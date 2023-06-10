@@ -132,7 +132,83 @@ export default function PGOwnerDashboard() {
                             <button className="btn">Pay Now</button>
                         </div>
                     </div>
+                </div>
 
+                <div className="col-lg-6 col-md-12 col-sm-12" style={{ padding: '10px' }}>
+                    <div className="default-card">
+                        <div className='default-card-inner'>
+                            <div>
+                                <h6>Brokerage Billing</h6>
+                                <h1 style={{ color: 'var(--red-color)' }}>
+                                    ₹2000
+                                </h1>
+                                <h3>Cut-off Date : 12 Jun'23</h3>
+                                {/* <h4>Due Date Exceeded : ₹100</h4> */}
+
+                            </div>
+                            <div>
+                                <h6>Property</h6>
+                                <h3 style={{ color: 'var(--blue-color)' }}>D2-201 & A-504</h3>
+
+
+                            </div>
+                        </div>
+                        <div className='default-card-inner'>
+                            <button className="btn info">Details</button>
+                            <button className="btn">Pay Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-lg-6 col-md-12 col-sm-12" style={{ padding: '10px' }}>
+                    <div className="default-card">
+                        <div className='default-card-inner'>
+                            <div>
+                                <h6>Maintenance Billing</h6>
+                                <h1 style={{ color: 'var(--red-color)' }}>
+                                    ₹12000
+                                </h1>
+                                <h3>Cut-off Date : 12 Jun'23</h3>
+                                {/* <h4>Due Date Exceeded : ₹100</h4> */}
+
+                            </div>
+                            <div>
+                                <h6>Property</h6>
+                                <h3 style={{ color: 'var(--blue-color)' }}>D2-201 & A-504</h3>
+
+
+                            </div>
+                        </div>
+                        <div className='default-card-inner'>
+                            <button className="btn info">Details</button>
+                            <button className="btn">Pay Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-lg-6 col-md-12 col-sm-12" style={{ padding: '10px' }}>
+                    <div className="default-card">
+                        <div className='default-card-inner'>
+                            <div>
+                                <h6>Sale Registration Advance or Registration Dues</h6>
+                                <h1 style={{ color: 'var(--red-color)' }}>
+                                    ₹15000
+                                </h1>
+                                <h3>Cut-off Date : 12 Jun'23</h3>
+                                {/* <h4>Due Date Exceeded : ₹100</h4> */}
+
+                            </div>
+                            <div>
+                                <h6>Property</h6>
+                                <h3 style={{ color: 'var(--blue-color)' }}>D2-201 & A-504</h3>
+
+
+                            </div>
+                        </div>
+                        <div className='default-card-inner'>
+                            <button className="btn info">Details</button>
+                            <button className="btn">Pay Now</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="col-lg-6 col-md-12 col-sm-12" style={{ padding: '10px' }}>
@@ -179,7 +255,7 @@ export default function PGOwnerDashboard() {
                             <div class="">
                                 <center>
                                     <span class="material-symbols-outlined">
-                                        groups
+                                        location_away
                                     </span>
                                     <h1>59</h1>
                                     <h5 class="owlcarousel-item-h5">Rental Enquiries</h5>
@@ -190,7 +266,7 @@ export default function PGOwnerDashboard() {
                             <div class="">
                                 <center>
                                     <span class="material-symbols-outlined">
-                                        groups
+                                        real_estate_agent
                                     </span>
                                     <h1>0</h1>
                                     <h5 class="owlcarousel-item-h5">Sale Enquiries</h5>
@@ -212,7 +288,7 @@ export default function PGOwnerDashboard() {
                             <div class="">
                                 <center>
                                     <span class="material-symbols-outlined">
-                                        groups
+                                        family_restroom
                                     </span>
                                     <h1>0</h1>
                                     <h5 class="owlcarousel-item-h5">Rental Visits</h5>
@@ -223,58 +299,13 @@ export default function PGOwnerDashboard() {
                             <div class="">
                                 <center>
                                     <span class="material-symbols-outlined">
-                                        groups
+                                        supervisor_account
                                     </span>
                                     <h1>0</h1>
                                     <h5 class="owlcarousel-item-h5">Sale Visits</h5>
                                 </center>
                             </div>
                         </div>
-                        <div class="owlcarousel-item">
-                            <div class="">
-                                <center>
-                                    <span class="material-symbols-outlined">
-                                        groups
-                                    </span>
-                                    <h1>₹1985 </h1>
-                                    <h5 class="owlcarousel-item-h5">PMS Billing</h5>
-                                </center>
-                            </div>
-                        </div>
-                        <div class="owlcarousel-item">
-                            <div class="">
-                                <center>
-                                    <span class="material-symbols-outlined">
-                                        groups
-                                    </span>
-                                    <h1>₹1985 </h1>
-                                    <h5 class="owlcarousel-item-h5">Brokerage Billing</h5>
-                                </center>
-                            </div>
-                        </div>
-                        <div class="owlcarousel-item">
-                            <div class="">
-                                <center>
-                                    <span class="material-symbols-outlined">
-                                        groups
-                                    </span>
-                                    <h1>₹1985 </h1>
-                                    <h5 class="owlcarousel-item-h5">Maintenance Billing</h5>
-                                </center>
-                            </div>
-                        </div>
-                        <div class="owlcarousel-item">
-                            <div class="">
-                                <center>
-                                    <span class="material-symbols-outlined">
-                                        groups
-                                    </span>
-                                    <h1>₹1985 </h1>
-                                    <h5 class="owlcarousel-item-h5">Sale Registration Advance</h5>
-                                </center>
-                            </div>
-                        </div>
-
                     </OwlCarousel>
                 </div >
                 <br /><br />
