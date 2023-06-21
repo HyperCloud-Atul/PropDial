@@ -23,37 +23,15 @@ export const AuthContextProvider = ({ children }) => {
     authIsReady: false
   })
 
-  // let roles = [];
-  // let online;
-  // let displayName;
-  // let fullName;
-  // let phoneNumber;
-  // let city;
-  // let address;
-  // let photoURL;
-  // let status;
-  // let createdAt;
-  // let lastLoginTimestamp;
-
-  // useEffect(() => {
-  //   const unsub = projectAuth.onAuthStateChanged(user => {
-  //     dispatch({ type: 'AUTH_IS_READY', payload: user })
-  //     unsub();
-  //   })
-  // }, [])
-
-  // let userData = {};
-
   useEffect(() => {
     const unsub = projectAuth.onAuthStateChanged(user => {
-      // console.log('AuthContext state in useEffect:', state)      
       // update online status
       if (user) {
         const documentRef = projectFirestore.collection('users').doc(user.uid)
         const unsubscribe = documentRef.onSnapshot(snapshot => {
           // need to make sure the doc exists & has data
           if (snapshot.data()) {
-            let roles = snapshot.data().roles;
+            let role = snapshot.data().role;
             let online = snapshot.data().online;
             let displayName = snapshot.data().displayName;
             let fullName = snapshot.data().fullName;
@@ -64,11 +42,10 @@ export const AuthContextProvider = ({ children }) => {
             let status = snapshot.data().status;
             let createdAt = snapshot.data().createdAt;
             let lastLoginTimestamp = snapshot.data().lastLoginTimestamp;
-            // console.log('Roles in App Context: ', roles);        
 
             let userData = {
               ...user,
-              roles,
+              role,
               online,
               displayName,
               fullName,

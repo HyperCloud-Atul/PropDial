@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useCollection } from '../../hooks/useCollection'
 import { useAuthContext } from '../../hooks/useAuthContext'
-import { timestamp } from '../../firebase/config'
+import { timestamp, projectFirestore } from '../../firebase/config'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useDocument } from '../../hooks/useDocument'
 import Select from 'react-select'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,61 +19,117 @@ const categories = [
     { value: 'commercial', label: 'Commercial' },
 ]
 
-export default function PGAddProperty() {
+export default function PGAddProperty({ propertyid }) {
     const navigate = useNavigate()
-    const { addDocument, response } = useFirestore('properties')
+    const { document: propertyDocument, error: propertyerror } = useDocument('properties', propertyid)
+    const { addDocument, response: addDocumentResponse } = useFirestore('properties')
+    const { updateDocument, response: updateDocumentResponse } = useFirestore('properties')
+
     const { user } = useAuthContext()
-    const { documents } = useCollection('users')
-    const { document, error } = useDocument('countries', 'COUNTRY')
     const [users, setUsers] = useState([])
-    // const [countries, setCountries] = useState([])
+
+    const { documents } = useCollection('users')
+
     const [toggleFlag, setToggleFlag] = useState(false)
 
     // form field values
     const [unitNumber, setUnitNumber] = useState('')
-    const [taggedUsers, setTaggedUsers] = useState([]) //Owners, Co-Owners, Executive 
+    const [taggedUsers, setTaggedUsers] = useState([])
     const { document: masterPropertyPurpose, error: masterPropertyPurposeerror } = useDocument('master', 'PROPERTYPURPOSE')
-    const [propertyPurpose, setpropertyPurpose] = useState()
-    const { document: masterCountry, error: masterCountryerror } = useDocument('master', 'COUNTRY')
-    const [country, setCountry] = useState({ value: 'INDIA', label: 'INDIA' })
-    const [state, setState] = useState({ value: 'DEL', label: 'DELHI' })
-    const [city, setCity] = useState({ value: 'DELHI', label: 'DELHI' })
-    const [locality, setLocality] = useState('')
+    const { documents: masterCountry, error: masterCountryerror } = useCollection('m_countries')
+    const [country, setCountry] = useState({ label: 'INDIA', value: 'INDIA' })
+    const [state, setState] = useState()
+    const [city, setCity] = useState()
+    const [cityList, setCityList] = useState([])
+
+    const [localityList, setLocalityList] = useState([])
+    const [locality, setLocality] = useState()
+
     const [society, setSociety] = useState('')
     const [category, setCategory] = useState('residential') //Residential/Commercial
-    const [purpose, setPurpose] = useState('') //Rent/Sale/RentSaleBoth
+    const [purpose, setPurpose] = useState()
     const [status, setStatus] = useState('active')
-    const today = new Date();
+    // const today = new Date();
     // const formattedDate = format(today, 'yyyy-MM-dd');
-    const [onboardingDate, setDueDate] = useState(new Date())
+    const [onboardingDate, setOnboardingDate] = useState(new Date())
     const [formError, setFormError] = useState(null)
 
-    let propertyPurposeOptions;
-    let propertyPurposeOptionsSorted;
-    if (masterCountry) {
-        propertyPurposeOptions = masterPropertyPurpose.data.map(propertyPurposeData => ({
-            label: propertyPurposeData.toUpperCase(),
-            value: propertyPurposeData
-        }))
-
-        propertyPurposeOptionsSorted = propertyPurposeOptions.sort((a, b) =>
-            a.label.localeCompare(b.label)
-        );
+    let taggedUsersListShow = '';
+    if (propertyDocument) {
+        let taggedUsersListCount = propertyDocument.taggedUsersList.length;
+        // console.log('taggedUsersListCount', taggedUsersListCount)
+        for (var i = 0; i < taggedUsersListCount; i++) {
+            if (propertyDocument.taggedUsersList) {
+                // console.log('propertyDocument.taggedUsersList:', propertyDocument.taggedUsersList[i])
+                if (taggedUsersListShow === '')
+                    taggedUsersListShow = propertyDocument.taggedUsersList[i].displayName + '(' + propertyDocument.taggedUsersList[i].phoneNumber + ')';
+                else
+                    taggedUsersListShow = taggedUsersListShow + ', ' + propertyDocument.taggedUsersList[i].displayName + '(' + propertyDocument.taggedUsersList[i].phoneNumber + ')';
+            }
+        }
     }
 
-    let countryOptions;
-    let countryOptionsSorted;
-    if (masterCountry) {
-        countryOptions = masterCountry.data.map(countryData => ({
-            label: countryData.toUpperCase(),
-            value: countryData
-        }))
+    const propertyPurposeOptions = useRef([]);
+    const propertyPurposeOptionsSorted = useRef([]);
+    let countryOptions = useRef([]);
+    let countryOptionsSorted = useRef([]);
+    let statesOptions = useRef([]);
+    let statesOptionsSorted = useRef([]);
+    let citiesOptions = useRef([]);
+    let citiesOptionsSorted = useRef([]);
+    let localityOptions;
+    let localityOptionsSorted;
 
-        countryOptionsSorted = countryOptions.sort((a, b) =>
-            a.label.localeCompare(b.label)
-        );
-    }
+    useEffect(() => {
+        // console.log('in useeffect')
+        if (documents) {
+            setUsers(documents.map(user => {
+                return { value: { ...user, id: user.id }, label: user.fullName + ' ( ' + user.phoneNumber + ' )' }
+            }))
+        }
 
+        if (masterPropertyPurpose) {
+            propertyPurposeOptions.current = masterPropertyPurpose.data.map(propertyPurposeData => ({
+                label: propertyPurposeData.toUpperCase(),
+                value: propertyPurposeData
+            }))
+
+            propertyPurposeOptionsSorted.current = propertyPurposeOptions.current.sort((a, b) =>
+                a.label.localeCompare(b.label)
+            );
+        }
+
+        if (masterCountry) {
+            countryOptions.current = masterCountry.map(countryData => ({
+                label: countryData.country,
+                value: countryData.country
+            }))
+
+            countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
+                a.label.localeCompare(b.label)
+            );
+            handleCountryChange(country)
+        }
+
+        if (propertyDocument) {
+            setCategory(propertyDocument.category)
+            if (propertyDocument.category.toUpperCase() === 'RESIDENTIAL')
+                setToggleFlag(false);
+            else
+                setToggleFlag(true);
+
+            setUnitNumber(propertyDocument.unitNumber)
+            setPurpose({ label: propertyDocument.purpose })
+            const date = new Date(propertyDocument.onboardingDate.seconds * 1000);
+            setOnboardingDate(date)
+            setCountry({ label: propertyDocument.country })
+            setState({ label: propertyDocument.state })
+            setCity({ label: propertyDocument.city })
+            setLocality({ label: propertyDocument.locality })
+            setSociety({ label: propertyDocument.society })
+        }
+
+    }, [documents, propertyDocument, masterPropertyPurpose])
 
 
     const toggleBtnClick = () => {
@@ -86,45 +142,10 @@ export default function PGAddProperty() {
         setToggleFlag(!toggleFlag);
     };
 
-    // console.log('documentCountry: ', document);
-    // console.log('purpose value: ', purpose);
+    const usersSorted = users.sort((a, b) =>
+        a.label.localeCompare(b.label)
+    );
 
-
-    // const countryOptions = [
-    //     { value: 'IND', label: 'INDIA' },
-    //     { value: 'USA', label: 'USA' }
-    // ];
-    // const countryOptionsSorted = countryOptions.sort((a, b) =>
-    //     a.label.localeCompare(b.label)
-    // );
-    const stateOptions = [
-        { value: 'DEL', label: 'DELHI' },
-        { value: 'MH', label: 'MAHARASHTRA' },
-        { value: 'UP', label: 'UTTAR PRADESH' }
-    ];
-    const stateOptionsSorted = stateOptions.sort((a, b) =>
-        a.label.localeCompare(b.label)
-    );
-    const cityOptions = [
-        { value: 'DELHI', label: 'DELHI' },
-        { value: 'PUNE', label: 'PUNE' },
-        { value: 'MUMBAI', label: 'MUMBAI' },
-        { value: 'NOIDA', label: 'NOIDA' },
-        { value: 'GURGAON', label: 'GURGAON' }
-    ];
-    const cityOptionsSorted = cityOptions.sort((a, b) =>
-        a.label.localeCompare(b.label)
-    );
-    const localityOptions = [
-        { value: '1', label: 'MALVIYA NAGAR' },
-        { value: '2', label: 'SECTOR 5' },
-        { value: '3', label: 'SECTOR 105' },
-        { value: '4', label: 'M G ROAD' },
-        { value: '5', label: 'HINJEWADI PHASE 2' }
-    ];
-    const localityOptionsSorted = localityOptions.sort((a, b) =>
-        a.label.localeCompare(b.label)
-    );
     const societyOptions = [
         { value: '1', label: 'AVON PARADISE' },
         { value: '2', label: 'DREAM LAND' },
@@ -137,19 +158,112 @@ export default function PGAddProperty() {
     );
 
 
-    // create user values for react-select
-    useEffect(() => {
-        if (documents) {
-            setUsers(documents.map(user => {
-                return { value: { ...user, id: user.id }, label: user.displayName + ' ( ' + user.phoneNumber + ' )' }
-            }))
-        }
+    // Load dropdowns with db values
+    //Load data into Country dropdown    
 
-    }, [documents])
 
-    const usersSorted = users.sort((a, b) =>
-        a.label.localeCompare(b.label)
-    );
+    //Country select onchange
+    const handleCountryChange = async (option) => {
+        setCountry(option)
+        let countryname = option.label;
+        const ref = await projectFirestore.collection('m_states').where("country", "==", countryname)
+        ref.onSnapshot(async snapshot => {
+            if (snapshot.docs) {
+                statesOptions.current = snapshot.docs.map(stateData => ({
+                    label: stateData.data().state,
+                    value: stateData.data().state
+                }))
+                console.log('statesOptions:', statesOptions)
+                statesOptionsSorted.current = statesOptions.current.sort((a, b) =>
+                    a.label.localeCompare(b.label)
+                );
+
+                if (countryname === 'INDIA') {
+                    setState({ label: 'DELHI', value: 'DELHI' })
+                    handleStateChange({ label: 'DELHI', value: 'DELHI' })
+                }
+                else {
+                    setState({ label: statesOptionsSorted.current[0].label, value: statesOptionsSorted.current[0].value })
+                    handleStateChange({ label: statesOptionsSorted.current[0].label, value: statesOptionsSorted.current[0].value })
+                }
+            }
+            else {
+                // setError('No such document exists')
+            }
+        }, err => {
+            console.log(err.message)
+            // setError('failed to get document')
+        })
+    }
+
+    //State select onchange
+    const handleStateChange = async (option) => {
+        setState(option)
+        let statename = option.label;
+        const ref = await projectFirestore.collection('m_cities').where("state", "==", statename)
+        ref.onSnapshot(async snapshot => {
+            if (snapshot.docs) {
+                citiesOptions.current = snapshot.docs.map(cityData => ({
+                    label: cityData.data().city,
+                    value: cityData.data().city
+                }))
+                console.log('citiesOptions:', citiesOptions)
+                citiesOptionsSorted.current = citiesOptions.current.sort((a, b) =>
+                    a.label.localeCompare(b.label)
+                );
+
+                if (statename === 'DELHI') {
+                    setCity({ label: 'DELHI', value: 'DELHI' })
+                    // handleCityChange({ label: 'DELHI', value: 'DELHI' })
+                }
+                else {
+                    setCity({ label: citiesOptionsSorted.current[0].label, value: citiesOptionsSorted.current[0].value })
+                    // handleCityChange({ label: statesOptions[0].label, value: statesOptions[0].value })
+                }
+            }
+            else {
+                // setError('No such document exists')
+            }
+
+        }, err => {
+            console.log(err.message)
+            // setError('failed to get document')
+        })
+    }
+
+    //City select onchange
+    const handleCityChange = async (option) => {
+        setCity(option)
+        // console.log('option.label: ', option.label)
+        const ref = await projectFirestore.collection('m_localities').doc(option.label)
+        ref.onSnapshot(async snapshot => {
+            // need to make sure the doc exists & has data
+            if (snapshot.data()) {
+                // console.log('snapshot.data():', snapshot.data())
+                localityOptions = snapshot.data().data.map(localityData => ({
+                    label: localityData.locality.toUpperCase(),
+                    value: localityData.localitycode
+                }))
+
+                localityOptionsSorted = localityOptions.sort((a, b) =>
+                    a.label.localeCompare(b.label)
+                );
+
+                console.log('localityOptionsSorted:', localityOptionsSorted)
+                setLocalityList(localityOptionsSorted)
+
+                setLocality({ label: localityOptions[0].label, value: localityOptions[0].value })
+
+            }
+            else {
+                // setError('No such document exists')
+            }
+        }, err => {
+            console.log(err.message)
+            // setError('failed to get document')
+        })
+    }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -165,18 +279,23 @@ export default function PGAddProperty() {
         }
 
         const taggedUsersList = taggedUsers.map(u => {
-            // console.log('user attributes:', u)
-            // console.log('user role:', u.value.roles)
             return {
-                displayName: u.value.displayName,
-                photoURL: u.value.photoURL,
                 id: u.value.id,
-                role: u.value.roles
+                displayName: u.value.fullName,
+                phoneNumber: u.value.phoneNumber,
+                photoURL: u.value.photoURL,
+                role: u.value.role
             }
         })
 
         const createdBy = {
-            displayName: user.displayName + '(' + user.roles + ')',
+            displayName: user.displayName + '(' + user.role + ')',
+            photoURL: user.photoURL,
+            id: user.uid
+        }
+
+        const updatedBy = {
+            displayName: user.displayName + '(' + user.role + ')',
             photoURL: user.photoURL,
             id: user.uid
         }
@@ -189,19 +308,46 @@ export default function PGAddProperty() {
             city: city.label,
             locality: locality.label,
             society: society.label,
-            category,
-            purpose,
-            status,
-            createdBy,
+            category: category,
+            purpose: purpose.label,
+            status: status,
+            updatedBy,
             onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
             comments: []
         }
 
-        await addDocument(property)
-        console.log('addDocument:', property)
-        if (!response.error) {
-            navigate('/')
+        if (propertyid) {
+            await updateDocument(propertyid, {
+                unitNumber: unitNumber,
+                taggedUsersList,
+                country: country.label,
+                state: state.label,
+                city: city.label,
+                locality: locality.label,
+                society: society.label,
+                category,
+                purpose: purpose.label,
+                status: status,
+                createdBy,
+                onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
+                comments: []
+            })
+            if (updateDocumentResponse.error) {
+                // console.log('updateDocument Error:', updateDocumentResponse.error)
+                navigate('/')
+            }
+            else {
+                // console.log('Property Udpated Successfully:', property)
+            }
         }
+        else {
+            await addDocument(property)
+            if (!addDocumentResponse.error) {
+                navigate('/')
+            }
+            // console.log('addDocument:', property)
+        }
+
     }
 
     return (
@@ -210,10 +356,10 @@ export default function PGAddProperty() {
                 <span className="material-symbols-outlined">
                     real_estate_agent
                 </span>
-                <h1>Add Property </h1>
+                <h1>{propertyid ? 'Edit Property' : 'Add Property'} </h1>
             </div>
 
-            <div className="row no-gutters" style={{ margin: '20px 0 10px 0' }}>
+            <div className="row no-gutters" style={{ margin: '20px 0 0px 0', height: '50px' }}>
 
                 {/* <div className="col-lg-6 col-md-6 col-sm-12"
                     style={{ background: 'rgb(188, 236, 224, 0.5)', padding: ' 0 10px' }}> */}
@@ -239,7 +385,7 @@ export default function PGAddProperty() {
                         <div></div>
                         <div className='details-radio-inner'>
                             <div className="row no-gutters">
-                                <div className="col-6" style={{ padding: '0 5px' }}>
+                                {/* <div className="col-6" style={{ padding: '0 5px' }}>
                                     <input type="checkbox" className="checkbox" style={{ width: '0px' }}
                                         name="BusinessType" id="businessTypeRent" value="Rent"
                                         onClick={() => setPurpose('rent')}
@@ -253,9 +399,9 @@ export default function PGAddProperty() {
                                         </span>
                                         <small>Rent</small>
                                     </label>
-                                </div>
+                                </div> */}
 
-                                <div className="col-6" style={{ padding: '0 5px' }}>
+                                {/* <div className="col-6" style={{ padding: '0 5px' }}>
                                     <input type="checkbox" className="checkbox" style={{ width: '0px' }}
                                         name="BusinessType" id="businessTypeSale" value="Sale"
                                         onClick={() => setPurpose('sale')}
@@ -269,7 +415,7 @@ export default function PGAddProperty() {
                                         </span>
                                         <small>Sale</small>
                                     </label>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -307,10 +453,12 @@ export default function PGAddProperty() {
                                 <div className="location-search">
                                     {/* <input type="text" required placeholder="Enetr Property Unit Number..."
                                         name="" /> */}
+
                                     <Select className=''
-                                        onChange={(option) => setpropertyPurpose(option)}
-                                        options={propertyPurposeOptionsSorted}
-                                        value={propertyPurpose}
+                                        onChange={(option) => setPurpose(option)}
+                                        options={propertyPurposeOptionsSorted.current}
+                                        // value={propertyDocument ? propertyDocument.purpose : purpose}
+                                        value={purpose}
                                         styles={{
                                             control: (baseStyles, state) => ({
                                                 ...baseStyles,
@@ -335,7 +483,7 @@ export default function PGAddProperty() {
                                         selected={onboardingDate}
                                         maxDate={new Date()}
                                         required
-                                        onChange={(onboardingDate) => setDueDate(onboardingDate)}
+                                        onChange={(onboardingDate) => setOnboardingDate(onboardingDate)}
                                     // value={onboardingDate}
                                     />
                                     <div className="underline"></div>
@@ -352,7 +500,7 @@ export default function PGAddProperty() {
                     <div className="row no-gutters">
                         <div className="col-lg-4 col-md-4 col-sm-12">
                             <div className="property-form-border-div">
-                                <h1 className="owner-heading">Tag Users</h1>
+                                <h1 className="owner-heading">Tag Users : {taggedUsersListShow}</h1>
                                 <div className="location-search">
                                     <Select className=''
                                         onChange={(option) => setTaggedUsers(option)}
@@ -378,8 +526,8 @@ export default function PGAddProperty() {
                                 <h1 className="owner-heading">Country</h1>
                                 <div className="location-search">
                                     <Select className=''
-                                        onChange={(option) => setCountry(option)}
-                                        options={countryOptionsSorted}
+                                        onChange={handleCountryChange}
+                                        options={countryOptionsSorted.current}
                                         value={country}
                                         styles={{
                                             control: (baseStyles, state) => ({
@@ -402,8 +550,10 @@ export default function PGAddProperty() {
                                 <h1 className="owner-heading">State</h1>
                                 <div className="location-search">
                                     <Select className=''
-                                        onChange={(option) => setState(option)}
-                                        options={stateOptionsSorted}
+                                        // onChange={(option) => setState(option)}
+                                        onChange={handleStateChange}
+                                        options={statesOptionsSorted.current}
+                                        // options={stateList}
                                         value={state}
                                         styles={{
                                             control: (baseStyles, state) => ({
@@ -427,8 +577,8 @@ export default function PGAddProperty() {
                                     <h1 className="owner-heading">City</h1>
                                     <div className="location-search">
                                         <Select className=''
-                                            onChange={(option) => setCity(option)}
-                                            options={cityOptionsSorted}
+                                            onChange={handleCityChange}
+                                            options={cityList}
                                             value={city}
                                             styles={{
                                                 control: (baseStyles, state) => ({
@@ -452,7 +602,7 @@ export default function PGAddProperty() {
                                     <div className="location-search">
                                         <Select className=''
                                             onChange={(option) => setLocality(option)}
-                                            options={localityOptionsSorted}
+                                            options={localityList}
                                             value={locality}
                                             styles={{
                                                 control: (baseStyles, state) => ({
@@ -635,7 +785,7 @@ export default function PGAddProperty() {
                     </div>
                     <br />
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <button className="btn">Add Property</button>
+                        <button className="btn">{propertyid ? 'Update Property' : 'Add Property'}</button>
                         {formError && <p className="error">{formError}</p>}
                     </div>
                     <br />

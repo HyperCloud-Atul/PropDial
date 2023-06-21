@@ -54,10 +54,12 @@ export default function Login() {
             />
           </div>
         </label>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          {error && <div className="error">{error}</div>}
+          {/* {<div className="error">{error} this is error box</div>} */}
           {!isPending && <button className="btn">Log in</button>}
           {isPending && <button className="btn" disabled>Signing...</button>}
-          {error && <div className="error">{error}</div>}
+
         </div>
         <br />
         <div className='sign-up-or-div'>

@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { projectAuth, projectFirestore } from '../firebase/config'
 import { useAuthContext } from './useAuthContext'
 import { timestamp } from '../firebase/config'
+import { el } from 'date-fns/locale'
 
 export const useLogin = () => {
-  const [isCancelled, setIsCancelled] = useState(false)
+  // const [isCancelled, setIsCancelled] = useState(false)
   const [error, setError] = useState(null)
   const [isPending, setIsPending] = useState(false)
   const { dispatch } = useAuthContext()
@@ -13,9 +14,14 @@ export const useLogin = () => {
     setError(null)
     setIsPending(true)
 
+    // console.log('isCancelled in login: ', isCancelled)
     try {
       // login
       const res = await projectAuth.signInWithEmailAndPassword(email, password)
+
+      if (!res) {
+        throw new Error('Could not process the login')
+      }
 
       // update online status
       const documentRef = projectFirestore.collection('users').doc(res.user.uid)
@@ -24,13 +30,10 @@ export const useLogin = () => {
         lastLoginTimestamp: timestamp.fromDate(new Date())
       })
 
-      // console.log('Roles:', documentRef.get())
-      let roles = [];
       const unsubscribe = await documentRef.onSnapshot(snapshot => {
         // need to make sure the doc exists & has data
         if (snapshot.data()) {
-          if (snapshot.data().roles)
-            roles = snapshot.data().roles;
+          let role = snapshot.data().role;
           let online = snapshot.data().online;
           let displayName = snapshot.data().displayName;
           let fullName = snapshot.data().fullName;
@@ -41,11 +44,10 @@ export const useLogin = () => {
           let status = snapshot.data().status;
           let createdAt = snapshot.data().createdAt;
           let lastLoginTimestamp = snapshot.data().lastLoginTimestamp;
-          // console.log('Roles: ', roles);
 
           let userData = {
             ...res.user,
-            roles,
+            role,
             online,
             displayName,
             fullName,
@@ -57,15 +59,13 @@ export const useLogin = () => {
             createdAt,
             lastLoginTimestamp
           }
-          // console.log('User with Roles: ', userData)
-          // dispatch login action
-          // dispatch({ type: 'LOGIN', payload: res.user })
+
           dispatch({ type: 'LOGIN', payload: userData })
 
-          if (!isCancelled) {
-            setIsPending(false)
-            setError(null)
-          }
+          // if (!isCancelled) {
+          setIsPending(false)
+          setError(null)
+          // }
         }
         else {
           // setError('No such document exists')
@@ -76,15 +76,15 @@ export const useLogin = () => {
       })
     }
     catch (err) {
-      if (!isCancelled) {
-        setError(err.message)
-        setIsPending(false)
-      }
+      // if (isCancelled) {
+      setError(err.message)
+      setIsPending(false)
+      // }
     }
   }
 
   useEffect(() => {
-    return () => setIsCancelled(true)
+    // return () => setIsCancelled(true)
   }, [])
 
   return { login, isPending, error }

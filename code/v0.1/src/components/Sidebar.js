@@ -36,7 +36,7 @@ export default function Sidebar(props) {
           <nav className="links">
             <ul>
 
-              {user && user.roles && user.roles.includes('superadmin') &&
+              {user && user.role === 'superadmin' &&
                 <li>
                   <NavLink exact to="/superadmindashboard">
                     <img src={DashboardIcon} alt="dashboard icon" />
@@ -45,7 +45,7 @@ export default function Sidebar(props) {
                 </li>
               }
 
-              {user && user.roles && user.roles.includes('admin') &&
+              {user && user.role === 'admin' &&
                 <li>
                   <NavLink exact to="/admindashboard">
                     <img src={DashboardIcon} alt="dashboard icon" />
@@ -54,7 +54,7 @@ export default function Sidebar(props) {
                 </li>
               }
 
-              {user && user.roles && user.roles.includes('admin') &&
+              {user && user.role === 'admin' &&
                 <li>
                   <NavLink to="/addproperty">
                     <img src={AddIcon} alt="add property icon" />
@@ -63,7 +63,7 @@ export default function Sidebar(props) {
                 </li>
               }
 
-              {user && user.roles && user.roles.includes('owner') &&
+              {user && user.role === 'owner' &&
                 <li>
                   <NavLink exact to="/ownerdashboard">
                     <img src={DashboardIcon} alt="dashboard icon" />
@@ -72,7 +72,7 @@ export default function Sidebar(props) {
                 </li>
               }
 
-              {user && user.roles && user.roles.includes('tenant') &&
+              {user && user.role === 'tenant' &&
                 <li>
                   <NavLink exact to="/tenantdashboard">
                     <img src={DashboardIcon} alt="dashboard icon" />
@@ -81,7 +81,7 @@ export default function Sidebar(props) {
                 </li>
               }
 
-              {user && user.roles && user.roles.includes('executive') &&
+              {user && user.role === 'executive' &&
                 <li>
                   <NavLink exact to="/executivedashboard">
                     <img src={DashboardIcon} alt="dashboard icon" />

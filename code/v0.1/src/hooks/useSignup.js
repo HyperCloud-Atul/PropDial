@@ -21,12 +21,14 @@ export const useSignup = () => {
         throw new Error('Could not complete signup')
       }
 
+
       // upload user thumbnail
       // console.log('thumbnail in useSignup 1:', thumbnail)
       let imgUrl = ''
+      const thumbnailName = 'profile.png'
       if (thumbnail) {
         // console.log('thumbnail in useSignup 2:', thumbnail)
-        const uploadPath = `userThumbnails/${res.user.uid}/${thumbnail.name}`
+        const uploadPath = `userThumbnails/${res.user.uid}/${thumbnailName}`
         const img = await projectStorage.ref(uploadPath).put(thumbnail)
         imgUrl = await img.ref.getDownloadURL()
       }
@@ -44,6 +46,15 @@ export const useSignup = () => {
       const lastIndex = displayName.lastIndexOf(" ");
       const firstName = displayName.substring(0, lastIndex);
       await res.user.updateProfile({ phoneNumber, displayName: firstName, photoURL: imgUrl })
+
+      // Send an email verification link
+      await res.user.sendEmailVerification();
+
+      // Prompt the user to verify their email address
+      const verificationLink = res.user.emailVerificationLink;
+      console.log('email verificationLink:', verificationLink)
+
+
       // console.log('after updateProfile:', imgUrl)
       // create a user document
       await projectFirestore.collection('users').doc(res.user.uid).set({
@@ -55,7 +66,7 @@ export const useSignup = () => {
         city: '',
         address: '',
         photoURL: imgUrl,
-        roles: ['user'],
+        role: 'user',
         status: 'active',
         createdAt: timestamp.fromDate(new Date()),
         lastLoginTimestamp: timestamp.fromDate(new Date())

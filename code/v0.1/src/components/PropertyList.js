@@ -26,7 +26,8 @@ export default function PropertyList({ properties }) {
                     <div className="property-status-padding-div">
                         <div className="profile-card-div" style={{ position: 'relative' }}>
                             {/* <Link to={`/properties/${property.id}`} key={property.id} style={{ textDecoration: 'none' }} > */}
-                            <Link to='/propertydetails' state={{ propertyid: property.id }} key={property.id} style={{ textDecoration: 'none' }} >
+                            {/* <Link to='/propertydetails' state={{ propertyid: property.id }} key={property.id} style={{ textDecoration: 'none' }} > */}
+                            <Link to={`/propertyedit/${property.id}`} key={property.id}>
                                 <div className={"event-id " + property.category}>
                                     <h5>{property.category}</h5>
                                 </div>
@@ -56,7 +57,7 @@ export default function PropertyList({ properties }) {
                                         </div>
                                         <div>
                                             <h1>Purpose</h1>
-                                            <h2>Rented but sale</h2>
+                                            <h2>{property.purpose}</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -108,7 +109,7 @@ export default function PropertyList({ properties }) {
                                 </div>
                             </Link >
 
-                            {user && user.roles && user.roles.includes('admin') &&
+                            {user && user.role === 'admin' &&
                                 <div className='secondary-details-inside-display-btn-div'>
                                     {/* <button onClick={() => navigate('/addbill', { state: { propertyid: property.id } })}>Add Bill</button> */}
                                     <div onClick={() => navigate('/addbill', { state: { propertyid: property.id } })}>
@@ -128,7 +129,7 @@ export default function PropertyList({ properties }) {
 
                         </div>
                     </div>
-                </div>
+                </div >
 
             </>
             ))

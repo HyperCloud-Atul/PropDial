@@ -34,7 +34,7 @@ export default function UserList({ users }) {
                                 <div>
                                     <h2>{userObj.email}</h2>
                                     {/* <h2>aditya@gmail.com</h2> */}
-                                    <h4><strong>Roles : </strong>{userObj.roles}</h4>
+                                    <h4><strong>Role : </strong>{userObj.role}</h4>
                                 </div>
                                 <div>
                                     {/* <h3>{userObj.phone}</h3> */}

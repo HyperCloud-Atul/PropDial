@@ -19,7 +19,7 @@ export default function PGUserList() {
     // const navigate = useNavigate();
 
     useEffect(() => {
-        let flag = user && user.roles && user.roles.includes('superadmin');
+        let flag = user && user.role === 'superadmin';
         if (!flag) {
             logout()
         }
@@ -35,13 +35,13 @@ export default function PGUserList() {
             case 'ALL':
                 return true
             case 'ADMIN':
-                return document.roles.includes('admin')
+                return document.role === 'admin'
             case 'OWNER':
-                return document.roles.includes('owner')
+                return document.role === 'owner'
             case 'TENANT':
-                return document.roles.includes('tenant')
+                return document.role === 'tenant'
             case 'EXECUTIVE':
-                return document.roles.includes('executive')
+                return document.role === 'executive'
             case 'INACTIVE':
                 return document.status === 'inactive'
             default:

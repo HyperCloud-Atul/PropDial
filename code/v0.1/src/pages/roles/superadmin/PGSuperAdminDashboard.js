@@ -18,7 +18,7 @@ export default function SuperAdminDashboard() {
     // const navigate = useNavigate();
 
     useEffect(() => {
-        let flag = user && user.roles && user.roles.includes('superadmin');
+        let flag = user && user.role === 'superadmin';
         if (!flag) {
             logout()
         }
@@ -34,7 +34,7 @@ export default function SuperAdminDashboard() {
             case 'all':
                 return true
             case 'admin':
-                return document.roles.includes(filter)
+                return document.role === filter
             case 'active':
             case 'inactive':
                 return document.status === filter

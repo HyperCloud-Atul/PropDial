@@ -18,13 +18,6 @@ export default function PGAdminProperties() {
     const [filter, setFilter] = useState('all')
     // const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     let flag = user && user.roles && user.roles.includes('admin');
-    //     if (!flag) {
-    //         logout()
-    //     }
-    // }, [user, logout])
-
     const changeFilter = (newFilter) => {
         setFilter(newFilter)
     }

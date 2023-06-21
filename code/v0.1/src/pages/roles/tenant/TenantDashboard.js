@@ -19,7 +19,7 @@ export default function TenantDashboard() {
     // const navigate = useNavigate();
 
     useEffect(() => {
-        let flag = user && user.roles && user.roles.includes('tenant');
+        let flag = user && user.role === 'tenant';
         if (!flag) {
             logout()
         }

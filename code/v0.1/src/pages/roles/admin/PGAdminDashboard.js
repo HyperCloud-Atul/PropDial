@@ -19,7 +19,7 @@ export default function PGAdminDashboard() {
     // const navigate = useNavigate();
 
     useEffect(() => {
-        let flag = user && user.roles && user.roles.includes('admin');
+        let flag = user && user.role === 'admin';
         if (!flag) {
             logout()
         }

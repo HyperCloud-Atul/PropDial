@@ -48,7 +48,7 @@ export const useFirestore = (collection) => {
     try {
 
       const createdBy = {
-        displayName: user.displayName + '(' + user.roles + ')',
+        displayName: user.displayName + '(' + user.role + ')',
         photoURL: user.photoURL,
         id: user.uid
       }

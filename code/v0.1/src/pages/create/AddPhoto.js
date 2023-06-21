@@ -63,7 +63,7 @@ export default function AddPhoto(props) {
 
         if (documents) {
             setUsers(documents.map(user => {
-                var userDetails = user.displayName + '(' + user.roles + ')';
+                var userDetails = user.displayName + '(' + user.role + ')';
                 // console.log('userDetails:', userDetails)
                 return { value: { ...user, id: user.id }, label: userDetails }
             }))

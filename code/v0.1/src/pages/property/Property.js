@@ -20,9 +20,12 @@ export default function Property() {
     }
 
     return (
-        <div className="property-details">
-            <PGPropertyDetails property={document} />
-            <PropertyComments property={document} />
-        </div>
+        <>
+            <div>Property Edit</div>
+            <div className="property-details">
+                <PGPropertyDetails property={document} />
+                <PropertyComments property={document} />
+            </div>
+        </>
     )
 }

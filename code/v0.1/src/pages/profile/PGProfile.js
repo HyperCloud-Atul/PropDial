@@ -7,6 +7,8 @@ import { useDocument } from "../../hooks/useDocument"
 import Avatar from "../../components/Avatar"
 import { useLogout } from "../../hooks/useLogout"
 import Popup from '../../components/Popup'
+import { useImageUpload } from "../../hooks/useImageUpload"
+import { projectStorage } from "../../firebase/config"
 
 // styles
 import './PGProfile.css'
@@ -14,9 +16,9 @@ import './PGProfile.css'
 export default function PGProfile() {
     const { user } = useAuthContext()
     // const { document, error } = useDocument('users', user.uid)
-    // const [email, setEmail] = useState('')
-    const [phoneNumber, setPhoneNumber] = useState('')
-    const [fullName, setFullName] = useState('')
+    // const [email, setEmail] = useState('')    
+    const [userFullName, setUserFullName] = useState(user.fullName)
+    const [userPhoneNumber, setUserPhoneNumber] = useState(user.phoneNumber)
     const { updateDocument, response } = useFirestore('users')
     const { document: userDocument, error: userDocumentError } = useDocument('users', user.uid)
     const [formError, setFormError] = useState(null)
@@ -24,6 +26,11 @@ export default function PGProfile() {
     //Popup Flags
     const [showPopupFlag, setShowPopupFlag] = useState(false)
     const [popupReturn, setPopupReturn] = useState(false)
+
+    const [thumbnail, setThumbnail] = useState(null)
+    const [thumbnailError, setThumbnailError] = useState(null)
+    const { imgUpload, isImgCompressPending, imgCompressedFile } = useImageUpload()
+
 
     const navigate = useNavigate();
 
@@ -36,6 +43,7 @@ export default function PGProfile() {
 
     }, [popupReturn])
 
+
     //Popup Flags
     const showPopup = async (e) => {
         e.preventDefault()
@@ -45,35 +53,98 @@ export default function PGProfile() {
 
     const showDashboard = () => {
 
-        if (user && user.roles && user.roles.includes('superadmin')) {
-            // console.log('in superadmin', user.roles)
+        if (user && user.role === 'user') {
+            // console.log('in user', user.role)
+            navigate('/userdashboard')
+        }
+
+        if (user && user === 'superadmin') {
+            // console.log('in superadmin', user.role)
             navigate('/superadmindashboard')
         }
 
-        if (user && user.roles && user.roles.includes('admin')) {
-            // console.log('in admin', user.roles)
+        if (user && user.role === 'admin') {
+            // console.log('in admin', user.role)
             navigate('/admindashboard')
         }
 
-        if (user && user.roles && user.roles.includes('owner')) {
-            // console.log('in user', user.roles)
+        if (user && user.role === 'owner') {
+            // console.log('in user', user.role)
             navigate('/ownerdashboard')
         }
 
-        if (user && user.roles && user.roles.includes('tenant')) {
-            // console.log('in user', user.roles)
+        if (user && user.role === 'tenant') {
+            // console.log('in user', user.role)
             navigate('/tenantdashboard')
         }
 
-        if (user && user.roles && user.roles.includes('executive')) {
-            // console.log('in user', user.roles)
+        if (user && user.role === 'executive') {
+            // console.log('in user', user.role)
             navigate('/executivedashboard')
         }
 
-        if (user && user.roles && user.roles.includes('user')) {
-            // console.log('in user', user.roles)
-            navigate('/userdashboard')
+
+    }
+
+    const handleFileChange = async (e) => {
+        // setThumbnail(null)
+        let file = e.target.files[0]
+        // console.log('file original selected:', file)
+        // console.log('file size original selected:', file.size)
+
+        const compressedImage = await imgUpload(file, 300, 300);
+
+        if (!compressedImage) {
+            setThumbnailError('Please select a file')
+            return
         }
+        if (!compressedImage.type.includes('image')) {
+            setThumbnailError('Selected file must be an image')
+            return
+        }
+
+        // setThumbnailError(null)
+
+        let imgUrl = ''
+        const thumbnailName = 'profile.png'
+        if (compressedImage) {
+            const uploadPath = `userThumbnails/${user.uid}/${thumbnailName}`
+            const img = await projectStorage.ref(uploadPath).put(compressedImage)
+            imgUrl = await img.ref.getDownloadURL()
+            // console.log('imgUrl:', imgUrl)
+            await updateDocument(user.uid, {
+                photoURL: imgUrl
+            })
+            // await user.updateProfile({ photoURL: imgUrl })
+        }
+        else { //if thumbnail is null
+            //user1.png
+            // imgUrl = 'https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/thumbnails%2Fthumbnail1.png?alt=media&token=445a89f4-d5c0-495d-8541-496cd8dfd232';
+            //user2.png
+            imgUrl = 'https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2'
+            //user3.png
+            // imgUrl = 'https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/thumbnails%2Fthumbnail3.png?alt=media&token=36ebeeff-a6a3-4180-a269-61a23cbc3632';
+        }
+
+        // console.log('thumbnail updated')
+
+    }
+
+    const [isProfileEdit, setisProfileEdit] = useState(false)
+
+    const handleProfileEdit = async (e) => {
+        setisProfileEdit(true)
+
+    }
+    const handleProfileSave = async (e) => {
+        setisProfileEdit(false)
+        // setUserFullName(e.target.value)
+        // console.log('e.target.value:', e)
+        await updateDocument(user.uid, {
+            fullName: userFullName,
+            phoneNumber: userPhoneNumber
+        })
+
     }
 
     const handleSubmit = async (e) => {
@@ -82,38 +153,11 @@ export default function PGProfile() {
         e.preventDefault();
         setFormError(null)
 
-        // if (!category) {
-        //     setFormError('Please select a property category.')
-        //     return
-        // }
-        // if (assignedUsers.length < 1) {
-        //     setFormError('Please assign the property to at least 1 user')
-        //     return
-        // }
-
-        // await updateDocument(user.uid, {
-        //     admin: 'true',          
-        // })
-
-        await updateDocument(user.uid, {
-            fullName,
-            phoneNumber
-        })
-
-        // setFormError('Data updated successfully')
     }
 
     const changePwd = (e) => {
         navigate('/updatepwd')
     }
-
-
-    // if (error) {
-    //     return <div className="error">{error}</div>
-    // }
-    // if (!document) {
-    //     return <div className="loading">Loading...</div>
-    // }
 
     // --------------------HTML UI Codebase------------------
     return (
@@ -132,17 +176,42 @@ export default function PGProfile() {
                             <div className="user-logo">
                                 <Avatar src={user.photoURL} />
                             </div>
+                            <input
+                                type="file"
+                                onChange={handleFileChange}
+                                id="profile-upload-input"
+                                className="profile-upload-input"
+                            />
+                            <label
+                                htmlFor="profile-upload-input"
+                                className="profile-upload-label"
+                            >
+                                <span className="material-symbols-outlined">
+                                    upload
+                                </span>
+                            </label>
                         </div>
 
                         <div className="details">
-                            <h5>{user.fullName}</h5>
-                            <p>{user.email}</p>
-                            <p>{user.phoneNumber}</p>
+                            <input type="text" className="profile-change-name" readOnly={isProfileEdit ? false : true}
+                                onChange={(e) => setUserFullName(e.target.value)}
+                                value={userFullName}
+                            ></input>
+                            <input type="number" maxLength={10} readOnly={isProfileEdit ? false : true}
+                                className="profile-change-phone"
+                                onChange={(e) => setUserPhoneNumber(e.target.value)}
+                                value={userPhoneNumber}
+                            >
+                            </input>
+                            <p style={{ paddingLeft: '8px' }} >{user.email}</p>
                         </div>
 
                         <div className="edit">
-                            <span className="material-symbols-outlined">
+                            <span className="material-symbols-outlined" style={{ display: isProfileEdit ? 'none' : 'block' }} onClick={handleProfileEdit}>
                                 edit
+                            </span>
+                            <span className="material-symbols-outlined done" style={{ display: isProfileEdit ? 'block' : 'none' }} onClick={handleProfileSave}>
+                                done
                             </span>
                         </div>
                     </div>

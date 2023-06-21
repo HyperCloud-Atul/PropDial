@@ -122,6 +122,7 @@
     font-size: 0.9rem;
     font-weight: bolder;
     padding-top: 10px;
+    color: var(--lightblue-color);
 }
 
 .more-div-card {

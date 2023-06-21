@@ -20,7 +20,7 @@ export default function PGOwnerDashboard() {
     const [filter, setFilter] = useState('ALL')
 
     useEffect(() => {
-        let flag = user && user.roles && user.roles.includes('owner');
+        let flag = user && user.role === 'owner';
         if (!flag) {
             logout()
         }
@@ -41,7 +41,6 @@ export default function PGOwnerDashboard() {
     });
 
     useEffect(() => {
-
         setMyState({
             responsive: {
                 0: {
@@ -56,7 +55,6 @@ export default function PGOwnerDashboard() {
             },
         }
         )
-
     }, [])
 
     // console.log('user uid:', user.uid)
@@ -236,7 +234,7 @@ export default function PGOwnerDashboard() {
             </div>
             <br />
 
-            <div className="row no-gutters partners-div" style={{ backgroundColor: 'rgb(188, 236, 224, 0.5)', padding: '2% 0;' }}>
+            <div className="row no-gutters partners-div" style={{ backgroundColor: 'rgb(188, 236, 224, 0.5)', padding: '2% 0' }}>
                 <div className="col-md-12 col-md-offset-1">
                     <OwlCarousel
                         className="owl-theme"
@@ -251,58 +249,58 @@ export default function PGOwnerDashboard() {
                         margin={10}
                         stagePadding={30}
                         responsive={myState.responsive} >
-                        <div class="owlcarousel-item">
-                            <div class="">
+                        <div className="owlcarousel-item">
+                            <div className="">
                                 <center>
-                                    <span class="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">
                                         location_away
                                     </span>
                                     <h1>59</h1>
-                                    <h5 class="owlcarousel-item-h5">Rental Enquiries</h5>
+                                    <h5 className="owlcarousel-item-h5">Rental Enquiries</h5>
                                 </center>
                             </div>
                         </div>
-                        <div class="owlcarousel-item">
-                            <div class="">
+                        <div className="owlcarousel-item">
+                            <div className="">
                                 <center>
-                                    <span class="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">
                                         real_estate_agent
                                     </span>
                                     <h1>0</h1>
-                                    <h5 class="owlcarousel-item-h5">Sale Enquiries</h5>
+                                    <h5 className="owlcarousel-item-h5">Sale Enquiries</h5>
                                 </center>
                             </div>
                         </div>
-                        <div class="owlcarousel-item">
-                            <div class="">
+                        <div className="owlcarousel-item">
+                            <div className="">
                                 <center>
-                                    <span class="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">
                                         groups
                                     </span>
                                     <h1>0</h1>
-                                    <h5 class="owlcarousel-item-h5">General Visits</h5>
+                                    <h5 className="owlcarousel-item-h5">General Visits</h5>
                                 </center>
                             </div>
                         </div>
-                        <div class="owlcarousel-item">
-                            <div class="">
+                        <div className="owlcarousel-item">
+                            <div className="">
                                 <center>
-                                    <span class="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">
                                         family_restroom
                                     </span>
                                     <h1>0</h1>
-                                    <h5 class="owlcarousel-item-h5">Rental Visits</h5>
+                                    <h5 className="owlcarousel-item-h5">Rental Visits</h5>
                                 </center>
                             </div>
                         </div>
-                        <div class="owlcarousel-item">
-                            <div class="">
+                        <div className="owlcarousel-item">
+                            <div className="">
                                 <center>
-                                    <span class="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">
                                         supervisor_account
                                     </span>
                                     <h1>0</h1>
-                                    <h5 class="owlcarousel-item-h5">Sale Visits</h5>
+                                    <h5 className="owlcarousel-item-h5">Sale Visits</h5>
                                 </center>
                             </div>
                         </div>
@@ -325,8 +323,9 @@ export default function PGOwnerDashboard() {
                 {properties && <PropertyList properties={properties} />}
                 {/* {bills && <BillList bills={bills} />} */}
             </div>
+            <br></br><br></br>
+            <hr></hr>
             <div className="row no-gutters">
-
                 <div className="col-lg-6" style={{ padding: '2%' }}>
                     <h5 style={{ paddingLeft: '2%', fontWeight: 'bolder' }}>ANALYTICS</h5><br />
 

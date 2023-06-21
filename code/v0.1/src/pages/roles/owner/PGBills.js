@@ -19,14 +19,6 @@ export default function PGBills() {
     const { documents: billsdocuments, error: billserror } = useCollection('bills')
 
     const [filter, setFilter] = useState('PENDING')
-    // const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     let flag = user && user.roles && user.roles.includes('owner');
-    //     if (!flag) {
-    //         logout()
-    //     }
-    // }, [user, logout])
 
     const changeFilter = (newFilter) => {
         setFilter(newFilter)

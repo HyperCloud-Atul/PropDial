@@ -15,6 +15,7 @@ import PGUserList from './pages/roles/superadmin/PGUserList'
 // admin
 import PGAdminDashboard from './pages/roles/admin/PGAdminDashboard'
 import PGAdminProperties from './pages/roles/admin/PGAdminProperties'
+import PGPropertyEdit from './pages/roles/admin/PGPropertyEdit'
 // owner
 import PGOwnerDashboard from './pages/roles/owner/PGOwnerDashboard'
 import PGBills from './pages/roles/owner/PGBills'
@@ -40,6 +41,9 @@ import PGPropertyDetails from './pages/property/PGPropertyDetails'
 import './App.css'
 import UpdatePassword from './pages/login/PGUpdatePassword'
 import AdminSettings from './pages/roles/admin/AdminSettings'
+import MasterAddCountry from './pages/create/MasterAddCountry'
+import MasterAddState from './pages/create/MasterAddState'
+import MasterAddCity from './pages/create/MasterAddCity'
 // import BillList from './components/BillList'
 
 function App() {
@@ -54,23 +58,8 @@ function App() {
   // console.log('user in App.js', user)
 
   useEffect(() => {
-    // if (user && user.roles && user.roles.includes('owner')) {
-    //   setSideNavbar(null);
-    // } else if (user && user.roles && user.roles.includes('tenant')) {
-    //   setSideNavbar(null);
-    // } else if (user && user.roles && user.roles.includes('executive')) {
-    //   setSideNavbar(null);
-    // } else if (user && user.roles && user.roles.includes('admin')) {
-    //   setSideNavbar(true);
-    // } else if (user && user.roles && user.roles.includes('superadmin')) {
-    //   setSideNavbar(true);
-    // } else {
-    //   setSideNavbar(null);
-    // }
-    // console.log('user in useEffect App.js:', user);
-  }, [user])
 
-  // console.log('user in App:', user);
+  }, [user])
 
   return (
     <div className="App">
@@ -80,13 +69,13 @@ function App() {
           <Navbar />
           {/* <Navbar setFlag={openSideNavbar} /> */}
 
-
-          {/* {user && user.roles && (user.roles.includes('admin') || user.roles.includes('superadmin')) && <SidebarNew setFlag={openSideNavbar}></SidebarNew>} */}
-
-
-          {/* <div className={sideNavbar === true ? 'full-content' : sideNavbar === false ? 'full-content sidebar-open' : sideNavbar === null ? 'full-content no-sidebar' : ''}> */}
           <div className={'full-content'} >
             <Routes>
+
+              <Route path='/' element={
+                user ? < PGProfile /> : <PGLogin />
+              }>
+              </Route>
 
               <Route path='/adminsettings' element={<AdminSettings />}>
               </Route>
@@ -94,70 +83,75 @@ function App() {
               <Route path='/updatepwd' element={user ? < UpdatePassword /> : <PGLogin />}>
               </Route>
 
-              <Route path='/' element={user ? < PGProfile /> : <PGLogin />}>
-              </Route>
+
 
               <Route exact path="/superadmindashboard" element={
-                user && user.roles && user.roles.includes('superadmin') ? <SuperAdminDashboard /> : <Navigate to="/login" />
+                user && user.role === 'superadmin' ? <SuperAdminDashboard /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route exact path="/userlist" element={
-                user && user.roles && user.roles.includes('superadmin') ? <PGUserList /> : <Navigate to="/login" />
+                user && user.role === 'superadmin' ? <PGUserList /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/admindashboard" element={
-                user && user.roles && user.roles.includes('admin') ? < PGAdminDashboard /> : <Navigate to="/login" />
+                user && user.role === 'admin' ? < PGAdminDashboard /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/adminproperties" element={
-                user && user.roles && user.roles.includes('admin') ? < PGAdminProperties /> : <Navigate to="/login" />
+                user && user.role === 'admin' ? < PGAdminProperties /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/addproperty" element={
-                user && user.roles && user.roles.includes('admin') ? < PGAddProperty /> : <Navigate to="/login" />
+                user && user.role === 'admin' ? < PGAddProperty /> : <Navigate to="/login" />
+              }>
+              </Route>
+
+              <Route path="/addproperty/:propertyid" element={
+                user && user.role === 'admin' ? < PGAddProperty /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/addbill" element={
-                user && user.roles && user.roles.includes('admin') ? < AddBill /> : <Navigate to="/login" />
+                user && user.role === 'admin' ? < AddBill /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/addphoto" element={
-                user && user.roles && user.roles.includes('admin') ? < AddPhoto /> : <Navigate to="/login" />
+                user && user.role === 'admin' ? < AddPhoto /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/adddocument" element={
-                user && user.roles && user.roles.includes('admin') ? < AddDocument /> : <Navigate to="/login" />
+                user && user.role === 'admin' ? < AddDocument /> : <Navigate to="/login" />
               }>
               </Route>
 
-              {/* <Route path="/properties/:id" element={
-                user && user.roles ? < PGPropertyDetails /> : <Navigate to="/login" />
+              <Route path="/propertyedit/:id" element={
+                user && user.role ? < PGPropertyEdit /> : <Navigate to="/login" />
               }>
-              </Route> */}
+              </Route>
+
               <Route path="/propertydetails" element={
-                user && user.roles ? < PGPropertyDetails /> : <Navigate to="/login" />
+                user && user.role ? < PGPropertyDetails /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/bills" element={
-                user && user.roles ? < PGBills /> : <Navigate to="/login" />
+                user && user.role ? < PGBills /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/userdashboard" element={
-                user && user.roles && user.roles.includes('user') ? < UserDashboard /> : <Navigate to="/login" />
+                user && user.role === 'user' ? < UserDashboard /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/ownerdashboard" element={
-                user && user.roles && user.roles.includes('owner') ? < PGOwnerDashboard /> : <Navigate to="/login" />
+                user && user.role === 'owner' ? < PGOwnerDashboard /> : <Navigate to="/login" />
               }>
               </Route>
 
@@ -167,30 +161,14 @@ function App() {
               </Route>
 
               <Route path="/tenantdashboard" element={
-                user && user.roles && user.roles.includes('tenant') ? < TenantDashboard /> : <Navigate to="/login" />
+                user && user.role === 'tenant' ? < TenantDashboard /> : <Navigate to="/login" />
               }>
               </Route>
 
               <Route path="/executivedashboard" element={
-                user && user.roles && user.roles.includes('executive') ? < ExecutiveDashboard /> : <Navigate to="/login" />
+                user && user.role === 'executive' ? < ExecutiveDashboard /> : <Navigate to="/login" />
               }>
               </Route>
-
-              {/* <Route path="/properties/:id">
-                  {!user && <Login />}
-                  {user && <Property />}
-                </Route> */}
-
-
-              {/* <Route path="/create">
-                  {!user && <Navigate to="/login" />}
-                  {user && <Create />}
-                </Route>
-                <Route path="/projects/:id">
-                  {!user && <Navigate to="/login" />}
-                  {user && <Project />}
-                </Route> */}
-
 
               <Route path='/login' element={user ? <Navigate to="/" /> : < PGLogin />}>
               </Route>
@@ -199,26 +177,24 @@ function App() {
               <Route path='/profile' element={user ? < PGProfile /> : < PGLogin />}>
               </Route>
 
+              {/* Master data */}
+              <Route path="/addcountry" element={
+                user && user.role === 'admin' ? < MasterAddCountry /> : <PGLogin />
+              }>
+              </Route>
+              <Route path="/addstate" element={
+                user && user.role === 'admin' ? < MasterAddState /> : <PGLogin />
+              }>
+              </Route>
+              <Route path="/addcity" element={
+                user && user.role === 'admin' ? < MasterAddCity /> : <PGLogin />
+              }>
+              </Route>
 
-              {/* <Route path="/login">
-                  {user && <Navigate to="/" />}
-                  {!user && <Login />}
-                </Route>
-                <Route path="/signup">
-                  {user && user.displayName && <Navigate to="/" />}
-                  {!user && <Signup />}
-                </Route>
-                <Route path="/profile">
-                  {!user && <Navigate to="/" />}
-                  {user && <Profile />}
-                </Route> */}
             </Routes>
           </div>
-          {/* </div> */}
-          {/* {user && user.roles && user.roles.includes('admin') && <OnlineUsers setFlag={openOnlineUser} />} */}
 
-
-          {user && user.roles && (!user.roles.includes('user')) && <NavbarBottom></NavbarBottom>}
+          {user && user.role !== 'user' && <NavbarBottom></NavbarBottom>}
 
         </BrowserRouter>
       )

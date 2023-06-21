@@ -19,7 +19,7 @@ export default function ExecutiveDashboard() {
     // const navigate = useNavigate();
 
     useEffect(() => {
-        let flag = user && user.roles && user.roles.includes('executive');
+        let flag = user && user.role === 'executive';
         if (!flag) {
             logout()
         }

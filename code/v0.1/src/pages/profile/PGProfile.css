@@ -16,6 +16,7 @@
 }
 
 .user-logo-parent-div {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,10 +86,17 @@
     }
 }
 
-.user-name .details h5 {
+.user-name .details .profile-change-name {
     font-size: 1.3rem;
     color: #666;
     font-weight: 600;
+    border: none;
+    padding: 0 0 0 8px;
+    background: #eee;
+    /* background: var(--yellow-color); */
+    border: 1px dashed var(--lightgrey-color);
+    width: 90%;
+    margin-bottom: 8px;
 }
 
 .user-name .details p {
@@ -98,6 +106,24 @@
     font-weight: 500;
 }
 
+.user-name .details .profile-change-phone {
+    margin: 0;
+    color: #aaa;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    padding: 0 0 0 8px;
+    width: 120px;
+    background: #eee;
+    border: 1px dashed var(--lightgrey-color);
+}
+
+.user-name .details .profile-change-name:read-only,
+.user-name .details .profile-change-phone:read-only {
+    background: none;
+    border: 1px dashed transparent;
+}
+
 .user-name .edit {
     position: absolute;
     top: 0;
@@ -105,11 +131,24 @@
     display: flex;
     justify-content: center;
     padding: 10px 0;
+    cursor: pointer;
 }
 
 .user-name .edit span {
     color: #666;
     font-size: 1.3rem;
+}
+
+.user-name .edit span.done {
+    font-size: 1.5rem;
+    width: 25px;
+    height: 25px;
+    background: var(--blue-color);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .edit-profile-div {
@@ -207,4 +246,30 @@
     .dashboardCardBoxoffer {
         height: auto;
     }
+}
+
+.profile-upload-input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.profile-upload-label {
+    position: absolute;
+    bottom: -20%;
+    right: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--blue-color);
+    color: #fff;
+}
+
+.profile-upload-label span {
+    font-size: 1.4rem;
+    position: relative;
+    top: 2px;
 }

@@ -33,6 +33,7 @@ export default function PGPropertyDetails() {
 
     return (
         <div>
+            <div>Property Details</div>
             <Filters changeFilter={changeFilter} filterList={propertyDetailsFilter} filterLength={filterLength} />
             {/* <PropertyDetails property={document} /> */}
             {filter === 'BILLS' && billsdocuments && <BillList bills={billsdocuments} />}
