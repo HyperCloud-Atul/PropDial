@@ -381,7 +381,7 @@ export default function More() {
                                     </div>
                                 </Link>
 
-                                <div className='more-div-card-inner'>
+                                <Link to='/addlocality' className='more-div-card-inner'>
                                     <div className='more-div-card-inner-icon'>
                                         <span className="material-symbols-outlined">
                                             lock_open
@@ -396,7 +396,23 @@ export default function More() {
                                             arrow_forward_ios
                                         </span>
                                     </div>
-                                </div>
+                                </Link>
+                                <Link to='/addsociety' className='more-div-card-inner'>
+                                    <div className='more-div-card-inner-icon'>
+                                        <span className="material-symbols-outlined">
+                                            lock_open
+                                        </span>
+                                    </div>
+                                    <div className='more-div-card-inner-content'>
+                                        <h2>Add Society</h2>
+                                        <h3>sign-out from the application</h3>
+                                    </div>
+                                    <div className='more-div-card-inner-arrow'>
+                                        <span className="material-symbols-outlined">
+                                            arrow_forward_ios
+                                        </span>
+                                    </div>
+                                </Link>
                             </div>
                         </div>
                     </div>

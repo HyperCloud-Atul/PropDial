@@ -5,13 +5,15 @@ import { useCollection } from '../../hooks/useCollection'
 import Select from 'react-select'
 
 export default function MasterAddCity() {
-    const { addDocument, response } = useFirestore('m_states')
+    const { addDocument, response } = useFirestore('m_cities')
     const { documents: masterCity, error: masterCityerror } = useCollection('m_cities')
     // const { documents: masterState, error: masterStateerror } = useCollection('m_states')
     const { documents: masterCountry, error: masterCountryerror } = useCollection('m_countries')
-
+    // console.log('masterCountry:', masterCountry)
     const [country, setCountry] = useState({ label: 'INDIA', value: 'INDIA' })
+    const [countryList, setCountryList] = useState()
     const [state, setState] = useState()
+    const [stateList, setStateList] = useState()
     const [city, setCity] = useState()
     const [formError, setFormError] = useState(null)
 
@@ -21,7 +23,7 @@ export default function MasterAddCity() {
     let stateOptionsSorted = useRef([]);
 
     useEffect(() => {
-        console.log('in useeffect')
+        // console.log('in useeffect')
         if (masterCountry) {
             countryOptions.current = masterCountry.map(countryData => ({
                 label: countryData.country,
@@ -32,30 +34,18 @@ export default function MasterAddCity() {
                 a.label.localeCompare(b.label)
             );
 
-            console.log('countryOptionsSorted:', countryOptionsSorted)
+            setCountryList(countryOptionsSorted.current)
 
-            // handleCountryChange(country)
+            handleCountryChange(country)
         }
 
-    }, [])
-
-
-
-    // if (masterState) {
-    //     stateOptions.current = masterState.map(stateData => ({
-    //         label: stateData.state,
-    //         value: stateData.state
-    //     }))
-
-    //     stateOptionsSorted.current = stateOptions.current.sort((a, b) =>
-    //         a.label.localeCompare(b.label)
-    //     );
-    // }
+    }, [masterCountry])
 
     //Country select onchange
     const handleCountryChange = async (option) => {
         setCountry(option)
         let countryname = option.label;
+        console.log('countryname:', countryname)
         const ref = await projectFirestore.collection('m_states').where("country", "==", countryname)
         ref.onSnapshot(async snapshot => {
             if (snapshot.docs) {
@@ -67,6 +57,9 @@ export default function MasterAddCity() {
                 stateOptionsSorted.current = stateOptions.current.sort((a, b) =>
                     a.label.localeCompare(b.label)
                 );
+
+                // console.log('stateOptionsSorted.current:', stateOptionsSorted.current)
+                // setStateList(stateOptionsSorted.current)
 
                 if (countryname === 'INDIA') {
                     setState({ label: 'DELHI', value: 'DELHI' })
@@ -84,16 +77,13 @@ export default function MasterAddCity() {
         })
     }
 
-
-
-
-
     let results = []
     const handleSubmit = async (e) => {
         e.preventDefault()
         setFormError(null)
 
         let cityname = city.trim().toUpperCase();
+        console.log('cityname:', cityname)
         let ref = projectFirestore.collection('m_cities').where("city", "==", cityname)
 
         const unsubscribe = ref.onSnapshot(async snapshot => {
@@ -135,8 +125,9 @@ export default function MasterAddCity() {
                                 <br />
                                 <h1 className="owner-heading">Country</h1>
                                 <Select className=''
-                                    onChange={(option) => setCountry(option)}
-                                    options={countryOptionsSorted.current}
+                                    onChange={handleCountryChange}
+                                    // options={countryOptionsSorted.current}
+                                    options={countryList}
                                     value={country}
                                     styles={{
                                         control: (baseStyles, state) => ({
@@ -157,6 +148,7 @@ export default function MasterAddCity() {
                                 <Select className=''
                                     onChange={(option) => setState(option)}
                                     options={stateOptionsSorted.current}
+                                    // options={stateList}
                                     value={state}
                                     styles={{
                                         control: (baseStyles, state) => ({

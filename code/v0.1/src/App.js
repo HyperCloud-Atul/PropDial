@@ -44,6 +44,8 @@ import AdminSettings from './pages/roles/admin/AdminSettings'
 import MasterAddCountry from './pages/create/MasterAddCountry'
 import MasterAddState from './pages/create/MasterAddState'
 import MasterAddCity from './pages/create/MasterAddCity'
+import MasterAddLocality from './pages/create/MasterAddLocality'
+import MasterAddSociety from './pages/create/MasterAddSociety'
 // import BillList from './components/BillList'
 
 function App() {
@@ -188,6 +190,14 @@ function App() {
               </Route>
               <Route path="/addcity" element={
                 user && user.role === 'admin' ? < MasterAddCity /> : <PGLogin />
+              }>
+              </Route>
+              <Route path="/addlocality" element={
+                user && user.role === 'admin' ? < MasterAddLocality /> : <PGLogin />
+              }>
+              </Route>
+              <Route path="/addsociety" element={
+                user && user.role === 'admin' ? < MasterAddSociety /> : <PGLogin />
               }>
               </Route>
 

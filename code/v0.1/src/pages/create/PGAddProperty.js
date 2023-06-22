@@ -77,8 +77,10 @@ export default function PGAddProperty({ propertyid }) {
     let statesOptionsSorted = useRef([]);
     let citiesOptions = useRef([]);
     let citiesOptionsSorted = useRef([]);
-    let localityOptions;
-    let localityOptionsSorted;
+    let localityOptions = useRef([]);
+    let localityOptionsSorted = useRef([]);
+    let societyOptions = useRef([]);
+    let societyOptionsSorted = useRef([]);
 
     useEffect(() => {
         // console.log('in useeffect')
@@ -146,22 +148,8 @@ export default function PGAddProperty({ propertyid }) {
         a.label.localeCompare(b.label)
     );
 
-    const societyOptions = [
-        { value: '1', label: 'AVON PARADISE' },
-        { value: '2', label: 'DREAM LAND' },
-        { value: '3', label: 'VISON FLORA' },
-        { value: '4', label: 'PLATINUM VISTA' },
-        { value: '5', label: 'HIGH MONT' }
-    ];
-    const societyOptionsSorted = societyOptions.sort((a, b) =>
-        a.label.localeCompare(b.label)
-    );
-
-
     // Load dropdowns with db values
     //Load data into Country dropdown    
-
-
     //Country select onchange
     const handleCountryChange = async (option) => {
         setCountry(option)
@@ -173,7 +161,7 @@ export default function PGAddProperty({ propertyid }) {
                     label: stateData.data().state,
                     value: stateData.data().state
                 }))
-                console.log('statesOptions:', statesOptions)
+                // console.log('statesOptions:', statesOptions)
                 statesOptionsSorted.current = statesOptions.current.sort((a, b) =>
                     a.label.localeCompare(b.label)
                 );
@@ -196,10 +184,10 @@ export default function PGAddProperty({ propertyid }) {
         })
     }
 
-    //State select onchange
     const handleStateChange = async (option) => {
         setState(option)
         let statename = option.label;
+        console.log('statename:', statename)
         const ref = await projectFirestore.collection('m_cities').where("state", "==", statename)
         ref.onSnapshot(async snapshot => {
             if (snapshot.docs) {
@@ -207,24 +195,23 @@ export default function PGAddProperty({ propertyid }) {
                     label: cityData.data().city,
                     value: cityData.data().city
                 }))
-                console.log('citiesOptions:', citiesOptions)
+
                 citiesOptionsSorted.current = citiesOptions.current.sort((a, b) =>
                     a.label.localeCompare(b.label)
                 );
 
                 if (statename === 'DELHI') {
                     setCity({ label: 'DELHI', value: 'DELHI' })
-                    // handleCityChange({ label: 'DELHI', value: 'DELHI' })
+                    handleCityChange({ label: 'DELHI', value: 'DELHI' })
                 }
                 else {
                     setCity({ label: citiesOptionsSorted.current[0].label, value: citiesOptionsSorted.current[0].value })
-                    // handleCityChange({ label: statesOptions[0].label, value: statesOptions[0].value })
+                    handleCityChange({ label: citiesOptionsSorted.current[0].label, value: citiesOptionsSorted.current[0].value })
                 }
             }
             else {
                 // setError('No such document exists')
             }
-
         }, err => {
             console.log(err.message)
             // setError('failed to get document')
@@ -234,25 +221,22 @@ export default function PGAddProperty({ propertyid }) {
     //City select onchange
     const handleCityChange = async (option) => {
         setCity(option)
-        // console.log('option.label: ', option.label)
-        const ref = await projectFirestore.collection('m_localities').doc(option.label)
+        let cityname = option.label;
+        console.log('cityname:', cityname)
+        const ref = await projectFirestore.collection('m_localities').where("city", "==", cityname)
         ref.onSnapshot(async snapshot => {
-            // need to make sure the doc exists & has data
-            if (snapshot.data()) {
-                // console.log('snapshot.data():', snapshot.data())
-                localityOptions = snapshot.data().data.map(localityData => ({
-                    label: localityData.locality.toUpperCase(),
-                    value: localityData.localitycode
+            if (snapshot.docs) {
+                localityOptions.current = snapshot.docs.map(localityData => ({
+                    label: localityData.data().locality,
+                    value: localityData.data().locality
                 }))
 
-                localityOptionsSorted = localityOptions.sort((a, b) =>
+                localityOptionsSorted.current = localityOptions.current.sort((a, b) =>
                     a.label.localeCompare(b.label)
                 );
 
-                console.log('localityOptionsSorted:', localityOptionsSorted)
-                setLocalityList(localityOptionsSorted)
-
-                setLocality({ label: localityOptions[0].label, value: localityOptions[0].value })
+                setLocality({ label: localityOptionsSorted.current[0].label, value: localityOptionsSorted.current[0].value })
+                handleLocalityChange({ label: localityOptionsSorted.current[0].label, value: localityOptionsSorted.current[0].value })
 
             }
             else {
@@ -264,6 +248,35 @@ export default function PGAddProperty({ propertyid }) {
         })
     }
 
+    //Locality select onchange
+    const handleLocalityChange = async (option) => {
+        setLocality(option)
+        let localityname = option.label;
+        // console.log('cityname:', localityname)
+        const ref = await projectFirestore.collection('m_societies').where("locality", "==", localityname)
+        ref.onSnapshot(async snapshot => {
+            if (snapshot.docs) {
+                societyOptions.current = snapshot.docs.map(societyData => ({
+                    label: societyData.data().society,
+                    value: societyData.data().society
+                }))
+
+                societyOptionsSorted.current = societyOptions.current.sort((a, b) =>
+                    a.label.localeCompare(b.label)
+                );
+
+                setSociety({ label: societyOptionsSorted.current[0].label, value: societyOptionsSorted.current[0].value })
+                // setSociety({ label: societyOptionsSorted.current.label, value: societyOptionsSorted.current.value })
+                // handleCityChange({ label: statesOptionsSorted.current[0].label, value: statesOptionsSorted.current[0].value })
+            }
+            else {
+                // setError('No such document exists')
+            }
+        }, err => {
+            console.log(err.message)
+            // setError('failed to get document')
+        })
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -578,7 +591,7 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="location-search">
                                         <Select className=''
                                             onChange={handleCityChange}
-                                            options={cityList}
+                                            options={citiesOptionsSorted.current}
                                             value={city}
                                             styles={{
                                                 control: (baseStyles, state) => ({
@@ -601,8 +614,8 @@ export default function PGAddProperty({ propertyid }) {
                                     <h1 className="owner-heading">Lacality</h1>
                                     <div className="location-search">
                                         <Select className=''
-                                            onChange={(option) => setLocality(option)}
-                                            options={localityList}
+                                            onChange={handleLocalityChange}
+                                            options={localityOptionsSorted.current}
                                             value={locality}
                                             styles={{
                                                 control: (baseStyles, state) => ({
@@ -627,7 +640,7 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="location-search">
                                         <Select className=''
                                             onChange={(option) => setSociety(option)}
-                                            options={societyOptionsSorted}
+                                            options={societyOptionsSorted.current}
                                             value={society}
                                             styles={{
                                                 control: (baseStyles, state) => ({
