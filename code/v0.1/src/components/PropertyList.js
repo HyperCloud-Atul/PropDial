@@ -25,9 +25,7 @@ export default function PropertyList({ properties }) {
                 <div className='col-lg-6 col-md-6 col-sm-12'>
                     <div className="property-status-padding-div">
                         <div className="profile-card-div" style={{ position: 'relative' }}>
-                            {/* <Link to={`/properties/${property.id}`} key={property.id} style={{ textDecoration: 'none' }} > */}
-                            {/* <Link to='/propertydetails' state={{ propertyid: property.id }} key={property.id} style={{ textDecoration: 'none' }} > */}
-                            <Link to={`/propertyedit/${property.id}`} key={property.id}>
+                            {user.role === 'admin' && <Link to={`/propertyedit/${property.id}`} key={property.id}>
                                 <div className={"event-id " + property.category}>
                                     <h5>{property.category}</h5>
                                 </div>
@@ -62,6 +60,42 @@ export default function PropertyList({ properties }) {
                                     </div>
                                 </div>
                             </Link >
+                            }
+                            {user.role !== 'admin' && <div>
+                                <div className={"event-id " + property.category}>
+                                    <h5>{property.category}</h5>
+                                </div>
+                                <div className="address-div" style={{ paddingBottom: '5px' }}>
+                                    <div className="icon">
+                                        <span className="material-symbols-outlined" style={{ color: 'var(--darkgrey-color)' }}>
+                                            home
+                                        </span>
+                                    </div>
+                                    <div className="address-text">
+                                        <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
+                                            <h5 style={{ margin: '0' }}>{property.unitNumber} : {property.society} </h5>
+                                            <small style={{ margin: '0' }}>{property.locality} ({property.city})</small>
+                                        </div>
+                                        <div className="">
+                                            <span className="material-symbols-outlined">
+                                                chevron_right
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="tenant-profile-property-detail">
+                                    <div className="tenant-profile-property-detail-inner-div">
+                                        <div>
+                                            <h1>Onboarding Date</h1>
+                                            <h2>{format(property.onboardingDate.toDate(), 'dd MMM, yyyy')}</h2>
+                                        </div>
+                                        <div>
+                                            <h1>Purpose</h1>
+                                            <h2>{property.purpose}</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>}
                             {property.taggedUsersList.map((ele) => {
 
                                 return ele.role === 'executive' ?
@@ -107,7 +141,7 @@ export default function PropertyList({ properties }) {
                                         <div className="property-contact-div"
                                             style={{ width: '30%', height: 'auto' }}>
                                             <a href={"tel:" + ele.phoneNumber}>
-                                                {console.log("tel:" + ele.phoneNumber)}
+                                                {/* {console.log("tel:" + ele.phoneNumber)} */}
                                                 <div style={{ margin: '5px 0' }}>
                                                     <span className="material-symbols-outlined">
                                                         call
@@ -115,9 +149,11 @@ export default function PropertyList({ properties }) {
 
                                                 </div>
                                             </a>
-                                            <div style={{ margin: '5px 0' }}>
-                                                <img src="./img/whatsapp_square_icon.png" alt="" />
-                                            </div>
+                                            <a href={"https://wa.me/" + ele.phoneNumber}>
+                                                <div style={{ margin: '5px 0' }}>
+                                                    <img src="./assets/img/whatsapp_square_icon.png" alt="" />
+                                                </div>
+                                            </a>
                                         </div>
                                     </div> : ''
                             })}

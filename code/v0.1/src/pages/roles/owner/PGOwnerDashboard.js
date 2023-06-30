@@ -255,7 +255,7 @@ export default function PGOwnerDashboard() {
                                     <span className="material-symbols-outlined">
                                         location_away
                                     </span>
-                                    <h1>59</h1>
+                                    <h1>0</h1>
                                     <h5 className="owlcarousel-item-h5">Rental Enquiries</h5>
                                 </center>
                             </div>
@@ -340,10 +340,10 @@ export default function PGOwnerDashboard() {
                             <div className="address-text">
                                 <div style={{ textAlign: 'left', position: 'relative', top: '-1px', }}>
                                     <h5 style={{ fontWeight: 'bolder' }}>Payments</h5>
-                                    <h5 style={{ margin: '0', fontSize: '0.8rem', color: '#888' }}>1,708</h5>
+                                    <h5 style={{ margin: '0', fontSize: '0.8rem', color: '#888' }}>0</h5>
                                 </div>
                                 <div className="" style={{ position: 'relative', top: '-6px' }}>
-                                    <h6 style={{ margin: '0', fontSize: '1.4rem', fontWeight: '600', color: '#444' }}>₹84,538
+                                    <h6 style={{ margin: '0', fontSize: '1.4rem', fontWeight: '600', color: '#444' }}>₹ 0
                                     </h6>
                                 </div>
                             </div>
@@ -362,10 +362,10 @@ export default function PGOwnerDashboard() {
                             <div className="address-text">
                                 <div style={{ textAlign: 'left', position: 'relative', top: '-1px' }}>
                                     <h5 style={{ fontWeight: 'bolder' }}>Bills</h5>
-                                    <h5 style={{ margin: '0', fontSize: '0.8rem', color: '#888' }}>152</h5>
+                                    <h5 style={{ margin: '0', fontSize: '0.8rem', color: '#888' }}>0</h5>
                                 </div>
                                 <div className="" style={{ position: 'relative', top: '-6px' }}>
-                                    <h6 style={{ margin: '0', fontSize: '1.4rem', fontWeight: '600', color: '#444' }}>₹6,907
+                                    <h6 style={{ margin: '0', fontSize: '1.4rem', fontWeight: '600', color: '#444' }}>₹ 0
                                     </h6>
                                 </div>
                             </div>
@@ -384,10 +384,10 @@ export default function PGOwnerDashboard() {
                             <div className="address-text">
                                 <div style={{ textAlign: 'left', position: 'relative', top: '-1px' }}>
                                     <h5 style={{ fonWweight: ' bolde' }}>Documents</h5>
-                                    <h5 style={{ margin: '0', fontSize: '0.8rem', color: '#888' }}>742</h5>
+                                    <h5 style={{ margin: '0', fontSize: '0.8rem', color: '#888' }}>0</h5>
                                 </div>
                                 <div className="" style={{ position: 'relative', top: '-6px' }}>
-                                    <h6 style={{ margin: '0', fontSize: '1.4rem', fontWeight: '600', color: '#444' }}>742
+                                    <h6 style={{ margin: '0', fontSize: '1.4rem', fontWeight: '600', color: '#444' }}>0
                                     </h6>
                                 </div>
                             </div>
