@@ -41,11 +41,12 @@ import PGPropertyDetails from './pages/property/PGPropertyDetails'
 import './App.css'
 import UpdatePassword from './pages/login/PGUpdatePassword'
 import AdminSettings from './pages/roles/admin/AdminSettings'
-import MasterAddCountry from './pages/create/MasterAddCountry'
-import MasterAddState from './pages/create/MasterAddState'
-import MasterAddCity from './pages/create/MasterAddCity'
-import MasterAddLocality from './pages/create/MasterAddLocality'
-import MasterAddSociety from './pages/create/MasterAddSociety'
+import PGError from './pages/app/PGError'
+import MasterCountryList from './pages/create/MasterCountryList'
+import MasterCityList from './pages/create/MasterCityList'
+import MasterStateList from './pages/create/MasterStateList'
+import MasterLocalityList from './pages/create/MasterLocalityList'
+import MasterSocietyList from './pages/create/MasterSocietyList'
 // import BillList from './components/BillList'
 
 function App() {
@@ -180,24 +181,28 @@ function App() {
               </Route>
 
               {/* Master data */}
-              <Route path="/addcountry" element={
-                user && user.role === 'admin' ? < MasterAddCountry /> : <PGLogin />
+              <Route path="/countrylist" element={
+                user && user.role === 'admin' ? < MasterCountryList /> : <PGLogin />
               }>
               </Route>
-              <Route path="/addstate" element={
-                user && user.role === 'admin' ? < MasterAddState /> : <PGLogin />
+              <Route path="/statelist" element={
+                user && user.role === 'admin' ? < MasterStateList /> : <PGLogin />
               }>
               </Route>
-              <Route path="/addcity" element={
-                user && user.role === 'admin' ? < MasterAddCity /> : <PGLogin />
+              <Route path="/citylist" element={
+                user && user.role === 'admin' ? < MasterCityList /> : <PGLogin />
               }>
               </Route>
-              <Route path="/addlocality" element={
-                user && user.role === 'admin' ? < MasterAddLocality /> : <PGLogin />
+              <Route path="/localitylist" element={
+                user && user.role === 'admin' ? < MasterLocalityList /> : <PGLogin />
               }>
               </Route>
-              <Route path="/addsociety" element={
-                user && user.role === 'admin' ? < MasterAddSociety /> : <PGLogin />
+              <Route path="/societylist" element={
+                user && user.role === 'admin' ? < MasterSocietyList /> : <PGLogin />
+              }>
+              </Route>
+              <Route path="/error" element={
+                < PGError />
               }>
               </Route>
 

@@ -3,9 +3,11 @@ import { projectFirestore } from '../../firebase/config'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useCollection } from '../../hooks/useCollection'
 import Select from 'react-select'
+import { Link } from 'react-router-dom'
 
-export default function MasterAddLocality() {
+export default function MasterLocalityList() {
     const { addDocument, response } = useFirestore('m_localities')
+    const { updateDocument, response: responseUpdateDocument } = useFirestore('m_localities')
     const { documents: masterLocality, error: masterCityerror } = useCollection('m_localities')
     // const { documents: masterState, error: masterStateerror } = useCollection('m_states')
     const { documents: masterCountry, error: masterCountryerror } = useCollection('m_countries')
@@ -16,6 +18,8 @@ export default function MasterAddLocality() {
     const [city, setCity] = useState()
     const [locality, setLocality] = useState()
     const [formError, setFormError] = useState(null)
+    const [formBtnText, setFormBtnText] = useState('')
+    const [currentDocid, setCurrentDocid] = useState(null)
 
     let countryOptions = useRef([]);
     let countryOptionsSorted = useRef([]);
@@ -120,39 +124,157 @@ export default function MasterAddLocality() {
 
         let localityname = locality.trim().toUpperCase();
 
-        let ref = projectFirestore.collection('m_localities').where("locality", "==", localityname)
-        const unsubscribe = ref.onSnapshot(async snapshot => {
-            snapshot.docs.forEach(doc => {
-                results.push({ ...doc.data(), id: doc.id })
-            });
+        if (currentDocid) {
+            await updateDocument(currentDocid, {
+                country: country.label,
+                state: state.label,
+                city: city.label,
+                locality: localityname
+            })
+            setFormError('Successfully updated')
+        }
+        else {
 
-            if (results.length === 0) {
-                const dataSet = {
-                    country: country.label,
-                    state: state.label,
-                    city: city.label,
-                    locality: localityname,
-                    status: 'active'
+            let ref = projectFirestore.collection('m_localities').where("locality", "==", localityname)
+            const unsubscribe = ref.onSnapshot(async snapshot => {
+                snapshot.docs.forEach(doc => {
+                    results.push({ ...doc.data(), id: doc.id })
+                });
+
+                if (results.length === 0) {
+                    const dataSet = {
+                        country: country.label,
+                        state: state.label,
+                        city: city.label,
+                        locality: localityname,
+                        status: 'active'
+                    }
+                    await addDocument(dataSet)
+                    setFormError('Successfully added')
                 }
-                await addDocument(dataSet)
-                setFormError('Successfully added')
-            }
-            else {
-                setFormError('Already added')
-            }
+                else {
+                    setFormError('Already added')
+                }
+            })
+        }
+    }
+
+    const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+
+    const openMoreAddOptions = () => {
+        setHandleMoreOptionsClick(true)
+    }
+    const closeMoreAddOptions = () => {
+        setHandleMoreOptionsClick(false)
+    }
+
+    const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
+    const handleAddSection = () => {
+        setFormError(null)
+        sethandleAddSectionFlag(true)
+        setFormBtnText('Add Locality')
+        handleCountryChange(country)
+        setLocality('')
+        setCurrentDocid(null)
+    }
+
+    // const [cityStatus, setCityStatus] = useState();
+    const handleChangeStatus = async (docid, status) => {
+        // console.log('docid:', docid)
+        if (status === 'active')
+            status = 'inactive'
+        else
+            status = 'active'
+        await updateDocument(docid, {
+            status
         })
+    }
+
+    const handleEditCard = (docid, doccountry, docstate, doccity, doclocality) => {
+        // console.log('data:', data)
+        setFormError(null)
+        setCountry({ label: doccountry, value: doccountry })
+        setState({ label: docstate, value: docstate })
+        setCity({ label: doccity, value: doccity })
+        setLocality(doclocality)
+        sethandleAddSectionFlag(true)
+        setFormBtnText('Update Locality')
+        setCurrentDocid(docid)
     }
 
     return (
         <div>
+
+            <div onClick={openMoreAddOptions} className="property-list-add-property">
+                <span className="material-symbols-outlined">
+                    apps
+                </span>
+            </div>
+
+            <div className={handleMoreOptionsClick ? 'more-add-options-div open' : 'more-add-options-div'}
+                onClick={closeMoreAddOptions} id="moreAddOptions">
+
+                <div className='more-add-options-inner-div'>
+
+                    <div className="more-add-options-icons">
+                        <h1>Close</h1>
+                        <span className="material-symbols-outlined">
+                            close
+                        </span>
+                    </div>
+
+                    <Link to='/countrylist' className="more-add-options-icons">
+                        <h1>Country List</h1>
+                        <span className="material-symbols-outlined">
+                            public
+                        </span>
+                    </Link>
+
+                    <Link to='/statelist' className="more-add-options-icons">
+                        <h1>State List</h1>
+                        <span className="material-symbols-outlined">
+                            map
+                        </span>
+                    </Link>
+
+                    <Link to='/citylist' className="more-add-options-icons">
+                        <h1>City List</h1>
+                        <span className="material-symbols-outlined">
+                            location_city
+                        </span>
+                    </Link>
+
+                    <div onClick={handleAddSection} className="more-add-options-icons active" >
+                        <h1>Add Locality</h1>
+                        <span className="material-symbols-outlined">
+                            add
+                        </span>
+                    </div>
+
+                    <Link to='/societylist' className="more-add-options-icons" >
+                        <h1>Society List</h1>
+                        <span className="material-symbols-outlined">
+                            home
+                        </span>
+                    </Link>
+
+                </div>
+
+            </div>
+
             <div className='page-title'>
                 <span className="material-symbols-outlined">
                     flag
                 </span>
-                <h1>Add Locality </h1>
+                <h1>Locality List </h1>
             </div>
 
-            <div style={{ overflow: 'hidden' }}>
+            <div style={{
+                overflow: 'hidden',
+                transition: '2s',
+                opacity: handleAddSectionFlag ? '1' : '0',
+                maxHeight: handleAddSectionFlag ? '800px' : '0',
+            }}>
                 {/* <form onSubmit={handleSubmit} className="auth-form"> */}
                 <form onSubmit={handleSubmit} className="auth-form" style={{ maxWidth: '350px' }}>
                     <div className="row no-gutters">
@@ -221,7 +343,7 @@ export default function MasterAddLocality() {
                         <div className="col-12">
                             <div>
                                 <br />
-                                <h1 className="owner-heading">New Locality</h1>
+                                <h1 className="owner-heading">Locality</h1>
                                 <input
                                     required
                                     type="text"
@@ -238,12 +360,14 @@ export default function MasterAddLocality() {
                     </div>
                     <br />
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <button className="btn">Add Locality</button>
-                        {formError && <div className="error">{formError}</div>}
+                        <button className="btn">{formBtnText}</button>
+                        <br />
+                        {formError && <div style={{ margin: '0' }} className="error">{formError}</div>}
                     </div>
                     <br />
                 </form>
             </div >
+            <hr></hr>
             <div className="row no-gutters">
                 {masterLocality && masterLocality.length === 0 && <p>No City Yet!</p>}
                 {masterLocality && masterLocality.map(data => (<>
@@ -251,21 +375,47 @@ export default function MasterAddLocality() {
                         <div className="property-status-padding-div">
                             <div className="profile-card-div" style={{ position: 'relative' }}>
                                 <div className="address-div" style={{ paddingBottom: '5px' }}>
-                                    <div className="icon">
+                                    <div className="icon" style={{ position: 'relative', top: '-1px' }}>
                                         <span className="material-symbols-outlined" style={{ color: 'var(--darkgrey-color)' }}>
                                             flag
                                         </span>
                                     </div>
                                     <div className="address-text">
-                                        <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
-                                            <h5 style={{ margin: '0' }}>{data.locality}  </h5>
-                                            <small style={{ margin: '0' }}>{data.city}, {data.state}, {data.country}</small>
+                                        <div onClick={() => handleEditCard(data.id, data.country, data.state, data.city, data.locality)}
+                                            style={{
+                                                width: '80%',
+                                                height: '170%',
+                                                textAlign: 'left',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                flexDirection: 'column',
+                                                transform: 'translateY(-7px)',
+                                                cursor: 'pointer',
+                                            }}>
+                                            <h5 style={{ margin: '0', transform: 'translateY(5px)' }}>{data.locality}</h5>
+                                            <small style={{ margin: '0', transform: 'translateY(5px)' }}>{data.city}, {data.state}, {data.country}</small>
                                         </div>
-                                        <div className="">
-                                            <small style={{ margin: '0' }}>{data.status}</small>
-                                            <span className="material-symbols-outlined">
+                                        <div className="" onClick={() => handleChangeStatus(data.id, data.status)}
+                                            style={{
+                                                width: '20%',
+                                                height: 'calc(100% - -20px)',
+                                                position: 'relative',
+                                                top: '-8px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'flex-end',
+                                                cursor: 'pointer',
+                                            }}>
+                                            <small style={{
+                                                margin: '0',
+                                                background: data.status === 'active' ? 'green' : 'red',
+                                                color: '#fff',
+                                                padding: '3px 10px 3px 10px',
+                                                borderRadius: '4px',
+                                            }}>{data.status}</small>
+                                            {/* <span className="material-symbols-outlined">
                                                 chevron_right
-                                            </span>
+                                            </span> */}
                                         </div>
                                     </div>
                                 </div>

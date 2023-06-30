@@ -183,11 +183,12 @@ textarea {
   width: 100%;
   box-sizing: border-box;
   border: none;
-  /* border-color: none; */
-  border-bottom: 1px solid var(--yellow-color);
-  border-radius: 0px;
+  /* background: var(--yellow-color); */
+  border-radius: 4px;
+  color: #000;
+  border-color: none;
+  border-bottom: 2px solid var(--yellow-color);
   outline: none;
-
 }
 
 textarea {

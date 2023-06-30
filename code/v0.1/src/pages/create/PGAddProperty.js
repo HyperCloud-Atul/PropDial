@@ -355,9 +355,13 @@ export default function PGAddProperty({ propertyid }) {
         }
         else {
             await addDocument(property)
-            if (!addDocumentResponse.error) {
-                navigate('/')
+            if (addDocumentResponse.error) {
+                navigate('/error')
             }
+            else {
+                navigate('/admindashboard')
+            }
+
             // console.log('addDocument:', property)
         }
 
