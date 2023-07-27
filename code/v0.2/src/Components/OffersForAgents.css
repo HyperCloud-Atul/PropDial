@@ -1,0 +1,51 @@
+.card_div_1 {
+    background-color: #e1f1ff;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.card_upper div h4 {
+    margin-left: 30px;
+    font-weight: 600;
+}
+
+.heading_underline {
+    background-color: red;
+    height: 10px;
+    width: 500px;
+}
+
+.cards_para {
+    margin: 8px;
+}
+
+.btn_div {
+    padding: 10px;
+}
+
+.btn_div i {
+    font-weight: 600;
+    font-size: 15px;
+    transition: .3s;
+    position: relative;
+    margin-left: 10px;
+}
+
+.know_more_btn {
+    padding: 10px 15px 10px 15px;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, .1);
+    background-color: #fbfffd;
+    line-height: 12px;
+    color: #111112;
+    transition: .3s;
+    border: none;
+}
+
+.card_img {
+    bottom: 0;
+    right: 0;
+    position: absolute;
+}

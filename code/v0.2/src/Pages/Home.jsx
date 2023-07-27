@@ -11,6 +11,7 @@ import TopReasonsToChooseUs from "../Components/TopReasonsToChooseUs";
 import AnimatedImages from "../Components/AnimatedImages";
 import FounderSpeak from "../Components/FounderSpeak";
 import MobileBottomMenu from "../Components/MobileBottomMenu";
+import OffersForAgents from "../Components/OffersForAgents";
 import Footer from "../Components/Footer";
 import PopupMessage from "../Components/PopupMessage";
 const Home = () => {
@@ -26,6 +27,8 @@ const Home = () => {
       <AnimatedNumberCounter />
       <TopReasonsToChooseUs />
       <AnimatedImages />
+      <OffersForAgents />
+
       <FounderSpeak />
       <MobileBottomMenu />
       <Footer />
