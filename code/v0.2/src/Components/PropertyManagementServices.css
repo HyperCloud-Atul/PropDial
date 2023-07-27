@@ -1,0 +1,139 @@
+.our-services-heading{
+  text-align: center;
+  font-weight: 500;
+  color: #0a3544;
+  font-family: Montserrat,sans-serif;
+  margin: 12rem 0rem 7rem 0rem;
+}
+.our-services-heading h3{
+  font-size: 25px;
+}
+.our-services-heading span{
+  color: #EA5632;
+  font-size: 25px;
+}
+.our-services-heading p{
+  font-size: 15px;
+}
+.main-service-card {
+  margin: 8rem 0rem 10rem 0rem;
+}
+.right-service-div{
+display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
+.right-service-div p{
+  font-size: 12px;
+    display: block;
+    margin-top: 15px;
+    color: #20b2aa;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 2px;
+    line-height: 1.8;
+}
+.right-service-div h2{
+  font-size: 40px;
+    font-weight: 400;
+    line-height: 1.4; 
+}
+.btn-info{
+  width: 14rem;
+  font-size: 1.6rem;
+  color: white;
+  border: 1px solid #20b2aa;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 40px 40px 40px 0px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin: 15px 0px 20px 0px;
+}
+.btn-info:hover{
+  color: white;
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 40px;
+}
+.left-child-div{
+text-align: center;
+box-shadow: 0px 24px 48px -13px rgb(0 0 0 / 5%);
+margin-bottom: 20px;
+border-radius: 10px;
+}
+
+.pms-service-card{
+  padding: 20px;
+  margin-bottom: 30px;
+}
+.left-child-div:hover{
+  background-color: #EA5632;
+  transition: all 0.5s;
+}
+.left-child-div:hover .pms-service-card p{
+  color: white;
+  transition: all 0.5s;
+}
+.left-child-div:hover .pms-service-card h1{
+  color: white;
+  transition: all 0.5s;
+}
+.pms-service-card h1{
+  font-size: 17px;
+  font-weight: 500;
+  margin: 10px 0px 10px 0px;
+  color: #2a3a60;
+}
+.pms-service-card p{
+  color: #88879e;
+  font-size: 16px;
+}
+  .bi-house-add{
+    font-size: 5rem;
+    color: #20b2aa;
+    background-color: #eff2ff;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    padding: 12px;
+  }
+    .bi-search-heart{
+    font-size: 5rem;
+    color: #20b2aa;
+    background-color: #eff2ff;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    padding: 12px;
+  }
+    .bi-person-add{
+    font-size: 5rem;
+    color: #20b2aa;
+    background-color: #eff2ff;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    padding: 12px;
+  }
+    .bi-file-earmark-richtext{
+    font-size: 5rem;
+    color: #20b2aa;
+    background-color: #eff2ff;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    padding: 12px;
+  }
+    .bi-sliders2-vertical{
+    font-size: 5rem;
+    color: #20b2aa;
+    background-color: #eff2ff;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    padding: 12px;
+  }
+    .bi-graph-up-arrow{
+    font-size: 5rem;
+    color: #20b2aa;
+    background-color: #eff2ff;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    padding: 12px;
+  }

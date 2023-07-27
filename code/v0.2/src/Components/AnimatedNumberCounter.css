@@ -1,0 +1,42 @@
+ .animated-number{
+    width: 80%;
+    margin: auto;
+    text-align: center;
+  }
+   .counter-numbers h2{
+    margin: auto;
+    font-size: 4rem;
+    font-weight: 500;
+  }
+  .animated-data{
+    display: flex;
+  }
+    .divider-line{
+    width: 5rem;
+    height: .25rem;
+    background-color: #EB5733;
+    margin: 1rem auto 1rem auto;
+  }
+  .bi-hand-thumbs-up{
+    font-size: 5rem;
+    color: #20b2aa;
+  }
+  .bi-calendar-check{
+    font-size: 5rem;
+    color: #20b2aa;
+  }
+  .bi-people{
+    font-size: 5rem;
+    color: #20b2aa;
+  }
+  .bi-house-heart{
+    font-size: 5rem;
+    color: #20b2aa;
+  }
+  .counter-numbers{
+    font-size: 3rem;
+  }
+  .section-work-data p{
+    font-size: 2rem;
+    text-transform: capitalize;
+  }
