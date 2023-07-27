@@ -1,8 +1,26 @@
+.left_section h2 {
+    font-size: 25px;
+    font-family: Montserrat, sans-serif;
+    color: #0a3544;
+    font-weight: 500;
+    margin: 150px 0px 50px 0px;
+}
+
 .card_div_1 {
     background-color: #e1f1ff;
     padding: 10px;
+    width: 85%;
     border-radius: 10px;
     position: relative;
+}
+
+.card_upper {
+    margin: 2px 0px 10px 10px;
+}
+
+.card_upper img {
+    max-width: 70px;
+    max-height: 70px;
 }
 
 .card_upper div h4 {
@@ -12,11 +30,16 @@
 
 .heading_underline {
     background-color: red;
-    height: 10px;
-    width: 500px;
+    margin-left: 30px;
+    height: 3px;
+    width: 50px;
 }
 
 .cards_para {
+    margin: 4px 0px 0px 10px;
+}
+
+.cards_para h4 {
     margin: 8px;
 }
 
@@ -32,6 +55,34 @@
     margin-left: 10px;
 }
 
+
+
+.card_div_2 {
+    background-color: #ddf5ff;
+    padding: 10px;
+    width: 85%;
+    border-radius: 10px;
+    position: relative;
+    margin-top: 25px;
+}
+
+.card_div_3 {
+    background-color: #fff6e7;
+    padding: 10px;
+    width: 85%;
+    border-radius: 10px;
+    position: relative;
+}
+
+.card_div_4 {
+    background-color: #fef3ef;
+    padding: 10px;
+    width: 85%;
+    border-radius: 10px;
+    position: relative;
+    margin-top: 25px;
+}
+
 .know_more_btn {
     padding: 10px 15px 10px 15px;
     font-size: 15px;
@@ -39,13 +90,21 @@
     box-shadow: 0 10px 30px 0 rgba(0, 0, 0, .1);
     background-color: #fbfffd;
     line-height: 12px;
-    color: #111112;
     transition: .3s;
     border: none;
+    font-family: Montserrat, sans-serif;
+    color: #0a3544;
 }
 
 .card_img {
     bottom: 0;
     right: 0;
     position: absolute;
+}
+
+/* for small devices */
+@media screen and (max-width: 480px) {
+    .card_img img {
+        width: 150px;
+    }
 }
