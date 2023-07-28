@@ -1,3 +1,6 @@
+.home_banner a.carousel-control-prev, .home_banner a.carousel-control-next, .home_banner .carousel-indicators {
+    display: none;
+}
 .home_banner .ad_container {
     border-radius: 0px;
     overflow: hidden;
