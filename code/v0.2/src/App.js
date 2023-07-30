@@ -337,10 +337,7 @@ function App() {
 
           {user && user.role !== "user" && <NavbarBottom></NavbarBottom>}
         </BrowserRouter>
-      )}
-      <br />
-      <br />
-      <br />
+      )}   
     </div>
   );
 }
