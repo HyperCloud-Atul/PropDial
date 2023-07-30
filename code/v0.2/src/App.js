@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 // components
 import Navbar from "./Components/Navbar";
 import More from "./Components/More";
+import Footer from "./Components/Footer";
 // import SidebarNew from './components/SidebarNew'
 import NavbarBottom from "./Components/NavbarBottom";
 
