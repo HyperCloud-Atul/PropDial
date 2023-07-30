@@ -40,7 +40,7 @@ const TopCitiesInIndia = () => {
             </div>
             <div className="col-lg-4 col-md-4 col-sm-12">
               <div className="cities-img lucknow">
-                <h2>Lucknow</h2>
+                <h2>Gurugram</h2>
               </div>
             </div>
           </div>
