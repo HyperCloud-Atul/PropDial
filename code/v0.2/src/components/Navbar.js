@@ -145,16 +145,16 @@ login
           </div>
         </li>
         <li className='menu_social_media'>
-            <div className='msm_single'>
+            <div className='msm_single pointer'>
               <img src='./assets/img/facebook.png'></img>
             </div>
-            <div className='msm_single'>
+            <div className='msm_single pointer'>
               <img src='./assets/img/instagram.png'></img>
             </div>
-            <div className='msm_single'>
+            <div className='msm_single pointer'>
               <img src='./assets/img/twitter.png'></img>
             </div>
-            <div className='msm_single'>
+            <div className='msm_single pointer'>
               <img src='./assets/img/linkedin.png'></img>
             </div>
         </li>
