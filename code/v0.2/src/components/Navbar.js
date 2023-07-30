@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'
 
 // styles & images
 import './Navbar.css'
-import Temple from '../assets/img/logo.png'
 import { useState } from 'react'
 
 export default function Navbar() {
@@ -111,11 +110,60 @@ export default function Navbar() {
     <nav className="navbar sticky-top">
       <ul>
         <li className="logo">
-          <img src={Temple} alt="logo" />
-          {/* <span>Hyper Cloud</span> */}
+          <img src="./assets/img/logo_propdial.png" alt="logo" />         
+        </li>
+        <li className='main_menus'>
+          <div className='menu_single pointer active'>
+          <span class="material-symbols-outlined">
+home
+</span>
+            Home
+          </div>
+          <div className='menu_single pointer '>
+          <span class="material-symbols-outlined">
+countertops
+</span>
+            About us
+          </div>
+          <div className='menu_single pointer '>
+          <span class="material-symbols-outlined">
+contacts
+</span>
+            Contact us
+          </div>
+          <div className='menu_single pointer '>
+          <span class="material-symbols-outlined">
+settings_applications
+</span>
+           Services
+          </div>
+          <div className='menu_single pointer '>
+          <span class="material-symbols-outlined">
+login
+</span>
+            Login/Signup
+          </div>
+        </li>
+        <li className='menu_social_media'>
+            <div className='msm_single'>
+              <img src='./assets/img/facebook.png'></img>
+            </div>
+            <div className='msm_single'>
+              <img src='./assets/img/instagram.png'></img>
+            </div>
+            <div className='msm_single'>
+              <img src='./assets/img/twitter.png'></img>
+            </div>
+            <div className='msm_single'>
+              <img src='./assets/img/linkedin.png'></img>
+            </div>
         </li>
 
-        {user && (
+
+
+
+       
+        {/* {user && (
           <div className='small'>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div></div>
@@ -129,10 +177,10 @@ export default function Navbar() {
               </li>
             </div>
           </div>
-        )}
+        )} */}
 
-        <div className='large'>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* <div className='large'> */}
+          {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div></div>
             <div className='navbar-laptop-menu-links-div'>
 
@@ -157,24 +205,14 @@ export default function Navbar() {
                     {thirdMenuIcon}
                   </span>
                   <h1>{thirdMenu}</h1>
-                </div>
-
-                {/* <div onClick={showFourthPage}>
-                  <span className="material-symbols-outlined">
-                    {fourthMenuIcon}
-                  </span>
-                  <h1>{fourthMenu}</h1>
-                </div> */}
+                </div>          
 
               </div>
 
               {user && user.role !== 'user' &&
                 <div className='navbar-laptop-menu-icons-div'>
                   <div className='navbar-user-icon'>
-                    <Link to="/profile">
-                      {/* <span className="material-symbols-outlined">
-                      person
-                    </span> */}
+                    <Link to="/profile">             
                       {user.photoURL === '' ? <img src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA." alt="" /> : <img src={user.photoURL} alt="" />}
                     </Link>
                   </div>
@@ -186,13 +224,7 @@ export default function Navbar() {
                       </span>
                       <div></div>
                     </div>
-                  </li>
-
-                  {/* <button className='btn'>Try Our New ChatBot</button> */}
-
-                  {/* <div className='navbar-laptop-menu-icons-div-hamburger-icon' onClick={openNavbarMenu}> */}
-
-                  {/* <div onClick={showFourthPage}> */}
+                  </li>          
                   <div className='navbar-laptop-menu-icons-div-hamburger-icon' onClick={showFourthPage}>
                     <span className="material-symbols-outlined">
                       menu
@@ -203,7 +235,7 @@ export default function Navbar() {
 
             </div>
 
-          </div>
+          </div> */}
 
           {/* <div className={expandNavbar ? 'navbar-menu-expand-div open' : 'navbar-menu-expand-div'}>
             <div className='navbar-menu-expand-div-content'>
@@ -230,7 +262,7 @@ export default function Navbar() {
             </div>
           </div> */}
 
-        </div>
+        {/* </div> */}
 
         {/* {!user && (
           <>

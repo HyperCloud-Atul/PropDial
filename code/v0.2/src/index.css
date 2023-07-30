@@ -20,6 +20,7 @@
   --buttonbg-color: #e95733;
   /* --lightblue-color: #4e5bf8; */
   --lightblue-color: #54cccb;
+  --light-green: #8af5fc;
 }
 
 /* base styles */
@@ -121,7 +122,12 @@ a {
 .btn.info:hover {
   color: var(--blue-color);
 }
-
+.pointer{
+  cursor: pointer;
+}
+.relative{
+  position: relative;
+}
 .mybutton {
   background: var(--cream-color);
   outline: none;
