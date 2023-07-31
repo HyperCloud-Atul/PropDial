@@ -11,6 +11,14 @@
   background: white;
   border-radius: 8px;
   padding: 10px 15px !important;
+  transition: 0.4s;
+}
+nav.navbar.sticky-top.scrolled {
+  top: 0px !important;
+  max-width: 100%;
+  border-radius: 0px;
+  transition: 0.4s;
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
 }
 .navbar ul {
 padding: 0px;
@@ -44,6 +52,12 @@ li.main_menus {
   transition: 0.4s;
   color: var(--white-color);
   border-top: 4px solid var(--light-green);  
+}
+.scrolled .menu_single.active {
+  top: 0px;
+  transition: 0.4s;
+  border-top: inherit;
+  border-bottom: 4px solid var(--buttonbg-color);
 }
 .menu_single:hover {
   background: var(--blue-color);

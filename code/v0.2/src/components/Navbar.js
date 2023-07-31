@@ -2,15 +2,18 @@ import { Link } from 'react-router-dom'
 import { useLogout } from '../hooks/useLogout'
 import { useAuthContext } from '../hooks/useAuthContext'
 import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
 
 // styles & images
 import './Navbar.css'
-import { useState } from 'react'
 
 export default function Navbar() {
-  const { logout, isPending } = useLogout()
-  const { user } = useAuthContext()
-  const navigate = useNavigate()
+  
+
+  const { logout, isPending } = useLogout();
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
+
 
   function logoutSetPadding() {
     // props.setFlag(null);
@@ -106,8 +109,25 @@ export default function Navbar() {
     thirdMenu = 'Tickets'
   }
 
+
+// Add class on scroll 
+const [isScrolled, setIsScrolled] = useState(false);
+useEffect(() => {
+  const handleScroll = () => {
+    const scrollTop = window.scrollY;
+    const scrollThreshold = 100; // Adjust this value based on when you want to add the class
+    setIsScrolled(scrollTop > scrollThreshold);
+  };
+
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
+const navClass = isScrolled ? 'navbar sticky-top scrolled' : 'navbar sticky-top';
+// Add class on scroll 
+
   return (
-    <nav className="navbar sticky-top">
+    <nav className={navClass}>
       <ul>
         <li className="logo">
           <img src="./assets/img/logo_propdial.png" alt="logo" />         
@@ -145,16 +165,16 @@ login
           </div>
         </li>
         <li className='menu_social_media'>
-            <div className='msm_single'>
+            <div className='msm_single pointer'>
               <img src='./assets/img/facebook.png'></img>
             </div>
-            <div className='msm_single'>
+            <div className='msm_single pointer'>
               <img src='./assets/img/instagram.png'></img>
             </div>
-            <div className='msm_single'>
+            <div className='msm_single pointer'>
               <img src='./assets/img/twitter.png'></img>
             </div>
-            <div className='msm_single'>
+            <div className='msm_single pointer'>
               <img src='./assets/img/linkedin.png'></img>
             </div>
         </li>

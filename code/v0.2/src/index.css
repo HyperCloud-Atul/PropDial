@@ -37,9 +37,11 @@ p,
 h1,
 h2,
 h3,
-h4 {
-  margin: 0;
-  padding: 0;
+h4,
+h5,
+h6 {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 ul {
@@ -100,7 +102,9 @@ a {
   border-color: var(--yellow-color);
   color: var(--black-color);
 }
-
+.sect_padding {
+  padding: 100px 0px;
+}
 .btn.info {
   background: var(--blue-color);
   border-color: var(--blue-color);
@@ -113,12 +117,17 @@ a {
   /* background-color: var(--red-color); */
   background: var(--buttonfg-color);
 }
-
+.section_title h3 {
+  font-size: 32px;
+  color: var(--buttonbg-color);
+}
 .btn.cancel:hover {
   background: var(--cream-color);
   color: var(--blue-color);
 }
-
+.section_title {
+  position: relative;
+}
 .btn.info:hover {
   color: var(--blue-color);
 }
@@ -143,7 +152,25 @@ a {
   cursor: pointer;
   /* border-radius: 8px; */
 }
-
+.section_title_effect {
+  font-size: 75px;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #d2d2d480;
+  position: absolute;
+  top: -68px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  z-index: -1;
+  font-weight: 800;
+}
+.section_title {
+  position: relative;
+  text-align: center;
+}
 .button5 {
   background: linear-gradient(to right, #DC948B, #E4947C);
   /* background: #85cb0b; */
