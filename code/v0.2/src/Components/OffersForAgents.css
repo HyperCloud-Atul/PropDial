@@ -1,9 +1,13 @@
+.parent_section {
+    background-color: var(--bg-color);
+    padding: 70px 0px 50px 0px;
+}
+
 .left_section h2 {
-    font-size: 25px;
-    font-family: Montserrat, sans-serif;
+    font-size: 30px;
     color: #0a3544;
-    font-weight: 500;
-    margin: 150px 0px 50px 0px;
+    font-weight: 600;
+    margin: 20px 0px 50px 0px;
 }
 
 .card_div_1 {
@@ -116,4 +120,8 @@
         /* margin: 2px; */
         text-align: left;
     }
+
+        .parent_section {
+            padding: 0px 0px 50px 0px;
+        }
 }

@@ -1,0 +1,43 @@
+.scroll_bar_parent {
+    margin: 10em 0em 5em 0em;
+}
+
+.parent_scroll {
+    width: 200px;
+}
+
+.CircularProgressbar .CircularProgressbar-path {
+    stroke: var(--buttonbg-color);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease 0s;
+    stroke-width: 3px;
+}
+
+.CircularProgressbar .CircularProgressbar-text {
+    fill: #001659;
+    font-weight: 700;
+    font-size: 25px;
+    letter-spacing: 1px;
+}
+
+.right_div {
+    letter-spacing: 1px;
+    margin-left: 30px;
+}
+
+.right_div p {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.right_div h2 {
+    font-size: 35px;
+    font-weight: 700;
+}
+
+/* for small devices */
+@media screen and (max-width: 480px) {
+    .first_card_parent {
+        margin: 40px 0px 0px 0px;
+    }
+}

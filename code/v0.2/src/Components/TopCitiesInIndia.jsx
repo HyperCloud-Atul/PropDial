@@ -4,6 +4,7 @@ import "./TopCitiesInIndia.css";
 const TopCitiesInIndia = () => {
   return (
     <>
+    <div className="top_cities_parent">
       <div className="container">
         <div className="top-cities-heading">
           <h3>
@@ -50,6 +51,7 @@ const TopCitiesInIndia = () => {
             More
           </button>
         </div>
+      </div>
       </div>
     </>
   );

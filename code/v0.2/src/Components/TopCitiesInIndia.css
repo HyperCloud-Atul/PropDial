@@ -1,3 +1,8 @@
+.top_cities_parent {
+    background-color: var(--bg-color);
+    padding: 1px 0px 50px 0px;
+}
+
 .top-cities-heading {
     text-align: center;
     font-weight: 500;
@@ -121,7 +126,7 @@
 .more-btn-div {
     text-align: center;
     margin-top: 5rem;
-}   
+}
 
 .more-btn-info {
     width: 150px;
