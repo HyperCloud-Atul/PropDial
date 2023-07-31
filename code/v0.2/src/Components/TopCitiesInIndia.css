@@ -1,143 +1,144 @@
-.top_cities_parent {
-    background-color: var(--bg-color);
-    padding: 1px 0px 50px 0px;
-}
+ .top_cities_parent {
+     background-color: var(--bg-color);
+     padding: 70px 0px 50px 0px;
+ }
 
-.top-cities-heading {
-    text-align: center;
-    font-weight: 500;
-    color: #0a3544;
-    font-family: Montserrat, sans-serif;
-    margin: 5rem 0rem 0rem 0rem;
-}
+ .top-cities-heading {
+     text-align: center;
+     font-weight: 500;
+     color: #0a3544;
+     margin: 5rem 0rem 0rem 0rem;
+ }
 
-.top-cities-heading h3 {
-    font-size: 25px;
-}
+ .top-cities-heading h3 {
+     font-size: 25px;
+ }
 
-.top-cities-heading span {
-    color: #EA5632;
-    font-size: 25px;
-}
+ .top-cities-heading span {
+     color: #EA5632;
+     font-size: 25px;
+ }
 
-.top-cities-heading p {
-    font-size: 15px;
-}
+ .top-cities-heading p {
+     font-size: 15px;
+ }
 
-.divider-line {
-    width: 5rem;
-    height: 0.25rem;
-    background-color: #EB5733;
-    margin: 1rem auto 1rem auto;
-}
+ .divider-line {
+     width: 5rem;
+     height: 0.25rem;
+     background-color: #EB5733;
+     margin: 1rem auto 1rem auto;
+ }
 
-/* .cities-parent {
-    width: 80%;
-    margin: auto;
-} */
+ .right-city-div {
+     background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/bangalore-city-desktop.jpg);
+     background-size: cover;
+     background-position: 50%;
+     background-color: #02181e;
+     height: 420px;
+     border-radius: 9px;
+     /* border: none; */
+     margin: 22px 0px 0px 0px;
+     /* padding: 190px 0px 0px 0px; */
+     cursor: pointer;
+     transition: transform .5s;
+     text-align: center;
+ }
 
-.right-city-div {
-    background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/bangalore-city-desktop.jpg);
-    background-size: cover;
-    /* background-position: 50%; */
-    /* background-color: #02181e; */
-    height: 420px;
-    border-radius: 9px;
-    /* border: none; */
-    margin: 22px 0px 0px 0px;
-    /* padding: 190px 0px 0px 0px; */
-    cursor: pointer;
-    transition: transform .5s;
-}
 
-.right-city-div h2 {
-    font-size: 22px;
-    font-weight: 500;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-    margin: auto;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, .6784313725490196);
-    width: 60%;
-}
+ .right-city-div h2 {
+     font-size: 22px;
+     font-weight: 500;
+     color: #fff;
+     /* padding: 10px; */
+     margin: auto;
+     border-radius: 10px;
+     background: rgba(0, 0, 0, .6784313725490196);
+     width: 13rem;
+     height: 40px;
+ }
 
-.right-city-div:hover {
-    transform: scale(1.1);
-}
+ .right-city-div:hover {
+     transform: scale(1.1);
+ }
 
-.left-city-div div div {
-    cursor: pointer;
-    transition: transform .5s;
-}
+ .left-city-div div div:hover {
+     transform: scale(1.1);
+ }
 
-.left-city-div div div:hover {
-    transform: scale(1.1);
-}
+ .pune {
+     background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/hyderabad-city-common.jpg);
+ }
 
-.pune {
-    background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/hyderabad-city-common.jpg);
-}
+ .delhi {
+     background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/delhi-city-common.jpg);
+ }
 
-.delhi {
-    background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/delhi-city-common.jpg);
-}
+ .mumbai {
+     background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/mumbai-city-common.jpg);
+ }
 
-.mumbai {
-    background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/mumbai-city-common.jpg);
-}
+ .noida {
+     background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/kolkata-city-common.jpg);
+ }
 
-.noida {
-    background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/kolkata-city-common.jpg);
-}
+ .lucknow {
+     background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/chennai-city-common.jpg);
+ }
 
-.lucknow {
-    background-image: url(https://dc8w1iaixgohb.cloudfront.net/version9.0/images/city-banners/home-page-city/new/chennai-city-common.jpg);
-}
+ .cities-img {
+     background-position: 50%;
+     background-color: #02181e;
+     height: 200px;
+     border-radius: 9px;
+     cursor: pointer;
+     transition: transform .5s;
+     margin: 22px 0px 0px 0px;
+     /* padding: 75px 0px 0px 0px; */
+ }
 
-.cities-img {
-    background-position: 50%;
-    background-color: #02181e;
-    height: 200px;
-    border-radius: 9px;
-    border: none;
-    margin: 22px 0px 0px 15px;
-    padding: 75px 0px 0px 0px;
-}
+ .cities-img h2 {
+     font-size: 22px;
+     font-weight: 500;
+     color: #fff;
+     text-align: center;
+     padding: 10px;
+     /* margin: auto; */
+     border-radius: 10px;
+     background: rgba(0, 0, 0, .6784313725490196);
+     width: 12rem;
+     height: 40px;
+ }
 
-.cities-img h2 {
-    font-size: 22px;
-    font-weight: 500;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-    margin: auto;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, .6784313725490196);
-    width: 60%;
-}
+ .more-btn-info:hover {
+     /* color: white; */
+     border-top-left-radius: 0%;
+     border-bottom-left-radius: 40px;
+ }
 
-.more-btn-info:hover {
-    /* color: white; */
-    border-top-left-radius: 0%;
-    border-bottom-left-radius: 40px;
-}
+ .more-btn-div {
+     text-align: center;
+     margin-top: 6rem;
+ }
 
-.more-btn-div {
-    text-align: center;
-    margin-top: 5rem;
-}
+ .more-btn-info {
+     width: 10rem;
+     font-size: 1.2rem;
+     color: white;
+     border: 1px solid #20b2aa;
+     padding: 10px 20px;
+     cursor: pointer;
+     border-radius: 40px 40px 40px 0px;
+     font-weight: 500;
+     transition: all 0.3s ease;
+     margin: auto;
+     background-color: #20b2aa;
+ }
 
-.more-btn-info {
-    width: 150px;
-    /* font-size: 1.6rem; */
-    color: white;
-    border: 1px solid #20b2aa;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 40px 40px 40px 0px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    /* margin: auto; */
-    background-color: #20b2aa;
-}
+
+ /* for small devices */
+ @media screen and (max-width: 480px) {
+     .right-city-div {
+         width: 90%;
+     }
+ }

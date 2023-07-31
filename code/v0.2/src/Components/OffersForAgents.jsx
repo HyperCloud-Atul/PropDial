@@ -16,11 +16,13 @@ const OffersForAgents = () => {
                 <div>
                   <div className="d-flex align-items-center card_upper">
                     <img src="https://www.squareyards.com/assets/images/broker-performance/prime-connect.svg" />
-                    <div> 
+                    <div>
                       <h4>Prime Connect</h4>
                       <div
                         className="heading_underline"
-                        style={{ backgroundColor: "#83d1d7" }}
+                        style={{
+                          backgroundColor: "#83d1d7",
+                        }}
                       ></div>
                     </div>
                   </div>
