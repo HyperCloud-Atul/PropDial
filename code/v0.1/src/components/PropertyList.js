@@ -165,14 +165,32 @@ export default function PropertyList({ properties }) {
                                     <div onClick={() => navigate('/addbill', { state: { propertyid: property.id } })}>
                                         <h1>Add Bills</h1>
                                     </div>
-                                    <div onClick={() => navigate('/adddocument', { state: { propertyid: property.id } })}>
-                                        <h1>Add Docs</h1>
-                                    </div>
                                     <div onClick={() => navigate('/addphoto', { state: { propertyid: property.id } })}>
                                         <h1>Add Photos</h1>
                                     </div>
+                                    <div onClick={() => navigate('/adddocument', { state: { propertyid: property.id } })}>
+                                        <h1>Add Docs</h1>
+                                    </div>
                                     <div>
                                         <h1>Reports</h1>
+                                    </div>
+                                </div>
+                            }
+
+                            {user && user.role === 'owner' &&
+                                <div className='secondary-details-inside-display-btn-div'>
+                                    {/* <button onClick={() => navigate('/addbill', { state: { propertyid: property.id } })}>Add Bill</button> */}
+                                    <div onClick={() => navigate('/propertybills', { state: { propertyid: property.id } })}>
+                                        <h1>Bills</h1>
+                                    </div>
+                                    <div onClick={() => navigate('/propertyphotos', { state: { propertyid: property.id } })}>
+                                        <h1>Photos</h1>
+                                    </div>
+                                    <div onClick={() => navigate('/propertydocuments', { state: { propertyid: property.id } })}>
+                                        <h1>Docs</h1>
+                                    </div>
+                                    <div onClick={() => navigate('/tickets', { state: { propertyid: property.id } })}>
+                                        <h1>Tickets</h1>
                                     </div>
                                 </div>
                             }

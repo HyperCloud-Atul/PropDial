@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import { useAuthContext } from './hooks/useAuthContext'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { pushMessages } from './firebase/config'
+import { getToken } from './firebase/config'
 
 // components
 import Navbar from './components/Navbar'
@@ -18,7 +20,6 @@ import PGAdminProperties from './pages/roles/admin/PGAdminProperties'
 import PGPropertyEdit from './pages/roles/admin/PGPropertyEdit'
 // owner
 import PGOwnerDashboard from './pages/roles/owner/PGOwnerDashboard'
-import PGBills from './pages/roles/owner/PGBills'
 // tenant
 import TenantDashboard from './pages/roles/tenant/TenantDashboard'
 // executive
@@ -47,6 +48,12 @@ import MasterCityList from './pages/create/MasterCityList'
 import MasterStateList from './pages/create/MasterStateList'
 import MasterLocalityList from './pages/create/MasterLocalityList'
 import MasterSocietyList from './pages/create/MasterSocietyList'
+import PGTickets from './pages/roles/owner/PGTickets'
+import PGCustomerProperties from './pages/roles/owner/PGCustomerProperties'
+import PGPropertyPhotos from './pages/property/PGPropertyPhotos'
+import PGPropertyBills from './pages/property/PGPropertyBills'
+import PGPropertyDocuments from './pages/property/PGPropertyDocuments'
+import PGOwnerBills from './pages/roles/owner/PGOwnerBills'
 // import BillList from './components/BillList'
 
 function App() {
@@ -60,7 +67,23 @@ function App() {
   // }
   // console.log('user in App.js', user)
 
+
+  async function requestUserPermissionForPushMessaging() {
+    const permission = await Notification.requestPermission()
+    if (permission === 'granted') {
+      //Generate Token
+      // const token = await getToken(pushMessages, { vapiKey: "BLXmmKhydA6InNLevtX6O7hdUPKO3BDY7PmjXULhUfXSMljWwIwruSofKqxUa9yEns-8VZygemnC6fnAiUX133g" })
+      // const token = pushMessages.getToken({ vapiKey: "BLXmmKhydA6InNLevtX6O7hdUPKO3BDY7PmjXULhUfXSMljWwIwruSofKqxUa9yEns-8VZygemnC6fnAiUX133g" })
+      const token = pushMessages.getToken()
+      console.log('Token: ', token)
+    } else if (permission === 'denied') {
+      alert('You denied for the notification')
+    }
+  }
+
   useEffect(() => {
+
+    requestUserPermissionForPushMessaging()
 
   }, [user])
 
@@ -107,14 +130,19 @@ function App() {
                 user && user.role === 'admin' ? < PGAdminProperties /> : <Navigate to="/login" />
               }>
               </Route>
-
+              {/* 
               <Route path="/addproperty" element={
+                user && user.role === 'admin' ? < PGAddProperty /> : <Navigate to="/login" />
+              }>
+              </Route> */}
+
+              <Route path="/addproperty/:propertyid" element={
                 user && user.role === 'admin' ? < PGAddProperty /> : <Navigate to="/login" />
               }>
               </Route>
 
-              <Route path="/addproperty/:propertyid" element={
-                user && user.role === 'admin' ? < PGAddProperty /> : <Navigate to="/login" />
+              <Route path="/propertyedit/:id" element={
+                user && user.role ? < PGPropertyEdit /> : <Navigate to="/login" />
               }>
               </Route>
 
@@ -133,18 +161,40 @@ function App() {
               }>
               </Route>
 
-              <Route path="/propertyedit/:id" element={
-                user && user.role ? < PGPropertyEdit /> : <Navigate to="/login" />
-              }>
-              </Route>
+
 
               <Route path="/propertydetails" element={
                 user && user.role ? < PGPropertyDetails /> : <Navigate to="/login" />
               }>
               </Route>
 
-              <Route path="/bills" element={
-                user && user.role ? < PGBills /> : <Navigate to="/login" />
+              <Route path="/customerproperties" element={
+                user && user.role ? < PGCustomerProperties /> : <Navigate to="/login" />
+              }>
+              </Route>
+
+              <Route path="/propertybills" element={
+                user && user.role ? < PGPropertyBills /> : <Navigate to="/login" />
+              }>
+              </Route>
+              <Route path="/ownerbills" element={
+                user && user.role ? < PGOwnerBills /> : <Navigate to="/login" />
+              }>
+              </Route>
+
+              <Route path="/propertyphotos" element={
+                user && user.role ? < PGPropertyPhotos /> : <Navigate to="/login" />
+              }>
+              </Route>
+
+              <Route path="/propertydocuments" element={
+                user && user.role ? < PGPropertyDocuments /> : <Navigate to="/login" />
+              }>
+              </Route>
+
+
+              <Route path="/tickets" element={
+                user && user.role ? < PGTickets /> : <Navigate to="/login" />
               }>
               </Route>
 

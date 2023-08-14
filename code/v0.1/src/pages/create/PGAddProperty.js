@@ -114,6 +114,7 @@ export default function PGAddProperty({ propertyid }) {
         }
 
         if (propertyDocument) {
+            console.log('propertydocument:', propertyDocument)
             setCategory(propertyDocument.category)
             if (propertyDocument.category.toUpperCase() === 'RESIDENTIAL')
                 setToggleFlag(false);
@@ -124,14 +125,14 @@ export default function PGAddProperty({ propertyid }) {
             setPurpose({ label: propertyDocument.purpose })
             const date = new Date(propertyDocument.onboardingDate.seconds * 1000);
             setOnboardingDate(date)
-            setCountry({ label: propertyDocument.country })
-            setState({ label: propertyDocument.state })
-            setCity({ label: propertyDocument.city })
-            setLocality({ label: propertyDocument.locality })
-            setSociety({ label: propertyDocument.society })
+            setCountry({ label: propertyDocument.country, value: propertyDocument.country })
+            setState({ label: propertyDocument.state, value: propertyDocument.state })
+            setCity({ label: propertyDocument.city, value: propertyDocument.city })
+            setLocality({ label: propertyDocument.locality, value: propertyDocument.locality })
+            setSociety({ label: propertyDocument.society, value: propertyDocument.society })
         }
 
-    }, [documents, propertyDocument, masterPropertyPurpose])
+    }, [documents])
 
 
     const toggleBtnClick = () => {
@@ -276,7 +277,10 @@ export default function PGAddProperty({ propertyid }) {
             console.log(err.message)
             // setError('failed to get document')
         })
+
     }
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -297,7 +301,8 @@ export default function PGAddProperty({ propertyid }) {
                 displayName: u.value.fullName,
                 phoneNumber: u.value.phoneNumber,
                 photoURL: u.value.photoURL,
-                role: u.value.role
+                role: u.value.role,
+                type: u.value.role
             }
         })
 
@@ -350,7 +355,7 @@ export default function PGAddProperty({ propertyid }) {
                 navigate('/')
             }
             else {
-                // console.log('Property Udpated Successfully:', property)
+                setFormError('Successfully updated')
             }
         }
         else {
@@ -368,7 +373,7 @@ export default function PGAddProperty({ propertyid }) {
     }
 
     return (
-        <div>
+        <div className='container-fluid' >
             <div className='page-title'>
                 <span className="material-symbols-outlined">
                     real_estate_agent
@@ -377,10 +382,7 @@ export default function PGAddProperty({ propertyid }) {
             </div>
 
             <div className="row no-gutters" style={{ margin: '20px 0 0px 0', height: '50px' }}>
-
-                {/* <div className="col-lg-6 col-md-6 col-sm-12"
-                    style={{ background: 'rgb(188, 236, 224, 0.5)', padding: ' 0 10px' }}> */}
-                <div className="col-lg-6 col-md-6 col-sm-12"
+                <div className="col-lg-12 col-md-12 col-sm-12"
                     style={{ background: 'rgba(var(--green-color), 0.5)', padding: ' 0 10px', borderRadius: '8px 0px 0px 8px' }}>
                     <div className="residential-commercial-switch" style={{ height: 'calc(100% - 10px)' }}>
                         <span className={toggleFlag ? '' : 'active'} style={{ color: 'var(--blue-color)' }}>Residential</span>
@@ -394,50 +396,6 @@ export default function PGAddProperty({ propertyid }) {
                         <span className={toggleFlag ? 'active' : ''} style={{ color: 'var(--red-color)' }}>Commercial</span>
                     </div>
                 </div>
-                {/* <div className="col-lg-6 col-md-6 col-sm-12"
-                    style={{ background: 'rgb(188, 236, 224, 0.5)', padding: '10px 10px 0 10px' }}> */}
-                <div className="col-lg-6 col-md-6 col-sm-12"
-                    style={{ background: 'rgba(var(--green-color), 0.5)', padding: '10px 10px 0 10px', borderRadius: '0px 8px 8px 0px' }}>
-                    <div className="details-radio">
-                        <div></div>
-                        <div className='details-radio-inner'>
-                            <div className="row no-gutters">
-                                {/* <div className="col-6" style={{ padding: '0 5px' }}>
-                                    <input type="checkbox" className="checkbox" style={{ width: '0px' }}
-                                        name="BusinessType" id="businessTypeRent" value="Rent"
-                                        onClick={() => setPurpose('rent')}
-                                    />
-                                    <label className="checkbox-label" for="businessTypeRent">
-                                        <span className="material-symbols-outlined add">
-                                            add
-                                        </span>
-                                        <span className="material-symbols-outlined done">
-                                            done
-                                        </span>
-                                        <small>Rent</small>
-                                    </label>
-                                </div> */}
-
-                                {/* <div className="col-6" style={{ padding: '0 5px' }}>
-                                    <input type="checkbox" className="checkbox" style={{ width: '0px' }}
-                                        name="BusinessType" id="businessTypeSale" value="Sale"
-                                        onClick={() => setPurpose('sale')}
-                                    />
-                                    <label className="checkbox-label" for="businessTypeSale">
-                                        <span className="material-symbols-outlined add">
-                                            add
-                                        </span>
-                                        <span className="material-symbols-outlined done">
-                                            done
-                                        </span>
-                                        <small>Sale</small>
-                                    </label>
-                                </div> */}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
             <div style={{ overflow: 'hidden' }}>
@@ -667,138 +625,6 @@ export default function PGAddProperty({ propertyid }) {
                             </div>
                         </div>
 
-                        {/* <div className="col-lg-4 col-md-6 col-sm-12">
-
-                            <label>
-                                <div className='form-field-title'>
-                                    <span className="material-symbols-outlined">
-                                        badge
-                                    </span>
-                                    <h1>Unit No </h1>
-                                    <input
-                                        required
-                                        type="text"
-                                        maxLength={70}
-                                        onChange={(e) => setName(e.target.value)}
-                                        value={name}
-                                    />
-                                </div>
-                            </label>
-
-                            <label>
-                                <div className='form-field-title'>
-                                    <span className="material-symbols-outlined">
-                                        badge
-                                    </span>
-                                    <h1>Property Details </h1>
-                                    <textarea
-                                        required
-                                        type="text"
-                                        maxLength={70}
-                                        onChange={(e) => setDetails(e.target.value)}
-                                        value={details}
-                                    />
-                                </div>
-                            </label>
-                        </div> */}
-                        {/* <label>
-                            <div className='form-field-title'>
-                            <span className="material-symbols-outlined">
-                                badge
-                            </span>
-                            <h1>Owners</h1>
-                            <Select className='select'
-                                onChange={(option) => setAssignedUsers(option)}
-                                options={users}
-                                isMulti
-                            />
-                            </div>
-                        </label> */}
-                        {/* <div className="col-lg-6 col-md-6 col-sm-12">
-                            <label>
-                                <h1>test</h1>
-                                <Select className='select'
-                                    onChange={(option) => setAssignedUsers(option)}
-                                    options={users}
-                                    styles={{
-                                        control: (baseStyles, state) => ({
-                                            ...baseStyles,
-                                            borderColor: state.isFocused ? 'grey' : 'red',
-                                            background: 'yellow',
-                                            zIndex: '999'
-                                        }),
-                                    }}
-                                    isMulti
-                                />
-                            </label>
-                            <label>
-                                <div className='form-field-title'>
-                                    <span className="material-symbols-outlined">
-                                        badge
-                                    </span>
-                                    <h1>Country</h1>
-                                    <Select
-                                        onChange={(option) => setCategory(option)}
-                                        options={categories}
-                                    />
-                                </div>
-                            </label>
-                        </div> */}
-                        {/* <div className="col-lg-6 col-md-6 col-sm-12">
-                            <div style={{ position: 'relative' }}>
-                                <label>
-                                    <span style={{
-                                        position: 'absolute',
-                                        top: '37px',
-                                        right: '5px',
-                                        color: 'var(--blue-color)',
-                                        background: '#eee',
-                                        width: '30px',
-                                        height: '30px',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        zIndex: '999',
-                                        pointerEvents: 'none'
-                                    }} className="material-symbols-outlined">
-                                        badge
-                                    </span>
-                                    <h1>test</h1>
-                                    <Select className='select'
-                                        onChange={(option) => setAssignedUsers(option)}
-                                        options={users}
-                                        styles={{
-                                            control: (baseStyles, state) => ({
-                                                ...baseStyles,
-                                                outline: 'none',
-                                                background: '#eee',
-                                                borderBottom: ' 3px solid var(--blue-color)'
-                                            }),
-                                        }}
-                                        isMulti
-                                    />
-                                </label>
-                            </div>
-
-                            <label>
-                                <h1 style={{ fontSize: '0.9rem', fontWeight: 'bolder', paddingLeft: '4px', color: 'var(--blue-color)' }}>Country</h1>
-                                <Select
-                                    onChange={(option) => setCategory(option)}
-                                    options={categories}
-                                />
-                            </label>
-                        </div> */}
-                        {/* <label>
-                            <span>Set Onboarding Date:</span>
-                            <input
-                                required
-                                type="date"
-                                onChange={(e) => setDueDate(e.target.value)}
-                                value={onboardingDate}
-                            />
-                        </label> */}
-
-
                     </div>
                     <br />
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -807,23 +633,7 @@ export default function PGAddProperty({ propertyid }) {
                     </div>
                     <br />
                 </form>
-                {/* <br /><hr />
-                <br /><br /><br /><br /> */}
-                {/* <div className="row no-gutters section-btn-div">
-                    <div className="col-12">
-                        <div className="section-btn">
-                            <a href="propertyList.html" style={{ textDecoration: 'none', width: '100%' }}>
-                                <button type="button" name="button" onclick="addPropertyMenu('Details')"
-                                    className="mybutton button5">
-                                    Add
-                                </button>
-                            </a>
-
-                        </div>
-                    </div>
-                </div> */}
             </div >
-
         </div >
     )
 }
