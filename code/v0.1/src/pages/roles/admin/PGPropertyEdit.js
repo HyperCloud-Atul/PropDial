@@ -22,7 +22,7 @@ export default function PGPropertyEdit() {
 
     return (
         <>
-            <div className="property-details">
+            <div>
                 {<PGAddProperty propertyid={id} ></PGAddProperty>}
                 {/* <PGPropertyDetails property={document} /> */}
                 {/* <PropertyComments property={document} /> */}

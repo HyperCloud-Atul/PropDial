@@ -62,7 +62,18 @@ export default function Navbar() {
     }
     if (user && user.role === 'owner') {
       // console.log('in user', user.role)
-      navigate('/bills')
+      navigate('/customerproperties')
+    }
+  }
+
+  const showThirdPage = () => {
+    if (user && user.role === 'admin') {
+      // console.log('in user', user.role)
+      navigate('/adminproperties')
+    }
+    if (user && user.role === 'owner') {
+      // console.log('in user', user.role)
+      navigate('/ownerbills')
     }
   }
 
@@ -94,9 +105,11 @@ export default function Navbar() {
   }
   if (user && user.role === 'owner') {
     secondMenuIcon = 'receipt_long'
-    secondMenu = 'Bills'
-    thirdMenuIcon = 'support_agent';
-    thirdMenu = 'Tickets'
+    secondMenu = 'Properties'
+    // thirdMenuIcon = 'support_agent';
+    thirdMenuIcon = 'description';
+    // thirdMenu = 'Tickets'
+    thirdMenu = 'Bills'
   }
   if (user && user.role === 'tenant') {
     secondMenu = 'Rent'
@@ -152,7 +165,7 @@ export default function Navbar() {
                   <h1>{secondMenu}</h1>
                 </div>
 
-                <div>
+                <div onClick={showThirdPage}>
                   <span className="material-symbols-outlined">
                     {thirdMenuIcon}
                   </span>

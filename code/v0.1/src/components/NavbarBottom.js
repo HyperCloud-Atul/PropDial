@@ -46,7 +46,18 @@ export default function NavbarBottom() {
         }
         if (user && user.role === 'owner') {
             // console.log('in user', user.role)
-            navigate('/bills')
+            navigate('/customerproperties')
+        }
+    }
+
+    const showThirdPage = () => {
+        if (user && user.role === 'admin') {
+            // console.log('in user', user.role)
+            navigate('/adminproperties')
+        }
+        if (user && user.role === 'owner') {
+            // console.log('in user', user.role)
+            navigate('/ownerbills')
         }
     }
 
@@ -77,17 +88,23 @@ export default function NavbarBottom() {
         thirdMenu = 'Users'
     }
     if (user && user.role === 'owner') {
+        secondMenuIcon = 'location_away'
+        secondMenu = 'Properties'
+        // thirdMenuIcon = 'support_agent';
+        thirdMenuIcon = 'receipt_long';
+        // thirdMenu = 'Tickets'
+        thirdMenu = 'Bills'
+    }
+    if (user && user.role === 'tenant') {
         secondMenuIcon = 'receipt_long'
-        secondMenu = 'Bills'
+        secondMenu = 'Rent'
         thirdMenuIcon = 'support_agent';
         thirdMenu = 'Tickets'
     }
-    if (user && user.role === 'tenant') {
-        secondMenu = 'Rent'
-        thirdMenu = 'Tickets'
-    }
     if (user && user.role === 'executive') {
+        secondMenuIcon = 'receipt_long'
         secondMenu = 'Bills'
+        thirdMenuIcon = 'support_agent';
         thirdMenu = 'Tickets'
     }
 
@@ -111,8 +128,8 @@ export default function NavbarBottom() {
                 </div>
                 <a href="/">
                 </a>
-                <div to="/" className="navbar-mobile-bottom-menu-a "
-                    style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="navbar-mobile-bottom-menu-a "
+                    style={{ display: 'flex', flexDirection: 'column' }} onClick={showThirdPage}>
                     <span className="material-symbols-outlined">
                         {thirdMenuIcon}
                     </span>

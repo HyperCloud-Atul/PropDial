@@ -113,3 +113,184 @@
     border-radius: 10px;
     border: 3px solid #e4e4e4;
 }
+
+
+.property-details-sticky-div {
+    width: 100%;
+    /* background: #EB542E; */
+    /* background: var(--lightblue-color); */
+    /* background: linear-gradient(#54cccb, #54cc9c); */
+    background: linear-gradient(#54cccb, #bcd4d4);
+    /* background: #4CD7D0; */
+    transform: translateY(-1px);
+    padding: 0 20px 20px 20px;
+    overflow: hidden;
+    transition: 2s;
+    z-index: 999;
+    max-height: 80px;
+    cursor: pointer;
+    transition: 2s;
+}
+
+.property-details-sticky-div.open {
+    max-height: 400px;
+}
+
+/* @media (max-width: 992px) {
+    .property-details-sticky-div.open {
+        height: 360px;
+    }
+} */
+
+.property-details-sticky-div .property-sticky-arrow {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    z-index: 5;
+    transition: 2s;
+}
+
+.property-details-sticky-div.open .property-sticky-arrow {
+    bottom: 0px;
+    transform: translateX(-50%) rotate(180deg);
+}
+
+.property-details-sticky-div .property-sticky-arrow span {
+    color: #000;
+    font-size: 2rem;
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 700,
+        'GRAD' 0,
+        'opsz' 48
+}
+
+.property-details-sticky-div .primary-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.property-details-sticky-div .primary-details div:nth-child(1) {
+    width: 60%;
+}
+
+.property-details-sticky-div .primary-details div:nth-child(2) {
+    text-align: right;
+    width: 40%;
+}
+
+.property-details-sticky-div .primary-details div h1 {
+    font-size: 1.2rem;
+    color: #000;
+    font-weight: bold;
+    margin: 0;
+}
+
+.property-details-sticky-div .primary-details div:nth-child(2) h1 {
+    font-size: 1.1rem;
+}
+
+.property-details-sticky-div .primary-details h2 {
+    font-size: 0.9rem;
+    margin: 0;
+    font-weight: 500;
+    /* font-weight: lighter; */
+}
+
+.property-details-sticky-div .secondary-details {
+    opacity: 0;
+    pointer-events: none;
+    transition: 2s ease-in-out;
+    padding: 0;
+}
+
+.property-details-sticky-div.open .secondary-details {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.secondary-details .secondary-details-content {
+    margin: 10px 0;
+    border-radius: 5px;
+    background: #fff;
+    padding: 20px;
+    height: calc(100% - 20px);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+.secondary-details .secondary-details-content .secondary-details-content-inner {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    /* padding: 20px 0; */
+}
+
+.secondary-details .secondary-details-content .secondary-details-content-inner div {
+    width: 80px;
+    height: 80px;
+    background: #4CD7D0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.secondary-details .secondary-details-content .secondary-details-content-inner:nth-last-child(2) {
+    border-right: 3px solid #ddd;
+}
+
+.secondary-details .secondary-details-content .secondary-details-content-inner div span {
+    font-size: 1.1rem;
+    color: #222;
+    border-radius: 50%;
+}
+
+.secondary-details .secondary-details-content .secondary-details-content-inner div span img {
+    border-radius: 50%;
+}
+
+.secondary-details .secondary-details-content .secondary-details-content-inner h1 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.secondary-details .secondary-details-content .secondary-details-content-inner h2 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--peach-color);
+    text-transform: capitalize;
+}
+
+@media (max-width: 992px) {
+    .secondary-details .secondary-details-content {
+        flex-direction: column;
+        padding: 0 20px;
+    }
+
+    .secondary-details .secondary-details-content .secondary-details-content-inner {
+        justify-content: space-between;
+        /* justify-content: initial; */
+        padding: 20px 0;
+    }
+
+    .secondary-details .secondary-details-content .secondary-details-content-inner:nth-last-child(2) {
+        border-right: none;
+        border-bottom: 3px solid #ddd;
+        /* padding: 0 0 20px 0; */
+    }
+
+    /* .secondary-details .secondary-details-content .secondary-details-content-inner h1 {
+        padding-left: 40px;
+    } */
+}

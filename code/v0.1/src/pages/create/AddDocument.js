@@ -20,20 +20,15 @@ export default function AddDocument(props) {
     const { propertyid } = state
     const navigate = useNavigate()
     const { addDocument, response } = useFirestore('documents')
-    // const { document, error } = useDocument('properties', propertyid)
     const { document: property, error: propertyerror } = useDocument('properties', propertyid)
     const { document: masterDataDocumentType, error: masterDataDocumentTypeerror } = useDocument('master', 'DOCUMENTTYPE')
-    const { document: propertyDocuments, error: propertyDocumentserror } = useDocument('documents', ['propertyid', '==', propertyid])
+    const { document: propertyDocuments, error: propertyDocumentserror } = useDocument('documents', propertyid)
 
-    const { user } = useAuthContext()
+    // const { user } = useAuthContext()
     const { documents } = useCollection('users')
     const [users, setUsers] = useState([])
-    const [thumbnail, setThumbnail] = useState(null)
-    const [thumbnailError, setThumbnailError] = useState(null)
-    const { imgUpload, isImgCompressPending, imgCompressedFile } = useImageUpload()
-    // const [toggleFlag, setToggleFlag] = useState(false)
-
-    // form field values  
+    const [file, setFile] = useState(null)
+    // // form field values  
     const [documentType, setDocumentType] = useState('ALL')
     const [documentName, setDocumentName] = useState('')
     const [status, setStatus] = useState('active')
@@ -54,7 +49,6 @@ export default function AddDocument(props) {
         if (documents) {
             setUsers(documents.map(user => {
                 var userDetails = user.displayName + '(' + user.role + ')';
-                // console.log('userDetails:', userDetails)
                 return { value: { ...user, id: user.id }, label: userDetails }
             }))
         }
@@ -67,56 +61,70 @@ export default function AddDocument(props) {
 
     }, [documents])
 
-    const handleFileChange = async (e) => {
-        setThumbnail(null)
+    // const handleFileSelect = (event) => {
+    //     const file = event.target.files[0];
+    //     uploadFile(file);
+    // };
+
+    const handleFileChange = (e) => {
+        setFormError(null)
         let file = e.target.files[0]
-        // console.log('file original selected:', file)
-        // console.log('file size original selected:', file.size)
-        // const image = await resizeFile(file);
-        // const newImageFile = dataURIToBlob(image);
+        setFile(file)
+        // console.log('File:', file)
+        // console.log('File name:', file.name)
+        // console.log('File Type:', file.type)
+        // console.log('File Size:', file.size)
 
-        const compressedImage = await imgUpload(file, 300, 300);
-        // console.log('imgCom compressed in Signup.js', compressedImage);
-        // console.log('imgCom size after compressed in Signup.js', compressedImage.size);
-
-
-        if (!compressedImage) {
-            setThumbnailError('Please select a file')
-            return
-        }
-        if (!compressedImage.type.includes('image')) {
-            setThumbnailError('Selected file must be an image')
+        // const compressedImage = await imgUpload(file, 300, 300);
+        if (file.size > 52428800) {
+            setFormError('The large file is not supported')
             return
         }
 
-        // if (newImageFile.size > 20000000) {
-        //   setThumbnailError('Image file size must be less than 20mb')
-        //   return
-        // }
+        if (file.type === 'application/pdf' ||
+            file.type === 'application/msword' ||
+            file.type === 'application/doc' ||
+            file.type === 'application/docx' ||
+            file.type === 'application/xls' ||
+            file.type === 'application/xlsx' ||
+            file.type === 'text/plain' ||
+            file.type === 'image/jpeg' ||
+            file.type === 'image/jpg' ||
+            file.type === 'image/png' ||
+            file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+            file.type === 'application/vnd.openxmlformats - officedocument.wordprocessingml.document' ||
+            file.type === 'application / vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+            file.type === 'application / vnd.openxmlformats - officedocument.spreadsheetml.sheet'
 
-        setThumbnailError(null)
-        setThumbnail(compressedImage)
-        console.log('thumbnail updated')
+        ) {
+            setFormError(null)
+            return
+        }
+        else {
+            // Invalid file type, display an error message or handle accordingly
+            setFormError('The file type is not permitted')
+            return
+        }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setFormError(null)
 
-        let imgUrl = ''
-        if (thumbnail) {
-            // console.log('thumbnail in useSignup 2:', thumbnail)
-            let documentName = (propertyDocuments.length + 1) + '.png'
+        let uploadedFileUrl = ''
+
+        if (file) {
+            let documentName = file.name
             const uploadPath = `propertyDocuments/${propertyid}/${documentName}`
-            const img = await projectStorage.ref(uploadPath).put(thumbnail)
-            imgUrl = await img.ref.getDownloadURL()
+            const uploadedFile = await projectStorage.ref(uploadPath).put(file)
+            uploadedFileUrl = await uploadedFile.ref.getDownloadURL()
         }
 
         const propertyDocument = {
             propertyid,
             documentType: documentType.label,
             documentName,
-            documenturl: imgUrl,
+            documenturl: uploadedFileUrl,
             status
         }
 
@@ -125,8 +133,6 @@ export default function AddDocument(props) {
             navigate('/')
         }
     }
-
-
 
     return (
         <div>
@@ -176,20 +182,19 @@ export default function AddDocument(props) {
                                     <span className="material-symbols-outlined">
                                         photo_camera
                                     </span>
-                                    <h1>Document Photo</h1>
+                                    <h1>Document</h1>
                                     <input
                                         type="file"
+                                        accept=".pdf, .doc, .docx, .xls, .xlsx"
                                         onChange={handleFileChange}
                                     />
                                 </div>
-
-                                {/* {thumbnailError && <div className="error">{thumbnailError}</div>} */}
                             </label>
                         </div>
                     </div>
                     <br />
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <button className="btn">Add Document</button>
+                        {!formError && <button className="btn">Add Document</button>}
                         {formError && <p className="error">{formError}</p>}
                     </div>
                     <br />

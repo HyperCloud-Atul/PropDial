@@ -1,8 +1,7 @@
 import { useCollection } from '../../../hooks/useCollection'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+
 import { useAuthContext } from '../../../hooks/useAuthContext'
-// import { useNavigate } from 'react-router-dom'
-import { useLogout } from '../../../hooks/useLogout'
 
 // components
 import Filters from '../../../components/Filters'
@@ -13,10 +12,12 @@ import BillList from '../../../components/BillList'
 
 const billsFilter = ['PENDING', 'PMS', 'BROKERAGE', 'MAINTENANCE', 'INACTIVE'];
 
-export default function PGBills() {
+export default function PGOwnerBills() {
+    // const { state } = useLocation()
+    // const { propertyid } = state
     const { user } = useAuthContext()
-    const { logout, isPending } = useLogout()
     const { documents: billsdocuments, error: billserror } = useCollection('bills')
+    // const { document: property, error: propertyError } = useDocument('properties', propertyid)
 
     const [filter, setFilter] = useState('PENDING')
 
@@ -71,6 +72,8 @@ export default function PGBills() {
 
     return (
         <div>
+            {/* {property && <PropertyStickyHeader property={property} />} */}
+            {/* <br></br> */}
             <h2 className="page-title">Bills</h2>
             <div>
                 {billserror && <p className="error">{billserror}</p>}

@@ -7,18 +7,15 @@ import OwlCarousel from 'react-owl-carousel';
 // components
 import Filters from '../../../components/Filters'
 import PropertyList from '../../../components/PropertyList'
-import { numberFormat } from '../../../components/NumberFormat';
 
 // styles
 // import './UserDashboard.css'
 const propertyFilter = ['ALL', 'RESIDENTIAL', 'COMMERCIAL', 'INACTIVE'];
 
-export default function PGOwnerDashboard() {
+export default function PGCustomerProperties() {
     const { user } = useAuthContext()
     const { logout, isPending } = useLogout()
     const { documents: propertiesdocuments, error: propertieserror } = useCollection('properties')
-    // const { documents: billsdocuments, error: billserror } = useCollection('bills')
-    const { documents: billsdocuments, error: billserror } = useCollection('bills', ['status', '==', 'pending'])
 
     const [filter, setFilter] = useState('ALL')
 
@@ -108,141 +105,7 @@ export default function PGOwnerDashboard() {
         <div>
             {/* <h2 className="page-title">Owner Dashboard</h2> */}
 
-            <div className="row no-gutters">
-
-                {/* {billsdocuments && <p>There are {billsdocuments.length} Bills to be paid yet!</p>} */}
-
-                {billsdocuments && billsdocuments.map(bill => (<>
-                    <div className="col-lg-6 col-md-12 col-sm-12" style={{ padding: '10px' }}>
-                        <div className="default-card">
-                            <div className='default-card-inner'>
-                                <div>
-                                    <h6>{bill.billType}</h6>
-                                    <h1 style={{ color: 'var(--red-color)' }}>
-                                        {numberFormat.format(bill.billTotalAmount)}
-                                    </h1>
-                                    <h3>Due Date :{bill.billDueDate.toDate().toDateString()}</h3>
-                                    {/* <h4>Due Date Exceeded : ₹100</h4> */}
-
-                                </div>
-                                <div>
-                                    <h6>Property</h6>
-                                    <h3 style={{ color: 'var(--blue-color)' }}>D2-201 & A-504</h3>
-
-
-                                </div>
-                            </div>
-                            <div className='default-card-inner'>
-                                <h3>{bill.billDetails}</h3>
-                                <button className="btn">Pay Now</button>
-                            </div>
-                        </div>
-                    </div>
-                </>
-                ))}
-
-            </div>
-
-            <div className="row no-gutters">
-                <div className="col-lg-6 col-md-12 col-sm-12" style={{ padding: '10px' }}>
-                    <div className="tenant-dashboard-ticket-card">
-                        <div className="ticket-round-left"></div>
-                        <div className="ticket-round-right"></div>
-                        <h1 className="tenant-dashboard-ticket-card-heading">Tickets</h1>
-                        <hr />
-                        <div className="tenant-dashboard-ticket-card-content">
-                            <div>
-                                <h1>Pending Tickets</h1>
-                                <h2>10</h2>
-                                <h3>Last Raised Date</h3>
-                                <h4>15 Jan 2023</h4>
-                            </div>
-                            <div>
-                                <h1>Closed Tickets</h1>
-                                <h2>30</h2>
-                                <button className="mybutton button5">Raise Ticket</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br />
-
-            <div className="row no-gutters partners-div" style={{ backgroundColor: 'rgb(188, 236, 224, 0.5)', padding: '2% 0' }}>
-                <div className="col-md-12 col-md-offset-1">
-                    <OwlCarousel
-                        className="owl-theme"
-                        loop={true}
-                        nav={false}
-                        autoplay={false}
-                        smartSpeed={3000}
-                        autoplayTimeout={3000}
-                        autoplayHoverPause={false}
-                        dots={false}
-                        center={true}
-                        margin={10}
-                        stagePadding={30}
-                        responsive={myState.responsive} >
-                        <div className="owlcarousel-item">
-                            <div className="">
-                                <center>
-                                    <span className="material-symbols-outlined">
-                                        location_away
-                                    </span>
-                                    <h1>0</h1>
-                                    <h5 className="owlcarousel-item-h5">Rental Enquiries</h5>
-                                </center>
-                            </div>
-                        </div>
-                        <div className="owlcarousel-item">
-                            <div className="">
-                                <center>
-                                    <span className="material-symbols-outlined">
-                                        real_estate_agent
-                                    </span>
-                                    <h1>0</h1>
-                                    <h5 className="owlcarousel-item-h5">Sale Enquiries</h5>
-                                </center>
-                            </div>
-                        </div>
-                        <div className="owlcarousel-item">
-                            <div className="">
-                                <center>
-                                    <span className="material-symbols-outlined">
-                                        groups
-                                    </span>
-                                    <h1>0</h1>
-                                    <h5 className="owlcarousel-item-h5">General Visits</h5>
-                                </center>
-                            </div>
-                        </div>
-                        <div className="owlcarousel-item">
-                            <div className="">
-                                <center>
-                                    <span className="material-symbols-outlined">
-                                        family_restroom
-                                    </span>
-                                    <h1>0</h1>
-                                    <h5 className="owlcarousel-item-h5">Rental Visits</h5>
-                                </center>
-                            </div>
-                        </div>
-                        <div className="owlcarousel-item">
-                            <div className="">
-                                <center>
-                                    <span className="material-symbols-outlined">
-                                        supervisor_account
-                                    </span>
-                                    <h1>0</h1>
-                                    <h5 className="owlcarousel-item-h5">Sale Visits</h5>
-                                </center>
-                            </div>
-                        </div>
-                    </OwlCarousel>
-                </div >
-                <br /><br />
-            </div >
-            <br />
+            {/* <br /> */}
             <div>
                 <div className='page-title'>
                     <span className="material-symbols-outlined">
