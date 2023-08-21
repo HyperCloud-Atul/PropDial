@@ -1,8 +1,7 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
-
-// component 
+// component
 import Banner from "../../Components/Banner";
 import OffersForAgents from "../../Components/OffersForAgents";
 import TopCitiesInIndia from "../../Components/TopCitiesInIndia";
@@ -47,15 +46,17 @@ const Home = () => {
                 <div className="section_title">
                   <div class="section_title_effect">ABOUT</div>
                   <h3>A bit about us</h3>
-                </div>              
+                </div>
                 <h6>
                   Property Management Systems or Hotel Operating System, under
                   business, terms may be used in real estate hospitality
                   accommodation management.
                 </h6>
-                <ul style={{
-                  listStyleType:"circle"
-                }}>
+                <ul
+                  style={{
+                    listStyleType: "circle",
+                  }}
+                >
                   <li>
                     Lorem Ipsum is that it has a more-or-less normal
                     distribution
@@ -79,10 +80,12 @@ const Home = () => {
         </div>
       </section>
       <TopCitiesInIndia />
-      <section className="why_us sect_padding"
-      style={{
-        backgroundImage:"url('./assets/img/why_bg.jpg')"
-      }}>
+      <section
+        className="why_us sect_padding"
+        style={{
+          backgroundImage: "url('./assets/img/why_bg.jpg')",
+        }}
+      >
         <div className="container">
           <div className="section_title">
             <div class="section_title_effect">WHY US</div>
@@ -105,7 +108,9 @@ const Home = () => {
                   <img src="./assets/img/why_2.png" alt="" />
                   <h4 className="wucs_title">Competitive Pricing</h4>
                   <h6 className="wucs_desc">
-                  Propdial offers one of the best pricing for this service across the industry, without compromising on the quality of the service offered.
+                    Propdial offers one of the best pricing for this service
+                    across the industry, without compromising on the quality of
+                    the service offered.
                   </h6>
                 </div>
               </div>
@@ -114,7 +119,9 @@ const Home = () => {
                   <img src="./assets/img/why_3.png" alt="" />
                   <h4 className="wucs_title">Technology At Forefront</h4>
                   <h6 className="wucs_desc">
-                  Propdial leverages technology to make the process of property management very smooth and efficient, with minimal effort required by the property owners.
+                    Propdial leverages technology to make the process of
+                    property management very smooth and efficient, with minimal
+                    effort required by the property owners.
                   </h6>
                 </div>
               </div>
@@ -123,7 +130,10 @@ const Home = () => {
                   <img src="./assets/img/why_4.png" alt="" />
                   <h4 className="wucs_title">Full Transparency</h4>
                   <h6 className="wucs_desc">
-                  Every step of the property management from tenant onboarding to property inspection and maintenance is documented and updated online immediately. This lets you have an eye on your house.
+                    Every step of the property management from tenant onboarding
+                    to property inspection and maintenance is documented and
+                    updated online immediately. This lets you have an eye on
+                    your house.
                   </h6>
                 </div>
               </div>
@@ -132,7 +142,9 @@ const Home = () => {
                   <img src="./assets/img/why_5.png" alt="" />
                   <h4 className="wucs_title">Experienced Co-Founders</h4>
                   <h6 className="wucs_desc">
-                  The co-founders including the core team have decades of experience in the property management space and thus are well equipped to solve customer pain points.
+                    The co-founders including the core team have decades of
+                    experience in the property management space and thus are
+                    well equipped to solve customer pain points.
                   </h6>
                 </div>
               </div>
@@ -141,7 +153,9 @@ const Home = () => {
                   <img src="./assets/img/why_6.png" alt="" />
                   <h4 className="wucs_title">Our Wide Network</h4>
                   <h6 className="wucs_desc">
-                  Our extensive network of offline brokers and vast reach across multiple online platforms will ensure that you get the best clients without much delay.
+                    Our extensive network of offline brokers and vast reach
+                    across multiple online platforms will ensure that you get
+                    the best clients without much delay.
                   </h6>
                 </div>
               </div>
@@ -149,14 +163,13 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
+
       {/* <!-- START SECTION SERVICES --> */}
-      <section className="section-services sect_padding relative"
-      style={
-        {
-          backgroundImage:"url('./assets/img/service_bg.jpg')"
-        }
-      }
+      <section
+        className="section-services sect_padding relative"
+        style={{
+          backgroundImage: "url('./assets/img/service_bg.jpg')",
+        }}
       >
         <div className="container">
           <div className="section_title">
@@ -288,10 +301,49 @@ const Home = () => {
       </section>
       <CounterSection></CounterSection>
       {/* <!-- / END SECTION SERVICES --> */}
-      <section className="perfect_layout sect_padding"
-      style={{
-        backgroundImage:"url('./assets/img/appartment_bg.jpg')"
-      }}>
+      <section className="founder_speak sect_padding relative">
+        <div className="container">
+          <div className="row reverse-1199">
+            <div className="col-xl-8">
+              <div className="fs_left">
+                <div className="section_title">
+                  <div class="section_title_effect">FOUNDER'S SPEAK</div>
+                  <h3>Click and watch video</h3>
+                </div>
+                <div className="image_sect">
+                  <div className="img_div">
+                    <img src="./assets/img/GP-Interview-new.jpg" alt="" />
+                  </div>
+                  <div className="img_div">
+                    <img src="./assets/img/VP-Interview-new.jpg" alt="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-4">
+         <div className="fs_right">
+         <div className="fsr_inner">
+                <div className="section_title">
+                  <h3>We make your life a lot easier...</h3>
+                  <h6>Understand in Just 2 min!</h6>
+                </div>
+                <div className="btn_group">
+                  <button className="more-btn-info">Watch Video</button>
+                  <button className="more-btn-info">Get Started</button>
+                </div>
+              </div>
+         </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <Testimonial></Testimonial>
+      {/* <section
+        className="perfect_layout sect_padding"
+        style={{
+          backgroundImage: "url('./assets/img/appartment_bg.jpg')",
+        }}
+      >
         <div className="container">
           <div className="section_title">
             <div class="section_title_effect">APARTMENT</div>
@@ -314,10 +366,11 @@ const Home = () => {
                       The landscape infrastructures of streets are arranged in
                       with the common amenities for residents greatest ultural
                       institutions, its most fashionable stores, and its finest
-                      restaurants idents great.     The landscape infrastructures of streets are arranged in
-                      with the common amenities for residents greatest ultural
-                      institutions, its most fashionable stores, and its finest
-                      restaurants idents great.
+                      restaurants idents great. The landscape infrastructures of
+                      streets are arranged in with the common amenities for
+                      residents greatest ultural institutions, its most
+                      fashionable stores, and its finest restaurants idents
+                      great.
                     </p>
                     <p className="mt-2">
                       The landscape infrastructures of streets are arranged in
@@ -326,42 +379,30 @@ const Home = () => {
                       restaurants idents great.
                     </p>
                     <ol>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                    </ol>           
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                    </ol>
                   </div>
                   <div className="col-lg-6">
-               <div className="map_img">
-               <img
-                      src="./assets/img/tap_img_1.png"
-                      alt=""
-                      style={{
-                        width: "100%",
-                      }}
-                    />
-               </div>
+                    <div className="map_img">
+                      <img
+                        src="./assets/img/tap_img_1.png"
+                        alt=""
+                        style={{
+                          width: "100%",
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </TabPanel>
               <TabPanel>
                 <div className="row">
-                <div className="col-md-6">
+                  <div className="col-md-6">
                     <img
                       src="./assets/img/tap_img_1.png"
                       alt=""
@@ -375,10 +416,11 @@ const Home = () => {
                       The landscape infrastructures of streets are arranged in
                       with the common amenities for residents greatest ultural
                       institutions, its most fashionable stores, and its finest
-                      restaurants idents great.     The landscape infrastructures of streets are arranged in
-                      with the common amenities for residents greatest ultural
-                      institutions, its most fashionable stores, and its finest
-                      restaurants idents great.
+                      restaurants idents great. The landscape infrastructures of
+                      streets are arranged in with the common amenities for
+                      residents greatest ultural institutions, its most
+                      fashionable stores, and its finest restaurants idents
+                      great.
                     </p>
                     <p className="mt-2">
                       The landscape infrastructures of streets are arranged in
@@ -387,25 +429,13 @@ const Home = () => {
                       restaurants idents great.
                     </p>
                     <ol>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                    </ol>           
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                    </ol>
                   </div>
                 </div>
               </TabPanel>
@@ -416,10 +446,11 @@ const Home = () => {
                       The landscape infrastructures of streets are arranged in
                       with the common amenities for residents greatest ultural
                       institutions, its most fashionable stores, and its finest
-                      restaurants idents great.     The landscape infrastructures of streets are arranged in
-                      with the common amenities for residents greatest ultural
-                      institutions, its most fashionable stores, and its finest
-                      restaurants idents great.
+                      restaurants idents great. The landscape infrastructures of
+                      streets are arranged in with the common amenities for
+                      residents greatest ultural institutions, its most
+                      fashionable stores, and its finest restaurants idents
+                      great.
                     </p>
                     <p className="mt-2">
                       The landscape infrastructures of streets are arranged in
@@ -428,25 +459,13 @@ const Home = () => {
                       restaurants idents great.
                     </p>
                     <ol>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                    </ol>           
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                    </ol>
                   </div>
                   <div className="col-md-6">
                     <img
@@ -461,7 +480,7 @@ const Home = () => {
               </TabPanel>
               <TabPanel>
                 <div className="row">
-                <div className="col-md-6">
+                  <div className="col-md-6">
                     <img
                       src="./assets/img/tap_img_1.png"
                       alt=""
@@ -475,10 +494,11 @@ const Home = () => {
                       The landscape infrastructures of streets are arranged in
                       with the common amenities for residents greatest ultural
                       institutions, its most fashionable stores, and its finest
-                      restaurants idents great.     The landscape infrastructures of streets are arranged in
-                      with the common amenities for residents greatest ultural
-                      institutions, its most fashionable stores, and its finest
-                      restaurants idents great.
+                      restaurants idents great. The landscape infrastructures of
+                      streets are arranged in with the common amenities for
+                      residents greatest ultural institutions, its most
+                      fashionable stores, and its finest restaurants idents
+                      great.
                     </p>
                     <p className="mt-2">
                       The landscape infrastructures of streets are arranged in
@@ -487,25 +507,13 @@ const Home = () => {
                       restaurants idents great.
                     </p>
                     <ol>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                    </ol>           
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                    </ol>
                   </div>
                 </div>
               </TabPanel>
@@ -516,10 +524,11 @@ const Home = () => {
                       The landscape infrastructures of streets are arranged in
                       with the common amenities for residents greatest ultural
                       institutions, its most fashionable stores, and its finest
-                      restaurants idents great.     The landscape infrastructures of streets are arranged in
-                      with the common amenities for residents greatest ultural
-                      institutions, its most fashionable stores, and its finest
-                      restaurants idents great.
+                      restaurants idents great. The landscape infrastructures of
+                      streets are arranged in with the common amenities for
+                      residents greatest ultural institutions, its most
+                      fashionable stores, and its finest restaurants idents
+                      great.
                     </p>
                     <p className="mt-2">
                       The landscape infrastructures of streets are arranged in
@@ -528,25 +537,13 @@ const Home = () => {
                       restaurants idents great.
                     </p>
                     <ol>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                      <li>
-                        Lorem Ipsum
-                      </li>
-                    </ol>           
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                      <li>Lorem Ipsum</li>
+                    </ol>
                   </div>
                   <div className="col-md-6">
                     <img
@@ -559,16 +556,12 @@ const Home = () => {
                   </div>
                 </div>
               </TabPanel>
-     
             </Tabs>
           </div>
         </div>
-      </section>
-
-<Testimonial></Testimonial>
-<Blog></Blog>
+      </section> */}
+      <Blog></Blog>
       {/* <CollapsibleGroup /> */}
-  
     </div>
   );
 };

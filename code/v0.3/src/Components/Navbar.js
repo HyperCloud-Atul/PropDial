@@ -134,32 +134,39 @@ export default function Navbar() {
               <img src="./assets/img/logo_propdial.png" alt="logo" />
             </li>
             <li className="main_menus">
-           <Link to="/">
-           <div
-                className={`menu_single pointer ${
-                  location.pathname === "/" ? "active" : ""
-                }`}
-              >
-                <span class="material-symbols-outlined">home</span>
-                Home
-              </div>
-           </Link>
-            <Link to="/search-property">
-            <div
-                className={`menu_single pointer ${
-                  location.pathname === "/search-property" ? "active" : ""
-                }`}
-              >
-                <span class="material-symbols-outlined">countertops</span>
-                Property
-              </div>
-            </Link>
-
+              <Link to="/">
+                <div
+                  className={`menu_single pointer ${
+                    location.pathname === "/" ? "active" : ""
+                  }`}
+                >
+                  <span class="material-symbols-outlined">home</span>
+                  Home
+                </div>
+              </Link>
+              <Link to="/search-property">
+                <div
+                  className={`menu_single pointer ${
+                    location.pathname === "/search-property" ? "active" : ""
+                  }`}
+                >
+                  <span class="material-symbols-outlined">countertops</span>
+                  Property
+                </div>
+              </Link>
+              <Link to="/about-us">
+                <div  className={`menu_single pointer ${
+                    location.pathname === "/about-us" ? "active" : ""
+                  }`}>
+                  <span class="material-symbols-outlined">contacts</span>
+                  About Us
+                </div>
+              </Link>
               <div className="menu_single pointer ">
                 <span class="material-symbols-outlined">contacts</span>
                 Contact us
               </div>
-              <div className="menu_single pointer ">
+              {/* <div className="menu_single pointer ">
                 <span class="material-symbols-outlined">
                   settings_applications
                 </span>
@@ -168,7 +175,7 @@ export default function Navbar() {
               <div className="menu_single pointer ">
                 <span class="material-symbols-outlined">login</span>
                 Login/Signup
-              </div>
+              </div> */}
             </li>
             <li className="menu_social_media">
               <div className="msm_single pointer">

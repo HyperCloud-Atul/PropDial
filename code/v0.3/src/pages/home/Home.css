@@ -1,23 +1,3 @@
-/* CSS for the animation */
-.section_title_effect {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-/* Animation keyframes */
-@keyframes slideInFromLeft {
-  0% {
-    transform: translateX(-100%);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-
-
 /* about us section css start  */
 .ab_left.row img {
   width: 100%;
@@ -514,3 +494,94 @@ h6.wucs_desc {
 }
 }
 /* why us section css end  */
+
+
+/* founder section css start  */
+.image_sect {
+  margin-top: 30px;
+  display: flex;
+  gap: 30px;
+}
+.image_sect .img_div img{
+  width: 100%;
+  border-radius: 20px;
+}
+.fs_right .section_title h3 {
+  color: white;
+  max-width: 355px;
+  width: 100%;
+  margin: 0 auto !important;
+  font-size: 42px;
+}
+.fs_right .section_title h6 {
+  color: white;
+  margin-top: 10px !important;
+  margin-bottom: 40px !important;
+}
+.fs_right {
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fs_right .fsr_inner {
+  text-align: center;
+}
+.fs_right .fsr_inner .btn_group {
+  display: grid;
+  gap: 20px;
+}
+.fs_right .fsr_inner .btn_group .more-btn-info {
+  width: 100%;
+  color: #e95733;
+  border: none;
+  font-size: 18px;
+  border-radius: 20px;  
+  background-color: #ffffff;
+}
+.fs_right {
+  background: #e95733; 
+  border-radius: 30px 0px 0px 30px;
+}
+@media only screen and (min-width: 1200px) {
+.fs_right {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  height: auto;
+  transform: translateY(-50%);
+}
+}
+@media only screen and (max-width: 1199px) {
+.fs_right {
+  background: #e95733;
+  border-radius: 30px;
+  max-width: 500px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 60px;
+}
+}
+@media only screen and (max-width: 767px) {
+.fs_right {
+  margin-bottom: 30px;
+  padding: 15px;
+}
+.fs_right .section_title h3 {
+  max-width: inherit;
+  font-size: 22px;
+}
+.fs_right .section_title h6 {
+  margin-top: 5px !important;
+  margin-bottom: 22px !important;
+}
+.fs_right .fsr_inner .btn_group .more-btn-info {
+  font-size: 16px;
+}
+.fs_right .fsr_inner .btn_group {
+  display: grid;
+  gap: 10px;
+}
+
+}

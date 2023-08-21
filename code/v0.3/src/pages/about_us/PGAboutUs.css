@@ -1,0 +1,54 @@
+/* pg about content css start  */
+
+.abcr_div {
+    border: 4px solid var(--theme-orange);
+    position: absolute;
+    top: -120px;
+    padding: 25px;
+    left: 95px;
+    background: white;
+    max-width: 382px;
+    width: 100%;
+}
+.abcr_div h4 {
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: capitalize;
+    line-height: 28px;
+    margin-bottom: 55px !important;
+}
+.about_content .abc_left {
+    position: relative;
+    top: -30px;
+}
+.abcr_div .our_ex h6 {
+    font-size: 14px;
+    font-weight: 400;
+}
+.abcr_div .our_ex h3 {
+    font-size: 100px;
+    letter-spacing: 4px;
+    position: relative;
+    display: inline-block;
+}
+.abcr_div .our_ex h3:after {
+    content: '';
+    width: 100px;
+    height: 100px;
+    background: var(--theme-orange);
+    position: absolute;
+    border-radius: 50%;
+    right: -50px;
+    opacity: 0.4;
+}
+.about_content .abc_left h2 {
+    max-width: 356px;
+    font-size: 40px;
+    margin-bottom: 20px !important;
+}
+.about_content .abc_left p {
+    margin-bottom: 8px !important;
+}
+.about_content .abc_left p:last-child {
+    margin-bottom: 0px !important;
+}

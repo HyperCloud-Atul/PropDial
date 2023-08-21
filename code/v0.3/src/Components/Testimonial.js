@@ -27,8 +27,8 @@ const ProductCarousel = () => {
       <div className="container">
 
         <div className="section_title">
-          <h2 class="section_title_effect">Testimonial</h2>
-          <h3>What Our Clients Have to Say</h3>
+          <h2 class="section_title_effect">Audible Testimonial</h2>
+          <h3>Clients Radio Interview, We collect reviews from our customers.</h3>
         </div>
 
         <Carousel
@@ -52,11 +52,11 @@ const ProductCarousel = () => {
           <div className="testimonial_single relative">
             <h5>
               Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's
-              standard dummy text ever since the 1500s, when an unknown
-              printer took a galley of type and scrambled it to make a
-              type specimen book
+              typesetting industry.
             </h5>
+            <audio controls className="c_interview">
+              <source src="./assets/audio/parvinder-1.mp3"/>
+            </audio>
             <div className="client_info_div">
               <div className="client_img">
                 <img
@@ -65,7 +65,7 @@ const ProductCarousel = () => {
                 />
               </div>
               <div className="client_info">
-                <h4> Rakesh Mishra</h4>
+                <h4>Mr. Parvinder</h4>
                 <h6>Lorem Ipsum</h6>
               </div>
               <div className="quote_down quote">
@@ -79,11 +79,11 @@ const ProductCarousel = () => {
           <div className="testimonial_single relative">
             <h5>
               Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's
-              standard dummy text ever since the 1500s, when an unknown
-              printer took a galley of type and scrambled it to make a
-              type specimen book
+              typesetting industry.
             </h5>
+            <audio controls className="c_interview">
+              <source src="./assets/audio/snehlata-1.mp3"/>
+            </audio>
             <div className="client_info_div">
               <div className="client_img">
                 <img
@@ -92,7 +92,7 @@ const ProductCarousel = () => {
                 />
               </div>
               <div className="client_info">
-                <h4> Sonam Kapoor</h4>
+                <h4>Mrs. Sneh Lata</h4>
                 <h6>Lorem Ipsum</h6>
               </div>
               <div className="quote_down quote">
@@ -106,11 +106,11 @@ const ProductCarousel = () => {
           <div className="testimonial_single relative">
             <h5>
               Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's
-              standard dummy text ever since the 1500s, when an unknown
-              printer took a galley of type and scrambled it to make a
-              type specimen book
+              typesetting industry.
             </h5>
+                <audio controls className="c_interview">
+              <source src="./assets/audio/sachin-1.mp3"/>
+            </audio>
             <div className="client_info_div">
               <div className="client_img">
                 <img
@@ -119,7 +119,7 @@ const ProductCarousel = () => {
                 />
               </div>
               <div className="client_info">
-                <h4>Mohan Yadav</h4>
+                <h4>Mr. Sachin Jain</h4>
                 <h6>Lorem Ipsum</h6>
               </div>
               <div className="quote_down quote">
@@ -133,11 +133,11 @@ const ProductCarousel = () => {
           <div className="testimonial_single relative">
             <h5>
               Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's
-              standard dummy text ever since the 1500s, when an unknown
-              printer took a galley of type and scrambled it to make a
-              type specimen book
+              typesetting industry.
             </h5>
+                <audio controls className="c_interview">
+              <source src="./assets/audio/nishant-1.mp3"/>
+            </audio>
             <div className="client_info_div">
               <div className="client_img">
                 <img
@@ -146,7 +146,7 @@ const ProductCarousel = () => {
                 />
               </div>
               <div className="client_info">
-                <h4>Deepti Sen</h4>
+                <h4>Mr. Nishant Sharma</h4>
                 <h6>Lorem Ipsum</h6>
               </div>
               <div className="quote_down quote">
@@ -157,61 +157,6 @@ const ProductCarousel = () => {
               </div>
             </div>
           </div>
-          <div className="testimonial_single relative">
-            <h5>
-              Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's
-              standard dummy text ever since the 1500s, when an unknown
-              printer took a galley of type and scrambled it to make a
-              type specimen book
-            </h5>
-            <div className="client_info_div">
-              <div className="client_img">
-                <img
-                  src="./assets/img/client_img_4.jpg"
-                  alt=""
-                />
-              </div>
-              <div className="client_info">
-                <h4>Varun Solanki</h4>
-                <h6>Lorem Ipsum</h6>
-              </div>
-              <div className="quote_down quote">
-                <img src="./assets/img/quote.png" alt="" />
-              </div>
-              <div className="quote_up quote">
-                <img src="./assets/img/quote.png" alt="" />
-              </div>
-            </div>
-          </div>
-          <div className="testimonial_single relative">
-            <h5>
-              Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's
-              standard dummy text ever since the 1500s, when an unknown
-              printer took a galley of type and scrambled it to make a
-              type specimen book
-            </h5>
-            <div className="client_info_div">
-              <div className="client_img">
-                <img
-                  src="./assets/img/client_img_5.jpg"
-                  alt=""
-                />
-              </div>
-              <div className="client_info">
-                <h4>Khushi Sharma</h4>
-                <h6>Lorem Ipsum</h6>
-              </div>
-              <div className="quote_down quote">
-                <img src="./assets/img/quote.png" alt="" />
-              </div>
-              <div className="quote_up quote">
-                <img src="./assets/img/quote.png" alt="" />
-              </div>
-            </div>
-          </div>
-
         </Carousel>
 
 
