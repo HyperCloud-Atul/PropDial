@@ -11,7 +11,7 @@ import FooterBefore from "../../Components/FooterBefore";
 const PGAboutUs = () => {
   return (
     <div className="about_us_pg">
-      <Hero pageTitle="About Us" pageSubTitle="A few words"></Hero>
+      <Hero pageTitle="About Us" pageSubTitle="A few words" heroImage="./assets/img/about_us_banner.jpg"></Hero>
       <section className="about_content">
         <div className="container">
           <div className="row">
@@ -29,6 +29,11 @@ const PGAboutUs = () => {
                   ceilings and full-height windows. Custom herringbone floors
                   and hand-selected stone bring a rich tactility to the rooms.
                 </p>
+                <div >
+                  <button className="theme_btn btn_fill">
+                    Get In Touch
+                  </button>
+                </div>
               </div>
             </div>
             <div className="col-md-6">
@@ -45,6 +50,16 @@ const PGAboutUs = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className="col-md-12">
+              <div className="main_about_content">
+                <h3>What is Lorem Ipsum?</h3>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                <h6>Where does it come from?</h6>
+                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage</p>
+                <h6>Where can I get some?</h6>
+                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
               </div>
             </div>
           </div>

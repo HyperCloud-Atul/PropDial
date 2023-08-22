@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLogin } from '../../hooks/useLogin'
 import { Link } from 'react-router-dom'
+import Hero from '../../Components/Hero'
 
 // styles
 // import './Login.css'
@@ -17,6 +18,7 @@ export default function Login() {
 
   return (
     <div>
+    <Hero pageTitle="Login" pageSubTitle="login and signup"></Hero>
 
       <form onSubmit={handleSubmit} className="auth-form" style={{ maxWidth: '350px' }}>
         <div className='page-title'>

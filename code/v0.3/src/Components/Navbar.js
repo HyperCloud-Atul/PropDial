@@ -162,20 +162,28 @@ export default function Navbar() {
                   About Us
                 </div>
               </Link>
-              <div className="menu_single pointer ">
+        <Link to="/contact-us">
+        <div className={`menu_single pointer ${
+                    location.pathname === "/contact-us" ? "active" : ""
+                  }`}>
                 <span class="material-symbols-outlined">contacts</span>
                 Contact us
               </div>
-              {/* <div className="menu_single pointer ">
+        </Link>
+              <div className="menu_single pointer ">
                 <span class="material-symbols-outlined">
                   settings_applications
                 </span>
                 Services
               </div>
-              <div className="menu_single pointer ">
+         <Link to="/login">
+         <div className={`menu_single pointer ${
+                    location.pathname === "/login" ? "active" : ""
+                  }`}>
                 <span class="material-symbols-outlined">login</span>
                 Login/Signup
-              </div> */}
+              </div>
+         </Link>
             </li>
             <li className="menu_social_media">
               <div className="msm_single pointer">
