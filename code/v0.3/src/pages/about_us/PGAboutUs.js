@@ -2,9 +2,11 @@ import React from "react";
 
 // component
 import Hero from "../../Components/Hero";
-
+import OurTeam from "../../Components/OurTeam";
 // css
 import "./PGAboutUs.css";
+import FooterBefore from "../../Components/FooterBefore";
+
 
 const PGAboutUs = () => {
   return (
@@ -48,6 +50,8 @@ const PGAboutUs = () => {
           </div>
         </div>
       </section>
+      <OurTeam></OurTeam>
+      <FooterBefore></FooterBefore>
     </div>
   );
 };
