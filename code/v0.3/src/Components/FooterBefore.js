@@ -6,7 +6,7 @@ import './FooterBefore.css'
 const FooterBefore = () => {
   return (
     <div>
-      <section className='footer_before'
+      <section className='footer_before relative'
       style={{
         backgroundImage:"url('./assets/img/footer-before-bg.jpg')"
       }}
