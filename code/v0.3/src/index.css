@@ -576,6 +576,27 @@ button.theme_btn.btn_border {
 .reverse-1199{
   flex-direction: column-reverse;
 }
+
+/* form fields css start  */
+.form_field {
+  margin-bottom: 14px;
+  position: relative;
+}
+.form_field input, .form_field select, .form_field textarea {
+  border: 1px solid #03468738;
+  border-radius: 12px;
+  color: #000;
+  color: var(--black-color);
+  font-size: 16px;
+  padding: 10px 10px 10px 42px;
+  width: 100%;
+}
+.field_icon {
+  left: 12px;
+  position: absolute;
+  top: 10px;
+}
+
 /* sanskar css end  */
 
 

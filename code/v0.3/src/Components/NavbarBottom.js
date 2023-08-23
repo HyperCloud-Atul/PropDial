@@ -57,6 +57,9 @@ export default function NavbarBottom() {
 const searchpage = () => {
   navigate("/search-property")
 }
+const contactus = () => {
+  navigate("/contact-us")
+}
 const homepage = () => {
   navigate("/")
 }
@@ -158,7 +161,7 @@ const homepage = () => {
         </div>
         {/* <div className="menu_name">Home</div> */}
       </div>
-      <div className="b_menu_single">
+      <div className={`b_menu_single ${location.pathname === "/contact-us" ? "b_menu_active" : ""}`} onClick={contactus}>
         <div className="menu_icon">
           <span class="material-symbols-outlined">contacts</span>
         </div>

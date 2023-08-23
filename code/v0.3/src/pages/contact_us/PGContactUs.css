@@ -7,7 +7,17 @@
     aspect-ratio: 3/1;
     object-fit: cover;
 }
-
+.pg_contact_us .sn_inner {
+    top: 0px; 
+    margin-top: -110px;
+}
+.pg_contact_us .submit_btn{
+    text-align: center;
+}
+.pg_contact_us button.theme_btn {
+    padding: 10px 40px;
+    border-radius: 10px; 
+}
 .loc_em_ph_inner {
     background-size: cover;
     background-position: center;
@@ -37,7 +47,7 @@
 
 
 .lep_single .icon_div {
-    background: var(--pink);
+    background: var(--theme-orange);
     display: inline-block;
     border-radius: 50%;
     padding: 20px;
@@ -63,11 +73,10 @@
 .lep_single h4 {
     font-size: 26px;
     font-family: 'p_bold';
-    margin: 10px 0px;
+    margin: 10px 0px !important;
 }
 
-section.form_sec {
-    margin: 80px 0px;
+section.form_sec { 
     display: flex;
     flex-wrap: wrap;
 }
@@ -214,5 +223,8 @@ section.form_sec .right_form::after {
 
     section.form_sec {
         margin: 40px 0px;
+    }
+    .pg_contact_us .sn_inner {
+        margin-top: -45px;
     }
 }

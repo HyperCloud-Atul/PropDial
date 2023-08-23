@@ -1,11 +1,17 @@
 import React from 'react'
-
+import { useLocation } from "react-router-dom";
 // components 
 import Hero from '../../Components/Hero'
 
 // css 
 import './PGContactUs.css'
 const PGContactUs = () => {
+    const location = useLocation();
+
+    // Scroll to the top of the page whenever the location changes
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location]);
     return (
         <div className="pg_contact_us">
             <Hero pageTitle="Contact Us" pageSubTitle="Reach Out to Us" heroImage="./assets/img/contact_us_page_hero.jpg"></Hero>
@@ -42,9 +48,7 @@ const PGContactUs = () => {
                         <div className="lep_single">
                             <div>
                                 <div className="icon_div">
-                                    <span className="material-symbols-outlined ">
-                                        deskphone
-                                    </span>
+                                <img src="./assets/img/callcpg.png"></img>
                                 </div>
                                 <h4>Phone</h4>
                             </div>
@@ -137,7 +141,7 @@ const PGContactUs = () => {
                                 <div className="submit_btn">
                                     <button
                                         type="submit"
-                                        className="btn_fill"
+                                        className=" theme_btn btn_fill"
 
                                     >
                                         Send
@@ -151,7 +155,7 @@ const PGContactUs = () => {
 
                 <iframe
                     title="Dentamax Clinic Location"
-                    src="https://www.google.com/maps/dir//Propdial.com,+%23204,+2nd+floor,+Vipul+Trade+Centre,,+Sector+48,+Sohna+Road,+Gurugram,+Haryana+122018/@28.407147,77.04139,17z/data=!4m17!1m7!3m6!1s0x390d229097047f95:0x2d5ea723e57d3e4b!2sPropdial.com!8m2!3d28.406807!4d77.0424955!16s%2Fg%2F11g9djcvrs!4m8!1m0!1m5!1m1!1s0x390d229097047f95:0x2d5ea723e57d3e4b!2m2!1d77.0424955!2d28.406807!3e9?hl=en&entry=ttu"
+                    src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=propdial managment company&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
                     width="100%"
                     height="400"
                     style={{ border: 0 }}
