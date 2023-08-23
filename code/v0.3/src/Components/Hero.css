@@ -21,7 +21,7 @@ section.hero:after {
   max-width: 460px;
   width: 100%;
   position: relative;
-  top: -110px;
+margin-top: -110px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-radius: 10px;
 }
@@ -58,7 +58,7 @@ section.hero:after {
 
   .sn_inner {
     padding: 15px;
-    top: -45px;
+    margin-top: -45px;
   }
 
   .sn_inner h6 {

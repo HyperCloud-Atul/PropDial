@@ -60,6 +60,9 @@ const searchpage = () => {
 const contactus = () => {
   navigate("/contact-us")
 }
+const aboutpage = () => {
+  navigate("/about-us")
+}
 const homepage = () => {
   navigate("/")
 }
@@ -147,11 +150,11 @@ const homepage = () => {
         </div>
         <div className="menu_name">Home</div>
       </div>
-      <div className="b_menu_single">
+      <div className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""}`} onClick={aboutpage}>
         <div className="menu_icon">
           <span class="material-symbols-outlined">settings_applications</span>
         </div>
-        <div className="menu_name">Services</div>
+        <div className="menu_name">About</div>
       </div>
       <div className={
         `b_menu_single search ${location.pathname === "/search-property" ? "b_menu_active" : ""}`

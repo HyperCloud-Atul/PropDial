@@ -7,10 +7,6 @@
     aspect-ratio: 3/1;
     object-fit: cover;
 }
-.pg_contact_us .sn_inner {
-    top: 0px; 
-    margin-top: -110px;
-}
 .pg_contact_us .submit_btn{
     text-align: center;
 }
@@ -223,8 +219,5 @@ section.form_sec .right_form::after {
 
     section.form_sec {
         margin: 40px 0px;
-    }
-    .pg_contact_us .sn_inner {
-        margin-top: -45px;
     }
 }

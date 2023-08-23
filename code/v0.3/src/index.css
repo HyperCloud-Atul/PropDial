@@ -5,6 +5,8 @@
 /* sanskar color var  */
   --theme-green:#20b2aa;
   --theme-orange: #e95733; 
+  --white-color: #fff;
+  --black-color: #000;
 
 /* sanskar color var  */
 
@@ -12,8 +14,7 @@
 
   --heading-color: #3F5E98;
   --text-color: #444;
-  --white-color: #fff;
-  --black-color: #000;
+
   --darkgrey-color: #666;
   --lightgrey-color: #aaa;
   --red-color: #E4021B;
@@ -559,7 +560,7 @@ textarea {
 }
 button.theme_btn {
   padding: 4px 18px;
-  border-radius: 25px;
+  border-radius: 10px;
   font-size: 16px;
   font-weight: 500;
 }
@@ -573,9 +574,9 @@ button.theme_btn.btn_border {
   color: var(--black-color);
   border: 2px solid var(--theme-orange);
 }
-.reverse-1199{
-  flex-direction: column-reverse;
-}
+
+
+
 
 /* form fields css start  */
 .form_field {
@@ -606,7 +607,15 @@ button.theme_btn.btn_border {
 body {
   margin-bottom: 60px !important;
 }
+.reverse-1199{
+  flex-direction: column-reverse;
 }
+}
+
+@media (max-width: 1199px) {
+.reverse-991{
+  flex-direction: column-reverse;
+}}
 
 
 @media (max-width: 767px) {
