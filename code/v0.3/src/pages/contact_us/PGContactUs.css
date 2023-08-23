@@ -19,7 +19,22 @@
     justify-content: space-evenly;
     gap: 15px;
     border-radius: 20px;
+    position: relative;
+    z-index: 1;
 }
+.loc_em_ph_inner:after{
+    position: absolute;
+    content: '';
+    background: var(--white-color);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0.9;
+   
+}
+
 
 .lep_single .icon_div {
     background: var(--pink);

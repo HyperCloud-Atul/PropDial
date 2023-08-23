@@ -10,11 +10,11 @@ const PGContactUs = () => {
         <div className="pg_contact_us">
             <Hero pageTitle="Contact Us" pageSubTitle="Reach Out to Us" heroImage="./assets/img/contact_us_page_hero.jpg"></Hero>
             <section className="loc_em_ph">
-                <div className="container">              
+                <div className="container">
                     <div
                         className="loc_em_ph_inner"
                         style={{
-                            backgroundImage: "url('./assets/img/counterbg.png')",
+                            backgroundImage: "url('./assets/img/contact_info_belt.jpg')",
                         }}
                     >
                         <div className="lep_single">
@@ -25,9 +25,9 @@ const PGContactUs = () => {
                                 <h4>Address</h4>
                             </div>
                             <h6 className="lep_single_address">
-                            #204, 2nd floor, Vipul Trade Centre,
+                                #204, 2nd floor, Vipul Trade Centre,
 
-Sector 48, Sohna Road, Gurugram - 122 018, Haryana
+                                Sector 48, Sohna Road, Gurugram - 122 018, Haryana
                             </h6>
                         </div>
                         <div className="lep_single">
@@ -49,7 +49,7 @@ Sector 48, Sohna Road, Gurugram - 122 018, Haryana
                                 <h4>Phone</h4>
                             </div>
                             <h6>
-                            +91 95821 95821
+                                +91 95821 95821
                                 <br />
                                 +91 95821 95821
                             </h6>
@@ -59,12 +59,12 @@ Sector 48, Sohna Road, Gurugram - 122 018, Haryana
             </section>
             <section className="form_sec">
                 <div className="left_img">
-                    <img src="./assets/img/contact_us_page_hero.jpg" alt="Left" />
+                    <img src="./assets/img/contact_from_left.jpg" alt="Left" />
                 </div>
                 <div
                     className="right_form"
                     style={{
-                        backgroundImage: "url('./assets/img/contact_us_page_hero.jpg')",
+                        backgroundImage: "url('./assets/img/contact_from_right.jpg')",
                     }}
                 >
                     <form>
@@ -74,8 +74,8 @@ Sector 48, Sohna Road, Gurugram - 122 018, Haryana
                                     <input
                                         type="text"
                                         placeholder="Name"
-                                        name="name"                                       
-                                    
+                                        name="name"
+
                                     />
                                     <div className="field_icon">
                                         <span className="material-symbols-outlined">Person</span>
@@ -88,7 +88,7 @@ Sector 48, Sohna Road, Gurugram - 122 018, Haryana
                                         type="email"
                                         placeholder="Email"
                                         name="email"
-                                     
+
                                     />
                                     <div className="field_icon">
                                         <span className="material-symbols-outlined">mail</span>
@@ -100,7 +100,7 @@ Sector 48, Sohna Road, Gurugram - 122 018, Haryana
                                     <input
                                         type="tel"
                                         placeholder="Phone Number"
-                                        name="phoneNumber"                                    
+                                        name="phoneNumber"
                                     />
                                     <div className="field_icon">
                                         <span className="material-symbols-outlined">call</span>
@@ -113,7 +113,7 @@ Sector 48, Sohna Road, Gurugram - 122 018, Haryana
                                         type="text"
                                         placeholder="Subject"
                                         name="subject"
-                               
+
                                     />
                                     <div className="field_icon">
                                         <span className="material-symbols-outlined">subject</span>
@@ -126,7 +126,7 @@ Sector 48, Sohna Road, Gurugram - 122 018, Haryana
                                         type="text"
                                         placeholder="Message"
                                         name="message"
-                                    
+
                                     />
                                     <div className="field_icon">
                                         <span className="material-symbols-outlined">chat</span>
@@ -138,17 +138,17 @@ Sector 48, Sohna Road, Gurugram - 122 018, Haryana
                                     <button
                                         type="submit"
                                         className="btn_fill"
-                                       
+
                                     >
-                                     Send
+                                        Send
                                     </button>
-                                </div>                          
-                       
+                                </div>
+
                             </div>
                         </div>
                     </form>
                 </div>
-           
+
                 <iframe
                     title="Dentamax Clinic Location"
                     src="https://www.google.com/maps/dir//Propdial.com,+%23204,+2nd+floor,+Vipul+Trade+Centre,,+Sector+48,+Sohna+Road,+Gurugram,+Haryana+122018/@28.407147,77.04139,17z/data=!4m17!1m7!3m6!1s0x390d229097047f95:0x2d5ea723e57d3e4b!2sPropdial.com!8m2!3d28.406807!4d77.0424955!16s%2Fg%2F11g9djcvrs!4m8!1m0!1m5!1m1!1s0x390d229097047f95:0x2d5ea723e57d3e4b!2m2!1d77.0424955!2d28.406807!3e9?hl=en&entry=ttu"
@@ -157,7 +157,7 @@ Sector 48, Sohna Road, Gurugram - 122 018, Haryana
                     style={{ border: 0 }}
                     allowFullScreen
                 ></iframe>
-       
+
             </section>
         </div>
     )
