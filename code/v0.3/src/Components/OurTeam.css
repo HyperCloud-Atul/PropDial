@@ -107,9 +107,11 @@
 }
 
 .about_tm h5 {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--white-color);
   font-weight: 400;
+  margin-top: 2px !important;
+  text-transform: capitalize;
 }
 
 .tm_single .flip-card-front:after {

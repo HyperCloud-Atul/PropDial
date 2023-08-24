@@ -14,9 +14,11 @@ import Blog from "../../Components/Blog";
 import NavbarBottom from "../../Components/NavbarBottom";
 
 import "./Home.css";
+import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 const Home = () => {
   return (
     <div>
+    <BottomRightFixedIcon></BottomRightFixedIcon>
       <Banner></Banner>
 
       <ProductCarousel></ProductCarousel>

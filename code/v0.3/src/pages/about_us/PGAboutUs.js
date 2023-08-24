@@ -3,15 +3,18 @@ import React from "react";
 // component
 import Hero from "../../Components/Hero";
 import OurTeam from "../../Components/OurTeam";
+import FooterBefore from "../../Components/FooterBefore";
+import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 // css
 import "./PGAboutUs.css";
-import FooterBefore from "../../Components/FooterBefore";
+
 
 const PGAboutUs = () => {
   return (
     <div className="about_us_pg">
+    <BottomRightFixedIcon/>
       <Hero
-        pageTitle="About Us"
+        pageTitle="About"
         pageSubTitle="A few words"
         heroImage="./assets/img/about_us_banner.jpg"
       ></Hero>

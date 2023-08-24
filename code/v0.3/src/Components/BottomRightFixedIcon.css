@@ -1,0 +1,31 @@
+.brf_icon {
+    display: grid;
+    gap: 10px;
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 99;
+}
+.brfi_single {
+    width: 58px;
+    height: 58px;
+    padding: 12px;
+    background: var(--theme-orange);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.brfi_single:hover {  
+    background: var(--black-color);
+    transition: 0.3s;
+
+}
+.brfi_single img{
+    width: 100%;
+}
+
+@media only screen and (max-width: 1199px) {
+.brf_icon {
+    bottom: 80px; 
+}
+}

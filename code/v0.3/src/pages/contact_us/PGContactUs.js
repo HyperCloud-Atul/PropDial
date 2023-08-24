@@ -6,6 +6,7 @@ import Hero from "../../Components/Hero";
 
 // css
 import "./PGContactUs.css";
+import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 const PGContactUs = () => {
   const location = useLocation();
 
@@ -15,8 +16,9 @@ const PGContactUs = () => {
   }, [location]);
   return (
     <div className="pg_contact_us">
+    <BottomRightFixedIcon></BottomRightFixedIcon>
       <Hero
-        pageTitle="Contact Us"
+        pageTitle="Contact"
         pageSubTitle="Reach Out to Us"
         heroImage="./assets/img/contact_us_page_hero.jpg"
       ></Hero>
@@ -37,7 +39,7 @@ const PGContactUs = () => {
               </div>
               <h6 className="lep_single_address">
                 #204, 2nd floor, Vipul Trade Centre, Sector 48, Sohna Road,
-                Gurugram - 122 018, Haryana
+                Gurugram <br></br>- 122 018, Haryana
               </h6>
             </div>
             <div className="lep_single">

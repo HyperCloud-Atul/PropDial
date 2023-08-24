@@ -4,6 +4,7 @@ import "./PGProperty.css";
 
 // component
 import Banner from "../../Components/Banner";
+import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 
 const PGProperty = () => {
   // read more read less
@@ -16,6 +17,7 @@ const PGProperty = () => {
   return (
     <div className="pg_property">
       {/* <Banner></Banner> */}
+      <BottomRightFixedIcon></BottomRightFixedIcon>
       <div className="top_search_bar"></div>
       <Tabs>
         <div className="container-fluid"></div>

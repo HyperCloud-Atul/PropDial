@@ -30,7 +30,7 @@ const OurTeam = () => {
               </div>
               <div className="about_tm">
                 <h4>Mr.Vinay Prajapati</h4>
-                <h5>CO-FOUNDER AND CEO</h5>
+                <h5>Co-Founder And CEO</h5>
               </div>
             </div>
             <div className="tm_single">
@@ -50,7 +50,7 @@ const OurTeam = () => {
               </div>
               <div className="about_tm">
                 <h4>Mr. Gopal Mishra</h4>
-                <h5>CO-FOUNDER AND COO</h5>
+                <h5>Co-Founder And COO</h5>
               </div>
             </div>
             <div className="tm_single">
@@ -70,7 +70,7 @@ const OurTeam = () => {
               </div>
               <div className="about_tm">
                 <h4>Mr. Vivek Pandey</h4>
-                <h5>HEAD OF ENGINEERING</h5>
+                <h5>Heaad Of Engineering</h5>
               </div>
             </div>
             <div className="tm_single">
