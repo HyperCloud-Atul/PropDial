@@ -1,5 +1,7 @@
 import React from "react";
 import Hero from "../../Components/Hero";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 // component 
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
@@ -9,6 +11,12 @@ import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 import "./Faq.css";
 
 const Faq = () => {
+     // Scroll to the top of the page whenever the location changes start
+     const location = useLocation(); 
+     useEffect(() => {
+       window.scrollTo(0, 0);
+     }, [location]);
+      // Scroll to the top of the page whenever the location changes end
   return (
     <div>
         <BottomRightFixedIcon></BottomRightFixedIcon>

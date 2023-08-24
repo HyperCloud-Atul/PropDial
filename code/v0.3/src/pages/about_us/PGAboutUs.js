@@ -1,4 +1,6 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 // component
 import Hero from "../../Components/Hero";
@@ -9,6 +11,12 @@ import "./PGAboutUs.css";
 
 
 const PGAboutUs = () => {
+   // Scroll to the top of the page whenever the location changes start
+   const location = useLocation(); 
+   useEffect(() => {
+     window.scrollTo(0, 0);
+   }, [location]);
+    // Scroll to the top of the page whenever the location changes end
   return (
     <div className="about_us_pg">
     <BottomRightFixedIcon/>

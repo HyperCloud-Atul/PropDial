@@ -1,7 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 // css 
 import './FooterBefore.css'
+
 
 const FooterBefore = () => {
   return (
@@ -16,8 +18,12 @@ const FooterBefore = () => {
                 <h3>GET ACCESS TO THE BEST PROPERTY AROUND</h3>
                 <h6>Listed Over 3000+ Properties Around You</h6>
                 <div className='btn_group'>
-                <button className='theme_btn btn_fill'>Search A Property</button>
+               <Link to="search-property">
+               <button className='theme_btn btn_fill'>Search A Property</button>
+               </Link>
+               <Link to="search-property">
                 <button className='theme_btn btn_fill'>View All Properties</button>
+                </Link>
                 </div>
             </div>
         </div>

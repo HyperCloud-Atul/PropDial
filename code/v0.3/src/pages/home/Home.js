@@ -1,6 +1,8 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 
 // component
@@ -15,6 +17,12 @@ import Blog from "../../Components/Blog";
 import "./Home.css";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 const Home = () => {
+     // Scroll to the top of the page whenever the location changes start
+     const location = useLocation(); 
+     useEffect(() => {
+       window.scrollTo(0, 0);
+     }, [location]);
+      // Scroll to the top of the page whenever the location changes end
   return (
     <div>
     <BottomRightFixedIcon></BottomRightFixedIcon>
@@ -71,7 +79,9 @@ const Home = () => {
                     distribution
                   </li>
                 </ul>
+                <Link to="/about-us">
                 <button className="more-btn-info">More About</button>
+                </Link>
               </div>
             </div>
           </div>
@@ -312,12 +322,12 @@ const Home = () => {
                   <h3>Click and watch video</h3>
                 </div>
                 <div className="image_sect">
-                  <div className="img_div">
+                  <Link className="img_div" to="https://www.youtube.com/watch?v=RphaFtAR8pw&feature=youtu.be" target="_blank">
                     <img src="./assets/img/GP-Interview-new.jpg" alt="" />
-                  </div>
-                  <div className="img_div">
+                  </Link>
+                  <Link className="img_div" to="https://www.youtube.com/watch?v=H2bDZ4WLlyA" target="_blank">
                     <img src="./assets/img/VP-Interview-new.jpg" alt="" />
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>

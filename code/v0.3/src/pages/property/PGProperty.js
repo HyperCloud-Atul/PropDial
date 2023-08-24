@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PGProperty.css";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 // component
 import Banner from "../../Components/Banner";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 
 const PGProperty = () => {
+      // Scroll to the top of the page whenever the location changes start
+      const location = useLocation(); 
+      useEffect(() => {
+        window.scrollTo(0, 0);
+      }, [location]);
+       // Scroll to the top of the page whenever the location changes end
   // read more read less
   const [height, setHeight] = useState(true);
 

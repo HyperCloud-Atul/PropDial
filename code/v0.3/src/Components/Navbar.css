@@ -35,6 +35,14 @@ li.menu_social_media {
   gap: 5px;
   justify-content: end;
 }
+li.menu_social_media .msm_single {
+  width: 32px;
+  height: 32px;
+}
+li.menu_social_media .msm_single img{
+  width: 100%;
+}
+
 li.main_menus {
   display: flex;
   width: 70%;

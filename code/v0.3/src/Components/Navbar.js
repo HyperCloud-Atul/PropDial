@@ -204,18 +204,19 @@ question_mark
               </Link> */}
             </li>
             <li className="menu_social_media">
-              <div className="msm_single pointer">
+              <Link className="msm_single pointer" to="https://www.facebook.com/propdial">
                 <img src="./assets/img/facebook.png"></img>
-              </div>
-              <div className="msm_single pointer">
-                <img src="./assets/img/instagram.png"></img>
-              </div>
-              <div className="msm_single pointer">
-                <img src="./assets/img/twitter.png"></img>
-              </div>
-              <div className="msm_single pointer">
+              </Link>
+              <Link className="msm_single pointer" to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg">
+                <img src="./assets/img/youtube.png"></img>
+              </Link>
+              <Link className="msm_single pointer" to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/">
                 <img src="./assets/img/linkedin.png"></img>
-              </div>
+              </Link>
+              <Link className="msm_single pointer" to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial">
+                <img src="./assets/img/twitter.png"></img>
+              </Link>
+           
             </li>
 
             {/* {user && (

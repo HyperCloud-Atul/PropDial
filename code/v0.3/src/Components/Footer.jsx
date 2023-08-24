@@ -84,16 +84,16 @@ export default function Footer() {
           Important Links
           </div>
           <div className="footer_link">
-            <Link>
+            <Link to="/">
             Home
             </Link>
-            <Link>
+            <Link to="/about-us">
             About Us
             </Link>
-            <Link>
+            <Link to="contact-us">
             Contact Us
             </Link>
-            <Link>
+            <Link to="faq">
             FAQ
             </Link>
             <Link>
