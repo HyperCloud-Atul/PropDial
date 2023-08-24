@@ -86,7 +86,7 @@ export default function TenantDashboard() {
               <button
                 className="mybutton button5"
                 style={{
-                  background: "var(--blue-color)",
+                  background: "var(--theme-blue)",
                   color: "#fff",
                   fontWeight: "bolder",
                 }}

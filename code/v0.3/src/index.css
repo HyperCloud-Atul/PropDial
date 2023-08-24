@@ -7,6 +7,7 @@
   --theme-orange: #e95733; 
   --white-color: #fff;
   --black-color: #000;
+  --theme-blue: #3F5E98;
 
 /* sanskar color var  */
 
@@ -19,7 +20,7 @@
   --lightgrey-color: #aaa;
   --red-color: #E4021B;
   --peach-color: #FFBF90;
-  --blue-color: #3F5E98;
+  
   --green-color: 188, 236, 224;
   --yellow-color: #FEEBA0;
   --cream-color: #F4F2EB;
@@ -65,7 +66,7 @@ a {
   display: inline-block; */
   font-size: 1.4rem;
   font-weight: bolder;
-  color: var(--blue-color);
+  color: var(--theme-blue);
   padding: 4px 0px;
   z-index: 10;
   display: flex;
@@ -109,8 +110,8 @@ a {
   color: var(--black-color);
 }
 .btn.info {
-  background: var(--blue-color);
-  border-color: var(--blue-color);
+  background: var(--theme-blue);
+  border-color: var(--theme-blue);
   color: var(--white-color);
 }
 
@@ -127,13 +128,13 @@ a {
 }
 .btn.cancel:hover {
   background: var(--cream-color);
-  color: var(--blue-color);
+  color: var(--theme-blue);
 }
 .section_title {
   position: relative;
 }
 .btn.info:hover {
-  color: var(--blue-color);
+  color: var(--theme-blue);
 }
 .pointer{
   cursor: pointer;
@@ -265,7 +266,7 @@ textarea {
 /* Form Field Title */
 .form-field-title {
   position: relative;
-  color: var(--blue-color);
+  color: var(--theme-blue);
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -376,11 +377,11 @@ textarea {
 
 .pop-up-div div p {
   font-size: 1.1rem;
-  color: var(--blue-color);
+  color: var(--theme-blue);
 }
 
 .pop-up-div div p strong {
-  color: var(--blue-color);
+  color: var(--theme-blue);
 }
 
 .addon-service {

@@ -11,7 +11,7 @@
 }
 
 .bill-type.pms {
-    background: var(--blue-color);
+    background: var(--theme-blue);
 }
 
 .bill-type.brokerage {

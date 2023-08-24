@@ -8,12 +8,7 @@ import Hero from "../../Components/Hero";
 import "./PGContactUs.css";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 const PGContactUs = () => {
-  const location = useLocation();
 
-  // Scroll to the top of the page whenever the location changes
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
   return (
     <div className="pg_contact_us">
     <BottomRightFixedIcon></BottomRightFixedIcon>

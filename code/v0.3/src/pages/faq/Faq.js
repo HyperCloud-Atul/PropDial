@@ -3,7 +3,6 @@ import Hero from "../../Components/Hero";
 
 // component 
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
-import FooterBefore from "../../Components/FooterBefore";
 
 
 // css
@@ -339,7 +338,7 @@ const Faq = () => {
           </div>
         </div>
       </section>
-      <FooterBefore></FooterBefore>
+    
     </div>
   );
 };

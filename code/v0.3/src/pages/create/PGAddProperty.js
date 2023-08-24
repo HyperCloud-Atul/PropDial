@@ -383,7 +383,7 @@ export default function PGAddProperty({ propertyid }) {
                 <div className="col-lg-6 col-md-6 col-sm-12"
                     style={{ background: 'rgba(var(--green-color), 0.5)', padding: ' 0 10px', borderRadius: '8px 0px 0px 8px' }}>
                     <div className="residential-commercial-switch" style={{ height: 'calc(100% - 10px)' }}>
-                        <span className={toggleFlag ? '' : 'active'} style={{ color: 'var(--blue-color)' }}>Residential</span>
+                        <span className={toggleFlag ? '' : 'active'} style={{ color: 'var(--theme-blue)' }}>Residential</span>
 
                         <div className={toggleFlag ? 'toggle-switch on commercial' : 'toggle-switch off residential'} style={{ padding: '0 10px' }}>
                             {/* <small>{toggleFlag ? 'On' : 'Off'}</small> */}
@@ -481,7 +481,7 @@ export default function PGAddProperty({ propertyid }) {
                                                 ...baseStyles,
                                                 outline: 'none',
                                                 background: '#eee',
-                                                borderBottom: ' 1px solid var(--blue-color)'
+                                                borderBottom: ' 1px solid var(--theme-blue)'
                                             }),
                                         }}
                                     />
@@ -527,7 +527,7 @@ export default function PGAddProperty({ propertyid }) {
                                                 ...baseStyles,
                                                 outline: 'none',
                                                 background: '#eee',
-                                                borderBottom: ' 1px solid var(--blue-color)'
+                                                borderBottom: ' 1px solid var(--theme-blue)'
                                             }),
                                         }}
                                         isMulti
@@ -551,7 +551,7 @@ export default function PGAddProperty({ propertyid }) {
                                                 ...baseStyles,
                                                 outline: 'none',
                                                 background: '#eee',
-                                                borderBottom: ' 1px solid var(--blue-color)'
+                                                borderBottom: ' 1px solid var(--theme-blue)'
                                             }),
                                         }}
                                     />
@@ -577,7 +577,7 @@ export default function PGAddProperty({ propertyid }) {
                                                 ...baseStyles,
                                                 outline: 'none',
                                                 background: '#eee',
-                                                borderBottom: ' 1px solid var(--blue-color)'
+                                                borderBottom: ' 1px solid var(--theme-blue)'
                                             }),
                                         }}
                                     />
@@ -602,7 +602,7 @@ export default function PGAddProperty({ propertyid }) {
                                                     ...baseStyles,
                                                     outline: 'none',
                                                     background: '#eee',
-                                                    borderBottom: ' 1px solid var(--blue-color)'
+                                                    borderBottom: ' 1px solid var(--theme-blue)'
                                                 }),
                                             }}
                                         />
@@ -626,7 +626,7 @@ export default function PGAddProperty({ propertyid }) {
                                                     ...baseStyles,
                                                     outline: 'none',
                                                     background: '#eee',
-                                                    borderBottom: ' 1px solid var(--blue-color)'
+                                                    borderBottom: ' 1px solid var(--theme-blue)'
                                                 }),
                                             }}
                                         />
@@ -651,7 +651,7 @@ export default function PGAddProperty({ propertyid }) {
                                                     ...baseStyles,
                                                     outline: 'none',
                                                     background: '#eee',
-                                                    borderBottom: ' 1px solid var(--blue-color)'
+                                                    borderBottom: ' 1px solid var(--theme-blue)'
                                                 }),
                                             }}
                                         />
@@ -751,7 +751,7 @@ export default function PGAddProperty({ propertyid }) {
                                         position: 'absolute',
                                         top: '37px',
                                         right: '5px',
-                                        color: 'var(--blue-color)',
+                                        color: 'var(--theme-blue)',
                                         background: '#eee',
                                         width: '30px',
                                         height: '30px',
@@ -772,7 +772,7 @@ export default function PGAddProperty({ propertyid }) {
                                                 ...baseStyles,
                                                 outline: 'none',
                                                 background: '#eee',
-                                                borderBottom: ' 3px solid var(--blue-color)'
+                                                borderBottom: ' 3px solid var(--theme-blue)'
                                             }),
                                         }}
                                         isMulti
@@ -781,7 +781,7 @@ export default function PGAddProperty({ propertyid }) {
                             </div>
 
                             <label>
-                                <h1 style={{ fontSize: '0.9rem', fontWeight: 'bolder', paddingLeft: '4px', color: 'var(--blue-color)' }}>Country</h1>
+                                <h1 style={{ fontSize: '0.9rem', fontWeight: 'bolder', paddingLeft: '4px', color: 'var(--theme-blue)' }}>Country</h1>
                                 <Select
                                     onChange={(option) => setCategory(option)}
                                     options={categories}

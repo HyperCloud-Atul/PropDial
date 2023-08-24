@@ -291,7 +291,7 @@ export default function MasterCityList() {
                       ...baseStyles,
                       outline: "none",
                       background: "#eee",
-                      borderBottom: " 1px solid var(--blue-color)",
+                      borderBottom: " 1px solid var(--theme-blue)",
                     }),
                   }}
                 />
@@ -313,7 +313,7 @@ export default function MasterCityList() {
                       ...baseStyles,
                       outline: "none",
                       background: "#eee",
-                      borderBottom: " 1px solid var(--blue-color)",
+                      borderBottom: " 1px solid var(--theme-blue)",
                     }),
                   }}
                 />

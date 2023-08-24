@@ -165,7 +165,7 @@ export default function AddPhoto(props) {
                         ...baseStyles,
                         outline: "none",
                         background: "#eee",
-                        borderBottom: " 1px solid var(--blue-color)",
+                        borderBottom: " 1px solid var(--theme-blue)",
                       }),
                     }}
                   />

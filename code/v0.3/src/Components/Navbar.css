@@ -46,7 +46,7 @@ li.main_menus {
   gap: 8px;
 }
 .menu_single.active {
-  background: var(--blue-color);
+  background: var(--theme-blue);
   position: relative;
   top: -25px;
   transition: 0.4s;
@@ -60,7 +60,7 @@ li.main_menus {
   border-bottom: 4px solid var(--theme-orange);
 }
 .menu_single:hover {
-  background: var(--blue-color);
+  background: var(--theme-blue);
 
   transition: 0.4s;
   color: var(--white-color);
@@ -142,7 +142,7 @@ li.main_menus {
 .navbar-laptop-menu-links-div .navbar-laptop-menu-links div:hover span {
   font-variation-settings:
     'FILL' 1;
-  color: var(--blue-color);
+  color: var(--theme-blue);
 }
 
 .navbar-laptop-menu-links-div .navbar-laptop-menu-links div h1 {
@@ -157,7 +157,7 @@ li.main_menus {
 }
 
 .navbar-laptop-menu-links-div .navbar-laptop-menu-links div:hover h1 {
-  color: var(--blue-color);
+  color: var(--theme-blue);
 }
 
 .navbar-laptop-menu-icons-div {

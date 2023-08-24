@@ -292,7 +292,7 @@ export default function MasterLocalityList() {
                                             ...baseStyles,
                                             outline: 'none',
                                             background: '#eee',
-                                            borderBottom: ' 1px solid var(--blue-color)'
+                                            borderBottom: ' 1px solid var(--theme-blue)'
                                         }),
                                     }}
                                 />
@@ -313,7 +313,7 @@ export default function MasterLocalityList() {
                                             ...baseStyles,
                                             outline: 'none',
                                             background: '#eee',
-                                            borderBottom: ' 1px solid var(--blue-color)'
+                                            borderBottom: ' 1px solid var(--theme-blue)'
                                         }),
                                     }}
                                 />
@@ -334,7 +334,7 @@ export default function MasterLocalityList() {
                                             ...baseStyles,
                                             outline: 'none',
                                             background: '#eee',
-                                            borderBottom: ' 1px solid var(--blue-color)'
+                                            borderBottom: ' 1px solid var(--theme-blue)'
                                         }),
                                     }}
                                 />
@@ -352,7 +352,7 @@ export default function MasterLocalityList() {
                                     value={locality}
                                     styles={{
                                         backgroundColor: 'red',
-                                        borderBottom: ' 5px solid var(--blue-color)'
+                                        borderBottom: ' 5px solid var(--theme-blue)'
                                     }}
                                 />
                             </div>

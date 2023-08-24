@@ -5,6 +5,8 @@ section.footer_before {
     background-size: cover;
     background-attachment: fixed;
     color: var(--white-color);
+    margin-bottom: -145px;
+    padding-bottom: 235px;
 }
 
 section.footer_before:after {

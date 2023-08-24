@@ -130,7 +130,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div>
                 <h6>Property</h6>
-                <h3 style={{ color: "var(--blue-color)" }}>D2-201 & A-504</h3>
+                <h3 style={{ color: "var(--theme-blue)" }}>D2-201 & A-504</h3>
               </div>
             </div>
             <div className="default-card-inner">
@@ -154,7 +154,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div>
                 <h6>Property</h6>
-                <h3 style={{ color: "var(--blue-color)" }}>D2-201 & A-504</h3>
+                <h3 style={{ color: "var(--theme-blue)" }}>D2-201 & A-504</h3>
               </div>
             </div>
             <div className="default-card-inner">
@@ -177,7 +177,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div>
                 <h6>Property</h6>
-                <h3 style={{ color: "var(--blue-color)" }}>D2-201 & A-504</h3>
+                <h3 style={{ color: "var(--theme-blue)" }}>D2-201 & A-504</h3>
               </div>
             </div>
             <div className="default-card-inner">
@@ -201,7 +201,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div>
                 <h6>Property</h6>
-                <h3 style={{ color: "var(--blue-color)" }}>D2-201 & A-504</h3>
+                <h3 style={{ color: "var(--theme-blue)" }}>D2-201 & A-504</h3>
               </div>
             </div>
             <div className="default-card-inner">

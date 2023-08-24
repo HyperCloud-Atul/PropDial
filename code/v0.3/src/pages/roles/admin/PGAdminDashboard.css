@@ -213,7 +213,7 @@
 }
 
 .event-id.residential {
-    background: var(--blue-color);
+    background: var(--theme-blue);
 }
 
 .event-id.commercial {

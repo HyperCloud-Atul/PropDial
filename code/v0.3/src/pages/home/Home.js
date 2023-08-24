@@ -1,17 +1,16 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { Link } from "react-router-dom";
+
 
 // component
 import Banner from "../../Components/Banner";
-import OffersForAgents from "../../Components/OffersForAgents";
 import TopCitiesInIndia from "../../Components/TopCitiesInIndia";
-import CollapsibleGroup from "../../Components/CollapsibleGroup";
-import Footer from "../../Components/Footer";
 import ProductCarousel from "../../Components/ProductCarousel";
 import CounterSection from "../../Components/CounterSection";
 import Testimonial from "../../Components/Testimonial";
 import Blog from "../../Components/Blog";
-import NavbarBottom from "../../Components/NavbarBottom";
+
 
 import "./Home.css";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
@@ -330,8 +329,12 @@ const Home = () => {
                   <h6>Understand in Just 2 min!</h6>
                 </div>
                 <div className="btn_group">
+                  <Link to="https://www.youtube.com/watch?v=JV-lPfuBl20&t=5s" target={"_blank"}>
                   <button className="more-btn-info">Watch Video</button>
+                  </Link>
+                  <Link to="/contact-us">
                   <button className="more-btn-info">Get Started</button>
+                  </Link>
                 </div>
               </div>
          </div>
@@ -562,8 +565,9 @@ const Home = () => {
           </div>
         </div>
       </section> */}
-      <Blog></Blog>
+      <Blog></Blog>     
       {/* <CollapsibleGroup /> */}
+      
     </div>
   );
 };

@@ -120,13 +120,13 @@
 }
 
 .more-add-options-div div .more-add-options-icons.active span {
-  background: var(--blue-color);
+  background: var(--theme-blue);
 }
 
 .more-add-options-div div .more-add-options-icons.active h1 {
   font-size: 1.1rem;
   font-weight: bolder;
-  color: var(--blue-color);
+  color: var(--theme-blue);
 }
 
 .more-add-options-div div .more-add-options-icons:nth-last-child(1) h1 {

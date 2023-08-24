@@ -1,137 +1,160 @@
 import React from "react";
-import "./Footer.css";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
-import { useAuthContext } from "../hooks/useAuthContext";
+// css 
+import "./Footer.css";
+
+// components 
+import FooterBefore from "./FooterBefore";
+
 
 export default function Footer() {
-  const { user } = useAuthContext();
-  const navigate = useNavigate();
-  const showLogin = () => {
-    navigate("/signup");
-  };
   return (
     <>
-      {/* <footer className="footer-section">
+    <FooterBefore></FooterBefore>
+      <footer className="footer-section" style={{
+        backgroundImage:"url('./assets/img/footer-bg.png')",
+        backgroundSize:"cover",
+        backgroundPosition:"center",
+        backgroundRepeat:"no-repeat",
+        position:"relative",
+        zIndex:"1",
+        backgroundColor:"var(--theme-blue)"       
+      }}>
+
         <div className="container">
-          <div className="footer-cta pt-5 pb-5">
-            <div className="row">
-              <div className="col-md-4">
-                <div className="">
-                  <div className="single-cta">
-                    <span class="material-symbols-outlined">location_on</span>
-                    <div className="cta-text">
-                      <h4>Corporate Office</h4>
-                      <span>
-                        204, 2nd Floor, Vipul Trade Centre, Sector-48 Sohna
-                        Road, Gurugram-122018, Haryana, India
-                      </span>
-                    </div>
-                  </div>
+        <section className="loc_em_ph">
+        <div className="container">
+          <div
+            className="loc_em_ph_inner"
+            style={{
+              backgroundImage: "url('./assets/img/contact_info_belt.jpg')",
+            }}
+          >
+            <div className="lep_single">
+              <div>
+                <div className="icon_div ">
+                  <img src="./assets/img/location_f_cpg.png"></img>
                 </div>
-                <div className="mt-4">
-                  <div className="single-cta">
-                    <span class="material-symbols-outlined">call</span>
-                    <div className="cta-text">
-                      <h4>Call us</h4>
-                      <span>9876543210 0</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <div className="single-cta">
-                    <span class="material-symbols-outlined">mail</span>
-                    <div className="cta-text">
-                      <h4>Mail us</h4>
-                      <span>mail@info.com</span>
-                    </div>
-                  </div>
-                </div>
+                <h4>Address</h4>
               </div>
-              <div className="col-xl-4 col-lg-4 col-md-6 mb-30">
-                <div className="footer-widget">
-                  <div className="footer-widget-heading">
-                    <h3>Useful Links</h3>
-                  </div>
-                  <ul>
-                    <li>
-                      <a href="#">Home</a>
-                    </li>
-                    <li>
-                      <a href="#">about</a>
-                    </li>
-                    <li>
-                      <a href="#">services</a>
-                    </li>
-                    <li>
-                      <a href="#">portfolio</a>
-                    </li>
-                    <li>
-                      <a href="#">Contact</a>
-                    </li>
-                    <li>
-                      <a href="#">About us</a>
-                    </li>
-                    <li>
-                      <a href="#">Our Services</a>
-                    </li>
-                    <li>
-                      <a href="#">Expert Team</a>
-                    </li>
-                    <li>
-                      <a href="#">Contact us</a>
-                    </li>
-                    <li>
-                      <a href="#">Latest News</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-4 col-md-6 mb-50">
-                <div className="footer-widget">
-                  <div className="footer-widget-heading">
-                    <h3>Quick Links</h3>
-                  </div>
-                </div>
-              </div>
+              <h6 className="lep_single_address">
+                #204, 2nd floor, Vipul Trade Centre, Sector 48, Sohna Road,
+                Gurugram <br></br>- 122 018, Haryana
+              </h6>
             </div>
-          </div>
-          <div className="footer-content pt-5 pb-5">
-            <div className="row">
-              <div className="col-xl-4 col-lg-4 mb-50">
-                <div className="footer-widget">
-                  <div className="footer-logo">
-                    <a href="index.html">
-                      <img
-                        src="https://i.ibb.co/QDy827D/ak-logo.png"
-                        className="img-fluid"
-                        alt="logo"
-                      />
-                    </a>
-                  </div>
-                  <div className="footer-text">
-                    <p></p>
-                  </div>
-                  <div className="footer-social-icon">
-                    <span>Follow us</span>
-                    <a href="#">
-                      <i className="fab fa-facebook-f facebook-bg"></i>
-                    </a>
-                    <a href="#">
-                      <i className="fab fa-twitter twitter-bg"></i>
-                    </a>
-                    <a href="#">
-                      <i className="fab fa-google-plus-g google-bg"></i>
-                    </a>
-                  </div>
+            <div className="lep_single">
+              <div>
+                <div className="icon_div">
+                  <img src="./assets/img/emailcpg.png"></img>
                 </div>
+                <h4>Email</h4>
               </div>
+              <h6>info@propdial.com</h6>
+            </div>
+            <div className="lep_single">
+              <div>
+                <div className="icon_div">
+                  <img src="./assets/img/callcpg.png"></img>
+                </div>
+                <h4>Phone</h4>
+              </div>
+              <h6>
+                +91 95821 95821
+                <br />
+                +91 95821 95821
+              </h6>
             </div>
           </div>
         </div>
-      </footer> */}
-      <div className="copyright-area">
+      </section>
+      <section className="main_footer">
+       <div className="row">
+        <div className="col-lg-3 col-md-12">
+          <div className="footer_site_logo">
+            <img src="./assets/img/footer_site_logo.png" alt="Propdial" />
+            <p className="about_site">
+            Property Management Systems or Hotel Operating System, under business, terms may be used in real estate hospitality accommodation management.
+            </p>
+          </div>
+        </div>
+       
+        <div className="col-lg-3 col-md-4 col-sm-6">
+          <div className="footer_single_title">
+          Important Links
+          </div>
+          <div className="footer_link">
+            <Link>
+            Home
+            </Link>
+            <Link>
+            About Us
+            </Link>
+            <Link>
+            Contact Us
+            </Link>
+            <Link>
+            FAQ
+            </Link>
+            <Link>
+            Privacy Policy
+            </Link>
+            <Link>
+            Terms & Condition
+            </Link>
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-4 col-sm-6">
+          <div className="footer_single_title">
+          Quick Links
+          </div>
+          <div className="footer_link">
+            <Link>
+            Property  in Delhi
+            </Link>
+            <Link>
+            Property  in Noida
+            </Link>
+            <Link>
+            Property  in Ghaziabad
+            </Link>
+            <Link>
+            Property  in Hyderabad
+            </Link>
+            <Link>
+            Property  in Bangalore
+            </Link>
+            <Link>
+            Property  in Gurgaon
+            </Link>
+          </div>
+        </div>  
+        <div className="col-lg-3 col-md-4 col-sm-12">
+          <div className="footer_single_title">
+          Follow Us
+          </div>
+       <div className="footer_social_icon">       
+          <Link className="fsi_single" to="https://www.facebook.com/propdial">
+          <img src="./assets/img/facebook_footer.png" alt="" />
+          </Link>    
+          <Link className="fsi_single" to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg">
+          <img src="./assets/img/youtube_footer.png" alt="" />
+          </Link> 
+          <Link className="fsi_single" to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/">
+          <img src="./assets/img/linkedin_footer.png" alt="" />
+          </Link> 
+          <Link className="fsi_single" to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial" >
+          <img src="./assets/img/twitter_footer.png" alt="" />
+          </Link>    
+       </div>
+    
+        </div>   
+    
+       </div>
+      </section>
+        </div>
+      </footer>
+      <section className="copyright-area">
         <div className="container">
           <div className="copyright-item">
             <p>© 2023 All right reserved Propdial</p>
@@ -150,7 +173,7 @@ export default function Footer() {
             </p>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 }

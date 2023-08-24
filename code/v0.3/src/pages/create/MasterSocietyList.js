@@ -328,7 +328,7 @@ export default function MasterSocietyList() {
                                             ...baseStyles,
                                             outline: 'none',
                                             background: '#eee',
-                                            borderBottom: ' 1px solid var(--blue-color)'
+                                            borderBottom: ' 1px solid var(--theme-blue)'
                                         }),
                                     }}
                                 />
@@ -349,7 +349,7 @@ export default function MasterSocietyList() {
                                             ...baseStyles,
                                             outline: 'none',
                                             background: '#eee',
-                                            borderBottom: ' 1px solid var(--blue-color)'
+                                            borderBottom: ' 1px solid var(--theme-blue)'
                                         }),
                                     }}
                                 />
@@ -370,7 +370,7 @@ export default function MasterSocietyList() {
                                             ...baseStyles,
                                             outline: 'none',
                                             background: '#eee',
-                                            borderBottom: ' 1px solid var(--blue-color)'
+                                            borderBottom: ' 1px solid var(--theme-blue)'
                                         }),
                                     }}
                                 />
@@ -390,7 +390,7 @@ export default function MasterSocietyList() {
                                             ...baseStyles,
                                             outline: 'none',
                                             background: '#eee',
-                                            borderBottom: ' 1px solid var(--blue-color)'
+                                            borderBottom: ' 1px solid var(--theme-blue)'
                                         }),
                                     }}
                                 />
@@ -408,7 +408,7 @@ export default function MasterSocietyList() {
                                     value={society}
                                     styles={{
                                         backgroundColor: 'red',
-                                        borderBottom: ' 5px solid var(--blue-color)'
+                                        borderBottom: ' 5px solid var(--theme-blue)'
                                     }}
                                 />
                             </div>

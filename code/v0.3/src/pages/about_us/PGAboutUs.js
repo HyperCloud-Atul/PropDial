@@ -3,7 +3,6 @@ import React from "react";
 // component
 import Hero from "../../Components/Hero";
 import OurTeam from "../../Components/OurTeam";
-import FooterBefore from "../../Components/FooterBefore";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 // css
 import "./PGAboutUs.css";
@@ -163,7 +162,7 @@ const PGAboutUs = () => {
       </section>
 
       <OurTeam></OurTeam>
-      <FooterBefore></FooterBefore>
+
     </div>
   );
 };

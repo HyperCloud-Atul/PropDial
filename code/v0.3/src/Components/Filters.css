@@ -50,7 +50,7 @@
     padding: 4px 5px 1px 5px;
     height: 15px;
     font-size: 0.6rem;
-    background: var(--blue-color);
+    background: var(--theme-blue);
     display: flex;
     align-items: center;
     justify-content: center;
