@@ -54,18 +54,21 @@ export default function NavbarBottom() {
   const showFourthPage = () => {
     navigate("/more");
   };
-const searchpage = () => {
-  navigate("/search-property")
-}
-const contactus = () => {
-  navigate("/contact-us")
-}
-const aboutpage = () => {
-  navigate("/about-us")
-}
-const homepage = () => {
-  navigate("/")
-}
+  const searchpage = () => {
+    navigate("/search-property");
+  };
+  const contactus = () => {
+    navigate("/contact-us");
+  };
+  const aboutpage = () => {
+    navigate("/about-us");
+  };
+  const homepage = () => {
+    navigate("/");
+  };
+  const faqpage = () => {
+    navigate("/faq");
+  };
   //Menus as per role
   let firstMenuIcon = "";
   let firstMenu = ""; //This is for all user type
@@ -144,38 +147,67 @@ const homepage = () => {
     //     </Link>
     // </div>
     <section className="bottom_menu_bar">
-      <div className={`b_menu_single ${location.pathname === "/" ? "b_menu_active" : ""}`} onClick={homepage}>
+      <div
+        className={`b_menu_single ${
+          location.pathname === "/" ? "b_menu_active" : ""
+        }`}
+        onClick={homepage}
+      >
         <div className="menu_icon">
           <span class="material-symbols-outlined">home</span>
         </div>
         <div className="menu_name">Home</div>
       </div>
-      <div className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""}`} onClick={aboutpage}>
+      <div
+        className={`b_menu_single ${
+          location.pathname === "/about-us" ? "b_menu_active" : ""
+        }`}
+        onClick={aboutpage}
+      >
         <div className="menu_icon">
           <span class="material-symbols-outlined">settings_applications</span>
         </div>
         <div className="menu_name">About</div>
       </div>
-      <div className={
-        `b_menu_single search ${location.pathname === "/search-property" ? "b_menu_active" : ""}`
-      } onClick={searchpage}>
+      <div
+        className={`b_menu_single search ${
+          location.pathname === "/search-property" ? "b_menu_active" : ""
+        }`}
+        onClick={searchpage}
+      >
         <div className="menu_icon">
           <span class="material-symbols-outlined">search</span>
         </div>
         {/* <div className="menu_name">Home</div> */}
       </div>
-      <div className={`b_menu_single ${location.pathname === "/contact-us" ? "b_menu_active" : ""}`} onClick={contactus}>
+      <div
+        className={`b_menu_single ${
+          location.pathname === "/contact-us" ? "b_menu_active" : ""
+        }`}
+        onClick={contactus}
+      >
         <div className="menu_icon">
           <span class="material-symbols-outlined">contacts</span>
         </div>
         <div className="menu_name">Contact</div>
       </div>
-      <div className="b_menu_single">
+      <div
+        className={`b_menu_single ${
+          location.pathname === "/faq" ? "b_menu_active" : ""
+        }`}
+        onClick={faqpage}
+      >
+        <div className="menu_icon">
+          <span class="material-symbols-outlined">question_mark</span>
+        </div>
+        <div className="menu_name">FAQ</div>
+      </div>
+      {/* <div className="b_menu_single">
         <div className="menu_icon">
           <span class="material-symbols-outlined">apps</span>
         </div>
         <div className="menu_name">More</div>
-      </div>
+      </div> */}
     </section>
   );
 }

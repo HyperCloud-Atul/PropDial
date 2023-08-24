@@ -155,35 +155,53 @@ export default function Navbar() {
                 </div>
               </Link>
               <Link to="/about-us">
-                <div  className={`menu_single pointer ${
+                <div
+                  className={`menu_single pointer ${
                     location.pathname === "/about-us" ? "active" : ""
-                  }`}>
+                  }`}
+                >
                   <span class="material-symbols-outlined">contacts</span>
                   About Us
                 </div>
               </Link>
-        <Link to="/contact-us">
-        <div className={`menu_single pointer ${
+              <Link to="/contact-us">
+                <div
+                  className={`menu_single pointer ${
                     location.pathname === "/contact-us" ? "active" : ""
-                  }`}>
-                <span class="material-symbols-outlined">contacts</span>
-                Contact us
-              </div>
-        </Link>
-              <div className="menu_single pointer ">
+                  }`}
+                >
+                  <span class="material-symbols-outlined">contacts</span>
+                  Contact us
+                </div>
+              </Link>
+              <Link to="/faq">
+                <div
+                  className={`menu_single pointer ${
+                    location.pathname === "/faq" ? "active" : ""
+                  }`}
+                >
+                <span class="material-symbols-outlined">
+question_mark
+</span>
+                 FAQ
+                </div>
+              </Link>
+              {/* <div className="menu_single pointer ">
                 <span class="material-symbols-outlined">
                   settings_applications
                 </span>
                 Services
               </div>
-         <Link to="/login">
-         <div className={`menu_single pointer ${
+              <Link to="/login">
+                <div
+                  className={`menu_single pointer ${
                     location.pathname === "/login" ? "active" : ""
-                  }`}>
-                <span class="material-symbols-outlined">login</span>
-                Login/Signup
-              </div>
-         </Link>
+                  }`}
+                >
+                  <span class="material-symbols-outlined">login</span>
+                  Login/Signup
+                </div>
+              </Link> */}
             </li>
             <li className="menu_social_media">
               <div className="msm_single pointer">
