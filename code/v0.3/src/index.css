@@ -633,6 +633,17 @@ body {
 body {
   margin-bottom: 60px;
 }
+.oneline_parent{
+display: block !important;
+white-space: nowrap;
+overflow: auto;
+}
+.op_child{
+  display: inline-block;
+  white-space: normal;
+  width: 80% !important;
+  margin-bottom: 8px;
+}
 }
 
 /* sanskar media query css end  */

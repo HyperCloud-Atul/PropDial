@@ -130,8 +130,8 @@ const Home = () => {
             <h3>Elevating Properties, Simplifying Management</h3>
           </div>
           <div className="why_us_cards">
-            <div className="row">
-              <div className="col-lg-4 col-md-6">
+            <div className="row oneline_parent">
+              <div className="col-lg-4 col-md-6 op_child">
                 <div className="wuc_single b_top">
                   <img src="./assets/img/why_1.png" alt="" />
                   <h4 className="wucs_title">Happy and Satisfied Customers</h4>
@@ -141,7 +141,7 @@ const Home = () => {
                   </h6>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-6">
+              <div className="col-lg-4 col-md-6 op_child">
                 <div className="wuc_single b_bottom">
                   <img src="./assets/img/why_2.png" alt="" />
                   <h4 className="wucs_title">Competitive Pricing</h4>
@@ -152,7 +152,7 @@ const Home = () => {
                   </h6>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-6">
+              <div className="col-lg-4 col-md-6 op_child">
                 <div className="wuc_single b_top">
                   <img src="./assets/img/why_3.png" alt="" />
                   <h4 className="wucs_title">Technology At Forefront</h4>
@@ -163,7 +163,7 @@ const Home = () => {
                   </h6>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-6">
+              <div className="col-lg-4 col-md-6 op_child">
                 <div className="wuc_single b_bottom">
                   <img src="./assets/img/why_4.png" alt="" />
                   <h4 className="wucs_title">Full Transparency</h4>
@@ -175,7 +175,7 @@ const Home = () => {
                   </h6>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-6">
+              <div className="col-lg-4 col-md-6 op_child">
                 <div className="wuc_single b_top">
                   <img src="./assets/img/why_5.png" alt="" />
                   <h4 className="wucs_title">Experienced Co-Founders</h4>
@@ -186,7 +186,7 @@ const Home = () => {
                   </h6>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-6">
+              <div className="col-lg-4 col-md-6 op_child">
                 <div className="wuc_single b_bottom">
                   <img src="./assets/img/why_6.png" alt="" />
                   <h4 className="wucs_title">Our Wide Network</h4>
@@ -214,8 +214,8 @@ const Home = () => {
             <h2 class="section_title_effect">Services</h2>
             <h3>Services offered in our PMS package</h3>
           </div>
-          <div className="row">
-            <div className="col-md-6 col-lg-4">
+          <div className="row oneline_parent">
+            <div className="col-md-6 col-lg-4 op_child">
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
@@ -235,7 +235,7 @@ const Home = () => {
                 <span className="circle-before"></span>
               </div>
             </div>
-            <div className="col-md-6 col-lg-4">
+            <div className="col-md-6 col-lg-4 op_child">
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
@@ -254,7 +254,7 @@ const Home = () => {
                 <span className="circle-before"></span>
               </div>
             </div>
-            <div className="col-md-6 col-lg-4">
+            <div className="col-md-6 col-lg-4 op_child">
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
@@ -274,7 +274,7 @@ const Home = () => {
                 <span className="circle-before"></span>
               </div>
             </div>
-            <div className="col-md-6 col-lg-4">
+            <div className="col-md-6 col-lg-4 op_child">
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
@@ -295,7 +295,7 @@ const Home = () => {
                 <span className="circle-before"></span>
               </div>
             </div>
-            <div className="col-md-6 col-lg-4">
+            <div className="col-md-6 col-lg-4 op_child">
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
@@ -315,7 +315,7 @@ const Home = () => {
                 <span className="circle-before"></span>
               </div>
             </div>
-            <div className="col-md-6 col-lg-4">
+            <div className="col-md-6 col-lg-4 op_child">
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
@@ -337,6 +337,7 @@ const Home = () => {
           </div>
         </div>
       </section> 
+   
       <CounterSection></CounterSection>
       {/* <!-- / END SECTION SERVICES --> */}
       <section className="founder_speak sect_padding relative">

@@ -318,8 +318,7 @@
 }
 .section-services .single-service .description {
   margin-bottom: 15px !important;
-  font-size: 14px;
-  display: block;
+  font-size: 14px; 
   line-height: 18px;
 }
 .section-services .single-service a {
@@ -441,14 +440,14 @@ h6.wucs_desc {
   color: grey;
   font-weight: 400;
 }
-
+h6.wucs_desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 @media only screen and (min-width: 768px) {
-  h6.wucs_desc {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+
 h4.wucs_title {
   display: -webkit-box;
   -webkit-line-clamp: 1;
