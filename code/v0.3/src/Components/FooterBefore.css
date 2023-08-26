@@ -42,7 +42,8 @@ section.footer_before:after {
 
 @media (max-width: 767px) {
     section.footer_before {
-        padding: 35px 0px;      
+        padding: 35px 0px;
+        padding-bottom: 172px;
     }
     .fb_inner h6 {
         margin: 25px 0px !important;      

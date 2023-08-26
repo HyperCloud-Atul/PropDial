@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // css 
 import "./Footer.css";
@@ -9,6 +10,10 @@ import FooterBefore from "./FooterBefore";
 
 
 export default function Footer() {
+  const navigate = useNavigate();
+  const logoClick = () =>{
+    navigate("/");
+  };
   return (
     <>
     <FooterBefore></FooterBefore>
@@ -71,7 +76,7 @@ export default function Footer() {
       <section className="main_footer">
        <div className="row">
         <div className="col-lg-3 col-md-12">
-          <div className="footer_site_logo">
+          <div className="footer_site_logo pointer" onClick={logoClick}>
             <img src="./assets/img/footer_site_logo.png" alt="Propdial" />
             <p className="about_site">
             Property Management Systems or Hotel Operating System, under business, terms may be used in real estate hospitality accommodation management.

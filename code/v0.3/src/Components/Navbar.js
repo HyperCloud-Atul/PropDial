@@ -69,6 +69,9 @@ export default function Navbar() {
   const showFourthPage = () => {
     navigate("/more");
   };
+  const logoClick = () =>{
+    navigate("/");
+  };
 
   //Menus as per role
   let firstMenuIcon = "";
@@ -130,7 +133,7 @@ export default function Navbar() {
       <div className="container">
         <nav className={navClass}>
           <ul>
-            <li className="logo">
+            <li className="logo pointer" onClick={logoClick} >
               <img src="./assets/img/logo_propdial.png" alt="logo" />
             </li>
             <li className="main_menus">

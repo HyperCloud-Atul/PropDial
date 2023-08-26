@@ -17,17 +17,44 @@ import Blog from "../../Components/Blog";
 import "./Home.css";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 const Home = () => {
-     // Scroll to the top of the page whenever the location changes start
-     const location = useLocation(); 
-     useEffect(() => {
-       window.scrollTo(0, 0);
-     }, [location]);
-      // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   return (
     <div>
-    <BottomRightFixedIcon></BottomRightFixedIcon>
+      <BottomRightFixedIcon></BottomRightFixedIcon>
       <Banner></Banner>
+      {/* <section className="work_flow sect_padding">
+        <div className="container">
+          <div className="wf_first"
+            style={{
+              backgroundImage: "url('./assets/img/line.png')"
+            }}
+          >
+            <div className="row">
+              <div className="col-sm-6">
+                <div className="wf_single">
+                  <div className="icon_div relative">
+                    <img src="./assets/img/pune.jpg" />
+                    <div className="steps">1</div>
 
+                  </div>
+                  <h4>
+                    Lorem Ipsum
+                  </h4>
+                  <h5>
+                    Property Management Systems or Hotel Operating System, under business,
+                  </h5>
+                </div>
+              </div>
+              <div className="col-sm-6"></div>
+            </div>
+          </div>
+        </div>
+      </section> */}
       <ProductCarousel></ProductCarousel>
       <section className="about_us sect_padding relative">
         <div className="container">
@@ -80,7 +107,7 @@ const Home = () => {
                   </li>
                 </ul>
                 <Link to="/about-us">
-                <button className="more-btn-info">More About</button>
+                  <button className="more-btn-info">More About</button>
                 </Link>
               </div>
             </div>
@@ -91,7 +118,7 @@ const Home = () => {
         </div>
       </section>
       <TopCitiesInIndia />
-      <section
+   <section
         className="why_us sect_padding"
         style={{
           backgroundImage: "url('./assets/img/why_bg.jpg')",
@@ -173,7 +200,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> 
 
       {/* <!-- START SECTION SERVICES --> */}
       <section
@@ -309,7 +336,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> 
       <CounterSection></CounterSection>
       {/* <!-- / END SECTION SERVICES --> */}
       <section className="founder_speak sect_padding relative">
@@ -351,7 +378,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> 
       <Testimonial></Testimonial>
       {/* <section
         className="perfect_layout sect_padding"
@@ -575,9 +602,9 @@ const Home = () => {
           </div>
         </div>
       </section> */}
-      <Blog></Blog>     
+      <Blog></Blog>
       {/* <CollapsibleGroup /> */}
-      
+
     </div>
   );
 };

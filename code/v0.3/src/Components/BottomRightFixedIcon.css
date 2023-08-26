@@ -10,7 +10,7 @@
     width: 58px;
     height: 58px;
     padding: 12px;
-    background: var(--theme-blue);
+    background: #ffde59;
     border-radius: 50%;
     cursor: pointer;
     transition: 0.3s;

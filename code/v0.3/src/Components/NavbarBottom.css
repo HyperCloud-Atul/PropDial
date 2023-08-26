@@ -86,9 +86,12 @@ section.bottom_menu_bar {
     background: white;
 }
 .b_menu_single {
-    width: 20%;
+    width: 21.5%;
     padding: 7px 0px 4px 0px;
     text-align: center;
+}
+.b_menu_single.search {
+    width: 14%;
 }
 .b_menu_active {
     background: var(--theme-orange);
