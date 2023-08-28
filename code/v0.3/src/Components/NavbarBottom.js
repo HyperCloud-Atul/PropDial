@@ -54,8 +54,8 @@ export default function NavbarBottom() {
   const showFourthPage = () => {
     navigate("/more");
   };
-  const searchpage = () => {
-    navigate("/search-property");
+  const PGLogin = () => {
+    navigate("/login");
   };
   const contactus = () => {
     navigate("/contact-us");
@@ -173,12 +173,13 @@ export default function NavbarBottom() {
         className={`b_menu_single search ${
           location.pathname === "/search-property" ? "b_menu_active" : ""
         }`}
-        onClick={searchpage}
+        onClick={PGLogin}
       >
         <div className="menu_icon">
-          <span class="material-symbols-outlined">search</span>
-        </div>
-        {/* <div className="menu_name">Home</div> */}
+        <span class="material-symbols-outlined">
+person
+</span>
+        </div>      
       </div>
       <div
         className={`b_menu_single ${

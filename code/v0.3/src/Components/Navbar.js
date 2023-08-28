@@ -69,7 +69,7 @@ export default function Navbar() {
   const showFourthPage = () => {
     navigate("/more");
   };
-  const logoClick = () =>{
+  const logoClick = () => {
     navigate("/");
   };
 
@@ -133,7 +133,7 @@ export default function Navbar() {
       <div className="container">
         <nav className={navClass}>
           <ul>
-            <li className="logo pointer" onClick={logoClick} >
+            <li className="logo pointer" onClick={logoClick}>
               <img src="./assets/img/logo_propdial.png" alt="logo" />
             </li>
             <li className="main_menus">
@@ -157,16 +157,6 @@ export default function Navbar() {
                   Property
                 </div>
               </Link>
-              <Link to="/about-us">
-                <div
-                  className={`menu_single pointer ${
-                    location.pathname === "/about-us" ? "active" : ""
-                  }`}
-                >
-                  <span class="material-symbols-outlined">contacts</span>
-                  About Us
-                </div>
-              </Link>
               <Link to="/contact-us">
                 <div
                   className={`menu_single pointer ${
@@ -177,28 +167,24 @@ export default function Navbar() {
                   Contact us
                 </div>
               </Link>
-              <Link to="/faq">
-                <div
-                  className={`menu_single pointer ${
-                    location.pathname === "/faq" ? "active" : ""
-                  }`}
-                >
-                <span class="material-symbols-outlined">
-question_mark
-</span>
-                 FAQ
-                </div>
-              </Link>
               <Link to="/more-menu">
                 <div
                   className={`menu_single pointer ${
                     location.pathname === "/more-menu" ? "active" : ""
                   }`}
                 >
-                <span class="material-symbols-outlined">
-More
-</span>
-                 FAQ
+                  <span class="material-symbols-outlined">More</span>
+                  More
+                </div>
+              </Link>
+              <Link to="/login">
+                <div
+                  className={`menu_single login pointer ${
+                    location.pathname === "/login" ? "active" : ""
+                  }`}
+                >
+                  <span class="material-symbols-outlined">login</span>
+                  Login
                 </div>
               </Link>
 
@@ -220,19 +206,30 @@ More
               </Link> */}
             </li>
             <li className="menu_social_media">
-              <Link className="msm_single pointer" to="https://www.facebook.com/propdial">
+              <Link
+                className="msm_single pointer"
+                to="https://www.facebook.com/propdial"
+              >
                 <img src="./assets/img/facebook.png"></img>
               </Link>
-              <Link className="msm_single pointer" to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg">
+              <Link
+                className="msm_single pointer"
+                to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg"
+              >
                 <img src="./assets/img/youtube.png"></img>
               </Link>
-              <Link className="msm_single pointer" to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/">
+              <Link
+                className="msm_single pointer"
+                to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/"
+              >
                 <img src="./assets/img/linkedin.png"></img>
               </Link>
-              <Link className="msm_single pointer" to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial">
+              <Link
+                className="msm_single pointer"
+                to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial"
+              >
                 <img src="./assets/img/twitter.png"></img>
               </Link>
-           
             </li>
 
             {/* {user && (

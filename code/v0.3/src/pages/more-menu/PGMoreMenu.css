@@ -1,0 +1,27 @@
+.mm_inner {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 10px;
+}
+a.mm_single {
+    display: block;
+    padding: 15px 50px;
+    background: #20b2aa0f;
+    position: relative;
+    margin-top: 15px;
+    color: var(--theme-green);
+}
+
+.mm_inner a.mm_single:first-child {
+    margin-top: 0px;
+}
+a.mm_single span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+a.mm_single span.mms_icon {
+left: 15px;
+}
+a.mm_single span.mms_ra {
+    right: 15px;
+    }

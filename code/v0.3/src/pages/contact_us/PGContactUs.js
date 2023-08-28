@@ -8,13 +8,12 @@ import Hero from "../../Components/Hero";
 import "./PGContactUs.css";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 const PGContactUs = () => {
-
- // Scroll to the top of the page whenever the location changes start
-  const location = useLocation(); 
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-   // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes end
 
   return (
     <div className="pg_contact_us">
@@ -26,62 +25,58 @@ const PGContactUs = () => {
       ></Hero>
       <section className="loc_em_ph">
         <div className="container">
-       
-         
-         
           <div
             className="loc_em_ph_inner"
             style={{
               backgroundImage: "url('./assets/img/contact_info_belt.jpg')",
             }}
           >
-        <div className="section_title">
+            <div className="section_title">
               <h3>Regional Offices</h3>
             </div>
             <div className="lep_single">
               <div>
-                <div className="icon_div "
-                style={{
-                  backgroundImage:"url('./assets/img/bangaluru.jpg')"
-                }}
-                >                
-                </div>
+                <div
+                  className="icon_div "
+                  style={{
+                    backgroundImage: "url('./assets/img/bangaluru.jpg')",
+                  }}
+                ></div>
                 <h4>Bengaluru</h4>
               </div>
               <h6 className="lep_single_address">
-                #17, GF, 1st Cross, Lakshmi Layout
-
-                Bannerghatta Rd, Bengaluru - 560 076, Karnataka
+                #17, GF, 1st Cross, Lakshmi Layout Bannerghatta Rd, Bengaluru -
+                560 076, Karnataka
               </h6>
             </div>
             <div className="lep_single">
               <div>
-              <div className="icon_div "
-                style={{
-                  backgroundImage:"url('./assets/img/hyderabad.jpg')"
-                }}
-                >                
-                </div>
+                <div
+                  className="icon_div "
+                  style={{
+                    backgroundImage: "url('./assets/img/hyderabad.jpg')",
+                  }}
+                ></div>
                 <h4>Hyderabad</h4>
               </div>
-              <h6>#402, Jamuna Tirath, Nature Cure Hospital Road
-
-                Ameerpet, Hyderabad, Telangana</h6>
+              <h6>
+                #402, Jamuna Tirath, Nature Cure Hospital Road Ameerpet,
+                Hyderabad, Telangana
+              </h6>
             </div>
             <div className="lep_single">
               <div>
-              <div className="icon_div "
-                style={{
-                  backgroundImage:"url('./assets/img/pune.jpg')"
-                }}
-                >                
-                </div>
+                <div
+                  className="icon_div "
+                  style={{
+                    backgroundImage: "url('./assets/img/pune.jpg')",
+                  }}
+                ></div>
                 <h4>Pune</h4>
               </div>
               <h6>
-                Shop No. 2, Kalate Market, Datta Mandir Rd,
-
-                Wakad, Pune - 411 057, Maharashtra
+                Shop No. 2, Kalate Market, Datta Mandir Rd, Wakad, Pune - 411
+                057, Maharashtra
               </h6>
             </div>
           </div>
@@ -144,11 +139,11 @@ const PGContactUs = () => {
         >
           <form>
             <div className="row">
-            <div className="col-sm-12">
-              <div className="section_title mb-4">
-                <h3>Get In Touch With Us</h3>
+              <div className="col-sm-12">
+                <div className="section_title mb-4">
+                  <h3>Get In Touch With Us</h3>
+                </div>
               </div>
-            </div>
               <div className="col-sm-6">
                 <div className="form_field">
                   <input type="text" placeholder="Name" name="name" />
