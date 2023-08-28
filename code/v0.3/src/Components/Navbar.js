@@ -189,6 +189,19 @@ question_mark
                  FAQ
                 </div>
               </Link>
+              <Link to="/more-menu">
+                <div
+                  className={`menu_single pointer ${
+                    location.pathname === "/more-menu" ? "active" : ""
+                  }`}
+                >
+                <span class="material-symbols-outlined">
+More
+</span>
+                 FAQ
+                </div>
+              </Link>
+
               {/* <div className="menu_single pointer ">
                 <span class="material-symbols-outlined">
                   settings_applications

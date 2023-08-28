@@ -48,11 +48,6 @@ section.top_cities .second_div {
     content: none !important;
 }
 
-.cities_single.title .section_title h3 {
-    max-width: 203px;
-    width: 100%;
-}
-
 .cities_single.title .section_title_effect {
     -webkit-text-stroke-color: #ffffff;
     z-index: 0;

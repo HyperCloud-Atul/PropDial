@@ -12,8 +12,9 @@ const TopCitiesInIndia = () => {
           >
             <div>
               <div className="section_title">
-              <div class="section_title_effect">Cities</div>
-                <h3>Best places to live in India</h3>                
+              <div class="section_title_effect">States</div>
+                <h3>we are
+operational in</h3>                
               </div>           
             </div>
           </div>

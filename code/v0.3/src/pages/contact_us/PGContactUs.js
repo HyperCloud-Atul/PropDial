@@ -87,6 +87,51 @@ const PGContactUs = () => {
           </div>
         </div>
       </section>
+      <section className="loc_em_ph">
+        <div className="container">
+          <div
+            className="loc_em_ph_inner"
+            style={{
+              backgroundImage: "url('./assets/img/contact_info_belt.jpg')",
+            }}
+          >
+            <div className="lep_single">
+              <div>
+                <div className="icon_div ">
+                  <img src="./assets/img/location_f_cpg.png"></img>
+                </div>
+                <h4>Address</h4>
+              </div>
+              <h6 className="lep_single_address">
+                #204, 2nd floor, Vipul Trade Centre, Sector 48, Sohna Road,
+                Gurugram <br></br>- 122 018, Haryana
+              </h6>
+            </div>
+            <div className="lep_single">
+              <div>
+                <div className="icon_div">
+                  <img src="./assets/img/emailcpg.png"></img>
+                </div>
+                <h4>Email</h4>
+              </div>
+              <h6>info@propdial.com</h6>
+            </div>
+            <div className="lep_single">
+              <div>
+                <div className="icon_div">
+                  <img src="./assets/img/callcpg.png"></img>
+                </div>
+                <h4>Phone</h4>
+              </div>
+              <h6>
+                +91 95821 95821
+                <br />
+                +91 95821 95821
+              </h6>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="form_sec">
         <div className="left_img">
           <img src="./assets/img/contact_from_left.jpg" alt="Left" />

@@ -16,6 +16,7 @@ import Blog from "../../Components/Blog";
 
 import "./Home.css";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
+import ProductOwlCarousel from "../../Components/ProductOwlCarousel";
 const Home = () => {
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
@@ -56,6 +57,7 @@ const Home = () => {
         </div>
       </section> */}
       <ProductCarousel></ProductCarousel>
+      {/* <ProductOwlCarousel/> */}
       <section className="about_us sect_padding relative">
         <div className="container">
           <div className="row align-items-center">

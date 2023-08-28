@@ -54,6 +54,7 @@ import Home from "./pages/home/Home";
 import PGAboutUs from "./pages/about_us/PGAboutUs";
 import PGContactUs from "./pages/contact_us/PGContactUs";
 import Faq from "./pages/faq/Faq";
+import PageMoreMenu from "./Components/more_menu/PageMoreMenu";
 // import BillList from './components/BillList'
 
 function App() {
@@ -89,6 +90,8 @@ function App() {
               <Route path="/about-us" element={<PGAboutUs/>}></Route>
               <Route path="/contact-us" element={<PGContactUs/>}></Route>
               <Route path="/faq" element={<Faq></Faq>}></Route>
+              <Route path="/more-menu" element={<PageMoreMenu/>}></Route>
+
 
               <Route path="/adminsettings" element={<AdminSettings />}></Route>
 
