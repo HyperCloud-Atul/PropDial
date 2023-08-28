@@ -2,6 +2,11 @@
     background: var(--theme-orange);
     padding: 50px 0px;
 }
+.lc_slide_single img {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+}
 .lc_slide_single {   
     text-align: center;
 }

@@ -3,9 +3,12 @@ import { useLogin } from '../../hooks/useLogin'
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import Hero from '../../Components/Hero'
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Carousel } from "react-bootstrap";
 
 // styles
 // import './Login.css'
+import "./PGLoginSignup.css"
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -23,8 +26,8 @@ export default function Login() {
   }, [location]);
   // Scroll to the top of the page whenever the location changes en
   return (
-    <div>
-    <Hero pageTitle="Login" pageSubTitle="login and signup"></Hero>
+    <div className='pgloginsignup'>
+      <Hero pageTitle="Login" pageSubTitle="login and signup" heroImage="./assets/img/loginbanner.jpg"></Hero>
 
       {/* <form onSubmit={handleSubmit} className="auth-form" style={{ maxWidth: '350px' }}>
         <div className='page-title'>
@@ -75,7 +78,7 @@ export default function Login() {
         <br />
 
         <div className='sign-in-with-more-methods-div'>
-          <img src="./img/google-icon.png" alt="" />
+          <img src="./img/google-icon.jpg" alt="" />
           <span>Sign in with Google</span>
         </div>
 
@@ -84,86 +87,66 @@ export default function Login() {
           <span style={{ color: 'var(--lightgrey-color)' }} > Don't have an account? <Link to='/Signup' style={{ paddingLeft: '5px', color: 'var(--red-color)' }}> Sign up </Link> </span>
         </div>
       </form > */}
-       <section className="form_sec">
+      <section className="form_sec">
         <div className="left_img">
-          <img src="./assets/img/contact_from_left.jpg" alt="Left" />
+          {/* <img src="./assets/img/contact_from_left.jpg" alt="Left" /> */}
+          <Carousel>
+            <Carousel.Item>
+              <div className="ad_container">
+                <img src="./assets/img/p1.jpg" alt="Offer 1" />
+              </div>
+            </Carousel.Item>
+            <Carousel.Item>
+              <div className="ad_container">
+                <img src="./assets/img/p2.jpg" alt="Offer 1" />
+              </div>
+            </Carousel.Item>
+            <Carousel.Item>
+              <div className="ad_container">
+                <img src="./assets/img/p3.jpg" alt="Offer 1" />
+              </div>
+            </Carousel.Item>
+          </Carousel>
         </div>
         <div
-          className="right_form"
-          style={{
-            backgroundImage: "url('./assets/img/contact_from_right.jpg')",
-          }}
-        >
-          <form>
-            <div className="row">
-              <div className="col-sm-12">
-                <div className="section_title mb-4">
-                  <h3>Get In Touch With Us</h3>
-                </div>
+          className="right_form relative" >
+          <Carousel>
+            <Carousel.Item>
+              <div className="ad_container">
+                <img src="./assets/img/p2.jpg" alt="Offer 1" />
               </div>
-              <div className="col-sm-6">
-                <div className="form_field">
-                  <input type="text" placeholder="Name" name="name" />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">Person</span>
-                  </div>
-                </div>
+            </Carousel.Item>
+            <Carousel.Item>
+              <div className="ad_container">
+                <img src="./assets/img/p3.jpg" alt="Offer 1" />
               </div>
-              <div className="col-sm-6">
-                <div className="form_field">
-                  <input type="email" placeholder="Email" name="email" />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">mail</span>
-                  </div>
-                </div>
+            </Carousel.Item>
+            <Carousel.Item>
+              <div className="ad_container">
+                <img src="./assets/img/p1.jpg" alt="Offer 1" />
               </div>
-              <div className="col-sm-6">
-                <div className="form_field">
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    name="phoneNumber"
-                  />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">call</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="form_field">
-                  <input type="text" placeholder="Subject" name="subject" />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">subject</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-12">
-                <div className="form_field">
-                  <textarea type="text" placeholder="Message" name="message" />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">chat</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-12">
-                <div className="submit_btn">
-                  <button type="submit" className=" theme_btn btn_fill">
-                    Send
-                  </button>
-                </div>
-              </div>
+            </Carousel.Item>
+          </Carousel>
+          <div className='login_inner'>
+            <div className='section_title'>
+              <h3>Login as</h3>
             </div>
-          </form>
-        </div>
+            <div className='login_btn'>
+            <Link className='btn_white' to="https://www.propdial.com/workshop/user_login.php">
+              Owner
+            </Link>
+            <Link className='btn_white' to="https://www.propdial.com/workshop/tenant_login.php">
+              Tenant
+            </Link>
+            <Link className='btn_white' to="https://www.propdial.com/workshop/broker_login.php">
+             Agent
+            </Link>
+            </div>
+          </div>
+          
 
-        <iframe
-          title="Dentamax Clinic Location"
-          src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=propdial managment company&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-          width="100%"
-          height="400"
-          style={{ border: 0 }}
-          allowFullScreen
-        ></iframe>
+
+        </div>
       </section>
 
 

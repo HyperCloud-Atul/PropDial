@@ -7,11 +7,11 @@ const ProductCarousel = () => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
-      items: 4,
+      items: 6,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 3,
+      items: 6,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
@@ -26,19 +26,19 @@ const ProductCarousel = () => {
     <div className="logo_carousel"> 
           <div className="container">
        <div className="row">
-       <div className="col-md-6">
+       <div className="col-md-4">
                 <div className="lc_left">
-                    <h4>Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using</h4>
+                    <h4>Lorem Ipsum is that it has a more-or-less normal distribution of letters</h4>
                 </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-8">
                 <div className="lc_right">
                 <Carousel
-        swipeable={false}
-        draggable={false}
+        swipeable={true}
+        // draggable={true}
         showDots={false}
         responsive={responsive}
-        ssr={true} // means to render carousel on the server-side.
+        ssr={false} // means to render carousel on the server-side.
         infinite={true}
         autoPlay={true} // Enable auto-play for the second carousel
         autoPlaySpeed={4000}
@@ -46,49 +46,52 @@ const ProductCarousel = () => {
         customTransition="all .5"
         transitionDuration={500}
         // containerClass="carousel-container"
-        removeArrowOnDeviceType={["desktop", "tablet", "mobile"]}
+        // removeArrowOnDeviceType={["desktop", "tablet", "mobile"]}
         // dotListClass="custom-dot-list-style"
         // itemClass="carousel-item-padding-40-px"
       >
         <div className="lc_slide_single">
-            <img src="./assets/img/lc_img_1.png" alt="" />
-            <h5>Lorem Ipsum</h5>
-            <h6>Lorem Ipsum</h6>
+            <img src="./assets/img/haryana.jpg" alt="" />            
+            <h6>Haryana</h6>
         </div>
         <div className="lc_slide_single">
-            <img src="./assets/img/lc_img_2.png" alt="" />
-            <h5>Lorem Ipsum</h5>
-              <h6>Lorem Ipsum</h6>
+            <img src="./assets/img/uttarpradesh.jpg" alt="" />            
+              <h6>Uttar Pradesh</h6>
         </div>
         <div className="lc_slide_single">
-            <img src="./assets/img/lc_img_3.png" alt="" />
-            <h5>Lorem Ipsum</h5>
-              <h6>Lorem Ipsum</h6>
+            <img src="./assets/img/delhi.jpg" alt="" />
+            
+              <h6>Delhi</h6>
         </div>
         <div className="lc_slide_single">
-            <img src="./assets/img/lc_img_4.png" alt="" />
-            <h5>Lorem Ipsum</h5>
-              <h6>Lorem Ipsum</h6>
+            <img src="./assets/img/maharashtra.jpg" alt="" />
+            
+              <h6>Maharashtra</h6>
         </div>
         <div className="lc_slide_single">
-            <img src="./assets/img/lc_img_1.png" alt="" />
-            <h5>Lorem Ipsum</h5>
-            <h6>Lorem Ipsum</h6>
+            <img src="./assets/img/karnataka.jpg" alt="" />
+            
+            <h6>Karnataka</h6>
         </div>
         <div className="lc_slide_single">
-            <img src="./assets/img/lc_img_2.png" alt="" />
-            <h5>Lorem Ipsum</h5>
-              <h6>Lorem Ipsum</h6>
+            <img src="./assets/img/telangana.jpg" alt="" />
+            
+              <h6>telangana</h6>
         </div>
         <div className="lc_slide_single">
-            <img src="./assets/img/lc_img_3.png" alt="" />
-            <h5>Lorem Ipsum</h5>
-              <h6>Lorem Ipsum</h6>
+            <img src="./assets/img/tamilnadu.png" alt="" />
+            
+              <h6>Tamil Nadu</h6>
         </div>
         <div className="lc_slide_single">
-            <img src="./assets/img/lc_img_4.png" alt="" />
-            <h5>Lorem Ipsum</h5>
-              <h6>Lorem Ipsum</h6>
+            <img src="./assets/img/goa.png" alt="" />
+            
+              <h6>Goa</h6>
+        </div>
+        <div className="lc_slide_single">
+            <img src="./assets/img/uttarakhand.jpg" alt="" />
+            
+              <h6>uttarakhand</h6>
         </div>
       </Carousel>
                 </div>
