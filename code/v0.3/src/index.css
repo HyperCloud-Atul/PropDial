@@ -559,23 +559,51 @@ textarea {
 .sect_padding {
   padding: 80px 0px;
 }
-button.theme_btn {
-  padding: 4px 18px;
-  border-radius: 10px;
+.theme_btn {
+  padding: 10px 20px;
+  border-radius: 6px;
   font-size: 16px;
   font-weight: 500;
-}
-button.theme_btn.btn_fill {
+  position: relative;
+  padding-right: 35px;
   border: none;
-  background: var(--theme-orange);
+}
+.theme_btn.btn_white {
+  background: white;
+  color: black;
+}
+a.theme_btn.btn_white {
+  background: white;
+  color: black;
+}
+.theme_btn.btn_fill {
+  border: none;
+  background: var(--theme-green);
   color: var(--white-color);
 }
-button.theme_btn.btn_border {
+.theme_btn.btn_border {
   background: none;
   color: var(--black-color);
-  border: 2px solid var(--theme-orange);
+  border: 2px solid var(--theme-green);
 }
+.theme_btn .btn_arrow {
+  position: absolute;
+  top: 14px;
+  right: 5px; 
+  font-size: 18px;
+}
+.ba_animation {
+  animation: btn_arrow_animation 1s linear infinite;
 
+}
+@keyframes btn_arrow_animation{
+  0%{
+    transform: translateX(0);
+  }
+  50%{
+    transform: translateX(-5px);
+  }
+}
 
 
 

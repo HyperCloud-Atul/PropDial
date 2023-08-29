@@ -183,7 +183,7 @@ export default function Navbar() {
                     location.pathname === "/login" ? "active" : ""
                   }`}
                 >
-                  <span class="material-symbols-outlined">login</span>
+                  <span class="material-symbols-outlined ba_animation">login</span>
                   Login
                 </div>
               </Link>

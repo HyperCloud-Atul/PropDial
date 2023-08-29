@@ -37,7 +37,7 @@ operational in</h3>
               />
               <div className="city_number">01.</div>
          
-                <h6>Bengaluru</h6>
+                <h6>Karnataka</h6>
                 <h5>The Garden City</h5>
           
             </div>
@@ -49,7 +49,7 @@ operational in</h3>
               />
               <div className="city_number">02.</div>
             
-                <h6>Pune</h6>
+                <h6>Maharashtra</h6>
                 <h5>Queen of the Deccan</h5>
              
             </div>
@@ -61,7 +61,7 @@ operational in</h3>
               />
               <div className="city_number">03.</div>
            
-                <h6>Noida</h6>
+                <h6>uttar pradesh</h6>
                 <h5>City of Opportunities</h5>
             
             </div>
@@ -75,7 +75,7 @@ operational in</h3>
               />
               <div className="city_number">05.</div>
           
-                <h6>mumbai</h6>
+                <h6>Goa</h6>
                 <h5>city of dream</h5>
              
             </div>
@@ -87,7 +87,7 @@ operational in</h3>
               />
               <div className="city_number">06.</div>
             
-                <h6>Gurugram</h6>
+                <h6>Haryana</h6>
                 <h5>Millennium City</h5>
        
             </div>

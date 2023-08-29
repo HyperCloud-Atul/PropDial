@@ -109,7 +109,10 @@ const Home = () => {
                   </li>
                 </ul>
                 <Link to="/about-us">
-                  <button className="more-btn-info">More About</button>
+                  <button className="theme_btn btn_fill">More About
+                  <span class="material-symbols-outlined btn_arrow ba_animation">
+                                arrow_forward
+                              </span></button>
                 </Link>
               </div>
             </div>
@@ -230,9 +233,9 @@ const Home = () => {
                     the keys and conducts a full inspection to prepare the
                     property for renting
                   </p>
-                  <a href="#" className="learn-more">
-                    Know More
-                  </a>
+                  <Link to="/about-us" className="learn-more">
+                    know more
+                  </Link>
                 </div>
                 <span className="circle-before"></span>
               </div>
@@ -249,9 +252,9 @@ const Home = () => {
                     across online platforms ensure we do not miss out on any
                     potential tenant.
                   </p>
-                  <a href="#" className="learn-more">
-                    Know More
-                  </a>
+                  <Link to="/about-us" className="learn-more">
+                    know more
+                  </Link>
                 </div>
                 <span className="circle-before"></span>
               </div>
@@ -269,9 +272,9 @@ const Home = () => {
                     any surprises. Also, all rental paperwork will be taken care
                     of by our team in India.
                   </p>
-                  <a href="#" className="learn-more">
-                    Know More
-                  </a>
+                  <Link to="/about-us" className="learn-more">
+                    know more
+                  </Link>
                 </div>
                 <span className="circle-before"></span>
               </div>
@@ -290,9 +293,9 @@ const Home = () => {
                     issue-based and periodic property inspections and provide
                     detailed reports to the owner.
                   </p>
-                  <a href="#" className="learn-more">
-                    Know More
-                  </a>
+                  <Link to="/about-us" className="learn-more">
+                    know more
+                  </Link>
                 </div>
                 <span className="circle-before"></span>
               </div>
@@ -310,9 +313,9 @@ const Home = () => {
                     all the maintenance services, from deep cleaning to
                     painting, on a demand basis.
                   </p>
-                  <a href="#" className="learn-more">
-                    Know More
-                  </a>
+                  <Link to="/about-us" className="learn-more">
+                    know more
+                  </Link>
                 </div>
                 <span className="circle-before"></span>
               </div>
@@ -329,9 +332,9 @@ const Home = () => {
                     history of the tenant, personal expense tracker, inspection
                     reports, and more, accessible at the click of a button.
                   </p>
-                  <a href="#" className="learn-more">
-                    Know More
-                  </a>
+                  <Link to="/about-us" className="learn-more">
+                    know more
+                  </Link>
                 </div>
                 <span className="circle-before"></span>
               </div>
@@ -370,10 +373,16 @@ const Home = () => {
                 </div>
                 <div className="btn_group">
                   <Link to="https://www.youtube.com/watch?v=JV-lPfuBl20&t=5s" target={"_blank"}>
-                  <button className="more-btn-info">Watch Video</button>
+                  <button className="theme_btn btn_white">Watch Video<span class="material-symbols-outlined btn_arrow ba_animation">
+                                arrow_forward
+                              </span>
+                              </button>
                   </Link>
                   <Link to="/contact-us">
-                  <button className="more-btn-info">Get Started</button>
+                  <button className="theme_btn btn_white">Get Started<span class="material-symbols-outlined btn_arrow ba_animation">
+                                arrow_forward
+                              </span>
+                              </button>
                   </Link>
                 </div>
               </div>

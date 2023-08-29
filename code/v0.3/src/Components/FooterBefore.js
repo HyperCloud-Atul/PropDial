@@ -19,10 +19,16 @@ const FooterBefore = () => {
                 <h6>Listed Over 3000+ Properties Around You</h6>
                 <div className='btn_group'>
                <Link to="search-property">
-               <button className='theme_btn btn_fill'>Search A Property</button>
+               <button className='theme_btn btn_white'>
+               <span class="material-symbols-outlined btn_arrow ba_animation">
+                                arrow_forward
+                              </span>Search A Property</button>
                </Link>
                <Link to="search-property">
-                <button className='theme_btn btn_fill'>View All Properties</button>
+                <button className='theme_btn btn_white'>
+                <span class="material-symbols-outlined btn_arrow ba_animation">
+                                arrow_forward
+                              </span>View All Properties</button>
                 </Link>
                 </div>
             </div>

@@ -7,11 +7,11 @@ const ProductCarousel = () => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
-      items: 6,
+      items: 5,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 6,
+      items: 5,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
@@ -27,9 +27,12 @@ const ProductCarousel = () => {
           <div className="container">
        <div className="row">
        <div className="col-md-4">
-                <div className="lc_left">
-                    <h4>Lorem Ipsum is that it has a more-or-less normal distribution of letters</h4>
-                </div>
+             <div className="section_title">
+              <div className="section_title_effect">
+                Cities
+              </div>
+              <h3>Lorem Ipsum is that it has a more-or-less normal distribution of letters</h3>
+             </div>
             </div>
             <div className="col-md-8">
                 <div className="lc_right">

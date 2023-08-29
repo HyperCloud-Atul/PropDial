@@ -91,28 +91,30 @@ function Banner() {
                           <div className="search_by_single">
                             <select name="" id="" className="pointer">
                               <option value="" selected>Select City</option>
-                              <option value="">Madhya Pradesh</option>
-                              <option value="">Maharastra</option>
-                              <option value="">Uttar Pradesh</option>
-                              <option value="">Arunachal Pradesh</option>
+                              <option value="">Ujjain</option>
+                              <option value="">Pune</option>
+                              <option value="">Indore</option>
+                              <option value="">Bhopal</option>
                             </select>
                           </div>
                           <div className="search_by_single">
                             <select name="" id="" className="pointer">
                               <option value="" selected>Select BHK</option>
-                              <option value="">Madhya Pradesh</option>
-                              <option value="">Maharastra</option>
-                              <option value="">Uttar Pradesh</option>
-                              <option value="">Arunachal Pradesh</option>
+                              <option value=""> 1 BHK</option>
+                              <option value="">2 BHK</option>
+                              <option value=""> 3 BHK</option>
                             </select>
                           </div>
                         </div>
                         <div className="search_property pointer">
-                       <Link to="/search-property">
-                       <button className="more-btn-info">
-                            Search
-                          </button>
-                       </Link>
+                          <Link to="/search-property">
+                            <button className="theme_btn btn_fill">
+                              Search
+                              <span class="material-symbols-outlined btn_arrow ba_animation">
+                                arrow_forward
+                              </span>
+                            </button>
+                          </Link>
                         </div>
                       </div>
 
