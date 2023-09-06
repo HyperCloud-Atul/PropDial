@@ -15,8 +15,8 @@ import CounterSection from "../../Components/CounterSection";
 import Testimonial from "../../Components/Testimonial";
 import Blog from "../../Components/Blog";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
-// import ProductOwlCarousel from "../../Components/ProductOwlCarousel";
 import CollapsibleGroup from "../../Components/CollapsibleGroup"
+import AirBnb from "../../Components/AirBnb";
 
 
 const Home = () => {
@@ -31,7 +31,7 @@ const Home = () => {
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <Banner></Banner>
       <ProductCarousel></ProductCarousel>
-      {/* <ProductOwlCarousel/> */}  
+     
       <section className="work_flow sect_padding">
         <div className="container">
           <div className="section_title">
@@ -181,11 +181,12 @@ const Home = () => {
       </section>
    
       <TopCitiesInIndia />
+      <AirBnb/>
       <section
         className="why_us sect_padding"
-        style={{
-          backgroundImage: "url('./assets/img/why_bg.jpg')",
-        }}
+        // style={{
+        //   backgroundImage: "url('./assets/img/why_bg.jpg')",
+        // }}
       >
         <div className="container">
           <div className="section_title">
