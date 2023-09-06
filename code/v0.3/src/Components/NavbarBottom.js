@@ -69,6 +69,12 @@ export default function NavbarBottom() {
   const faqpage = () => {
     navigate("/faq");
   };
+  const property = () => {
+    navigate("/search-property");
+  };
+  const moreMenu = () => {
+    navigate("/more-menu");
+  };
   //Menus as per role
   let firstMenuIcon = "";
   let firstMenu = ""; //This is for all user type
@@ -148,9 +154,8 @@ export default function NavbarBottom() {
     // </div>
     <section className="bottom_menu_bar">
       <div
-        className={`b_menu_single ${
-          location.pathname === "/" ? "b_menu_active" : ""
-        }`}
+        className={`b_menu_single ${location.pathname === "/" ? "b_menu_active" : ""
+          }`}
         onClick={homepage}
       >
         <div className="menu_icon">
@@ -159,49 +164,51 @@ export default function NavbarBottom() {
         <div className="menu_name">Home</div>
       </div>
       <div
-        className={`b_menu_single ${
-          location.pathname === "/about-us" ? "b_menu_active" : ""
-        }`}
+        className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""
+          }`}
         onClick={aboutpage}
       >
         <div className="menu_icon">
-          <span class="material-symbols-outlined">settings_applications</span>
+          <span class="material-symbols-outlined">
+            import_contacts
+          </span>
         </div>
         <div className="menu_name">About</div>
       </div>
       <div
-        className={`b_menu_single search ${
-          location.pathname === "/search-property" ? "b_menu_active" : ""
-        }`}
+        className={`b_menu_single search ${location.pathname === "/search-property" ? "b_menu_active" : ""
+          }`}
         onClick={PGLogin}
       >
         <div className="menu_icon">
-        <span class="material-symbols-outlined">
-person
-</span>
-        </div>      
+          <span class="material-symbols-outlined">
+            person
+          </span>
+        </div>
       </div>
       <div
-        className={`b_menu_single ${
-          location.pathname === "/contact-us" ? "b_menu_active" : ""
-        }`}
-        onClick={contactus}
+        className={`b_menu_single ${location.pathname === "/search-property" ? "b_menu_active" : ""
+          }`}
+        onClick={property}
       >
         <div className="menu_icon">
-          <span class="material-symbols-outlined">contacts</span>
+          <span class="material-symbols-outlined">
+            search
+          </span>
         </div>
-        <div className="menu_name">Contact</div>
+        <div className="menu_name">Property</div>
       </div>
       <div
-        className={`b_menu_single ${
-          location.pathname === "/faq" ? "b_menu_active" : ""
-        }`}
-        onClick={faqpage}
+        className={`b_menu_single ${location.pathname === "/more-menu" ? "b_menu_active" : ""
+          }`}
+        onClick={moreMenu}
       >
         <div className="menu_icon">
-          <span class="material-symbols-outlined">question_mark</span>
+          <span class="material-symbols-outlined">
+            menu
+          </span>
         </div>
-        <div className="menu_name">FAQ</div>
+        <div className="menu_name">More</div>
       </div>
       {/* <div className="b_menu_single">
         <div className="menu_icon">

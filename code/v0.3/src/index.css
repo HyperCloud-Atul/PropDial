@@ -648,6 +648,15 @@ body {
 
 
 @media (max-width: 767px) {
+  .theme_btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    padding-right: 30px;
+}
+.theme_btn .btn_arrow {
+  top: 9px;
+  font-size: 16px;
+}
   .sect_padding {
     padding: 35px 0px;
 }
