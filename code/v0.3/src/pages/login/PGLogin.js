@@ -133,13 +133,16 @@ export default function Login() {
             </div>
             <div className='login_btn'>
             <Link className='theme_btn btn_white' to="https://www.propdial.com/workshop/user_login.php">
-              Owner
+              <img src='./assets/img/owner.jpg'></img>
+              <span>Owner</span>
             </Link>
             <Link className='theme_btn btn_white' to="https://www.propdial.com/workshop/tenant_login.php">
-              Tenant
+            <img src='./assets/img/tenant.jpg'></img>
+              <span>Tenant</span>
             </Link>
             <Link className='theme_btn btn_white' to="https://www.propdial.com/workshop/broker_login.php">
-             Agent
+            <img src='./assets/img/agent.jpg'></img>
+             <span>Agent</span>
             </Link>
             </div>
           </div>

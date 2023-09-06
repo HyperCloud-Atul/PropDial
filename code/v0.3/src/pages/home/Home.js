@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+// css 
+import "./Home.css";
 
 // component
 import Banner from "../../Components/Banner";
@@ -12,11 +14,11 @@ import ProductCarousel from "../../Components/ProductCarousel";
 import CounterSection from "../../Components/CounterSection";
 import Testimonial from "../../Components/Testimonial";
 import Blog from "../../Components/Blog";
-
-
-import "./Home.css";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
-import ProductOwlCarousel from "../../Components/ProductOwlCarousel";
+// import ProductOwlCarousel from "../../Components/ProductOwlCarousel";
+import CollapsibleGroup from "../../Components/CollapsibleGroup"
+
+
 const Home = () => {
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
@@ -28,16 +30,22 @@ const Home = () => {
     <div>
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <Banner></Banner>
-      {/* <section className="work_flow sect_padding">
+      <ProductCarousel></ProductCarousel>
+      {/* <ProductOwlCarousel/> */}  
+      <section className="work_flow sect_padding">
         <div className="container">
+          <div className="section_title">
+            <div class="section_title_effect">work flow</div>
+            <h3>Property Management Systems or Hotel</h3>
+          </div>
           <div className="wf_first"
             style={{
               backgroundImage: "url('./assets/img/line.png')"
             }}
           >
             <div className="row">
-              <div className="col-sm-6">
-                <div className="wf_single">
+              <div className="col-sm-3">
+                <div className="wf_single top">
                   <div className="icon_div relative">
                     <img src="./assets/img/pune.jpg" />
                     <div className="steps">1</div>
@@ -51,14 +59,63 @@ const Home = () => {
                   </h5>
                 </div>
               </div>
-              <div className="col-sm-6"></div>
+              <div className="col-sm-3">
+                <div className="wf_single bottom">
+                  <div className="icon_div relative">
+                    <img src="./assets/img/pune.jpg" />
+                    <div className="steps">2</div>
+
+                  </div>
+                  <h4>
+                    Lorem Ipsum
+                  </h4>
+                  <h5>
+                    Property Management Systems or Hotel Operating System, under business,
+                  </h5>
+                </div>
+              </div>
+              <div className="col-sm-3">
+                <div className="wf_single top">
+                  <div className="icon_div relative">
+                    <img src="./assets/img/pune.jpg" />
+                    <div className="steps">3</div>
+
+                  </div>
+                  <h4>
+                    Lorem Ipsum
+                  </h4>
+                  <h5>
+                    Property Management Systems or Hotel Operating System, under business,
+                  </h5>
+                </div>
+              </div>
+              <div className="col-sm-3">
+                <div className="wf_single bottom">
+                  <div className="icon_div relative">
+                    <img src="./assets/img/pune.jpg" />
+                    <div className="steps">4</div>
+
+                  </div>
+                  <h4>
+                    Lorem Ipsum
+                  </h4>
+                  <h5>
+                    Property Management Systems or Hotel Operating System, under business,
+                  </h5>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
-      </section> */}
-      <ProductCarousel></ProductCarousel>
-      {/* <ProductOwlCarousel/> */}
-      <section className="about_us sect_padding relative">
+      </section>
+      <CounterSection></CounterSection>
+      <section className="about_us sect_padding relative"
+      >
+      {/* <div className="bg_video">
+        <img src="./assets/gif/bg.gif"></img>
+      </div> */}
+
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6">
@@ -110,20 +167,21 @@ const Home = () => {
                 </ul>
                 <Link to="/about-us">
                   <button className="theme_btn btn_fill">More About
-                  <span class="material-symbols-outlined btn_arrow ba_animation">
-                                arrow_forward
-                              </span></button>
+                    <span class="material-symbols-outlined btn_arrow ba_animation">
+                      arrow_forward
+                    </span></button>
                 </Link>
               </div>
             </div>
           </div>
         </div>
-        <div className="house_gif">
+        {/* <div className="house_gif">
           <img src="./assets/gif/house-animation.gif"></img>
-        </div>
+        </div> */}
       </section>
+   
       <TopCitiesInIndia />
-   <section
+      <section
         className="why_us sect_padding"
         style={{
           backgroundImage: "url('./assets/img/why_bg.jpg')",
@@ -205,7 +263,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </section> 
+      </section>
 
       {/* <!-- START SECTION SERVICES --> */}
       <section
@@ -341,9 +399,9 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </section> 
-   
-      <CounterSection></CounterSection>
+      </section>
+
+      
       {/* <!-- / END SECTION SERVICES --> */}
       <section className="founder_speak sect_padding relative">
         <div className="container">
@@ -365,32 +423,32 @@ const Home = () => {
               </div>
             </div>
             <div className="col-xl-4">
-         <div className="fs_right">
-         <div className="fsr_inner">
-                <div className="section_title">
-                  <h3>We make your life a lot easier...</h3>
-                  <h6>Understand in Just 2 min!</h6>
-                </div>
-                <div className="btn_group">
-                  <Link to="https://www.youtube.com/watch?v=JV-lPfuBl20&t=5s" target={"_blank"}>
-                  <button className="theme_btn btn_white">Watch Video<span class="material-symbols-outlined btn_arrow ba_animation">
-                                arrow_forward
-                              </span>
-                              </button>
-                  </Link>
-                  <Link to="/contact-us">
-                  <button className="theme_btn btn_white">Get Started<span class="material-symbols-outlined btn_arrow ba_animation">
-                                arrow_forward
-                              </span>
-                              </button>
-                  </Link>
+              <div className="fs_right">
+                <div className="fsr_inner">
+                  <div className="section_title">
+                    <h3>We make your life a lot easier...</h3>
+                    <h6>Understand in Just 2 min!</h6>
+                  </div>
+                  <div className="btn_group">
+                    <Link to="https://www.youtube.com/watch?v=JV-lPfuBl20&t=5s" target={"_blank"}>
+                      <button className="theme_btn btn_white">Watch Video<span class="material-symbols-outlined btn_arrow ba_animation">
+                        arrow_forward
+                      </span>
+                      </button>
+                    </Link>
+                    <Link to="/contact-us">
+                      <button className="theme_btn btn_white">Get Started<span class="material-symbols-outlined btn_arrow ba_animation">
+                        arrow_forward
+                      </span>
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               </div>
-         </div>
             </div>
           </div>
         </div>
-      </section> 
+      </section>
       <Testimonial></Testimonial>
       {/* <section
         className="perfect_layout sect_padding"
@@ -614,8 +672,7 @@ const Home = () => {
           </div>
         </div>
       </section> */}
-      <Blog></Blog>
-      {/* <CollapsibleGroup /> */}
+      <Blog></Blog>     
 
     </div>
   );

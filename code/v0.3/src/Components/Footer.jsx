@@ -7,6 +7,7 @@ import "./Footer.css";
 
 // components 
 import FooterBefore from "./FooterBefore";
+import CollapsibleGroup from "./CollapsibleGroup";
 
 
 export default function Footer() {
@@ -16,6 +17,7 @@ export default function Footer() {
   };
   return (
     <>
+    <CollapsibleGroup></CollapsibleGroup>
     <FooterBefore></FooterBefore>
       <footer className="footer-section" style={{
         backgroundImage:"url('./assets/img/footer-bg.png')",

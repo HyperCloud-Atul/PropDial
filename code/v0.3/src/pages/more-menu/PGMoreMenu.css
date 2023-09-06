@@ -1,7 +1,8 @@
 .mm_inner {
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 10px;
+    box-shadow: rgb(45 178 175 / 31%) 0px 2px 8px 0px;
 }
+
 a.mm_single {
     display: block;
     padding: 15px 50px;
@@ -14,14 +15,35 @@ a.mm_single {
 .mm_inner a.mm_single:first-child {
     margin-top: 0px;
 }
+
 a.mm_single span {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
 }
+
 a.mm_single span.mms_icon {
-left: 15px;
+    left: 15px;
 }
+
 a.mm_single span.mms_ra {
     right: 15px;
-    }
+}
+.mm_inner h6.title {
+    padding: 15px !important;
+    padding-bottom: 0px !important;
+    font-size: 20px;
+}
+.more-menus_inner {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+}
+
+@media screen and (max-width: 767px) {
+.more-menus_inner {
+    grid-template-columns: repeat(1,1fr);
+    grid-row-gap: 30px;
+}
+}

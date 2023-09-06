@@ -22,13 +22,15 @@ const FooterBefore = () => {
                <button className='theme_btn btn_white'>
                <span class="material-symbols-outlined btn_arrow ba_animation">
                                 arrow_forward
-                              </span>Search A Property</button>
+                              </span>
+                              Search A Property</button>
                </Link>
                <Link to="search-property">
                 <button className='theme_btn btn_white'>
                 <span class="material-symbols-outlined btn_arrow ba_animation">
                                 arrow_forward
-                              </span>View All Properties</button>
+                              </span>
+                              View All Properties</button>
                 </Link>
                 </div>
             </div>
