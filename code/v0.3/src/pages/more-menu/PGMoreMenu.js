@@ -19,7 +19,7 @@ const PGMoreMenu = () => {
   return (
     <div className="pgmoremenu">
       <Hero
-        pageTitle="More Menu"
+        pageTitle="Locate Everything"
         pageSubTitle="Explore more for better understanding"
         heroImage="./assets/img/about_us_banner.jpg"
       ></Hero>
