@@ -13,14 +13,15 @@ import "./AirBnb.css";
 const AirBnb = () => {
   const options = {
     items: 3,
+    dots:false,
     loop: true,
     margin: 30,
     nav: true,
     // animateOut: 'fadeOut', // Fade out animation
     // animateIn: 'fadeIn',   // Fade in animation
     smartSpeed: 2000,
-    // autoplay: true, // Enable autoplay
-    autoplayTimeout: 3000, // Set autoplay interval (in milliseconds)
+    autoplay: true, // Enable autoplay
+    autoplayTimeout: 10000, // Set autoplay interval (in milliseconds)
   };
 
   const responsiveimg = {
@@ -53,7 +54,7 @@ const AirBnb = () => {
           <h2 class="section_title_effect">Air BNB</h2>
           <h3>Lorem Ipsum is simply dummy text</h3>
         </div>
-        <OwlCarousel className="owl-theme " {...options}>
+        <OwlCarousel className="owl-theme ab_p_carousel" {...options}>
           <div className="item card_single">
             <div className="card_img">
               <Carousel
@@ -67,22 +68,178 @@ const AirBnb = () => {
                 customTransition="all .5"
                 transitionDuration={500}
               >
-                <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single"/>
-                <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single"/>
-                <img src="./assets/img/airbnb/3.jpeg" alt="" className="ic_img-single"/>
-                <img src="./assets/img/airbnb/4.jpeg" alt="" className="ic_img-single"/>
-                <img src="./assets/img/airbnb/5.jpeg" alt="" className="ic_img-single"/>        
+                <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
+                <img src="./assets/img/airbnb/4.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/5.jpeg" alt="" className="ic_img-single" />
               </Carousel>
             </div>
             <div className="card_inner">
-                
+              <h4 className="location">
+                Margao1, India
+              </h4>
+              <div className="p_info">
+                <div className="p_info_single">
+                  <img src="./assets/img/plan.png"></img>
+                  <h6>Sq Ft:</h6>
+                  <h5>3800</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bed.png"></img>
+                  <h6>Bed:</h6>
+                  <h5>2</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bath.png"></img>
+                  <h6>Baths:</h6>
+                  <h5>3</h5>
+                </div>
+              </div>
+              <h4 className="property_price">
+                <b><span>₹</span>3345</b>
+                <span>night</span>
+              </h4>
             </div>
           </div>
-          <div className="item">2</div>
-          <div className="item">3</div>
-          <div className="item">4</div>
-          <div className="item">5</div>
-          <div className="item">6</div>
+          <div className="item card_single">
+            <div className="card_img">
+              <Carousel
+                showDots={false}
+                responsive={responsiveimg}
+                ssr={false}
+                infinite={true}
+                autoPlay={true}
+                autoPlaySpeed={4000}
+                keyBoardControl={true}
+                customTransition="all .5"
+                transitionDuration={500}
+              >
+                <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
+                <img src="./assets/img/airbnb/4.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/5.jpeg" alt="" className="ic_img-single" />
+              </Carousel>
+            </div>
+            <div className="card_inner">
+              <h4 className="location">
+                Margao2, India
+              </h4>
+              <div className="p_info">
+                <div className="p_info_single">
+                  <img src="./assets/img/plan.png"></img>
+                  <h6>Sq Ft:</h6>
+                  <h5>3800</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bed.png"></img>
+                  <h6>Bed:</h6>
+                  <h5>2</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bath.png"></img>
+                  <h6>Baths:</h6>
+                  <h5>3</h5>
+                </div>
+              </div>
+              <h4 className="property_price">
+                <b><span>₹</span>3345</b>
+                <span>night</span>
+              </h4>
+            </div>
+          </div>
+          <div className="item card_single">
+            <div className="card_img">
+              <Carousel
+                showDots={false}
+                responsive={responsiveimg}
+                ssr={false}
+                infinite={true}
+                autoPlay={true}
+                autoPlaySpeed={4000}
+                keyBoardControl={true}
+                customTransition="all .5"
+                transitionDuration={500}
+              >
+                <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
+                <img src="./assets/img/airbnb/4.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/5.jpeg" alt="" className="ic_img-single" />
+              </Carousel>
+            </div>
+            <div className="card_inner">
+              <h4 className="location">
+                Margao4, India
+              </h4>
+              <div className="p_info">
+                <div className="p_info_single">
+                  <img src="./assets/img/plan.png"></img>
+                  <h6>Sq Ft:</h6>
+                  <h5>3800</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bed.png"></img>
+                  <h6>Bed:</h6>
+                  <h5>2</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bath.png"></img>
+                  <h6>Baths:</h6>
+                  <h5>3</h5>
+                </div>
+              </div>
+              <h4 className="property_price">
+                <b><span>₹</span>3345</b>
+                <span>night</span>
+              </h4>
+            </div>
+          </div>
+          <div className="item card_single">
+            <div className="card_img">
+              <Carousel
+                showDots={false}
+                responsive={responsiveimg}
+                ssr={false}
+                infinite={true}
+                autoPlay={true}
+                autoPlaySpeed={2000}
+                keyBoardControl={true}
+                customTransition="all .5"
+                transitionDuration={500}
+              >
+                <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
+                <img src="./assets/img/airbnb/4.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/5.jpeg" alt="" className="ic_img-single" />
+              </Carousel>
+            </div>
+            <div className="card_inner">
+              <h4 className="location">
+                Margao5, India
+              </h4>
+              <div className="p_info">
+                <div className="p_info_single">
+                  <img src="./assets/img/plan.png"></img>
+                  <h6>Sq Ft:</h6>
+                  <h5>3800</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bed.png"></img>
+                  <h6>Bed:</h6>
+                  <h5>2</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bath.png"></img>
+                  <h6>Baths:</h6>
+                  <h5>3</h5>
+                </div>
+              </div>
+              <h4 className="property_price">
+                <b><span>₹</span>3345</b>
+                <span>night</span>
+              </h4>
+            </div>
+          </div>
+  
         </OwlCarousel>
       </div>
     </section>
