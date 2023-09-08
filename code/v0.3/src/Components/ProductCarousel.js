@@ -9,7 +9,7 @@ const ProductCarousel = () => {
     items: 6,
     loop: true,
     margin: 10,
-    // nav: true,
+    nav: true,
     // animateOut: 'fadeOut', // Fade out animation
     // animateIn: 'fadeIn',   // Fade in animation
     dots:false,

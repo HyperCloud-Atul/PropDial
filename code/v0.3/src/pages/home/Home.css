@@ -307,11 +307,10 @@
   color: #fff;
 }
 
-.section-services .single-service a {
-  position: relative;
+.learn-more {
   font-size: 14px;
-  color: #e95733;
-  text-decoration: none;
+  color: var(--theme-green);
+  text-decoration: underline !important;
   font-weight: 400;
   transition: color .3s;
   text-transform: lowercase;
@@ -321,16 +320,7 @@
   color: #fff;
 }
 
-.section-services .single-service a:after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: #ff4500;
-  transition: background-color .3s;
-}
+
 
 .section-services .single-service:hover a:after {
   background-color: #fff;
@@ -602,7 +592,6 @@ h6.wucs_desc {
 
 @media only screen and (max-width: 1199px) {
   .fs_right {
-    background: #e95733;
     border-radius: 30px;
     max-width: 500px;
     width: 100%;
@@ -653,6 +642,7 @@ h6.wucs_desc {
 
 .wf_single h4 {
   font-size: 14px;
+  text-transform: capitalize;
 }
 
 .wf_single h5 {

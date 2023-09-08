@@ -3,12 +3,11 @@ section.counter.sect_padding {
     background: var(--theme-orange);
 }
 .count_bg_number {
-    font-size: 155px;
+    font-size: 114px;
     -webkit-text-fill-color: transparent;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #ffffff4a;
     font-weight: 800;
-    letter-spacing: 2px;
     text-transform: uppercase;
     text-align: center;
 }
@@ -49,7 +48,7 @@ section.counter.sect_padding {
     top: 5px;
 }
 .count_which h5 {
-    font-size: 35px;
+    font-size: 24px;
     text-transform: capitalize;
     font-weight: 700;
     color: var(--white-color);
@@ -71,10 +70,13 @@ section.counter.sect_padding {
 }
 
 }
-@media (max-width: 767px) {
-.counter.sect_padding .col-md-3 {
-    width: 50%;
+@media (max-width: 991px) {
+    .counter.sect_padding .col-lg-3 {
+        width: 50%;
+    }
 }
+@media (max-width: 767px) {
+
 .count_bg_number {
     font-size: 60px;   
 }

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-// css 
+// css
 import "./Home.css";
 
 // component
@@ -15,9 +15,8 @@ import CounterSection from "../../Components/CounterSection";
 import Testimonial from "../../Components/Testimonial";
 import Blog from "../../Components/Blog";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
-import CollapsibleGroup from "../../Components/CollapsibleGroup"
+import CollapsibleGroup from "../../Components/CollapsibleGroup";
 import AirBnb from "../../Components/AirBnb";
-
 
 const Home = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -31,16 +30,17 @@ const Home = () => {
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <Banner></Banner>
       <ProductCarousel></ProductCarousel>
-     
+
       <section className="work_flow sect_padding">
         <div className="container">
           <div className="section_title">
             <div class="section_title_effect">work flow</div>
             <h3>Property Management Systems or Hotel</h3>
           </div>
-          <div className="wf_first"
+          <div
+            className="wf_first"
             style={{
-              backgroundImage: "url('./assets/img/line.png')"
+              backgroundImage: "url('./assets/img/line.png')",
             }}
           >
             <div className="row">
@@ -49,14 +49,10 @@ const Home = () => {
                   <div className="icon_div relative">
                     <img src="./assets/img/pune.jpg" />
                     <div className="steps">1</div>
-
                   </div>
-                  <h4>
-                  Property On-boarding
-
-                  </h4>
+                  <h4>Property On-Boarding</h4>
                   <h5>
-m. This includes gathering all relevant property information, such as ownership details, property type, and any existing leases or contracts.
+                  Property onboarding initiates by collecting pertinent data: ownership details, property type, and existing leases, fueling our management system efficiently.
 
                   </h5>
                 </div>
@@ -66,14 +62,11 @@ m. This includes gathering all relevant property information, such as ownership 
                   <div className="icon_div relative">
                     <img src="./assets/img/pune.jpg" />
                     <div className="steps">2</div>
-
                   </div>
-                  <h4>
-                  Inspection & Agreement
-
-                  </h4>
+                  <h4>Inspection & Agreement</h4>
                   <h5>
-                    This includes gathering all relevant property information, such as ownership details, property type, and any existing leases or contracts.
+                  Propdial initiates a property inspection to evaluate its condition, guiding maintenance decisions. We facilitate lease agreement signings for clarity and mutual consent.
+
                   </h5>
                 </div>
               </div>
@@ -82,14 +75,10 @@ m. This includes gathering all relevant property information, such as ownership 
                   <div className="icon_div relative">
                     <img src="./assets/img/pune.jpg" />
                     <div className="steps">3</div>
-
                   </div>
-                  <h4>
-                   Financial & Legal Compliance
-
-                  </h4>
+                  <h4>Financial & Legal Compliance</h4>
                   <h5>
-                    This includes gathering all relevant property information, such as ownership details, property type, and any existing leases or contracts.
+                  Propdial maintains thorough property financial records, delivering regular statements to owners. We guarantee property compliance with local, state, and government laws.
                   </h5>
                 </div>
               </div>
@@ -98,25 +87,20 @@ m. This includes gathering all relevant property information, such as ownership 
                   <div className="icon_div relative">
                     <img src="./assets/img/pune.jpg" />
                     <div className="steps">4</div>
-
                   </div>
-                  <h4>
-                  Reporting & Communication
-                  </h4>
+                  <h4>Reporting & Communication</h4>
                   <h5>
-                    This includes gathering all relevant property information, such as ownership details, property type, and any existing leases or contracts.
+                  Propdial delivers periodic property reports to owners, including updates on property status, financial performance, and noteworthy developments.
                   </h5>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </section>
       <CounterSection></CounterSection>
-      <section className="about_us sect_padding relative"
-      >
-      {/* <div className="bg_video">
+      <section className="about_us sect_padding relative">
+        {/* <div className="bg_video">
         <img src="./assets/gif/bg.gif"></img>
       </div> */}
 
@@ -144,12 +128,14 @@ m. This includes gathering all relevant property information, such as ownership 
               <div className="ab_right">
                 <div className="section_title">
                   <div class="section_title_effect">ABOUT</div>
-                  <h3>Your Trusted Property Management Partner
-</h3>
+                  <h3>Your Trusted Property Management Partner</h3>
                 </div>
                 <h6>
-                Established in 2014, Propdial is a prominent property management services company specializing in comprehensive property management and care-taking services. We are committed to delivering excellence and offer a complete 360-degree solution for property management.
-
+                  Established in 2014, Propdial is a prominent property
+                  management services company specializing in comprehensive
+                  property management and care-taking services. We are committed
+                  to delivering excellence and offer a complete 360-degree
+                  solution for property management.
                 </h6>
                 <ul
                   style={{
@@ -157,22 +143,27 @@ m. This includes gathering all relevant property information, such as ownership 
                   }}
                 >
                   <li>
-                  We efficiently manage the initial property on-boarding process.
+                    We efficiently manage the initial property on-boarding
+                    process.
                   </li>
                   <li>
-                  Our meticulous approach includes property inspection, rental market analysis, tenant screening, lease agreement management, and property maintenance.
-
+                    Our meticulous approach includes property inspection, rental
+                    market analysis, tenant screening, lease agreement
+                    management, and property maintenance.
                   </li>
                   <li>
-                 At Propdial, customer satisfaction is our top priority. We believe in transparent communication, legal compliance, and regular reporting to keep our clients informed and content.
-
+                    At Propdial, customer satisfaction is our top priority. We
+                    believe in transparent communication, legal compliance, and
+                    regular reporting to keep our clients informed and content.
                   </li>
                 </ul>
                 <Link to="/about-us">
-                  <button className="theme_btn btn_fill">More About
+                  <button className="theme_btn btn_fill">
+                    More About
                     <span class="material-symbols-outlined btn_arrow ba_animation">
                       arrow_forward
-                    </span></button>
+                    </span>
+                  </button>
                 </Link>
               </div>
             </div>
@@ -182,9 +173,9 @@ m. This includes gathering all relevant property information, such as ownership 
           <img src="./assets/gif/house-animation.gif"></img>
         </div> */}
       </section>
-   
+
       <TopCitiesInIndia />
-      <AirBnb/>
+      <AirBnb />
       <section
         className="why_us sect_padding"
         // style={{
@@ -201,7 +192,7 @@ m. This includes gathering all relevant property information, such as ownership 
               <div className="col-lg-4 col-md-6 op_child">
                 <div className="wuc_single b_top">
                   <img src="./assets/img/why_1.png" alt="" />
-                  <h4 className="wucs_title">Happy and Satisfied Customers</h4>
+                  <h4 className="wucs_title">Satisfied Customers</h4>
                   <h6 className="wucs_desc">
                     We have a very happy customer base with a high retention
                     rate of more than 80%, one of the highest across industry.
@@ -405,7 +396,6 @@ m. This includes gathering all relevant property information, such as ownership 
         </div>
       </section>
 
-      
       {/* <!-- / END SECTION SERVICES --> */}
       <section className="founder_speak sect_padding relative">
         <div className="container">
@@ -417,10 +407,18 @@ m. This includes gathering all relevant property information, such as ownership 
                   <h3>Click and watch video</h3>
                 </div>
                 <div className="image_sect">
-                  <Link className="img_div" to="https://www.youtube.com/watch?v=RphaFtAR8pw&feature=youtu.be" target="_blank">
+                  <Link
+                    className="img_div"
+                    to="https://www.youtube.com/watch?v=RphaFtAR8pw&feature=youtu.be"
+                    target="_blank"
+                  >
                     <img src="./assets/img/GP-Interview-new.jpg" alt="" />
                   </Link>
-                  <Link className="img_div" to="https://www.youtube.com/watch?v=H2bDZ4WLlyA" target="_blank">
+                  <Link
+                    className="img_div"
+                    to="https://www.youtube.com/watch?v=H2bDZ4WLlyA"
+                    target="_blank"
+                  >
                     <img src="./assets/img/VP-Interview-new.jpg" alt="" />
                   </Link>
                 </div>
@@ -434,16 +432,23 @@ m. This includes gathering all relevant property information, such as ownership 
                     <h6>Understand in Just 2 min!</h6>
                   </div>
                   <div className="btn_group">
-                    <Link to="https://www.youtube.com/watch?v=JV-lPfuBl20&t=5s" target={"_blank"}>
-                      <button className="theme_btn btn_white">Watch Video<span class="material-symbols-outlined btn_arrow ba_animation">
-                        arrow_forward
-                      </span>
+                    <Link
+                      to="https://www.youtube.com/watch?v=JV-lPfuBl20&t=5s"
+                      target={"_blank"}
+                    >
+                      <button className="theme_btn btn_white">
+                        Watch Video
+                        <span class="material-symbols-outlined btn_arrow ba_animation">
+                          arrow_forward
+                        </span>
                       </button>
                     </Link>
                     <Link to="/contact-us">
-                      <button className="theme_btn btn_white">Get Started<span class="material-symbols-outlined btn_arrow ba_animation">
-                        arrow_forward
-                      </span>
+                      <button className="theme_btn btn_white">
+                        Get Started
+                        <span class="material-symbols-outlined btn_arrow ba_animation">
+                          arrow_forward
+                        </span>
                       </button>
                     </Link>
                   </div>
@@ -676,8 +681,7 @@ m. This includes gathering all relevant property information, such as ownership 
           </div>
         </div>
       </section> */}
-      <Blog></Blog>     
-
+      <Blog></Blog>
     </div>
   );
 };

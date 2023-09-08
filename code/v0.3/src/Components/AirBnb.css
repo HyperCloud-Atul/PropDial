@@ -11,6 +11,12 @@ section.ari_bnb .item.card_single {
 }
 section.ari_bnb .card_inner {
     padding: 25px;
+    position: relative;
+}
+section.ari_bnb .know_detail.learn-more{
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
 }
 section.ari_bnb .card_inner h4.location {
     font-size: 24px;
@@ -51,5 +57,55 @@ section.ari_bnb h4.property_price {
 .ab_p_carousel {
     margin-top: 40px;
 }
+.ab_p_carousel{
+    position: relative;
+}
+.ab_p_carousel .owl-prev span{
+    font-size: 40px;
+}
+.ab_p_carousel .owl-prev {
+    width: 50px;
+    height: 50px;
+    left: -70px;
+    top: -38px;
+}
+.ab_p_carousel .owl-next span{
+    font-size: 40px;
+}
+.ab_p_carousel .owl-next {
+    width: 50px;
+    height: 50px;
+    right: -70px;
+    top: -38px;
+}
+.ab_p_carousel .owl-carousel .owl-item li img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3/2;
+}
+@media (max-width: 767px) {
+section.ari_bnb .card_inner {
+    padding: 15px;
+}
+section.ari_bnb .card_inner h4.location {
+    font-size: 18px;
 
-
+}
+section.ari_bnb .p_info_single {
+    margin-top: 10px;
+}
+section.ari_bnb .p_info_single img {
+    height: 14px;
+}
+section.ari_bnb .p_info_single h6 {
+    font-size: 14px;
+}
+section.ari_bnb .p_info_single h5 {
+    font-size: 14px;
+}
+section.ari_bnb h4.property_price {
+    font-size: 16px;
+    margin-top: 15px !important;
+ 
+}
+}

@@ -122,9 +122,10 @@ a {
   background: var(--buttonfg-color);
 }
 .section_title h3 {
-  font-size: 32px;
+  font-size: 26px;
   color: var(--theme-orange);
   text-transform: capitalize;
+  margin-top: -10px !important;
 }
 .btn.cancel:hover {
   background: var(--cream-color);
@@ -547,7 +548,7 @@ textarea {
 
 /* sanskar css start  */
 .section_title_effect {
-  font-size: 75px;
+  font-size: 50px;
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #00000061;
@@ -627,6 +628,29 @@ a.theme_btn.btn_white {
   top: 10px;
 }
 
+/* owl navigation css start  */
+.owl-nav {
+  position: absolute;   
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0px !important;
+}
+button.owl-prev, button.owl-next {
+  background: var(--theme-green) !important;
+  border-radius: 50% !important;
+  position: absolute;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+button.owl-prev span, button.owl-next span{ 
+  line-height: 0px !IMPORTANT;
+  position: relative;
+  top: -5px;
+  color: var(--white-color);
+}
+
 /* sanskar css end  */
 
 
@@ -666,6 +690,7 @@ body {
 }
 .section_title h3 {
   font-size: 22px;
+  margin-top: 0px !important;
 }
 body {
   margin-bottom: 60px;
@@ -680,6 +705,18 @@ overflow: auto;
   white-space: normal;
   width: 80% !important;
   margin-bottom: 8px;
+}
+.owl-nav {
+  position: unset;
+  transform: unset;
+  margin: 0px !important;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin-top: 14px !important;
+}
+button.owl-prev, button.owl-next {
+  position: unset;
 }
 }
 

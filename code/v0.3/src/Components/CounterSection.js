@@ -66,7 +66,7 @@ const CounterSection = () => {
         <section className="counter sect_padding">
           <div className="container">
             <div className="row">
-              <div className="col-md-3">
+              <div className="col-lg-3">
                 <div className="count_single relative">
                   <div className="cs_inner">
                     <div className="number_count">
@@ -87,7 +87,7 @@ const CounterSection = () => {
                 </div>
                 {/* <p>Current Count: {counts[0]}</p> */}
               </div>
-              <div className="col-md-3">
+              <div className="col-lg-3">
                 <div className="count_single relative">
                   <div className="cs_inner">
                     <div className="number_count">
@@ -108,7 +108,7 @@ const CounterSection = () => {
                 </div>
                 {/* <p>Current Count: {counts[1]}</p> */}
               </div>
-              <div className="col-md-3">
+              <div className="col-lg-3">
                 <div className="count_single relative">
                   <div className="cs_inner">
                     <div className="number_count">
@@ -128,7 +128,7 @@ const CounterSection = () => {
                 </div>
                 {/* <p>Current Count: {counts[1]}</p> */}
               </div>
-              <div className="col-md-3">
+              <div className="col-lg-3">
                 <div className="count_single relative">
                   <div className="cs_inner">
                     <div className="number_count">

@@ -14,10 +14,10 @@ const AirBnb = () => {
   const options = {
     items: 3,
     dots: false,
-    loop: true,
+    loop: false,
     margin: 30,
     nav: true,
-    smartSpeed: 2000,
+    smartSpeed: 1500,
     autoplay: true,
     autoplayTimeout: 10000,
     responsive: {
@@ -26,7 +26,7 @@ const AirBnb = () => {
         items: 1,
       },
       768: {
-        items: 1,
+        items: 2,
       },
       992: {
         items: 3,
@@ -62,13 +62,13 @@ const AirBnb = () => {
       <div className="container">
         <div className="section_title">
           <h2 class="section_title_effect">Air BNB</h2>
-          <h3>Lorem Ipsum is simply dummy text</h3>
+          <h3>Service Apartments - Daily/Short Time Rental</h3>
         </div>
         <OwlCarousel className="owl-theme ab_p_carousel" {...options}>
           <div className="item card_single">
             <div className="card_img">
               <Carousel
-                showDots={false}
+                showDots={true}
                 responsive={responsiveimg}          
               >
                 <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
@@ -100,14 +100,18 @@ const AirBnb = () => {
               </div>
               <h4 className="property_price">
                 <b><span>₹</span>3345</b>
-                <span>night</span>
+                <span>night</span>                
               </h4>
+              <div className="know_detail learn-more">
+                Know More
+              </div>
+        
             </div>
           </div>
           <div className="item card_single">
             <div className="card_img">
               <Carousel
-                showDots={false}
+                showDots={true}
                 responsive={responsiveimg}          
               >
                 <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
@@ -141,12 +145,15 @@ const AirBnb = () => {
                 <b><span>₹</span>3345</b>
                 <span>night</span>
               </h4>
+              <div className="know_detail learn-more">
+                Know More
+              </div>
             </div>
           </div>
           <div className="item card_single">
             <div className="card_img">
               <Carousel
-                showDots={false}
+                showDots={true}
                 responsive={responsiveimg}       
               >
                 <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
@@ -180,12 +187,15 @@ const AirBnb = () => {
                 <b><span>₹</span>3345</b>
                 <span>night</span>
               </h4>
+              <div className="know_detail learn-more">
+                Know More
+              </div>
             </div>
           </div>
           <div className="item card_single">
             <div className="card_img">
               <Carousel
-                showDots={false}
+                showDots={true}
                 responsive={responsiveimg}     
               >
                 <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
@@ -197,6 +207,174 @@ const AirBnb = () => {
             <div className="card_inner">
               <h4 className="location">
                 Margao5, India
+              </h4>
+              <div className="p_info">
+                <div className="p_info_single">
+                  <img src="./assets/img/plan.png"></img>
+                  <h6>Sq Ft:</h6>
+                  <h5>3800</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bed.png"></img>
+                  <h6>Bed:</h6>
+                  <h5>2</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bath.png"></img>
+                  <h6>Baths:</h6>
+                  <h5>3</h5>
+                </div>
+              </div>
+              <h4 className="property_price">
+                <b><span>₹</span>3345</b>
+                <span>night</span>
+              </h4>
+              <div className="know_detail learn-more">
+                Know More
+              </div>
+            </div>
+          </div>
+          <div className="item card_single">
+            <div className="card_img">
+              <Carousel
+                showDots={true}
+                responsive={responsiveimg}     
+              >
+                <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
+                <img src="./assets/img/airbnb/4.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/5.jpeg" alt="" className="ic_img-single" />
+              </Carousel>
+            </div>
+            <div className="card_inner">
+              <h4 className="location">
+                Margao6, India
+              </h4>
+              <div className="p_info">
+                <div className="p_info_single">
+                  <img src="./assets/img/plan.png"></img>
+                  <h6>Sq Ft:</h6>
+                  <h5>3800</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bed.png"></img>
+                  <h6>Bed:</h6>
+                  <h5>2</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bath.png"></img>
+                  <h6>Baths:</h6>
+                  <h5>3</h5>
+                </div>
+              </div>
+              <h4 className="property_price">
+                <b><span>₹</span>3345</b>
+                <span>night</span>
+              </h4>
+              <div className="know_detail learn-more">
+                Know More
+              </div>
+            </div>
+          </div>
+          <div className="item card_single">
+            <div className="card_img">
+              <Carousel
+                showDots={true}
+                responsive={responsiveimg}     
+              >
+                <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
+                <img src="./assets/img/airbnb/4.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/5.jpeg" alt="" className="ic_img-single" />
+              </Carousel>
+            </div>
+            <div className="card_inner">
+              <h4 className="location">
+                Margao7, India
+              </h4>
+              <div className="p_info">
+                <div className="p_info_single">
+                  <img src="./assets/img/plan.png"></img>
+                  <h6>Sq Ft:</h6>
+                  <h5>3800</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bed.png"></img>
+                  <h6>Bed:</h6>
+                  <h5>2</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bath.png"></img>
+                  <h6>Baths:</h6>
+                  <h5>3</h5>
+                </div>
+              </div>
+              <h4 className="property_price">
+                <b><span>₹</span>3345</b>
+                <span>night</span>
+              </h4>
+              <div className="know_detail learn-more">
+                Know More
+              </div>
+            </div>
+          </div>
+          <div className="item card_single">
+            <div className="card_img">
+              <Carousel
+                showDots={true}
+                responsive={responsiveimg}     
+              >
+                <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
+                <img src="./assets/img/airbnb/4.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/5.jpeg" alt="" className="ic_img-single" />
+              </Carousel>
+            </div>
+            <div className="card_inner">
+              <h4 className="location">
+                Margao8, India
+              </h4>
+              <div className="p_info">
+                <div className="p_info_single">
+                  <img src="./assets/img/plan.png"></img>
+                  <h6>Sq Ft:</h6>
+                  <h5>3800</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bed.png"></img>
+                  <h6>Bed:</h6>
+                  <h5>2</h5>
+                </div>
+                <div className="p_info_single">
+                  <img src="./assets/img/bath.png"></img>
+                  <h6>Baths:</h6>
+                  <h5>3</h5>
+                </div>
+              </div>
+              <h4 className="property_price">
+                <b><span>₹</span>3345</b>
+                <span>night</span>
+              </h4>
+              <div className="know_detail learn-more">
+                Know More
+              </div>
+            </div>
+          </div>
+          <div className="item card_single">
+            <div className="card_img">
+              <Carousel
+                showDots={true}
+                responsive={responsiveimg}     
+              >
+                <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
+                <img src="./assets/img/airbnb/4.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/5.jpeg" alt="" className="ic_img-single" />
+              </Carousel>
+            </div>
+            <div className="card_inner">
+              <h4 className="location">
+                Margao9, India
               </h4>
               <div className="p_info">
                 <div className="p_info_single">

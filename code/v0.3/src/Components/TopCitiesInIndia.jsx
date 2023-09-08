@@ -19,7 +19,7 @@ operational in</h3>
             </div>
           </div>
           <div className="cities_single down">
-            <img src="./assets/img/city_3.jpg" alt="" className="city_image" />
+            <img src="./assets/img/city_3.jpeg" alt="" className="city_image" />
             <div className="city_number">04.</div>
             <div className="city_name">
               <h6>Delhi</h6>
@@ -38,7 +38,7 @@ operational in</h3>
               <div className="city_number">01.</div>
          
                 <h6>Karnataka</h6>
-                <h5>The Garden City</h5>
+                <h5>Silicon Valley of India</h5>
           
             </div>
             <div className="cities_single first_row_img pointer">
@@ -49,20 +49,20 @@ operational in</h3>
               />
               <div className="city_number">02.</div>
             
-                <h6>Maharashtra</h6>
-                <h5>Queen of the Deccan</h5>
+                <h6>Goa</h6>
+                <h5>Party Capital of India</h5>
              
             </div>
             <div className="cities_single first_row_img pointer">
               <img
-                src="./assets/img/city_6.jpg"
+                src="./assets/img/city_8.jpg"
                 alt=""
                 className="city_image"
               />
               <div className="city_number">03.</div>
            
                 <h6>uttar pradesh</h6>
-                <h5>City of Opportunities</h5>
+                <h5>Heartland of India</h5>
             
             </div>
           </div>
@@ -75,8 +75,8 @@ operational in</h3>
               />
               <div className="city_number">05.</div>
           
-                <h6>Goa</h6>
-                <h5>city of dream</h5>
+                <h6>Maharashtra</h6>
+                <h5>Financial Capital of India</h5>
              
             </div>
             <div className="cities_single sr_img_2 pointer">
@@ -88,7 +88,7 @@ operational in</h3>
               <div className="city_number">06.</div>
             
                 <h6>Haryana</h6>
-                <h5>Millennium City</h5>
+                <h5>India's Green City</h5>
        
             </div>
           </div>
