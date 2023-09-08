@@ -22,7 +22,8 @@ const PGAboutUs = () => {
     <BottomRightFixedIcon/>
       <Hero
         pageTitle="About"
-        pageSubTitle="A few words"
+        pageSubTitle="Discover Our Story
+        "
         heroImage="./assets/img/about_us_banner.jpg"
       ></Hero>
       <section className="about_content sect_padding">
@@ -30,18 +31,17 @@ const PGAboutUs = () => {
           <div className="row reverse-991">
             <div className="col-lg-6">
               <div className="abc_left">
-                <h2>Exceptional Value Remarkable Quality</h2>
+                <h2>Your Trusted Property Management Partner
+</h2>
                 <p>
-                  From the lush Waterline Square Park to dazzling glass facades,
-                  a team of world-renowned design talent considered every detail
-                  for truly impeccable surroundings.
+                Propdial, established in 2014, is a leading property management services company. We specialize in offering comprehensive property management and property care-taking services to property owners and landlords.
+
                 </p>
                 <p>
-                  Featuring a refined palette of natural materials, the open
-                  living spaces provide a warm counterpoint to the soaring
-                  ceilings and full-height windows. Custom herringbone floors
-                  and hand-selected stone bring a rich tactility to the rooms.
+                At Propdial, we prioritize our customers above all else. Our dedication to customer satisfaction is unwavering, and we believe in transparent communication, legal compliance, and regular reporting to keep our clients informed and content.
+
                 </p>
+                <p>Choose Propdial for all your property management needs, and experience the peace of mind that comes with having a reliable partner by your side.</p>
                 <div>
                   <button className="theme_btn btn_fill">Get In Touch</button>
                 </div>
@@ -52,12 +52,12 @@ const PGAboutUs = () => {
                 <div className="abc_right_inner relative">
                   <img src="./assets/img/about_01.jpg" alt="" />
                   <div className="abcr_div">
-                    <h4>We Develop Quality Infrastructure And Real Estate</h4>
+                    <h4>Delivering Quality and On-Time Service for Over a Decade</h4>
                     <div className="our_ex">
                       <h6>
                         YEARS <br></br> EXPERIENCE
                       </h6>
-                      <h3>21</h3>
+                      <h3>10+</h3>
                     </div>
                   </div>
                 </div>
@@ -87,8 +87,8 @@ const PGAboutUs = () => {
                       className="bullet_icon"
                     />
                     <p>                    
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
+                   <strong> Excellence in Property Management:</strong> To be recognized as a leading provider of property management services known for excellence and reliability.
+
                     </p>
                   </div>
                   <div className="vs_single">
@@ -98,8 +98,8 @@ const PGAboutUs = () => {
                       className="bullet_icon"
                     />
                     <p>                    
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
+                   <strong>Customer-Centric Approach:</strong> To prioritize our customers and ensure their satisfaction through transparent communication and exceptional service.
+
                     </p>
                   </div>
                   <div className="vs_single">
@@ -109,8 +109,8 @@ const PGAboutUs = () => {
                       className="bullet_icon"
                     />
                     <p>                    
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
+                    <strong>Innovation and Technology:</strong> To leverage cutting-edge technology and innovation to enhance our property management solutions.
+
                     </p>
                   </div>
                   <div className="vs_single">
@@ -120,8 +120,8 @@ const PGAboutUs = () => {
                       className="bullet_icon"
                     />
                     <p>                    
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
+                    <strong>Compliance and Legal Integrity:</strong> To ensure strict compliance with all local, state, and government laws and regulations.
+
                     </p>
                   </div>
                   <div className="vs_single">
@@ -131,38 +131,30 @@ const PGAboutUs = () => {
                       className="bullet_icon"
                     />
                     <p>                    
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
+                    <strong>Continuous Improvement:</strong> To continuously evolve and improve our services to meet the ever-changing needs of our clients and the property management industry.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-lg-7 mabc_right">
-              <h3>What is Lorem Ipsum?</h3>
+              <h3>A 360-Degree <br /> Property Management Solution
+</h3>
               <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book. It has
-                survived not only five centuries, but also the leap into
-                electronic typesetting, remaining essentially unchanged.
+              Our unwavering commitment to delivering excellence drives us to provide a holistic property management solution. We approach property management as a complete circle, starting from the initial property on-boarding process. At Propdial, we leave no stone unturned to ensure your property is well-taken care of and yields optimum returns.
+
               </p>
-              <h6>Where does it come from?</h6>
+              <h6>Prioritizing Customer Satisfaction
+</h6>
               <p>
-                Contrary to popular belief, Lorem Ipsum is not simply random
-                text. It has roots in a piece of classical Latin literature from
-                45 BC, making it over 2000 years old. Richard McClintock, a
-                Latin professor at Hampden-Sydney College in Virginia, looked up
-                one of the more obscure Latin words, consectetur, from a Lorem
-                Ipsum passage
+              At Propdial, our customers are at the heart of everything we do. We prioritize your satisfaction above all else, ensuring you have peace of mind knowing your property is in capable hands.
+
+
               </p>
-              <h6>Where can I get some?</h6>
+              <h6>Choose Propdial
+</h6>
               <p>
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form, by
-                injected humour, or randomised words which don't look even
-                slightly believable.
+              In your search for a property management partner, choose Propdial. With our extensive experience, commitment to excellence, and customer-centric approach, we ensure your property receives the care and attention it deserves. Partner with us for all your property management needs and experience the peace of mind that comes with having a reliable partner by your side.
               </p>
             </div>
           </div>

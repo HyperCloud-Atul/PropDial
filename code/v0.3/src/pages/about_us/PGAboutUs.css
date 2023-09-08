@@ -11,7 +11,7 @@
     width: 100%;
 }
 .abcr_div h4 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
     text-transform: capitalize;
     line-height: 28px;
@@ -38,11 +38,11 @@
     background: var(--theme-orange);
     position: absolute;
     border-radius: 50%;
-    right: -50px;
+    right: 0px;
     opacity: 0.4;
 }
 .about_content .abc_left h2 {
-    max-width: 356px;
+    max-width: 412px;
     font-size: 40px;
     margin-bottom: 20px !important;
 }
@@ -97,7 +97,7 @@
 .abcr_div .our_ex h3:after {   
     width: 60px;
     height: 60px;  
-    right: -28px;
+    right: 0px;
 
 }
 .abc_right img {

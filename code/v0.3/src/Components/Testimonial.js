@@ -38,21 +38,21 @@ const ProductCarousel = () => {
           responsive={responsive}
           ssr={true} // means to render carousel on the server-side.
           infinite={true}
-          autoPlay={true} // Enable auto-play for the second carousel
-          autoPlaySpeed={4000}
+          autoPlay={false} // Enable auto-play for the second carousel
+          // autoPlaySpeed={4000}
           keyBoardControl={true}
           customTransition="all .5"
           transitionDuration={500}
           // containerClass="carousel-container"
-          removeArrowOnDeviceType={["desktop", "tablet", "mobile"]}
+          removeArrowOnDeviceType={[]}
           // dotListClass="custom-dot-list-style"
           // itemClass="carousel-item-padding-40-px"
           className="carousel_container"
         >
           <div className="testimonial_single relative">
             <h5>
-              Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry.
+            Propdial brought convenience and efficiency to managing my Indian property
+
             </h5>
             <audio controls className="c_interview">
               <source src="./assets/audio/parvinder-1.mp3"/>
@@ -66,7 +66,7 @@ const ProductCarousel = () => {
               </div>
               <div className="client_info">
                 <h4>Mr. Parvinder</h4>
-                <h6>Lorem Ipsum</h6>
+                <h6>Satisfied Propdial Client</h6>
               </div>
               <div className="quote_down quote">
                 <img src="./assets/img/quote.png" alt="" />
@@ -78,8 +78,8 @@ const ProductCarousel = () => {
           </div>
           <div className="testimonial_single relative">
             <h5>
-              Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry.
+            Propdial's service bridged the gap for managing my Indian property
+
             </h5>
             <audio controls className="c_interview">
               <source src="./assets/audio/snehlata-1.mp3"/>
@@ -93,7 +93,7 @@ const ProductCarousel = () => {
               </div>
               <div className="client_info">
                 <h4>Mrs. Sneh Lata</h4>
-                <h6>Lorem Ipsum</h6>
+                <h6>Satisfied Propdial Client</h6>
               </div>
               <div className="quote_down quote">
                 <img src="./assets/img/quote.png" alt="" />
@@ -105,8 +105,8 @@ const ProductCarousel = () => {
           </div>
           <div className="testimonial_single relative">
             <h5>
-              Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry.
+            Propdial made managing my Indian property from the US effortless.
+
             </h5>
                 <audio controls className="c_interview">
               <source src="./assets/audio/sachin-1.mp3"/>
@@ -120,7 +120,7 @@ const ProductCarousel = () => {
               </div>
               <div className="client_info">
                 <h4>Mr. Sachin Jain</h4>
-                <h6>Lorem Ipsum</h6>
+                <h6>US Resident</h6>
               </div>
               <div className="quote_down quote">
                 <img src="./assets/img/quote.png" alt="" />
@@ -132,8 +132,8 @@ const ProductCarousel = () => {
           </div>
           <div className="testimonial_single relative">
             <h5>
-              Lorem Ipsum is simply dummy text of the printing and
-              typesetting industry.
+            Propdial made long-distance property management hassle-free and stress-free.
+
             </h5>
                 <audio controls className="c_interview">
               <source src="./assets/audio/nishant-1.mp3"/>
@@ -147,7 +147,7 @@ const ProductCarousel = () => {
               </div>
               <div className="client_info">
                 <h4>Mr. Nishant Sharma</h4>
-                <h6>Lorem Ipsum</h6>
+                <h6>Satisfied Propdial Client</h6>
               </div>
               <div className="quote_down quote">
                 <img src="./assets/img/quote.png" alt="" />
