@@ -1,103 +1,97 @@
 import React from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
 import "./ProductCarousel.css";
 
 const ProductCarousel = () => {
-  const responsive = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5,
-    },
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 5,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 3,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 3,
+  const citiesOptions = {
+    items: 6,
+    loop: true,
+    margin: 10,
+    // nav: true,
+    // animateOut: 'fadeOut', // Fade out animation
+    // animateIn: 'fadeIn',   // Fade in animation
+    dots:false,
+    smartSpeed: 2000,
+    autoplay: true, // Enable autoplay
+    autoplayTimeout: 5000, // Set autoplay interval (in milliseconds)
+    responsive: {
+      // Define breakpoints and the number of items to show at each breakpoint
+      0: {
+        items: 3,
+      },
+      768: {
+        items: 4,
+      },
+      992: {
+        items: 5,
+      },
+      1200: {
+        items: 6,
+      },
     },
   };
+
   return (
     <div className="logo_carousel">
       <div className="container">
         <div className="row">
           <div className="col-md-4">
             <div className="section_title">
-              <div className="section_title_effect">Cities</div>
+              <div className="section_title_effect">Our Presence</div>
               <h3>
-                Lorem Ipsum is that it has a more-or-less normal distribution of
-                letters
+              Our Impactful and Extensive Global Reach
               </h3>
             </div>
           </div>
           <div className="col-md-8">
             <div className="lc_right">
-              <Carousel
-                swipeable={true}
-                // draggable={true}
-                showDots={false}
-                responsive={responsive}
-                ssr={false} // means to render carousel on the server-side.
-                infinite={true}
-                autoPlay={true} // Enable auto-play for the second carousel
-                autoPlaySpeed={4000}
-                keyBoardControl={true}
-                customTransition="all .5"
-                transitionDuration={500}
-                // containerClass="carousel-container"
-                // removeArrowOnDeviceType={["desktop", "tablet", "mobile"]}
-                // dotListClass="custom-dot-list-style"
-                // itemClass="carousel-item-padding-40-px"
-              >
-                <div className="lc_slide_single">
+            <OwlCarousel className="owl-theme" {...citiesOptions}>
+                <div className="item lc_slide_single">
                   <img src="./assets/img/haryana.jpg" alt="" />
                   <h6>Haryana</h6>
                 </div>
-                <div className="lc_slide_single">
+                <div className="item lc_slide_single">
                   <img src="./assets/img/uttarpradesh.jpg" alt="" />
                   <h6>Uttar Pradesh</h6>
                 </div>
-                <div className="lc_slide_single">
+                <div className="item lc_slide_single">
                   <img src="./assets/img/delhi.jpg" alt="" />
 
                   <h6>Delhi</h6>
                 </div>
-                <div className="lc_slide_single">
+                <div className="item lc_slide_single">
                   <img src="./assets/img/maharashtra.jpg" alt="" />
 
                   <h6>Maharashtra</h6>
                 </div>
-                <div className="lc_slide_single">
+                <div className="item lc_slide_single">
                   <img src="./assets/img/karnataka.jpg" alt="" />
 
                   <h6>Karnataka</h6>
                 </div>
-                <div className="lc_slide_single">
+                <div className="item lc_slide_single">
                   <img src="./assets/img/telangana.jpg" alt="" />
 
                   <h6>telangana</h6>
                 </div>
-                <div className="lc_slide_single">
+                <div className="item lc_slide_single">
                   <img src="./assets/img/tamilnadu.png" alt="" />
 
                   <h6>Tamil Nadu</h6>
                 </div>
-                <div className="lc_slide_single">
+                <div className="item lc_slide_single">
                   <img src="./assets/img/goa.png" alt="" />
 
                   <h6>Goa</h6>
                 </div>
-                <div className="lc_slide_single">
+                <div className="item lc_slide_single">
                   <img src="./assets/img/uttarakhand.jpg" alt="" />
 
                   <h6>uttarakhand</h6>
                 </div>
-              </Carousel>
+                </OwlCarousel>
             </div>
           </div>
         </div>

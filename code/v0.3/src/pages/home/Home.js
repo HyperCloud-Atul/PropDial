@@ -52,10 +52,12 @@ const Home = () => {
 
                   </div>
                   <h4>
-                    Lorem Ipsum
+                  Property On-boarding
+
                   </h4>
                   <h5>
-                    Property Management Systems or Hotel Operating System, under business,
+m. This includes gathering all relevant property information, such as ownership details, property type, and any existing leases or contracts.
+
                   </h5>
                 </div>
               </div>
@@ -67,10 +69,11 @@ const Home = () => {
 
                   </div>
                   <h4>
-                    Lorem Ipsum
+                  Inspection & Agreement
+
                   </h4>
                   <h5>
-                    Property Management Systems or Hotel Operating System, under business,
+                    This includes gathering all relevant property information, such as ownership details, property type, and any existing leases or contracts.
                   </h5>
                 </div>
               </div>
@@ -82,10 +85,11 @@ const Home = () => {
 
                   </div>
                   <h4>
-                    Lorem Ipsum
+                   Financial & Legal Compliance
+
                   </h4>
                   <h5>
-                    Property Management Systems or Hotel Operating System, under business,
+                    This includes gathering all relevant property information, such as ownership details, property type, and any existing leases or contracts.
                   </h5>
                 </div>
               </div>
@@ -97,10 +101,10 @@ const Home = () => {
 
                   </div>
                   <h4>
-                    Lorem Ipsum
+                  Reporting & Communication
                   </h4>
                   <h5>
-                    Property Management Systems or Hotel Operating System, under business,
+                    This includes gathering all relevant property information, such as ownership details, property type, and any existing leases or contracts.
                   </h5>
                 </div>
               </div>
@@ -140,12 +144,12 @@ const Home = () => {
               <div className="ab_right">
                 <div className="section_title">
                   <div class="section_title_effect">ABOUT</div>
-                  <h3>A bit about us</h3>
+                  <h3>Your Trusted Property Management Partner
+</h3>
                 </div>
                 <h6>
-                  Property Management Systems or Hotel Operating System, under
-                  business, terms may be used in real estate hospitality
-                  accommodation management.
+                Established in 2014, Propdial is a prominent property management services company specializing in comprehensive property management and care-taking services. We are committed to delivering excellence and offer a complete 360-degree solution for property management.
+
                 </h6>
                 <ul
                   style={{
@@ -153,16 +157,15 @@ const Home = () => {
                   }}
                 >
                   <li>
-                    Lorem Ipsum is that it has a more-or-less normal
-                    distribution
+                  We efficiently manage the initial property on-boarding process.
                   </li>
                   <li>
-                    Lorem Ipsum is that it has a more-or-less normal
-                    distribution
+                  Our meticulous approach includes property inspection, rental market analysis, tenant screening, lease agreement management, and property maintenance.
+
                   </li>
                   <li>
-                    Lorem Ipsum is that it has a more-or-less normal
-                    distribution
+                 At Propdial, customer satisfaction is our top priority. We believe in transparent communication, legal compliance, and regular reporting to keep our clients informed and content.
+
                   </li>
                 </ul>
                 <Link to="/about-us">

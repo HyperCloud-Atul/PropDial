@@ -13,15 +13,25 @@ import "./AirBnb.css";
 const AirBnb = () => {
   const options = {
     items: 3,
-    dots:false,
+    dots: false,
     loop: true,
     margin: 30,
     nav: true,
-    // animateOut: 'fadeOut', // Fade out animation
-    // animateIn: 'fadeIn',   // Fade in animation
     smartSpeed: 2000,
-    autoplay: true, // Enable autoplay
-    autoplayTimeout: 10000, // Set autoplay interval (in milliseconds)
+    autoplay: true,
+    autoplayTimeout: 10000,
+    responsive: {
+      // Define breakpoints and the number of items to show at each breakpoint
+      0: {
+        items: 1,
+      },
+      768: {
+        items: 1,
+      },
+      992: {
+        items: 3,
+      },
+    },
   };
 
   const responsiveimg = {
@@ -59,14 +69,7 @@ const AirBnb = () => {
             <div className="card_img">
               <Carousel
                 showDots={false}
-                responsive={responsiveimg}
-                ssr={false}
-                infinite={true}
-                autoPlay={true}
-                autoPlaySpeed={4000}
-                keyBoardControl={true}
-                customTransition="all .5"
-                transitionDuration={500}
+                responsive={responsiveimg}          
               >
                 <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
@@ -105,14 +108,7 @@ const AirBnb = () => {
             <div className="card_img">
               <Carousel
                 showDots={false}
-                responsive={responsiveimg}
-                ssr={false}
-                infinite={true}
-                autoPlay={true}
-                autoPlaySpeed={4000}
-                keyBoardControl={true}
-                customTransition="all .5"
-                transitionDuration={500}
+                responsive={responsiveimg}          
               >
                 <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
@@ -151,14 +147,7 @@ const AirBnb = () => {
             <div className="card_img">
               <Carousel
                 showDots={false}
-                responsive={responsiveimg}
-                ssr={false}
-                infinite={true}
-                autoPlay={true}
-                autoPlaySpeed={4000}
-                keyBoardControl={true}
-                customTransition="all .5"
-                transitionDuration={500}
+                responsive={responsiveimg}       
               >
                 <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             
@@ -197,14 +186,7 @@ const AirBnb = () => {
             <div className="card_img">
               <Carousel
                 showDots={false}
-                responsive={responsiveimg}
-                ssr={false}
-                infinite={true}
-                autoPlay={true}
-                autoPlaySpeed={2000}
-                keyBoardControl={true}
-                customTransition="all .5"
-                transitionDuration={500}
+                responsive={responsiveimg}     
               >
                 <img src="./assets/img/airbnb/1.jpeg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/2.jpeg" alt="" className="ic_img-single" />             

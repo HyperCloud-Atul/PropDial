@@ -10,6 +10,7 @@ section.counter.sect_padding {
     font-weight: 800;
     letter-spacing: 2px;
     text-transform: uppercase;
+    text-align: center;
 }
 .cs_inner {
     display: flex;
@@ -36,7 +37,7 @@ section.counter.sect_padding {
     transform: translateY(-50%);
 }
 .number_count {
-    font-size: 60px;
+    font-size: 46px;
     font-weight: 700;
     color: var(--white-color);
 }

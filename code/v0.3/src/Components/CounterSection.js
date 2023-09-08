@@ -12,10 +12,10 @@ const CounterSection = () => {
 
   // Counter configurations for each counter
   const countersConfig = [
-    { start: 0, end: 50, duration: 2 },
-    { start: 0, end: 70, duration: 3 },
-    { start: 0, end: 10, duration: 1 },
-    { start: 0, end: 10, duration: 4 },
+    { start: 0, end: 10, duration: 2 },
+    { start: 0, end: 20, duration: 3 },
+    { start: 0, end: 30, duration: 1 },
+    { start: 0, end: 40, duration: 4 },
   ];
 
   useEffect(() => {
@@ -78,75 +78,77 @@ const CounterSection = () => {
                       +
                     </div>
                     <div className="count_which">
-                      <h6>Country's</h6>
-                      <h5>Customer</h5>
+                      <h6>Years of
+                      </h6>
+                      <h5>Experience</h5>
                     </div>
                   </div>
-                  <div className="count_bg_number">50</div>
+                  <div className="count_bg_number">10</div>
                 </div>
                 {/* <p>Current Count: {counts[0]}</p> */}
               </div>
               <div className="col-md-3">
-              <div className="count_single relative">
+                <div className="count_single relative">
                   <div className="cs_inner">
                     <div className="number_count">
-                    <CountUp
-                    start={countersConfig[1].start}
-                    end={countersConfig[1].end}
-                    duration={countersConfig[1].duration}
-                  />
-                      K
+                      <CountUp
+                        start={countersConfig[1].start}
+                        end={countersConfig[1].end}
+                        duration={countersConfig[1].duration}
+                      />
+                      +
+                    </div>
+                    <div className="count_which">
+                      <h6>Cities Presence in 
+</h6>
+                      <h5>India</h5>
+                    </div>
+                  </div>
+                  <div className="count_bg_number">20</div>
+                </div>
+                {/* <p>Current Count: {counts[1]}</p> */}
+              </div>
+              <div className="col-md-3">
+                <div className="count_single relative">
+                  <div className="cs_inner">
+                    <div className="number_count">
+                      <CountUp
+                        start={countersConfig[2].start}
+                        end={countersConfig[2].end}
+                        duration={countersConfig[2].duration}
+                      />
+                      K+
                     </div>
                     <div className="count_which">
                       <h6>Happy</h6>
-                      <h5>client</h5>
+                      <h5>Customers</h5>
                     </div>
                   </div>
-                  <div className="count_bg_number">70</div>
-                </div>             
-                              {/* <p>Current Count: {counts[1]}</p> */}
+                  <div className="count_bg_number">30</div>
+                </div>
+                {/* <p>Current Count: {counts[1]}</p> */}
               </div>
               <div className="col-md-3">
-              <div className="count_single relative">
+                <div className="count_single relative">
                   <div className="cs_inner">
                     <div className="number_count">
-                    <CountUp
-                    start={countersConfig[2].start}
-                    end={countersConfig[2].end}
-                    duration={countersConfig[2].duration}
-                  />
-                      +
+                      <CountUp
+                        start={countersConfig[3].start}
+                        end={countersConfig[3].end}
+                        duration={countersConfig[3].duration}
+                      />
+                      K+
                     </div>
                     <div className="count_which">
-                      <h6>States In</h6>
-                      <h5>India</h5>
+                      <h6>Beautiful</h6>
+                      <h5>Properties</h5>
                     </div>
                   </div>
-                  <div className="count_bg_number">10</div>
-                </div>             
-                              {/* <p>Current Count: {counts[1]}</p> */}
+                  <div className="count_bg_number">40</div>
+                </div>
+                {/* <p>Current Count: {counts[1]}</p> */}
               </div>
-              <div className="col-md-3">
-              <div className="count_single relative">
-                  <div className="cs_inner">
-                    <div className="number_count">
-                    <CountUp
-                    start={countersConfig[3].start}
-                    end={countersConfig[3].end}
-                    duration={countersConfig[3].duration}
-                  />
-                      +
-                    </div>
-                    <div className="count_which">
-                      <h6>Countries In</h6>
-                      <h5>India</h5>
-                    </div>
-                  </div>
-                  <div className="count_bg_number">10</div>
-                </div>             
-                              {/* <p>Current Count: {counts[1]}</p> */}
-              </div>
-          
+
             </div>
           </div>
         </section>

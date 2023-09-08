@@ -45,6 +45,9 @@ button.accordion-button {
     color: #333333;
     font-size: 20px;
 }
+.accordion-body p {
+    margin-bottom: 10px !important;
+}
 
 
 @media (max-width: 767px) {

@@ -21,7 +21,7 @@ const PGMoreMenu = () => {
       <Hero
         pageTitle="Locate Everything"
         pageSubTitle="Explore more for better understanding"
-        heroImage="./assets/img/about_us_banner.jpg"
+        heroImage="./assets/img/more_banner.jpg"
       ></Hero>
 
       <section className="more-menus sect_padding">
@@ -31,6 +31,13 @@ const PGMoreMenu = () => {
               <h6 className="title">
                 Contact
               </h6>
+              <Link className="mm_single" to="/faq">
+                <span class="material-symbols-outlined mms_icon">quiz</span>
+                <h6>FAQ</h6>
+                <span class="material-symbols-outlined mms_ra">
+                  chevron_right
+                </span>
+              </Link>
               <Link className="mm_single" to="/about-us">
                 <span class="material-symbols-outlined mms_icon">
                   import_contacts
@@ -40,13 +47,7 @@ const PGMoreMenu = () => {
                   chevron_right
                 </span>
               </Link>
-              <Link className="mm_single" to="/faq">
-                <span class="material-symbols-outlined mms_icon">quiz</span>
-                <h6>FAQ</h6>
-                <span class="material-symbols-outlined mms_ra">
-                  chevron_right
-                </span>
-              </Link>
+            
               <Link className="mm_single" to="/contact-us">
                 <span class="material-symbols-outlined mms_icon">
                   contact_page
