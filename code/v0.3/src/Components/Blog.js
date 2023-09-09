@@ -12,9 +12,9 @@ const Blog = () => {
         dots: false,
         loop: true,
         margin: 30,
-        nav: true,
+        nav: false,
         smartSpeed: 1500,
-        autoplay: true,
+        // autoplay: true,
         autoplayTimeout: 3000,
         responsive: {
             // Define breakpoints and the number of items to show at each breakpoint
@@ -46,7 +46,10 @@ const Blog = () => {
                                 <img src="./assets/img/blog1.jpg" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Business</span>
+                                {/* <span className="card-badge">Business</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source1.webp" alt="" />
+                                </div>
                                 <h3>
                                     Prop-tech Startup Propdial forays into 2nd home shared ownership space
                                 </h3>
@@ -70,7 +73,10 @@ const Blog = () => {
                                 <img src="./assets/img/blog2.webp" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Propdial</span>
+                                {/* <span className="card-badge">Propdial</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source2.svg" alt="" />
+                                </div>
                                 <h3>
                                     [Funding roundup] Cooby, Propdial, Oorjaa, Blue Tokai raise early-stage capital
                                 </h3>
@@ -94,7 +100,10 @@ const Blog = () => {
                                 <img src="./assets/img/blog3.webp" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Agencies</span>
+                                {/* <span className="card-badge">Agencies</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source3.png" alt="" />
+                                </div>
                                 <h3>
                                     Property management company Propdial to expand to Mumbai, Chennai and Kolkata
                                 </h3>
@@ -118,7 +127,10 @@ const Blog = () => {
                                 <img src="./assets/img/blog4.webp" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Propdial</span>
+                                {/* <span className="card-badge">Propdial</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source2.svg" alt="" />
+                                </div>
                                 <h3>
                                     THIS GURUGRAM-BASED STARTUP IS HELPING PROPERTY OWNERS REMOTELY MANAGE REAL ESTATE
                                 </h3>
@@ -143,7 +155,10 @@ const Blog = () => {
                                 <img src="./assets/img/blog5.jpeg" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Propdial</span>
+                                {/* <span className="card-badge">Propdial</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source4.png" alt="" />
+                                </div>
                                 <h3>
                                     Housing.com dials into the property management services game, announces tie-up with Gurugram-based Propdial
                                 </h3>
@@ -169,7 +184,10 @@ const Blog = () => {
                                 <img src="./assets/img/blog1.jpg" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Propdial</span>
+                                {/* <span className="card-badge">Propdial</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source5.png" alt="" />
+                                </div>
                                 <h3>
                                 49 Top Indian Property Management Companies and Startups of 2021
                                 </h3>
@@ -194,7 +212,10 @@ const Blog = () => {
                                 <img src="./assets/img/blog5.jpeg" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Propdial</span>
+                                {/* <span className="card-badge">Propdial</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source6.png" alt="" />
+                                </div>
                                 <h3>
                                 Housing.com Joins Hands With Gurugram-Based Propdial To Tap Into Rental, Property Management Tech
                                 </h3>
@@ -219,7 +240,10 @@ const Blog = () => {
                                 <img src="./assets/img/blog6.avif" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Propdial</span>
+                                {/* <span className="card-badge">Propdial</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source2.svg" alt="" />
+                                </div>
                                 <h3>
                                 HOW THIS REALTY MANAGED MARKETPLACE OFFERS PEACE OF MIND TO NRI PROPERTY OWNERS
                                 </h3>
@@ -244,7 +268,10 @@ const Blog = () => {
                                 <img src="./assets/img/blog7.jpg" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Propdial</span>
+                                {/* <span className="card-badge">Propdial</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source7.png" alt="" />
+                                </div>
                                 <h3>
                                 Propdial India: A Name you can Trust Upon A Platform with its Unique Approach
                                 </h3>
@@ -269,7 +296,11 @@ const Blog = () => {
                                 <img src="./assets/img/blog8.webp" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Propdial</span>
+                                {/* <span className="card-badge">Propdial</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source3.png" alt="" />
+                                </div>
+
                                 <h3>
                                 Housing.com partners Propdial to strengthen rental services business
                                 </h3>
@@ -296,18 +327,19 @@ const Blog = () => {
                                 <img src="./assets/img/blog5.jpeg" />
                             </div>
                             <div className="card-body">
-                                <span className="card-badge">Propdial</span>
+                                {/* <span className="card-badge">Propdial</span> */}
+                                <div className="blog_source">
+                                    <img src="./assets/img/blog_source8.png" alt="" />
+                                </div>
                                 <h3>
                                 Housing.com partners startup Propdial to boost rental services business
                                 </h3>
                                 <p className="card-subtitle">
-                                The tie-up will help the company to provide property management services such as renting/leasing, tenant background verification, rental agreement and rent collection/bill payment, Housing.com said in a statement.
-
-               
+                                The tie-up will help the company to provide property management services such as renting/leasing, tenant background verification, rental agreement and rent collection/bill payment, Housing.com said in a statement.           
 
                                 </p>
                                 <div className="card-author">
-                                    <img src="./assets/img/blog5.jpeg" alt="author avatar" />
+                                    <img src="./assets/img/blog8.png" alt="author avatar" />
                                     <div className="author-info">
                                         {/* <p className="author-name">John Doe</p>
                                         <p className="post-timestamp">2h ago</p> */}

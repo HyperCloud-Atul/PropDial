@@ -157,20 +157,20 @@ export default function Navbar() {
                   Property
                 </div>
               </Link>
-              <Link to="/contact-us">
+              <Link to="/about-us">
                 <div
                   className={`menu_single pointer ${
-                    location.pathname === "/contact-us" ? "active" : ""
+                    location.pathname === "/about-us" ? "active" : ""
                   }`}
                 >
-                  <span class="material-symbols-outlined">contacts</span>
-                  Contact us
+                  <span class="material-symbols-outlined">import_contacts</span>
+                  About Us
                 </div>
               </Link>
               <Link to="/more-menu">
                 <div
                   className={`menu_single pointer ${
-                    location.pathname === "/more-menu" ? "active" : ""
+                    location.pathname === "/more-menu" || location.pathname === "/faq" || location.pathname === "/contact-us" ? "active" : ""
                   }`}
                 >
                   <span class="material-symbols-outlined">More</span>

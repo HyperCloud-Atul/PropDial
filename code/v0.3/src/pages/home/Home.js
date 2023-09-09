@@ -47,7 +47,7 @@ const Home = () => {
               <div className="col-sm-3">
                 <div className="wf_single top">
                   <div className="icon_div relative">
-                    <img src="./assets/img/pune.jpg" />
+                    <img src="./assets/img/wf1.jpg" />
                     <div className="steps">1</div>
                   </div>
                   <h4>Property On-Boarding</h4>
@@ -60,7 +60,7 @@ const Home = () => {
               <div className="col-sm-3">
                 <div className="wf_single bottom">
                   <div className="icon_div relative">
-                    <img src="./assets/img/pune.jpg" />
+                    <img src="./assets/img/wf2.jpg" />
                     <div className="steps">2</div>
                   </div>
                   <h4>Inspection & Agreement</h4>
@@ -73,7 +73,7 @@ const Home = () => {
               <div className="col-sm-3">
                 <div className="wf_single top">
                   <div className="icon_div relative">
-                    <img src="./assets/img/pune.jpg" />
+                    <img src="./assets/img/wf3.jpg" />
                     <div className="steps">3</div>
                   </div>
                   <h4>Financial & Legal Compliance</h4>
@@ -85,7 +85,7 @@ const Home = () => {
               <div className="col-sm-3">
                 <div className="wf_single bottom">
                   <div className="icon_div relative">
-                    <img src="./assets/img/pune.jpg" />
+                    <img src="./assets/img/wf4.jpg" />
                     <div className="steps">4</div>
                   </div>
                   <h4>Reporting & Communication</h4>
@@ -110,14 +110,28 @@ const Home = () => {
               <div className="ab_left row">
                 <div className="col-sm-6">
                   <img
-                    src="./assets/img/ab_left_img1.png"
+                    src="./assets/img/ab_left_img1.jpg"
                     alt=""
                     className="img_1"
                   />
                 </div>
                 <div className="col-sm-6">
                   <img
-                    src="./assets/img/ab_left_img2.png"
+                    src="./assets/img/ab_left_img2.jpg"
+                    alt=""
+                    className="img_2"
+                  />
+                </div>
+                <div className="col-sm-6 mt-4">
+                  <img
+                    src="./assets/img/ab_left_img3.jpg"
+                    alt=""
+                    className="img_1"
+                  />
+                </div>
+                <div className="col-sm-6">
+                  <img
+                    src="./assets/img/ab_left_img4.jpg"
                     alt=""
                     className="img_2"
                   />

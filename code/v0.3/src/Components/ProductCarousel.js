@@ -49,47 +49,103 @@ const ProductCarousel = () => {
             <div className="lc_right">
             <OwlCarousel className="owl-theme" {...citiesOptions}>
                 <div className="item lc_slide_single">
-                  <img src="./assets/img/haryana.jpg" alt="" />
-                  <h6>Haryana</h6>
+                  <img src="./assets/img/faridabad.jpg" alt="" />
+                  <h6>Faridabad</h6>
                 </div>
                 <div className="item lc_slide_single">
-                  <img src="./assets/img/uttarpradesh.jpg" alt="" />
-                  <h6>Uttar Pradesh</h6>
+                  <img src="./assets/img/gurugram.jpg" alt="" />
+                  <h6>gurugram</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/sohna.jpg" alt="" />
+
+                  <h6>sohna</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/dharuhera.jpg" alt="" />
+
+                  <h6>dharuhera</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/noida.jpg" alt="" />
+
+                  <h6>noida</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/ghazibad.jpg" alt="" />
+
+                  <h6>ghazibad</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/lucknow.jpg" alt="" />
+
+                  <h6>lucknow</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/yamuna-expressway.jpg" alt="" />
+
+                  <h6>yamuna expressway</h6>
                 </div>
                 <div className="item lc_slide_single">
                   <img src="./assets/img/delhi.jpg" alt="" />
 
-                  <h6>Delhi</h6>
+                  <h6>delhi</h6>
                 </div>
                 <div className="item lc_slide_single">
-                  <img src="./assets/img/maharashtra.jpg" alt="" />
+                  <img src="./assets/img/pune.jpg" alt="" />
 
-                  <h6>Maharashtra</h6>
+                  <h6>pune</h6>
                 </div>
                 <div className="item lc_slide_single">
-                  <img src="./assets/img/karnataka.jpg" alt="" />
+                  <img src="./assets/img/mumbai.jpg" alt="" />
 
-                  <h6>Karnataka</h6>
+                  <h6>mumbai</h6>
                 </div>
                 <div className="item lc_slide_single">
-                  <img src="./assets/img/telangana.jpg" alt="" />
+                  <img src="./assets/img/thane.png" alt="" />
 
-                  <h6>telangana</h6>
+                  <h6>thane</h6>
                 </div>
                 <div className="item lc_slide_single">
-                  <img src="./assets/img/tamilnadu.png" alt="" />
+                  <img src="./assets/img/kalyan.png" alt="" />
 
-                  <h6>Tamil Nadu</h6>
+                  <h6>kalyan</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/bengaluru.jpg" alt="" />
+
+                  <h6>bengaluru</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/hyderabad.jpg" alt="" />
+
+                  <h6>hyderabad</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/secunderabad.jpg" alt="" />
+
+                  <h6>secunderabad</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/chennai.png" alt="" />
+
+                  <h6>chennai</h6>
+                </div>
+                <div className="item lc_slide_single">
+                  <img src="./assets/img/chandigarh.jpeg" alt="" />
+
+                  <h6>chandigarh</h6>
                 </div>
                 <div className="item lc_slide_single">
                   <img src="./assets/img/goa.png" alt="" />
 
-                  <h6>Goa</h6>
+                  <h6>goa</h6>
                 </div>
+               
                 <div className="item lc_slide_single">
-                  <img src="./assets/img/uttarakhand.jpg" alt="" />
+                  <img src="./assets/img/dehradun.jpg" alt="" />
 
-                  <h6>uttarakhand</h6>
+                  <h6>dehradun</h6>
                 </div>
                 </OwlCarousel>
             </div>

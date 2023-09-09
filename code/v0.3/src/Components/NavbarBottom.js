@@ -200,7 +200,7 @@ export default function NavbarBottom() {
         <div className="menu_name">About</div>
       </div>
       <div
-        className={`b_menu_single ${location.pathname === "/more-menu" ? "b_menu_active" : ""
+        className={`b_menu_single ${location.pathname === "/more-menu" || location.pathname === "/faq" || location.pathname === "/contact-us" ? "b_menu_active" : ""
           }`}
         onClick={moreMenu}
       >
