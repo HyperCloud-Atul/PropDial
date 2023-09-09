@@ -7,9 +7,9 @@
     z-index: 99;
 }
 .brfi_single {
-    width: 58px;
-    height: 58px;
-    padding: 6px;
+    width: 55px;
+    height: 55px;
+    padding: 7px;
     background: #8cf6fc;
     border-radius: 50%;
     cursor: pointer;
@@ -28,4 +28,10 @@
 .brf_icon {
     bottom: 80px; 
 }
+}
+@media only screen and (max-width: 767px) {
+    .brfi_single {
+        width: 40px;
+        height: 40px;
+    }
 }

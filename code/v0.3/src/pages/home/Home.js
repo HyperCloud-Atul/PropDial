@@ -35,7 +35,7 @@ const Home = () => {
         <div className="container">
           <div className="section_title">
             <div class="section_title_effect">work flow</div>
-            <h3>Property Management Systems or Hotel</h3>
+            <h3>Property Management Services</h3>
           </div>
           <div
             className="wf_first"

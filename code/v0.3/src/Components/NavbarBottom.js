@@ -164,17 +164,18 @@ export default function NavbarBottom() {
         <div className="menu_name">Home</div>
       </div>
       <div
-        className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""
+        className={`b_menu_single ${location.pathname === "/search-property" ? "b_menu_active" : ""
           }`}
-        onClick={aboutpage}
+        onClick={property}
       >
         <div className="menu_icon">
           <span class="material-symbols-outlined">
-            import_contacts
+            search
           </span>
         </div>
-        <div className="menu_name">About</div>
+        <div className="menu_name">Property</div>
       </div>
+    
       <div
         className={`b_menu_single search ${location.pathname === "/search-property" ? "b_menu_active" : ""
           }`}
@@ -187,16 +188,16 @@ export default function NavbarBottom() {
         </div>
       </div>
       <div
-        className={`b_menu_single ${location.pathname === "/search-property" ? "b_menu_active" : ""
+        className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""
           }`}
-        onClick={property}
+        onClick={aboutpage}
       >
         <div className="menu_icon">
           <span class="material-symbols-outlined">
-            search
+            import_contacts
           </span>
         </div>
-        <div className="menu_name">Property</div>
+        <div className="menu_name">About</div>
       </div>
       <div
         className={`b_menu_single ${location.pathname === "/more-menu" ? "b_menu_active" : ""

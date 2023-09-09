@@ -11,17 +11,17 @@ import "./PGAboutUs.css";
 
 
 const PGAboutUs = () => {
-   // Scroll to the top of the page whenever the location changes start
-   const location = useLocation(); 
-   useEffect(() => {
-     window.scrollTo(0, 0);
-   }, [location]);
-    // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   return (
     <div className="about_us_pg">
-    <BottomRightFixedIcon/>
+      <BottomRightFixedIcon />
       <Hero
-        pageTitle="About"
+        pageTitle="About Us"
         pageSubTitle="Discover Our Story
         "
         heroImage="./assets/img/about_us_banner.jpg"
@@ -32,13 +32,13 @@ const PGAboutUs = () => {
             <div className="col-lg-6">
               <div className="abc_left">
                 <h2>Your Trusted Property Management Partner
-</h2>
+                </h2>
                 <p>
-                Propdial, established in 2014, is a leading property management services company. We specialize in offering comprehensive property management and property care-taking services to property owners and landlords.
+                  Propdial, established in 2014, is a leading property management services company. We specialize in offering comprehensive property management and property care-taking services to property owners and landlords.
 
                 </p>
                 <p>
-                At Propdial, we prioritize our customers above all else. Our dedication to customer satisfaction is unwavering, and we believe in transparent communication, legal compliance, and regular reporting to keep our clients informed and content.
+                  At Propdial, we prioritize our customers above all else. Our dedication to customer satisfaction is unwavering, and we believe in transparent communication, legal compliance, and regular reporting to keep our clients informed and content.
 
                 </p>
                 <p>Choose Propdial for all your property management needs, and experience the peace of mind that comes with having a reliable partner by your side.</p>
@@ -86,8 +86,8 @@ const PGAboutUs = () => {
                       alt=""
                       className="bullet_icon"
                     />
-                    <p>                    
-                   <strong> Excellence in Property Management:</strong> To be recognized as a leading provider of property management services known for excellence and reliability.
+                    <p>
+                      <strong> Excellence in Property Management:</strong> To be recognized as a leading provider of property management services known for excellence and reliability.
 
                     </p>
                   </div>
@@ -97,8 +97,8 @@ const PGAboutUs = () => {
                       alt=""
                       className="bullet_icon"
                     />
-                    <p>                    
-                   <strong>Customer-Centric Approach:</strong> To prioritize our customers and ensure their satisfaction through transparent communication and exceptional service.
+                    <p>
+                      <strong>Customer-Centric Approach:</strong> To prioritize our customers and ensure their satisfaction through transparent communication and exceptional service.
 
                     </p>
                   </div>
@@ -108,8 +108,8 @@ const PGAboutUs = () => {
                       alt=""
                       className="bullet_icon"
                     />
-                    <p>                    
-                    <strong>Innovation and Technology:</strong> To leverage cutting-edge technology and innovation to enhance our property management solutions.
+                    <p>
+                      <strong>Innovation and Technology:</strong> To leverage cutting-edge technology and innovation to enhance our property management solutions.
 
                     </p>
                   </div>
@@ -119,8 +119,8 @@ const PGAboutUs = () => {
                       alt=""
                       className="bullet_icon"
                     />
-                    <p>                    
-                    <strong>Compliance and Legal Integrity:</strong> To ensure strict compliance with all local, state, and government laws and regulations.
+                    <p>
+                      <strong>Compliance and Legal Integrity:</strong> To ensure strict compliance with all local, state, and government laws and regulations.
 
                     </p>
                   </div>
@@ -130,8 +130,8 @@ const PGAboutUs = () => {
                       alt=""
                       className="bullet_icon"
                     />
-                    <p>                    
-                    <strong>Continuous Improvement:</strong> To continuously evolve and improve our services to meet the ever-changing needs of our clients and the property management industry.
+                    <p>
+                      <strong>Continuous Improvement:</strong> To continuously evolve and improve our services to meet the ever-changing needs of our clients and the property management industry.
                     </p>
                   </div>
                 </div>
@@ -139,22 +139,22 @@ const PGAboutUs = () => {
             </div>
             <div className="col-lg-7 mabc_right">
               <h3>A 360-Degree <br /> Property Management Solution
-</h3>
+              </h3>
               <p>
-              Our unwavering commitment to delivering excellence drives us to provide a holistic property management solution. We approach property management as a complete circle, starting from the initial property on-boarding process. At Propdial, we leave no stone unturned to ensure your property is well-taken care of and yields optimum returns.
+                Our unwavering commitment to delivering excellence drives us to provide a holistic property management solution. We approach property management as a complete circle, starting from the initial property on-boarding process. At Propdial, we leave no stone unturned to ensure your property is well-taken care of and yields optimum returns.
 
               </p>
               <h6>Prioritizing Customer Satisfaction
-</h6>
+              </h6>
               <p>
-              At Propdial, our customers are at the heart of everything we do. We prioritize your satisfaction above all else, ensuring you have peace of mind knowing your property is in capable hands.
+                At Propdial, our customers are at the heart of everything we do. We prioritize your satisfaction above all else, ensuring you have peace of mind knowing your property is in capable hands.
 
 
               </p>
               <h6>Choose Propdial
-</h6>
+              </h6>
               <p>
-              In your search for a property management partner, choose Propdial. With our extensive experience, commitment to excellence, and customer-centric approach, we ensure your property receives the care and attention it deserves. Partner with us for all your property management needs and experience the peace of mind that comes with having a reliable partner by your side.
+                In your search for a property management partner, choose Propdial. With our extensive experience, commitment to excellence, and customer-centric approach, we ensure your property receives the care and attention it deserves. Partner with us for all your property management needs and experience the peace of mind that comes with having a reliable partner by your side.
               </p>
             </div>
           </div>

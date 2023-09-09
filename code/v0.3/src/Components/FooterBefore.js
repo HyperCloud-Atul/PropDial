@@ -16,7 +16,7 @@ const FooterBefore = () => {
         <div className='container'>
             <div className='fb_inner'>
                 <h3>GET ACCESS TO THE BEST PROPERTY AROUND</h3>
-                <h6>Listed Over 3000+ Properties Around You</h6>
+                <h6>Listed Over 40K+ Properties Around You</h6>
                 <div className='btn_group'>
                <Link to="search-property">
                <button className='theme_btn btn_white'>
