@@ -53,7 +53,7 @@ const ProductCarousel = () => {
                   <h6>Faridabad</h6>
                 </div>
                 <div className="item lc_slide_single">
-                  <img src="./assets/img/gurugram.jpg" alt="" />
+                  <img src="./assets/img/guru.jpg" alt="" />
                   <h6>gurugram</h6>
                 </div>
                 <div className="item lc_slide_single">

@@ -52,6 +52,9 @@ section.main_footer .col-md-3:last-child {
     color: var(--white-color);
     font-weight: 500;
 }
+.footer_link a.active_f_link {
+    color: var(--theme-green);     
+}
 .footer_link a:hover{
     color: var(--theme-green);  
 }
