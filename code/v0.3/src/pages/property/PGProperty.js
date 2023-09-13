@@ -3,12 +3,16 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PGProperty.css";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useCollection } from "../../hooks/useCollection";
 
 // component
 import Banner from "../../Components/Banner";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
 
 const PGProperty = () => {
+  const { documents: propertiesdocuments, error: propertieserror } =
+  useCollection("properties");
+
       // Scroll to the top of the page whenever the location changes start
       const location = useLocation(); 
       useEffect(() => {
@@ -23,6 +27,7 @@ const PGProperty = () => {
   };
   // read more read less
   return (
+
     <div className="pg_property">
       {/* <Banner></Banner> */}
       <BottomRightFixedIcon></BottomRightFixedIcon>

@@ -3,6 +3,7 @@ import { projectAuth, projectFirestore } from '../firebase/config'
 import { useAuthContext } from './useAuthContext'
 import { timestamp } from '../firebase/config'
 import { el } from 'date-fns/locale'
+import { Navigate } from 'react-router-dom'
 
 export const useLogin = () => {
   // const [isCancelled, setIsCancelled] = useState(false)
@@ -65,7 +66,8 @@ export const useLogin = () => {
           // if (!isCancelled) {
           setIsPending(false)
           setError(null)
-          // }
+          // }  
+          
         }
         else {
           // setError('No such document exists')

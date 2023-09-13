@@ -1,4 +1,6 @@
-.pgloginsignup a.carousel-control-next, .pgloginsignup a.carousel-control-prev, .pgloginsignup .carousel-indicators {
+.pgloginsignup a.carousel-control-next,
+.pgloginsignup a.carousel-control-prev,
+.pgloginsignup .carousel-indicators {
     display: none;
 }
 
@@ -7,14 +9,17 @@
     height: 375px !important;
     object-fit: cover;
 }
+
 .pgloginsignup section.form_sec .right_form {
     padding: 0px;
 
 }
+
 .pgloginsignup section.form_sec .right_form::after {
     z-index: unset;
     opacity: 0.8;
 }
+
 .login_inner {
     position: absolute;
     top: 50%;
@@ -25,20 +30,22 @@
     transform: translateY(-50%);
     z-index: 99;
 }
+
 .login_btn {
     display: grid;
     margin-top: 20px;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 20px;
     grid-row-gap: 25px;
 }
-.login_btn a.theme_btn.btn_white {
+
+.login_btn .theme_btn.btn_white {
     display: flex;
     gap: 20px;
     margin-top: 28px;
 }
 
-.login_btn a.theme_btn.btn_white img {
+.login_btn .theme_btn.btn_white img {
     width: 102px;
     height: 102px;
     margin-top: -42px;
@@ -52,29 +59,52 @@
     margin-top: 60px;
 }
 
+.pgloginsignup .hidden {
+    display: none;
+}
+
+.pgloginsignup .back_login_option {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    color: var(--theme-green);
+    margin-top: 26px !important;
+    cursor: pointer;
+}
+.pgloginsignup .login_form{
+    margin-top: 15px;
+}
+.pgloginsignup .login_form .theme_btn{
+    margin-top: 18px;
+}
 @media screen and (max-width: 1199px) {
 
     .form_sec .left_img {
-    display: none;
+        display: none;
+    }
+
+    .login_inner {
+        padding: 0px 50px;
+    }
+
+    section.form_sec .right_form {
+        width: 100% !important;
+    }
 }
-.login_inner {
-    padding: 0px 50px;
-}
-section.form_sec .right_form {
-    width: 100% !important; 
-}
-}
+
 @media screen and (max-width: 767px) {
 
-.login_inner {
-    padding: 0px 15px;
-}
-.pgloginsignup .ad_container img {   
-    height: 500px !important;
- 
-}
-.login_btn { 
-    grid-template-columns: repeat(1,1fr);
+    .login_inner {
+        padding: 0px 15px;
+    }
 
-}
+    .pgloginsignup .ad_container img {
+        height: 500px !important;
+
+    }
+
+    .login_btn {
+        grid-template-columns: repeat(1, 1fr);
+
+    }
 }

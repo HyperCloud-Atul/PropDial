@@ -1,8 +1,8 @@
 
-import { useLogin } from '../../hooks/useLogin'
+import { useLogin } from '../../hooks/useLogin';
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import Hero from '../../Components/Hero'
+import Hero from '../../Components/Hero';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Carousel } from "react-bootstrap";
 
@@ -14,6 +14,7 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { login, error, isPending } = useLogin()
+  const [loginAsOwner, setLoginAsOwner] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -29,64 +30,7 @@ export default function Login() {
     <div className='pgloginsignup'>
       <Hero pageTitle="Login" pageSubTitle="login and signup" heroImage="./assets/img/loginbanner.jpg"></Hero>
 
-      {/* <form onSubmit={handleSubmit} className="auth-form" style={{ maxWidth: '350px' }}>
-        <div className='page-title'>
-          <h1>Login </h1>
-        </div>
-        <br />
-        <label>
-          <div className='form-field-title'>
-            <span className="material-symbols-outlined">
-              person
-            </span>
-            <h1>Email </h1>
 
-            <input
-              required
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
-          </div>
-        </label>
-
-        <label>
-          <div className='form-field-title'>
-            <span className="material-symbols-outlined">
-              lock
-            </span>
-            <h1>Password </h1>
-
-            <input
-              required
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-            />
-          </div>
-        </label>
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          {error && <div className="error">{error}</div>}        
-          {!isPending && <button className="btn">Log in</button>}
-          {isPending && <button className="btn" disabled>Signing...</button>}
-
-        </div>
-        <br />
-        <div className='sign-up-or-div'>
-          <h1>OR</h1>
-        </div>
-        <br />
-
-        <div className='sign-in-with-more-methods-div'>
-          <img src="./img/google-icon.jpg" alt="" />
-          <span>Sign in with Google</span>
-        </div>
-
-        <br /><br />
-        <div style={{ textAlign: 'center' }}>
-          <span style={{ color: 'var(--lightgrey-color)' }} > Don't have an account? <Link to='/Signup' style={{ paddingLeft: '5px', color: 'var(--red-color)' }}> Sign up </Link> </span>
-        </div>
-      </form > */}
       <section className="form_sec">
         <div className="left_img">
           {/* <img src="./assets/img/contact_from_left.jpg" alt="Left" /> */}
@@ -128,25 +72,78 @@ export default function Login() {
             </Carousel.Item>
           </Carousel>
           <div className='login_inner'>
+
             <div className='section_title'>
-              <h3>Login as</h3>
+              <h3>{loginAsOwner ? 'Login As' : 'Login As Owner'} </h3>
             </div>
-            <div className='login_btn'>
-            <Link className='theme_btn btn_white' to="https://www.propdial.com/workshop/user_login.php">
-              <img src='./assets/img/owner.jpg'></img>
-              <span>Owner</span>
-            </Link>
-            <Link className='theme_btn btn_white' to="https://www.propdial.com/workshop/tenant_login.php">
-            <img src='./assets/img/tenant.jpg'></img>
-              <span>Tenant</span>
-            </Link>
-            <Link className='theme_btn btn_white' to="https://www.propdial.com/workshop/broker_login.php">
-            <img src='./assets/img/agent.jpg'></img>
-             <span>Agent</span>
-            </Link>
+            <form onSubmit={handleSubmit} className={`login_form ${loginAsOwner ? 'hidden' : 'Show'}`}>
+              <div className='row'>
+                <div className='col-sm-6'>
+                  <div className='form_field'>
+                    <input
+                      required
+                      type="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      value={email}
+                      placeholder='Email'
+                    />
+                    <div class="field_icon"><span class="material-symbols-outlined">mail</span></div>
+                  </div>
+                </div>
+                <div className='col-sm-6'>
+                  <div className='form_field'>
+                    <input
+                      required
+                      type="password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      value={password}
+                      placeholder='Password'
+                    />
+                    <div class="field_icon"><span class="material-symbols-outlined">mail</span></div>
+                  </div>
+                </div>
+                <div className='col-sm-12' style={{
+                  textAlign: "center"
+                }}>
+                  {!isPending && <button className="theme_btn btn_fill">Log in<span class="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span></button>}
+                  {isPending && <button className="theme_btn btn_fill" disabled>Signing...<span class="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span></button>}
+                  {error && <div className="error">{error}</div>}
+                  <div onClick={() => setLoginAsOwner(!loginAsOwner)} className={`back_login_option ${loginAsOwner ? 'hidden' : 'show'}`}>
+                    <span class="material-symbols-outlined">
+                      arrow_back
+                    </span>
+                    Back to Login Options
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+              {/* <div style={{ textAlign: 'center' }}>
+                <span style={{ color: 'var(--lightgrey-color)' }} > Don't have an account? <Link to='/Signup' style={{ paddingLeft: '5px', color: 'var(--red-color)' }}> Sign up </Link> </span>
+              </div> */}
+            </form >
+            <div className={`login_btn ${loginAsOwner ? 'show' : 'hidden'}`}>
+              <div className='theme_btn btn_white pointer' onClick={() => setLoginAsOwner(!loginAsOwner)}>
+                <img src='./assets/img/owner.jpg'></img>
+                <span>Owner</span>
+              </div>
+              <Link className='theme_btn btn_white pointer' to="https://www.propdial.com/workshop/tenant_login.php">
+                <img src='./assets/img/tenant.jpg'></img>
+                <span>Tenant</span>
+              </Link>
+              <Link className='theme_btn btn_white pointer' to="https://www.propdial.com/workshop/broker_login.php">
+                <img src='./assets/img/agent.jpg'></img>
+                <span>Agent</span>
+              </Link>
             </div>
+
           </div>
-          
+
 
 
         </div>
