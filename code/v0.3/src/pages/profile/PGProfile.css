@@ -1,0 +1,275 @@
+.profile-card-div {
+    background: #fff;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.profile-card-div .content {
+    padding: 10px;
+}
+
+.user-name {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.user-logo-parent-div {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-logo-parent-div .user-logo {
+    width: 85px;
+    height: 85px;
+    background: rgba(84, 204, 203);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-logo-parent-div .user-logo .avatar {
+    width: 80px;
+    height: 80px;
+}
+
+@media (max-width: 850px) {
+    /* .user-logo-parent-div {
+    display: block;
+  } */
+
+    .user-logo-parent-div .user-logo {
+        width: 85px;
+        height: 85px;
+    }
+
+    .user-logo-parent-div .user-logo .avatar {
+        width: 80px !important;
+        height: 80px !important;
+    }
+}
+
+.user-logo-parent-div .user-logo h4 {
+    position: relative;
+    top: 5px;
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: 500;
+}
+
+.user-logo-parent-div .user-logo img {
+    width: 100%;
+    border-radius: 50%;
+}
+
+.user-name .details,
+.property-status-property-card .details {
+    padding: 10px 15px;
+}
+
+.property-status-property-card .details {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 10px;
+}
+
+@media (max-width: 850px) {
+    .property-status-property-card .details {
+        text-align: center;
+        padding: 20px 10px 0 10px;
+    }
+}
+
+.user-name .details .profile-change-name {
+    font-size: 1.3rem;
+    color: #666;
+    font-weight: 600;
+    border: none;
+    padding: 0 0 0 8px;
+    background: #eee;
+    /* background: var(--yellow-color); */
+    border: 1px dashed var(--lightgrey-color);
+    width: 90%;
+    margin-bottom: 8px;
+}
+
+.user-name .details p {
+    margin: 0;
+    color: #aaa;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.user-name .details .profile-change-phone {
+    margin: 0;
+    color: #aaa;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    padding: 0 0 0 8px;
+    width: 120px;
+    background: #eee;
+    border: 1px dashed var(--lightgrey-color);
+}
+
+.user-name .details .profile-change-name:read-only,
+.user-name .details .profile-change-phone:read-only {
+    background: none;
+    border: 1px dashed transparent;
+}
+
+.user-name .edit {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.user-name .edit span {
+    color: #666;
+    font-size: 1.3rem;
+}
+
+.user-name .edit span.done {
+    font-size: 1.5rem;
+    width: 25px;
+    height: 25px;
+    background: var(--theme-blue);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-profile-div {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background: var(--yellow-color);
+    border-radius: 0 0 4px 4px;
+}
+
+.edit-profile-div small {
+    margin: 0;
+    width: 70%;
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
+
+}
+
+.edit-profile-div div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 40%;
+}
+
+.address-div {
+    display: grid;
+    grid-template-columns: 10% 90%;
+    padding: 15px;
+}
+
+.address-div .icon {
+    position: relative;
+    top: 3px;
+    width: 33px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(84, 204, 203, 0.3);
+    /* color: #555; */
+}
+
+.address-div .icon span {
+    font-size: 1.2rem;
+}
+
+.address-div .address-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0px 0px 20px;
+}
+
+.address-div .address-text h5 {
+    position: relative;
+    top: -5px;
+    font-size: 1rem;
+    color: #444;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.address-div .address-text small {
+    position: relative;
+    top: -4px;
+    margin-top: 0;
+    font-size: 0.7rem;
+    color: #aaa;
+}
+
+.address-div .address-text div {
+    text-align: right;
+    position: relative;
+    top: -3px;
+}
+
+.address-div .address-text div span {
+    color: #ccc;
+}
+
+.dashboardCardBoxoffer {
+    /* padding: 10px; */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    height: 9rem;
+    width: 100%;
+    transition: 1s;
+    overflow: hidden;
+}
+
+@media (max-width: 850px) {
+    .dashboardCardBoxoffer {
+        height: auto;
+    }
+}
+
+.profile-upload-input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.profile-upload-label {
+    position: absolute;
+    bottom: -20%;
+    right: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--theme-blue);
+    color: #fff;
+}
+
+.profile-upload-label span {
+    font-size: 1.4rem;
+    position: relative;
+    top: 2px;
+}
