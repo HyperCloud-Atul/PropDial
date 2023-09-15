@@ -10,8 +10,7 @@ import Popup from "../../Components/Popup";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { projectStorage } from "../../firebase/config";
 
-// component 
-import Hero from "../../Components/Hero";
+
 
 // styles
 import "./PGProfile.css";
@@ -159,7 +158,7 @@ export default function PGProfile() {
 
   // --------------------HTML UI Codebase------------------
   return (
-    <div>
+    <div className="profile_pg">
 
       {/* Popup Component */}
       <Popup
@@ -168,18 +167,14 @@ export default function PGProfile() {
         setPopupReturn={setPopupReturn}
         msg={"Are you sure you want to logout?"}
       />
-   <Hero
-        pageTitle={user.fullName}
-        pageSubTitle="Profile"
-        heroImage="./assets/img/profile_bg.jpeg"
-      ></Hero>
-      <div className="profile-card-div">
-        <div className="content">
-          <div className="user-name">
-            <div className="user-logo-parent-div">
-              <div className="user-logo">
-                <Avatar src={user.photoURL} />
-              </div>
+      <section className="hero relative">
+        <img src="./assets/img/profile_bg.jpeg"></img>
+      </section>
+      <section className="section_name profile_card">
+        <div className="container">
+          <div className="sn_inner">
+            <div className="user_img relative">
+              <img src={user.photoURL}></img>
               <input
                 type="file"
                 onChange={handleFileChange}
@@ -188,13 +183,12 @@ export default function PGProfile() {
               />
               <label
                 htmlFor="profile-upload-input"
-                className="profile-upload-label"
+                className="profile-upload-label pointer"
               >
                 <span className="material-symbols-outlined">upload</span>
               </label>
             </div>
-
-            <div className="details">
+            <h4 className="user_name">
               <input
                 type="text"
                 className="profile-change-name"
@@ -202,6 +196,8 @@ export default function PGProfile() {
                 onChange={(e) => setUserFullName(e.target.value)}
                 value={userFullName}
               ></input>
+            </h4>
+            <h5>
               <input
                 type="number"
                 maxLength={10}
@@ -210,10 +206,11 @@ export default function PGProfile() {
                 onChange={(e) => setUserPhoneNumber(e.target.value)}
                 value={userPhoneNumber}
               ></input>
-              <p style={{ paddingLeft: "8px" }}>{user.email}</p>
-            </div>
-
-            <div className="edit">
+            </h5>
+            <h5>
+              {user.email}
+            </h5>
+            <div className={`edit pointer ${isProfileEdit ? "edit_done" : ""}`}>
               <span
                 className="material-symbols-outlined"
                 style={{ display: isProfileEdit ? "none" : "block" }}
@@ -229,21 +226,22 @@ export default function PGProfile() {
                 done
               </span>
             </div>
-          </div>
-        </div>
 
-        <div className="edit-profile-div">
-          <small>Visit Dashboard for more deatils</small>
-          <div>
-            <div></div>
-            <button type="button" className="btn" onClick={showDashboard}>
-              Dashboard
-            </button>
           </div>
         </div>
+      </section>
+  <div className="container">
+  <div className="visit_dashboard">
+        <span>Visit Dashboard for more deatils</span>
+        <span className="theme_btn btn_fill pointer" onClick={showDashboard}>
+          Dashboard
+          <span class="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span>
+        </span>
+
       </div>
-
-      <div className="row no-gutters">
+  </div>
+    <div className="container">
+    <div className="row no-gutters">
         <div className="col-lg-6 col-md-12 col-sm-12">
           <div className="property-status-padding-div">
             <div className="profile-card-div">
@@ -359,7 +357,9 @@ export default function PGProfile() {
           </div>
         </div>
       </div>
-      <br />
+    </div>
+    <br></br>
+    <br></br>
       {/* <form onSubmit={handleSubmit}>
                 <label>
                     <span>Full Name:</span>

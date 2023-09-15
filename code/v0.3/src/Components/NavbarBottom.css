@@ -132,6 +132,12 @@ section.bottom_menu_bar {
     position: relative;
     top: -30px;
 }
+.b_menu_single.search .menu_icon img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
 .bottom_menu_bar .menu_name {
     font-size: 13px;
     position: relative;
