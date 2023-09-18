@@ -82,7 +82,7 @@ const PGAboutUs = () => {
                 <div className="vision_points">
                   <div className="vs_single">
                     <img
-                      src="./assets/img/right-arrow.png"
+                      // src="./assets/img/right-arrow.png"
                       alt=""
                       className="bullet_icon"
                     />
@@ -93,7 +93,7 @@ const PGAboutUs = () => {
                   </div>
                   <div className="vs_single">
                     <img
-                      src="./assets/img/right-arrow.png"
+                      // src="./assets/img/right-arrow.png"
                       alt=""
                       className="bullet_icon"
                     />
@@ -104,7 +104,7 @@ const PGAboutUs = () => {
                   </div>
                   <div className="vs_single">
                     <img
-                      src="./assets/img/right-arrow.png"
+                      // src="./assets/img/right-arrow.png"
                       alt=""
                       className="bullet_icon"
                     />
@@ -115,7 +115,7 @@ const PGAboutUs = () => {
                   </div>
                   <div className="vs_single">
                     <img
-                      src="./assets/img/right-arrow.png"
+                      // src="./assets/img/right-arrow.png"
                       alt=""
                       className="bullet_icon"
                     />
@@ -126,7 +126,7 @@ const PGAboutUs = () => {
                   </div>
                   <div className="vs_single">
                     <img
-                      src="./assets/img/right-arrow.png"
+                      // src="./assets/img/right-arrow.png"
                       alt=""
                       className="bullet_icon"
                     />

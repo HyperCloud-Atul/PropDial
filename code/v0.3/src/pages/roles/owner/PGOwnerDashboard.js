@@ -130,7 +130,7 @@ export default function PGOwnerDashboard() {
         pageTitle="Owner Dashboard"
         pageSubTitle="All your information
     "
-        heroImage="./assets/img/about_us_banner.jpg"
+        heroImage="./assets/img/ownerdashboard.jpg"
       ></Hero>
       <br></br>
       <div className="container">

@@ -94,7 +94,7 @@ export default function PGBills() {
         pageTitle="Bills"
         pageSubTitle="Discover Your Bills
         "
-        heroImage="./assets/img/about_us_banner.jpg"
+        heroImage="./assets/img/bills.jpg"
       ></Hero>
   <div className="container">
     <br></br>
