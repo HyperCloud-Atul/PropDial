@@ -55,9 +55,7 @@
 }
 
 
-.pgloginsignup section.form_sec {
-    margin-top: 60px;
-}
+
 
 .pgloginsignup .hidden {
     display: none;
@@ -78,6 +76,13 @@
     margin-top: 18px;
 }
 @media screen and (max-width: 1199px) {
+    .pgloginsignup section.form_sec {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    .pgls_mobile .hero_component {
+        display: none;
+    }
 
     .form_sec .left_img {
         display: none;

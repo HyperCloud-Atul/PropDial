@@ -27,7 +27,7 @@ export default function Login() {
   }, [location]);
   // Scroll to the top of the page whenever the location changes en
   return (
-    <div className='pgloginsignup'>
+    <div className='pgloginsignup pgls_mobile'>
       <Hero pageTitle="Login" pageSubTitle="login and signup" heroImage="./assets/img/loginbanner.jpg"></Hero>
 
 

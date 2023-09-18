@@ -3,16 +3,24 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useLogout } from "../../../hooks/useLogout";
 import OwlCarousel from "react-owl-carousel";
+import { Link, useLocation } from "react-router-dom";
 
 // components
 import Filters from "../../../Components/Filters";
 import PropertyList from "../../../Components/PropertyList";
+import Hero from "../../../Components/Hero";
 
 // styles
 // import './UserDashboard.css'
 const propertyFilter = ["ALL", "RESIDENTIAL", "COMMERCIAL", "INACTIVE"];
 
 export default function PGOwnerDashboard() {
+    // Scroll to the top of the page whenever the location changes start
+    const location = useLocation();
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location]);
+    // Scroll to the top of the page whenever the location changes en
   const { user } = useAuthContext();
   const { logout, isPending } = useLogout();
   const { documents: propertiesdocuments, error: propertieserror } =
@@ -66,55 +74,66 @@ export default function PGOwnerDashboard() {
 
   const properties = propertiesdocuments
     ? propertiesdocuments.filter((document) => {
-        let filteredProperty = false;
-        switch (filter) {
-          case "ALL":
-            document.taggedUsersList.forEach((u) => {
-              if (u.id === user.uid) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "RESIDENTIAL":
-            document.taggedUsersList.forEach((u) => {
-              if (
-                u.id === user.uid &&
-                document.category.toUpperCase() === "RESIDENTIAL"
-              ) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "COMMERCIAL":
-            document.taggedUsersList.forEach((u) => {
-              if (
-                u.id === user.uid &&
-                document.category.toUpperCase() === "COMMERCIAL"
-              ) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "INACTIVE":
-            document.taggedUsersList.forEach((u) => {
-              if (
-                u.id === user.uid &&
-                document.status.toUpperCase() === "INACTIVE"
-              ) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          default:
-            return true;
-        }
-      })
+      let filteredProperty = false;
+      switch (filter) {
+        case "ALL":
+          document.taggedUsersList.forEach((u) => {
+            if (u.id === user.uid) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "RESIDENTIAL":
+          document.taggedUsersList.forEach((u) => {
+            if (
+              u.id === user.uid &&
+              document.category.toUpperCase() === "RESIDENTIAL"
+            ) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "COMMERCIAL":
+          document.taggedUsersList.forEach((u) => {
+            if (
+              u.id === user.uid &&
+              document.category.toUpperCase() === "COMMERCIAL"
+            ) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "INACTIVE":
+          document.taggedUsersList.forEach((u) => {
+            if (
+              u.id === user.uid &&
+              document.status.toUpperCase() === "INACTIVE"
+            ) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        default:
+          return true;
+      }
+    })
     : null;
+    
 
   return (
-    <div>
-      {/* <h2 className="page-title">Owner Dashboard</h2> */}
 
+    <div style={{
+      background:"#f4f2eb"
+    }} className="pgls_mobile">
+      {/* <h2 className="page-title">Owner Dashboard</h2> */}
+      <Hero
+        pageTitle="Owner Dashboard"
+        pageSubTitle="All your information
+    "
+        heroImage="./assets/img/about_us_banner.jpg"
+      ></Hero>
+      <br></br>
+      <div className="container">
       <div className="row no-gutters">
         <div
           className="col-lg-6 col-md-12 col-sm-12"
@@ -236,13 +255,15 @@ export default function PGOwnerDashboard() {
           </div>
         </div>
       </div>
+      </div>
+ 
       <br />
-
+      <br />
       <div
-        className="row no-gutters partners-div"
+        className="partners-div"
         style={{ backgroundColor: "rgb(188, 236, 224, 0.5)", padding: "2% 0" }}
       >
-        <div className="col-md-12 col-md-offset-1">
+        
           <OwlCarousel
             className="owl-theme"
             loop={true}
@@ -311,12 +332,13 @@ export default function PGOwnerDashboard() {
               </div>
             </div>
           </OwlCarousel>
-        </div>
-        <br />
-        <br />
+      
+      
       </div>
       <br />
-      <div>
+      <br />
+    <div className="container">
+    <div>
         <div className="page-title">
           <span className="material-symbols-outlined">real_estate_agent</span>
           <h1>Properties </h1>
@@ -334,10 +356,12 @@ export default function PGOwnerDashboard() {
         {properties && <PropertyList properties={properties} />}
         {/* {bills && <BillList bills={bills} />} */}
       </div>
+    </div>
       <br></br>
       <br></br>
       <hr></hr>
-      <div className="row no-gutters">
+    <div className="container">
+    <div className="row no-gutters">
         <div className="col-lg-6" style={{ padding: "2%" }}>
           <h5 style={{ paddingLeft: "2%", fontWeight: "bolder" }}>ANALYTICS</h5>
           <br />
@@ -557,6 +581,7 @@ export default function PGOwnerDashboard() {
           </div>
         </div>
       </div>
+    </div>
       <br className="small" />
     </div>
   );

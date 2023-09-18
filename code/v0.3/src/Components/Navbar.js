@@ -30,6 +30,11 @@ export default function Navbar() {
   // };
 
   const showDashboard = () => {
+    if (!user) {
+      // User is not logged in, navigate to "/"
+      navigate("/");
+      return; // Exit the function to prevent further checks
+    }
     if (user && user.role === "superadmin") {
       // console.log('in superadmin', user.role)
       navigate("/superadmindashboard");
@@ -56,6 +61,11 @@ export default function Navbar() {
   };
 
   const showSecondPage = () => {
+    if (!user) {
+      // User is not logged in, navigate to "/"
+      navigate("/search-property");
+      return; // Exit the function to prevent further checks
+    }
     if (user && user.role === "admin") {
       // console.log('in user', user.role)
       navigate("/adminproperties");
@@ -63,6 +73,21 @@ export default function Navbar() {
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
       navigate("/bills");
+    }
+  };
+  const showThirdPage = () => {
+    if (!user) {
+      // User is not logged in, navigate to "/"
+      navigate("/about-us");
+      return; // Exit the function to prevent further checks
+    }
+    if (user && user.role === "admin") {
+      // console.log('in user', user.role)
+      navigate("/adminproperties");
+    }
+    if (user && user.role === "owner") {
+      // console.log('in user', user.role)
+      navigate("/customerproperties");
     }
   };
 
@@ -82,6 +107,15 @@ export default function Navbar() {
   let thirdMenu = "";
   let fourthMenu = "";
   let fourthMenuIcon = "";
+  if (!user) {
+    firstMenuIcon = "home";
+    firstMenu = "Home";
+    secondMenuIcon = "countertops";
+    secondMenu = "Property";
+    thirdMenuIcon = "import_contacts";
+    thirdMenu = "About Us";
+
+  }
   if (user && user.role !== "user") {
     firstMenuIcon = "home";
     firstMenu = "Dashboard";
@@ -99,7 +133,7 @@ export default function Navbar() {
     secondMenuIcon = "receipt_long";
     secondMenu = "Bills";
     thirdMenuIcon = "support_agent";
-    thirdMenu = "Tickets";
+    thirdMenu = "Properties";
   }
   if (user && user.role === "tenant") {
     secondMenu = "Rent";
@@ -137,36 +171,36 @@ export default function Navbar() {
               <img src="./assets/img/logo_propdial.png" alt="logo" />
             </li>
             <li className="main_menus">
-              <Link to="/">
-                <div
+             
+                <div onClick={showDashboard}
                   className={`menu_single pointer ${
-                    location.pathname === "/" ? "active" : ""
+                    location.pathname === "/" || location.pathname === "/ownerdashboard" ? "active" : ""
                   }`}
                 >
-                  <span class="material-symbols-outlined">home</span>
-                  Home
+                  <span class="material-symbols-outlined">{firstMenuIcon}</span>
+                  {firstMenu}
                 </div>
-              </Link>
-              <Link to="/search-property">
-                <div
+          
+            
+                <div onClick={showSecondPage}
                   className={`menu_single pointer ${
                     location.pathname === "/search-property" ? "active" : ""
                   }`}
                 >
-                  <span class="material-symbols-outlined">countertops</span>
-                  Property
+                  <span class="material-symbols-outlined">{secondMenuIcon}</span>
+                {secondMenu}
                 </div>
-              </Link>
-              <Link to="/about-us">
-                <div
+             
+             
+                <div onClick={showThirdPage}
                   className={`menu_single pointer ${
                     location.pathname === "/about-us" ? "active" : ""
                   }`}
                 >
-                  <span class="material-symbols-outlined">import_contacts</span>
-                  About Us
+                  <span class="material-symbols-outlined">{thirdMenuIcon}</span>
+                 {thirdMenu}
                 </div>
-              </Link>
+          
               <Link to="/more-menu">
                 <div
                   className={`menu_single pointer ${

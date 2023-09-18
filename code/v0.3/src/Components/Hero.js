@@ -5,7 +5,7 @@ import "./Hero.css"
 
 const Hero = (props) => {
   return (
-    <div>
+    <div className="hero_component">
       <section className="hero relative">
         <img src={props.heroImage}></img>
       </section>

@@ -15,6 +15,11 @@ export default function NavbarBottom() {
   };
 
   const showDashboard = () => {
+    if (!user) {
+      // User is not logged in, navigate to "/"
+      navigate("/");
+      return; // Exit the function to prevent further checks
+    }
     if (user && user.role === "superadmin") {
       // console.log('in superadmin', user.role)
       navigate("/superadmindashboard");
@@ -41,6 +46,11 @@ export default function NavbarBottom() {
   };
 
   const showSecondPage = () => {
+    if (!user) {
+      // User is not logged in, navigate to "/"
+      navigate("/search-property");
+      return; // Exit the function to prevent further checks
+    }
     if (user && user.role === "admin") {
       // console.log('in user', user.role)
       navigate("/adminproperties");
@@ -84,6 +94,13 @@ export default function NavbarBottom() {
   let thirdMenu = "";
   let fourthMenu = "";
   let fourthMenuIcon = "";
+  if (!user) {
+    firstMenu = "Home";
+    secondMenuIcon = "search";
+    secondMenu = "Property";
+    thirdMenuIcon = "import_contacts";
+    thirdMenu = "About";
+  }
   if (user && user.role !== "user") {
     firstMenuIcon = "home";
     firstMenu = "Dashboard";
@@ -156,12 +173,12 @@ export default function NavbarBottom() {
       <div
         className={`b_menu_single ${location.pathname === "/" ? "b_menu_active" : ""
           }`}
-        onClick={homepage}
+        onClick={showDashboard}
       >
         <div className="menu_icon">
           <span class="material-symbols-outlined">home</span>
         </div>
-        <div className="menu_name">Home</div>
+        <div className="menu_name">{firstMenu}</div>
       </div>
       <div
         className={`b_menu_single ${location.pathname === "/search-property" ? "b_menu_active" : ""
@@ -170,12 +187,12 @@ export default function NavbarBottom() {
       >
         <div className="menu_icon">
           <span class="material-symbols-outlined">
-            search
+            {secondMenuIcon}
           </span>
         </div>
-        <div className="menu_name">Property</div>
+        <div className="menu_name">{secondMenu}</div>
       </div>
-    
+
       <div
         className={`b_menu_single search ${location.pathname === "/search-property" ? "b_menu_active" : ""
           }`}
@@ -194,10 +211,10 @@ export default function NavbarBottom() {
       >
         <div className="menu_icon">
           <span class="material-symbols-outlined">
-            import_contacts
+           {thirdMenuIcon}
           </span>
         </div>
-        <div className="menu_name">About</div>
+        <div className="menu_name">{thirdMenu}</div>
       </div>
       <div
         className={`b_menu_single ${location.pathname === "/more-menu" || location.pathname === "/faq" || location.pathname === "/contact-us" ? "b_menu_active" : ""

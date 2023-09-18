@@ -1,12 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 // style
 import "./CollapsibleGroup.css";
 
+
 const CollapsibleGroup = () => {
+  const location = useLocation(); // Get the current location
   return (
-    <section className="faq_single_page sect_padding">
+    <section 
+     className={`faq_single_page sect_padding ${
+                    location.pathname === "/ownerdashboard" ? "d_none" : ""
+                  }`}>
       <div className="container">
         <div className="row">
           {/* Left section */}

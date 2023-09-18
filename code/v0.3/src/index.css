@@ -547,6 +547,9 @@ textarea {
 
 
 /* sanskar css start  */
+.d_none{
+  display: none;
+}
 .section_title_effect {
   font-size: 50px;
   -webkit-text-fill-color: transparent;
