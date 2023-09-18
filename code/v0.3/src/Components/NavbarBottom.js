@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./NavbarBottom.css";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { ShowChartOutlined } from "@mui/icons-material";
 
 export default function NavbarBottom() {
   const location = useLocation(); // Get the current location
@@ -60,29 +61,18 @@ export default function NavbarBottom() {
       navigate("/bills");
     }
   };
-
+  const showThirdPage = () => {
+    if (!user) {
+      // User is not logged in, navigate to "/"
+      navigate("/about-us");
+      return; // Exit the function to prevent further checks
+    }
+    if (user && user.role === "owner") {
+      // console.log('in user', user.role)
+      navigate("/customerproperties");
+    }
+  };
   const showFourthPage = () => {
-    navigate("/more");
-  };
-  const PGLogin = () => {
-    navigate("/login");
-  };
-  const contactus = () => {
-    navigate("/contact-us");
-  };
-  const aboutpage = () => {
-    navigate("/about-us");
-  };
-  const homepage = () => {
-    navigate("/");
-  };
-  const faqpage = () => {
-    navigate("/faq");
-  };
-  const property = () => {
-    navigate("/search-property");
-  };
-  const moreMenu = () => {
     navigate("/more-menu");
   };
   //Menus as per role
@@ -171,8 +161,9 @@ export default function NavbarBottom() {
     // </div>
     <section className="bottom_menu_bar">
       <div
-        className={`b_menu_single ${location.pathname === "/" ? "b_menu_active" : ""
-          }`}
+        className={`b_menu_single ${
+          location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindasboard" ? "b_menu_active" : ""
+        }`}
         onClick={showDashboard}
       >
         <div className="menu_icon">
@@ -181,59 +172,66 @@ export default function NavbarBottom() {
         <div className="menu_name">{firstMenu}</div>
       </div>
       <div
-        className={`b_menu_single ${location.pathname === "/search-property" ? "b_menu_active" : ""
-          }`}
-        onClick={property}
+        className={`b_menu_single ${
+          location.pathname === "/search-property" || location.pathname === "/bills"? "b_menu_active" : ""
+        }`}
+        onClick={showSecondPage}
       >
         <div className="menu_icon">
-          <span class="material-symbols-outlined">
-            {secondMenuIcon}
-          </span>
+          <span class="material-symbols-outlined">{secondMenuIcon}</span>
         </div>
         <div className="menu_name">{secondMenu}</div>
       </div>
 
-      <div
-        className={`b_menu_single search ${location.pathname === "/search-property" ? "b_menu_active" : ""
-          }`}
-        onClick={PGLogin}
+      <Link
+        to="/profile"
+        className={`b_menu_single profile ${
+          location.pathname === "/profile" ? "b_menu_active" : ""
+        }`}
       >
         <div className="menu_icon">
-          <span class="material-symbols-outlined">
-            person
-          </span>
+         {user ?
+          (     user.photoURL === "" ? (
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
+              alt=""
+            />
+          ) : (
+            <img src={user.photoURL} alt="" />
+          ) ) 
+          :
+           (
+            <span class="material-symbols-outlined">person</span> 
+            )
+            }    
         </div>
-      </div>
+      </Link>
       <div
-        className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""
-          }`}
-        onClick={aboutpage}
+        className={`b_menu_single ${
+          location.pathname === "/about-us" ? "b_menu_active" : ""
+        }`}
+      onClick={showThirdPage}
       >
         <div className="menu_icon">
-          <span class="material-symbols-outlined">
-           {thirdMenuIcon}
-          </span>
+          <span class="material-symbols-outlined">{thirdMenuIcon}</span>
         </div>
         <div className="menu_name">{thirdMenu}</div>
       </div>
       <div
-        className={`b_menu_single ${location.pathname === "/more-menu" || location.pathname === "/faq" || location.pathname === "/contact-us" ? "b_menu_active" : ""
-          }`}
-        onClick={moreMenu}
+        className={`b_menu_single ${
+          location.pathname === "/more-menu" ||
+          location.pathname === "/faq" ||
+          location.pathname === "/contact-us"
+            ? "b_menu_active"
+            : ""
+        }`}
+        onClick={showFourthPage}
       >
         <div className="menu_icon">
-          <span class="material-symbols-outlined">
-            menu
-          </span>
+          <span class="material-symbols-outlined">menu</span>
         </div>
         <div className="menu_name">More</div>
       </div>
-      {/* <div className="b_menu_single">
-        <div className="menu_icon">
-          <span class="material-symbols-outlined">apps</span>
-        </div>
-        <div className="menu_name">More</div>
-      </div> */}
     </section>
   );
 }

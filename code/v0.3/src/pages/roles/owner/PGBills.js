@@ -7,6 +7,7 @@ import { useLogout } from "../../../hooks/useLogout";
 // components
 import Filters from "../../../Components/Filters";
 import BillList from "../../../Components/BillList";
+import Hero from "../../../Components/Hero"
 
 // styles
 // import './UserDashboard.css'
@@ -86,7 +87,18 @@ export default function PGBills() {
     : null;
 
   return (
-    <div>
+  <div className="pgls_mobile pgbills" style={{
+    background:"rgb(244, 242, 235)"
+  }}>
+  <Hero
+        pageTitle="Bills"
+        pageSubTitle="Discover Your Bills
+        "
+        heroImage="./assets/img/about_us_banner.jpg"
+      ></Hero>
+  <div className="container">
+    <br></br>
+    
       <h2 className="page-title">Bills</h2>
       <div>
         {billserror && <p className="error">{billserror}</p>}
@@ -102,5 +114,6 @@ export default function PGBills() {
         {bills && <BillList bills={bills} />}
       </div>
     </div>
+  </div>
   );
 }

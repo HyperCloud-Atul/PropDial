@@ -9,13 +9,20 @@ import { useLogout } from "../../hooks/useLogout";
 import Popup from "../../Components/Popup";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { projectStorage } from "../../firebase/config";
-
+import { useLocation } from "react-router-dom";
 
 
 // styles
 import "./PGProfile.css";
 
 export default function PGProfile() {
+    // Scroll to the top of the page whenever the location changes start
+    const location = useLocation();
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location]);
+    // Scroll to the top of the page whenever the location changes end
+    
   const { user } = useAuthContext();
   // const { document, error } = useDocument('users', user.uid)
   // const [email, setEmail] = useState('')

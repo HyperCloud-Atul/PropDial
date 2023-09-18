@@ -230,12 +230,17 @@ textarea {
 
 .error {
   color: var(--red-color);
-  background: var(--yellow-color);
   border: 1px solid var(--red-color);
   border-radius: 4px;
-  padding: 4px;
+  padding: 8px;
   margin-bottom: 15px;
-  font-weight: bold;
+  margin-top: 25px;
+  font-size: 16px;
+  font-weight: 500;
+  background: black;
+  max-width: 430px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 

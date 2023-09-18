@@ -10,7 +10,7 @@ const CollapsibleGroup = () => {
   return (
     <section 
      className={`faq_single_page sect_padding ${
-                    location.pathname === "/ownerdashboard" ? "d_none" : ""
+                    location.pathname === "/ownerdashboard" || location.pathname === "/bills" || location.pathname === "/tickets" || location.pathname === "/customersproperties"? "d_none" : ""
                   }`}>
       <div className="container">
         <div className="row">

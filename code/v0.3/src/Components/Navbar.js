@@ -87,7 +87,7 @@ export default function Navbar() {
     }
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
-      navigate("/customerproperties");
+      navigate("/tickets");
     }
   };
 
@@ -114,7 +114,6 @@ export default function Navbar() {
     secondMenu = "Property";
     thirdMenuIcon = "import_contacts";
     thirdMenu = "About Us";
-
   }
   if (user && user.role !== "user") {
     firstMenuIcon = "home";
@@ -133,7 +132,7 @@ export default function Navbar() {
     secondMenuIcon = "receipt_long";
     secondMenu = "Bills";
     thirdMenuIcon = "support_agent";
-    thirdMenu = "Properties";
+    thirdMenu = "Tickets";
   }
   if (user && user.role === "tenant") {
     secondMenu = "Rent";
@@ -171,36 +170,39 @@ export default function Navbar() {
               <img src="./assets/img/logo_propdial.png" alt="logo" />
             </li>
             <li className="main_menus">
-             
-                <div onClick={showDashboard}
-                  className={`menu_single pointer ${
-                    location.pathname === "/" || location.pathname === "/ownerdashboard" ? "active" : ""
-                  }`}
-                >
-                  <span class="material-symbols-outlined">{firstMenuIcon}</span>
-                  {firstMenu}
-                </div>
-          
-            
-                <div onClick={showSecondPage}
-                  className={`menu_single pointer ${
-                    location.pathname === "/search-property" ? "active" : ""
-                  }`}
-                >
-                  <span class="material-symbols-outlined">{secondMenuIcon}</span>
+              <div
+                onClick={showDashboard}
+                className={`menu_single pointer ${
+                  location.pathname === "/" ||
+                  location.pathname === "/ownerdashboard"
+                    ? "active"
+                    : ""
+                }`}
+              >
+                <span class="material-symbols-outlined">{firstMenuIcon}</span>
+                {firstMenu}
+              </div>
+
+              <div
+                onClick={showSecondPage}
+                className={`menu_single pointer ${
+                  location.pathname === "/search-property" || location.pathname === "/bills"? "active" : ""
+                }`}
+              >
+                <span class="material-symbols-outlined">{secondMenuIcon}</span>
                 {secondMenu}
-                </div>
-             
-             
-                <div onClick={showThirdPage}
-                  className={`menu_single pointer ${
-                    location.pathname === "/about-us" ? "active" : ""
-                  }`}
-                >
-                  <span class="material-symbols-outlined">{thirdMenuIcon}</span>
-                 {thirdMenu}
-                </div>
-          
+              </div>
+
+              <div
+                onClick={showThirdPage}
+                className={`menu_single pointer ${
+                  location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : ""
+                }`}
+              >
+                <span class="material-symbols-outlined">{thirdMenuIcon}</span>
+                {thirdMenu}
+              </div>
+
               <Link to="/more-menu">
                 <div
                   className={`menu_single pointer ${
@@ -212,7 +214,7 @@ export default function Navbar() {
                   }`}
                 >
                   <span class="material-symbols-outlined">More</span>
-                  More 
+                  More
                 </div>
               </Link>
               {user ? (
@@ -221,19 +223,18 @@ export default function Navbar() {
                   className={`menu_single profile pointer ${
                     location.pathname === "/profile" ? "active" : ""
                   }`}
-
-                >             
+                >
                   <span>Hi, {user.fullName}</span>
                   <div className="user_img">
-               {user.photoURL === "" ? (
-                    <img
-                      src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
-                      alt=""
-                    />
-                  ) : (
-                    <img src={user.photoURL} alt="" />
-                  )}
-               </div>
+                    {user.photoURL === "" ? (
+                      <img
+                        src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
+                        alt=""
+                      />
+                    ) : (
+                      <img src={user.photoURL} alt="" />
+                    )}
+                  </div>
                 </Link>
               ) : (
                 <Link to="/login">
