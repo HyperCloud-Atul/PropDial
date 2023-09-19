@@ -162,7 +162,7 @@ export default function NavbarBottom() {
     <section className="bottom_menu_bar">
       <div
         className={`b_menu_single ${
-          location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindasboard" ? "b_menu_active" : ""
+          location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard" ? "b_menu_active" : ""
         }`}
         onClick={showDashboard}
       >

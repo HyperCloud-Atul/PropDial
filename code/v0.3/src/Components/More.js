@@ -86,7 +86,6 @@ export default function More() {
                                     </div>
                                 </Link>
                             </div>
-
                             <div className='col-lg-6 col-md-6 col-sm-12'>
                                 <div className='more-div-card-inner'>
                                     <div className='more-div-card-inner-icon'>
@@ -106,7 +105,6 @@ export default function More() {
                                 </div>
                             </div>
                             <div className='col-lg-6 col-md-6 col-sm-12'>
-
                                 <div className='more-div-card-inner'>
                                     <div className='more-div-card-inner-icon'>
                                         <span className="material-symbols-outlined">

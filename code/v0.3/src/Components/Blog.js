@@ -14,7 +14,7 @@ const Blog = () => {
         margin: 30,
         nav: false,
         smartSpeed: 1500,
-        // autoplay: true,
+        autoplay: true,
         autoplayTimeout: 3000,
         responsive: {
             // Define breakpoints and the number of items to show at each breakpoint

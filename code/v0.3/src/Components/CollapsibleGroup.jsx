@@ -7,11 +7,16 @@ import "./CollapsibleGroup.css";
 
 const CollapsibleGroup = () => {
   const location = useLocation(); // Get the current location
+// faq display none Array 
+const excludedPaths = ["/ownerdashboard", "/bills", "/tickets", "/customersproperties", "/admindashboard"];
+const shouldHide = excludedPaths.includes(location.pathname);
+const className = `faq_single_page sect_padding ${shouldHide ? "d_none" : ""}`;
+// faq display none Array 
+
+  
   return (
     <section 
-     className={`faq_single_page sect_padding ${
-                    location.pathname === "/ownerdashboard" || location.pathname === "/bills" || location.pathname === "/tickets" || location.pathname === "/customersproperties"? "d_none" : ""
-                  }`}>
+     className={className}>
       <div className="container">
         <div className="row">
           {/* Left section */}

@@ -7,6 +7,7 @@ import { useLogout } from "../../../hooks/useLogout";
 // components
 import Filters from "../../../Components/Filters";
 import PropertyList from "../../../Components/PropertyList";
+import Hero from "../../../Components/Hero";
 
 // styles
 import "./PGAdminDashboard.css";
@@ -56,12 +57,21 @@ export default function PGAdminDashboard() {
     : null;
 
   return (
-    <div>
-      <div className="page-title">
+    <div className="pgadmindasboard pgls_mobile" style={{
+      background:"rgb(244, 242, 235)"
+    }} >
+      <Hero
+        pageTitle="Admin Dashboard"
+        pageSubTitle="Explore your dashboard
+        "
+        heroImage="./assets/img/about_us_banner.jpg"
+      ></Hero>
+      <br />
+   <div className="container">
+   {/* <div className="page-title">
         <span className="material-symbols-outlined">dashboard_customize</span>
         <h1>Admin Dashboard </h1>
-      </div>
-      <br />
+      </div>      <br /> */}
 
       <div className="row no-gutters">
         <div
@@ -129,6 +139,9 @@ export default function PGAdminDashboard() {
         />
       )}
       {properties && <PropertyList properties={properties} />}
+      <br />
+      <br />  
+   </div>
     </div>
   );
 }

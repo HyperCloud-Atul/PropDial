@@ -174,7 +174,7 @@ export default function Navbar() {
                 onClick={showDashboard}
                 className={`menu_single pointer ${
                   location.pathname === "/" ||
-                  location.pathname === "/ownerdashboard"
+                  location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard"
                     ? "active"
                     : ""
                 }`}

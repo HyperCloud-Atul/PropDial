@@ -40,7 +40,28 @@ a.mm_single span.mms_ra {
     grid-column-gap: 50px;
     grid-row-gap: 50px;
 }
-
+.more-menus .more-div-big-icon-div { 
+    border-radius: 10px;
+    box-shadow: rgb(45 178 175 / 31%) 0px 2px 8px 0px;
+    margin-bottom: 50px;
+}
+a.mm_single h6 {
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 2px !IMPORTANT;
+    text-transform: lowercase;
+}
+.pgmoremenu .more-div-big-icon-div .more-div-big-icon-div-inner { 
+    gap: 7px;
+}
+.pgmoremenu .more-div-big-icon-div .more-div-big-icon-div-inner h1 {
+    font-size: 16px;
+    font-weight: 500;
+ 
+}
+a.mm_single h5 {
+    font-size: 16px;
+}
 @media screen and (max-width: 767px) {
 .more-menus_inner {
     grid-template-columns: repeat(1,1fr);
