@@ -325,7 +325,7 @@ export default function More() {
                         <h1 className='more-div-card-heading'>Master Data</h1>
                         <div className='row no-gutters'>
                             <div className='col-lg-6 col-md-6 col-sm-12'>
-                                <Link to='/addcountry' className='more-div-card-inner'>
+                                <Link to='/countrylist' className='more-div-card-inner'>
                                     <div className='more-div-card-inner-icon'>
                                         <span className="material-symbols-outlined">
                                             flag
@@ -341,7 +341,7 @@ export default function More() {
                                         </span>
                                     </div>
                                 </Link>
-                                <Link to='/addstate' className='more-div-card-inner'>
+                                <Link to='/statelist' className='more-div-card-inner'>
                                     <div className='more-div-card-inner-icon'>
                                         <span className="material-symbols-outlined">
                                             g_translate
@@ -362,7 +362,7 @@ export default function More() {
                             </div>
 
                             <div className='col-lg-6 col-md-6 col-sm-12'>
-                                <Link to='/addcity' className='more-div-card-inner'>
+                                <Link to='/citylist' className='more-div-card-inner'>
                                     <div className='more-div-card-inner-icon'>
                                         <span className="material-symbols-outlined">
                                             favorite
@@ -379,7 +379,7 @@ export default function More() {
                                     </div>
                                 </Link>
 
-                                <Link to='/addlocality' className='more-div-card-inner'>
+                                <Link to='/localitylist' className='more-div-card-inner'>
                                     <div className='more-div-card-inner-icon'>
                                         <span className="material-symbols-outlined">
                                             lock_open
@@ -395,7 +395,7 @@ export default function More() {
                                         </span>
                                     </div>
                                 </Link>
-                                <Link to='/addsociety' className='more-div-card-inner'>
+                                <Link to='/societylist' className='more-div-card-inner'>
                                     <div className='more-div-card-inner-icon'>
                                         <span className="material-symbols-outlined">
                                             lock_open

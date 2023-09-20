@@ -196,7 +196,7 @@ const PGMoreMenu = () => {
             {user && user.role === "admin" && (
               <div className="mm_inner">
                 <h6 className="title">Master Data</h6>
-                <Link className="mm_single" to="/addcountry">
+                <Link className="mm_single" to="/countrylist">
                   <span class="material-symbols-outlined mms_icon">flag</span>
                   <h5>Add Country</h5>
                   <h6>set your current location</h6>
@@ -204,7 +204,7 @@ const PGMoreMenu = () => {
                     chevron_right
                   </span>
                 </Link>
-                <Link className="mm_single" to="/addstate">
+                <Link className="mm_single" to="/statelist">
                   <span class="material-symbols-outlined mms_icon">
                     g_translate
                   </span>
@@ -214,7 +214,7 @@ const PGMoreMenu = () => {
                     chevron_right
                   </span>
                 </Link>
-                <Link className="mm_single" to="/addcity">
+                <Link className="mm_single" to="/citylist">
                   <span class="material-symbols-outlined mms_icon">
                     favorite
                   </span>
@@ -224,7 +224,7 @@ const PGMoreMenu = () => {
                     chevron_right
                   </span>
                 </Link>
-                <Link className="mm_single" to="/addlocality">
+                <Link className="mm_single" to="/localitylist">
                   <span class="material-symbols-outlined mms_icon">
                     favorite
                   </span>
@@ -234,7 +234,7 @@ const PGMoreMenu = () => {
                     chevron_right
                   </span>
                 </Link>
-                <Link className="mm_single" to="/addsociety">
+                <Link className="mm_single" to="/societylist">
                   <span class="material-symbols-outlined mms_icon">
                     favorite
                   </span>
@@ -306,7 +306,7 @@ const PGMoreMenu = () => {
                 </Link>
                 <Link className="mm_single" to="">
                   <span class="material-symbols-outlined mms_icon">
-                  g_translate
+                    g_translate
                   </span>
                   <h5>Language</h5>
                   <h6>setup your native language</h6>
@@ -326,7 +326,7 @@ const PGMoreMenu = () => {
                 </Link>
                 <Link className="mm_single" to="">
                   <span class="material-symbols-outlined mms_icon">
-                  lock_open
+                    lock_open
                   </span>
                   <h5>Logout</h5>
                   <h6>sign-out from the application</h6>

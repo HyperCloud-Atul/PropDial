@@ -67,9 +67,10 @@ function App() {
   // console.log('opensidenavbar flag in aap.js : ', flag);
   // setSideNavbar(flag);
   // }
-  // console.log('user in App.js', user)
+  console.log('user in App.js', user)
+  // console.log('user role in App.js', user.role)
 
-  useEffect(() => {}, [user]);
+  useEffect(() => { }, [user]);
 
   return (
     <div className="App">
@@ -88,11 +89,11 @@ function App() {
 
               <Route path="/" element={<Home></Home>}></Route>
               <Route path="/search-property" element={<PGProperty></PGProperty>}></Route>
-              <Route path="/about-us" element={<PGAboutUs/>}></Route>
-              <Route path="/contact-us" element={<PGContactUs/>}></Route>
+              <Route path="/about-us" element={<PGAboutUs />}></Route>
+              <Route path="/contact-us" element={<PGContactUs />}></Route>
               <Route path="/faq" element={<Faq></Faq>}></Route>
               <Route path="/more-menu" element={<PGMoreMenu></PGMoreMenu>}></Route>
-             
+
 
 
               <Route path="/adminsettings" element={<AdminSettings />}></Route>
@@ -351,9 +352,9 @@ function App() {
 
           {user && user.role !== "user" && <NavbarBottom></NavbarBottom>}
           <Footer></Footer>
-      <NavbarBottom></NavbarBottom>
+          <NavbarBottom></NavbarBottom>
         </BrowserRouter>
-      )}   
+      )}
     </div>
   );
 }
