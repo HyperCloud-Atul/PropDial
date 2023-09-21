@@ -81,13 +81,10 @@ a {
 
 .auth-form {
   width: 100%;
-  margin: 20px auto;
+  margin: 30px auto 0px auto;
   padding: 20px;
-  border: 1px solid;
-  border-color: var(--yellow-color);
-  border-radius: 10px;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
-  background: #fff;
+  border: 1px solid #cfcfcf;
+  border-radius: 15px; 
 }
 
 .btn {
@@ -658,7 +655,33 @@ button.owl-prev span, button.owl-next span{
   top: -5px;
   color: var(--white-color);
 }
-
+form.auth-form input, form.auth-form textarea, form.auth-form select {
+  border: 1px solid #03468738;
+  border-radius: 12px;
+  color: #000;
+  color: var(--black-color);
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+  margin-top: 8px;
+}
+form.auth-form .css-rd8jxw-control{
+  border: 1px solid #03468738;
+  border-radius: 12px;
+ border-bottom: 1px solid #03468738 !important;
+  color: var(--black-color);
+  font-size: 16px;
+  width: 100%;
+  margin-top: 8px;
+  background: white !important;
+}
+form.auth-form .theme_btn {
+  margin-top: 15px;
+  width: fit-content;
+  padding: 10px 22px;
+  margin-left: auto;
+  margin-right: auto;
+}
 /* sanskar css end  */
 
 

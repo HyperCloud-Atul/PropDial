@@ -8,7 +8,7 @@ import "./CollapsibleGroup.css";
 const CollapsibleGroup = () => {
   const location = useLocation(); // Get the current location
 // faq display none Array 
-const excludedPaths = ["/ownerdashboard", "/bills", "/tickets", "/customersproperties", "/admindashboard"];
+const excludedPaths = ["/ownerdashboard", "/bills", "/tickets", "/customersproperties", "/admindashboard", "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist"];
 const shouldHide = excludedPaths.includes(location.pathname);
 const className = `faq_single_page sect_padding ${shouldHide ? "d_none" : ""}`;
 // faq display none Array 

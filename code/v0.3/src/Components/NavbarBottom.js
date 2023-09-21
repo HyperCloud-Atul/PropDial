@@ -119,6 +119,14 @@ export default function NavbarBottom() {
     thirdMenu = "Tickets";
   }
 
+// more acitve class Array 
+const moreActivePaths = ["/more-menu", "/about-us", "/contact-us", "/faq",
+"/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist"];
+const shouldMoreActive = moreActivePaths.includes(location.pathname);
+const moreActiveClass = `b_menu_single ${shouldMoreActive ? "b_menu_active" : ""}`;
+// more acitve class Array 
+
+
   return (
     // <div className="small navbar-mobile-bottom">
     //     <div className="navbar-mobile-bottom-menu" id="divBottomNavBar">
@@ -218,13 +226,7 @@ export default function NavbarBottom() {
         <div className="menu_name">{thirdMenu}</div>
       </div>
       <div
-        className={`b_menu_single ${
-          location.pathname === "/more-menu" ||
-          location.pathname === "/faq" ||
-          location.pathname === "/contact-us"
-            ? "b_menu_active"
-            : ""
-        }`}
+        className={moreActiveClass}
         onClick={showFourthPage}
       >
         <div className="menu_icon">

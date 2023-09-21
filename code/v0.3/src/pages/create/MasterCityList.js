@@ -5,10 +5,19 @@ import { useCollection } from "../../hooks/useCollection";
 import Select from "react-select";
 import Filters from "../../Components/Filters";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "./Create.css";
+// component
+import Hero from "../../Components/Hero";
 
 const dataFilter = ["INDIA", "USA", "OTHERS", "INACTIVE"];
 export default function MasterCityList() {
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   const { addDocument, response: responseAddDocument } =
     useFirestore("m_cities");
   const { updateDocument, response: responseUpdateDocument } =
@@ -207,6 +216,12 @@ export default function MasterCityList() {
 
   return (
     <div>
+      <Hero
+        pageTitle="City List"
+        pageSubTitle="Add or update City
+        "
+        heroImage="./assets/img/about_us_banner.jpg"
+      ></Hero>
       <div onClick={openMoreAddOptions} className="property-list-add-property">
         <span className="material-symbols-outlined">apps</span>
       </div>
@@ -256,214 +271,207 @@ export default function MasterCityList() {
         </div>
       </div>
 
-      <div className="page-title">
-        <span className="material-symbols-outlined">flag</span>
-        <h1>City List </h1>
-      </div>
-
-      <div
-        style={{
-          overflow: "hidden",
-          transition: "2s",
-          opacity: handleAddSectionFlag ? "1" : "0",
-          maxHeight: handleAddSectionFlag ? "800px" : "0",
-        }}
-      >
-        {/* <form onSubmit={handleSubmit} className="auth-form"> */}
-        <form
-          onSubmit={handleSubmit}
-          className="auth-form"
-          style={{ maxWidth: "350px" }}
+      <div className="container">
+        <div
+          style={{
+            overflow: "hidden",
+            transition: "2s",
+            opacity: handleAddSectionFlag ? "1" : "0",
+            maxHeight: handleAddSectionFlag ? "800px" : "0",
+          }}
         >
-          <div className="row no-gutters">
-            <div className="col-12">
-              <div>
-                <br />
-                <h1 className="owner-heading">Country</h1>
-                <Select
-                  className=""
-                  onChange={handleCountryChange}
-                  // options={countryOptionsSorted.current}
-                  options={countryList}
-                  value={country}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      outline: "none",
-                      background: "#eee",
-                      borderBottom: " 1px solid var(--theme-blue)",
-                    }),
-                  }}
-                />
-                <div className="underline"></div>
-              </div>
-            </div>
-            <div className="col-12">
-              <div>
-                <br />
-                <h1 className="owner-heading">State</h1>
-                <Select
-                  className=""
-                  onChange={(option) => setState(option)}
-                  options={stateOptionsSorted.current}
-                  // options={stateList}
-                  value={state}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      outline: "none",
-                      background: "#eee",
-                      borderBottom: " 1px solid var(--theme-blue)",
-                    }),
-                  }}
-                />
-                <div className="underline"></div>
-              </div>
-            </div>
-            <div className="col-12">
-              <div>
-                <br />
-                <h1 className="owner-heading">City</h1>
-                <input
-                  required
-                  type="text"
-                  placeholder="Entry City Name"
-                  onChange={(e) => setCity(e.target.value)}
-                  value={city}
-                />
-              </div>
-            </div>
-          </div>
-          <br />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
+          {/* <form onSubmit={handleSubmit} className="auth-form"> */}
+          <form
+            onSubmit={handleSubmit}
+            className="auth-form"
+            style={{ maxWidth: "350px" }}
           >
-            <button className="btn">{formBtnText}</button>
-            <br />
-            {formError && (
-              <div style={{ margin: "0" }} className="error">
-                {formError}
+            <div className="row no-gutters">
+              <div className="col-12">
+                <div>
+                  <h1 className="owner-heading">Country</h1>
+                  <Select
+                    className=""
+                    onChange={handleCountryChange}
+                    // options={countryOptionsSorted.current}
+                    options={countryList}
+                    value={country}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: "#eee",
+                        borderBottom: " 1px solid var(--theme-blue)",
+                      }),
+                    }}
+                  />
+                  <div className="underline"></div>
+                </div>
               </div>
-            )}
-          </div>
-          <br />
-        </form>
-      </div>
-      <hr></hr>
-      {filteredData && (
-        <Filters
-          changeFilter={changeFilter}
-          filterList={dataFilter}
-          filterLength={filteredData.length}
-        />
-      )}
-      <div className="row no-gutters">
-        {masterCity && masterCity.length === 0 && <p>No City Yet!</p>}
-        {filteredData &&
-          filteredData.map((data) => (
-            <>
-              <div className="col-lg-6 col-md-6 col-sm-12">
-                <div className="property-status-padding-div">
-                  <div
-                    className="profile-card-div"
-                    style={{ position: "relative" }}
-                  >
+              <div className="col-12">
+                <div>
+                  <h1 className="owner-heading mt-3">State</h1>
+                  <Select
+                    className=""
+                    onChange={(option) => setState(option)}
+                    options={stateOptionsSorted.current}
+                    // options={stateList}
+                    value={state}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: "#eee",
+                        borderBottom: " 1px solid var(--theme-blue)",
+                      }),
+                    }}
+                  />
+                  <div className="underline"></div>
+                </div>
+              </div>
+              <div className="col-12">
+                <div>
+                  <h1 className="owner-heading mt-3">City</h1>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Entry City Name"
+                    onChange={(e) => setCity(e.target.value)}
+                    value={city}
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <button className="theme_btn btn_fill">{formBtnText}</button>
+
+              {formError && (
+                <div style={{ margin: "0" }} className="error">
+                  {formError}
+                </div>
+              )}
+            </div>
+          </form>
+        </div>
+        <br />
+        {filteredData && (
+          <Filters
+            changeFilter={changeFilter}
+            filterList={dataFilter}
+            filterLength={filteredData.length}
+          />
+        )}
+        <div className="row no-gutters">
+          {masterCity && masterCity.length === 0 && <p>No City Yet!</p>}
+          {filteredData &&
+            filteredData.map((data) => (
+              <>
+                <div className="col-lg-6 col-md-6 col-sm-12">
+                  <div className="property-status-padding-div">
                     <div
-                      className="address-div"
-                      style={{ paddingBottom: "5px" }}
+                      className="profile-card-div"
+                      style={{ position: "relative" }}
                     >
                       <div
-                        className="icon"
-                        style={{ position: "relative", top: "-1px" }}
+                        className="address-div"
+                        style={{ paddingBottom: "5px" }}
                       >
-                        <span
-                          className="material-symbols-outlined"
-                          style={{ color: "var(--darkgrey-color)" }}
-                        >
-                          flag
-                        </span>
-                      </div>
-                      <div className="address-text">
                         <div
-                          onClick={() =>
-                            handleEditCard(
-                              data.id,
-                              data.country,
-                              data.state,
-                              data.city
-                            )
-                          }
-                          style={{
-                            width: "80%",
-                            height: "170%",
-                            textAlign: "left",
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            transform: "translateY(-7px)",
-                            cursor: "pointer",
-                          }}
+                          className="icon"
+                          style={{ position: "relative", top: "-1px" }}
                         >
-                          <h5
-                            style={{
-                              margin: "0",
-                              transform: "translateY(5px)",
-                            }}
+                          <span
+                            className="material-symbols-outlined"
+                            style={{ color: "var(--darkgrey-color)" }}
                           >
-                            {data.city}
-                          </h5>
-                          <small
-                            style={{
-                              margin: "0",
-                              transform: "translateY(5px)",
-                            }}
-                          >
-                            {data.state}, {data.country}
-                          </small>
+                            flag
+                          </span>
                         </div>
-                        <div
-                          className=""
-                          onClick={() =>
-                            handleChangeStatus(data.id, data.status)
-                          }
-                          style={{
-                            width: "20%",
-                            height: "calc(100% - -20px)",
-                            position: "relative",
-                            top: "-8px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                            cursor: "pointer",
-                          }}
-                        >
-                          <small
+                        <div className="address-text">
+                          <div
+                            onClick={() =>
+                              handleEditCard(
+                                data.id,
+                                data.country,
+                                data.state,
+                                data.city
+                              )
+                            }
                             style={{
-                              margin: "0",
-                              background:
-                                data.status === "active" ? "green" : "red",
-                              color: "#fff",
-                              padding: "3px 10px 3px 10px",
-                              borderRadius: "4px",
+                              width: "80%",
+                              height: "170%",
+                              textAlign: "left",
+                              display: "flex",
+                              justifyContent: "center",
+                              flexDirection: "column",
+                              transform: "translateY(-7px)",
+                              cursor: "pointer",
                             }}
                           >
-                            {data.status}
-                          </small>
-                          {/* <span className="material-symbols-outlined">
+                            <h5
+                              style={{
+                                margin: "0",
+                                transform: "translateY(5px)",
+                              }}
+                            >
+                              {data.city}
+                            </h5>
+                            <small
+                              style={{
+                                margin: "0",
+                                transform: "translateY(5px)",
+                              }}
+                            >
+                              {data.state}, {data.country}
+                            </small>
+                          </div>
+                          <div
+                            className=""
+                            onClick={() =>
+                              handleChangeStatus(data.id, data.status)
+                            }
+                            style={{
+                              width: "20%",
+                              height: "calc(100% - -20px)",
+                              position: "relative",
+                              top: "-8px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "flex-end",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <small
+                              style={{
+                                margin: "0",
+                                background:
+                                  data.status === "active" ? "green" : "red",
+                                color: "#fff",
+                                padding: "3px 10px 3px 10px",
+                                borderRadius: "4px",
+                              }}
+                            >
+                              {data.status}
+                            </small>
+                            {/* <span className="material-symbols-outlined">
                                                 chevron_right
                                             </span> */}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </>
-          ))}
+              </>
+            ))}
+        </div>
+        <br />
       </div>
     </div>
   );

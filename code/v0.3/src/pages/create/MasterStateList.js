@@ -2,13 +2,23 @@ import { useState, useEffect, useRef } from "react";
 import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
+import { useLocation } from "react-router-dom";
 import Select from "react-select";
 import Filters from "../../Components/Filters";
 import { Link } from "react-router-dom";
 
+// component 
+import Hero from '../../Components/Hero'
+
 const dataFilter = ["INDIA", "USA", "OTHERS", "INACTIVE"];
 
 export default function MasterStateList() {
+        // Scroll to the top of the page whenever the location changes start
+        const location = useLocation();
+        useEffect(() => {
+          window.scrollTo(0, 0);
+        }, [location]);
+        // Scroll to the top of the page whenever the location changes end
   const { addDocument, response } = useFirestore("m_states");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_states");
@@ -149,7 +159,14 @@ export default function MasterStateList() {
 
   return (
     <div>
-      <div onClick={openMoreAddOptions} className="property-list-add-property">
+        <Hero
+        pageTitle="State List"
+        pageSubTitle="Add or update state
+        "
+        heroImage="./assets/img/about_us_banner.jpg"
+      ></Hero>
+   <div className="container">
+   <div onClick={openMoreAddOptions} className="property-list-add-property">
         <span className="material-symbols-outlined">apps</span>
       </div>
 
@@ -198,11 +215,6 @@ export default function MasterStateList() {
         </div>
       </div>
 
-      <div className="page-title">
-        <span className="material-symbols-outlined">flag</span>
-        <h1>State List </h1>
-      </div>
-
       <div
         style={{
           overflow: "hidden",
@@ -219,8 +231,7 @@ export default function MasterStateList() {
         >
           <div className="row no-gutters">
             <div className="col-12">
-              <div>
-                <br />
+              <div>       
                 <h1 className="owner-heading">Country</h1>
                 <Select
                   className=""
@@ -240,9 +251,8 @@ export default function MasterStateList() {
               </div>
             </div>
             <div className="col-12">
-              <div>
-                <br />
-                <h1 className="owner-heading">New State</h1>
+              <div>            
+                <h1 className="owner-heading mt-3">New State</h1>
                 <input
                   required
                   type="text"
@@ -253,7 +263,6 @@ export default function MasterStateList() {
               </div>
             </div>
           </div>
-          <br />
           <div
             style={{
               display: "flex",
@@ -261,18 +270,18 @@ export default function MasterStateList() {
               justifyContent: "center",
             }}
           >
-            <button className="btn">{formBtnText}</button>
-            <br />
+            <button className="theme_btn btn_fill">{formBtnText}</button>
+         
             {formError && (
               <div style={{ margin: "0" }} className="error">
                 {formError}
               </div>
             )}
           </div>
-          <br />
+     
         </form>
       </div>
-      <hr></hr>
+      <br />
       {filteredData && (
         <Filters
           changeFilter={changeFilter}
@@ -280,6 +289,7 @@ export default function MasterStateList() {
           filterLength={filteredData.length}
         />
       )}
+     
       <div className="row no-gutters">
         {masterState && masterState.length === 0 && <p>No State Yet!</p>}
         {filteredData &&
@@ -379,6 +389,8 @@ export default function MasterStateList() {
             </>
           ))}
       </div>
+      <br />
+   </div>
     </div>
   );
 }

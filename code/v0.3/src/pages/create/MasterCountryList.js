@@ -2,9 +2,19 @@ import { useState, useEffect } from 'react'
 import { projectFirestore } from '../../firebase/config'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useCollection } from '../../hooks/useCollection'
+import { useLocation } from "react-router-dom";
 import { Link } from 'react-router-dom'
 
+// component 
+import Hero from '../../Components/Hero'
+
 export default function MasterCountryList() {
+      // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
     const { addDocument, response } = useFirestore('m_countries')
     const { updateDocument, response: responseUpdateDocument } = useFirestore('m_countries')
     const { documents: masterCountry, error: masterCountryerror } = useCollection('m_countries')
@@ -99,8 +109,14 @@ export default function MasterCountryList() {
 
     return (
         <div>
-
-            <div onClick={openMoreAddOptions} className="property-list-add-property">
+  <Hero
+        pageTitle="Country List"
+        pageSubTitle="Add or update country
+        "
+        heroImage="./assets/img/about_us_banner.jpg"
+      ></Hero>
+           <div className="container">
+           <div onClick={openMoreAddOptions} className="property-list-add-property">
                 <span className="material-symbols-outlined">
                     apps
                 </span>
@@ -155,27 +171,19 @@ export default function MasterCountryList() {
 
                 </div>
 
-            </div>
-
-            <div className='page-title'>
-                <span className="material-symbols-outlined">
-                    flag
-                </span>
-                <h1>Country List </h1>
-            </div>
+            </div>        
 
             <div style={{
                 overflow: 'hidden',
                 transition: '2s',
                 opacity: handleAddSectionFlag ? '1' : '0',
                 maxHeight: handleAddSectionFlag ? '500px' : '0',
-            }}>
+            }}>         
                 {/* <form onSubmit={handleSubmit} className="auth-form"> */}
                 <form onSubmit={handleSubmit} className="auth-form" style={{ maxWidth: '350px' }}>
                     <div className="row no-gutters">
                         <div className="col-12">
-                            <div>
-                                <br />
+                            <div>                            
                                 <h1 className="owner-heading">Country Name</h1>
                                 <input
                                     required
@@ -186,17 +194,14 @@ export default function MasterCountryList() {
                                 />
                             </div>
                         </div>
-                    </div>
-                    <br />
+                    </div>             
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <button className="btn">{formBtnText}</button>
-                        <br />
+                        <button className="theme_btn btn_fill">{formBtnText}</button>                    
                         {formError && <div style={{ margin: '0' }} className="error">{formError}</div>}
-                    </div>
-                    <br />
+                    </div>                
                 </form>
-            </div >
-            <hr></hr>
+            </div >   
+            <br />     
             <div className="row no-gutters">
                 {masterCountry && masterCountry.length === 0 && <p>No Country Yet!</p>}
                 {masterCountry && masterCountry.map(data => (<>
@@ -255,6 +260,8 @@ export default function MasterCountryList() {
                 </>
                 ))}
             </div>
+            <br />
+           </div>
         </div >
     )
 }

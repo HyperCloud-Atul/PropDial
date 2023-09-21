@@ -161,6 +161,13 @@ export default function Navbar() {
     : "navbar sticky-top";
   // Add class on scroll
 
+  // array of more class active on desktop
+const moreDesktopActivePaths = ["/more-menu", "/contact-us", "/faq",
+"/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist"];
+const shouldMoreDesktopActive = moreDesktopActivePaths.includes(location.pathname);
+const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? "active" : ""}`;
+// array of more class active on desktop 
+
   return (
     <header>
       <div className="container">
@@ -205,13 +212,7 @@ export default function Navbar() {
 
               <Link to="/more-menu">
                 <div
-                  className={`menu_single pointer ${
-                    location.pathname === "/more-menu" ||
-                    location.pathname === "/faq" ||
-                    location.pathname === "/contact-us"
-                      ? "active"
-                      : ""
-                  }`}
+                  className={moreDesktopActiveClass}
                 >
                   <span class="material-symbols-outlined">More</span>
                   More
