@@ -113,7 +113,7 @@ export default function MasterCountryList() {
         pageTitle="Country List"
         pageSubTitle="Add or update country
         "
-        heroImage="./assets/img/about_us_banner.jpg"
+        heroImage="./assets/img/country_banner.jpg"
       ></Hero>
            <div className="container">
            <div onClick={openMoreAddOptions} className="property-list-add-property">

@@ -281,7 +281,7 @@ export default function MasterSocietyList() {
         pageTitle="Society List"
         pageSubTitle="Add or update society
         "
-        heroImage="./assets/img/about_us_banner.jpg"
+        heroImage="./assets/img/society_banner.jpg"
       ></Hero>
       <div onClick={openMoreAddOptions} className="property-list-add-property">
         <span className="material-symbols-outlined">apps</span>

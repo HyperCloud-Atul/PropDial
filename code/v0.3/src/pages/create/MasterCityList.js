@@ -220,7 +220,7 @@ export default function MasterCityList() {
         pageTitle="City List"
         pageSubTitle="Add or update City
         "
-        heroImage="./assets/img/about_us_banner.jpg"
+        heroImage="./assets/img/city_banner.jpg"
       ></Hero>
       <div onClick={openMoreAddOptions} className="property-list-add-property">
         <span className="material-symbols-outlined">apps</span>

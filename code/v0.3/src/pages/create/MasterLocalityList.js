@@ -234,7 +234,7 @@ export default function MasterLocalityList() {
         pageTitle="Locality List"
         pageSubTitle="Add or update locality
         "
-        heroImage="./assets/img/about_us_banner.jpg"
+        heroImage="./assets/img/locality_banner.jpg"
       ></Hero>
       <div onClick={openMoreAddOptions} className="property-list-add-property">
         <span className="material-symbols-outlined">apps</span>

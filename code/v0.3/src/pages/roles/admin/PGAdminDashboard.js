@@ -64,7 +64,7 @@ export default function PGAdminDashboard() {
         pageTitle="Admin Dashboard"
         pageSubTitle="Explore your dashboard
         "
-        heroImage="./assets/img/about_us_banner.jpg"
+        heroImage="./assets/img/admin_banner.jpg"
       ></Hero>
       <br />
    <div className="container">
