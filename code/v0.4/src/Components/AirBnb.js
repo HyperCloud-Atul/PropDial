@@ -100,8 +100,8 @@ const AirBnb = () => {
                 </div>
               </div>
               <h4 className="property_price">
-                <b><span>₹</span>2,229 </b>
-                <span>night</span>                
+                <b><span>₹</span>2k-2.5k</b>
+                <span>per night</span>
               </h4>
               <Link className="know_detail learn-more" to="https://www.airbnb.co.in/rooms/966417708640526996?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_fA6WCaHp3etyoJem">
                 Know More
@@ -143,8 +143,8 @@ const AirBnb = () => {
                 </div>
               </div>
               <h4 className="property_price">
-                <b><span>₹</span>2,393</b>
-                <span>night</span>
+                <b><span>₹</span>2k-2.5k</b>
+                <span>per night</span>
               </h4>
               <Link to="https://www.airbnb.co.in/rooms/971457138024310477?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_IHy7Zg9xo5dt7OLG" className="know_detail learn-more">
                 Know More
@@ -185,8 +185,8 @@ const AirBnb = () => {
                 </div>
               </div>
               <h4 className="property_price">
-                <b><span>₹</span>2,357</b>
-                <span>night</span>
+                <b><span>₹</span>2k-2.5k</b>
+                <span>per night</span>
               </h4>
               <Link to="https://www.airbnb.co.in/rooms/871388524750609310?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_4XdIug9%2BRzr4RwS5&modal=PHOTO_TOUR_SCROLLABLE" className="know_detail learn-more">
                 Know More
@@ -228,8 +228,8 @@ const AirBnb = () => {
                 </div>
               </div>
               <h4 className="property_price">
-                <b><span>₹</span>2,546</b>
-                <span>night</span>
+                <b><span>₹</span>2k-2.5k</b>
+                <span>per night</span>
               </h4>
               <Link to="https://www.airbnb.co.in/rooms/864290115669008213?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556776_XA6%2BspREIs5aMSXh" className="know_detail learn-more">
                 Know More
