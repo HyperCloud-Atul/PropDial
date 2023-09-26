@@ -1,0 +1,88 @@
+/* Color Palette - Details
+
+Palette#: 226650 from Colorhunt
+
+Reference Colors:
+- Red: #161d65 - main header & footer color
+- Light Red: #ff8585 - support colors
+- Light Orange: #ffb396 - support colors
+- Yellow: #fff5c0- support colors
+
+*/
+
+/********** tag selectors ************/
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+
+}
+
+body{
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  /* background: #eeefee; */
+  /* font-family: 'Montserrat'; */
+  font-family: 'Baloo 2', cursive;
+}
+
+a{
+  text-decoration: none;
+}
+
+h1{
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+h2{
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+h3{
+  font-size: 2rem;
+  font-weight: bold;
+}
+h4{
+  font-size: 1.5rem;
+  font-weight:normal;
+}
+h5{
+  font-size: 1.2rem;
+  font-weight:normal;
+}
+h6{
+  font-size: 0.8rem;
+  font-weight:normal;
+}
+
+
+/********** class selectors ************/
+.container-fluid{
+  width: 100%;
+}
+
+.large{
+  width: 100% ;
+  border-radius: 0 0 0 0 ;
+}
+.small{
+  width: 0px ;
+  display: none;
+  border-radius: 0 0 0 0 ;
+}
+
+@media (max-width: 1080px) {
+  .large{
+    width: 0% ;
+    display: none;
+    border-radius: 0 0 0 0 ;
+  }
+  .small{
+    width: 100% ;
+    display: block;
+    border-radius: 0 0 0 0 ;
+  }
+}

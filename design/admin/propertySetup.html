@@ -1,0 +1,3378 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Created by Hyper Cloud Digital Solutions">
+  <meta name="keywords" content="">
+  <meta name="author" content="Hyper Cloud Digital Solutions">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dashboard</title>
+
+  <link rel="shortcut icon" href="../img/logo_manu_transparent.png">
+  <!-- Google Icons -->
+  <link rel="stylesheet"
+    href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+
+
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+
+  <!-- Font Awesome cdn file -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+  <!-- Owl Stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+  <!-- Bootstrap css -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <!-- Your Own Style -->
+  <link rel="stylesheet" href="../css/styles.css">
+
+
+</head>
+
+<body style="background: #efefef;">
+  <!-- sidenav starts -->
+
+  <nav class="navbar navbar-expand-lg sticky-top large ">
+    <a class="navbar-brand" href="#banner">
+      <img style="height:60px;" src="../img/logo.png" alt="">
+    </a>
+    <button class="navbar-toggler" title="hambergericon" type="button" data-toggle="collapse"
+      data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" style="position:absolute;right: 20px;" id="collapsibleNavbar">
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="adminDashboard.html">
+            <span class="material-icons-outlined">
+              home
+            </span>
+            <small>Dashboard</small>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/propertyList.html">
+            <span class="material-icons-outlined">
+              receipt_long
+            </span>
+            <small>Properties</small>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="search.html">
+            <span class="material-icons-outlined">
+              search
+            </span>
+            <small>Search</small>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <span class="material-icons-outlined">
+              handyman
+            </span>
+            <small>Enquiries</small>
+          </a>
+        </li>
+
+      </ul>
+
+    </div>
+
+  </nav>
+
+  <div class="small navbar-mobile" style="padding:0 10px;">
+    <div class="navbar-mobile-menu">
+      <a href="#" id="hamberIcon">
+        <span class="material-symbols-outlined">
+          menu
+        </span>
+      </a>
+      <a href="#">
+        <img style="height:40px; position:relative;top:4px;" src="../img/logo.png" alt="">
+      </a>
+
+      <a href="notification/index.html"
+        style="padding-right: 10px;position:relative;display:flex;justify-content: space-between;">
+        <span class="material-symbols-outlined">
+          notifications
+        </span>
+        <div class="notification-count">
+
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- bottom bardown - ends -->
+
+  <div class="small navbar-mobile-bottom">
+    <div class="navbar-mobile-bottom-menu" id="divBottomNavBar">
+      <a href="adminDashboard.html" class="navbar-mobile-bottom-menu-a" style="display:flex; flex-direction:column;">
+        <span class="material-symbols-outlined">
+          home
+        </span>
+        <small>Home</small>
+      </a>
+      <a href="propertyList.html" class="navbar-mobile-bottom-menu-a active"
+        style="display:flex; flex-direction:column;">
+        <span class="material-symbols-outlined">
+          receipt_long
+        </span>
+        <small>List</small>
+      </a>
+      <a href="">
+
+      </a>
+      <a href="search.html" class="navbar-mobile-bottom-menu-a " style="display:flex; flex-direction:column;">
+        <span class="material-symbols-outlined">
+          search
+        </span>
+        <small>Search</small>
+      </a>
+      <a href="#" class="navbar-mobile-bottom-menu-a" style="display:flex; flex-direction:column;">
+        <span class="material-symbols-outlined">
+          handyman
+        </span>
+        <small>Enquiries</small>
+      </a>
+    </div>
+    <a class="new-user " href="/login/profile.html">
+      <span class="material-symbols-outlined">
+        person
+      </span>
+    </a>
+  </div>
+
+  <!-- bottom-bardown ends -->
+
+  <!-- top sticky div - start -->
+
+  <div class="property-details-sticky-div sticky-top" id="propertyStickyDetail"
+    onclick="openPropertyDetails(propertyStickyDetail)">
+    <div class="primary-details">
+      <div>
+        <h1>A - 504</h1>
+        <h2>High Mont Society,<br> Hinjewadi, Pune</h2>
+      </div>
+      <div>
+        <h1>Atul Tripathi</h1>
+        <h2>9822752885</h2>
+      </div>
+    </div>
+
+    <div class="property-sticky-arrow">
+      <span class="material-symbols-outlined">
+        expand_more
+      </span>
+    </div>
+
+    <div class="secondary-details">
+      <div class="" style="height: 100%;">
+        <div class="profile-card-div" style="padding: 20px;height: calc(100% - 20px);background: #fff;">
+          <div class="property-status-property-card">
+            <div class="user-logo-parent-div">
+              <div class="user-logo">
+                <h4>AT</h4>
+              </div>
+            </div>
+
+            <div class="details" style="text-align: center;">
+              <div class="secondary-details-display">
+                <div class="secondary-details-inside-display">
+                  <h5>Atul Tripathi</h5>
+                  <div class="property-contact-div property-media-icons-horizontal"
+                    style="flex-direction: row;width: 100%;height: auto;">
+                    <div>
+                      <span class="material-symbols-outlined">
+                        call
+                      </span>
+                      <h1>Call</h1>
+                    </div>
+                    <div>
+                      <img src="../img/whatsapp_square_icon.png" alt="">
+                      <h1>WhatsApp</h1>
+                    </div>
+                    <div>
+                      <span class="material-symbols-outlined">
+                        alternate_email
+                      </span>
+                      <h1>Mail</h1>
+                    </div>
+                  </div>
+                </div>
+                <hr class="secondary-details-hr" />
+                <div style="width: 100%">
+                  <h5>Vinay Prajapati</h5>
+                  <div class="property-contact-div property-media-icons-horizontal"
+                    style="flex-direction: row;width: 100%;height: auto;">
+                    <div>
+                      <span class="material-symbols-outlined">
+                        call
+                      </span>
+                      <h1>Call</h1>
+                    </div>
+                    <div>
+                      <img src="../img/whatsapp_square_icon.png" alt="">
+                      <h1>WhatsApp</h1>
+                    </div>
+                    <div>
+                      <span class="material-symbols-outlined">
+                        alternate_email
+                      </span>
+                      <h1>Mail</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- top sticky div - end -->
+
+
+
+  <div id="fullContent" class="row no-gutters">
+
+    <div class="col-lg-2">
+      <div class="large" style="padding: 12px;"></div>
+      <div class="side-navbar side-navbar-large property-list-side-navbar"
+        style="height: calc(100% - 40px);background: #fff;position: relative;top: -5px;">
+
+
+        <ul>
+
+          <li style="background: #4CD7D0;">
+
+            <a href="adminDashboard.html">
+
+
+              <div class="side-navbar-profile-div">
+
+                <div class="side-navbar-profile-div-circle">
+                  <div>
+                    <span>AT</span>
+                  </div>
+                </div>
+
+                <div class="side-navbar-profile-div-name">
+                  <div class="">
+                    <h6>Khushi Soni
+                    </h6>
+                    <small>Edit Profile</small>
+                  </div>
+                </div>
+                <div class="side-navbar-profile-div-arrow">
+                  <span class="material-symbols-outlined">
+                    navigate_next
+                  </span>
+                </div>
+              </div>
+
+            </a>
+          </li><br>
+
+          <li>
+            <b></b>
+            <b></b>
+            <a href="propertyStatus.html">
+              <span class="material-symbols-outlined">
+                home
+              </span>
+              <small>Property Status</small>
+            </a>
+          </li>
+
+          <li>
+            <b></b>
+            <b></b>
+            <a href="propertyImages.html">
+              <span class="material-symbols-outlined">
+                image
+              </span>
+              <small>Property Images</small>
+
+            </a>
+          </li>
+
+          <li class="active">
+            <b></b>
+            <b></b>
+            <a href="propertySetup.html">
+              <span class="material-symbols-outlined">
+                category
+              </span>
+              <small>Property Setup</small>
+
+            </a>
+          </li>
+
+          <li>
+            <b></b>
+            <b></b>
+            <a href="propertyDocument.html">
+              <span class="material-symbols-outlined">
+                description
+              </span>
+              <small>Property Documents</small>
+            </a>
+          </li>
+
+
+          <li>
+            <b></b>
+            <b></b>
+            <a href="propertyInsights.html">
+              <span class="material-symbols-outlined">
+                volunteer_activism
+              </span>
+              <small>Reports</small>
+            </a>
+          </li>
+
+          <li>
+            <a href="/login/index.html">
+              <b></b>
+              <b></b>
+              <span class="material-symbols-outlined">
+                logout
+              </span>
+              <small>Logout</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="side-navbar mobile small" style="z-index: 9999;" id="sideNavbar">
+        <div class="closeBtn">
+          <span class="material-symbols-outlined" id="closeBtn">
+            close
+          </span>
+        </div>
+        <ul>
+
+          <li style="background: #4CD7D0;">
+
+            <a href="adminDashboard.html">
+
+
+              <div class="side-navbar-profile-div">
+
+                <div class="side-navbar-profile-div-circle">
+                  <div>
+                    <span>KS</span>
+                  </div>
+                </div>
+
+                <div class="side-navbar-profile-div-name">
+                  <div class="">
+                    <h6>Khushi Soni
+                    </h6>
+                    <small>Edit Profile</small>
+                  </div>
+                </div>
+                <div class="side-navbar-profile-div-arrow">
+                  <span class="material-symbols-outlined">
+                    navigate_next
+                  </span>
+                </div>
+              </div>
+
+
+
+            </a>
+          </li><br>
+          <li>
+            <b></b>
+            <b></b>
+            <a href="propertyStatus.html">
+              <span class="material-symbols-outlined">
+                home
+              </span>
+              <small>Property Status</small>
+            </a>
+          </li>
+
+          <li>
+            <b></b>
+            <b></b>
+            <a href="propertyImages.html">
+              <span class="material-symbols-outlined">
+                category
+              </span>
+              <small>Property Images</small>
+
+            </a>
+          </li>
+
+          <li class="active">
+            <b></b>
+            <b></b>
+            <a href="propertySetup.html">
+              <span class="material-symbols-outlined">
+                category
+              </span>
+              <small>Property Setup</small>
+
+            </a>
+          </li>
+
+          <li>
+            <b></b>
+            <b></b>
+            <a href="propertyDocument.html">
+              <span class="material-symbols-outlined">
+                description
+              </span>
+              <small>Property Documents</small>
+            </a>
+          </li>
+
+
+          <li>
+            <b></b>
+            <b></b>
+            <a href="propertyInsights.html">
+              <span class="material-symbols-outlined">
+                volunteer_activism
+              </span>
+              <small>Reports</small>
+            </a>
+          </li>
+
+          <li>
+            <a href="/login/index.html">
+              <b></b>
+              <b></b>
+              <span class="material-symbols-outlined">
+                logout
+              </span>
+              <small>Logout</small>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
+
+    </div>
+    <div class="col-lg-10">
+
+      <div class="container-fluid">
+
+        <div style="padding: 4px;"></div>
+        <div class="row no-gutters" style="margin: 10px 0;">
+
+          <div class="col-lg-6 col-md-6 col-sm-12" style="background: #fff; padding: 10px 10px 0 10px;">
+            <div class="switch" style="height: calc(100% - 10px);">
+              <span class="active" id="ResidentialText" style="color: #59981A">Residential</span>
+
+              <div class="switch-button Residential" id="propertyTypeToggleBtn"
+                onclick="propertyToggleClick(propertyTypeToggleBtn)">
+                <div class="switch-button-inner"></div>
+              </div>
+
+              <span id="CommercialText" style="color: #EB542E">Commercial</span>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12" style="background: #fff; padding: 10px 10px 0 10px;">
+            <div class="details-radio">
+
+              <div class="row no-gutters">
+
+                <div class="col-6" style="padding: 0 5px;">
+                  <input type="checkbox" checked class="checkbox" style="width: 0px;" id="businessTypeRent"
+                    value="Rent">
+                  <label class="checkbox-label" onclick="openRentSection('businessTypeRent','businessTypeSale','Rent')"
+                    id="Rent-label" for="businessTypeRent">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-check"></i>
+                    <span>Rent</span>
+                  </label>
+                </div>
+
+                <div class="col-6" style="padding: 0 5px;">
+                  <input type="checkbox" class="checkbox" style="width: 0px;" id="businessTypeSale" value="Sale">
+                  <label class="checkbox-label" onclick="openRentSection('businessTypeSale','businessTypeRent','Sale')"
+                    id="Sale-label" for="businessTypeSale">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-check"></i>
+                    <span>Sale</span>
+                  </label>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="add-property-menu">
+          <div class="menu-list active" id="Basic" onclick="addPropertyMenu('Basic')">
+            <h1>Basic</h1>
+          </div>
+          <div class="menu-list" id="Details" onclick="addPropertyMenu('Details')">
+            <h1>Details</h1>
+          </div>
+          <div class="menu-list" id="More" onclick="addPropertyMenu('More')">
+            <h1>More</h1>
+          </div>
+          <div class="menu-indicator" id="menuIndicator"></div>
+        </div>
+
+        <div class="add-property-outter">
+
+          <div class="add-property-inner">
+            <div class="section basic-details" id="section1">
+              <div class="white-div">
+
+                <div class="row no-gutters">
+
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="property-form-border-div">
+
+                      <h1 class="owner-heading">Owner Name</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Select Owner</option>
+                          <option value="">Atul Tripathi</option>
+                          <option value="">Vinay Prajapati</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          person
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Co-Owner Name</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Select Co-Owner</option>
+                          <option value="">Atul Tripathi</option>
+                          <option value="">Vinay Prajapati</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          group
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Address Locator</h1>
+                      <div class="location-search">
+                        <input type="text" required placeholder="Enetr Property Unit Number..." name="" value="">
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          map
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Country</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected>India</option>
+                          <option value="">Denmark</option>
+                          <option value="">Malasia</option>
+                          <option value="">China</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          public
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">State</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected>Delhi</option>
+                          <option value="">Harayana</option>
+                          <option value="">Uttar Pradesh</option>
+                          <option value="">Maharashtra</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          emoji_transportation
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">City</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected>Delhi</option>
+                          <option value="">Gurugram</option>
+                          <option value="">Noida</option>
+                          <option value="">Pune</option>
+                          <option value="">Hyderabad</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          apartment
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Locality</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected>Malviya Nagar</option>
+                          <option value="">Dwarka</option>
+                          <option value="">Rajori Garden</option>
+                          <option value="">Lajpat Nagar</option>
+                          <option value="">Saraojni Nagar</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          holiday_village
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Pin Code</h1>
+                      <div class="location-search">
+                        <input type="number" maxlength="6"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          required placeholder="Enetr Property Unit Number..." name="" value="">
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          drive_file_rename_outline
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Society</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Choose Society</option>
+                          <option value="">Society 1</option>
+                          <option value="">Society 2</option>
+                          <option value="">Society 3</option>
+                          <option value="">Society 4</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          holiday_village
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Unit Number</h1>
+                      <div class="location-search">
+                        <input type="text" required placeholder="Enetr Property Unit Number..." name="" value="">
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          drive_file_rename_outline
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Property Type</h1>
+                      <div class="location-search">
+
+                        <select class="" name="">
+                          <option value="" selected disabled>Choose Property Type</option>
+                          <option value="">High Rise Apt</option>
+                          <option value="">Low Rise Apt</option>
+                          <option value="">Builder Floor</option>
+                          <option value="">Kothi</option>
+                          <option value="">Villa - Simplex</option>
+                          <option value="">Villa - Duplex</option>
+                          <option value="">Row House - Simplex</option>
+                          <option value="">Row House - Duplex</option>
+                          <option value="">Pent House - Simplex</option>
+                          <option value="">Pent House - Duplex</option>
+                        </select>
+
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          format_list_bulleted
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Year of Constuction</h1>
+                      <div class="location-search">
+                        <select class="" name="" id="yearOfConstructionSelect" onchange="ageOfPropertyCalc()">
+                          <option value="" disabled>Year of Constuction</option>
+                          <option value="">1990</option>
+                          <option value="">1991</option>
+                          <option value="">1992</option>
+                          <option value="">1993</option>
+                          <option value="">1994</option>
+                          <option value="">1995</option>
+                          <option value="">1996</option>
+                          <option value="">1997</option>
+                          <option value="">1998</option>
+                          <option value="">1999</option>
+                          <option value="">2000</option>
+                          <option value="">2001</option>
+                          <option value="">2002</option>
+                          <option value="">2003</option>
+                          <option value="">2004</option>
+                          <option value="">2005</option>
+                          <option value="">2006</option>
+                          <option value="">2007</option>
+                          <option value="">2008</option>
+                          <option value="">2009</option>
+                          <option value="" selected>2010</option>
+                          <option value="">2011</option>
+                          <option value="">2012</option>
+                          <option value="">2013</option>
+                          <option value="">2014</option>
+                          <option value="">2015</option>
+                          <option value="">2016</option>
+                          <option value="">2017</option>
+                          <option value="">2018</option>
+                          <option value="">2019</option>
+                          <option value="">2020</option>
+                          <option value="">2021</option>
+                          <option value="">2022</option>
+                        </select>
+
+                        <span class="material-symbols-outlined">
+                          engineering
+                        </span>
+                        <div class="age-of-property-div">
+                          <h1>Age Of Property is <small id="ageOfPropertyCount">12</small> Years </h1>
+                        </div>
+                      </div><br><br class="large" />
+
+                      <h1 class="owner-heading">BHK</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Choose BHK</option>
+                          <option value="">EWS</option>
+                          <option value="">1 RK</option>
+                          <option value="">Studio</option>
+                          <option value="">1 BHK</option>
+                          <option value="">1.5 BHK</option>
+                          <option value="">2 BHK</option>
+                          <option value="">2.5 BHK</option>
+                          <option value="">3 BHK</option>
+                          <option value="">2.5 BHK</option>
+                          <option value="">4 BHK</option>
+                          <option value="">5 BHK</option>
+                          <option value="">6 BHK</option>
+                          <option value="">7 BHK</option>
+                          <option value="">8 BHK</option>
+                          <option value="">9+ BHK</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          bedroom_parent
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Furnishing</h1>
+                      <div class="row no-gutters">
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required checked class="checkbox" style="width: 0px;" name="Furninshed"
+                            id="FurninshedSemi" value="FurninshedSemi">
+                          <label class="checkbox-label property-setup-checkbox" id="FurninshedSemi-label"
+                            for="FurninshedSemi">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Semi</span>
+                          </label>
+                        </div>
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="Furninshed"
+                            id="FurninshedFully" value="FurninshedFully">
+                          <label class="checkbox-label property-setup-checkbox" id="FurninshedFully-label"
+                            for="FurninshedFully">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Fully</span>
+                          </label>
+                        </div>
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="Furninshed"
+                            id="FurninshedNot" value="FurninshedNot">
+                          <label class="checkbox-label property-setup-checkbox" id="FurninshedNot-label"
+                            for="FurninshedNot">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Raw</span>
+                          </label>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="property-form-border-div">
+
+                      <h1 class="owner-heading">No. of Bedrooms</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Number Of Bedrooms</option>
+                          <option value="">0</option>
+                          <option value="">1</option>
+                          <option value="">2</option>
+                          <option value="">3</option>
+                          <option value="">4</option>
+                          <option value="">5</option>
+                          <option value="">6</option>
+                          <option value="">7</option>
+                          <option value="">8</option>
+                          <option value="">9</option>
+                          <option value="">10</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          bed
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">No. of Bathrooms</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Number Of Bathrooms</option>
+                          <option value="">0</option>
+                          <option value="">1</option>
+                          <option value="">2</option>
+                          <option value="">3</option>
+                          <option value="">4</option>
+                          <option value="">5</option>
+                          <option value="">6</option>
+                          <option value="">7</option>
+                          <option value="">8</option>
+                          <option value="">9</option>
+                          <option value="">10</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          bathtub
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">No. of Balcony</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Number Of Balcony</option>
+                          <option value="">0</option>
+                          <option value="">1</option>
+                          <option value="">2</option>
+                          <option value="">3</option>
+                          <option value="">4</option>
+                          <option value="">5</option>
+                          <option value="">6</option>
+                          <option value="">7</option>
+                          <option value="">8</option>
+                          <option value="">9</option>
+                          <option value="">10</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          balcony
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">No. of Kitchen</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" disabled>Number Of Kitchen</option>
+                          <option value="">0</option>
+                          <option value="" selected>1</option>
+                          <option value="">2</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          soup_kitchen
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Dining Area</h1>
+                      <div class="row no-gutters">
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="SeperateDining"
+                            id="SeperateDiningYes" value="SeperateDiningYes">
+                          <label class="checkbox-label property-setup-checkbox" id="SeperateDiningYes-label"
+                            for="SeperateDiningYes">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                          </label>
+                        </div>
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required checked class="checkbox" style="width: 0px;"
+                            name="SeperateDining" id="SeperateDiningNo" value="SeperateDiningNo">
+                          <label class="checkbox-label property-setup-checkbox" id="SeperateDiningNo-label"
+                            for="SeperateDiningNo">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>No</span>
+                          </label>
+                        </div>
+
+                      </div><br>
+
+                      <h1 class="owner-heading">Living & Dining</h1>
+                      <div class="row no-gutters">
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="LivingDining"
+                            id="LivingDiningYes" value="LivingDiningYes">
+                          <label class="checkbox-label property-setup-checkbox" id="LivingDiningYes-label"
+                            for="LivingDiningYes">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                          </label>
+                        </div>
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required checked class="checkbox" style="width: 0px;" name="LivingDining"
+                            id="LivingDiningNo" value="LivingDiningNo">
+                          <label class="checkbox-label property-setup-checkbox" id="LivingDiningNo-label"
+                            for="LivingDiningNo">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>No</span>
+                          </label>
+                        </div>
+                      </div><br>
+
+                      <h1 class="owner-heading">No. of Living Area</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" disabled>Number Of Living Area</option>
+                          <option value="">0</option>
+                          <option value="" selected>1</option>
+                          <option value="">2</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          living
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Passages</h1>
+                      <div class="row no-gutters">
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="Passages"
+                            id="PassagesYes" value="PassagesYes">
+                          <label class="checkbox-label property-setup-checkbox" id="PassagesYes-label"
+                            for="PassagesYes">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                          </label>
+                        </div>
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required checked class="checkbox" style="width: 0px;" name="Passages"
+                            id="PassagesNo" value="PassagesNo">
+                          <label class="checkbox-label property-setup-checkbox" id="PassagesNo-label" for="PassagesNo">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>No</span>
+                          </label>
+                        </div>
+
+                      </div><br>
+
+                      <h1 class="owner-heading">Entrance Gallery</h1>
+                      <div class="row no-gutters">
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="Gallery"
+                            id="GalleryYes" value="GalleryYes">
+                          <label class="checkbox-label property-setup-checkbox" id="GalleryYes-label" for="GalleryYes">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                          </label>
+                        </div>
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required checked class="checkbox" style="width: 0px;" name="Gallery"
+                            id="GalleryNo" value="GalleryNo">
+                          <label class="checkbox-label property-setup-checkbox" id="GalleryNo-label" for="GalleryNo">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>No</span>
+                          </label>
+                        </div>
+
+                      </div><br>
+
+                      <h1 class="owner-heading">Basement</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" disabled>Number Of Basement</option>
+                          <option value="" selected>0</option>
+                          <option value="">1</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          foundation
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Additional Rooms - ( <span id="additionalRoomsTotal">0</span> )</h1>
+                      <div class="row no-gutters">
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(ServentRoom,ServentRoomNumber); additinalRoomsTotal()"
+                            style="width: 0px;" name="AdditionalRoom" id="ServentRoom" value="ServentRoom">
+                          <label class="checkbox-label" id="ServentRoom-label" for="ServentRoom">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Servent Room</span>
+                          </label>
+                          <div onclick="parkingNumberChange(ServentRoom,ServentRoomNumber);additinalRoomsTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="ServentRoomNumber">0</h1>
+                          </div>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(officeRoom,officeRoomNumber); additinalRoomsTotal()"
+                            style="width: 0px;" name="AdditionalRoom" id="officeRoom" value="officeRoom">
+                          <label class="checkbox-label" id="officeRoom-label" for="officeRoom">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Office Room</span>
+                          </label>
+                          <div onclick="parkingNumberChange(officeRoom,officeRoomNumber);additinalRoomsTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="officeRoomNumber">0</h1>
+                          </div>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(StoreRoom,StoreRoomNumber);additinalRoomsTotal()"
+                            style="width: 0px;" name="AdditionalRoom" id="StoreRoom" value="StoreRoom">
+                          <label class="checkbox-label" id="StoreRoom-label" for="StoreRoom">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Store Room</span>
+                          </label>
+                          <div onclick="parkingNumberChange(StoreRoom,StoreRoomNumber);additinalRoomsTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="StoreRoomNumber">0</h1>
+                          </div>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(PoojaRoom,PoojaRoomNumber);additinalRoomsTotal()"
+                            style="width: 0px;" name="AdditionalRoom" id="PoojaRoom" value="PoojaRoom">
+                          <label class="checkbox-label" id="PoojaRoom-label" for="PoojaRoom">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Pooja Room</span>
+                          </label>
+                          <div onclick="parkingNumberChange(PoojaRoom,PoojaRoomNumber);additinalRoomsTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="PoojaRoomNumber">0</h1>
+                          </div>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(StudyRoom,StudyRoomNumber); additinalRoomsTotal()"
+                            style="width: 0px;" name="AdditionalRoom" id="StudyRoom" value="StudyRoom">
+                          <label class="checkbox-label" id="StudyRoom-label" for="StudyRoom">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Study Room</span>
+                          </label>
+                          <div onclick="parkingNumberChange(StudyRoom,StudyRoomNumber);additinalRoomsTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="StudyRoomNumber">0</h1>
+                          </div>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(PowderRoom,PowderRoomNumber);additinalRoomsTotal()"
+                            style="width: 0px;" name="AdditionalRoom" id="PowderRoom" value="PowderRoom">
+                          <label class="checkbox-label" id="PowderRoom-label" for="PowderRoom">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Powder Room</span>
+                          </label>
+                          <div onclick="parkingNumberChange(PowderRoom,PowderRoomNumber);additinalRoomsTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="PowderRoomNumber">0</h1>
+                          </div>
+                        </div>
+                      </div><br>
+
+                      <h1 class="owner-heading">Additional Area - ( <span id="additinalAreaTotal">0</span> )</h1>
+                      <div class="row no-gutters">
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(FrontYard,FrontYardNumber); additinalAreaTotal()"
+                            style="width: 0px;" name="AdditionalArea" id="FrontYard" value="FrontYard">
+                          <label class="checkbox-label" id="FrontYard-label" for="FrontYard">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Front Yard</span>
+                          </label>
+                          <div onclick="parkingNumberChange(FrontYard,FrontYardNumber);additinalAreaTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="FrontYardNumber">0</h1>
+                          </div>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(BackYard,BackYardNumber); additinalAreaTotal()"
+                            style="width: 0px;" name="AdditionalArea" id="BackYard" value="BackYard">
+                          <label class="checkbox-label" id="BackYard-label" for="BackYard">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Back Yard</span>
+                          </label>
+                          <div onclick="parkingNumberChange(BackYard,BackYardNumber);additinalAreaTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="BackYardNumber">0</h1>
+                          </div>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(Terrace,TerraceNumber); additinalAreaTotal()"
+                            style="width: 0px;" name="AdditionalArea" id="Terrace" value="Terrace">
+                          <label class="checkbox-label" id="Terrace-label" for="Terrace">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Terrace</span>
+                          </label>
+                          <div onclick="parkingNumberChange(Terrace,TerraceNumber);additinalAreaTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="TerraceNumber">0</h1>
+                          </div>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(PrivateGarden,PrivateGardenNumber); additinalAreaTotal()"
+                            style="width: 0px;" name="AdditionalArea" id="PrivateGarden" value="PrivateGarden">
+                          <label class="checkbox-label" id="PrivateGarden-label" for="PrivateGarden">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Private Garden</span>
+                          </label>
+                          <div onclick="parkingNumberChange(PrivateGarden,PrivateGardenNumber);additinalAreaTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="PrivateGardenNumber">0</h1>
+                          </div>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(Garage,GarageNumber); additinalAreaTotal()"
+                            style="width: 0px;" name="AdditionalArea" id="Garage" value="Garage">
+                          <label class="checkbox-label" id="Garage-label" for="Garage">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Garage</span>
+                          </label>
+                          <div onclick="parkingNumberChange(Garage,GarageNumber);additinalAreaTotal()"
+                            class="car-parking-options-badge">
+                            <h1 id="GarageNumber">0</h1>
+                          </div>
+                        </div>
+                      </div><br>
+
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="property-form-border-div" style="border: none;">
+
+                      <h1 class="owner-heading">Total Floor</h1>
+                      <div class="location-search">
+                        <input type="number" required placeholder="Total Floors..." maxlength="2"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          name="" value="" min="0">
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          table_rows
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Floor Number</h1>
+                      <div class="location-search">
+                        <input type="number" required placeholder="Floor Number..." maxlength="2"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          name="" value="" min="0">
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          filter_none
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">No. of Apt On Floor</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Number of Apt On Floor</option>
+                          <option value="">1</option>
+                          <option value="">2</option>
+                          <option value="">3</option>
+                          <option value="">4</option>
+                          <option value="">5</option>
+                          <option value="">6</option>
+                          <option value="">7</option>
+                          <option value="">8</option>
+                          <option value="">9</option>
+                          <option value="">10</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          filter_none
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">No. of Lifts</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Number of Lifts</option>
+                          <option value="">1</option>
+                          <option value="">2</option>
+                          <option value="">3</option>
+                          <option value="">4</option>
+                          <option value="">5</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          full_stacked_bar_chart
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Power Backup</h1>
+                      <div class="row no-gutters">
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="PowerBackup"
+                            id="NoBackup" value="NoBackup">
+                          <label class="checkbox-label property-setup-checkbox" id="NoBackup-label" for="NoBackup">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>No Backup</span>
+                          </label>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="PowerBackup"
+                            id="FullBackup" value="FullBackup">
+                          <label class="checkbox-label" id="FullBackup-label" for="FullBackup">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Full Backup</span>
+                          </label>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="PowerBackup"
+                            id="PartialBackup" value="PartialBackup">
+                          <label class="checkbox-label" id="PartialBackup-label" for="PartialBackup">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Partial Backup</span>
+                          </label>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="PowerBackup"
+                            id="LiftOnly" value="LiftOnly">
+                          <label class="checkbox-label" id="LiftOnly-label" for="LiftOnly">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Lift Only</span>
+                          </label>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="PowerBackup"
+                            id="Inverter" value="Inverter">
+                          <label class="checkbox-label" id="Inverter-label" for="Inverter">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Inverter</span>
+                          </label>
+                        </div>
+
+                      </div><br class="small" />
+
+                      <h1 class="owner-heading">Plot Area</h1>
+                      <div class="location-search">
+                        <input type="number" required placeholder="Plot Area..." name="" value="" min="0">
+                        <div class="underline"></div>
+                        <select name="" style="position: absolute;right: 0;width: auto;padding-right: 16px;" id="">
+                          <option value="">SqFt</option>
+                          <option value="">SqMtr</option>
+                          <option value="">SqYd</option>
+                        </select>
+                        <span class="material-symbols-outlined" style="color: #666;font-size: 1.1rem;right: 1px;">
+                          expand_more
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Super Area</h1>
+                      <div class="location-search">
+                        <input type="number" required placeholder="Super Area..." name="" value="" min="0">
+                        <div class="underline"></div>
+                        <select name="" style="position: absolute;right: 0;width: auto;padding-right: 16px;" id="">
+                          <option value="">SqFt</option>
+                          <option value="">SqMtr</option>
+                          <option value="">SqYd</option>
+                        </select>
+                        <span class="material-symbols-outlined" style="color: #666;font-size: 1.1rem;right: 1px;">
+                          expand_more
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Built-up Area</h1>
+                      <div class="location-search">
+                        <input type="number" required placeholder="Build Area..." name="" value="" min="0">
+                        <div class="underline"></div>
+                        <select name="" style="position: absolute;right: 0;width: auto;padding-right: 16px;" id="">
+                          <option value="">SqFt</option>
+                          <option value="">SqMtr</option>
+                          <option value="">SqYd</option>
+                        </select>
+                        <span class="material-symbols-outlined" style="color: #666;font-size: 1.1rem;right: 1px;">
+                          expand_more
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Carpet Area</h1>
+                      <div class="location-search">
+                        <input type="number" required placeholder="Carpet Area..." name="" value="" min="0">
+                        <div class="underline"></div>
+                        <select name="" style="position: absolute;right: 0;width: auto;padding-right: 16px;" id="">
+                          <option value="">SqFt</option>
+                          <option value="">SqMtr</option>
+                          <option value="">SqYd</option>
+                        </select>
+                        <span class="material-symbols-outlined" style="color: #666;font-size: 1.1rem;right: 1px;">
+                          expand_more
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">No. of Car Parking</h1>
+                      <div class="location-search">
+                        <select class="" name="">
+                          <option value="" selected disabled>Number of Car Parking</option>
+                          <option value="">1</option>
+                          <option value="">2</option>
+                          <option value="">3</option>
+                          <option value="">4</option>
+                          <option value="">5</option>
+                        </select>
+                        <div class="underline"></div>
+                        <span class="material-symbols-outlined">
+                          local_parking
+                        </span>
+                      </div><br>
+
+                      <h1 class="owner-heading">Car Parking - ( <span id="carParkingTotal">0</span> )</h1>
+                      <div class="row no-gutters">
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox"
+                            onclick="changeNumberAccordingInput(carParkingOpen,carParkingOpenNumber);closeCarParkingNumberChange()"
+                            style="width: 0px;" name="CarParking" id="carParkingOpen" value="Open">
+                          <label class="checkbox-label" id="Open-label" for="carParkingOpen">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Open</span>
+                          </label>
+                          <div
+                            onclick="parkingNumberChange(carParkingOpen,carParkingOpenNumber);closeCarParkingNumberChange()"
+                            class="car-parking-options-badge">
+                            <h1 id="carParkingOpenNumber">0</h1>
+                          </div>
+                        </div>
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="checkbox" required class="checkbox" style="width: 0px;" name="CarParking"
+                            id="carParkingClosed" onclick="openCarParkingClosedDiv();closeCarParkingNumberChange()"
+                            value="Closed">
+                          <label class="checkbox-label" id="Closed-label" for="carParkingClosed">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Closed</span>
+                          </label>
+                          <div class="car-parking-options-badge" style="background: #666;">
+                            <h1 id="carParkingCloseNumber">0</h1>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="car-parking-closed-outter" id="extraCarParkingClosed">
+                        <div class="car-parking-closed">
+                          <div class="row no-gutters">
+                            <div class="col-6" style="padding: 5px;">
+                              <input type="checkbox" required class="checkbox"
+                                onclick="changeNumberAccordingInput(Basment1,Basment1Number); closeCarParkingNumberChange()"
+                                style="width: 0px;" name="CarParkingClosed" id="Basment1" value="Basment1">
+                              <label class="checkbox-label" id="Basment1-label" for="Basment1">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-check"></i>
+                                <span>Basment 1</span>
+                              </label>
+                              <div onclick="parkingNumberChange(Basment1,Basment1Number); closeCarParkingNumberChange()"
+                                class="car-parking-options-badge">
+                                <h1 id="Basment1Number">0</h1>
+                              </div>
+                            </div>
+
+                            <div class="col-6" style="padding: 5px;">
+                              <input type="checkbox" required class="checkbox"
+                                onclick="changeNumberAccordingInput(Basment2,Basment2Number); closeCarParkingNumberChange()"
+                                style="width: 0px;" name="CarParkingClosed" id="Basment2" value="Basment2">
+                              <label class="checkbox-label" id="Basment2-label" for="Basment2">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-check"></i>
+                                <span>Basment 2</span>
+                              </label>
+                              <div onclick="parkingNumberChange(Basment2,Basment2Number); closeCarParkingNumberChange()"
+                                class="car-parking-options-badge">
+                                <h1 id="Basment2Number">0</h1>
+                              </div>
+                            </div>
+
+                            <div class="col-6" style="padding: 5px;">
+                              <input type="checkbox" required class="checkbox"
+                                onclick="changeNumberAccordingInput(Basment3,Basment3Number); closeCarParkingNumberChange()"
+                                style="width: 0px;" name="CarParkingClosed" id="Basment3" value="Basment3">
+                              <label class="checkbox-label" id="Basment3-label" for="Basment3">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-check"></i>
+                                <span>Basment 3</span>
+                              </label>
+                              <div onclick="parkingNumberChange(Basment3,Basment3Number); closeCarParkingNumberChange()"
+                                class="car-parking-options-badge">
+                                <h1 id="Basment3Number">0</h1>
+                              </div>
+                            </div>
+
+                            <div class="col-6" style="padding: 5px;">
+                              <input type="checkbox" required class="checkbox"
+                                onclick="changeNumberAccordingInput(Stilt,StiltNumber); closeCarParkingNumberChange()"
+                                style="width: 0px;" name="CarParkingClosed" id="Stilt" value="Stilt">
+                              <label class="checkbox-label" id="Stilt-label" for="Stilt">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-check"></i>
+                                <span>Stilt</span>
+                              </label>
+                              <div onclick="parkingNumberChange(Stilt,StiltNumber); closeCarParkingNumberChange()"
+                                class="car-parking-options-badge">
+                                <h1 id="StiltNumber">0</h1>
+                              </div>
+                            </div>
+
+                            <div class="col-6" style="padding: 5px;">
+                              <input type="checkbox" required class="checkbox"
+                                onclick="changeNumberAccordingInput(Shade,ShadeNumber); closeCarParkingNumberChange()"
+                                style="width: 0px;" name="CarParkingClosed" id="Shade" value="Shade">
+                              <label class="checkbox-label" id="Shade-label" for="Shade">
+                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-check"></i>
+                                <span>Shade</span>
+                              </label>
+                              <div onclick="parkingNumberChange(Shade,ShadeNumber); closeCarParkingNumberChange()"
+                                class="car-parking-options-badge">
+                                <h1 id="ShadeNumber">0</h1>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <h1 class="owner-heading">2-Wheeler Parking</h1>
+                      <div class="row no-gutters">
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required class="checkbox" style="width: 0px;" name="BikeParking"
+                            id="BikeParkingYes" value="BikeParkingYes">
+                          <label class="checkbox-label" id="BikeParkingYes-label" for="BikeParkingYes">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>Yes</span>
+                          </label>
+                        </div>
+
+                        <div class="col-6" style="padding: 5px;">
+                          <input type="radio" required checked class="checkbox" style="width: 0px;" name="BikeParking"
+                            id="BikeParkingNo" value="BikeParkingNo">
+                          <label class="checkbox-label" id="BikeParkingNo-label" for="BikeParkingNo">
+                            <i class="fas fa-plus"></i>
+                            <i class="fas fa-check"></i>
+                            <span>No</span>
+                          </label>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div><br>
+
+              <div class="row no-gutters section-btn-div">
+                <!-- <div class="col-6">
+                  <div class="section-btn">
+                    <button type="button" name="button" class="mybutton button5">Back</button>
+                    <div class=""></div>
+                  </div>
+                </div> -->
+
+                <div class="col-12">
+                  <div class="section-btn">
+                    <div class=""></div>
+                    <button type="button" name="button" onclick="addPropertyMenu('Details')"
+                      class="mybutton button5">Next</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="section" id="section2">
+
+              <div class="row no-gutters">
+
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                  <div class="white-div">
+                    <img src="../img/propertySetup/layout.png" width="100%" alt="">
+                  </div>
+                  <br>
+                </div>
+
+                <div class="col-lg-8 col-md-8 col-sm-12 property-setup-left-padding">
+                  <div class="property-setup-padding">
+                    <div class="property-setup-collapse-div completed" id="propertyDetailBedroom">
+
+                      <div class="title-div" onclick="proprtyDetailCard(propertyDetailBedroom)">
+                        <div>
+                          <img src="../img/InventoryIcons/Double Bed.png"
+                            style="transform: translateY(-4px);margin-right: 10px;" width="30px" alt="">
+                          <h1>Bedrooms - ( <span>4</span> )</h1>
+                          <span class="material-symbols-outlined check">
+                            done
+                          </span>
+                          <span class="material-symbols-outlined close">
+                            close
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined arrow">
+                          expand_more
+                        </span>
+                      </div>
+                      <div class="content-div">
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Master Bedroom</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="total-area-number">
+                              <h2><span>1200</span> sqft <span>6</span> in</h2>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12" style="padding: 5px">
+                            <div style="padding: 10px 5px 2px 5px;border: 1px solid #ddd;">
+                              <h1 class="owner-heading">Is Bathroom attached ?</h1>
+                              <div class="row no-gutters">
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="radio" required class="checkbox" style="width: 0px;"
+                                    name="attachedBathroomBedroom1"
+                                    onclick="openBathroomNumberChoose(bathroomAttachedBedroom1)"
+                                    id="attachedBathroomBedroom1Yes" value="attachedBathroomBedroom1Yes">
+                                  <label class="checkbox-label property-setup-checkbox"
+                                    for="attachedBathroomBedroom1Yes">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Yes</span>
+                                  </label>
+                                </div>
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="radio" required checked class="checkbox" style="width: 0px;"
+                                    name="attachedBathroomBedroom1"
+                                    onclick="closeBathroomNumberChoose(bathroomAttachedBedroom1)"
+                                    id="attachedBathroomBedroom1No" value="attachedBathroomBedroom1No">
+                                  <label class="checkbox-label property-setup-checkbox"
+                                    for="attachedBathroomBedroom1No">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>No</span>
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div class="whichBathroomAttached" id="bathroomAttachedBedroom1">
+                                <div class="location-search">
+                                  <select class="" name="">
+                                    <option value="" selected disabled>Which Bathroom Attached ?</option>
+                                    <option value="">Bathroom 1</option>
+                                    <option value="">Bathroom 2</option>
+                                    <option value="">Bathroom 3</option>
+                                    <option value="">Bathroom 4</option>
+                                    <option value="">Bathroom 5</option>
+                                    <option value="">Bathroom 6</option>
+                                    <option value="">Bathroom 7</option>
+                                    <option value="">Bathroom 8</option>
+                                    <option value="">Bathroom 9</option>
+                                    <option value="">Bathroom 10</option>
+                                  </select>
+                                  <div class="underline"></div>
+                                  <span class="material-symbols-outlined">
+                                    crop_square
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="col-lg-4 col-md-4 col-sm-12" style="padding: 5px">
+                            <div style="padding: 10px 5px 2px 5px;border: 1px solid #ddd;">
+                              <h1 class="owner-heading">Is Balcony attached ?</h1>
+                              <div class="row no-gutters">
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="radio" required class="checkbox" style="width: 0px;"
+                                    name="attachedBalconyBedroom1"
+                                    onclick="openBathroomNumberChoose(balconyAttachedBedroom1)"
+                                    id="attachedBalconyBedroom1Yes" value="attachedBalconyBedroom1Yes">
+                                  <label class="checkbox-label property-setup-checkbox"
+                                    for="attachedBalconyBedroom1Yes">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Yes</span>
+                                  </label>
+                                </div>
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="radio" required checked class="checkbox" style="width: 0px;"
+                                    name="attachedBalconyBedroom1"
+                                    onclick="closeBathroomNumberChoose(balconyAttachedBedroom1)"
+                                    id="attachedBalconyBedroom1No" value="attachedBalconyBedroom1No">
+                                  <label class="checkbox-label property-setup-checkbox" for="attachedBalconyBedroom1No">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>No</span>
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div class="whichBathroomAttached" id="balconyAttachedBedroom1">
+                                <div class="location-search">
+                                  <select class="" name="">
+                                    <option value="" selected disabled>Which Balcony Attached ?</option>
+                                    <option value="">Balcony 1</option>
+                                    <option value="">Balcony 2</option>
+                                    <option value="">Balcony 3</option>
+                                    <option value="">Balcony 4</option>
+                                    <option value="">Balcony 5</option>
+                                    <option value="">Balcony 6</option>
+                                    <option value="">Balcony 7</option>
+                                    <option value="">Balcony 8</option>
+                                    <option value="">Balcony 9</option>
+                                    <option value="">Balcony 10</option>
+                                  </select>
+                                  <div class="underline"></div>
+                                  <span class="material-symbols-outlined">
+                                    crop_square
+                                  </span>
+                                </div>
+                              </div>
+
+                            </div>
+
+                          </div>
+                          <div class="col-lg-4 col-md-4 col-sm-12" style="padding: 5px;">
+
+                            <div style="padding: 10px 5px 15px 5px;border: 1px solid #ddd;">
+                              <h1 class="owner-heading">Flooring Type</h1>
+                              <div class="location-search">
+                                <select class="" name="">
+                                  <option value="" selected disabled>Flooring Type</option>
+                                  <option value="">Marble</option>
+                                  <option value="">Vetrified Tile</option>
+                                  <option value="">Vinyl</option>
+                                  <option value="">Hardwood</option>
+                                  <option value="">Granite</option>
+                                  <option value="">Bamboo</option>
+                                  <option value="">Concrete</option>
+                                  <option value="">Laminate</option>
+                                  <option value="">Linoleum</option>
+                                  <option value="">Terrazzo (Mosaic)</option>
+                                  <option value="">Brick</option>
+                                  <option value="">Red Oxide</option>
+                                </select>
+                                <div class="underline"></div>
+                                <span class="material-symbols-outlined">
+                                  crop_square
+                                </span>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 5px">
+                            <div style="padding: 10px 5px 2px 5px;border: 1px solid #ddd;">
+
+                              <h1 class="owner-heading">Fitting & Fixtures</h1>
+                              <div class="row no-gutters">
+
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="checkbox" required class="checkbox"
+                                    onclick="changeNumberAccordingInput(additinalItemsFan,additinalItemsFanNumber)"
+                                    style="width: 0px;" name="additinalItems" id="additinalItemsFan"
+                                    value="additinalItemsFan">
+                                  <label class="checkbox-label property-setup-checkbox" for="additinalItemsFan">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Fan</span>
+                                  </label>
+                                  <div onclick="parkingNumberChange(additinalItemsFan,additinalItemsFanNumber)"
+                                    class="car-parking-options-badge">
+                                    <h1 id="additinalItemsFanNumber">0</h1>
+                                  </div>
+                                </div>
+
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="checkbox" required class="checkbox"
+                                    onclick="changeNumberAccordingInput(additinalItemsTubeLight,additinalItemsTubeLightNumber)"
+                                    style="width: 0px;" name="additinalItems" id="additinalItemsTubeLight"
+                                    value="additinalItemsTubeLight">
+                                  <label class="checkbox-label property-setup-checkbox" for="additinalItemsTubeLight">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Tube Light</span>
+                                  </label>
+                                  <div
+                                    onclick="parkingNumberChange(additinalItemsTubeLight,additinalItemsTubeLightNumber)"
+                                    class="car-parking-options-badge">
+                                    <h1 id="additinalItemsTubeLightNumber">0</h1>
+                                  </div>
+                                </div>
+
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="checkbox" required class="checkbox"
+                                    onclick="changeNumberAccordingInput(additinalItemsAlmirah,additinalItemsAlmirahNumber)"
+                                    style="width: 0px;" name="additinalItems" id="additinalItemsAlmirah"
+                                    value="additinalItemsAlmirah">
+                                  <label class="checkbox-label property-setup-checkbox" for="additinalItemsAlmirah">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Almirah</span>
+                                  </label>
+                                  <div onclick="parkingNumberChange(additinalItemsAlmirah,additinalItemsAlmirahNumber)"
+                                    class="car-parking-options-badge">
+                                    <h1 id="additinalItemsAlmirahNumber">0</h1>
+                                  </div>
+                                </div>
+
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="checkbox" required class="checkbox"
+                                    onclick="changeNumberAccordingInput(additinalItemsWindow,additinalItemsWindowNumber)"
+                                    style="width: 0px;" name="additinalItems" id="additinalItemsWindow"
+                                    value="additinalItemsWindow">
+                                  <label class="checkbox-label property-setup-checkbox" for="additinalItemsWindow">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Window</span>
+                                  </label>
+                                  <div onclick="parkingNumberChange(additinalItemsWindow,additinalItemsWindowNumber)"
+                                    class="car-parking-options-badge">
+                                    <h1 id="additinalItemsWindowNumber">0</h1>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+
+                        </div>
+                        <hr>
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Bedroom
+                              2</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <hr style="margin-top: 0;" />
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Bedroom
+                              3</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Bedroom
+                              4</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="property-setup-collapse-div" id="propertyDetailBathroom">
+
+                      <div class="title-div" onclick="proprtyDetailCard(propertyDetailBathroom)">
+                        <div>
+                          <img src="../img/InventoryIcons/Shower.png"
+                            style="transform: translateY(-2px);margin-right: 10px;" width="35px" alt="">
+                          <h1>Bathrooms - ( <span>1</span> )</h1>
+                          <span class="material-symbols-outlined check">
+                            done
+                          </span>
+                          <span class="material-symbols-outlined close">
+                            close
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined arrow">
+                          expand_more
+                        </span>
+                      </div>
+                      <div class="content-div">
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Bathroom 1</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="total-area-number">
+                              <h2><span>500</span> sqft <span>2</span> in</h2>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12" style="padding: 5px">
+                            <div style="padding: 10px 5px 2px 5px;border: 1px solid #ddd;">
+                              <h1 class="owner-heading">Is attached to Bedroom ?</h1>
+                              <div class="row no-gutters">
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="radio" required class="checkbox" style="width: 0px;"
+                                    name="attachedBedroomBathroom1"
+                                    onclick="openBathroomNumberChoose(bedroomAttachedBathroom1)"
+                                    id="attachedBedroomBathroom1Yes" value="attachedBedroomBathroom1Yes">
+                                  <label class="checkbox-label property-setup-checkbox"
+                                    for="attachedBedroomBathroom1Yes">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Yes</span>
+                                  </label>
+                                </div>
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="radio" required checked class="checkbox" style="width: 0px;"
+                                    name="attachedBedroomBathroom1"
+                                    onclick="closeBathroomNumberChoose(bedroomAttachedBathroom1)"
+                                    id="attachedBedroomBathroom1No" value="attachedBedroomBathroom1No">
+                                  <label class="checkbox-label property-setup-checkbox"
+                                    for="attachedBedroomBathroom1No">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>No</span>
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div class="whichBathroomAttached" id="bedroomAttachedBathroom1">
+                                <div class="location-search">
+                                  <select class="" name="">
+                                    <option value="" selected disabled>Which Bedroom its Attached ?</option>
+                                    <option value="">Master Bedroom</option>
+                                    <option value="">Bedroom 2</option>
+                                    <option value="">Bedroom 3</option>
+                                    <option value="">Bedroom 4</option>
+                                    <option value="">Bedroom 5</option>
+                                    <option value="">Bedroom 6</option>
+                                    <option value="">Bedroom 7</option>
+                                    <option value="">Bedroom 8</option>
+                                    <option value="">Bedroom 9</option>
+                                    <option value="">Bedroom 10</option>
+                                  </select>
+                                  <div class="underline"></div>
+                                  <span class="material-symbols-outlined">
+                                    crop_square
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12" style="padding: 5px;">
+
+                            <div style="padding: 10px 5px 15px 5px;border: 1px solid #ddd;">
+                              <h1 class="owner-heading">Flooring Type</h1>
+                              <div class="location-search">
+                                <select class="" name="">
+                                  <option value="" selected disabled>Flooring Type</option>
+                                  <option value="">Marble</option>
+                                  <option value="">Vetrified Tile</option>
+                                  <option value="">Vinyl</option>
+                                  <option value="">Hardwood</option>
+                                  <option value="">Granite</option>
+                                  <option value="">Bamboo</option>
+                                  <option value="">Concrete</option>
+                                  <option value="">Laminate</option>
+                                  <option value="">Linoleum</option>
+                                  <option value="">Terrazzo (Mosaic)</option>
+                                  <option value="">Brick</option>
+                                  <option value="">Red Oxide</option>
+                                </select>
+                                <div class="underline"></div>
+                                <span class="material-symbols-outlined">
+                                  crop_square
+                                </span>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 5px">
+                            <div style="padding: 10px 5px 2px 5px;border: 1px solid #ddd;">
+
+                              <h1 class="owner-heading">Fitting & Fixtures</h1>
+                              <div class="row no-gutters">
+
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="checkbox" required class="checkbox"
+                                    onclick="changeNumberAccordingInput(additinalItemsFan,additinalItemsFanNumber)"
+                                    style="width: 0px;" name="additinalItems" id="additinalItemsFan"
+                                    value="additinalItemsFan">
+                                  <label class="checkbox-label property-setup-checkbox" for="additinalItemsFan">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Fan</span>
+                                  </label>
+                                  <div onclick="parkingNumberChange(additinalItemsFan,additinalItemsFanNumber)"
+                                    class="car-parking-options-badge">
+                                    <h1 id="additinalItemsFanNumber">0</h1>
+                                  </div>
+                                </div>
+
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="checkbox" required class="checkbox"
+                                    onclick="changeNumberAccordingInput(additinalItemsTubeLight,additinalItemsTubeLightNumber)"
+                                    style="width: 0px;" name="additinalItems" id="additinalItemsTubeLight"
+                                    value="additinalItemsTubeLight">
+                                  <label class="checkbox-label property-setup-checkbox" for="additinalItemsTubeLight">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Tube Light</span>
+                                  </label>
+                                  <div
+                                    onclick="parkingNumberChange(additinalItemsTubeLight,additinalItemsTubeLightNumber)"
+                                    class="car-parking-options-badge">
+                                    <h1 id="additinalItemsTubeLightNumber">0</h1>
+                                  </div>
+                                </div>
+
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="checkbox" required class="checkbox"
+                                    onclick="changeNumberAccordingInput(additinalItemsAlmirah,additinalItemsAlmirahNumber)"
+                                    style="width: 0px;" name="additinalItems" id="additinalItemsAlmirah"
+                                    value="additinalItemsAlmirah">
+                                  <label class="checkbox-label property-setup-checkbox" for="additinalItemsAlmirah">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Almirah</span>
+                                  </label>
+                                  <div onclick="parkingNumberChange(additinalItemsAlmirah,additinalItemsAlmirahNumber)"
+                                    class="car-parking-options-badge">
+                                    <h1 id="additinalItemsAlmirahNumber">0</h1>
+                                  </div>
+                                </div>
+
+                                <div class="col-6" style="padding: 5px;">
+                                  <input type="checkbox" required class="checkbox"
+                                    onclick="changeNumberAccordingInput(additinalItemsWindow,additinalItemsWindowNumber)"
+                                    style="width: 0px;" name="additinalItems" id="additinalItemsWindow"
+                                    value="additinalItemsWindow">
+                                  <label class="checkbox-label property-setup-checkbox" for="additinalItemsWindow">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-check"></i>
+                                    <span>Window</span>
+                                  </label>
+                                  <div onclick="parkingNumberChange(additinalItemsWindow,additinalItemsWindowNumber)"
+                                    class="car-parking-options-badge">
+                                    <h1 id="additinalItemsWindowNumber">0</h1>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="property-setup-collapse-div" id="propertyDetailBalcony">
+
+                      <div class="title-div" onclick="proprtyDetailCard(propertyDetailBalcony)">
+                        <div>
+                          <img src="../img/InventoryIcons/window-icon.png"
+                            style="transform: translateY(-1px);margin-right: 10px;" width="35px" alt="">
+                          <h1>All Balcony - ( <span>1</span> )</h1>
+                          <span class="material-symbols-outlined check">
+                            done
+                          </span>
+                          <span class="material-symbols-outlined close">
+                            close
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined arrow">
+                          expand_more
+                        </span>
+                      </div>
+                      <div class="content-div">
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Balcony
+                              1</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="property-setup-collapse-div" id="propertyDetailKitchen">
+
+                      <div class="title-div" onclick="proprtyDetailCard(propertyDetailKitchen)">
+                        <div>
+                          <img src="../img/InventoryIcons/Dish Washer .png"
+                            style="transform: translateY(-1px);margin-right: 10px;" width="35px" alt="">
+                          <h1>All Kitchen - ( <span>1</span> )</h1>
+                          <span class="material-symbols-outlined check">
+                            done
+                          </span>
+                          <span class="material-symbols-outlined close">
+                            close
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined arrow">
+                          expand_more
+                        </span>
+                      </div>
+                      <div class="content-div">
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Kitchen
+                              1</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="property-setup-collapse-div" id="propertyDetailLiving">
+
+                      <div class="title-div" onclick="proprtyDetailCard(propertyDetailLiving)">
+                        <div>
+                          <img src="../img/InventoryIcons/Sofa Set.png"
+                            style="transform: translateY(-1px);margin-right: 10px;" width="35px" alt="">
+                          <h1>Living - ( <span>1</span> )</h1>
+                          <span class="material-symbols-outlined check">
+                            done
+                          </span>
+                          <span class="material-symbols-outlined close">
+                            close
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined arrow">
+                          expand_more
+                        </span>
+                      </div>
+                      <div class="content-div">
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Living
+                              1</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="property-setup-collapse-div" id="propertyDetailDining">
+
+                      <div class="title-div" onclick="proprtyDetailCard(propertyDetailDining)">
+                        <div>
+                          <img src="../img/InventoryIcons/Dining Table.png"
+                            style="transform: translateY(-1px);margin-right: 10px;" width="35px" alt="">
+                          <h1>Living & Dining - ( <span>1</span> )</h1>
+                          <span class="material-symbols-outlined check">
+                            done
+                          </span>
+                          <span class="material-symbols-outlined close">
+                            close
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined arrow">
+                          expand_more
+                        </span>
+                      </div>
+                      <div class="content-div">
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Living & Dining
+                              1</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="property-setup-collapse-div" id="propertyDetailGallery">
+
+                      <div class="title-div" onclick="proprtyDetailCard(propertyDetailGallery)">
+                        <div>
+                          <h1>Gallery & Passages - ( <span>1</span> )</h1>
+                          <span class="material-symbols-outlined check">
+                            done
+                          </span>
+                          <span class="material-symbols-outlined close">
+                            close
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined arrow">
+                          expand_more
+                        </span>
+                      </div>
+                      <div class="content-div">
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Gallery & Passages
+                              1</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="property-setup-collapse-div" id="propertyDetailBasement">
+
+                      <div class="title-div" onclick="proprtyDetailCard(propertyDetailBasement)">
+                        <div>
+                          <h1>Bassment - ( <span>1</span> )</h1>
+                          <span class="material-symbols-outlined check">
+                            done
+                          </span>
+                          <span class="material-symbols-outlined close">
+                            close
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined arrow">
+                          expand_more
+                        </span>
+                      </div>
+                      <div class="content-div">
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Basement
+                              1</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div class="property-setup-collapse-div" id="propertyDetailAdditionalRooms">
+
+                      <div class="title-div" onclick="proprtyDetailCard(propertyDetailAdditionalRooms)">
+                        <div>
+                          <img src="../img/InventoryIcons/Dressing Table.png"
+                            style="transform: translateY(-1px);margin-right: 10px;" width="35px" alt="">
+                          <h1>Additional Rooms - ( <span>1</span> )</h1>
+                          <span class="material-symbols-outlined check">
+                            done
+                          </span>
+                          <span class="material-symbols-outlined close">
+                            close
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined arrow">
+                          expand_more
+                        </span>
+                      </div>
+                      <div class="content-div">
+
+                        <div class="row no-gutters">
+
+                          <div class="col-lg-12">
+                            <h1 class="owner-heading" style="text-align: center;font-size: 1.2rem;color: #000;">
+                              Additional Rooms
+                              1</h1>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Total Area</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>sqft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Length</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                            <h1 class="owner-heading">Width</h1>
+                            <div class="row no-gutters">
+                              <div class="col-5" style="padding-right: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Feet" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>ft</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-5" style="padding-left: 5px;">
+                                <div class="location-search">
+                                  <input type="number" required maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                    placeholder="Inch" name="" value="" min="0">
+                                  <div class="underline"></div>
+                                  <div class="feet-inch-display">
+                                    <h1>in</h1>
+                                  </div>
+                                </div><br>
+                              </div>
+                              <div class="col-2"></div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+              <div style="padding: 5px;"></div>
+
+              <div class="row no-gutters section-btn-div">
+                <div class="col-6" style="padding: 5px;">
+                  <div class="section-btn">
+                    <button type="button" name="button" onclick="addPropertyMenu('Basic')"
+                      class="mybutton button5">Back</button>
+                    <div class=""></div>
+                  </div>
+                </div>
+
+                <div class="col-6" style="padding: 5px;">
+                  <div class="section-btn">
+                    <div class=""></div>
+                    <button type="button" name="button" onclick="addPropertyMenu('Category')"
+                      class="mybutton button5">Next</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="section" id="section3">
+
+              <div class="white-div">
+
+                <div class="row no-gutters">
+
+                  <div class="col-lg-6 col-md-12 col-sm-12" style="padding: 5px;">
+
+                    <h1 class="owner-heading">Property Description</h1>
+                    <div class="location-search">
+                      <textarea name="" required id=""></textarea>
+                      <div class="underline"></div>
+                      <span class="material-symbols-outlined">
+                        drive_file_rename_outline
+                      </span>
+                    </div>
+
+                  </div>
+
+                  <div class="col-lg-6 col-md-12 col-sm-12" style="padding: 5px;">
+
+                    <h1 class="owner-heading">Owner Instruction</h1>
+                    <div class="location-search">
+                      <textarea name="" required id=""></textarea>
+                      <div class="underline"></div>
+                      <span class="material-symbols-outlined">
+                        drive_file_rename_outline
+                      </span>
+                    </div>
+
+                  </div>
+
+                </div><br>
+
+                <h1 class="owner-heading" style="font-size: 1.5rem;">Key details / Key Handover</h1><br>
+                <h1 class="owner-heading" style="font-size: 1.5rem;">Bill Type Setting</h1><br>
+                <h1 class="owner-heading" style="font-size: 1.5rem;">Advertising</h1><br>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div><br>
+
+      <div class="last-div">
+        <img src="../img/logo_manu_transparent.png" width="180px" alt="">
+        <a href="#">Terms & Conditions | Privacy Policy</a>
+        <small>Version 2.54.0</small>
+      </div><br class="small" /><br class="small" />
+
+    </div>
+
+  </div>
+
+
+
+  <!-- Jquery order should be higher from normal javascript  -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+
+  <!-- Owl Carousel JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+  <script src="../js/main.js"></script>
+  <script src="../js/addproperty.js"></script>
+
+  <!-- Owl Carousel Javascript  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>

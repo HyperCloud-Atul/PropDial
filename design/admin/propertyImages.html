@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Created by Hyper Cloud Digital Solutions">
+    <meta name="keywords" content="">
+    <meta name="author" content="Hyper Cloud Digital Solutions">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard</title>
+
+    <link rel="shortcut icon" href="../img/logo_manu_transparent.png">
+    <!-- Google Icons -->
+    <link rel="stylesheet"
+        href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+
+    <!-- Font Awesome cdn file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- Owl Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <!-- Your Own Style -->
+    <link rel="stylesheet" href="../css/styles.css">
+
+
+</head>
+
+<body style="background: #efefef;">
+    <!-- sidenav starts -->
+
+    <nav class="navbar navbar-expand-lg sticky-top large ">
+        <a class="navbar-brand" href="#banner">
+            <img style="height:60px;" src="../img/logo.png" alt="">
+        </a>
+        <button class="navbar-toggler" title="hambergericon" type="button" data-toggle="collapse"
+            data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" style="position:absolute;right: 20px;" id="collapsibleNavbar">
+            <ul class="nav navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="adminDashboard.html">
+                        <span class="material-icons-outlined">
+                            home
+                        </span>
+                        <small>Dashboard</small>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/propertyList.html">
+                        <span class="material-icons-outlined">
+                            receipt_long
+                        </span>
+                        <small>Properties</small>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="search.html">
+                        <span class="material-icons-outlined">
+                            search
+                        </span>
+                        <small>Search</small>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span class="material-icons-outlined">
+                            handyman
+                        </span>
+                        <small>Enquiries</small>
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+
+    <div class="small navbar-mobile" style="padding:0 10px;">
+        <div class="navbar-mobile-menu">
+            <a href="#" id="hamberIcon">
+                <span class="material-symbols-outlined">
+                    menu
+                </span>
+            </a>
+            <a href="#">
+                <img style="height:40px; position:relative;top:4px;" src="../img/logo.png" alt="">
+            </a>
+
+            <a href="notification/index.html"
+                style="padding-right: 10px;position:relative;display:flex;justify-content: space-between;">
+                <span class="material-symbols-outlined">
+                    notifications
+                </span>
+                <div class="notification-count">
+
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- bottom bardown - ends -->
+
+    <div class="small navbar-mobile-bottom">
+        <div class="navbar-mobile-bottom-menu" id="divBottomNavBar">
+            <a href="adminDashboard.html" class="navbar-mobile-bottom-menu-a"
+                style="display:flex; flex-direction:column;">
+                <span class="material-symbols-outlined">
+                    home
+                </span>
+                <small>Home</small>
+            </a>
+            <a href="propertyList.html" class="navbar-mobile-bottom-menu-a active"
+                style="display:flex; flex-direction:column;">
+                <span class="material-symbols-outlined">
+                    receipt_long
+                </span>
+                <small>List</small>
+            </a>
+            <a href="">
+
+            </a>
+            <a href="search.html" class="navbar-mobile-bottom-menu-a " style="display:flex; flex-direction:column;">
+                <span class="material-symbols-outlined">
+                    search
+                </span>
+                <small>Search</small>
+            </a>
+            <a href="#" class="navbar-mobile-bottom-menu-a" style="display:flex; flex-direction:column;">
+                <span class="material-symbols-outlined">
+                    handyman
+                </span>
+                <small>Enquiries</small>
+            </a>
+        </div>
+        <a class="new-user " href="/login/profile.html">
+            <span class="material-symbols-outlined">
+                person
+            </span>
+        </a>
+    </div>
+
+    <!-- bottom-bardown ends -->
+
+    <!-- top sticky div - start -->
+
+    <div class="property-details-sticky-div sticky-top" id="propertyStickyDetail"
+        onclick="openPropertyDetails(propertyStickyDetail)">
+        <div class="primary-details">
+            <div>
+                <h1>A - 504</h1>
+                <h2 style="color: #444;">High Mont Society, Hinjewadi, Pune</h2>
+            </div>
+            <div>
+                <h1>Atul Tripathi</h1>
+                <h2 style="color: #444;">9822752885</h2>
+            </div>
+        </div>
+
+        <div class="property-sticky-arrow">
+            <span class="material-symbols-outlined">
+                expand_more
+            </span>
+        </div>
+
+        <div class="secondary-details">
+            <div class="padding-div" style="height: 100%;">
+                <div class="profile-card-div" style="padding: 20px;height: calc(100% - 20px);background: #fff;">
+                    <div class="property-status-property-card">
+                        <div class="user-logo-parent-div">
+                            <div class="user-logo">
+                                <h4>AT</h4>
+                            </div>
+                        </div>
+
+                        <div class="details" style="text-align: center;">
+                            <div class="secondary-details-display">
+                                <div class="secondary-details-inside-display">
+                                    <h5>Atul Tripathi</h5>
+                                    <div class="property-contact-div property-media-icons-horizontal"
+                                        style="flex-direction: row;width: 100%;height: auto;">
+                                        <div>
+                                            <span class="material-symbols-outlined">
+                                                call
+                                            </span>
+                                            <h1>Call</h1>
+                                        </div>
+                                        <div>
+                                            <img src="../img/whatsapp_square_icon.png" alt="">
+                                            <h1>WhatsApp</h1>
+                                        </div>
+                                        <div>
+                                            <span class="material-symbols-outlined">
+                                                alternate_email
+                                            </span>
+                                            <h1>Mail</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="secondary-details-hr" />
+                                <div style="width: 100%">
+                                    <h5>Vinay Prajapati</h5>
+                                    <div class="property-contact-div property-media-icons-horizontal"
+                                        style="flex-direction: row;width: 100%;height: auto;">
+                                        <div>
+                                            <span class="material-symbols-outlined">
+                                                call
+                                            </span>
+                                            <h1>Call</h1>
+                                        </div>
+                                        <div>
+                                            <img src="../img/whatsapp_square_icon.png" alt="">
+                                            <h1>WhatsApp</h1>
+                                        </div>
+                                        <div>
+                                            <span class="material-symbols-outlined">
+                                                alternate_email
+                                            </span>
+                                            <h1>Mail</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- top sticky div - end -->
+
+
+
+
+
+    <div id="fullContent" class="row no-gutters">
+
+        <div class="col-lg-2">
+            <div class="large" style="padding: 12px;"></div>
+            <div class="side-navbar side-navbar-large property-list-side-navbar"
+                style="height: calc(100% - 40px);background: #fff;position: relative;top: -5px;">
+
+
+                <ul>
+
+                    <li style="background: #4CD7D0;">
+
+                        <a href="adminDashboard.html">
+
+
+                            <div class="side-navbar-profile-div">
+
+                                <div class="side-navbar-profile-div-circle">
+                                    <div>
+                                        <span>AT</span>
+                                    </div>
+                                </div>
+
+                                <div class="side-navbar-profile-div-name">
+                                    <div class="">
+                                        <h6>Khushi Soni
+                                        </h6>
+                                        <small>Edit Profile</small>
+                                    </div>
+                                </div>
+                                <div class="side-navbar-profile-div-arrow">
+                                    <span class="material-symbols-outlined">
+                                        navigate_next
+                                    </span>
+                                </div>
+                            </div>
+
+                        </a>
+                    </li><br>
+
+                    <li>
+                        <b></b>
+                        <b></b>
+                        <a href="propertyStatus.html">
+                            <span class="material-symbols-outlined">
+                                home
+                            </span>
+                            <small>Property Status</small>
+                        </a>
+                    </li>
+
+                    <li class="active">
+                        <b></b>
+                        <b></b>
+                        <a href="propertyImages.html">
+                            <span class="material-symbols-outlined">
+                                image
+                            </span>
+                            <small>Property Images</small>
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <b></b>
+                        <b></b>
+                        <a href="propertySetup.html">
+                            <span class="material-symbols-outlined">
+                                category
+                            </span>
+                            <small>Property Setup</small>
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <b></b>
+                        <b></b>
+                        <a href="propertyDocument.html">
+                            <span class="material-symbols-outlined">
+                                description
+                            </span>
+                            <small>Property Documents</small>
+                        </a>
+                    </li>
+
+
+                    <li>
+                        <b></b>
+                        <b></b>
+                        <a href="propertyInsights.html">
+                            <span class="material-symbols-outlined">
+                                volunteer_activism
+                            </span>
+                            <small>Reports</small>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/login/index.html">
+                            <b></b>
+                            <b></b>
+                            <span class="material-symbols-outlined">
+                                logout
+                            </span>
+                            <small>Logout</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="side-navbar mobile small" style="z-index: 9999;" id="sideNavbar">
+                <div class="closeBtn">
+                    <span class="material-symbols-outlined" id="closeBtn">
+                        close
+                    </span>
+                </div>
+                <ul>
+
+                    <li style="background: #4CD7D0;">
+
+                        <a href="adminDashboard.html">
+
+
+                            <div class="side-navbar-profile-div">
+
+                                <div class="side-navbar-profile-div-circle">
+                                    <div>
+                                        <span>KS</span>
+                                    </div>
+                                </div>
+
+                                <div class="side-navbar-profile-div-name">
+                                    <div class="">
+                                        <h6>Khushi Soni
+                                        </h6>
+                                        <small>Edit Profile</small>
+                                    </div>
+                                </div>
+                                <div class="side-navbar-profile-div-arrow">
+                                    <span class="material-symbols-outlined">
+                                        navigate_next
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+                        </a>
+                    </li><br>
+                    <li>
+                        <b></b>
+                        <b></b>
+                        <a href="propertyStatus.html">
+                            <span class="material-symbols-outlined">
+                                home
+                            </span>
+                            <small>Property Status</small>
+                        </a>
+                    </li>
+
+                    <li class="active">
+                        <b></b>
+                        <b></b>
+                        <a href="propertyImages.html">
+                            <span class="material-symbols-outlined">
+                                category
+                            </span>
+                            <small>Property Images</small>
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <b></b>
+                        <b></b>
+                        <a href="propertySetup.html">
+                            <span class="material-symbols-outlined">
+                                category
+                            </span>
+                            <small>Property Setup</small>
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <b></b>
+                        <b></b>
+                        <a href="propertyDocument.html">
+                            <span class="material-symbols-outlined">
+                                description
+                            </span>
+                            <small>Property Documents</small>
+                        </a>
+                    </li>
+
+
+                    <li>
+                        <b></b>
+                        <b></b>
+                        <a href="propertyInsights.html">
+                            <span class="material-symbols-outlined">
+                                volunteer_activism
+                            </span>
+                            <small>Reports</small>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/login/index.html">
+                            <b></b>
+                            <b></b>
+                            <span class="material-symbols-outlined">
+                                logout
+                            </span>
+                            <small>Logout</small>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+
+        </div>
+        <div class="col-lg-10">
+
+            <div class="container-fluid">
+
+                <a href="#" onclick="openMoreAddOptions()" class="property-list-add-property small">
+                    <span class="material-symbols-outlined">
+                        apps
+                    </span>
+                </a>
+
+                <div class="more-add-options-div" onclick="closeMoreAddOptions()" id="moreAddOptions">
+
+                    <div>
+
+                        <a href="createProperty.html" class="more-add-options-icons">
+                            <h1>Add Property</h1>
+                            <span class="material-symbols-outlined">
+                                real_estate_agent
+                            </span>
+                        </a>
+
+                        <a href="propertyImages.html" class="more-add-options-icons">
+                            <h1>Add Image</h1>
+                            <span class="material-symbols-outlined">
+                                image
+                            </span>
+                        </a>
+
+                        <a href="propertyDocument.html" class="more-add-options-icons">
+                            <h1>Add Document</h1>
+                            <span class="material-symbols-outlined">
+                                description
+                            </span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div style="padding: 20px 0;">
+                    <h1 class="all-heading mobile-center" style="padding: 0 10px;">Property Images</h1><br>
+
+                    <div class="add-property-menu">
+                        <div class="menu-list active" id="Basic" onclick="addPropertyMenu('Basic')">
+                            <h1>Original</h1>
+                        </div>
+                        <div class="menu-list" id="Details" onclick="addPropertyMenu('Details')">
+                            <h1>Inspection</h1>
+                        </div>
+                        <div class="menu-list" id="Occupancy" onclick="addPropertyMenu('Occupancy')">
+                            <h1>Other</h1>
+                        </div>
+                        <div class="menu-indicator" id="menuIndicator"></div>
+                    </div>
+
+                    <br>
+
+                    <div class="add-property-outter">
+
+                        <div class="add-property-inner">
+                            <div class="section" id="section1">
+
+                                <div class="row no-gutters">
+                                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                                        <div class="property-image-div">
+                                            <!-- <img src="" class="property-image" alt=""> -->
+                                            <div class="property-contact-div property-media-icons-horizontal"
+                                                style="justify-content: space-evenly;flex-direction: row;">
+                                                <div style="cursor: pointer;">
+                                                    <span class="material-symbols-outlined">
+                                                        add_a_photo
+                                                    </span>
+                                                    <h1>Camera</h1>
+                                                </div>
+                                                <div style="cursor: pointer;">
+                                                    <span class="material-symbols-outlined">
+                                                        cloud_upload
+                                                    </span>
+                                                    <h1>Upload</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                                        <div class="property-image-div">
+                                            <img src="../img/room_house.jpg" class="property-image" alt="">
+                                            <div onclick="moreClickOpen(moreBtnDetails1)" class="object-more-icon">
+                                                <span class="material-symbols-outlined">
+                                                    more_vert
+                                                </span>
+                                            </div>
+                                            <div id="moreBtnDetails1" class="object-more-details">
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        cloud_upload
+                                                    </span>
+                                                    <h1>UPLOAD</h1>
+                                                </div>
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                    <h1>TRASH</h1>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="propety-description">
+                                            <h1>HOUSE - FULL VIEW</h1>
+                                            <div class="indicating-letter"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                                        <div class="property-image-div">
+                                            <img src="../img/room_hall.jpg" class="property-image" alt="">
+                                            <div onclick="moreClickOpen(moreBtnDetails2)" class="object-more-icon">
+                                                <span class="material-symbols-outlined">
+                                                    more_vert
+                                                </span>
+                                            </div>
+                                            <div id="moreBtnDetails2" class="object-more-details">
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        cloud_upload
+                                                    </span>
+                                                    <h1>UPLOAD</h1>
+                                                </div>
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                    <h1>TRASH</h1>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="propety-description">
+                                            <h1>DRAWING ROOM</h1>
+                                            <div class="indicating-letter"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                                        <div class="property-image-div">
+                                            <img src="../img/room_master.jpg" class="property-image" alt="">
+                                            <div onclick="moreClickOpen(moreBtnDetails3)" class="object-more-icon">
+                                                <span class="material-symbols-outlined">
+                                                    more_vert
+                                                </span>
+                                            </div>
+                                            <div id="moreBtnDetails3" class="object-more-details">
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        cloud_upload
+                                                    </span>
+                                                    <h1>UPLOAD</h1>
+                                                </div>
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                    <h1>TRASH</h1>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="propety-description">
+                                            <h1>MASTER BED ROOM</h1>
+                                            <div class="indicating-letter"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                                        <div class="property-image-div">
+                                            <img src="../img/room_1.jpg" class="property-image" alt="">
+                                            <div onclick="moreClickOpen(moreBtnDetails4)" class="object-more-icon">
+                                                <span class="material-symbols-outlined">
+                                                    more_vert
+                                                </span>
+                                            </div>
+                                            <div id="moreBtnDetails4" class="object-more-details">
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        cloud_upload
+                                                    </span>
+                                                    <h1>UPLOAD</h1>
+                                                </div>
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                    <h1>TRASH</h1>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="propety-description">
+                                            <h1>ROOM ADJECENT TO HALL</h1>
+                                            <div class="indicating-letter"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                                        <div class="property-image-div">
+                                            <img src="../img/room_2.jpg" class="property-image" alt="">
+                                            <div onclick="moreClickOpen(moreBtnDetails5)" class="object-more-icon">
+                                                <span class="material-symbols-outlined">
+                                                    more_vert
+                                                </span>
+                                            </div>
+                                            <div id="moreBtnDetails5" class="object-more-details">
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        cloud_upload
+                                                    </span>
+                                                    <h1>UPLOAD</h1>
+                                                </div>
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                    <h1>TRASH</h1>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="propety-description">
+                                            <h1>ROOM ADJECENT TO KITCHEN</h1>
+                                            <div class="indicating-letter"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                                        <div class="property-image-div">
+                                            <img src="../img/room_balcony.jpg" class="property-image" alt="">
+                                            <div onclick="moreClickOpen(moreBtnDetails6)" class="object-more-icon">
+                                                <span class="material-symbols-outlined">
+                                                    more_vert
+                                                </span>
+                                            </div>
+                                            <div id="moreBtnDetails6" class="object-more-details">
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        cloud_upload
+                                                    </span>
+                                                    <h1>UPLOAD</h1>
+                                                </div>
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                    <h1>TRASH</h1>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="propety-description">
+                                            <h1>BALCONY</h1>
+                                            <div class="indicating-letter"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                                        <div class="property-image-div">
+                                            <img src="../img/room_kitchen.webp" class="property-image" alt="">
+                                            <div onclick="moreClickOpen(moreBtnDetails7)" class="object-more-icon">
+                                                <span class="material-symbols-outlined">
+                                                    more_vert
+                                                </span>
+                                            </div>
+                                            <div id="moreBtnDetails7" class="object-more-details">
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        cloud_upload
+                                                    </span>
+                                                    <h1>UPLOAD</h1>
+                                                </div>
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                    <h1>TRASH</h1>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="propety-description">
+                                            <h1>KITCHEN</h1>
+                                            <div class="indicating-letter"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                                        <div class="property-image-div">
+                                            <img src="../img/room_bathroom.jpg" class="property-image" alt="">
+                                            <div onclick="moreClickOpen(moreBtnDetails8)" class="object-more-icon">
+                                                <span class="material-symbols-outlined">
+                                                    more_vert
+                                                </span>
+                                            </div>
+                                            <div id="moreBtnDetails8" class="object-more-details">
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        cloud_upload
+                                                    </span>
+                                                    <h1>UPLOAD</h1>
+                                                </div>
+
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                    <h1>TRASH</h1>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="propety-description">
+                                            <h1>BATHROOM</h1>
+                                            <div class="indicating-letter"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="section" id="section2"></div>
+
+                            <div class="section" id="section3"></div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <hr>
+                <div class="padding-div">
+                    <div onclick="trashCardsOpen(trashCardDiv, trashCardArrow)" class="trash-heading-div">
+                        <h1 class="all-heading">Trash</h1>
+                        <span id="trashCardArrow" class="material-symbols-outlined">
+                            expand_more
+                        </span>
+                    </div>
+                </div>
+
+                <div id="trashPopUpDiv" class="trash-pop-up">
+                    <div onclick="closeDeletePopUp()" class="trash-pop-up-card">
+                        <span class="material-symbols-outlined close-btn">
+                            close
+                        </span>
+                        <h1>ROOM ADJECENT TO HALL</h1>
+                        <hr>
+                        <h2><span id="trashPopUpParaText"></span> "ROOM ADJECENT TO HALL" Image</h2>
+                        <div class="trash-pop-up-btn-div">
+                            <div>
+                                <span>CANCEL</span>
+                            </div>
+                            <div id="trashPopUpSituationBtn" class="">
+                                <span>mytext</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="trashCardDiv" class="row no-gutters trash-cards">
+
+                    <div class="col-lg-12 col-sm-12 col-sm-12">
+                        <br>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                        <div class="property-image-div">
+                            <img src="../img/room_1.jpg" class="property-image" alt="">
+                            <div onclick="moreClickOpen(moreBtnTrashDetails1)" class="object-more-icon">
+                                <span class="material-symbols-outlined">
+                                    more_vert
+                                </span>
+                            </div>
+                            <div id="moreBtnTrashDetails1" class="object-more-details">
+
+                                <div onclick="openDeletePopUp('Recover')">
+                                    <span class="material-symbols-outlined">
+                                        refresh
+                                    </span>
+                                    <h1>RECOVER</h1>
+                                </div>
+
+                                <div onclick="openDeletePopUp('Delete')">
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
+                                    <h1>DELETE</h1>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="propety-description">
+                            <h1>ROOM ADJECENT TO HALL</h1>
+                            <div class="indicating-letter"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6 col-sm-12" style="padding: 10px;">
+                        <div class="property-image-div">
+                            <img src="../img/room_balcony.jpg" class="property-image" alt="">
+                            <div onclick="moreClickOpen(moreBtnTrashDetails2)" class="object-more-icon">
+                                <span class="material-symbols-outlined">
+                                    more_vert
+                                </span>
+                            </div>
+                            <div id="moreBtnTrashDetails2" class="object-more-details">
+
+                                <div onclick="openDeletePopUp('Recover')">
+                                    <span class="material-symbols-outlined">
+                                        refresh
+                                    </span>
+                                    <h1>RECOVER</h1>
+                                </div>
+
+                                <div onclick="openDeletePopUp('Delete')">
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
+                                    <h1>DELETE</h1>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="propety-description">
+                            <h1>BALCONY</h1>
+                            <div class="indicating-letter"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+
+                <div class="vehicle-div">
+
+                    <div class="row no-gutters">
+                        <div class="col-lg-6 col-md-12 col-sm-12">
+                            <div class="padding-div">
+                                <div class="profile-card-div">
+                                    <div class="address-div">
+                                        <div class="icon" style="background: rgba(84,204,203,);">
+                                            <span class="material-symbols-outlined">
+                                                security
+                                            </span>
+                                        </div>
+
+                                        <div class="address-text">
+                                            <h5>Security alert list</h5>
+                                            <div class="">
+                                                <span class="material-symbols-outlined">
+                                                    chevron_right
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr style="margin: 0;border: none; border-bottom: 1px solid #eee;" />
+
+                                    <div class="address-div">
+                                        <div class="icon" style="background: rgba(84,204,203,);">
+                                            <span class="material-symbols-outlined">
+                                                sms
+                                            </span>
+                                        </div>
+
+                                        <div class="address-text">
+                                            <h5>Support & Feedback</h5>
+                                            <div class="">
+                                                <span class="material-symbols-outlined">
+                                                    chevron_right
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 col-sm-12">
+                            <div class="padding-div">
+                                <div class="profile-card-div">
+                                    <div class="address-div">
+                                        <div class="icon" style="background: rgba(84,204,203,);">
+                                            <span class="material-symbols-outlined">
+                                                lock_open
+                                            </span>
+                                        </div>
+
+                                        <div class="address-text">
+                                            <h5>Change Password</h5>
+                                            <div class="">
+                                                <span class="material-symbols-outlined">
+                                                    chevron_right
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr style="margin: 0;border: none; border-bottom: 1px solid #eee;" />
+
+                                    <div class="address-div">
+                                        <div class="icon" style="background: rgba(84,204,203,);">
+                                            <span class="material-symbols-outlined">
+                                                logout
+                                            </span>
+                                        </div>
+
+                                        <div class="address-text">
+                                            <h5>Logout</h5>
+                                            <div class="">
+                                                <span style="opacity: 0;" class="material-symbols-outlined">
+                                                    chevron_right
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="last-div">
+                        <img src="../img/logo_manu_transparent.png" width="180px" alt="">
+                        <a href="#">Terms & Conditions | Privacy Policy</a>
+                        <small>Version 2.54.0</small>
+                    </div><br class="small" /><br class="small" />
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Jquery order should be higher from normal javascript  -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+
+    <!-- Owl Carousel JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <script src="../js/main.js"></script>
+    <script src="../js/propertyImage.js"></script>
+    <script src="../js/addproperty.js"></script>
+
+    <!-- Owl Carousel Javascript  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>

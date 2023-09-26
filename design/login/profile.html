@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Created by Hyper Cloud Digital Solutions">
+  <meta name="keywords" content="">
+  <meta name="author" content="Hyper Cloud Digital Solutions">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PropDail - Profile</title>
+
+  <link rel="shortcut icon" href="../img/logo_manu_transparent.png">
+
+  <!-- Google Icons -->
+  <link rel="stylesheet"
+    href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome cdn file -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+  <!-- Owl Stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+  <!-- Bootstrap css -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css"> -->
+
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+  <!-- Your Own Style -->
+  <link rel="stylesheet" href="../css/styles.css">
+
+</head>
+
+<body style="background: #efefef;">
+
+  <!-- Navbar - Start -->
+
+  <nav class="navbar navbar-expand-lg sticky-top large ">
+    <a class="navbar-brand" href="#banner">
+      <img style="height:60px;" src="../img/logo.png" alt="">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" style="position:absolute;right: 20px;" id="collapsibleNavbar">
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/dashboard.html">
+            <span class="material-icons-outlined">
+              home
+            </span>
+            <small>Dashboard</small>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/propertyList.html">
+            <span class="material-icons-outlined">
+              receipt_long
+            </span>
+            <small>Properties</small>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/search.html">
+            <span class="material-icons-outlined">
+              search
+            </span>
+            <small>Search</small>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <span class="material-icons-outlined">
+              handyman
+            </span>
+            <small>Enquiries</small>
+          </a>
+        </li>
+
+      </ul>
+
+    </div>
+
+  </nav>
+  <!-- navbar ends -->
+
+  <div class="small navbar-mobile" style="padding:0 10px;">
+    <div class="navbar-mobile-menu">
+      <a href="#" id="hamberIcon">
+        <span class="material-symbols-outlined">
+          menu
+        </span>
+      </a>
+      <a href="#">
+        <img style="height:40px; position:relative;top:4px;" src="../img/logo.png" alt="">
+      </a>
+
+      <a href="notification/index.html"
+        style="padding-right: 10px;position:relative;display:flex;justify-content: space-between;">
+        <span class="material-symbols-outlined">
+          notifications
+        </span>
+        <div class="notification-count">
+
+        </div>
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- bottom bardown -->
+  <div class="small navbar-mobile-bottom">
+    <div class="navbar-mobile-bottom-menu" id="divBottomNavBar">
+      <a href="/admin/dashboard.html" class="navbar-mobile-bottom-menu-a" style="display:flex; flex-direction:column;">
+        <span class="material-symbols-outlined">
+          home
+        </span>
+        <small>Home</small>
+      </a>
+      <a href="/admin/propertyList.html" class="navbar-mobile-bottom-menu-a"
+        style="display:flex; flex-direction:column;">
+        <span class="material-symbols-outlined">
+          receipt_long
+        </span>
+        <small>List</small>
+      </a>
+      <a href="">
+
+      </a>
+      <a href="/admin/search.html" class="navbar-mobile-bottom-menu-a " style="display:flex; flex-direction:column;">
+        <span class="material-symbols-outlined">
+          search
+        </span>
+        <small>Search</small>
+      </a>
+      <a href="#" class="navbar-mobile-bottom-menu-a" style="display:flex; flex-direction:column;">
+        <span class="material-symbols-outlined">
+          handyman
+        </span>
+        <small>Enquiries</small>
+      </a>
+    </div>
+    <a class="new-user " style="background: #EB542E;" href="/login/profile.html">
+      <span class="material-symbols-outlined">
+        person
+      </span>
+    </a>
+  </div>
+  <!-- bottom bardown -->
+
+  <!-- profile - start -->
+
+  <div class="" id="fullContent" style="overflow:hidden;">
+    <div class="row no-gutters">
+      <div class="col-lg-2" style="">
+        <div class="side-navbar large property-list-side-navbar" style="height: calc(100% - 40px); background: #fff;">
+          <ul>
+
+            <li style="background: #EB542E;" class="active">
+
+              <a href="/login/profile.html">
+
+
+                <div style="display:flex; justify-content: space-between; margin: 0; width:100%;" class="">
+
+                  <span
+                    style="font-weight: bolder;padding-top: 4px ;background:#fff;color:rgb(235, 84, 46); height: 30px; width: 30px; border-radius:50%; text-align: center; justify-content:center; margin-top: 6px;">
+                    AT
+                  </span>
+
+                  <div style="position:relative; left:-10px;" class="">
+                    <div style="display:flex; flex-direction:column; " class="">
+                      <h6 style="font-size:1rem; margin-top: 4px; margin-bottom: 2px; ">Atul Tripathi
+                      </h6>
+                      <h6 style="font-size:0.8rem;">Edit Profile</h6>
+                    </div>
+                  </div>
+                  <div style="padding-top:10px;" class="">
+                    <span class="material-symbols-outlined">
+                      navigate_next
+                    </span>
+                  </div>
+                </div>
+
+
+
+              </a>
+            </li><br>
+            <li>
+              <b></b>
+              <b></b>
+              <a href="/admin/dashboard.html">
+                <span class="material-symbols-outlined">
+                  home
+                </span>
+                <small>Dashboard</small>
+              </a>
+            </li>
+
+            <li>
+              <b></b>
+              <b></b>
+              <a href="/admin/propertyList.html">
+                <span class="material-symbols-outlined">
+                  description
+                </span>
+                <small>Property List</small>
+
+              </a>
+            </li>
+
+            <li>
+              <b></b>
+              <b></b>
+              <a href="createProperty.html">
+                <span class="material-symbols-outlined">
+                  add
+                </span>
+                <small>Add Property</small>
+              </a>
+            </li>
+
+            <li>
+              <a href="#">
+                <b></b>
+                <b></b>
+                <span class="material-symbols-outlined">
+                  handyman
+                </span>
+                <small>Enquiries</small>
+              </a>
+            </li>
+
+            <li>
+              <a href="#">
+                <b></b>
+                <b></b>
+                <span class="material-symbols-outlined">
+                  volunteer_activism
+                </span>
+                <small>Refer & Earn</small>
+              </a>
+            </li>
+
+            <li>
+              <a href="/login/index.html">
+                <b></b>
+                <b></b>
+                <span class="material-symbols-outlined">
+                  logout
+                </span>
+                <small>Logout</small>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="side-navbar mobile small" id="sideNavbar">
+          <div class="closeBtn">
+            <span class="material-symbols-outlined" id="closeBtn">
+              close
+            </span>
+          </div>
+          <ul>
+
+            <li style="background: #EB542E;" class="active">
+
+              <a href="/login/profile.html">
+
+
+                <div style="display:flex; justify-content: space-between; margin: 0; width:100%;" class="">
+
+                  <span
+                    style="font-weight: bolder;padding-top: 4px ;background:#fff;color:rgb(235, 84, 46); height: 36px; width: 36px; border-radius:50%; text-align: center; justify-content:center; margin-top: 6px;">
+                    AT
+                  </span>
+
+                  <div style="position:relative; left:-24px;" class="">
+                    <div style="display:flex; flex-direction:column; " class="">
+                      <h6 style="font-size:1.2rem; margin-top: 4px; margin-bottom: 2px; ">Atul
+                        Tripathi</h6>
+                      <h6 style="font-size:0.9rem;">Edit Profile</h6>
+                    </div>
+                  </div>
+                  <div style="padding-top:10px;" class="">
+                    <span class="material-symbols-outlined">
+                      navigate_next
+                    </span>
+                  </div>
+                </div>
+
+
+
+              </a>
+            </li><br>
+            <li>
+              <b></b>
+              <b></b>
+              <a href="/admin/dashboard.html">
+                <span class="material-symbols-outlined">
+                  home
+                </span>
+                <small>Dashboard</small>
+              </a>
+            </li>
+
+            <li>
+              <b></b>
+              <b></b>
+              <a href="/admin/propertyList.html">
+                <span class="material-symbols-outlined">
+                  description
+                </span>
+                <small>Property List</small>
+
+              </a>
+            </li>
+
+            <li>
+              <b></b>
+              <b></b>
+              <a href="createProperty.html">
+                <span class="material-symbols-outlined">
+                  add
+                </span>
+                <small>Add Property</small>
+              </a>
+            </li>
+
+            <li>
+              <a href="#">
+                <b></b>
+                <b></b>
+                <span class="material-symbols-outlined">
+                  handyman
+                </span>
+                <small>Enquiries</small>
+              </a>
+            </li>
+
+            <li>
+              <a href="#">
+                <b></b>
+                <b></b>
+                <span class="material-symbols-outlined">
+                  volunteer_activism
+                </span>
+                <small>Refer & Earn</small>
+              </a>
+            </li>
+
+            <li>
+              <a href="/login/index.html">
+                <b></b>
+                <b></b>
+                <span class="material-symbols-outlined">
+                  logout
+                </span>
+                <small>Logout</small>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+
+
+      </div>
+      <div class="col-lg-10 col-md-10 col-sm-12">
+        <div class="">
+          <div class="full-profile-div">
+
+            <div class="profile-card-div">
+              <div class="content">
+                <div class="user-name">
+                  <div class="user-logo-parent-div">
+                    <div class="user-logo">
+                      <h4>AT</h4>
+                    </div>
+                  </div>
+
+                  <div class="details">
+                    <h5>Atul Tripathi</h5>
+                    <p>atulmani@gmail.com</p>
+                    <p style="margin-top: 2px;">98227 52885</p>
+                  </div>
+
+                  <div class="edit">
+                    <span class="material-symbols-outlined">
+                      edit
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="edit-profile-div">
+                <small>See Your Dashboard and Other Details</small>
+                <div class="">
+                  <div class="">
+
+                  </div>
+                  <a href="#"><button type="button" class="mybutton button5"
+                      style="height: 32px;font-size: 0.7rem;width: 100px;">Dashboard</button></a>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="row no-gutters">
+              <div class="col-lg-6">
+                <div class="profile-card-div">
+                  <div class="address-div">
+                    <div class="icon">
+                      <span class="material-symbols-outlined">
+                        home
+                      </span>
+                    </div>
+
+                    <div class="address-text">
+                      <h5>A 504, HIGH MONT</h5>
+                      <div class="">
+                        <span class="material-symbols-outlined">
+                          chevron_right
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="add-address">
+                    <small>
+                      <span class="material-symbols-outlined">
+                        add
+                      </span>
+                    </small>
+                    <small>Add an property</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="profile-card-div large">
+                  <div class="address-div">
+                    <div class="icon">
+                      <span class="material-symbols-outlined">
+                        apartment
+                      </span>
+                    </div>
+
+                    <div class="address-text">
+                      <h5>Hinjewadi Housing Agents</h5>
+                      <div class="">
+                        <span class="material-symbols-outlined">
+                          chevron_right
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="add-address">
+                    <small>
+                      <span class="material-symbols-outlined">
+                        pin_drop
+                      </span>
+                    </small>
+                    <small>Properties Near Me</small>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="vehicle-div">
+
+              <h1 class="all-heading">My Properties</h1>
+
+              <div class="">
+                <div class="row">
+                  <div class="col-md-12 col-md-offset-1">
+                    <div id="vehicle-list" class="owl-carousel owl-theme">
+                      <div class="item" style="margin: 10px 0;">
+                        <div class="vehicle-card">
+                          <div class="">
+                            <span class="material-symbols-outlined">
+                              house
+                            </span>
+
+                            <h5>C-202 Sri Adinath</h5>
+                            <small>Sector 3 Kharghar Navi Mumbai</small>
+                          </div>
+                          <div class="newWave wave1 battery7"></div>
+                          <div class="newWave wave2 battery7"></div>
+                          <div class="newWave wave3 battery7"></div>
+                          <div class="battery">
+                            <span>10%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="item" style="margin: 10px 0;">
+                        <div class="vehicle-card">
+                          <div class="">
+                            <span class="material-symbols-outlined">
+                              storefront
+                            </span>
+
+                            <h5>S-21 Shobha Shopping Complex</h5>
+                            <small>Sector 35 Vashi Navi Mumbai</small>
+                          </div>
+                          <div class="newWave wave1 battery7"></div>
+                          <div class="newWave wave2 battery7"></div>
+                          <div class="newWave wave3 battery7"></div>
+                          <div class="battery">
+                            <span>10%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="item" style="margin: 10px 0;">
+                        <div class="vehicle-card">
+                          <div class="">
+                            <span class="material-symbols-outlined">
+                              apartment
+                            </span>
+
+                            <h5>Inorbit Mall</h5>
+                            <small>Palm Beach Road, Belapur CBD</small>
+                          </div>
+                          <div class="newWave wave1 battery7"></div>
+                          <div class="newWave wave2 battery7"></div>
+                          <div class="newWave wave3 battery7"></div>
+                          <div class="battery">
+                            <span>10%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="item" style="margin: 10px 0;">
+                        <div class="vehicle-card">
+                          <div class="add-vehicle-card">
+                            <span class="material-symbols-outlined">
+                              add
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <br>
+              </div>
+
+              <div class="row no-gutters">
+                <div class="col-lg-6 col-md-12 col-sm-12">
+
+                  <div class="profile-card-div">
+                    <div class="address-div">
+                      <div class="icon" style="background: rgba(84,204,203,);">
+                        <span class="material-symbols-outlined">
+                          security
+                        </span>
+                      </div>
+
+                      <div class="address-text">
+                        <h5>Security alert list</h5>
+                        <div class="">
+                          <span class="material-symbols-outlined">
+                            chevron_right
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <hr style="margin: 0;border: none; border-bottom: 1px solid #aaa;" />
+
+                    <div class="address-div">
+                      <div class="icon" style="background: rgba(84,204,203,);">
+                        <span class="material-symbols-outlined">
+                          sms
+                        </span>
+                      </div>
+
+                      <div class="address-text">
+                        <h5>Support & Feedback</h5>
+                        <div class="">
+                          <span class="material-symbols-outlined">
+                            chevron_right
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12">
+
+                  <div class="profile-card-div">
+                    <div class="address-div">
+                      <div class="icon" style="background: rgba(84,204,203,);">
+                        <span class="material-symbols-outlined">
+                          lock_open
+                        </span>
+                      </div>
+
+                      <div class="address-text">
+                        <h5>Change Password</h5>
+                        <div class="">
+                          <span class="material-symbols-outlined">
+                            chevron_right
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <hr style="margin: 0;border: none; border-bottom: 1px solid #aaa;" />
+
+                    <div class="address-div">
+                      <div class="icon" style="background: rgba(84,204,203,);">
+                        <span class="material-symbols-outlined">
+                          logout
+                        </span>
+                      </div>
+
+                      <div class="address-text">
+                        <h5>Logout</h5>
+                        <div class="">
+                          <span style="opacity: 0;" class="material-symbols-outlined">
+                            chevron_right
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+        <div class="last-div">
+          <img src="../img/logo_manu_transparent.png" width="180px" alt="">
+          <a href="#">Terms & Conditions | Privacy Policy</a>
+          <small>Version 2.54.0</small>
+        </div><br class="small" /><br class="small" />
+
+
+      </div>
+    </div>
+
+    <!-- profile - end -->
+
+    <!-- Jquery order should be higher from normal javascript  -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"></script>
+
+    <!-- Owl Carousel JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="../js/main.js"></script>
+
+    <!-- Owl Carousel Javascript  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"></script>
+
+</body>
+
+</html>
