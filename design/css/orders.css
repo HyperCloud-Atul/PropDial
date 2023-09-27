@@ -1,0 +1,231 @@
+
+.OrderPageCard{
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  height: 6rem;
+  width: 100%;
+  transition: 1s;
+  overflow: hidden;
+  margin-bottom: 20px;
+
+}
+
+.OrderPageCard.active{
+  height:17rem;
+}
+
+
+.OrderLine{
+  font-weight: normal;
+  display: flex;
+}
+
+.OrderLineBelow{
+  display: flex;
+  flex-direction: column;
+}
+
+.OrderLineBelow h6:nth-child(1){
+  font-weight: bold;
+  margin-left: 10px;
+  margin-top: 1px;
+  margin-bottom: 3px;
+  font-size: 1rem;
+
+}
+
+.OrderLineBelow h6:nth-child(2){
+  /* font-weight: bold; */
+  margin-left: 10px;
+  font-size: 0.8rem;
+  color: #494949;
+  margin-bottom: 3px;
+  font-weight: bolder;
+
+}
+
+.OrderLineBelowEnd{
+  display: flex;
+  /* justify-content: flex-end; */
+}
+/*
+.OrderLineBelowEndContent div:nth-child(1) h6{
+
+  margin-left: 10px;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  background: red;
+} */
+
+.OrderLineBelowEndContent span{
+  /* font-weight: bold; */
+  margin-left: 10px;
+  margin-bottom: 0;
+  font-size: 1rem;
+  /* background: red; */
+}
+
+.OrderLineBelowEndContent span:nth-child(1) {
+  font-weight: 600;
+  color: #65c032;
+}
+
+.OrderLineBelowEndContent{
+  display: flex;
+}
+
+.statusdiv{
+  /* background: #65c032; */
+  color: #000;
+  /* margin: 0; */
+  /* display: inline-block; */
+  height: 24px;
+  width: 65px;
+  border-radius: 4px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+
+}
+.statusdiv h6{
+
+  position: relative;
+  top: 4px;
+  font-size: 0.9rem;
+  font-weight: bolder;
+
+
+}
+
+.OrderCardDetail{
+  display: flex;
+  justify-content: space-between;
+}
+.OrderCardDetailFeilds{
+  display: flex;
+  flex-direction: column;
+}
+.OrderCardDetailFeilds h6:nth-child(1){
+font-weight: bold;
+margin-bottom: 0;
+}
+.OrderCardDetailFeilds h6:nth-child(2){
+font-weight: 400;
+margin-bottom: 0;
+}
+
+.filterDiv{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 3%;
+
+}
+
+.FilterLine h6{
+  font-size: 1rem;
+  font-weight: bolder;
+}
+
+.FilterLine{
+  width: 33%;
+  text-align: center;
+  margin: 2px;
+
+}
+
+
+.hLine{
+  border: none;
+  border-bottom: 3px solid orange;
+  width:33.3%;
+  margin: 0;
+  transition: 1s
+}
+
+.ordersOuter{
+  width:100%;
+  overflow: hidden;
+  /* padding: 3%; */
+}
+
+.ordersDiv{
+  display: flex;
+  width: 300%;
+  /* padding: 0 5px; */
+}
+
+.orders{
+  width: 100%;
+  transition: 1s;
+  padding: 0 20px;
+
+
+}
+
+@media (max-width:850px) {
+  .orders{
+
+    padding: 0;
+
+  }
+}
+
+.category-list-sub-menu{
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  padding: 5px 10px 0 100px;
+  /* margin: 0 3px; */
+}
+@media (max-width:850px) {
+  .category-list-sub-menu{
+
+    padding: 5px 10px 0 30px;
+  }
+}
+.city-selector{
+  background: rgba(0,0,0,0.1);
+  outline: none;
+  border: #ddd;
+  padding: 5px 40px 5px 20px;
+  margin: 10px auto;
+  border-radius: 4px;
+  color: #444;
+  -webkit-appearance: none;
+  z-index: 10;
+}
+
+.city-selector.multi-select option{
+  padding: 5px 0;
+  font-size: 1rem;
+}
+
+/* .city-selector::-ms-expand {
+  display: none;
+} */
+
+.city-selector-icon{
+  position: relative;
+  top: 5px;
+  right: 35px;
+  pointer-events:none;
+}
+
+.icon{
+  position: relative;
+  top: 3px;
+  width: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 33px;
+  border-radius: 10px;
+  background: #65c032;
+  color: #fff;
+}
+
+ .icon span{
+  font-size: 1.2rem;
+}
