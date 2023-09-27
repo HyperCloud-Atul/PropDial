@@ -19,9 +19,9 @@ section.ari_bnb .know_detail.learn-more{
     right: 25px;
 }
 section.ari_bnb .card_inner h4.location {
-    font-size: 24px;
+    font-size: 20px;
     color: var(--theme-blue);
-    font-weight: 700;
+    font-weight: 500;
 }
 section.ari_bnb .p_info_single {
     display: flex;
@@ -30,16 +30,16 @@ section.ari_bnb .p_info_single {
     margin-top: 15px;
 }
 section.ari_bnb .p_info_single img {
-    height: 20px;
+    height: 16px;
     width: auto;
     opacity: 0.7;
 }
 section.ari_bnb .p_info_single h6 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
 }
 section.ari_bnb .p_info_single h5 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
 }
 section.ari_bnb .p_info {
@@ -53,6 +53,12 @@ section.ari_bnb h4.property_price {
     font-size: 20px;
     display: flex;
     gap: 5px;
+}
+.ari_bnb .owl-carousel .owl-item li img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3/2;
+    object-fit: cover;
 }
 .ab_p_carousel {
     margin-top: 40px;
