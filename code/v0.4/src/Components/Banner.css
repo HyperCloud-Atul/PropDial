@@ -11,6 +11,7 @@
 
 .home_banner {
     position: relative;
+    margin-top: -68px;
 }
 
 .home_banner::after {

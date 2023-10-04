@@ -3,7 +3,9 @@ section.hero img {
   aspect-ratio: 3/0.8;
   object-fit: cover;
 }
-
+.hero_component {
+  margin-top: -68px;
+}
 section.hero:after {
   content: '';
   background: black;
@@ -14,7 +16,9 @@ section.hero:after {
   left: 0;
   opacity: 0.5;
 }
-
+.hero_component.hero_display_none {
+  display: none;
+}
 .sn_inner {
   padding: 50px;
   background: white;

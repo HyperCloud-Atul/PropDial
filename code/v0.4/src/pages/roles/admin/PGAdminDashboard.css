@@ -9,6 +9,17 @@
     border-radius: 4px;
 }
 
+.admin_card_bottom {
+    position: absolute !important;
+    top: 100% !important;
+    height: 30px;
+    left: 0;
+    width: 100%;
+    background: #4CD7D0;
+    transform: translateY(-100%);
+    border-radius: 0 0 20px 20px;
+}
+
 .property-filter p {
     font-size: 0.9em;
     margin-right: 10px;
@@ -252,3 +263,141 @@
 }
 
 /* tenant dashboard - end */
+
+
+/* top card css  */
+
+
+
+/* admin dashboard page - start */
+
+.admin-property-count-card {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    padding: 20px 20px 45px 20px;
+    height: 120px;
+    text-decoration: none;
+    background: #fff;
+  }
+  
+  @media (max-width: 850px) {
+    .admin-property-count-card {
+      height: 100px;
+    }
+  
+    .admin-property-count-card-mobile {
+      transform: translateY(-13px);
+    }
+  }
+  
+  .admin-property-count-card:hover {
+    text-decoration: none;
+  }
+  
+  .admin-property-count-card div {
+    position: relative;
+    top: 5px;
+  }
+  
+  .admin-property-count-card h1 {
+    font-size: 2rem;
+    color: #EB542E;
+    margin: 0 !important;
+  }
+  
+  .admin-property-count-card h2 {
+    position: relative;
+    top: 5px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #000;
+    margin-bottom: 0 !important;
+  }
+  
+  .admin-property-count-card .rent-sale-div {
+    display: flex;
+  }
+  
+  .admin-property-count-card .rent-sale-div h3 {
+    font-size: 0.7rem;
+    color: #666;
+  }
+  
+  @media (max-width: 500px) {
+    .admin-property-count-card .rent-sale-div h3 {
+      font-size: 0.6rem;
+    }
+  }
+  
+  .admin-property-count-card .rent-sale-div h3.rent-span {
+    /* color: #ff5757; */
+    border-right: 1px solid #444;
+    padding-right: 3px !important;
+  }
+  
+  .admin-property-count-card .rent-sale-div h3.sale-span {
+    /* color: green; */
+    padding-left: 3px !important;
+  }
+  
+  .admin-property-count-card span {
+    font-size: 2.7rem;
+    color: #aaa;
+  }
+  
+  
+  @media (max-width: 850px) {
+    .admin-property-count-card {
+      padding: 10px !important;
+    }
+  
+    .admin-property-count-card h1 {
+      font-size: 1.2rem;
+    }
+  
+    .admin-property-count-card h2 {
+      font-size: 0.8rem;
+    }
+  
+    .admin-property-count-card span {
+      font-size: 2rem;
+    }
+  }
+  
+  .dashboard-square-card {
+    padding: 0 20px !important;
+  }
+  
+  @media (max-width: 850px) {
+    .dashboard-square-card {
+      padding: 5px 0 !important;
+    }
+  }
+  
+  .dashboard-square-card div {
+    padding: 20px 5px !important;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    background: #F8EA8C;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .dashboard-square-card h1 {
+    font-size: 2.5rem;
+    color: #EB542E;
+  }
+  
+  .dashboard-square-card h2 {
+    font-size: 0.9rem;
+    font-weight: normal;
+    margin-bottom: 5px !important;
+  }
+  
+  /* admin dashboard page - end */

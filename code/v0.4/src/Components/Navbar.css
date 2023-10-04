@@ -13,12 +13,12 @@
   padding: 10px 15px !important;
   transition: 0.4s;
 }
-nav.navbar.sticky-top.scrolled {
+nav.navbar.sticky-top.scrolled, .on_top .navbar {
   top: 0px !important;
   max-width: 100%;
   border-radius: 0px;
   transition: 0.4s;
-  box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 .navbar ul {
 padding: 0px;
@@ -112,7 +112,7 @@ li.main_menus {
   color: var(--white-color);
   border-top: 2px solid var(--light-green); 
 }
-.scrolled .menu_single.active {
+.scrolled .menu_single.active, .on_top .menu_single.active {
   top: 0px;
   transition: 0.4s;
   border-top: inherit;

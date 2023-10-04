@@ -1,11 +1,18 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 // css 
 import "./Hero.css"
 
 const Hero = (props) => {
+  const location = useLocation(); // Get the current location
+  // hero display none Array 
+  const excludedPaths = ["/", "/about-us", "/contact-us", "/more-menu", "/faq"];
+  const shouldHeroHide = excludedPaths.includes(location.pathname);
+  const heroClass = `hero_component ${shouldHeroHide ? "" : "hero_display_none"}`;
+  // hero display none Array 
   return (
-    <div className="hero_component">
+    <div className={heroClass}>
       <section className="hero relative">
         <img src={props.heroImage}></img>
       </section>

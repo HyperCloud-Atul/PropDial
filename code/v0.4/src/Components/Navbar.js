@@ -12,6 +12,12 @@ export default function Navbar() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location
+ 
+  // display navbar on top Array 
+  const excludedPaths = ["/", "/about-us", "/contact-us", "/more-menu", "/faq"];
+  const shouldOnTop = excludedPaths.includes(location.pathname);
+  const navbarClassName = `navbarparent ${shouldOnTop ? "" : "on_top"}`;
+  // display navbar on top Array 
 
   function logoutSetPadding() {
     // props.setFlag(null);
@@ -169,7 +175,7 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
 // array of more class active on desktop 
 
   return (
-    <header>
+    <header className={navbarClassName}>
       <div className="container">
         <nav className={navClass}>
           <ul>
