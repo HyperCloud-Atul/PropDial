@@ -72,8 +72,9 @@ const AirBnb = () => {
                 showDots={true}
                 responsive={responsiveimg}          
               >
-                <img src="./assets/img/airbnb/property1/1.jpg" alt="" className="ic_img-single" />
+                
                 <img src="./assets/img/airbnb/property1/2.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/property1/1.jpg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property1/3.jpg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property1/10.jpg" alt="" className="ic_img-single" />              
               </Carousel>
@@ -115,9 +116,11 @@ const AirBnb = () => {
                 showDots={true}
                 responsive={responsiveimg}          
               >
+               <img src="./assets/img/airbnb/property2/2.jpeg" alt="" className="ic_img-single" />  
+              <img src="./assets/img/airbnb/property2/3.jpeg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property2/1.jpg" alt="" className="ic_img-single" />
-                <img src="./assets/img/airbnb/property2/2.jpeg" alt="" className="ic_img-single" />             
-                <img src="./assets/img/airbnb/property2/3.jpeg" alt="" className="ic_img-single" />
+                          
+                
                 <img src="./assets/img/airbnb/property2/4.jpeg" alt="" className="ic_img-single" />
               </Carousel>
             </div>
@@ -200,8 +203,9 @@ const AirBnb = () => {
                 responsive={responsiveimg}  
               
               >
-                <img src="./assets/img/airbnb/property4/1.jpg" alt="" className="ic_img-single" />
-                <img src="./assets/img/airbnb/property4/2.jpg" alt="" className="ic_img-single" />             
+                
+                <img src="./assets/img/airbnb/property4/2.jpg" alt="" className="ic_img-single" /> 
+                <img src="./assets/img/airbnb/property4/1.jpg" alt="" className="ic_img-single" />            
                 <img src="./assets/img/airbnb/property4/3.jpg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property4/4.jpg" alt="" className="ic_img-single" />
               </Carousel>

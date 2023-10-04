@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 // import { useNavigate } from 'react-router-dom'
 import { useLogout } from "../../../hooks/useLogout";
+import { useLocation } from "react-router-dom";
 
 // components
 import Filters from "../../../Components/Filters";
@@ -13,6 +14,12 @@ import Hero from "../../../Components/Hero";
 import "./PGAdminDashboard.css";
 const propertyFilter = ["ALL", "RESIDENTIAL", "COMMERCIAL", "INACTIVE"];
 export default function PGAdminDashboard() {
+    // Scroll to the top of the page whenever the location changes start
+    const location = useLocation();
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location]);
+    // Scroll to the top of the page whenever the location changes end
   const { user } = useAuthContext();
   const { logout, isPending } = useLogout();
   const { documents, error } = useCollection("properties");

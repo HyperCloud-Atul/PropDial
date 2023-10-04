@@ -14,7 +14,16 @@ import Avatar from "../../Components/Avatar";
 import "./AddBill.css";
 import { el } from "date-fns/locale";
 
+// components 
+import Hero from "../../Components/Hero";
+
 export default function AddBill(props) {
+     // Scroll to the top of the page whenever the location changes start
+     const location = useLocation();
+     useEffect(() => {
+       window.scrollTo(0, 0);
+     }, [location]);
+     // Scroll to the top of the page whenever the location changes end
   const { state } = useLocation();
   const { propertyid } = state;
   const navigate = useNavigate();
@@ -202,12 +211,15 @@ export default function AddBill(props) {
 
   return (
     <div>
-      <div className="page-title">
-        <span className="material-symbols-outlined">real_estate_agent</span>
-        <h1>Add Bill </h1>
-      </div>
+      <Hero
+        pageTitle="Add Bill"
+        pageSubTitle="Discover Our Story
+        "
+        heroImage="./assets/img/about_us_banner.jpg"
+      ></Hero>
 
-      <div style={{ overflow: "hidden" }}>
+<div className="container">
+<div style={{ overflow: "hidden" }}>
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="row no-gutters">
             <div className="col-lg-6 col-md-6 col-sm-12">
@@ -329,12 +341,13 @@ export default function AddBill(props) {
           </div>
           <br />
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <button className="btn">Add Bill</button>
+            <button className="theme_btn btn_fill">Add Bill</button>
             {formError && <p className="error">{formError}</p>}
           </div>
           <br />
         </form>
       </div>
+</div>
     </div>
   );
 }

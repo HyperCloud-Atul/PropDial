@@ -4,7 +4,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectStorage, timestamp } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useImageUpload } from "../../hooks/useImageUpload";
@@ -15,8 +15,17 @@ import Avatar from "../../Components/Avatar";
 import "./AddBill.css";
 import { el } from "date-fns/locale";
 
+// components 
+import Hero from "../../Components/Hero"; 
+
 let photosCount = 0;
 export default function AddPhoto(props) {
+       // Scroll to the top of the page whenever the location changes start
+       const location = useLocation();
+       useEffect(() => {
+         window.scrollTo(0, 0);
+       }, [location]);
+       // Scroll to the top of the page whenever the location changes end
   const { state } = useLocation();
   const { propertyid } = state;
   const navigate = useNavigate();
@@ -143,12 +152,15 @@ export default function AddPhoto(props) {
 
   return (
     <div>
-      <div className="page-title">
-        <span className="material-symbols-outlined">photo_camera</span>
-        <h1>Add Photo </h1>
-      </div>
 
-      <div style={{ overflow: "hidden" }}>
+<Hero
+        pageTitle="Add Photo"
+        pageSubTitle="Discover Our Story
+        "
+        heroImage="./assets/img/about_us_banner.jpg"
+      ></Hero>
+    <div className="container">
+    <div style={{ overflow: "hidden" }}>
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="row no-gutters">
             <div className="col-lg-6 col-md-6 col-sm-12">
@@ -197,12 +209,13 @@ export default function AddPhoto(props) {
           </div>
           <br />
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <button className="btn">Add Photo</button>
+            <button className="theme_btn btn_fill">Add Photo</button>
             {formError && <p className="error">{formError}</p>}
           </div>
           <br />
         </form>
       </div>
+    </div>
     </div>
   );
 }
