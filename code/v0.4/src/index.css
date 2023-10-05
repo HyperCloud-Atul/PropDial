@@ -8,6 +8,7 @@
   --white-color: #fff;
   --black-color: #000;
   --theme-blue: #3F5E98;
+  --aflbg:#efefef;
 
 /* sanskar color var  */
 
@@ -550,6 +551,9 @@ textarea {
 
 
 /* sanskar css start  */
+.aflbg{
+  background: var(--aflbg);
+}
 .d_none{
   display: none;
 }
@@ -601,7 +605,6 @@ a.theme_btn.btn_white {
 }
 .ba_animation {
   animation: btn_arrow_animation 1s linear infinite;
-
 }
 @keyframes btn_arrow_animation{
   0%{

@@ -64,18 +64,15 @@ export default function PGAdminDashboard() {
     : null;
 
   return (
-    <div className="pgadmindasboard pgls_mobile" style={{
-      background: "#efefef"
-    }} >
+    <div className="pgadmindasboard pgls_mobile aflbg" >
       <Hero
         pageTitle="Admin Dashboard"
-        pageSubTitle="Explore your dashboard
-        "
+        pageSubTitle="Explore your dashboard"
         heroImage="./assets/img/admin_banner.jpg"
       ></Hero>
       <br />
       <div className="container-fluid">
-        <div className="large">
+      
           <div className="row no-gutters">
             <div className="col-lg-3 col-md-3 relative" style={{ padding: "15px" }}>
               <a href="addproperty.html" className="admin-property-count-card">
@@ -172,30 +169,25 @@ export default function PGAdminDashboard() {
                 </div>
               </div>
             </div>
-
           </div>
-
-          <br />
-
-          {/* <div class="container-fluid">
-            <div class="row no-gutters">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-
-                <div class="profile-card-div" style={{background:"#ff5757"}}>
-                  <div class="address-div" style={{padding: "8px 10px 4px 10px;"}}>
-                    <div class="icon" style={{background:"#fff"}}>
-                      <span class="material-symbols-outlined">
+          <br />        
+            <div className="row no-gutters">
+              <div className="col-lg-6 col-md-6 col-sm-12">
+                <div className="profile-card-div" style={{background:"#ff5757"}}>
+                  <div className="address-div" style={{padding: "8px 10px 4px 10px;"}}>
+                    <div className="icon" style={{background:"#fff"}}>
+                      <span className="material-symbols-outlined">
                         money_off
                       </span>
                     </div>
 
-                    <div class="address-text">
-                      <div style="text-align: left;position: relative;top: -1px;">
-                        <h5 style="color: #fff;font-weight: bold;">PMS Due</h5>
-                        <h5 style="margin: 0;font-size: 0.8rem;color: #dedede;">152</h5>
+                    <div className="address-text">
+                      <div style={{textAlign: "left",position: "relative", top: "-1px"}}>
+                        <h5 style={{color: "#fff",fontWeight: "bold"}}>PMS Due</h5>
+                        <h5 style={{margin: "0",fontSize: "0.8rem",color: "#dedede"}}>152</h5>
                       </div>
-                      <div class="" style="position: relative;top: -6px">
-                        <h6 style="margin: 0;font-size:1.4rem;font-weight:600; color:#fff;">₹84,538
+                      <div className="" style={{position: "relative",top: "-6px"}}>
+                        <h6 style={{margin: "0",fontSize:"1.4rem",fontWeight:"600", color:"#fff"}}>₹84,538
                         </h6>
                       </div>
                     </div>
@@ -203,42 +195,42 @@ export default function PGAdminDashboard() {
 
                 </div>
 
-                <div class="profile-card-div" style={{background:"#ff5757"}}>
-                  <div class="address-div" style={{padding: "8px 10px 4px 10px"}}>
-                    <div class="icon" style={{background:"#fff"}}>
-                      <span class="material-symbols-outlined">
+                <div className="profile-card-div" style={{background:"#ff5757"}}>
+                  <div className="address-div" style={{padding: "8px 10px 4px 10px"}}>
+                    <div className="icon" style={{background:"#fff"}}>
+                      <span className="material-symbols-outlined">
                         key_off
                       </span>
                     </div>
 
-                    <div class="address-text">
-                      <div style="text-align: left;position: relative;top: -1px;">
-                        <h5 style="color: #fff;font-weight: bold;">Brokerage Due</h5>
-                        <h5 style="margin: 0;font-size: 0.8rem;color: #dedede;">10</h5>
+                    <div className="address-text">
+                      <div style={{textAlign: "left",position: "relative", top: "-1px"}}>
+                        <h5 style={{color: "#fff",fontWeight: "bold"}}>Brokerage Due</h5>
+                        <h5 style={{margin: "0",fontSize: "0.8rem",color: "#dedede"}}>10</h5>
                       </div>
-                      <div class="" style="position: relative;top: -6px">
-                        <h6 style="margin: 0;font-size:1.4rem;font-weight:600; color:#ededed;">₹845</h6>
+                      <div className="" style={{position: "relative",top: "-6px"}}>
+                        <h6 style={{margin: "0",fontSize:"1.4rem", fontWeight:"600", color:"#ededed"}}>₹845</h6>
                       </div>
                     </div>
                   </div>
 
                 </div>
 
-                <div class="profile-card-div" style= {{background:"#ff5757"}}>
-                  <div class="address-div" style={{padding: "8px 10px 4px 10px"}}>
-                    <div class="icon" style="background: rgba(84,204,203, 0.8);background: #fff;">
-                      <span class="material-symbols-outlined">
+                <div className="profile-card-div" style= {{background:"#ff5757"}}>
+                  <div className="address-div" style={{padding: "8px 10px 4px 10px"}}>
+                    <div className="icon" style={{background: "rgba(84,204,203, 0.8)",background: "#fff"}}>
+                      <span className="material-symbols-outlined">
                         no_stroller
                       </span>
                     </div>
 
-                    <div class="address-text">
-                      <div style="text-align: left;position: relative;top: -1px;">
-                        <h5 style="color: #fff;font-weight: bold;">Maintenance Due</h5>
-                        <h5 style="margin: 0;font-size: 0.8rem;color: #dedede">167</h5>
+                    <div className="address-text">
+                      <div style={{textAlign: "left",position: "relative", top: "-1px"}}>
+                        <h5 style={{color: "#fff",fontWeight: "bold"}}>Maintenance Due</h5>
+                        <h5 style={{margin: "0",fontSize: "0.8rem",color: "#dedede"}}>167</h5>
                       </div>
-                      <div class="" style="position: relative;top: -6px">
-                        <h6 style="margin: 0;font-size:1.4rem;font-weight:600; color:#ededed;">₹1,68,069
+                      <div className="" style={{position: "relative",top: "-6px"}}>
+                        <h6 style={{margin: "0",fontSize:"1.4rem", fontWeight:"600", color:"#ededed"}}>₹1,68,069
                         </h6>
                       </div>
                     </div>
@@ -246,21 +238,21 @@ export default function PGAdminDashboard() {
 
                 </div>
 
-                <div class="profile-card-div" style= {{background:"#ff5757"}}>
-                  <div class="address-div" style={{padding: "8px 10px 4px 10px"}}>
-                    <div class="icon" style={{background:"#fff"}}>
-                      <span class="material-symbols-outlined">
+                <div className="profile-card-div" style= {{background:"#ff5757"}}>
+                  <div className="address-div" style={{padding: "8px 10px 4px 10px"}}>
+                    <div className="icon" style={{background:"#fff"}}>
+                      <span className="material-symbols-outlined">
                         local_library
                       </span>
                     </div>
 
-                    <div class="address-text">
-                      <div style="text-align: left;position: relative;top: -1px;">
-                        <h5 style="color: #fff;font-weight: bold;">Maintenance Advance</h5>
-                        <h5 style="margin: 0;font-size: 0.8rem;color: #dedede;">147</h5>
+                    <div className="address-text">
+                      <div style={{textAlign: "left",position: "relative", top: "-1px"}}>
+                        <h5 style={{color: "#fff",fontWeight: "bold"}}>Maintenance Advance</h5>
+                        <h5 style={{margin: "0",fontSize: "0.8rem",color: "#dedede"}}>147</h5>
                       </div>
-                      <div class="" style="position: relative;top: -6px">
-                        <h6 style="margin: 0;font-size:1.4rem;font-weight:600; color:#ededed;">₹1,683
+                      <div className="" style={{position: "relative",top: "-6px"}}>
+                        <h6 style={{margin: "0",fontSize:"1.4rem", fontWeight:"600", color:"#ededed"}}>₹1,683
                         </h6>
                       </div>
                     </div>
@@ -269,11 +261,11 @@ export default function PGAdminDashboard() {
                 </div>
 
               </div>
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row no-gutters">
-                  <div class="col-6" style="padding: 10px;">
+              <div className="col-lg-6 col-md-6 col-sm-12">
+                <div className="row no-gutters">
+                  <div className="col-6" style={{padding: "10px"}}>
 
-                    <div class="dashboard-square-card">
+                    <div className="dashboard-square-card">
                       <div>
                         <h1>216</h1>
                         <h2>For Rent</h2>
@@ -282,9 +274,9 @@ export default function PGAdminDashboard() {
 
                   </div>
 
-                  <div class="col-6" style="padding: 10px;">
+                  <div className="col-6" style={{padding: "10px"}}>
 
-                    <div class="dashboard-square-card">
+                    <div className="dashboard-square-card">
                       <div>
                         <h1>58</h1>
                         <h2>For Sale</h2>
@@ -293,9 +285,9 @@ export default function PGAdminDashboard() {
 
                   </div>
 
-                  <div class="col-6" style="padding: 10px;">
+                  <div className="col-6" style={{padding: "10px"}}>
 
-                    <div class="dashboard-square-card">
+                    <div className="dashboard-square-card">
                       <div>
                         <h1>64</h1>
                         <h2>Rent Renewal</h2>
@@ -304,9 +296,9 @@ export default function PGAdminDashboard() {
 
                   </div>
 
-                  <div class="col-6" style="padding: 10px;">
+                  <div className="col-6" style={{padding: "10px"}}>
 
-                    <div class="dashboard-square-card">
+                    <div className="dashboard-square-card">
                       <div>
                         <h1>16</h1>
                         <h2>On Notice</h2>
@@ -317,14 +309,9 @@ export default function PGAdminDashboard() {
 
                 </div>
               </div>
-            </div>
-          </div> */}
+            </div>       
           <br />
-        </div>
-        {/* <div className="page-title">
-        <span className="material-symbols-outlined">dashboard_customize</span>
-        <h1>Admin Dashboard </h1>
-      </div>      <br /> */}
+    
 
         <div className="row no-gutters">
           <div
@@ -347,12 +334,7 @@ export default function PGAdminDashboard() {
                 >
                   Details
                 </button>
-              </div>
-              {/* <div>
-                            <h6>Propdial Commission</h6>
-                            <h2 style={{fontSize: '1.2rem',color: '#666'}}>₹10,000</h2>
-                            <button style={{float: 'right'}} className="mybutton button5">Pay Now</button>
-                        </div> */}
+              </div>       
             </div>
           </div>
 
