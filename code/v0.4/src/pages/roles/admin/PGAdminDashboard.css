@@ -399,5 +399,37 @@
     font-weight: normal;
     margin-bottom: 5px !important;
   }
-  
+  .asc_single .material-symbols-outlined {
+    font-size: 2rem;
+    color: var(--theme-light-green);
+}
+.asc_single h6{
+  font-size: 1rem;
+  color: #666;
+}
+.asc_single h5{
+  font-size: 0.7rem;
+  color: #aaa;
+  font-weight: 600;
+}
+.asc_single {
+  position: relative;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 112px;
+}
+
+
+
+section.admin_services_cards {
+  background-color: rgb(188, 236, 224, 0.5);
+  padding: 25px;
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+}
   /* admin dashboard page - end */

@@ -82,7 +82,8 @@ a.fsi_single img{
 /* copyright area css start  */
 
 .copyright-area {
-    background-color: #012860e3;
+    background-color: #012860;
+    position: relative;   
 }
 
 .copyright-area .copyright-item {

@@ -4,6 +4,7 @@
 :root {
 /* sanskar color var  */
   --theme-green:#20b2aa;
+  --theme-light-green:#4CD7D0;
   --theme-orange: #e95733; 
   --white-color: #fff;
   --black-color: #000;
@@ -688,6 +689,15 @@ form.auth-form .theme_btn {
 }
 .pg_width{
   width: 100%;
+}
+.right_main_content {
+  margin-left: auto;
+}
+.sidebarwidth {
+  position: fixed;
+  /* width: 20%; */
+  height: 100vh;
+  overflow-y: auto;
 }
 /* sanskar css end  */
 

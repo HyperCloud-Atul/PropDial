@@ -8,7 +8,7 @@ const LeftSidebar = () => {
         <div>
             <div class="side-navbar side-navbar-large property-list-side-navbar"
             >
-            <br></br>
+            <br/>
                 <ul>
                     <li class="active">
                         <b></b>
@@ -32,7 +32,7 @@ const LeftSidebar = () => {
                         </div>
                         
                     </li>
-                    <li className='pointer active'>
+                    <li className='pointer'>
                         <b></b>
                         <b></b>
                         
