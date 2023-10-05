@@ -5,10 +5,11 @@ import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useLogout } from "../../../hooks/useLogout";
 import { useLocation } from "react-router-dom";
 
+
 // components
 import Filters from "../../../Components/Filters";
 import PropertyList from "../../../Components/PropertyList";
-import Hero from "../../../Components/Hero";
+import LeftSidebar from "../../../Components/LeftSidebar";
 
 // styles
 import "./PGAdminDashboard.css";
@@ -64,15 +65,12 @@ export default function PGAdminDashboard() {
     : null;
 
   return (
-    <div className="pgadmindasboard pgls_mobile aflbg" >
-      <Hero
-        pageTitle="Admin Dashboard"
-        pageSubTitle="Explore your dashboard"
-        heroImage="./assets/img/admin_banner.jpg"
-      ></Hero>
-      <br />
-      <div className="container-fluid">
-      
+    <div className="pgadmindasboard pgls_mobile aflbg" >      
+      <div className="row no-gutters pg_width">
+        <div className="col-lg-2">
+<LeftSidebar/>
+        </div>
+        <div className="col-lg-10">
           <div className="row no-gutters">
             <div className="col-lg-3 col-md-3 relative" style={{ padding: "15px" }}>
               <a href="addproperty.html" className="admin-property-count-card">
@@ -170,212 +168,209 @@ export default function PGAdminDashboard() {
               </div>
             </div>
           </div>
-          <br />        
-            <div className="row no-gutters">
-              <div className="col-lg-6 col-md-6 col-sm-12">
-                <div className="profile-card-div" style={{background:"#ff5757"}}>
-                  <div className="address-div" style={{padding: "8px 10px 4px 10px;"}}>
-                    <div className="icon" style={{background:"#fff"}}>
-                      <span className="material-symbols-outlined">
-                        money_off
-                      </span>
-                    </div>
-
-                    <div className="address-text">
-                      <div style={{textAlign: "left",position: "relative", top: "-1px"}}>
-                        <h5 style={{color: "#fff",fontWeight: "bold"}}>PMS Due</h5>
-                        <h5 style={{margin: "0",fontSize: "0.8rem",color: "#dedede"}}>152</h5>
-                      </div>
-                      <div className="" style={{position: "relative",top: "-6px"}}>
-                        <h6 style={{margin: "0",fontSize:"1.4rem",fontWeight:"600", color:"#fff"}}>₹84,538
-                        </h6>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="profile-card-div" style={{background:"#ff5757"}}>
-                  <div className="address-div" style={{padding: "8px 10px 4px 10px"}}>
-                    <div className="icon" style={{background:"#fff"}}>
-                      <span className="material-symbols-outlined">
-                        key_off
-                      </span>
-                    </div>
-
-                    <div className="address-text">
-                      <div style={{textAlign: "left",position: "relative", top: "-1px"}}>
-                        <h5 style={{color: "#fff",fontWeight: "bold"}}>Brokerage Due</h5>
-                        <h5 style={{margin: "0",fontSize: "0.8rem",color: "#dedede"}}>10</h5>
-                      </div>
-                      <div className="" style={{position: "relative",top: "-6px"}}>
-                        <h6 style={{margin: "0",fontSize:"1.4rem", fontWeight:"600", color:"#ededed"}}>₹845</h6>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="profile-card-div" style= {{background:"#ff5757"}}>
-                  <div className="address-div" style={{padding: "8px 10px 4px 10px"}}>
-                    <div className="icon" style={{background: "rgba(84,204,203, 0.8)",background: "#fff"}}>
-                      <span className="material-symbols-outlined">
-                        no_stroller
-                      </span>
-                    </div>
-
-                    <div className="address-text">
-                      <div style={{textAlign: "left",position: "relative", top: "-1px"}}>
-                        <h5 style={{color: "#fff",fontWeight: "bold"}}>Maintenance Due</h5>
-                        <h5 style={{margin: "0",fontSize: "0.8rem",color: "#dedede"}}>167</h5>
-                      </div>
-                      <div className="" style={{position: "relative",top: "-6px"}}>
-                        <h6 style={{margin: "0",fontSize:"1.4rem", fontWeight:"600", color:"#ededed"}}>₹1,68,069
-                        </h6>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="profile-card-div" style= {{background:"#ff5757"}}>
-                  <div className="address-div" style={{padding: "8px 10px 4px 10px"}}>
-                    <div className="icon" style={{background:"#fff"}}>
-                      <span className="material-symbols-outlined">
-                        local_library
-                      </span>
-                    </div>
-
-                    <div className="address-text">
-                      <div style={{textAlign: "left",position: "relative", top: "-1px"}}>
-                        <h5 style={{color: "#fff",fontWeight: "bold"}}>Maintenance Advance</h5>
-                        <h5 style={{margin: "0",fontSize: "0.8rem",color: "#dedede"}}>147</h5>
-                      </div>
-                      <div className="" style={{position: "relative",top: "-6px"}}>
-                        <h6 style={{margin: "0",fontSize:"1.4rem", fontWeight:"600", color:"#ededed"}}>₹1,683
-                        </h6>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-              <div className="col-lg-6 col-md-6 col-sm-12">
-                <div className="row no-gutters">
-                  <div className="col-6" style={{padding: "10px"}}>
-
-                    <div className="dashboard-square-card">
-                      <div>
-                        <h1>216</h1>
-                        <h2>For Rent</h2>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="col-6" style={{padding: "10px"}}>
-
-                    <div className="dashboard-square-card">
-                      <div>
-                        <h1>58</h1>
-                        <h2>For Sale</h2>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="col-6" style={{padding: "10px"}}>
-
-                    <div className="dashboard-square-card">
-                      <div>
-                        <h1>64</h1>
-                        <h2>Rent Renewal</h2>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="col-6" style={{padding: "10px"}}>
-
-                    <div className="dashboard-square-card">
-                      <div>
-                        <h1>16</h1>
-                        <h2>On Notice</h2>
-                      </div>
-                    </div>
-
-                  </div>
-
-                </div>
-              </div>
-            </div>       
           <br />
-    
+          <div className="row no-gutters">
+            <div className="col-lg-6 col-md-6 col-sm-12">
+              <div className="profile-card-div" style={{ background: "#ff5757" }}>
+                <div className="address-div" style={{ padding: "8px 10px 4px 10px;" }}>
+                  <div className="icon" style={{ background: "#fff" }}>
+                    <span className="material-symbols-outlined">
+                      money_off
+                    </span>
+                  </div>
 
-        <div className="row no-gutters">
-          <div
-            className="col-lg-6 col-md-12 col-sm-12"
-            style={{ padding: "10px" }}
-          >
-            <div className="rent-tenant-card">
-              <div>
-                <h6>Rent Balance</h6>
-                <h1 style={{ color: "red" }}>₹42,000</h1>
-                <h2>Cut-off Date : 12 Jun'23</h2>
-                {/* <h4>Due Date Exceeded : ₹100</h4> */}
-                <button
-                  className="mybutton button5"
-                  style={{
-                    background: "var(--theme-blue)",
-                    color: "#fff",
-                    fontWeight: "bolder",
-                  }}
-                >
-                  Details
-                </button>
-              </div>       
+                  <div className="address-text">
+                    <div style={{ textAlign: "left", position: "relative", top: "-1px" }}>
+                      <h5 style={{ color: "#fff", fontWeight: "bold" }}>PMS Due</h5>
+                      <h5 style={{ margin: "0", fontSize: "0.8rem", color: "#dedede" }}>152</h5>
+                    </div>
+                    <div className="" style={{ position: "relative", top: "-6px" }}>
+                      <h6 style={{ margin: "0", fontSize: "1.4rem", fontWeight: "600", color: "#fff" }}>₹84,538
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div className="profile-card-div" style={{ background: "#ff5757" }}>
+                <div className="address-div" style={{ padding: "8px 10px 4px 10px" }}>
+                  <div className="icon" style={{ background: "#fff" }}>
+                    <span className="material-symbols-outlined">
+                      key_off
+                    </span>
+                  </div>
+
+                  <div className="address-text">
+                    <div style={{ textAlign: "left", position: "relative", top: "-1px" }}>
+                      <h5 style={{ color: "#fff", fontWeight: "bold" }}>Brokerage Due</h5>
+                      <h5 style={{ margin: "0", fontSize: "0.8rem", color: "#dedede" }}>10</h5>
+                    </div>
+                    <div className="" style={{ position: "relative", top: "-6px" }}>
+                      <h6 style={{ margin: "0", fontSize: "1.4rem", fontWeight: "600", color: "#ededed" }}>₹845</h6>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div className="profile-card-div" style={{ background: "#ff5757" }}>
+                <div className="address-div" style={{ padding: "8px 10px 4px 10px" }}>
+                  <div className="icon" style={{ background: "rgba(84,204,203, 0.8)", background: "#fff" }}>
+                    <span className="material-symbols-outlined">
+                      no_stroller
+                    </span>
+                  </div>
+
+                  <div className="address-text">
+                    <div style={{ textAlign: "left", position: "relative", top: "-1px" }}>
+                      <h5 style={{ color: "#fff", fontWeight: "bold" }}>Maintenance Due</h5>
+                      <h5 style={{ margin: "0", fontSize: "0.8rem", color: "#dedede" }}>167</h5>
+                    </div>
+                    <div className="" style={{ position: "relative", top: "-6px" }}>
+                      <h6 style={{ margin: "0", fontSize: "1.4rem", fontWeight: "600", color: "#ededed" }}>₹1,68,069
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div className="profile-card-div" style={{ background: "#ff5757" }}>
+                <div className="address-div" style={{ padding: "8px 10px 4px 10px" }}>
+                  <div className="icon" style={{ background: "#fff" }}>
+                    <span className="material-symbols-outlined">
+                      local_library
+                    </span>
+                  </div>
+
+                  <div className="address-text">
+                    <div style={{ textAlign: "left", position: "relative", top: "-1px" }}>
+                      <h5 style={{ color: "#fff", fontWeight: "bold" }}>Maintenance Advance</h5>
+                      <h5 style={{ margin: "0", fontSize: "0.8rem", color: "#dedede" }}>147</h5>
+                    </div>
+                    <div className="" style={{ position: "relative", top: "-6px" }}>
+                      <h6 style={{ margin: "0", fontSize: "1.4rem", fontWeight: "600", color: "#ededed" }}>₹1,683
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <div className="col-lg-6 col-md-6 col-sm-12">
+              <div className="row no-gutters">
+                <div className="col-6" style={{ padding: "10px" }}>
+
+                  <div className="dashboard-square-card">
+                    <div>
+                      <h1>216</h1>
+                      <h2>For Rent</h2>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div className="col-6" style={{ padding: "10px" }}>
+
+                  <div className="dashboard-square-card">
+                    <div>
+                      <h1>58</h1>
+                      <h2>For Sale</h2>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div className="col-6" style={{ padding: "10px" }}>
+
+                  <div className="dashboard-square-card">
+                    <div>
+                      <h1>64</h1>
+                      <h2>Rent Renewal</h2>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div className="col-6" style={{ padding: "10px" }}>
+
+                  <div className="dashboard-square-card">
+                    <div>
+                      <h1>16</h1>
+                      <h2>On Notice</h2>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
             </div>
           </div>
-
-          <div
-            className="col-lg-6 col-md-12 col-sm-12"
-            style={{ padding: "10px" }}
-          >
-            <div className="tenant-dashboard-ticket-card">
-              <div className="ticket-round-left"></div>
-              <div className="ticket-round-right"></div>
-              <h1 className="tenant-dashboard-ticket-card-heading">Tickets</h1>
-              <hr />
-              <div className="tenant-dashboard-ticket-card-content">
+          <br />       <div className="row no-gutters">
+            <div
+              className="col-lg-6 col-md-12 col-sm-12"
+              style={{ padding: "10px" }}
+            >
+              <div className="rent-tenant-card">
                 <div>
-                  <h1>Pending Tickets</h1>
-                  <h2>10</h2>
-                  <h3>Last Raised Date</h3>
-                  <h4>15 Jan 2023</h4>
+                  <h6>Rent Balance</h6>
+                  <h1 style={{ color: "red" }}>₹42,000</h1>
+                  <h2>Cut-off Date : 12 Jun'23</h2>
+                  {/* <h4>Due Date Exceeded : ₹100</h4> */}
+                  <button
+                    className="mybutton button5"
+                    style={{
+                      background: "var(--theme-blue)",
+                      color: "#fff",
+                      fontWeight: "bolder",
+                    }}
+                  >
+                    Details
+                  </button>
                 </div>
-                <div>
-                  <h1>Closed Tickets</h1>
-                  <h2>30</h2>
-                  <button className="mybutton button5">Raise Ticket</button>
+              </div>
+            </div>
+
+            <div
+              className="col-lg-6 col-md-12 col-sm-12"
+              style={{ padding: "10px" }}
+            >
+              <div className="tenant-dashboard-ticket-card">
+                <div className="ticket-round-left"></div>
+                <div className="ticket-round-right"></div>
+                <h1 className="tenant-dashboard-ticket-card-heading">Tickets</h1>
+                <hr />
+                <div className="tenant-dashboard-ticket-card-content">
+                  <div>
+                    <h1>Pending Tickets</h1>
+                    <h2>10</h2>
+                    <h3>Last Raised Date</h3>
+                    <h4>15 Jan 2023</h4>
+                  </div>
+                  <div>
+                    <h1>Closed Tickets</h1>
+                    <h2>30</h2>
+                    <button className="mybutton button5">Raise Ticket</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <br />
+          {error && <p className="error">{error}</p>}
+          {documents && (
+            <Filters
+              changeFilter={changeFilter}
+              filterList={propertyFilter}
+              filterLength={properties.length}
+            />
+          )}
+          {properties && <PropertyList properties={properties} />}
+          <br />
+          <br />
         </div>
-        <br />
-
-        {error && <p className="error">{error}</p>}
-        {documents && (
-          <Filters
-            changeFilter={changeFilter}
-            filterList={propertyFilter}
-            filterLength={properties.length}
-          />
-        )}
-        {properties && <PropertyList properties={properties} />}
-        <br />
-        <br />
       </div>
     </div>
   );
