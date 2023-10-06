@@ -692,12 +692,16 @@ form.auth-form .theme_btn {
 }
 .right_main_content {
   margin-left: auto;
+  width: 83.33333333%;
+  padding: 0px 25px;
+  min-height: 100vh;
 }
 .sidebarwidth {
   position: fixed;
-background: white;
+  background: white;
   height: 100vh;
   overflow-y: auto;
+  width: 16.66666666%;
 }
 /* sanskar css end  */
 

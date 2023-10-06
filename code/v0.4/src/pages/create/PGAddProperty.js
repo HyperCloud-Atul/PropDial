@@ -17,6 +17,7 @@ import { el } from 'date-fns/locale'
 
 // component 
 import Hero from '../../Components/Hero'
+import PropertySidebar from '../../Components/PropertySidebar'
 
 const categories = [
     { value: 'residential', label: 'Residential' },
@@ -376,468 +377,59 @@ export default function PGAddProperty({ propertyid }) {
         }
 
     }
+    // sticky top property details - start
+
+function openPropertyDetails(propertyDetails) {
+    propertyDetails.classList.toggle('open');
+  }
+  
+  // sticky top property details - end
 
     return (
-        <div>
-            <Hero
-                pageTitle={propertyid ? 'Edit Property' : 'Add Property'}
-                pageSubTitle="Add or edit property"
-
-                heroImage="./assets/img/add_property_banner.jpg"
-            ></Hero>
-
-            <div className='container'>
-                <div className="row no-gutters" style={{ margin: '20px 0 0px 0', height: '50px' }}>
-
-                    {/* <div className="col-lg-6 col-md-6 col-sm-12"
-    style={{ background: 'rgb(188, 236, 224, 0.5)', padding: ' 0 10px' }}> */}
-                    <div className="col-lg-6 col-md-6 col-sm-12"
-                        style={{ background: 'rgba(var(--green-color), 0.5)', padding: ' 0 10px', borderRadius: '8px 0px 0px 8px' }}>
-                        <div className="residential-commercial-switch" style={{ height: 'calc(100% - 10px)' }}>
-                            <span className={toggleFlag ? '' : 'active'} style={{ color: 'var(--theme-blue)' }}>Residential</span>
-
-                            <div className={toggleFlag ? 'toggle-switch on commercial' : 'toggle-switch off residential'} style={{ padding: '0 10px' }}>
-                                {/* <small>{toggleFlag ? 'On' : 'Off'}</small> */}
-                                <div onClick={toggleBtnClick}>
-                                    <div></div>
-                                </div>
-                            </div>
-                            <span className={toggleFlag ? 'active' : ''} style={{ color: 'var(--red-color)' }}>Commercial</span>
-                        </div>
-                    </div>
-                    {/* <div className="col-lg-6 col-md-6 col-sm-12"
-    style={{ background: 'rgb(188, 236, 224, 0.5)', padding: '10px 10px 0 10px' }}> */}
-                    <div className="col-lg-6 col-md-6 col-sm-12"
-                        style={{ background: 'rgba(var(--green-color), 0.5)', padding: '10px 10px 0 10px', borderRadius: '0px 8px 8px 0px', display:"none" }}>
-                        <div className="details-radio">
-                            <div></div>
-                            <div className='details-radio-inner'>
-                                <div className="row no-gutters">
-                                    {/* <div className="col-6" style={{ padding: '0 5px' }}>
-                    <input type="checkbox" className="checkbox" style={{ width: '0px' }}
-                        name="BusinessType" id="businessTypeRent" value="Rent"
-                        onClick={() => setPurpose('rent')}
-                    />
-                    <label className="checkbox-label" for="businessTypeRent">
-                        <span className="material-symbols-outlined add">
-                            add
-                        </span>
-                        <span className="material-symbols-outlined done">
-                            done
-                        </span>
-                        <small>Rent</small>
-                    </label>
-                </div> */}
-
-                                    {/* <div className="col-6" style={{ padding: '0 5px' }}>
-                    <input type="checkbox" className="checkbox" style={{ width: '0px' }}
-                        name="BusinessType" id="businessTypeSale" value="Sale"
-                        onClick={() => setPurpose('sale')}
-                    />
-                    <label className="checkbox-label" for="businessTypeSale">
-                        <span className="material-symbols-outlined add">
-                            add
-                        </span>
-                        <span className="material-symbols-outlined done">
-                            done
-                        </span>
-                        <small>Sale</small>
-                    </label>
-                </div> */}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div style={{ overflow: 'hidden' }}>
-                    <form onSubmit={handleSubmit} className="auth-form">
-                        <div className="row no-gutters">
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div" style={{ border: 'none', paddingBottom: '0' }}>
-                                    <h1 className="owner-heading">Unit Number</h1>
-                                    <div className="location-search">
-                                        {/* <input type="text" required placeholder="Enetr Property Unit Number..."
-                        name="" /> */}
-                                        <input
-                                            required
-                                            type="text"
-                                            placeholder="e.g. A-504"
-                                            maxLength={70}
-                                            onChange={(e) => setUnitNumber(e.target.value)}
-                                            value={unitNumber}
-                                        />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            drive_file_rename_outline
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div" style={{ border: 'none', paddingBottom: '0' }}>
-                                    <h1 className="owner-heading">Purpose</h1>
-                                    <div className="location-search">
-                                        {/* <input type="text" required placeholder="Enetr Property Unit Number..."
-                        name="" /> */}
-
-                                        <Select className=''
-                                            onChange={(option) => setPurpose(option)}
-                                            options={propertyPurposeOptionsSorted.current}
-                                            // value={propertyDocument ? propertyDocument.purpose : purpose}
-                                            value={purpose}
-                                            styles={{
-                                                control: (baseStyles, state) => ({
-                                                    ...baseStyles,
-                                                    outline: 'none',
-                                                    background: '#eee',
-                                                    borderBottom: ' 1px solid var(--theme-blue)'
-                                                }),
-                                            }}
-                                        />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            drive_file_rename_outline
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div" style={{ border: 'none', paddingBottom: '0' }}>
-                                    <h1 className="owner-heading">Onboarding Date</h1>
-                                    <div className="location-search">
-                                        <DatePicker
-                                            selected={onboardingDate}
-                                            maxDate={new Date()}
-                                            required
-                                            onChange={(onboardingDate) => setOnboardingDate(onboardingDate)}
-                                        // value={onboardingDate}
-                                        />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            calendar_month
-                                        </span>
-                                    </div>
-                                </div>
-                                <br /><br />
-                            </div>
-
-                        </div>
-
-                        <div className="row no-gutters">
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div">
-                                    <h1 className="owner-heading">Tag Users : {taggedUsersListShow}</h1>
-                                    <div className="location-search">
-                                        <Select className=''
-                                            onChange={(option) => setTaggedUsers(option)}
-                                            options={usersSorted}
-                                            styles={{
-                                                control: (baseStyles, state) => ({
-                                                    ...baseStyles,
-                                                    outline: 'none',
-                                                    background: '#eee',
-                                                    borderBottom: ' 1px solid var(--theme-blue)'
-                                                }),
-                                            }}
-                                            isMulti
-                                        />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            person
-                                        </span>
-                                    </div>
-                                </div></div>
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div">
-                                    <h1 className="owner-heading">Country</h1>
-                                    <div className="location-search">
-                                        <Select className=''
-                                            onChange={handleCountryChange}
-                                            options={countryOptionsSorted.current}
-                                            value={country}
-                                            styles={{
-                                                control: (baseStyles, state) => ({
-                                                    ...baseStyles,
-                                                    outline: 'none',
-                                                    background: '#eee',
-                                                    borderBottom: ' 1px solid var(--theme-blue)'
-                                                }),
-                                            }}
-                                        />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            public
-                                        </span>
-                                    </div><br />
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div">
-                                    <h1 className="owner-heading">State</h1>
-                                    <div className="location-search">
-                                        <Select className=''
-                                            // onChange={(option) => setState(option)}
-                                            onChange={handleStateChange}
-                                            options={statesOptionsSorted.current}
-                                            // options={stateList}
-                                            value={state}
-                                            styles={{
-                                                control: (baseStyles, state) => ({
-                                                    ...baseStyles,
-                                                    outline: 'none',
-                                                    background: '#eee',
-                                                    borderBottom: ' 1px solid var(--theme-blue)'
-                                                }),
-                                            }}
-                                        />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            emoji_transportation
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row no-gutters">
-                                <div className="col-lg-4 col-md-6 col-sm-12">
-                                    <div className="property-form-border-div" style={{ border: 'none', }}>
-                                        <h1 className="owner-heading">City</h1>
-                                        <div className="location-search">
-                                            <Select className=''
-                                                onChange={handleCityChange}
-                                                options={citiesOptionsSorted.current}
-                                                value={city}
-                                                styles={{
-                                                    control: (baseStyles, state) => ({
-                                                        ...baseStyles,
-                                                        outline: 'none',
-                                                        background: '#eee',
-                                                        borderBottom: ' 1px solid var(--theme-blue)'
-                                                    }),
-                                                }}
-                                            />
-                                            <div className="underline"></div>
-                                            <span className="material-symbols-outlined">
-                                                apartment
-                                            </span>
-                                        </div><br />
-                                    </div>
-                                </div>
-                                <div className="col-lg-4 col-md-6 col-sm-12">
-                                    <div className="property-form-border-div" style={{ border: 'none', }}>
-                                        <h1 className="owner-heading">Lacality</h1>
-                                        <div className="location-search">
-                                            <Select className=''
-                                                onChange={handleLocalityChange}
-                                                options={localityOptionsSorted.current}
-                                                value={locality}
-                                                styles={{
-                                                    control: (baseStyles, state) => ({
-                                                        ...baseStyles,
-                                                        outline: 'none',
-                                                        background: '#eee',
-                                                        borderBottom: ' 1px solid var(--theme-blue)'
-                                                    }),
-                                                }}
-                                            />
-                                            <div className="underline"></div>
-                                            <span className="material-symbols-outlined">
-                                                holiday_village
-                                            </span>
-                                        </div><br />
-                                    </div>
-                                </div>
-                                <div className="col-lg-4 col-md-6 col-sm-12">
-                                    <div className="property-form-border-div" style={{ border: 'none', }}>
-
-                                        <h1 className="owner-heading">Society</h1>
-                                        <div className="location-search">
-                                            <Select className=''
-                                                onChange={(option) => setSociety(option)}
-                                                options={societyOptionsSorted.current}
-                                                value={society}
-                                                styles={{
-                                                    control: (baseStyles, state) => ({
-                                                        ...baseStyles,
-                                                        outline: 'none',
-                                                        background: '#eee',
-                                                        borderBottom: ' 1px solid var(--theme-blue)'
-                                                    }),
-                                                }}
-                                            />
-                                            <div className="underline"></div>
-                                            <span className="material-symbols-outlined">
-                                                home
-                                            </span>
-                                        </div>
-
-                                        <br />
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            {/* <div className="col-lg-4 col-md-6 col-sm-12">
-
-            <label>
-                <div className='form-field-title'>
-                    <span className="material-symbols-outlined">
-                        badge
-                    </span>
-                    <h1>Unit No </h1>
-                    <input
-                        required
-                        type="text"
-                        maxLength={70}
-                        onChange={(e) => setName(e.target.value)}
-                        value={name}
-                    />
-                </div>
-            </label>
-
-            <label>
-                <div className='form-field-title'>
-                    <span className="material-symbols-outlined">
-                        badge
-                    </span>
-                    <h1>Property Details </h1>
-                    <textarea
-                        required
-                        type="text"
-                        maxLength={70}
-                        onChange={(e) => setDetails(e.target.value)}
-                        value={details}
-                    />
-                </div>
-            </label>
-        </div> */}
-                            {/* <label>
-            <div className='form-field-title'>
-            <span className="material-symbols-outlined">
-                badge
-            </span>
-            <h1>Owners</h1>
-            <Select className='select'
-                onChange={(option) => setAssignedUsers(option)}
-                options={users}
-                isMulti
-            />
+        <div className='dashboard_pg aflbg'>
+            <div className="sidebarwidth">
+                <PropertySidebar />
             </div>
-        </label> */}
-                            {/* <div className="col-lg-6 col-md-6 col-sm-12">
-            <label>
-                <h1>test</h1>
-                <Select className='select'
-                    onChange={(option) => setAssignedUsers(option)}
-                    options={users}
-                    styles={{
-                        control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            borderColor: state.isFocused ? 'grey' : 'red',
-                            background: 'yellow',
-                            zIndex: '999'
-                        }),
-                    }}
-                    isMulti
-                />
-            </label>
-            <label>
-                <div className='form-field-title'>
-                    <span className="material-symbols-outlined">
-                        badge
-                    </span>
-                    <h1>Country</h1>
-                    <Select
-                        onChange={(option) => setCategory(option)}
-                        options={categories}
-                    />
+            <div className="right_main_content">
+           <div className='property-detail'>
+           <div class="accordion" id="a1accordion_section">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="a1headingOne">
+                  <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#a1collapseOne"
+                    aria-expanded="true"
+                    aria-controls="a1collapseOne"
+                  >
+          <div className='inner'>
+          <div className='left'>
+                    <h5>A-502</h5>
+                    <h6>High Mont Society,<br/>Hinjewadi, Pune</h6>
+                    
                 </div>
-            </label>
-        </div> */}
-                            {/* <div className="col-lg-6 col-md-6 col-sm-12">
-            <div style={{ position: 'relative' }}>
-                <label>
-                    <span style={{
-                        position: 'absolute',
-                        top: '37px',
-                        right: '5px',
-                        color: 'var(--theme-blue)',
-                        background: '#eee',
-                        width: '30px',
-                        height: '30px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        zIndex: '999',
-                        pointerEvents: 'none'
-                    }} className="material-symbols-outlined">
-                        badge
-                    </span>
-                    <h1>test</h1>
-                    <Select className='select'
-                        onChange={(option) => setAssignedUsers(option)}
-                        options={users}
-                        styles={{
-                            control: (baseStyles, state) => ({
-                                ...baseStyles,
-                                outline: 'none',
-                                background: '#eee',
-                                borderBottom: ' 3px solid var(--theme-blue)'
-                            }),
-                        }}
-                        isMulti
-                    />
-                </label>
+                <div className='right'>
+                    <h5>Sanskar Solanki</h5>
+                    <h6>8770534650</h6>
+                </div>
+          </div>
+                  </button>
+                </h2>
+                <div
+                  id="a1collapseOne"
+                  class="accordion-collapse collapse show"
+                  aria-labelledby="a1headingOne"
+                  data-bs-parent="#a1accordion_section"
+                >
+                  <div class="accordion-body">
+                   hello
+                  </div>
+                </div>
+              </div>           
             </div>
-
-            <label>
-                <h1 style={{ fontSize: '0.9rem', fontWeight: 'bolder', paddingLeft: '4px', color: 'var(--theme-blue)' }}>Country</h1>
-                <Select
-                    onChange={(option) => setCategory(option)}
-                    options={categories}
-                />
-            </label>
-        </div> */}
-                            {/* <label>
-            <span>Set Onboarding Date:</span>
-            <input
-                required
-                type="date"
-                onChange={(e) => setDueDate(e.target.value)}
-                value={onboardingDate}
-            />
-        </label> */}
-
-
-                        </div>
-                        <br />
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <button className="theme_btn btn_fill">{propertyid ? 'Update Property' : 'Add Property'}</button>
-                            {formError && <p className="error">{formError}</p>}
-                        </div>
-                        <br />
-                    </form>
-                    <br /><br />
-
-                    {/* <br /><hr />
-<br /><br /><br /><br /> */}
-                    {/* <div className="row no-gutters section-btn-div">
-    <div className="col-12">
-        <div className="section-btn">
-            <a href="propertyList.html" style={{ textDecoration: 'none', width: '100%' }}>
-                <button type="button" name="button" onclick="addPropertyMenu('Details')"
-                    className="mybutton button5">
-                    Add
-                </button>
-            </a>
-
-        </div>
-    </div>
-</div> */}
-                </div >
+           </div>
             </div>
-
         </div >
     )
 }

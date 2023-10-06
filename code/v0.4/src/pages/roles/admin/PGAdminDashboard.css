@@ -429,7 +429,7 @@
 section.admin_services_cards {
   background-color: rgb(188, 236, 224, 0.5);
   padding: 25px;
-  margin-left: -1.5rem;
-  margin-right: -1.5rem;
+  margin-left: -25px;
+  margin-right: -25px;
 }
   /* admin dashboard page - end */

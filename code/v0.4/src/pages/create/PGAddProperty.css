@@ -263,3 +263,44 @@ input[type=number] {
         padding: 0;
     }
 }
+.property-detail .accordion {
+    background: #4CD7D0;
+    transform: translateY(-1px);
+    padding: 20px;
+    max-width: inherit;
+    margin-left: -25px;
+    margin-right: -25px;
+    width: auto;
+}
+.property-detail .accordion button.accordion-button {
+    padding: 0px;
+    border: none !IMPORTANT;   
+    display: block;
+}
+.property-detail .accordion button.accordion-button .inner {
+    display: flex;
+    justify-content: space-between;
+}
+.property-detail .accordion .accordion-item {
+    background: none;
+}
+.property-detail .accordion .accordion-button:focus {
+    box-shadow: none;
+}
+.property-detail .accordion button.accordion-button .inner h5 {
+    color: black;
+    font-weight: 500;
+    font-size: 16px;
+}
+.property-detail .accordion button.accordion-button .inner h6{
+    color: black;
+    font-weight: 400;
+    font-size: 14px;
+    margin-top: 4px !important;
+}
+.property-detail .accordion button.accordion-button .inner .right{
+    text-align: end;
+}
+.property-detail .accordion-item:last-of-type .accordion-button.collapsed{
+    background: none;
+}

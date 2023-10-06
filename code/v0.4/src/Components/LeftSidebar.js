@@ -1,6 +1,3 @@
-// npm i react-pro-sidebar  (command)
-// https://www.npmjs.com/package/react-pro-sidebar  (documentation link) 
-
 import React from 'react'
 import "./LeftSidebar.css"
 const LeftSidebar = () => {
@@ -120,8 +117,6 @@ const LeftSidebar = () => {
                 </ul>
             </div>
         </div>
-
-
     )
 }
 

@@ -94,11 +94,11 @@ export default function PGAdminDashboard() {
 
   return (
     <div className="pgadmindasboard pgls_mobile aflbg" >
-      <div className="row no-gutters pg_width">
-        <div className="col-lg-2 sidebarwidth">
+      <div className="dashboard_pg pg_width">
+        <div className="sidebarwidth">
           <LeftSidebar />
         </div>
-        <div className="col-lg-10 right_main_content">
+        <div className="right_main_content">
           <section>
             <br />
             <div className="row no-gutters">
