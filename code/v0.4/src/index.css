@@ -695,7 +695,7 @@ form.auth-form .theme_btn {
 }
 .sidebarwidth {
   position: fixed;
-  /* width: 20%; */
+background: white;
   height: 100vh;
   overflow-y: auto;
 }
