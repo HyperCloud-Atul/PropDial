@@ -91,8 +91,8 @@
 
 .secondary-details-display .secondary-details-inside-display {
     width: 100%;
-    border-right: 1px solid var(--lightgrey-color);
-    border-left: 1px solid var(--lightgrey-color);
+    border-right: 2px solid var(--lightgrey-color);
+
 }
 
 .secondary-details-inside-display .secondary-details-inside-display-img {

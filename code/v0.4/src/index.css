@@ -771,5 +771,43 @@ button.owl-prev, button.owl-next {
   position: unset;
 }
 }
+/* form fields style 2 */
+.form_field.st-2 {
+  margin-top: 16px;
+  margin-bottom: 0px;
+}
+.form_field.st-2 label {
+  margin-top: 0px;
+  margin-bottom: 6px;
+  font-size: 16px;
+  color: var(--theme-orange);
+  font-weight: 500;
+}
+.form_field.st-2 select {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  height: 40px;
+  font-size: 0.8rem;
+  color: #444;
+  font-weight: bold;
+  padding: 0 10px;
+  border-radius: 0px;
+  background: #efefef;
+  position: relative;
+}
+.form_field.st-2 .input.select{
+  position: relative;
+}
+.form_field.st-2 .input.select:after {
+  content: '';
+  width: 20px;
+  height: 40px;
+  background: #efefef;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-bottom: 1px solid #ddd;
+}
 
 /* sanskar media query css end  */

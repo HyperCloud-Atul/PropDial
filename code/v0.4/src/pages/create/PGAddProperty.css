@@ -10,13 +10,14 @@
 }
 
 .residential-commercial-switch span {
-    font-size: 1.1rem;
+    font-size: 15px;
     opacity: 0.5;
     transform: 0.5s;
 }
 
 .residential-commercial-switch span.active {
     opacity: 1;
+    font-size: 18px;
 }
 
 .toggle-switch.off.residential div {
@@ -25,7 +26,7 @@
 }
 
 .toggle-switch.on.commercial div {
-    border: 1px solid var(--red-color);
+    border: 1px solid var(--theme-orange);
     background: #efefef;
 }
 
@@ -36,7 +37,7 @@
 }
 
 .toggle-switch.on.commercial div div {
-    background: var(--red-color);
+    background: var(--theme-orange);
     left: calc(94% - 16px);
 }
 
@@ -263,6 +264,7 @@ input[type=number] {
         padding: 0;
     }
 }
+
 .property-detail .accordion {
     background: #4CD7D0;
     transform: translateY(-1px);
@@ -272,35 +274,81 @@ input[type=number] {
     margin-right: -25px;
     width: auto;
 }
+
 .property-detail .accordion button.accordion-button {
     padding: 0px;
-    border: none !IMPORTANT;   
+    border: none !IMPORTANT;
     display: block;
 }
+
 .property-detail .accordion button.accordion-button .inner {
     display: flex;
     justify-content: space-between;
 }
+
 .property-detail .accordion .accordion-item {
     background: none;
 }
+
 .property-detail .accordion .accordion-button:focus {
     box-shadow: none;
 }
+
 .property-detail .accordion button.accordion-button .inner h5 {
     color: black;
     font-weight: 500;
     font-size: 16px;
 }
-.property-detail .accordion button.accordion-button .inner h6{
+
+.property-detail .accordion button.accordion-button .inner h6 {
     color: black;
     font-weight: 400;
     font-size: 14px;
     margin-top: 4px !important;
 }
-.property-detail .accordion button.accordion-button .inner .right{
+
+.property-detail .accordion button.accordion-button .inner .right {
     text-align: end;
 }
-.property-detail .accordion-item:last-of-type .accordion-button.collapsed{
+
+.property-detail .accordion-item:last-of-type .accordion-button.collapsed {
     background: none;
+}
+
+.property-detail .accordion-body {
+    padding: 20px;
+    height: calc(100% - 20px);
+    background: #fff;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin: 12px 0 0 0;
+}
+
+.property_setup ul.react-tabs__tab-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: #F8EA8C;
+}
+
+.property_setup ul.react-tabs__tab-list li {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--theme-orange);
+    text-transform: uppercase;
+    padding: 10px !important;
+    width: 33.3333333%;
+    text-align: center;
+}
+.property_setup .react-tabs__tab--selected {
+    border-bottom: 3px solid;
+}
+.property_setup .react-tabs__tab-panel--selected {
+    background: white;
+    margin-top: 10px;  
+    padding: 0px 15px;
+}
+.property_setup .col-lg-4.second_col {
+    border-right: 2px solid #ededed;
+    border-left: 2px solid #ededed;
 }

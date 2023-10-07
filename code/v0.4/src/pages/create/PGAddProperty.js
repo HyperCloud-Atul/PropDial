@@ -10,6 +10,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { Navigate, Link } from "react-router-dom";
+
 
 // styles
 import './PGAddProperty.css'
@@ -379,56 +382,155 @@ export default function PGAddProperty({ propertyid }) {
     }
     // sticky top property details - start
 
-function openPropertyDetails(propertyDetails) {
-    propertyDetails.classList.toggle('open');
-  }
-  
-  // sticky top property details - end
+    function openPropertyDetails(propertyDetails) {
+        propertyDetails.classList.toggle('open');
+    }
+
+    // sticky top property details - end
 
     return (
-        <div className='dashboard_pg aflbg'>
+        <div className='dashboard_pg aflbg property_setup'>
             <div className="sidebarwidth">
                 <PropertySidebar />
             </div>
             <div className="right_main_content">
-           <div className='property-detail'>
-           <div class="accordion" id="a1accordion_section">
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="a1headingOne">
-                  <button
-                    class="accordion-button"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#a1collapseOne"
-                    aria-expanded="true"
-                    aria-controls="a1collapseOne"
-                  >
-          <div className='inner'>
-          <div className='left'>
-                    <h5>A-502</h5>
-                    <h6>High Mont Society,<br/>Hinjewadi, Pune</h6>
-                    
+                <div className='property-detail'>
+                    <div class="accordion" id="a1accordion_section">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="a1headingOne">
+                                <button
+                                    class="accordion-button"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#a1collapseOne"
+                                    aria-expanded="true"
+                                    aria-controls="a1collapseOne"
+                                >
+                                    <div className='inner'>
+                                        <div className='left'>
+                                            <h5>A-502</h5>
+                                            <h6>High Mont Society,<br />Hinjewadi, Pune</h6>
+
+                                        </div>
+                                        <div className='right'>
+                                            <h5>Sanskar Solanki</h5>
+                                            <h6>8770534650</h6>
+                                        </div>
+                                    </div>
+                                </button>
+                            </h2>
+                            <div
+                                id="a1collapseOne"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="a1headingOne"
+                                data-bs-parent="#a1accordion_section"
+                            >
+                                <div class="accordion-body">
+                                    <div class="secondary-details-display">
+                                        <div class="secondary-details-inside-display">
+                                            <h5 style={{ textAlign: "center" }}>Atul Tripathi</h5>
+                                            <div class="property-contact-div property-media-icons-horizontal"
+                                                style={{ flexDirection: "row", width: "100%", height: "auto" }}>
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        call
+                                                    </span>
+                                                    <h1>Call</h1>
+                                                </div>
+                                                <div>
+                                                    <img src="./assets/img/whatsapp_square_icon.png" alt="" />
+                                                    <h1>WhatsApp</h1>
+                                                </div>
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        alternate_email
+                                                    </span>
+                                                    <h1>Mail</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="secondary-details-hr" />
+                                        <div style={{ width: "100%" }}>
+                                            <h5 style={{ textAlign: "center" }}>Vinay Prajapati</h5>
+                                            <div class="property-contact-div property-media-icons-horizontal"
+                                                style={{ flexDirection: "row", width: "100%", height: "auto" }}>
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        call
+                                                    </span>
+                                                    <h1>Call</h1>
+                                                </div>
+                                                <div>
+                                                    <img src="../img/whatsapp_square_icon.png" alt="" />
+                                                    <h1>WhatsApp</h1>
+                                                </div>
+                                                <div>
+                                                    <span class="material-symbols-outlined">
+                                                        alternate_email
+                                                    </span>
+                                                    <h1>Mail</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className='right'>
-                    <h5>Sanskar Solanki</h5>
-                    <h6>8770534650</h6>
+                <div className="row no-gutters" style={{ margin: '10px 0px ', height: '50px', background: "white" }}>
+                    <div className="col-lg-6 col-md-6 col-sm-12"
+                    >
+                        <div className="residential-commercial-switch" style={{ height: 'calc(100% - 10px)' }}>
+                            <span className={toggleFlag ? '' : 'active'} style={{ color: 'var(--theme-blue)' }}>Residential</span>
+
+                            <div className={toggleFlag ? 'toggle-switch on commercial' : 'toggle-switch off residential'} style={{ padding: '0 10px' }}>
+                                {/* <small>{toggleFlag ? 'On' : 'Off'}</small> */}
+                                <div onClick={toggleBtnClick}>
+                                    <div></div>
+                                </div>
+                            </div>
+                            <span className={toggleFlag ? 'active' : ''} style={{ color: 'var(--theme-orange)' }}>Commercial</span>
+                        </div>
+                    </div>
                 </div>
-          </div>
-                  </button>
-                </h2>
-                <div
-                  id="a1collapseOne"
-                  class="accordion-collapse collapse show"
-                  aria-labelledby="a1headingOne"
-                  data-bs-parent="#a1accordion_section"
-                >
-                  <div class="accordion-body">
-                   hello
-                  </div>
-                </div>
-              </div>           
-            </div>
-           </div>
+                <form>
+                    <Tabs>
+                        <TabList>
+                            <Tab className="pointer">Basic</Tab>
+                            <Tab className="pointer">Details</Tab>
+                            <Tab className="pointer">More</Tab>
+                        </TabList>
+                        <TabPanel className="basic_detail">
+                            <div className='row no-gutters'>
+                                <div className='col-lg-4 first_col'>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Owner Name
+                                        </label>
+                                        <div className='input select'>                                          
+                                                <select>
+                                                    <option>Test This Select</option>
+                                                    <option>Test This Select</option>
+                                                </select>
+                                         
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='col-lg-4 second_col'>
+                                    hi
+                                </div>
+                                <div className='col-lg-4 third_col'>
+                                    hi
+                                </div>
+                            </div>
+                        </TabPanel>
+                        <TabPanel>
+                            hello
+                        </TabPanel>
+                    </Tabs>
+                </form>
             </div>
         </div >
     )
