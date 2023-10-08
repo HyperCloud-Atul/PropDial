@@ -34,6 +34,17 @@ export default function PGAddProperty({ propertyid }) {
         window.scrollTo(0, 0);
     }, [location]);
     // Scroll to the top of the page whenever the location changes end
+
+    // radio button check
+    // Initialize state for each radio button
+    const [selectedRadioOption, setRadioSelectedOption] = useState('by_default_check');
+
+    // Function to handle radio button selection
+    const handleRadioCheck = (event) => {
+        setRadioSelectedOption(event.target.value);
+    };
+    // radio button check
+
     const navigate = useNavigate()
     const { document: propertyDocument, error: propertyerror } = useDocument('properties', propertyid)
     const { addDocument, response: addDocumentResponse } = useFirestore('properties')
@@ -508,15 +519,357 @@ export default function PGAddProperty({ propertyid }) {
                                         <label>
                                             Owner Name
                                         </label>
-                                        <div className='input select'>                                          
-                                                <select>
-                                                    <option>Test This Select</option>
-                                                    <option>Test This Select</option>
-                                                </select>
-                                         
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" selected disabled>Select Owner</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    person
+                                                </span>
+                                            </div>
+
 
                                         </div>
                                     </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Co-Owner Name
+                                        </label>
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" selected disabled>Select Co-Owner</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    group
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Address Locator
+                                        </label>
+                                        <div className='field_inner'>
+                                            <input type="text" placeholder="Enter Property Unit Number" />
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    map
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Country
+                                        </label>
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" selected>India</option>
+                                                <option value="">Denmark</option>
+                                                <option value="">Malasia</option>
+                                                <option value="">China</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    public
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            State
+                                        </label>
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" selected>Delhi</option>
+                                                <option value="">Harayana</option>
+                                                <option value="">Uttar Pradesh</option>
+                                                <option value="">Maharashtra</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    emoji_transportation
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            City
+                                        </label>
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" selected>Delhi</option>
+                                                <option value="">Gurugram</option>
+                                                <option value="">Noida</option>
+                                                <option value="">Pune</option>
+                                                <option value="">Hyderabad</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    apartment
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Locality
+                                        </label>
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" selected>Malviya Nagar</option>
+                                                <option value="">Dwarka</option>
+                                                <option value="">Rajori Garden</option>
+                                                <option value="">Lajpat Nagar</option>
+                                                <option value="">Saraojni Nagar</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    holiday_village
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Pin Code
+                                        </label>
+                                        <div className='field_inner'>
+                                            <input type="number" placeholder="Enter Pin Code" />
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    drive_file_rename_outline
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Society
+                                        </label>
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" selected disabled>Choose Society</option>
+                                                <option value="">Society 1</option>
+                                                <option value="">Society 2</option>
+                                                <option value="">Society 3</option>
+                                                <option value="">Society 4</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    holiday_village
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Unit Number
+                                        </label>
+                                        <div className='field_inner'>
+                                            <input type="text" placeholder="Enter Property Unit Number" />
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    drive_file_rename_outline
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Property Type
+                                        </label>
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" selected disabled>Choose Property Type</option>
+                                                <option value="">High Rise Apt</option>
+                                                <option value="">Low Rise Apt</option>
+                                                <option value="">Builder Floor</option>
+                                                <option value="">Kothi</option>
+                                                <option value="">Villa - Simplex</option>
+                                                <option value="">Villa - Duplex</option>
+                                                <option value="">Row House - Simplex</option>
+                                                <option value="">Row House - Duplex</option>
+                                                <option value="">Pent House - Simplex</option>
+                                                <option value="">Pent House - Duplex</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    format_list_bulleted
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            Year of Constuction
+                                        </label>
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" disabled>Year of Constuction</option>
+                                                <option value="">1990</option>
+                                                <option value="">1991</option>
+                                                <option value="">1992</option>
+                                                <option value="">1993</option>
+                                                <option value="">1994</option>
+                                                <option value="">1995</option>
+                                                <option value="">1996</option>
+                                                <option value="">1997</option>
+                                                <option value="">1998</option>
+                                                <option value="">1999</option>
+                                                <option value="">2000</option>
+                                                <option value="">2001</option>
+                                                <option value="">2002</option>
+                                                <option value="">2003</option>
+                                                <option value="">2004</option>
+                                                <option value="">2005</option>
+                                                <option value="">2006</option>
+                                                <option value="">2007</option>
+                                                <option value="">2008</option>
+                                                <option value="">2009</option>
+                                                <option value="" selected>2010</option>
+                                                <option value="">2011</option>
+                                                <option value="">2012</option>
+                                                <option value="">2013</option>
+                                                <option value="">2014</option>
+                                                <option value="">2015</option>
+                                                <option value="">2016</option>
+                                                <option value="">2017</option>
+                                                <option value="">2018</option>
+                                                <option value="">2019</option>
+                                                <option value="">2020</option>
+                                                <option value="">2021</option>
+                                                <option value="">2022</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    engineering
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                        <h6 className='dec_related_to_input'>Age Of Property is 12 Years
+                                        </h6>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <label>
+                                            BHK
+                                        </label>
+                                        <div className='field_inner select'>
+                                            <select>
+                                                <option value="" selected disabled>Choose BHK</option>
+                                                <option value="">EWS</option>
+                                                <option value="">1 RK</option>
+                                                <option value="">Studio</option>
+                                                <option value="">1 BHK</option>
+                                                <option value="">1.5 BHK</option>
+                                                <option value="">2 BHK</option>
+                                                <option value="">2.5 BHK</option>
+                                                <option value="">3 BHK</option>
+                                                <option value="">2.5 BHK</option>
+                                                <option value="">4 BHK</option>
+                                                <option value="">5 BHK</option>
+                                                <option value="">6 BHK</option>
+                                                <option value="">7 BHK</option>
+                                                <option value="">8 BHK</option>
+                                                <option value="">9+ BHK</option>
+                                            </select>
+                                            <div className='field_icon'>
+                                                <span class="material-symbols-outlined">
+                                                    bedroom_parent
+                                                </span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div className='form_field st-2'>
+                                        <div className='form_field st-2'>
+                                            <div className='radio_group'>
+                                                <div className='radio_group_single'>
+                                                    <div className={`custom_radio_button ${selectedRadioOption === 'by_default_check' ? 'radiochecked' : ''}`}>
+                                                        <input
+                                                            type="radio"
+                                                            id="semi_furnished"
+                                                            value="semi_furnished"
+                                                            checked={selectedRadioOption === 'by_default_check'}
+                                                            onChange={handleRadioCheck}
+                                                        />
+                                                        <label htmlFor="semi_furnished">
+                                                            <div className="radio_icon">
+                                                                <span className="material-symbols-outlined add">add</span>
+                                                                <span className="material-symbols-outlined check">done</span>
+                                                            </div>
+                                                            <h6>Semi</h6>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div className='radio_group_single'>
+                                                    <div className={`custom_radio_button ${selectedRadioOption === 'fully_furnished' ? 'radiochecked' : ''}`}>
+                                                        <input
+                                                            type="radio"
+                                                            id="fully_furnished"
+                                                            value="fully_furnished"
+                                                            checked={selectedRadioOption === 'fully_furnished'}
+                                                            onChange={handleRadioCheck}
+                                                        />
+                                                        <label htmlFor="fully_furnished">
+                                                            <div className="radio_icon">
+                                                                <span className="material-symbols-outlined add">add</span>
+                                                                <span className="material-symbols-outlined check">done</span>
+                                                            </div>
+                                                            <h6>Fully</h6>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div className='radio_group_single'>
+                                                    <div className={`custom_radio_button ${selectedRadioOption === 'raw_furnished' ? 'radiochecked' : ''}`}>
+                                                        <input
+                                                            type="radio"
+                                                            id="raw_furnished"
+                                                            value="raw_furnished"
+                                                            checked={selectedRadioOption === 'raw_furnished'}
+                                                            onChange={handleRadioCheck}
+                                                        />
+                                                        <label htmlFor="raw_furnished">
+                                                            <div className="radio_icon">
+                                                                <span className="material-symbols-outlined add">add</span>
+                                                                <span className="material-symbols-outlined check">done</span>
+                                                            </div>
+                                                            <h6>Raw</h6>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                             
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div className='col-lg-4 second_col'>
                                     hi

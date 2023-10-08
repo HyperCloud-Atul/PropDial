@@ -783,23 +783,28 @@ button.owl-prev, button.owl-next {
   color: var(--theme-orange);
   font-weight: 500;
 }
-.form_field.st-2 select {
+.form_field.st-2 select, .form_field.st-2 input {
   outline: none;
   border: none;
   border-bottom: 1px solid #ddd;
   height: 40px;
-  font-size: 0.8rem;
+  font-size: 14px;
   color: #444;
-  font-weight: bold;
   padding: 0 10px;
   border-radius: 0px;
+  position: relative;
+  padding-right: 40px;
+}
+.form_field.st-2 select{
   background: #efefef;
+}
+.form_field.st-2 .field_inner, .form_field.st-2 .field_inner.select{
   position: relative;
 }
-.form_field.st-2 .input.select{
-  position: relative;
+.form_field.st-2 .field_inner.select{
+  cursor: pointer;
 }
-.form_field.st-2 .input.select:after {
+.form_field.st-2 .field_inner.select:after {
   content: '';
   width: 20px;
   height: 40px;
@@ -809,5 +814,76 @@ button.owl-prev, button.owl-next {
   right: 0;
   border-bottom: 1px solid #ddd;
 }
+.form_field.st-2 .field_icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4CD7D0;
+  font-size: 1.8rem;
+  pointer-events: none;
+  left: inherit;
+  z-index: 9;
+}
+.form_field.st-2 h6.dec_related_to_input {
+  font-size: 12px;
+  color: #666;
+  margin: 2px 0px !important;
+}
+.form_field.st-2 .radio_group {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 20px;
+}
+.form_field.st-2 .radio_group_single label {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  height: 35px;
+  border-radius: 20px;
+  padding: 6px 7px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.4);
+  transition: 0.3s;
+  display: flex;
+  gap: 8px;
+  position: relative;
+  margin-bottom: 0px;
+  padding-left: 38px;
+}
+.form_field.st-2 .radio_group_single .radiochecked label {
+  background: var(--theme-light-green);
+  color: white;
+  border-color: var(--theme-light-green);
+}
+.form_field.st-2 .radio_group_single label .radio_icon {
+  position: absolute;
+  line-height: 0px;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-41%);
+}
+.form_field.st-2 .radio_group_single label .radio_icon .check{
+  display: none;
+}
+.form_field.st-2 .radio_group_single .radiochecked label .radio_icon .check{
+  display: inherit;
+}
+.form_field.st-2 .radio_group_single .radiochecked label .radio_icon .add{
+  display: none;
+}
+.form_field.st-2 .radio_group_single .custom_radio_button {
+  position: relative;
+ 
+}
+.form_field.st-2 .radio_group_single .custom_radio_button input{
+  position: absolute;
+  height: 35px;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
 
 /* sanskar media query css end  */

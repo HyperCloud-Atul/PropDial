@@ -23,7 +23,7 @@ const categories = [
     { value: 'commercial', label: 'Commercial' },
 ]
 
-export default function PGAddProperty({ propertyid }) {
+export default function PGAddPropertyOld({ propertyid }) {
     // Scroll to the top of the page whenever the location changes start
     const location = useLocation();
     useEffect(() => {

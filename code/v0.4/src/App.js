@@ -32,6 +32,7 @@ import PGLogin from "./pages/login/PGLogin";
 import PGSignup from "./pages/login/PGSignup";
 import PGProfile from "./pages/profile/PGProfile";
 import PGAddProperty from "./pages/create/PGAddProperty";
+import PGAddPropertyOld from "./pages/create/PGAddProperty_old";
 import AddBill from "./pages/create/AddBill";
 import AddPhoto from "./pages/create/AddPhoto";
 import AddDocument from "./pages/create/AddDocument";
@@ -154,6 +155,16 @@ function App() {
                 element={
                   user && user.role === "admin" ? (
                     <PGAddProperty />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+                  <Route
+                path="/addproperty_old"
+                element={
+                  user && user.role === "admin" ? (
+                    <PGAddPropertyOld />
                   ) : (
                     <Navigate to="/login" />
                   )
