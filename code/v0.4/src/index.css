@@ -834,7 +834,7 @@ button.owl-prev, button.owl-next {
   display: grid;
   grid-template-columns: repeat(2,1fr);
   grid-column-gap: 10px;
-  grid-row-gap: 20px;
+  grid-row-gap: 10px;
 }
 .form_field.st-2 .radio_group_single label {
   width: 100%;
