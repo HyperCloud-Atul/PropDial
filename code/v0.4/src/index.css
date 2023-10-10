@@ -804,6 +804,9 @@ button.owl-prev, button.owl-next {
 .form_field.st-2 select{
   background: #efefef;
 }
+.form_field.st-2 textarea {
+  padding: 10px 42px 10px 10px;
+}
 .form_field.st-2 .field_inner, .form_field.st-2 .field_inner.select{
   position: relative;
 }

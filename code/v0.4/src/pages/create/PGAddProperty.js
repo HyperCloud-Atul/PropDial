@@ -979,10 +979,7 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Bathrooms</label>
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected disabled>
-                            Number Of Bedrooms
-                          </option>
+                        <select>                        
                           <option value="" selected disabled>
                             Number Of Bathrooms
                           </option>
@@ -1164,10 +1161,7 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Living Area</label>
                       <div className="field_inner select">
-                        <select>
-                          <option value="" disabled>
-                            Number Of Kitchen
-                          </option>
+                        <select>                     
                           <option value="" disabled>
                             Number Of Living Area
                           </option>
@@ -2215,19 +2209,26 @@ export default function PGAddProperty({ propertyid }) {
                                 </div>
                                 <div className="col-lg-4 col-md-6">
                                   <div className="form_field st-2">
-                                    <label>No. of Car Parking</label>
+                                    <label>Flooring Type</label>
                                     <div className="field_inner select">
                                       <select>
-                                        <option value="" selected disabled>Number of Car Parking</option>
-                                        <option value="">1</option>
-                                        <option value="">2</option>
-                                        <option value="">3</option>
-                                        <option value="">4</option>
-                                        <option value="">5</option>
+                                        <option value="" selected disabled>Flooring Type</option>
+                                        <option value="">Marble</option>
+                                        <option value="">Vetrified Tile</option>
+                                        <option value="">Vinyl</option>
+                                        <option value="">Hardwood</option>
+                                        <option value="">Granite</option>
+                                        <option value="">Bamboo</option>
+                                        <option value="">Concrete</option>
+                                        <option value="">Laminate</option>
+                                        <option value="">Linoleum</option>
+                                        <option value="">Terrazzo (Mosaic)</option>
+                                        <option value="">Brick</option>
+                                        <option value="">Red Oxide</option>
                                       </select>
                                       <div className="field_icon">
                                         <span class="material-symbols-outlined">
-                                          local_parking
+                                          crop_square
                                         </span>
                                       </div>
                                     </div>
@@ -2235,7 +2236,7 @@ export default function PGAddProperty({ propertyid }) {
                                 </div>
                                 <div className="col-lg-12 col-md-12">
                                   <div className="form_field st-2">
-                                    <label>Is Balcony attached ?</label>
+                                    <label>Fitting & Fixtures</label>
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
@@ -2402,7 +2403,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                     </div>
                                   </div>
-                                </div>                            
+                                </div>
                               </div>
                               <hr></hr>
                               <h6 className="mt-2 text-center">Bedroom 3</h6>
@@ -2463,7 +2464,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                     </div>
                                   </div>
-                                </div>                            
+                                </div>
                               </div>
                               <hr></hr>
                               <h6 className="mt-2 text-center">Bedroom 4</h6>
@@ -2524,7 +2525,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                     </div>
                                   </div>
-                                </div>                            
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -2560,7 +2561,261 @@ export default function PGAddProperty({ propertyid }) {
                             data-bs-parent="#property_detail_accordion"
                           >
                             <div class="accordion-body">
-                              Propdial is a Property Management and Maintenance company designed to serve home owners, and help them to manage their property with no hassle.
+                              <h6 className="mt-2 text-center">Bathroom 1</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div className="form_field st-2">
+                                    <label>Is attached to Bedroom ?</label>
+                                    <div className="radio_group">
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                                            ? "radiochecked"
+                                            : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_yes"
+                                            value="dining_yes"
+                                            checked={selectedRadioOption === "by_default_check"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_yes">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  Yes</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_no"
+                                            value="dining_no"
+                                            checked={selectedRadioOption === "no"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_no">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  No</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div className="form_field st-2">
+                                    <label>Flooring Type</label>
+                                    <div className="field_inner select">
+                                      <select>
+                                        <option value="" selected disabled>Flooring Type</option>
+                                        <option value="">Marble</option>
+                                        <option value="">Vetrified Tile</option>
+                                        <option value="">Vinyl</option>
+                                        <option value="">Hardwood</option>
+                                        <option value="">Granite</option>
+                                        <option value="">Bamboo</option>
+                                        <option value="">Concrete</option>
+                                        <option value="">Laminate</option>
+                                        <option value="">Linoleum</option>
+                                        <option value="">Terrazzo (Mosaic)</option>
+                                        <option value="">Brick</option>
+                                        <option value="">Red Oxide</option>
+                                      </select>
+                                      <div className="field_icon">
+                                        <span class="material-symbols-outlined">
+                                          crop_square
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-12 col-md-12">
+                                  <div className="form_field st-2">
+                                    <label>Fitting & Fixtures</label>
+                                    <div className="radio_group">
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                                            ? "radiochecked"
+                                            : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_yes"
+                                            value="dining_yes"
+                                            checked={selectedRadioOption === "by_default_check"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_yes">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>   Fan</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_no"
+                                            value="dining_no"
+                                            checked={selectedRadioOption === "no"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_no">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  Tube Light</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_no"
+                                            value="dining_no"
+                                            checked={selectedRadioOption === "no"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_no">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>   Almirah</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_no"
+                                            value="dining_no"
+                                            checked={selectedRadioOption === "no"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_no">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  Window</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -2595,7 +2850,66 @@ export default function PGAddProperty({ propertyid }) {
                             data-bs-parent="#property_detail_accordion"
                           >
                             <div class="accordion-body">
-                              PMS is a legal document that helps us to work on your behalf when managing your property. We visit your property to review, work with your tenant for rent collection, get repairs done after your approval etc. and this document helps us to take care of all these things as an authorised service provider.
+                              <h6 className="mt-2 text-center">Balcony 1</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -2630,7 +2944,66 @@ export default function PGAddProperty({ propertyid }) {
                             data-bs-parent="#property_detail_accordion"
                           >
                             <div class="accordion-body">
-                              PMS is a legal document that helps us to work on your behalf when managing your property. We visit your property to review, work with your tenant for rent collection, get repairs done after your approval etc. and this document helps us to take care of all these things as an authorised service provider.
+                              <h6 className="mt-2 text-center">Kitchen 1</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -2665,7 +3038,66 @@ export default function PGAddProperty({ propertyid }) {
                             data-bs-parent="#property_detail_accordion"
                           >
                             <div class="accordion-body">
-                              PMS is a legal document that helps us to work on your behalf when managing your property. We visit your property to review, work with your tenant for rent collection, get repairs done after your approval etc. and this document helps us to take care of all these things as an authorised service provider.
+                              <h6 className="mt-2 text-center">Living 1</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -2700,7 +3132,66 @@ export default function PGAddProperty({ propertyid }) {
                             data-bs-parent="#property_detail_accordion"
                           >
                             <div class="accordion-body">
-                              PMS is a legal document that helps us to work on your behalf when managing your property. We visit your property to review, work with your tenant for rent collection, get repairs done after your approval etc. and this document helps us to take care of all these things as an authorised service provider.
+                              <h6 className="mt-2 text-center">Living & Dining 1</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -2735,7 +3226,66 @@ export default function PGAddProperty({ propertyid }) {
                             data-bs-parent="#property_detail_accordion"
                           >
                             <div class="accordion-body">
-                              PMS is a legal document that helps us to work on your behalf when managing your property. We visit your property to review, work with your tenant for rent collection, get repairs done after your approval etc. and this document helps us to take care of all these things as an authorised service provider.
+                              <h6 className="mt-2 text-center">Gallery & Passage 1</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -2770,7 +3320,66 @@ export default function PGAddProperty({ propertyid }) {
                             data-bs-parent="#property_detail_accordion"
                           >
                             <div class="accordion-body">
-                              PMS is a legal document that helps us to work on your behalf when managing your property. We visit your property to review, work with your tenant for rent collection, get repairs done after your approval etc. and this document helps us to take care of all these things as an authorised service provider.
+                              <h6 className="mt-2 text-center">Basement 1</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -2805,7 +3414,66 @@ export default function PGAddProperty({ propertyid }) {
                             data-bs-parent="#property_detail_accordion"
                           >
                             <div class="accordion-body">
-                              PMS is a legal document that helps us to work on your behalf when managing your property. We visit your property to review, work with your tenant for rent collection, get repairs done after your approval etc. and this document helps us to take care of all these things as an authorised service provider.
+                              <h6 className="mt-2 text-center">Additional Rooms 1</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -2819,7 +3487,68 @@ export default function PGAddProperty({ propertyid }) {
             </TabPanel>
             <TabPanel className="more_about_property">
               <div className="map_inner">
-                hello
+                <div className="row no-gutters">
+                  <div className="col-lg-6">
+                    <div class="form_field st-2">
+                      <label>Property Description</label>
+                      <textarea></textarea>
+                      <div class="field_icon">
+                        <span class="material-symbols-outlined">
+                          border_color
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div class="form_field st-2">
+                      <label>Owner Instruction</label>
+                      <textarea></textarea>
+                      <div class="field_icon">
+                        <span class="material-symbols-outlined">
+                          border_color
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div class="form_field st-2">
+                      <label>Key details / Key Handover</label>
+                      <textarea></textarea>
+                      <div class="field_icon">
+                        <span class="material-symbols-outlined">
+                          border_color
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div class="form_field st-2">
+                      <label>Bill Type Setting</label>
+                      <textarea></textarea>
+                      <div class="field_icon">
+                        <span class="material-symbols-outlined">
+                          border_color
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div class="form_field st-2">
+                      <label>Advertising</label>
+                      <textarea></textarea>
+                      <div class="field_icon">
+                        <span class="material-symbols-outlined">
+                          border_color
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
               </div>
             </TabPanel>
           </Tabs>
