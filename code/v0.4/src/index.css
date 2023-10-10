@@ -776,12 +776,18 @@ button.owl-prev, button.owl-next {
   margin-top: 16px;
   margin-bottom: 0px;
 }
+.form_field.st-2 .field_two {
+  display: flex;
+  gap: 8px;
+}
+
 .form_field.st-2 label {
   margin-top: 0px;
   margin-bottom: 6px;
   font-size: 16px;
   color: var(--theme-orange);
   font-weight: 500;
+  text-transform: capitalize;
 }
 .form_field.st-2 select, .form_field.st-2 input {
   outline: none;
@@ -824,6 +830,19 @@ button.owl-prev, button.owl-next {
   pointer-events: none;
   left: inherit;
   z-index: 9;
+}
+.form_field.st-2 .field_icon .text_icon {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  background: #eee;
+  margin-right: -10px;
+  margin-bottom: -10px;
+  font-size: 15px;
+  color: #474747;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .form_field.st-2 h6.dec_related_to_input {
   font-size: 12px;
