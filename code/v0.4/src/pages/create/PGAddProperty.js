@@ -2052,49 +2052,479 @@ export default function PGAddProperty({ propertyid }) {
                                 <div className="col-lg-4 col-md-6">
                                   <div class="form_field st-2">
                                     <label>Length</label>
-                                 <div className="field_two">
-                                 <div class="field_inner">
-                                      <input type="text" placeholder="Feet" />
-                                      <div class="field_icon">
-                                        <div className="text_icon">
-                                          ft
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="field_inner">
-                                      <input type="text" placeholder="inch" />
-                                      <div class="field_icon">
-                                        <div className="text_icon">
-                                          in
-                                        </div>
-                                      </div>
-                                    </div>
-                                 </div>
                                   </div>
                                 </div>
                                 <div className="col-lg-4 col-md-6">
                                   <div class="form_field st-2">
                                     <label>width</label>
-                                 <div className="field_two">
-                                 <div class="field_inner">
-                                      <input type="text" placeholder="Feet" />
-                                      <div class="field_icon">
-                                        <div className="text_icon">
-                                          ft
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="field_inner">
-                                      <input type="text" placeholder="inch" />
-                                      <div class="field_icon">
-                                        <div className="text_icon">
-                                          in
-                                        </div>
-                                      </div>
-                                    </div>
-                                 </div>
                                   </div>
                                 </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div className="form_field st-2">
+                                    <label>Is Bathroom attached ?</label>
+                                    <div className="radio_group">
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                                            ? "radiochecked"
+                                            : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_yes"
+                                            value="dining_yes"
+                                            checked={selectedRadioOption === "by_default_check"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_yes">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  Yes</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_no"
+                                            value="dining_no"
+                                            checked={selectedRadioOption === "no"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_no">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  No</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div className="form_field st-2">
+                                    <label>Is Balcony attached ?</label>
+                                    <div className="radio_group">
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                                            ? "radiochecked"
+                                            : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_yes"
+                                            value="dining_yes"
+                                            checked={selectedRadioOption === "by_default_check"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_yes">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  Yes</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_no"
+                                            value="dining_no"
+                                            checked={selectedRadioOption === "no"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_no">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  No</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div className="form_field st-2">
+                                    <label>No. of Car Parking</label>
+                                    <div className="field_inner select">
+                                      <select>
+                                        <option value="" selected disabled>Number of Car Parking</option>
+                                        <option value="">1</option>
+                                        <option value="">2</option>
+                                        <option value="">3</option>
+                                        <option value="">4</option>
+                                        <option value="">5</option>
+                                      </select>
+                                      <div className="field_icon">
+                                        <span class="material-symbols-outlined">
+                                          local_parking
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-12 col-md-12">
+                                  <div className="form_field st-2">
+                                    <label>Is Balcony attached ?</label>
+                                    <div className="radio_group">
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                                            ? "radiochecked"
+                                            : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_yes"
+                                            value="dining_yes"
+                                            checked={selectedRadioOption === "by_default_check"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_yes">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>   Fan</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_no"
+                                            value="dining_no"
+                                            checked={selectedRadioOption === "no"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_no">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  Tube Light</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_no"
+                                            value="dining_no"
+                                            checked={selectedRadioOption === "no"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_no">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>   Almirah</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                      <div className="radio_group_single">
+                                        <div
+                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                                            }`}
+                                        >
+                                          <input
+                                            type="radio"
+                                            id="dining_no"
+                                            value="dining_no"
+                                            checked={selectedRadioOption === "no"}
+                                            onChange={handleRadioCheck}
+                                          />
+                                          <label htmlFor="dining_no">
+                                            <div className="radio_icon">
+                                              <span className="material-symbols-outlined add">
+                                                add
+                                              </span>
+                                              <span className="material-symbols-outlined check">
+                                                done
+                                              </span>
+                                            </div>
+                                            <h6>  Window</h6>
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <hr></hr>
+                              <h6 className="mt-2 text-center">Bedroom 2</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>                            
+                              </div>
+                              <hr></hr>
+                              <h6 className="mt-2 text-center">Bedroom 3</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>                            
+                              </div>
+                              <hr></hr>
+                              <h6 className="mt-2 text-center">Bedroom 4</h6>
+                              <div className="row no-gutters">
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Total Area</label>
+                                    <div class="field_inner">
+                                      <input type="text" value="1200 sqft 6 in" />
+                                      <div class="field_icon">
+                                        <span class="material-symbols-outlined">crop_square</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>Length</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-lg-4 col-md-6">
+                                  <div class="form_field st-2">
+                                    <label>width</label>
+                                    <div className="field_two">
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="Feet" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            ft
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="field_inner">
+                                        <input type="text" placeholder="inch" />
+                                        <div class="field_icon">
+                                          <div className="text_icon">
+                                            in
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>                            
                               </div>
                             </div>
                           </div>
