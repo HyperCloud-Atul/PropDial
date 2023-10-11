@@ -270,7 +270,7 @@ export default function AddPhoto(props) {
             </TabList>
             <TabPanel className="">
               <div className="row no-gutters">
-                <div className="col-lg-8 col-md-12">
+                {/* <div className="col-lg-8 col-md-12">
                   <div className="upload_property_img">
                     <form onSubmit={handleSubmit}>
                       <div className="row no-gutters">
@@ -320,7 +320,7 @@ export default function AddPhoto(props) {
                         </div>
                         <div className="col-sm-12">
                           <input type="file" onChange={handleFileChange} />
-                          {/* {thumbnailError && <div className="error">{thumbnailError}</div>} */}
+                        
                         </div>
                         <div style={{ display: "flex", justifyContent: "center" }}>
                           <button className="theme_btn btn_fill">Add Photo</button>
@@ -329,8 +329,9 @@ export default function AddPhoto(props) {
                       </div>
                     </form>
                   </div>
-
-                </div>
+  
+                </div> */}
+                {/* {thumbnailError && <div className="error">{thumbnailError}</div>} */}
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/fullview.jpg"></img>
