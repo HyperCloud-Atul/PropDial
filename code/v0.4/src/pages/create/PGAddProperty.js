@@ -1606,7 +1606,7 @@ export default function PGAddProperty({ propertyid }) {
                         <input type="text" placeholder="Total Floors..." />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
-                            {" "}
+                         
                             table_rows
                           </span>
                         </div>
