@@ -1,14 +1,25 @@
 import React from 'react'
 // import "./LeftSidebar.css"
+import { useNavigate } from "react-router-dom";
 
 const PropertySidebar = () => {
+    const navigate = useNavigate();
+    const psidemenuone = () => {
+        navigate("/adddocumentnew");
+      };   
+      const psidemenutwo = () => {
+          navigate("/addphoto");
+        };
+        const psidemenuthree = () => {
+            navigate("/propertystatus");
+          };
     return (
         <div>
             <div class="side-navbar side-navbar-large property-list-side-navbar"
             >
                 <br />
                 <ul>
-                    <li class="">
+                    <li class="" onClick={psidemenuthree}>
                         <b></b>
                         <b></b>
                         <div className='sn_menu'>
@@ -18,7 +29,7 @@ const PropertySidebar = () => {
                             <small>Property Status</small>
                         </div>
                     </li>
-                    <li className='pointer'>
+                    <li className='pointer' onClick={psidemenutwo}>
                         <b></b>
                         <b></b>
 
@@ -42,7 +53,7 @@ const PropertySidebar = () => {
                         </div>
 
                     </li>
-                    <li className='pointer'>
+                    <li className='pointer' onClick={psidemenuone}>
                         <b></b>
                         <b></b>
 

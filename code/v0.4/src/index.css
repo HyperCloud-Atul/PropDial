@@ -792,7 +792,7 @@ button.owl-prev, button.owl-next {
 .form_field.st-2 select, .form_field.st-2 input {
   outline: none;
   border: none;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;  
   height: 40px;
   font-size: 14px;
   color: #444;
@@ -899,6 +899,37 @@ button.owl-prev, button.owl-next {
   position: relative;
  
 }
+.form_field.st-2 .css-1no06ky-control {
+  border: none;
+  height: 40px;
+}
+.form_field.st-2 .css-1fdsijx-ValueContainer {
+  border: none !important;
+  margin: 0px !important;
+  padding: 0px !important;
+  height: 40px !important;
+}
+.form_field.st-2 .css-1jqq78o-placeholder {
+  height: 40px;
+  margin: 0px;
+  padding-top: 9px;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+  background: #efefef;
+}
+.form_field.st-2 .css-1jqq78o-placeholder:focus{
+  border: none;
+  outline: none;
+}
+.form_field.st-2 .css-1rrxwye-control:hover {
+  border: none !important;
+ box-shadow: none !important;
+}
+.form_field.st-2 .css-qbdosj-Input {
+  height: 40px;
+  margin: 0pc !IMPORTANT;
+  padding: 0px !important;
+}
 .form_field.st-2 .radio_group_single .custom_radio_button input{
   position: absolute;
   height: 35px;
@@ -909,6 +940,11 @@ button.owl-prev, button.owl-next {
 h2.pg_title {
   font-size: 24px;
   color: var(--theme-orange);
+}
+.d_inner_card {
+  background: var(--white-color);
+  padding: 20px 15px;
+  margin-top: 10px;
 }
 .property_image .property-img-container {
   width: 100%;

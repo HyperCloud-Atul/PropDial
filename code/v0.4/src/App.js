@@ -36,6 +36,8 @@ import PGAddPropertyOld from "./pages/create/PGAddProperty_old";
 import AddBill from "./pages/create/AddBill";
 import AddPhoto from "./pages/create/AddPhoto";
 import AddDocument from "./pages/create/AddDocument";
+import AddDocumentNew from "./pages/create/AddDocumentNew";
+import PropertyStatus from "./Components/PropertyStatus";
 import PGProperty from "./pages/property/PGProperty";
 // import Property from './pages/property/Property'
 import PGPropertyDetails from "./pages/property/PGPropertyDetails";
@@ -160,7 +162,7 @@ function App() {
                   )
                 }
               ></Route>
-                  <Route
+              <Route
                 path="/addproperty_old"
                 element={
                   user && user.role === "admin" ? (
@@ -213,7 +215,30 @@ function App() {
                     <Navigate to="/login" />
                   )
                 }
+              >
+              </Route>
+              <Route
+                path="/adddocumentnew"
+                element={
+                  user && user.role === "admin" ? (
+                    <AddDocumentNew />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
               ></Route>
+
+              <Route
+                path="/propertystatus"
+                element={
+                  user && user.role === "admin" ? (
+                    <PropertyStatus />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+
 
               <Route
                 path="/propertyedit/:id"

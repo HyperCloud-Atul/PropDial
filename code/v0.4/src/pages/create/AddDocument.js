@@ -187,7 +187,8 @@ export default function AddDocument(props) {
                   <input type="file" onChange={handleFileChange} />
                 </div>
 
-                {/* {thumbnailError && <div className="error">{thumbnailError}</div>} */}
+             
+             
               </label>
             </div>
           </div>

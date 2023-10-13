@@ -275,7 +275,7 @@ export default function AddPhoto(props) {
                     <form onSubmit={handleSubmit}>
                       <div className="row no-gutters">
                         <div className="col-sm-6">
-                          <div className="form_field st-2 mt-0">
+                          <div className="form_field st-2 mt-lg-0">
                             <label>No. of Bedrooms</label>
                             <div className="field_inner select">
                               <Select
@@ -299,7 +299,7 @@ export default function AddPhoto(props) {
                           </div>
                         </div>
                         <div className="col-sm-6">
-                          <div className="form_field st-2 mt-0">
+                          <div className="form_field st-2 mt-lg-0">
                             <label>Total Floor</label>
                             <div className="field_inner">
                               <input

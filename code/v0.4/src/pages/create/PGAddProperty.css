@@ -84,8 +84,8 @@
 .checkbox:checked~.checkbox-label {
     display: flex;
     align-items: center;
-    background: var(--theme-blue);
-    border: 1px solid var(--theme-blue);
+    background: var(--theme-green);
+    border: 1px solid var(--theme-green);
     color: #fff;
 }
 

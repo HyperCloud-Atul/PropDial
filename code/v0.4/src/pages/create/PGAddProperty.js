@@ -600,7 +600,7 @@ export default function PGAddProperty({ propertyid }) {
               <div className="basic_detail_inner">
                 <div className="row no-gutters">
                   <div className="col-lg-4 first_col">
-                    <div className="form_field st-2 mt-0">
+                    <div className="form_field st-2 mt-lg-0">
                       <label>Owner Name</label>
                       <div className="field_inner select">
                         <select>
@@ -952,7 +952,7 @@ export default function PGAddProperty({ propertyid }) {
                     </div>
                   </div>
                   <div className="col-lg-4 second_col">
-                    <div className="form_field st-2 mt-0">
+                    <div className="form_field st-2 mt-lg-0">
                       <label>No. of Bedrooms</label>
                       <div className="field_inner select">
                         <select>
@@ -1600,7 +1600,7 @@ export default function PGAddProperty({ propertyid }) {
                     </div>
                   </div>
                   <div className="col-lg-4 third_col">
-                    <div className="form_field st-2 mt-0">
+                    <div className="form_field st-2 mt-lg-0">
                       <label>Total Floor</label>
                       <div className="field_inner">
                         <input type="text" placeholder="Total Floors..." />

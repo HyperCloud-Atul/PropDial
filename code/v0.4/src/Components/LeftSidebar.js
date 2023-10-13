@@ -1,6 +1,13 @@
 import React from 'react'
 import "./LeftSidebar.css"
+import { useNavigate } from "react-router-dom";
+
 const LeftSidebar = () => {
+    const navigate = useNavigate();
+    const sidemenuone = () => {
+        navigate("/addproperty_old");
+      };
+
     return (
         <div>
             <div class="side-navbar side-navbar-large property-list-side-navbar"
@@ -54,7 +61,7 @@ const LeftSidebar = () => {
 
                        
                     </li>
-                    <li className='pointer'>
+                    <li className='pointer' onClick={sidemenuone}>
                         <b></b>
                         <b></b>
                       
