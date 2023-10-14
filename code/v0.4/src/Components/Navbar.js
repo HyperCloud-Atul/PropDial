@@ -176,7 +176,7 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
 
   return (
     <header className={navbarClassName}>
-      <div className="container">
+     
         <nav className={navClass}>
           <ul>
             <li className="logo pointer" onClick={logoClick}>
@@ -417,8 +417,7 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
           </li>
         )} */}
           </ul>
-        </nav>
-      </div>
+        </nav>  
     </header>
   );
 }

@@ -381,10 +381,10 @@ export default function PGAddPropertyOld({ propertyid }) {
     return (
         <div>
 
-            <div className="dashboard_pg aflbg property_setup">
-                <div className="sidebarwidth">
+            <div className="pgadmindasboard dashboard_pg aflbg property_setup">
+                
                     <LeftSidebar />
-                </div>
+               
                 <div className="right_main_content">
                     <br />
                     <h2 className='pg_title'>

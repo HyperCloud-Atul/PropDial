@@ -25,9 +25,9 @@ const toggleBtnClick = () => {
   return (
     <div className="pgadmindasboard pgls_mobile aflbg">
       <div className="dashboard_pg pg_width">
-        <div className="sidebarwidth">
+      
           <LeftSidebar />
-        </div>
+   
         <div className="right_main_content">
           <br />
           <h2 className="pg_title">USER List</h2>

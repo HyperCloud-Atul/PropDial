@@ -37,8 +37,7 @@ body {
   font-family: 'Comfortaa', cursive;
   margin: 0;
   font-size: 0.9rem;
-  background: var(--bg-color);
-  margin-top: 68px !important;
+  background: var(--bg-color); 
 }
 
 ul,
@@ -687,31 +686,13 @@ form.auth-form .theme_btn {
   margin-left: auto;
   margin-right: auto;
 }
-.pg_width{
-  width: 100%;
-}
-.right_main_content {
-  margin-left: auto;
-  width: 83.33333333%;
-  padding: 0px 25px;
-  min-height: 100vh;
-}
-.sidebarwidth {
-  position: fixed;
-  background: white;
-  height: 100vh;
-  overflow-y: auto;
-  width: 16.66666666%;
-}
+
 /* sanskar css end  */
 
 
 /* sanskar media query css start  */
 
 @media (max-width: 1199px) {
-body {
-  margin-bottom: 60px !important;
-}
 .reverse-1199{
   flex-direction: column-reverse;
 }
@@ -743,9 +724,6 @@ body {
 .section_title h3 {
   font-size: 22px;
   margin-top: 0px !important;
-}
-body {
-  margin-bottom: 60px;
 }
 .oneline_parent{
 display: block !important;
@@ -1007,6 +985,9 @@ h2.pg_title {
 }
 .property_image h4.property_desc .indicating-letter::after{
   left: 42px;
+}
+.pgadmindasboard {
+  margin-top: 68px;
 }
 
 /* sanskar media query css end  */

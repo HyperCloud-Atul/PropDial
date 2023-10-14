@@ -351,8 +351,8 @@ li.main_menus {
     display: none; 
   }
   .navbar {
-    position: inherit !important; 
-    padding: 10px 0px !important;
+ 
+    padding: 10px 15px !important;
     max-width: 100%;
   }
   li.menu_social_media {
