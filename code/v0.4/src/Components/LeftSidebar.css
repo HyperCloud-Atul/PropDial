@@ -63,6 +63,7 @@
   .side-navbar ul li:hover {
     background: rgba(235, 84, 46, 0.8);
     border-radius: 10px 0 0 10px;
+    cursor: pointer;
   }
   
   .side-navbar ul li b {

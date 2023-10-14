@@ -113,19 +113,20 @@ const AddDocumentNew = () => {
       <h2 className="pg_title">
         Property Document
       </h2>
-      <br></br>
+   <hr/>
       <form>
         <Tabs>
           <TabList>
-            <Tab className="pointer">ORIGINAL</Tab>
-            <Tab className="pointer">INSPECTION</Tab>
-            <Tab className="pointer">OTHER</Tab>
+            <Tab className="pointer">PROPERTY DOCS</Tab>
+            <Tab className="pointer">PROPDAIL DOCS</Tab>
+            <Tab className="pointer">UTILITY BILLS</Tab>
+            <Tab className="pointer">MAINTENANCE BILLS</Tab>
           </TabList>
           <TabPanel className="">
             <div className="row no-gutters">
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/fullview.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -134,13 +135,13 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  house - full view
+              Document 1
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/drawingroom.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -149,13 +150,13 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  DRAWING ROOM
+              Document 2
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/masterbedroom.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -164,13 +165,13 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  MASTER BED ROOM
+              Document 3
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/room_1.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -179,77 +180,18 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  ROOM ADJECENT TO HALL
+              Document 4
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/room_2.jpg"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  ROOM ADJECENT TO KITCHEN
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/balcony.jpg"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  BALCONY
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/kitchen.webp"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  KITCHEN
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/bathroom.jpg"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  BATHROOM
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
+        
             </div>
-          </TabPanel>
+          </TabPanel>   
           <TabPanel className="">
             <div className="row no-gutters">
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/fullview.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -258,13 +200,13 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  house - full view
+              Document 1
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/drawingroom.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -273,13 +215,13 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  DRAWING ROOM
+              Document 2
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/masterbedroom.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -288,13 +230,13 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  MASTER BED ROOM
+              Document 3
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/room_1.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -303,77 +245,18 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  ROOM ADJECENT TO HALL
+              Document 4
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/room_2.jpg"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  ROOM ADJECENT TO KITCHEN
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/balcony.jpg"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  BALCONY
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/kitchen.webp"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  KITCHEN
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/bathroom.jpg"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  BATHROOM
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
+        
             </div>
-          </TabPanel>
+          </TabPanel>   
           <TabPanel className="">
             <div className="row no-gutters">
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/fullview.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -382,13 +265,13 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  house - full view
+              Document 1
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/drawingroom.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -397,13 +280,13 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  DRAWING ROOM
+              Document 2
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/masterbedroom.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -412,13 +295,13 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  MASTER BED ROOM
+              Document 3
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
               <div className="col-lg-4 col-md-6">
                 <div className="property-img-container">
-                  <img src="./assets/img/p_img/room_1.jpg"></img>
+                  <img src="./assets/img/document1.png"></img>
                   <span class="material-symbols-outlined delete">
                     delete
                   </span>
@@ -427,74 +310,81 @@ const AddDocumentNew = () => {
                   </span>
                 </div>
                 <h4 className="property_desc">
-                  ROOM ADJECENT TO HALL
+              Document 4
                   <div class="indicating-letter"></div>
                 </h4>
               </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/room_2.jpg"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  ROOM ADJECENT TO KITCHEN
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/balcony.jpg"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  BALCONY
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/kitchen.webp"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  KITCHEN
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
-              <div className="col-lg-4 col-md-6">
-                <div className="property-img-container">
-                  <img src="./assets/img/p_img/bathroom.jpg"></img>
-                  <span class="material-symbols-outlined delete">
-                    delete
-                  </span>
-                  <span class="material-symbols-outlined upload">
-                    publish
-                  </span>
-                </div>
-                <h4 className="property_desc">
-                  BATHROOM
-                  <div class="indicating-letter"></div>
-                </h4>
-              </div>
+        
             </div>
-          </TabPanel>
+          </TabPanel>   
+          <TabPanel className="">
+            <div className="row no-gutters">
+              <div className="col-lg-4 col-md-6">
+                <div className="property-img-container">
+                  <img src="./assets/img/document1.png"></img>
+                  <span class="material-symbols-outlined delete">
+                    delete
+                  </span>
+                  <span class="material-symbols-outlined upload">
+                    publish
+                  </span>
+                </div>
+                <h4 className="property_desc">
+              Document 1
+                  <div class="indicating-letter"></div>
+                </h4>
+              </div>
+              <div className="col-lg-4 col-md-6">
+                <div className="property-img-container">
+                  <img src="./assets/img/document1.png"></img>
+                  <span class="material-symbols-outlined delete">
+                    delete
+                  </span>
+                  <span class="material-symbols-outlined upload">
+                    publish
+                  </span>
+                </div>
+                <h4 className="property_desc">
+              Document 2
+                  <div class="indicating-letter"></div>
+                </h4>
+              </div>
+              <div className="col-lg-4 col-md-6">
+                <div className="property-img-container">
+                  <img src="./assets/img/document1.png"></img>
+                  <span class="material-symbols-outlined delete">
+                    delete
+                  </span>
+                  <span class="material-symbols-outlined upload">
+                    publish
+                  </span>
+                </div>
+                <h4 className="property_desc">
+              Document 3
+                  <div class="indicating-letter"></div>
+                </h4>
+              </div>
+              <div className="col-lg-4 col-md-6">
+                <div className="property-img-container">
+                  <img src="./assets/img/document1.png"></img>
+                  <span class="material-symbols-outlined delete">
+                    delete
+                  </span>
+                  <span class="material-symbols-outlined upload">
+                    publish
+                  </span>
+                </div>
+                <h4 className="property_desc">
+              Document 4
+                  <div class="indicating-letter"></div>
+                </h4>
+              </div>
+        
+            </div>
+          </TabPanel>       
         </Tabs>
       </form>
+      <br/>
     </div>
   </div>
   )

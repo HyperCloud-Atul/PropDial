@@ -4,9 +4,23 @@ import { useNavigate } from "react-router-dom";
 
 const LeftSidebar = () => {
     const navigate = useNavigate();
-    const sidemenuone = () => {
+
+ const sidemenuone = () => {
+        navigate("/admindashboard");
+      };
+    const sidemenutwo = () => {
+        navigate("/users");
+      };
+      const sidemenuthree = () => {
+        navigate("/pgpropertylist");
+      };
+    const sidemenufour = () => {
         navigate("/addproperty_old");
       };
+      const sidemenufive = () => {
+        navigate("/pgsearch");
+      };
+   
 
     return (
         <div>
@@ -14,7 +28,7 @@ const LeftSidebar = () => {
             >
             <br/>
                 <ul>
-                    <li class="active">
+                    <li class="active" onClick={sidemenuone}>
                         <b></b>
                         <b></b>
                         <div className='sn_menu'>
@@ -24,7 +38,7 @@ const LeftSidebar = () => {
                             <small>Admin Dashboard</small>
                         </div>
                     </li>              
-                    <li className='pointer'>
+                    <li className='pointer' onClick={sidemenutwo}>
                         <b></b>
                         <b></b>
                        
@@ -32,23 +46,11 @@ const LeftSidebar = () => {
                         <span class="material-symbols-outlined">
                                 account_box
                             </span>
-                            <small>Owner List</small>
+                            <small>User List</small>
                         </div>
                         
-                    </li>
-                    <li className='pointer'>
-                        <b></b>
-                        <b></b>
-                        
-                         <div className='sn_menu'>
-                         <span class="material-symbols-outlined">
-                                sentiment_satisfied
-                            </span>
-                            <small>Tenant List</small>
-                         </div>
-                       
-                    </li>
-                    <li className='pointer'>
+                    </li>               
+                    <li className='pointer' onClick={sidemenuthree}>
                         <b></b>
                         <b></b>
                        
@@ -61,7 +63,7 @@ const LeftSidebar = () => {
 
                        
                     </li>
-                    <li className='pointer' onClick={sidemenuone}>
+                    <li className='pointer' onClick={sidemenufour}>
                         <b></b>
                         <b></b>
                       
@@ -73,7 +75,7 @@ const LeftSidebar = () => {
                          </div>
                        
                     </li>
-                    <li className='pointer'>
+                    <li className='pointer' onClick={sidemenufive}>
                         <b></b>
                         <b></b>
                    

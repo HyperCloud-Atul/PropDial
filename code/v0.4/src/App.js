@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAuthContext } from "./hooks/useAuthContext";
 import { useEffect, useState } from "react";
 
-
 // components
 import Navbar from "./Components/Navbar";
 import More from "./Components/More";
@@ -39,6 +38,7 @@ import AddDocument from "./pages/create/AddDocument";
 import AddDocumentNew from "./pages/create/AddDocumentNew";
 import PropertyStatus from "./Components/PropertyStatus";
 import PGProperty from "./pages/property/PGProperty";
+import UserList from "./pages/user/UserList";
 // import Property from './pages/property/Property'
 import PGPropertyDetails from "./pages/property/PGPropertyDetails";
 // import OnlineUsers from './components/OnlineUsers'
@@ -58,6 +58,8 @@ import PGAboutUs from "./pages/about_us/PGAboutUs";
 import PGContactUs from "./pages/contact_us/PGContactUs";
 import Faq from "./pages/faq/Faq";
 import PGMoreMenu from "./pages/more-menu/PGMoreMenu";
+import PGPropertyList from "./pages/pgpropertylist/PGPropertyList";
+import PGSearch from "./pages/search/PGSearch";
 
 // import BillList from './components/BillList'
 
@@ -70,10 +72,10 @@ function App() {
   // console.log('opensidenavbar flag in aap.js : ', flag);
   // setSideNavbar(flag);
   // }
-  console.log('user in App.js', user)
+  console.log("user in App.js", user);
   // console.log('user role in App.js', user.role)
 
-  useEffect(() => { }, [user]);
+  useEffect(() => {}, [user]);
 
   return (
     <div className="App">
@@ -91,13 +93,17 @@ function App() {
               </Route> */}
 
               <Route path="/" element={<Home></Home>}></Route>
-              <Route path="/search-property" element={<PGProperty></PGProperty>}></Route>
+              <Route
+                path="/search-property"
+                element={<PGProperty></PGProperty>}
+              ></Route>
               <Route path="/about-us" element={<PGAboutUs />}></Route>
               <Route path="/contact-us" element={<PGContactUs />}></Route>
               <Route path="/faq" element={<Faq></Faq>}></Route>
-              <Route path="/more-menu" element={<PGMoreMenu></PGMoreMenu>}></Route>
-
-
+              <Route
+                path="/more-menu"
+                element={<PGMoreMenu></PGMoreMenu>}
+              ></Route>
 
               <Route path="/adminsettings" element={<AdminSettings />}></Route>
 
@@ -215,13 +221,42 @@ function App() {
                     <Navigate to="/login" />
                   )
                 }
-              >
-              </Route>
+              ></Route>
               <Route
                 path="/adddocumentnew"
                 element={
                   user && user.role === "admin" ? (
                     <AddDocumentNew />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+              <Route
+                path="/users"
+                element={
+                  user && user.role === "admin" ? (
+                    <UserList />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+              <Route
+                path="/pgpropertylist"
+                element={
+                  user && user.role === "admin" ? (
+                    <PGPropertyList />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+                <Route
+                path="/pgsearch"
+                element={
+                  user && user.role === "admin" ? (
+                    <PGSearch />
                   ) : (
                     <Navigate to="/login" />
                   )
@@ -238,7 +273,6 @@ function App() {
                   )
                 }
               ></Route>
-
 
               <Route
                 path="/propertyedit/:id"

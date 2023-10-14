@@ -916,6 +916,7 @@ button.owl-prev, button.owl-next {
     font-size: 14px;
     border-bottom: 1px solid #ddd;
   background: #efefef;
+  padding-left: 12px;
 }
 .form_field.st-2 .css-1jqq78o-placeholder:focus{
   border: none;
@@ -940,6 +941,7 @@ button.owl-prev, button.owl-next {
 h2.pg_title {
   font-size: 24px;
   color: var(--theme-orange);
+  text-transform: uppercase;
 }
 .d_inner_card {
   background: var(--white-color);
