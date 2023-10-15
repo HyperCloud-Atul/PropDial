@@ -1,5 +1,6 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 // component
 import LeftSidebar from "../../Components/LeftSidebar";
@@ -8,26 +9,28 @@ import LeftSidebar from "../../Components/LeftSidebar";
 import "./UserList.css";
 
 const UserList = () => {
+     // Scroll to the top of the page whenever the location changes start
+     const location = useLocation();
+     useEffect(() => {
+       window.scrollTo(0, 0);
+     }, [location]);
+     // Scroll to the top of the page whenever the location changes end
+  // switch
+  const [toggleFlag, setToggleFlag] = useState(false);
+  const [userlist, setUserlist] = useState("owner"); //Residential/Commercial
+  const toggleBtnClick = () => {
+    if (toggleFlag) setUserlist("owner");
+    else setUserlist("tenant");
 
-
-// switch 
-const [toggleFlag, setToggleFlag] = useState(false);
-const [userlist, setUserlist] = useState("owner"); //Residential/Commercial
-const toggleBtnClick = () => {
-  if (toggleFlag) setUserlist("owner");
-  else setUserlist("tenant");
-
-  setToggleFlag(!toggleFlag);
-};
-// switch 
-
+    setToggleFlag(!toggleFlag);
+  };
+  // switch
 
   return (
     <div className="pgadmindasboard pgls_mobile aflbg">
       <div className="dashboard_pg pg_width">
-      
-          <LeftSidebar />
-   
+        <LeftSidebar />
+
         <div className="right_main_content">
           <br />
           <h2 className="pg_title">USER List</h2>
@@ -75,12 +78,18 @@ const toggleBtnClick = () => {
               </div>
             </div>
             <div
-              className="col-md-6 col-sm-12 d-flex"
-              style={{
-                alignItems: "center",
-                height: "50px",
-              }}
-            ></div>
+              className="col-md-6 col-sm-12"
+          
+            >
+              <div class="form_field st-2 mt-lg-0">
+                <div class="field_inner">
+                  <input type="text" placeholder="Search here" />
+                  <div class="field_icon">
+                    <span class="material-symbols-outlined">manage_search</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="userlist">
             <div className="single_user">
@@ -371,9 +380,8 @@ const toggleBtnClick = () => {
                 </div>
               </div>
             </div>
-
           </div>
-          <br/>
+          <br />
         </div>
       </div>
     </div>

@@ -1,10 +1,18 @@
-import React from 'react'
+import React from "react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 // component
 import PropertySidebar from "../../Components/PropertySidebar"; 
 
 const AddDocumentNew = () => {
+   // Scroll to the top of the page whenever the location changes start
+   const location = useLocation();
+   useEffect(() => {
+     window.scrollTo(0, 0);
+   }, [location]);
+   // Scroll to the top of the page whenever the location changes end
   return (
     <div className="dashboard_pg aflbg property_setup property_image">
     <div className="sidebarwidth">

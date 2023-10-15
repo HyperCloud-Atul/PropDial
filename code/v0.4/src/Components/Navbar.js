@@ -74,7 +74,8 @@ export default function Navbar() {
     }
     if (user && user.role === "admin") {
       // console.log('in user', user.role)
-      navigate("/adminproperties");
+      // navigate("/adminproperties");
+      navigate("/pgpropertylist");
     }
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
@@ -89,7 +90,8 @@ export default function Navbar() {
     }
     if (user && user.role === "admin") {
       // console.log('in user', user.role)
-      navigate("/adminproperties");
+      // navigate("/adminproperties");
+      navigate("/users");
     }
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
@@ -199,7 +201,7 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
               <div
                 onClick={showSecondPage}
                 className={`menu_single pointer ${
-                  location.pathname === "/search-property" || location.pathname === "/bills"? "active" : ""
+                  location.pathname === "/search-property" || location.pathname === "/bills"? "active" : "" || location.pathname === "/pgpropertylist" ? "active" : ""
                 }`}
               >
                 <span class="material-symbols-outlined">{secondMenuIcon}</span>
@@ -209,7 +211,7 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
               <div
                 onClick={showThirdPage}
                 className={`menu_single pointer ${
-                  location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : ""
+                  location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : "" || location.pathname === "/users" ? "active" : ""
                 }`}
               >
                 <span class="material-symbols-outlined">{thirdMenuIcon}</span>

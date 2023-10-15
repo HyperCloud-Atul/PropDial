@@ -1,8 +1,10 @@
 import React from 'react'
 // import "./LeftSidebar.css"
 import { useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const PropertySidebar = () => {
+    const location = useLocation(); // Get the current location
     const navigate = useNavigate();
     const psidemenuone = () => {
         navigate("/adddocumentnew");
@@ -19,7 +21,9 @@ const PropertySidebar = () => {
             >
                 <br />
                 <ul>
-                    <li class="" onClick={psidemenuthree}>
+                    <li  className={`pointer ${
+                location.pathname === "/propertystatus" ? "active" : ""
+              }`} onClick={psidemenuthree}>
                         <b></b>
                         <b></b>
                         <div className='sn_menu'>
@@ -33,7 +37,9 @@ const PropertySidebar = () => {
                         <b></b>
                         <b></b>
 
-                        <div className='sn_menu'>
+                        <div className={`pointer sn_menu ${
+                location.pathname === "/addphoto" ? "active" : ""
+              }`}>
                             <span class="material-symbols-outlined">
                             image
                             </span>
@@ -41,7 +47,7 @@ const PropertySidebar = () => {
                         </div>
 
                     </li>
-                    <li className='pointer active'>
+                    <li className={`pointer ${["/addphoto", "/adddocumentnew", "/propertystatus"].includes(location.pathname) ? "" : "active"}`}>
                         <b></b>
                         <b></b>
 
@@ -53,7 +59,9 @@ const PropertySidebar = () => {
                         </div>
 
                     </li>
-                    <li className='pointer' onClick={psidemenuone}>
+                    <li className={`pointer sn_menu ${
+                location.pathname === "/adddocumentnew" ? "active" : ""
+              }`} onClick={psidemenuone}>
                         <b></b>
                         <b></b>
 

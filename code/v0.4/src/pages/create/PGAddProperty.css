@@ -274,7 +274,13 @@ input[type=number] {
     margin-right: -25px;
     width: auto;
 }
-
+.property-detail   .accordion-button::after {    
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    bottom: 0;  
+}
 .property-detail .accordion button.accordion-button {
     padding: 0px;
     border: none !IMPORTANT;

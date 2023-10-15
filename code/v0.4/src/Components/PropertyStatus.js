@@ -1,10 +1,17 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+
 
 import PropertySidebar from "./PropertySidebar";
 
 const PropertyStatus = () => {
+   // Scroll to the top of the page whenever the location changes start
+   const location = useLocation();
+   useEffect(() => {
+     window.scrollTo(0, 0);
+   }, [location]);
+   // Scroll to the top of the page whenever the location changes end
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
 
   const openMoreAddOptions = () => {

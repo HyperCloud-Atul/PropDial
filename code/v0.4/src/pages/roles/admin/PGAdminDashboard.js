@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 // import { useNavigate } from 'react-router-dom'
 import { useLogout } from "../../../hooks/useLogout";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
@@ -103,7 +103,7 @@ export default function PGAdminDashboard() {
             <br />
             <div className="row no-gutters">
               <div className="col-lg-3 col-md-3 relative" style={{ padding: "15px" }}>
-                <a href="addproperty.html" className="admin-property-count-card">
+                <Link to="/pgpropertylist" className="admin-property-count-card">
                   <div className="">
                     <h1>80623</h1>
                     <div className="rent-sale-div">
@@ -120,7 +120,7 @@ export default function PGAdminDashboard() {
                     className="admin_card_bottom">
                     <h2>Properties</h2>
                   </div>
-                </a>
+                </Link>
                 {/* <div style={{
                 position:"absolute",
                 top:"0",
@@ -139,7 +139,7 @@ export default function PGAdminDashboard() {
               </div> */}
               </div>
               <div className="col-lg-3 col-md-3 relative" style={{ padding: "15px" }}>
-                <div className="admin-property-count-card">
+                <Link to="/users" className="admin-property-count-card">
                   <div className="">
                     <h1>1,504</h1>
                     <div className="rent-sale-div">
@@ -156,10 +156,10 @@ export default function PGAdminDashboard() {
                     className="admin_card_bottom">
                     <h2>Owners</h2>
                   </div>
-                </div>
+                </Link>
               </div>
               <div className="col-lg-3 col-md-3 relative" style={{ padding: "15px" }}>
-                <div className="admin-property-count-card">
+                <Link to="/users" className="admin-property-count-card">
                   <div className="">
                     <h1>1,235</h1>
                     <div className="rent-sale-div">
@@ -175,7 +175,7 @@ export default function PGAdminDashboard() {
                     className="admin_card_bottom">
                     <h2>Tenents</h2>
                   </div>
-                </div>
+                </Link>
               </div>
               <div className="col-lg-3 col-md-3 relative" style={{ padding: "15px" }}>
                 <div className="admin-property-count-card">

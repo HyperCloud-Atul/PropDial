@@ -1,18 +1,60 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 // import AddBill from '../pages/create/AddBill'
 import { useNavigate } from "react-router-dom";
+import { useCollection } from "../../hooks/useCollection";
+import { useEffect, useState } from "react";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 //Date Formatter MMM dd, yyyy
 import { format } from "date-fns";
 
 // component
 import LeftSidebar from "../../Components/LeftSidebar";
+import Filters from "../../Components/Filters";
+import PropertyList from "../../Components/PropertyList";
 
 // styles
 import "./PGPropetyList.css";
 
-export default function PGPropertyList({ properties }) {
+export default function PGPropertyList() {
+    // Scroll to the top of the page whenever the location changes start
+    const location = useLocation();
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location]);
+    // Scroll to the top of the page whenever the location changes end
+  const propertyFilter = ["ALL", "RESIDENTIAL", "COMMERCIAL", "INACTIVE"];
+  const { user } = useAuthContext(); 
+  const { documents, error } = useCollection("properties");
+  const [filter, setFilter] = useState("all");
+  const changeFilter = (newFilter) => {
+    setFilter(newFilter);
+  };
+  const properties = documents
+    ? documents.filter((document) => {
+      switch (filter) {
+        case "ALL":
+          return true;
+        case "mine":
+          let assignedToMe = false;
+          document.assignedUsersList.forEach((u) => {
+            if (u.id === user.uid) {
+              assignedToMe = true;
+            }
+          });
+          return assignedToMe;
+        case "RESIDENTIAL":
+          return document.category.toUpperCase() === filter;
+        case "COMMERCIAL":
+          return document.category.toUpperCase() === filter;
+        case "INACTIVE":
+          // console.log(document.category, filter)
+          return document.status.toUpperCase() === filter;
+        default:
+          return true;
+      }
+    })
+    : null;
   // switch
   const [toggleFlag, setToggleFlag] = useState(false);
   const [propertyList, setPropertyList] = useState("residential"); //Residential/Commercial
@@ -221,6 +263,17 @@ export default function PGPropertyList({ properties }) {
            
             </div>
           </div>
+         
+          {error && <p className="error">{error}</p>}
+          {documents && (
+            <Filters
+              changeFilter={changeFilter}
+              filterList={propertyFilter}
+              filterLength={properties.length}
+            />
+          )}
+          {properties && <PropertyList properties={properties} />}
+          <br />
           <br />
         </div>
       </div>

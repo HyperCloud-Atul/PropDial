@@ -986,7 +986,7 @@ h2.pg_title {
 .property_image h4.property_desc .indicating-letter::after{
   left: 42px;
 }
-.pgadmindasboard {
+.pgadmindasboard, .dashboard_pg {
   margin-top: 68px;
 }
 
