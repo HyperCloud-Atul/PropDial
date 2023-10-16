@@ -9,12 +9,12 @@ import LeftSidebar from "../../Components/LeftSidebar";
 import "./UserList.css";
 
 const UserList = () => {
-     // Scroll to the top of the page whenever the location changes start
-     const location = useLocation();
-     useEffect(() => {
-       window.scrollTo(0, 0);
-     }, [location]);
-     // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   // switch
   const [toggleFlag, setToggleFlag] = useState(false);
   const [userlist, setUserlist] = useState("owner"); //Residential/Commercial
@@ -39,7 +39,7 @@ const UserList = () => {
             className="row no-gutters"
             style={{ margin: "10px 0px ", height: "50px", background: "white" }}
           >
-            <div
+            {/* <div
               className="col-md-6 col-sm-12 d-flex "
               style={{
                 alignItems: "center",
@@ -64,7 +64,6 @@ const UserList = () => {
                   }
                   style={{ padding: "0 10px" }}
                 >
-                  {/* <small>{toggleFlag ? 'On' : 'Off'}</small> */}
                   <div onClick={toggleBtnClick}>
                     <div></div>
                   </div>
@@ -76,16 +75,32 @@ const UserList = () => {
                   Tenant
                 </span>
               </div>
-            </div>
+            </div> */}
             <div
-              className="col-md-6 col-sm-12"
-          
-            >
+              className="col-md-6 col-sm-12">
+
               <div class="form_field st-2 mt-lg-0">
                 <div class="field_inner">
                   <input type="text" placeholder="Search here" />
                   <div class="field_icon">
                     <span class="material-symbols-outlined">manage_search</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-sm-12">
+              <div class="form_field st-2 mt-lg-2">
+                <div class="field_inner select">
+                  <select>
+                    <option selected="">Property Owner (900)</option>
+                    <option> Property Tenant (4000)</option>
+                    <option>Property Advisor (50)</option>
+                    <option>Property Manager (100)</option>
+                    <option>Frontdesk (20)</option>
+                    <option>Admin (12)</option>
+                  </select>
+                  <div class="field_icon">
+                    <span class="material-symbols-outlined">hourglass_bottom</span>
                   </div>
                 </div>
               </div>
