@@ -239,7 +239,7 @@ const PropertyStatus = () => {
                       paddingTop: "20px",
                     }}
                   >
-                    <Link>
+                    <Link to="/addphoto">
                       <img
                         src="./assets/img/home_image.svg"
                         style={{ height: "80px", marginTop: "-60px" }}
@@ -247,7 +247,7 @@ const PropertyStatus = () => {
                       />
                       <h6>IMAGES</h6>
                     </Link>
-                    <Link>
+                    <Link to="/adddocumentnew">
                       <img
                         src="./assets/img/documents.svg"
                         style={{ height: "80px", marginTop: "-60px" }}

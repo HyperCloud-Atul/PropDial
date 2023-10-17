@@ -200,6 +200,82 @@ export default function PGAdminDashboard() {
             </div>
             <br />
           </section>
+          <section className="admin_services_cards">
+            <OwlCarousel className="owl-theme" {...servicesOptions}>
+              <div className="item asc_single ">
+                <center>
+                  <span class="material-symbols-outlined">
+                    groups
+                  </span>
+                  <h6>12749</h6>
+                  <h5>Tenant List</h5>
+                </center>
+              </div>
+              <div className="item asc_single ">
+                <center>
+                  <span class="material-symbols-outlined">
+                    bedroom_parent
+                  </span>
+                  <h6>2617</h6>
+                  <h5>Rent</h5>
+                </center>
+              </div>
+              <div className="item asc_single ">
+                <center>
+                  <span class="material-symbols-outlined">
+                    real_estate_agent
+                  </span>
+                  <h6>1824</h6>
+                  <h5>Sale</h5>
+                </center>
+              </div>
+              <div className="item asc_single ">
+                <center>
+                  <span class="material-symbols-outlined">
+                    group_work
+                  </span>
+                  <h6>182</h6>
+                  <h5>Both</h5>
+                </center>
+              </div>
+              <div className="item asc_single ">
+                <center>
+                  <span class="material-symbols-outlined">
+                    apartment
+                  </span>
+                  <h6>12</h6>
+                  <h5>City List</h5>
+                </center>
+              </div>
+              <div className="item asc_single ">
+                <center>
+                  <span class="material-symbols-outlined">
+                    reduce_capacity
+                  </span>
+                  <h6>29</h6>
+                  <h5>Employee List</h5>
+                </center>
+              </div>
+              <div className="item asc_single ">
+                <center>
+                  <span class="material-symbols-outlined">
+                    support_agent
+                  </span>
+                  <h6>10</h6>
+                  <h5>Agent List</h5>
+                </center>
+              </div>
+              <div className="item asc_single ">
+                <center>
+                  <span class="material-symbols-outlined">
+                    event_available
+                  </span>
+                  <h5>Holiday List</h5>
+                </center>
+              </div>
+            </OwlCarousel>           
+          </section>
+          <br/>
           <section>
             <div className="row no-gutters">
               <div className="col-lg-6 col-md-6 col-sm-12">
@@ -342,82 +418,8 @@ export default function PGAdminDashboard() {
             </div>
             <br />
           </section>
-          <section className="admin_services_cards">
-            <OwlCarousel className="owl-theme" {...servicesOptions}>
-              <div className="item asc_single ">
-                <center>
-                  <span class="material-symbols-outlined">
-                    groups
-                  </span>
-                  <h6>12749</h6>
-                  <h5>Tenant List</h5>
-                </center>
-              </div>
-              <div className="item asc_single ">
-                <center>
-                  <span class="material-symbols-outlined">
-                    bedroom_parent
-                  </span>
-                  <h6>2617</h6>
-                  <h5>Rent</h5>
-                </center>
-              </div>
-              <div className="item asc_single ">
-                <center>
-                  <span class="material-symbols-outlined">
-                    real_estate_agent
-                  </span>
-                  <h6>1824</h6>
-                  <h5>Sale</h5>
-                </center>
-              </div>
-              <div className="item asc_single ">
-                <center>
-                  <span class="material-symbols-outlined">
-                    group_work
-                  </span>
-                  <h6>182</h6>
-                  <h5>Both</h5>
-                </center>
-              </div>
-              <div className="item asc_single ">
-                <center>
-                  <span class="material-symbols-outlined">
-                    apartment
-                  </span>
-                  <h6>12</h6>
-                  <h5>City List</h5>
-                </center>
-              </div>
-              <div className="item asc_single ">
-                <center>
-                  <span class="material-symbols-outlined">
-                    reduce_capacity
-                  </span>
-                  <h6>29</h6>
-                  <h5>Employee List</h5>
-                </center>
-              </div>
-              <div className="item asc_single ">
-                <center>
-                  <span class="material-symbols-outlined">
-                    support_agent
-                  </span>
-                  <h6>10</h6>
-                  <h5>Agent List</h5>
-                </center>
-              </div>
-              <div className="item asc_single ">
-                <center>
-                  <span class="material-symbols-outlined">
-                    event_available
-                  </span>
-                  <h5>Holiday List</h5>
-                </center>
-              </div>
-            </OwlCarousel>           
-          </section>
-          <br/>
+        
+       
 
           {/* <div className="row no-gutters">
             <div
@@ -469,7 +471,8 @@ export default function PGAdminDashboard() {
             </div>
           </div> */}
 
-          {error && <p className="error">{error}</p>}
+       <div style={{display:"none"}}>
+       {error && <p className="error">{error}</p>}
           {documents && (
             <Filters
               changeFilter={changeFilter}
@@ -479,6 +482,7 @@ export default function PGAdminDashboard() {
           )}
           {properties && <PropertyList properties={properties} />}
           <br />
+       </div>
           <br />
         </div>
       </div>
