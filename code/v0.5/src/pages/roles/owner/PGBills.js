@@ -7,7 +7,7 @@ import { useLogout } from "../../../hooks/useLogout";
 // components
 import Filters from "../../../Components/Filters";
 import BillList from "../../../Components/BillList";
-import Hero from "../../../Components/Hero"
+import LeftSidebar from "../../../Components/LeftSidebar";
 
 // styles
 // import './UserDashboard.css'
@@ -28,92 +28,101 @@ export default function PGBills() {
 
   const bills = billsdocuments
     ? billsdocuments.filter((document) => {
-        let filteredProperty = false;
-        switch (filter) {
-          case "PENDING":
-            document.taggedUsersList.forEach((u) => {
-              if (
-                u.id === user.uid &&
-                document.status.toUpperCase() === "PENDING"
-              ) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "PMS":
-            document.taggedUsersList.forEach((u) => {
-              if (
-                u.id === user.uid &&
-                document.billType.toUpperCase() === "PMS"
-              ) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "BROKERAGE":
-            document.taggedUsersList.forEach((u) => {
-              if (
-                u.id === user.uid &&
-                document.billType.toUpperCase() === "BROKERAGE"
-              ) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "MAINTENANCE":
-            document.taggedUsersList.forEach((u) => {
-              if (
-                u.id === user.uid &&
-                document.billType.toUpperCase() === "MAINTENANCE"
-              ) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "INACTIVE":
-            document.taggedUsersList.forEach((u) => {
-              if (
-                u.id === user.uid &&
-                document.status.toUpperCase() === "INACTIVE"
-              ) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          default:
-            return true;
-        }
-      })
+      let filteredProperty = false;
+      switch (filter) {
+        case "PENDING":
+          document.taggedUsersList.forEach((u) => {
+            if (
+              u.id === user.uid &&
+              document.status.toUpperCase() === "PENDING"
+            ) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "PMS":
+          document.taggedUsersList.forEach((u) => {
+            if (
+              u.id === user.uid &&
+              document.billType.toUpperCase() === "PMS"
+            ) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "BROKERAGE":
+          document.taggedUsersList.forEach((u) => {
+            if (
+              u.id === user.uid &&
+              document.billType.toUpperCase() === "BROKERAGE"
+            ) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "MAINTENANCE":
+          document.taggedUsersList.forEach((u) => {
+            if (
+              u.id === user.uid &&
+              document.billType.toUpperCase() === "MAINTENANCE"
+            ) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "INACTIVE":
+          document.taggedUsersList.forEach((u) => {
+            if (
+              u.id === user.uid &&
+              document.status.toUpperCase() === "INACTIVE"
+            ) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        default:
+          return true;
+      }
+    })
     : null;
 
   return (
-  <div className="pgls_mobile pgbills" style={{
-    background:"rgb(244, 242, 235)"
-  }}>
-  <Hero
-        pageTitle="Bills"
-        pageSubTitle="Discover Your Bills
-        "
-        heroImage="./assets/img/bills.jpg"
-      ></Hero>
-  <div className="container">
-    <br></br>
-    
-      <h2 className="page-title">Bills</h2>
-      <div>
-        {billserror && <p className="error">{billserror}</p>}
+    <div className="pgadmindasboard pgls_mobile aflbg" >
+      <div className="dashboard_pg pg_width">
+        <LeftSidebar />
+        <div className="right_main_content">
 
-        {billsdocuments && (
-          <Filters
-            changeFilter={changeFilter}
-            filterList={billsFilter}
-            filterLength={bills.length}
-          />
-        )}
+          <br />
 
-        {bills && <BillList bills={bills} />}
+         
+
+            <h2 className="page-title">Bills</h2>
+            <div>
+              {billserror && <p className="error">{billserror}</p>}
+
+              {billsdocuments && (
+                <Filters
+                  changeFilter={changeFilter}
+                  filterList={billsFilter}
+                  filterLength={bills.length}
+                />
+              )}
+
+              {bills && <BillList bills={bills} />}
+            </div>
+        
+
+
+
+
+
+
+          <br />
+        </div>
       </div>
     </div>
-  </div>
+
+
+
   );
 }

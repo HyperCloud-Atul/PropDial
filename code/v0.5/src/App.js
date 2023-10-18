@@ -19,6 +19,7 @@ import PGAdminProperties from "./pages/roles/admin/PGAdminProperties";
 import PGPropertyEdit from "./pages/roles/admin/PGPropertyEdit";
 // owner
 import PGOwnerDashboard from "./pages/roles/owner/PGOwnerDashboard";
+import PGOwnerDashboardOld from "./pages/roles/owner/PGOwnerDashboard_old";
 import PGBills from "./pages/roles/owner/PGBills";
 // tenant
 import TenantDashboard from "./pages/roles/tenant/TenantDashboard";
@@ -319,6 +320,16 @@ function App() {
                 element={
                   user && user.role === "owner" ? (
                     <PGOwnerDashboard />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+                 <Route
+                path="/ownerdashboardold"
+                element={
+                  user && user.role === "owner" ? (
+                    <PGOwnerDashboardOld />
                   ) : (
                     <Navigate to="/login" />
                   )

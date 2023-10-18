@@ -2,6 +2,7 @@ import { React, useState } from "react";
 import "./LeftSidebar.css";
 import { useNavigate } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const LeftSidebar = () => {
   const location = useLocation(); // Get the current location
@@ -11,24 +12,127 @@ const LeftSidebar = () => {
     setLeftSidebar(!leftSidebar);
   };
   //   add class when click on advance toggle
+  const { user } = useAuthContext();
+  const navigate = useNavigate(); 
 
-  const navigate = useNavigate();
 
-  const sidemenuone = () => {
-    navigate("/admindashboard");
+  const showLDashboard = () => {   
+    if (user && user.role === "superadmin") {
+      // console.log('in superadmin', user.role)
+      navigate("/superadmindashboard");
+    }
+
+    if (user && user.role === "admin") {
+      // console.log('in admin', user.role)
+      navigate("/admindashboard");
+    }
+
+    if (user && user.role === "owner") {
+      // console.log('in user', user.role)
+      navigate("/ownerdashboard");
+    }
+
+    if (user && user.role === "tenant") {
+      // console.log('in user', user.role)
+      navigate("/tenantdashboard");
+    }
+    if (user && user.role === "executive") {
+      // console.log('in user', user.role)
+      navigate("/executivedashboard");
+    }
   };
-  const sidemenutwo = () => {
-    navigate("/users");
+
+  const showSecondMenu = () => {
+    if (user && user.role === "admin") {
+      // console.log('in user', user.role)
+      // navigate("/adminproperties");
+      navigate("/users");
+    }
+    if (user && user.role === "owner") {
+      // console.log('in user', user.role)
+      navigate("/bills");
+    }
   };
-  const sidemenuthree = () => {
-    navigate("/pgpropertylist");
+  const showThirdMenu = () => { 
+    if (user && user.role === "admin") {
+      // console.log('in user', user.role)
+      // navigate("/adminproperties");
+      navigate("/pgpropertylist");
+    }
+    if (user && user.role === "owner") {
+      // console.log('in user', user.role)
+      navigate("/tickets");
+    }
   };
-  const sidemenufour = () => {
-    navigate("/addproperty_old");
+
+  const showFourthMenu = () => {
+    if (user && user.role === "admin") {
+      // console.log('in user', user.role)
+      // navigate("/adminproperties");
+      navigate("/addproperty_old");
+    }
+    if (user && user.role === "owner") {
+      // console.log('in user', user.role)
+      navigate("");
+    }
   };
-  const sidemenufive = () => {
-    navigate("/pgsearch");
+  const showFifthMenu = () => {
+    if (user && user.role === "admin") {
+      // console.log('in user', user.role)
+      // navigate("/adminproperties");
+      navigate("/pgsearch");
+    }
+    if (user && user.role === "owner") {
+      // console.log('in user', user.role)
+      navigate("");
+    }
   };
+
+  //Menus as per role
+  let firstMenuIcon = "home";
+  let firstMenu = ""; //This is for all user type
+  let secondMenuIcon = "";
+  let secondMenu = "";
+  let thirdMenuIcon = "";
+  let thirdMenu = "";
+  let fourthMenu = "";
+  let fourthMenuIcon = "";
+  let fifthMenu = "";
+  let fifthMenuIcon = "";
+
+
+  if (user && user.role === "admin") {  
+    firstMenu = "Admin Dashboard";
+    secondMenuIcon = "account_box";
+    secondMenu = "User List";
+    thirdMenuIcon = "description";
+    thirdMenu = "Property List";
+    fourthMenuIcon = "add";
+    fourthMenu = "Add Property"
+    fifthMenuIcon = "search"
+    fifthMenu = "Search"
+  }
+  if (user && user.role === "owner") {
+    firstMenu = "Owner Dashboard";
+    secondMenuIcon = "receipt_long";
+    secondMenu = "Bills";
+    thirdMenuIcon = "support_agent";
+    thirdMenu = "Tickets";
+    fourthMenuIcon = "";
+    fourthMenu = ""
+    fifthMenuIcon = ""
+    fifthMenu = ""
+  }
+  if (user && user.role === "tenant") {
+    firstMenu = "Tenant Dashboard";
+    secondMenu = "Rent";
+    thirdMenu = "Tickets";
+  }
+  if (user && user.role === "executive") {
+    firstMenu = "";
+    secondMenu = "Bills";
+    thirdMenu = "Tickets";
+  }
 
   return (
     <div class={`sidebarparent ${leftSidebar ? "baropen" : ""}`}>
@@ -41,71 +145,73 @@ const LeftSidebar = () => {
           <ul>
             <li
               className={`pointer ${
-                location.pathname === "/admindashboard" ? "active" : ""
+                location.pathname === "/admindashboard" ? "active" : "" || location.pathname === "/ownerdashboard" ? "active" : ""
               }`}
-              onClick={sidemenuone}
+              onClick={showLDashboard}
             >
               <b></b>
               <b></b>
               <div className="sn_menu">
-                <span class="material-symbols-outlined">home</span>
-                <small>Admin Dashboard</small>
+                <span class="material-symbols-outlined">{firstMenuIcon}</span>
+                <small>
+                  {firstMenu}
+                </small>
               </div>
             </li>
             <li
               className={`sb_menu pointer ${
-                location.pathname === "/users" ? "active" : ""
+                location.pathname === "/users" ? "active" : "" || location.pathname === "/bills" ? "active" : ""
               }`}
-              onClick={sidemenutwo}
+              onClick={showSecondMenu}
             >
               <b></b>
               <b></b>
 
               <div className="sn_menu">
-                <span class="material-symbols-outlined">account_box</span>
-                <small>User List</small>
+                <span class="material-symbols-outlined"> {secondMenuIcon} </span>
+                <small> {secondMenu} </small>
               </div>
             </li>
             <li
               className={`sb_menu pointer ${
-                location.pathname === "/pgpropertylist" ? "active" : ""
+                location.pathname === "/pgpropertylist" ? "active" : "" || location.pathname === "/tickets" ? "active" : ""
               }`}
-              onClick={sidemenuthree}
+              onClick={showThirdMenu}
             >
               <b></b>
               <b></b>
 
               <div className="sn_menu">
-                <span class="material-symbols-outlined">description</span>
-                <small>Property List</small>
+                <span class="material-symbols-outlined"> {thirdMenuIcon} </span>
+                <small> {thirdMenu} </small>
               </div>
             </li>
             <li
               className={`sb_menu pointer ${
                 location.pathname === "/addproperty_old" ? "active" : ""
               }`}
-              onClick={sidemenufour}
+              onClick={showFourthMenu}
             >
               <b></b>
               <b></b>
 
               <div className="sn_menu">
-                <span class="material-symbols-outlined">add</span>
-                <small>Add Property</small>
+                <span class="material-symbols-outlined"> {fourthMenuIcon} </span>
+                <small> {fourthMenu} </small>
               </div>
             </li>
             <li
               className={`sb_menu pointer ${
                 location.pathname === "/pgsearch" ? "active" : ""
               }`}
-              onClick={sidemenufive}
+              onClick={showFifthMenu}
             >
               <b></b>
               <b></b>
 
               <div className="sn_menu">
-                <span class="material-symbols-outlined">search</span>
-                <small>Search</small>
+                <span class="material-symbols-outlined"> {fifthMenuIcon} </span>
+                <small> {fifthMenu} </small>
               </div>
             </li>
             <li className="pointer">
