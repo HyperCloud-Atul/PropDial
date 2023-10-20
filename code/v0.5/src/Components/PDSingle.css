@@ -37,3 +37,16 @@
 .pd_single .pcs_inner .pcs_image_area img.bigimage{
     border-radius: 0px;
 }
+.pd_single  .property_card_single{
+    margin-bottom: 16px;
+}
+.pd_single .more_detail_card_inner{
+    padding: 16px;
+}
+.pd_single  .property_card_single{
+    display: inherit;
+}
+.pd_single  .p_info {   
+    column-gap: 60px;   
+    row-gap: 16px;
+}

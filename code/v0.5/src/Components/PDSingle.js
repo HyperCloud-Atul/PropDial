@@ -30,31 +30,31 @@ const PDSingle = () => {
     // };
     const images = [
         {
-          original: "./assets/img/p_img/fullview.jpg",
-          thumbnail: "./assets/img/p_img/fullview.jpg",
+            original: "./assets/img/p_img/fullview.jpg",
+            thumbnail: "./assets/img/p_img/fullview.jpg",
         },
         {
-          original: "./assets/img/p_img/drawingroom.jpg",
-          thumbnail: "./assets/img/p_img/drawingroom.jpg",
+            original: "./assets/img/p_img/drawingroom.jpg",
+            thumbnail: "./assets/img/p_img/drawingroom.jpg",
         },
         {
-          original: "./assets/img/p_img/balcony.jpg",
-          thumbnail: "./assets/img/p_img/balcony.jpg",
+            original: "./assets/img/p_img/balcony.jpg",
+            thumbnail: "./assets/img/p_img/balcony.jpg",
         },
         {
-          original: "./assets/img/p_img/masterbedroom.jpg",
-          thumbnail: "./assets/img/p_img/masterbedroom.jpg",
+            original: "./assets/img/p_img/masterbedroom.jpg",
+            thumbnail: "./assets/img/p_img/masterbedroom.jpg",
         },
         {
             original: "./assets/img/p_img/room_2.jpg",
             thumbnail: "./assets/img/p_img/room_2.jpg",
-          },
-          {
+        },
+        {
             original: "./assets/img/p_img/bathroom.jpg",
             thumbnail: "./assets/img/p_img/bathroom.jpg",
-          },
-      ];
-      const slideDuration = 1000;
+        },
+    ];
+    const slideDuration = 1000;
     return (
         <div className="pg_property aflbg pd_single">
             <div className="container-fluid"></div>
@@ -65,10 +65,10 @@ const PDSingle = () => {
                             <div className="property_card_single">
                                 <div className="pcs_inner pointer" to="/pdsingle">
                                     <div className="pcs_image_area">
-                                     <div className="bigimage_container">
-                                     {/* <img src={bigImage.url} alt="Big Property Image" className="bigimage" / > */}
-                                     <Gallery items={images} slideDuration={slideDuration} />
-                                     </div>
+                                        <div className="bigimage_container">
+                                            {/* <img src={bigImage.url} alt="Big Property Image" className="bigimage" / > */}
+                                            <Gallery items={images} slideDuration={slideDuration} />
+                                        </div>
                                         {/* <div className="small_images">
                                         {images.map((image, index) => (
                                         <div
@@ -83,7 +83,7 @@ const PDSingle = () => {
                                     ))}
                                         </div> */}
                                     </div>
-                                
+
                                     <div className="pcs_main_detail">
                                         <div className="pmd_top">
                                             <h4 className="property_name">
@@ -121,6 +121,308 @@ const PDSingle = () => {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="property_card_single">
+                                <div className="more_detail_card_inner">
+                                    <h2 className="card_title">
+                                        Property Type :-
+                                    </h2>
+                                    <div class="p_info">
+                                        <div class="p_info_single">
+                                            <h6>Type:</h6>
+                                            <h5>2 BHK
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+
+                                            <h6>Floor no:
+                                            </h6>
+                                            <h5>
+                                                5th
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Age of Property:
+                                            </h6>
+                                            <h5>12
+
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Furnishing:
+                                            </h6>
+                                            <h5>Semi
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Bedrooms:
+                                            </h6>
+                                            <h5>2
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Bathrooms:
+                                            </h6>
+                                            <h5>2
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Balcony:
+                                            </h6>
+                                            <h5>2
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Kitchen:
+                                            </h6>
+                                            <h5>1
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Dining Area:
+                                            </h6>
+                                            <h5>No
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Living & Dining:
+                                            </h6>
+                                            <h5>Yes
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Passages:
+                                            </h6>
+                                            <h5>Yes
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Entrance Gallery:
+                                            </h6>
+                                            <h5>Yes
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Basement:
+                                            </h6>
+                                            <h5>No
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="property_card_single">
+                                <div className="more_detail_card_inner">
+                                    <h2 className="card_title">
+                                        Property Size :-
+                                    </h2>
+                                    <div class="p_info">
+                                        <div class="p_info_single">
+                                            <h6>Plot Area:</h6>
+                                            <h5>1500 SqFt
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+
+                                            <h6>Super Area:
+                                            </h6>
+                                            <h5>1500 SqFt
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Built-up Area:
+                                            </h6>
+                                            <h5>1500 SqFt
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Carpet Area:
+                                            </h6>
+                                            <h5>1500 SqFt
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="property_card_single">
+                                <div className="more_detail_card_inner">
+                                    <h2 className="card_title">
+                                        Parking :-
+                                    </h2>
+                                    <div class="p_info">
+                                        <div class="p_info_single">
+                                            <h6>Car Parking:</h6>
+                                            <h5>2
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+
+                                            <h6>2 Wheeler Parking:
+                                            </h6>
+                                            <h5>2
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="property_card_single">
+                                <div className="more_detail_card_inner">
+                                    <h2 className="card_title">
+                                        Additional Rooms :-
+                                    </h2>
+                                    <div class="p_info">
+                                        <div class="p_info_single">
+                                            <h6>Office Room
+                                                :</h6>
+                                            <h5>1
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+
+                                            <h6>Pooja Room
+                                                :
+                                            </h6>
+                                            <h5>1
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Servent Room
+                                                :
+                                            </h6>
+                                            <h5>1
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Power Room
+
+                                            </h6>
+                                            <h5>1
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Store Room
+
+
+                                            </h6>
+                                            <h5>1
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Study Room
+
+
+                                            </h6>
+                                            <h5>1
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="property_card_single">
+                                <div className="more_detail_card_inner">
+                                    <h2 className="card_title">
+                                    Additional Area :-
+                                    </h2>
+                                    <div class="p_info">
+                                        <div class="p_info_single">
+                                            <h6>Back Yard
+
+                                                :</h6>
+                                            <h5>No
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+
+                                            <h6>Front Yard
+
+                                                :
+                                            </h6>
+                                            <h5>Yes
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Garage
+
+                                                :
+                                            </h6>
+                                            <h5>No
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Garden
+
+
+                                            </h6>
+                                            <h5>Yes
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Terrace
+
+
+
+                                            </h6>
+                                            <h5>Yes
+                                            </h5>
+                                        </div>                                   
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="property_card_single">
+                                <div className="more_detail_card_inner">
+                                    <h2 className="card_title">
+                                    Building :-
+                                    </h2>
+                                    <div class="p_info">
+                                        <div class="p_info_single">
+                                            <h6>Total Floors
+
+                                                :</h6>
+                                            <h5>22
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+
+                                            <h6>Apartment on Floor
+
+                                                :
+                                            </h6>
+                                            <h5>6
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Lift
+
+                                                :
+                                            </h6>
+                                            <h5>3
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Power Backup
+
+
+                                            </h6>
+                                            <h5>Partial Backup
+                                            </h5>
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Terrace
+
+
+
+                                            </h6>
+                                            <h5>Yes
+                                            </h5>
+                                        </div>                                   
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <div className="col-xl-3">

@@ -957,6 +957,13 @@ h2.pg_title {
   color: var(--theme-orange);
   text-transform: uppercase;
 }
+h2.card_title {
+  color: #303030;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 32px;
+  margin-bottom: 16px !important;
+}
 .d_inner_card {
   background: var(--white-color);
   padding: 20px 15px;
