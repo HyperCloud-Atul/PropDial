@@ -7,7 +7,9 @@ section.ari_bnb .item.card_single {
     border-radius: 15px;
     overflow: hidden;
     border: 1px solid #bad2ff;
-    background: var(--white-color);
+    background: var(--white-color) !important;
+    display: block;
+    color: black;
 }
 section.ari_bnb .card_inner {
     padding: 25px;
@@ -22,12 +24,12 @@ section.ari_bnb .card_inner h4.location {
     font-size: 20px;
     color: var(--theme-blue);
     font-weight: 500;
+    margin-bottom: 15px !important;
 }
 section.ari_bnb .p_info_single {
     display: flex;
     gap: 7px;
-    align-items: center;
-    margin-top: 15px;
+    align-items: center; 
 }
 section.ari_bnb .p_info_single img {
     height: 16px;
@@ -42,10 +44,11 @@ section.ari_bnb .p_info_single h5 {
     font-size: 16px;
     font-weight: 500;
 }
-section.ari_bnb .p_info {
-    display: grid;
-    grid-template-columns: 48% 48%;
-    grid-column-gap: 14px;
+section.ari_bnb .p_info {  
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 section.ari_bnb h4.property_price {
     margin-top: 20px !important;

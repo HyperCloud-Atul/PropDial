@@ -66,7 +66,7 @@ const AirBnb = () => {
           <h3>Service Apartments - Daily/Short Time Rental</h3>
         </div>
         <OwlCarousel className="owl-theme ab_p_carousel" {...options}>
-          <div className="item card_single">
+          <Link className="item card_single" to="https://www.airbnb.co.in/rooms/966417708640526996?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_fA6WCaHp3etyoJem" target="_blank">
             <div className="card_img">
               <Carousel
                 showDots={true}
@@ -86,7 +86,7 @@ const AirBnb = () => {
               <div className="p_info">
                 <div className="p_info_single">
                   <img src="./assets/img/plan.png"></img>
-                  <h6>Guests</h6>
+                  <h6>Guests:</h6>
                   <h5>4</h5>
                 </div>
                 <div className="p_info_single">
@@ -95,22 +95,22 @@ const AirBnb = () => {
                   <h5>2</h5>
                 </div>
                 <div className="p_info_single">
-                  <img src="./assets/img/bath.png"></img>
-                  <h6>Baths:</h6>
-                  <h5>2</h5>
+                  <img src="./assets/img/hallway.png"></img>
+                  <h6>Type:</h6>
+                  <h5>Sharing apartment</h5>
                 </div>
               </div>
               <h4 className="property_price">
                 <b><span>₹</span>2k-2.5k</b>
                 <span>per night</span>
               </h4>
-              <Link className="know_detail learn-more" to="https://www.airbnb.co.in/rooms/966417708640526996?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_fA6WCaHp3etyoJem">
-                Know More
+              <Link className="know_detail learn-more" to="https://www.airbnb.co.in/rooms/966417708640526996?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_fA6WCaHp3etyoJem" target="_blank">
+                view detail
               </Link>
         
             </div>
-          </div>
-          <div className="item card_single">
+          </Link>
+          <Link className="item card_single" to="https://www.airbnb.co.in/rooms/971457138024310477?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_IHy7Zg9xo5dt7OLG" target="_blank">
             <div className="card_img">
               <Carousel
                 showDots={true}
@@ -131,7 +131,7 @@ const AirBnb = () => {
               <div className="p_info">
                 <div className="p_info_single">
                   <img src="./assets/img/plan.png"></img>
-                  <h6>Guest</h6>
+                  <h6>Guest:</h6>
                   <h5>4</h5>
                 </div>
                 <div className="p_info_single">
@@ -140,21 +140,21 @@ const AirBnb = () => {
                   <h5>2</h5>
                 </div>
                 <div className="p_info_single">
-                  <img src="./assets/img/bath.png"></img>
-                  <h6>Baths:</h6>
-                  <h5>2</h5>
+                  <img src="./assets/img/hallway.png"></img>
+                  <h6>Type:</h6>
+                  <h5>Entire apartment</h5>
                 </div>
               </div>
               <h4 className="property_price">
                 <b><span>₹</span>2k-2.5k</b>
                 <span>per night</span>
               </h4>
-              <Link to="https://www.airbnb.co.in/rooms/971457138024310477?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_IHy7Zg9xo5dt7OLG" className="know_detail learn-more">
-                Know More
+              <Link to="https://www.airbnb.co.in/rooms/971457138024310477?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_IHy7Zg9xo5dt7OLG" className="know_detail learn-more" target="_blank">
+                view detail
               </Link>
             </div>
-          </div>
-          <div className="item card_single">
+          </Link>
+          <Link className="item card_single" to="https://www.airbnb.co.in/rooms/871388524750609310?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_4XdIug9%2BRzr4RwS5&modal=PHOTO_TOUR_SCROLLABLE" target="_blank">
             <div className="card_img">
               <Carousel
                 showDots={true}
@@ -173,7 +173,7 @@ const AirBnb = () => {
               <div className="p_info">
                 <div className="p_info_single">
                   <img src="./assets/img/plan.png"></img>
-                  <h6>Guest</h6>
+                  <h6>Guest:</h6>
                   <h5>4</h5>
                 </div>
                 <div className="p_info_single">
@@ -182,21 +182,21 @@ const AirBnb = () => {
                   <h5>2</h5>
                 </div>
                 <div className="p_info_single">
-                  <img src="./assets/img/bath.png"></img>
-                  <h6>Baths:</h6>
-                  <h5>2</h5>
+                  <img src="./assets/img/hallway.png"></img>
+                  <h6>Type:</h6>
+                  <h5>Sharing apartment</h5>
                 </div>
               </div>
               <h4 className="property_price">
                 <b><span>₹</span>2k-2.5k</b>
                 <span>per night</span>
               </h4>
-              <Link to="https://www.airbnb.co.in/rooms/871388524750609310?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_4XdIug9%2BRzr4RwS5&modal=PHOTO_TOUR_SCROLLABLE" className="know_detail learn-more">
-                Know More
+              <Link to="https://www.airbnb.co.in/rooms/871388524750609310?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_4XdIug9%2BRzr4RwS5&modal=PHOTO_TOUR_SCROLLABLE" className="know_detail learn-more" target="_blank">
+                view detail
               </Link>
             </div>
-          </div>
-          <div className="item card_single">
+          </Link>
+          <Link className="item card_single" to="https://www.airbnb.co.in/rooms/864290115669008213?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556776_XA6%2BspREIs5aMSXh" target="_blank">
             <div className="card_img">
               <Carousel
                 showDots={true}
@@ -217,7 +217,7 @@ const AirBnb = () => {
               <div className="p_info">
                 <div className="p_info_single">
                   <img src="./assets/img/plan.png"></img>
-                  <h6>Guest</h6>
+                  <h6>Guest:</h6>
                   <h5>4</h5>
                 </div>
                 <div className="p_info_single">
@@ -226,20 +226,20 @@ const AirBnb = () => {
                   <h5>2</h5>
                 </div>
                 <div className="p_info_single">
-                  <img src="./assets/img/bath.png"></img>
-                  <h6>Baths:</h6>
-                  <h5>2</h5>
+                  <img src="./assets/img/hallway.png"></img>
+                  <h6>Type:</h6>
+                  <h5>Entire apartment</h5>
                 </div>
               </div>
               <h4 className="property_price">
                 <b><span>₹</span>2k-2.5k</b>
                 <span>per night</span>
               </h4>
-              <Link to="https://www.airbnb.co.in/rooms/864290115669008213?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556776_XA6%2BspREIs5aMSXh" className="know_detail learn-more">
-                Know More
+              <Link to="https://www.airbnb.co.in/rooms/864290115669008213?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556776_XA6%2BspREIs5aMSXh " className="know_detail learn-more" target="_blank">
+                view detail
               </Link>
             </div>
-          </div>          
+          </Link>          
         </OwlCarousel>
       </div>
     </section>

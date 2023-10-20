@@ -1,8 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-const PropertyDetail = ({propertiesdocuments}) => {
-      // read more read less
+const PropertyDetail = ({ propertiesdocuments }) => {
+  // read more read less
   const [height, setHeight] = useState(true);
 
   const handleHeight = () => {
@@ -10,48 +11,49 @@ const PropertyDetail = ({propertiesdocuments}) => {
   };
   // read more read less
   return (
-<>
-{propertiesdocuments.map((property) => (<div className="property_card_single">
-      <div className="pcs_inner">
-        <div className="pcs_image_area">
-          <img src="./assets/img/property/p1.jpg"></img>
-        </div>
-        <div className="pcs_main_detail">
-          <div className="pmd_top">
-            <h4 className="property_name">
-              {property.society}
-            </h4>
-            <h6 className="property_location">{property.state}</h6>
-          </div>
-          <div className="pmd_body">
-            <div className="property_information">
-              <div className="pi_single">
-                <h6>Carpet area</h6>
-                <h5>8500 sqft</h5>
-              </div>
-              <div className="pi_single">
-                <h6>STATUS</h6>
-                <h5>Ready to Move</h5>
-              </div>
-              <div className="pi_single">
-                <h6>TRANSACTION</h6>
-                <h5>New Property</h5>
-              </div>
-              <div className="pi_single">
-                <h6>FURNISHING</h6>
-                <h5>Unfurnished</h5>
-              </div>
-              <div className="pi_single">
-                <h6>Society</h6>
-                <h5>Indore</h5>
-              </div>
-              <div className="pi_single">
-                <h6>BHK</h6>
-                <h5>2</h5>
-              </div>
+    <>
+      {propertiesdocuments.map((property) => (
+        <div className="property_card_single">
+          <div className="pcs_inner pointer">
+            <div className="pcs_image_area">
+              <img src="./assets/img/property/p1.jpg"></img>
             </div>
-          </div>
-          <div className="pmd_bottom">
+            <div className="pcs_main_detail">
+              <div className="pmd_top">
+                <h4 className="property_name">
+                  {property.society}
+                </h4>
+                <h6 className="property_location">{property.state}</h6>
+              </div>
+              <div className="pmd_body">
+                <div className="property_information">
+                  <div className="pi_single">
+                    <h6>Carpet area</h6>
+                    <h5>8500 sqft</h5>
+                  </div>
+                  <div className="pi_single">
+                    <h6>STATUS</h6>
+                    <h5>Ready to Move</h5>
+                  </div>
+                  <div className="pi_single">
+                    <h6>TRANSACTION</h6>
+                    <h5>New Property</h5>
+                  </div>
+                  <div className="pi_single">
+                    <h6>FURNISHING</h6>
+                    <h5>Unfurnished</h5>
+                  </div>
+                  <div className="pi_single">
+                    <h6>Society</h6>
+                    <h5>Indore</h5>
+                  </div>
+                  <div className="pi_single">
+                    <h6>BHK</h6>
+                    <h5>2</h5>
+                  </div>
+                </div>
+              </div>
+              {/* <div className="pmd_bottom">
             <p className={`pshortdetail ${height ? "" : "readmore"}`}>
               Grandeur is Kalpataru's first offering to the city of Indore. This
               landmark address stands a class apart with its iconic design and
@@ -64,28 +66,98 @@ const PropertyDetail = ({propertiesdocuments}) => {
             <div onClick={handleHeight} className="readml pointer">
               {height ? "Read More" : "Read Less"}
             </div>
+          </div> */}
+            </div>
+          </div>
+          <div className="pcs_other_info">
+            <div className="poi_inner">
+              <h6 className="property_value">
+                <span>₹ </span> 2 cr
+              </h6>
+              <h6 className="value_per_sqf">
+                <span>₹ </span> 9000 per sqf
+              </h6>
+              <Link to="/contact-us" className="theme_btn no_icon btn_fill"             
+              style={{padding:"5px 20px"}}>Contact Agent</Link>
+              <button className="theme_btn no_icon btn_border" data-bs-toggle="modal" data-bs-target="#exampleModal"
+              style={{padding:"5px 20px"}}>Enquire Now</button>
+              <h5 className="link">Check Loan Eligibility</h5>
+            </div>
+          </div>
+        </div>
+
+      ))}
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content relative">
+            <span class="material-symbols-outlined close_modal" data-bs-dismiss="modal">
+              close
+            </span>
+            
+            <div class="modal-body">
+              <form>
+                <div className="row">
+                  <div className="col-sm-12">
+                    <div className="section_title mb-4">
+                      <h3>Enquiry</h3>
+                      <h6 className="modal_subtitle">Thank you for your interest in reaching out to us. Please use the form below to submit any question.</h6>
+                    </div>
+                  </div>
+                  <div className="col-sm-12">
+                    <div class="form_field st-2">
+                      <div class="field_inner select">
+                        <select>
+                          <option value="" disabled selected>I am</option>
+                          <option>Owner</option>
+                          <option>Tenant</option>
+                          <option>Agent</option>
+                        </select>
+                        <div class="field_icon">
+                          <span class="material-symbols-outlined">person</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-sm-12">
+                    <div class="form_field st-2">
+                      <div class="field_inner">
+                        <input type="text" placeholder="Name" />
+                        <div class="field_icon">
+                          <span class="material-symbols-outlined">person</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-sm-12">
+                    <div class="form_field st-2">
+                      <div class="field_inner">
+                        <input type="text" placeholder="Phone Number" />
+                        <div class="field_icon">
+                          <span class="material-symbols-outlined">call</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-sm-12">
+                    <div className="submit_btn mt-4">
+                      <button type="submit" className="modal_btn theme_btn no_icon btn_fill">
+                        Submit
+                        {/* <span class="material-symbols-outlined btn_arrow ba_animation">
+                          arrow_forward
+                        </span> */}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
           </div>
         </div>
       </div>
-      <div className="pcs_other_info">
-        <div className="poi_inner">
-          <h6 className="property_value">
-            <span>₹ </span> 2 cr
-          </h6>
-          <h6 className="value_per_sqf">
-            <span>₹ </span> 9000 per sqf
-          </h6>
-          <button className="theme_btn btn_fill">Contact Agent</button>
-          <button className="theme_btn btn_border">Enquire Now</button>
-          <h5 className="link">Check Loan Eligibility</h5>
-        </div>
-      </div>
-    </div>
-    
-    ) )}
 
 
-</>
+    </>
   );
 };
 
