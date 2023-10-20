@@ -42,6 +42,7 @@ import PGProperty from "./pages/property/PGProperty";
 import UserList from "./pages/user/UserList";
 // import Property from './pages/property/Property'
 import PGPropertyDetails from "./pages/property/PGPropertyDetails";
+import PDSingle from "./Components/PDSingle";
 // import OnlineUsers from './components/OnlineUsers'
 
 // styles
@@ -76,7 +77,7 @@ function App() {
   console.log("user in App.js", user);
   // console.log('user role in App.js', user.role)
 
-  useEffect(() => {}, [user]);
+  useEffect(() => { }, [user]);
 
   return (
     <div className="App">
@@ -97,6 +98,11 @@ function App() {
               <Route
                 path="/search-property"
                 element={<PGProperty></PGProperty>}
+              ></Route>
+              <Route
+                path="/pdsingle"
+                element={<PDSingle></PDSingle>}
+
               ></Route>
               <Route path="/about-us" element={<PGAboutUs />}></Route>
               <Route path="/contact-us" element={<PGContactUs />}></Route>
@@ -253,7 +259,7 @@ function App() {
                   )
                 }
               ></Route>
-                <Route
+              <Route
                 path="/pgsearch"
                 element={
                   user && user.role === "admin" ? (
@@ -325,7 +331,7 @@ function App() {
                   )
                 }
               ></Route>
-                 <Route
+              <Route
                 path="/ownerdashboardold"
                 element={
                   user && user.role === "owner" ? (

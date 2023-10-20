@@ -1,6 +1,5 @@
 /* page property css start */
-.pg_property {
-    background: whitesmoke;
+.pg_property {  
     min-height: 100vh;
 }
 
@@ -130,7 +129,7 @@
     width: 75%;
 }
 
-.pcs_inner .pcs_image_area img {
+.pcs_inner .pcs_image_area img.bigimage {
     width: 100%;
     height: 100%;
     object-fit: cover;

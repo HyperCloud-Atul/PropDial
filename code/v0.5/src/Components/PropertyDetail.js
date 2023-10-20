@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+
 const PropertyDetail = ({ propertiesdocuments }) => {
   // read more read less
   const [height, setHeight] = useState(true);
@@ -14,9 +15,9 @@ const PropertyDetail = ({ propertiesdocuments }) => {
     <>
       {propertiesdocuments.map((property) => (
         <div className="property_card_single">
-          <div className="pcs_inner pointer">
+          <Link className="pcs_inner pointer" to="/pdsingle">
             <div className="pcs_image_area">
-              <img src="./assets/img/property/p1.jpg"></img>
+              <img src="./assets/img/property/p1.jpg" className="bigimage"></img>
             </div>
             <div className="pcs_main_detail">
               <div className="pmd_top">
@@ -68,7 +69,7 @@ const PropertyDetail = ({ propertiesdocuments }) => {
             </div>
           </div> */}
             </div>
-          </div>
+          </Link>
           <div className="pcs_other_info">
             <div className="poi_inner">
               <h6 className="property_value">

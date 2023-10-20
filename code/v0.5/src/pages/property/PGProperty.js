@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useCollection } from "../../hooks/useCollection";
 
-
 // component
 import Banner from "../../Components/Banner";
 import BottomRightFixedIcon from "../../Components/BottomRightFixedIcon";
@@ -23,7 +22,7 @@ const PGProperty = () => {
 
   return (
 
-    <div className="pg_property">
+    <div className="pg_property aflbg">
       {/* <Banner></Banner> */}
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <div className="top_search_bar"></div>
@@ -41,7 +40,7 @@ const PGProperty = () => {
                 </TabList>
                 <TabPanel>
                   <div className="property_card_left">
-                  {propertiesdocuments && <PropertyDetail propertiesdocuments={propertiesdocuments} />}                   
+                  {propertiesdocuments && <PropertyDetail propertiesdocuments={propertiesdocuments}/> }                   
                   </div>
                 </TabPanel>
                 <TabPanel>
