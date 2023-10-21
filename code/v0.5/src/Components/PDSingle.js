@@ -4,30 +4,6 @@ import Gallery from "react-image-gallery";
 // css 
 import "./PDSingle.css"
 const PDSingle = () => {
-    // const [images, setImages] = useState([
-    //     {
-    //         id: 1,
-    //         url: "./assets/img/p_img/fullview.jpg",
-    //     },
-    //     {
-    //         id: 2,
-    //         url: "./assets/img/p_img/drawingroom.jpg",
-    //     },
-    //     {
-    //         id: 3,
-    //         url: "./assets/img/p_img/balcony.jpg",
-    //     }
-    // ]);
-
-    // const [bigImage, setBigImage] = useState(images[0]);
-
-    // const handleImageClick = (image) => {
-    //     const newImages = [...images];
-    //     const index = newImages.findIndex((img) => img.id === image.id);
-    //     newImages[index] = { ...image, url: bigImage.url };
-    //     setImages(newImages);
-    //     setBigImage(image);
-    // };
     const images = [
         {
             original: "./assets/img/p_img/fullview.jpg",
@@ -66,57 +42,68 @@ const PDSingle = () => {
                                 <div className="pcs_inner pointer" to="/pdsingle">
                                     <div className="pcs_image_area">
                                         <div className="bigimage_container">
-                                            {/* <img src={bigImage.url} alt="Big Property Image" className="bigimage" / > */}
                                             <Gallery items={images} slideDuration={slideDuration} />
                                         </div>
-                                        {/* <div className="small_images">
-                                        {images.map((image, index) => (
-                                        <div
-                                            key={index}
-                                            className="small_image_single"
-                                            onClick={() => handleImageClick(image)}
-                                        >
-                                            
-                                                <img src={image.url} alt={`Small Property Image ${index}`} />
-                                           
-                                        </div>
-                                    ))}
-                                        </div> */}
+
                                     </div>
 
                                     <div className="pcs_main_detail">
                                         <div className="pmd_top">
                                             <h4 className="property_name">
-                                                2 BHK 1030 Sq-ft Flat For Sale Geeta Bhavan<br /> Indore, Madhya pradesh
+                                                2 BHK 1030 Sq-ft Flat For Sale<br />
                                             </h4>
-                                            <h6 className="property_location">hello</h6>
+                                            <h6 className="property_location">Geeta Bhavan, Indore, Madhya pradesh</h6>
                                         </div>
-                                        <div className="pmd_body">
-                                            <div className="property_information">
-                                                <div className="pi_single">
-                                                    <h6>Carpet area</h6>
-                                                    <h5>8500 sqft</h5>
-                                                </div>
-                                                <div className="pi_single">
-                                                    <h6>STATUS</h6>
-                                                    <h5>Ready to Move</h5>
-                                                </div>
-                                                <div className="pi_single">
-                                                    <h6>TRANSACTION</h6>
-                                                    <h5>New Property</h5>
-                                                </div>
-                                                <div className="pi_single">
-                                                    <h6>FURNISHING</h6>
-                                                    <h5>Unfurnished</h5>
-                                                </div>
-                                                <div className="pi_single">
-                                                    <h6>Society</h6>
-                                                    <h5>Indore</h5>
-                                                </div>
-                                                <div className="pi_single">
-                                                    <h6>BHK</h6>
-                                                    <h5>2</h5>
-                                                </div>
+                                        <div className="divider">
+                                        </div>
+                                        <div className="pmd_section2 row">
+                                            <div className="pdms_single col-4">
+                                                <h4><span className="currency">₹</span>47.6<span className="price">L</span></h4>
+                                                <h6>6,999 / sq ft</h6>
+                                            </div>
+                                            <div className="pdms_single col-4">
+                                                <h4>470</h4>
+                                                <h6>Area in sq ft</h6>
+                                            </div>
+                                            <div className="pdms_single col-4">
+                                                {/* <h4>Under Construction</h4>
+                                                <h6>Construction status</h6> */}
+                                            </div>
+                                        </div>
+                                        <div className="divider">
+                                        </div>
+                                        <div className="pmd_section2 pmd_section3 row">
+                                            <div className="pdms_single col-4">
+                                                <h4><img src="./assets/img/home-black.png"></img>2</h4>
+                                                <h6>BHK</h6>
+                                            </div>
+                                            <div className="pdms_single col-4">
+                                                <h4><img src="./assets/img/double-bed-black.png"></img>2</h4>
+                                                <h6>Bedrooms</h6>
+                                            </div>
+                                            <div className="pdms_single col-4">
+                                                <h4><img src="./assets/img/bathtub-black.png"></img>2</h4>
+                                                <h6>Bathroom</h6>
+                                            </div>
+                                        </div>
+                                        <div className="divider">
+                                        </div>
+                                        <div className="pmd_section4">
+                                            <div className="left">
+                                                <span class="material-symbols-outlined mr-2" style={{
+                                                    marginRight:"3px"
+                                                }}>
+                                                    favorite
+                                                </span>
+                                                <span class="material-symbols-outlined">
+                                                    share
+                                                </span>
+                                            </div>
+                                            <div className="right">
+                                                <a className="theme_btn no_icon btn_fill" style={{
+                                                    marginRight:"10px"
+                                                }}> Contact Agent</a>
+                                                <a className="theme_btn no_icon btn_border"> Enquire Now</a>
                                             </div>
                                         </div>
                                     </div>
@@ -325,7 +312,7 @@ const PDSingle = () => {
                             <div className="property_card_single">
                                 <div className="more_detail_card_inner">
                                     <h2 className="card_title">
-                                    Additional Area :-
+                                        Additional Area :-
                                     </h2>
                                     <div class="p_info">
                                         <div class="p_info_single">
@@ -368,7 +355,7 @@ const PDSingle = () => {
                                             </h6>
                                             <h5>Yes
                                             </h5>
-                                        </div>                                   
+                                        </div>
                                     </div>
                                 </div>
 
@@ -376,7 +363,7 @@ const PDSingle = () => {
                             <div className="property_card_single">
                                 <div className="more_detail_card_inner">
                                     <h2 className="card_title">
-                                    Building :-
+                                        Building :-
                                     </h2>
                                     <div class="p_info">
                                         <div class="p_info_single">
@@ -404,14 +391,6 @@ const PDSingle = () => {
                                             </h5>
                                         </div>
                                         <div class="p_info_single">
-                                            <h6>Power Backup
-
-
-                                            </h6>
-                                            <h5>Partial Backup
-                                            </h5>
-                                        </div>
-                                        <div class="p_info_single">
                                             <h6>Terrace
 
 
@@ -419,7 +398,16 @@ const PDSingle = () => {
                                             </h6>
                                             <h5>Yes
                                             </h5>
-                                        </div>                                   
+                                        </div>
+                                        <div class="p_info_single">
+                                            <h6>Power Backup
+
+
+                                            </h6>
+                                            <h5>Partial Backup
+                                            </h5>
+                                        </div>
+                                   
                                     </div>
                                 </div>
 

@@ -969,6 +969,12 @@ h2.card_title {
   padding: 20px 15px;
   margin-top: 10px;
 }
+.divider {
+  background: #dddddd;
+  height: 1px;
+  margin: 8px 0px;
+}
+
 .property_image .property-img-container {
   width: 100%;
   height: 200px;
