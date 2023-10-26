@@ -959,10 +959,11 @@ h2.pg_title {
 }
 h2.card_title {
   color: #303030;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 32px;
   margin-bottom: 16px !important;
+  text-transform: uppercase;
 }
 .d_inner_card {
   background: var(--white-color);

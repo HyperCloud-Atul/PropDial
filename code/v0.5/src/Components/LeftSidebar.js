@@ -73,7 +73,7 @@ const LeftSidebar = () => {
     }
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
-      navigate("");
+      navigate("/search-property");
     }
   };
   const showFifthMenu = () => {
@@ -118,8 +118,8 @@ const LeftSidebar = () => {
     secondMenu = "Bills";
     thirdMenuIcon = "support_agent";
     thirdMenu = "Tickets";
-    fourthMenuIcon = "";
-    fourthMenu = ""
+    fourthMenuIcon = "receipt_long";
+    fourthMenu = "Property"
     fifthMenuIcon = ""
     fifthMenu = ""
   }

@@ -5,7 +5,7 @@
 
 @media only screen and (min-width: 1200px) {
     .pg_property {
-        padding-top: 110px;
+        padding-top: 68px;
     }
 }
 
@@ -15,10 +15,39 @@
 
 /* page property search bar css start  */
 .pg_property .top_search_bar {
-    background: var(--theme-orange);
-    height: 60px;
+    background: #e7e7e7;
+    display: flex;   
+    padding: 15px;
+    align-items: center;
+    gap: 30px;
+    justify-content: space-between;
 }
-
+.pg_property .top_search_bar .search_area_header { 
+    margin-bottom: 0px;
+    gap: 30px;
+    background: #ffffff;
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+.pg_property .top_search_bar .search_by_single select {   
+    background: #ffffff;
+    border: 1px solid white;  
+}
+.pg_property .top_search_bar .for_buy_rent {
+    color: black;
+}
+.pg_property .top_search_bar .for_buy_rent div {
+    border-color: #00000000;
+}
+.pg_property .top_search_bar .for_buy_rent div.active {   
+    border-color: rgb(0, 0, 0);
+}
+.top_search_bar .search_area_body {
+    padding: 0px;
+    background: inherit;
+    border-radius: inherit;
+    top: 0px;
+}
 /* page property search bar css end  */
 
 
@@ -86,6 +115,12 @@
 
 
 /* single card css start  */
+.fav_and_share {
+    color: #303030;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
 .property_card_single {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .24), 0 1px 4px 0 rgba(0, 0, 0, .12);
     display: flex;
@@ -139,6 +174,7 @@
 .pmd_top {
     display: grid;
     gap: 8px;
+    padding-right: 56px;
 }
 
 .pmd_top .property_name {

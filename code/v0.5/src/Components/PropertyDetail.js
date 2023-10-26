@@ -20,11 +20,21 @@ const PropertyDetail = ({ propertiesdocuments }) => {
               <img src="./assets/img/property/p1.jpg" className="bigimage"></img>
             </div>
             <div className="pcs_main_detail">
-              <div className="pmd_top">
+              <div className="pmd_top relative" >
                 <h4 className="property_name">
                   {property.society}
                 </h4>
                 <h6 className="property_location">{property.state}</h6>
+                <div className="fav_and_share">
+                  <span class="material-symbols-outlined mr-2" style={{
+                    marginRight: "3px"
+                  }}>
+                    favorite
+                  </span>
+                  <span class="material-symbols-outlined">
+                    share
+                  </span>
+                </div>
               </div>
               <div className="pmd_body">
                 <div className="property_information">
@@ -78,10 +88,10 @@ const PropertyDetail = ({ propertiesdocuments }) => {
               <h6 className="value_per_sqf">
                 <span>₹ </span> 9000 per sqf
               </h6>
-              <Link to="/contact-us" className="theme_btn no_icon btn_fill"             
-              style={{padding:"5px 20px"}}>Contact Agent</Link>
+              <Link to="/contact-us" className="theme_btn no_icon btn_fill"
+                style={{ padding: "5px 20px" }}>Contact Agent</Link>
               <button className="theme_btn no_icon btn_border" data-bs-toggle="modal" data-bs-target="#exampleModal"
-              style={{padding:"5px 20px"}}>Enquire Now</button>
+                style={{ padding: "5px 20px" }}>Enquire Now</button>
               <h5 className="link">Check Loan Eligibility</h5>
             </div>
           </div>
@@ -94,7 +104,7 @@ const PropertyDetail = ({ propertiesdocuments }) => {
             <span class="material-symbols-outlined close_modal" data-bs-dismiss="modal">
               close
             </span>
-            
+
             <div class="modal-body">
               <form>
                 <div className="row">

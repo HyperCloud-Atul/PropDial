@@ -434,7 +434,7 @@ export default function PGOwnerDashboard() {
                 />
               )}
               {/* {billsdocuments && <Filters changeFilter={changeFilter} />} */}
-              {properties && <PropertyList properties={properties} />}
+              {properties && <PropertyList properties={properties}/>}
               {/* {bills && <BillList bills={bills} />} */}
             </div>
           </section>

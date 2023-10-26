@@ -59,6 +59,17 @@
     font-size: 16px;
     vertical-align: super;
 }
+.pd_single .pp_sidebar {
+    margin-top: 0px;
+}
+.back_btn {
+    display: flex;
+    gap: 4px;
+    color: black;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+}
 .pdms_single h4 span.price {
     font-size: 16px;
     vertical-align: bottom;
@@ -93,52 +104,79 @@
     height: 22px;
     margin-right: 4px;
 }
-.bigimage_container .image-gallery-content .image-gallery-slide .image-gallery-image, .bigimage_container .image-gallery-thumbnail .image-gallery-thumbnail-image {  
-    width: 100%;
-    aspect-ratio: 3/2;
-    object-fit: cover;
-}
-.bigimage_container .image-gallery-thumbnail.active, .bigimage_container .image-gallery-thumbnail:focus {
-    outline: none;
-    border: 2px solid #161616;
-}
-.bigimage_container .image-gallery-thumbnail:hover {
-    outline: none;
-    border: 2px solid #161616;
-}
-.bigimage_container .image-gallery-thumbnails {   
-   padding: 0px;
-    padding-top: 6px;
-    border-radius: 0px 0px 16px 16px;
-}
-.bigimage_container .image-gallery-swipe {
-    border-radius: 16px 16px 0px 0px;
-    overflow: hidden;
-}
-.bigimage_container .image-gallery-left-nav .image-gallery-svg, .bigimage_container .image-gallery-right-nav .image-gallery-svg {
-    height: 40px;
-    width: 40px;
-    background: #00000057;
-    border-radius: 50%;  
-}
-.bigimage_container .image-gallery-icon {
-    filter: none;
-}
-.bigimage_container .image-gallery-fullscreen-button, .bigimage_container .image-gallery-play-button { 
-    padding: 8px;
-}
-.image-gallery-fullscreen-button .image-gallery-svg, .image-gallery-play-button .image-gallery-svg {
-    height: 40px;
-    width: 40px;
-    background: #00000057;
-    padding: 7px;
-    border-radius: 50%;
-}
 .pmd_section4 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 25px;
 }
-
-
+.property_full_address h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #7e7e7e;
+}
+.property_full_address h2.card_title{
+    margin-bottom: 0px !important;
+}
+.property_connected_people .single_user .left {
+    border-right: none;
+    padding-right: 2px;
+}
+.property_connected_people.userlist .single_user {
+    padding: 0px;    
+}
+.pcp_single .contacts_single .icon span{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    color: var(--theme-green);
+    font-size: 20px;
+    background: #fff;
+    margin-left: auto;
+    margin-right: auto;
+}
+.pcp_single .contacts_single .icon img {
+    width: 40px;
+    margin: 0 auto;
+}
+.pcp_single .contacts_single {
+    text-align: center;
+}
+.pcp_single .contacts_single h6 {
+    color: #666;
+    font-weight: 400;
+    font-size: 12px;
+    margin-top: 4px !important;
+}
+.pcp_single .contacts {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 15px;
+    border-top: 1px solid #e7e7e7;
+    margin-top: 15px;
+}
+.property_connected_people.userlist {
+    display: block;  
+}
+.property_people_designation {
+    background: #f3f3f3;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #303030;
+    margin-bottom: 15px;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+.property_connected_people.userlist .pcp_single {
+    padding: 0px 15px 15px 15px;
+    margin-top: 20px;
+    border: 1px solid #e7e7e7;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: -webkit-grab;
+}

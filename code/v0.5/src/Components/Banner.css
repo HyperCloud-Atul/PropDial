@@ -209,7 +209,21 @@ h2.banner_heading {
     border-radius: 20px;
     margin-top: 30px;
 }
-
+.for_buy_rent {
+    display: flex;
+    gap: 15px;
+    color: white; 
+    
+}
+.for_buy_rent div{
+    transition: 0.3s;
+    border-bottom: 2px solid;    
+    border-color: #ffffff00;
+}
+.for_buy_rent div.active{
+    transition: 0.3s;
+    border-color: white;
+}
 @media only screen and (max-width: 1024px) {
     .banner_content .react-tabs {
         display: none;

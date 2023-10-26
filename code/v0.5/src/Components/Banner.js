@@ -8,14 +8,20 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Navigate, Link } from "react-router-dom";
 
 function Banner() {
-  const [checked, setChecked] = useState(false);
 
+  // switch 
+  const [checked, setChecked] = useState(false);
   const handleChange = (checked) => {
     setChecked(checked);
   };
+  // switch 
 
-
-
+  // rent and buy acitve 
+  const [activeOption, setActiveOption] = useState('Buy');
+  const handleOptionClick = (option) => {
+    setActiveOption(option);
+  };
+  // rent and buy acitve 
   return (
     <div className="home_banner">
       <div className="swipercomp">
@@ -45,126 +51,90 @@ function Banner() {
                   <AutoTypingEffect className="auto_typing_text"></AutoTypingEffect>
                 </h1>
                 <h6>We Have Million Properties For You</h6>
-                <Tabs>
-                  <div className="search_area">
-                    <div className="search_area_header">
-                      <div className="for_buy_rent">
-                        <TabList>
-                          <Tab className="pointer">Buy</Tab>
-                          <Tab className="pointer">Rent</Tab>
-                        </TabList>
+
+                <div className="search_area">
+                  <div className="search_area_header">
+                    <div className="for_buy_rent">
+                      <div
+                        className={`pointer ${activeOption === 'Buy' ? 'active' : ''}`}
+                        onClick={() => handleOptionClick('Buy')}
+                      >
+                        Buy
                       </div>
-                      <div className="residentail_commercial">
-                        <label className={checked ? "on" : "off"}>
-                          <div className="switch">
-                            <span className={`Residential ${checked ? "off" : "on"}`} >
-                              Residential
-                            </span>
-                            <Switch
-                              onChange={handleChange}
-                              checked={checked}
-                              handleDiameter={20} // Set the handle diameter (optional)
-                              uncheckedIcon={false} // Hide the wrong/right icon
-                              checkedIcon={false} // Hide the wrong/right icon
-                              className="pointer"
-                            />
-                            <span className={`Commercial ${checked ? "on" : "off"}`}
-                            >
-                              Commercial
-                            </span>
-                          </div>
-                        </label>
+                      <div
+                        className={`pointer ${activeOption === 'Rent' ? 'active' : ''}`}
+                        onClick={() => handleOptionClick('Rent')}
+                      >
+                        Rent
                       </div>
                     </div>
-                    <TabPanel>
-                      <div className="search_area_body">
-                        <div className="search_by">
-                          <div className="search_by_single">
-                            <select name="" id="" className="pointer">
-                              <option value="" selected>Select State</option>
-                              <option value="">Madhya Pradesh</option>
-                              <option value="">Maharastra</option>
-                              <option value="">Uttar Pradesh</option>
-                              <option value="">Arunachal Pradesh</option>
-                            </select>
-                          </div>
-                          <div className="search_by_single">
-                            <select name="" id="" className="pointer">
-                              <option value="" selected>Select City</option>
-                              <option value="">Ujjain</option>
-                              <option value="">Pune</option>
-                              <option value="">Indore</option>
-                              <option value="">Bhopal</option>
-                            </select>
-                          </div>
-                          <div className="search_by_single">
-                            <select name="" id="" className="pointer">
-                              <option value="" selected>Select BHK</option>
-                              <option value=""> 1 BHK</option>
-                              <option value="">2 BHK</option>
-                              <option value=""> 3 BHK</option>
-                            </select>
-                          </div>
+                    <div className="residentail_commercial">
+                      <label className={checked ? "on" : "off"}>
+                        <div className="switch">
+                          <span className={`Residential ${checked ? "off" : "on"}`} >
+                            Residential
+                          </span>
+                          <Switch
+                            onChange={handleChange}
+                            checked={checked}
+                            handleDiameter={20} // Set the handle diameter (optional)
+                            uncheckedIcon={false} // Hide the wrong/right icon
+                            checkedIcon={false} // Hide the wrong/right icon
+                            className="pointer"
+                          />
+                          <span className={`Commercial ${checked ? "on" : "off"}`}
+                          >
+                            Commercial
+                          </span>
                         </div>
-                        <div className="search_property pointer">
-                          <Link to="/search-property">
-                            <button className="theme_btn btn_fill">
-                              Search
-                              <span class="material-symbols-outlined btn_arrow ba_animation">
-                                arrow_forward
-                              </span>
-                            </button>
-                          </Link>
-                        </div>
-                      </div>
-
-
-
-                    </TabPanel>
-                    <TabPanel>
-                      <div className="search_area_body">
-                        <div className="search_by">
-                          <div className="search_by_single">
-                            <select name="" id="" className="pointer">
-                              <option value="" selected>Select State</option>
-                              <option value="">Madhya Pradesh</option>
-                              <option value="">Maharastra</option>
-                              <option value="">Uttar Pradesh</option>
-                              <option value="">Arunachal Pradesh</option>
-                            </select>
-                          </div>
-                          <div className="search_by_single">
-                            <select name="" id="" className="pointer">
-                              <option value="" selected>Select City</option>
-                              <option value="">Madhya Pradesh</option>
-                              <option value="">Maharastra</option>
-                              <option value="">Uttar Pradesh</option>
-                              <option value="">Arunachal Pradesh</option>
-                            </select>
-                          </div>
-                          <div className="search_by_single">
-                            <select name="" id="" className="pointer">
-                              <option value="" selected>Select BHK</option>
-                              <option value="">Madhya Pradesh</option>
-                              <option value="">Maharastra</option>
-                              <option value="">Uttar Pradesh</option>
-                              <option value="">Arunachal Pradesh</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div className="search_property pointer">
-                          <button className="more-btn-info">
-                            Search
-                          </button>
-                        </div>
-                      </div>
-
-
-
-                    </TabPanel>
-
+                      </label>
+                    </div>
                   </div>
-                </Tabs>
+                  <div className="search_area_body">
+                    <div className="search_by">
+                      <div className="search_by_single">
+                        <select name="" id="" className="pointer">
+                          <option value="" selected>Select State</option>
+                          <option value="">Madhya Pradesh</option>
+                          <option value="">Maharastra</option>
+                          <option value="">Uttar Pradesh</option>
+                          <option value="">Arunachal Pradesh</option>
+                        </select>
+                      </div>
+                      <div className="search_by_single">
+                        <select name="" id="" className="pointer">
+                          <option value="" selected>Select City</option>
+                          <option value="">Ujjain</option>
+                          <option value="">Pune</option>
+                          <option value="">Indore</option>
+                          <option value="">Bhopal</option>
+                        </select>
+                      </div>
+                      <div className="search_by_single">
+                        <select name="" id="" className="pointer">
+                          <option value="" selected>Select BHK</option>
+                          <option value=""> 1 BHK</option>
+                          <option value="">2 BHK</option>
+                          <option value=""> 3 BHK</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="search_property pointer">
+                      <Link to="/search-property">
+                        <button className="theme_btn btn_fill">
+                          Search
+                          <span class="material-symbols-outlined btn_arrow ba_animation">
+                            arrow_forward
+                          </span>
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+
+
+
+                </div>
+
               </div>
             </div>
           </div>
