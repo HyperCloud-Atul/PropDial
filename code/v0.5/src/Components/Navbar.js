@@ -34,7 +34,9 @@ export default function Navbar() {
   // const closeNavbarMenu = () => {
   //   setExpandNavbar(false);
   // };
-
+  const showHome = () => {  
+      navigate("/");   
+  };
   const showDashboard = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
@@ -82,22 +84,22 @@ export default function Navbar() {
       navigate("/bills");
     }
   };
-  const showThirdPage = () => {
-    if (!user) {
-      // User is not logged in, navigate to "/"
-      navigate("/about-us");
-      return; // Exit the function to prevent further checks
-    }
-    if (user && user.role === "admin") {
-      // console.log('in user', user.role)
-      // navigate("/adminproperties");
-      navigate("/users");
-    }
-    if (user && user.role === "owner") {
-      // console.log('in user', user.role)
-      navigate("/tickets");
-    }
-  };
+  // const showThirdPage = () => {
+  //   if (!user) {
+  //     // User is not logged in, navigate to "/"
+  //     navigate("/about-us");
+  //     return; // Exit the function to prevent further checks
+  //   }
+  //   if (user && user.role === "admin") {
+  //     // console.log('in user', user.role)
+  //     // navigate("/adminproperties");
+  //     navigate("/users");
+  //   }
+  //   if (user && user.role === "owner") {
+  //     // console.log('in user', user.role)
+  //     navigate("/tickets");
+  //   }
+  // };
 
   const showFourthPage = () => {
     navigate("/more");
@@ -107,8 +109,8 @@ export default function Navbar() {
   };
 
   //Menus as per role
-  let firstMenuIcon = "";
-  let firstMenu = ""; //This is for all user type
+  let firstMenuIcon = "home";
+  let firstMenu = "Home"; //This is for all user type
   let secondMenuIcon = "";
   let secondMenu = "";
   let thirdMenuIcon = "";
@@ -124,8 +126,8 @@ export default function Navbar() {
     thirdMenu = "About Us";
   }
   if (user && user.role !== "user") {
-    firstMenuIcon = "home";
-    firstMenu = "Dashboard";
+    // firstMenuIcon = "home";
+    // firstMenu = "Dashboard";
     fourthMenuIcon = "apps";
     fourthMenu = "More";
   }
@@ -137,8 +139,8 @@ export default function Navbar() {
     thirdMenu = "Users";
   }
   if (user && user.role === "owner") {
-    secondMenuIcon = "receipt_long";
-    secondMenu = "Bills";
+    secondMenuIcon = "home";
+    secondMenu = "Dashboard";
     thirdMenuIcon = "support_agent";
     thirdMenu = "Tickets";
   }
@@ -186,33 +188,36 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
             </li>
             <li className="main_menus">
               <div
-                onClick={showDashboard}
-                className={`menu_single pointer ${
-                  location.pathname === "/" ||
-                  location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard"
-                    ? "active"
-                    : ""
-                }`}
+                onClick={showHome}
+                // className={`menu_single pointer ${
+                //   location.pathname === "/" ||
+                //   location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard"
+                //     ? "active"
+                //     : ""
+                // }`}
+                className="menu_single pointer"
               >
                 <span class="material-symbols-outlined">{firstMenuIcon}</span>
                 {firstMenu}
               </div>
 
               <div
-                onClick={showSecondPage}
-                className={`menu_single pointer ${
-                  location.pathname === "/search-property" || location.pathname === "/bills"? "active" : "" || location.pathname === "/pgpropertylist" ? "active" : ""
-                }`}
+                onClick={showDashboard}
+                // className={`menu_single pointer ${
+                //   location.pathname === "/search-property" || location.pathname === "/bills"? "active" : "" || location.pathname === "/pgpropertylist" ? "active" : ""
+                // }`}
+                className="menu_single pointer"
               >
                 <span class="material-symbols-outlined">{secondMenuIcon}</span>
                 {secondMenu}
               </div>
 
               <div
-                onClick={showThirdPage}
-                className={`menu_single pointer ${
-                  location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : "" || location.pathname === "/users" ? "active" : ""
-                }`}
+                onClick={showSecondPage}
+                // className={`menu_single pointer ${
+                //   location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : "" || location.pathname === "/users" ? "active" : ""
+                // }`}
+                className="menu_single pointer"
               >
                 <span class="material-symbols-outlined">{thirdMenuIcon}</span>
                 {thirdMenu}

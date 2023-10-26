@@ -291,6 +291,51 @@ const PGMoreMenu = () => {
                 </Link>
               </div>
             )}
+                   {user && user.role === "owner" && (
+              <div className="mm_inner">
+                <h6 className="title">Properties</h6>
+                <Link className="mm_single" to="/bills">
+                  <span class="material-symbols-outlined mms_icon">
+                    shopping_bag
+                  </span>
+                  <h5>Bills</h5>
+                  <h6>Your all generated bills</h6>
+                  <span class="material-symbols-outlined mms_ra">
+                    chevron_right
+                  </span>
+                </Link>
+                <Link className="mm_single" to="/search-property">
+                  <span class="material-symbols-outlined mms_icon">
+                    shopping_bag
+                  </span>
+                  <h5>Property</h5>
+                  <h6>All properties</h6>
+                  <span class="material-symbols-outlined mms_ra">
+                    chevron_right
+                  </span>
+                </Link>
+                <Link className="mm_single" to="/tickets">
+                  <span class="material-symbols-outlined mms_icon">
+                    favorite
+                  </span>
+                  <h5>Tickets</h5>
+                  <h6>All generated tickets</h6>
+                  <span class="material-symbols-outlined mms_ra">
+                    chevron_right
+                  </span>
+                </Link>
+                <Link className="mm_single" to="/ownerdashboard">
+                  <span class="material-symbols-outlined mms_icon">
+                    favorite
+                  </span>
+                  <h5>Dashboard</h5>
+                  <h6>Your dashboard</h6>
+                  <span class="material-symbols-outlined mms_ra">
+                    chevron_right
+                  </span>
+                </Link>
+              </div>
+            )}
             {user && user.role === "owner" && (
               <div className="mm_inner">
                 <h6 className="title">Settings</h6>
