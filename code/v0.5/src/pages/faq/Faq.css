@@ -17,6 +17,11 @@
     margin-left: auto;
     margin-right: auto;
 }
+button.accordion-button.collapsed {
+    font-weight: 500;
+    font-size: 18px;
+    color: #303030;
+}
 .faq .faq_section_single:last-child {
     margin-bottom: 0px;
 }
@@ -29,6 +34,12 @@
     color: var(--theme-green);
     background: none;
     box-shadow: none;
+    font-weight: 500;
+    font-size: 18px;
+}
+.accordion-body {
+    color: grey;
+    font-size: 14px;
 }
 .accordion button:focus:not(:focus-visible) {
     outline: none;
@@ -58,6 +69,15 @@ button.accordion-button {
 
 
 @media (max-width: 767px) {
+    .accordion .accordion-button:not(.collapsed) {       
+        font-weight: 500;
+        font-size: 16px;
+    }
+    button.accordion-button.collapsed {
+        font-weight: 500;
+        font-size: 16px;
+    }
+    
 .faq_section_single .section_title h3 {
     padding-bottom: 12px !important;
     margin-bottom: 5px !important;

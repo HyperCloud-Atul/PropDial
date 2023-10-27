@@ -87,7 +87,7 @@ function App() {
           <Navbar />
           {/* <Navbar setFlag={openSideNavbar} /> */}
 
-          <div className={"full-content"}>
+          <div className={"full-content page"}>
             <Routes>
               {/* <Route path='/' element={
                 user ? < PGProfile /> : <PGLogin />

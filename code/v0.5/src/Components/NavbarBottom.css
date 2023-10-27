@@ -94,8 +94,7 @@ section.bottom_menu_bar {
     width: 14%;
 }
 .b_menu_active {
-    background: var(--theme-orange);
-    border-radius: 15px 15px 0px 0px;
+    background: var(--theme-orange);    
 }
 .bottom_menu_bar .b_menu_active .menu_name {
     color: var(--white-color);

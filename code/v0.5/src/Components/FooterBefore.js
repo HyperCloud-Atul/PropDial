@@ -1,14 +1,20 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from "react-router-dom";
 
 // css 
 import './FooterBefore.css'
 
 
 const FooterBefore = () => {
+  const location = useLocation(); // Get the current location
+  // footer before display none Array 
+  const excludedPaths = ["/", "aboutus", "contactus", "more-menu"];
+  const shouldHide = excludedPaths.includes(location.pathname);
+  const className = `footer_before relative ${shouldHide ? "" : "d_none"}`;
+  // footer before display none Array 
   return (
     <div>
-      <section className='footer_before relative'
+      <section className={className}
       style={{
         backgroundImage:"url('./assets/img/footer-before-bg.jpg')"
       }}

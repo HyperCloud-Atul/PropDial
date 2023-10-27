@@ -347,14 +347,18 @@ li.main_menus {
 
 
 @media only screen and (max-width: 1199px) {
+  .navbar ul { 
+    justify-content: center;
+}
   li.main_menus {
     display: none; 
   }
   .navbar {
- 
     padding: 10px 15px !important;
     max-width: 100%;
-  }
+    border-radius: 0px;
+    top: 0px !important;
+}
   li.menu_social_media {
     width: 100%;  
 }

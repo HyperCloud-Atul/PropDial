@@ -12,13 +12,6 @@ export default function Navbar() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location
- 
-  // display navbar on top Array 
-  const excludedPaths = ["/", "/about-us", "/contact-us", "/more-menu", "/faq"];
-  const shouldOnTop = excludedPaths.includes(location.pathname);
-  const navbarClassName = `navbarparent ${shouldOnTop ? "" : "on_top"}`;
-  // display navbar on top Array 
-
   function logoutSetPadding() {
     // props.setFlag(null);
     // console.log('in function logoutSetPadding', props.setFlag);
@@ -34,8 +27,8 @@ export default function Navbar() {
   // const closeNavbarMenu = () => {
   //   setExpandNavbar(false);
   // };
-  const showHome = () => {  
-      navigate("/");   
+  const showHome = () => {
+    navigate("/");
   };
   const showDashboard = () => {
     if (!user) {
@@ -153,7 +146,7 @@ export default function Navbar() {
     thirdMenu = "Tickets";
   }
 
-  // Add class on scroll
+  // Add class on scroll start
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -169,103 +162,119 @@ export default function Navbar() {
   const navClass = isScrolled
     ? "navbar sticky-top scrolled"
     : "navbar sticky-top";
-  // Add class on scroll
+  // Add class on scroll end
+
+
+  // arrrays start
+
 
   // array of more class active on desktop
-const moreDesktopActivePaths = ["/more-menu", "/contact-us", "/faq",
-"/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/addproperty"];
-const shouldMoreDesktopActive = moreDesktopActivePaths.includes(location.pathname);
-const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? "active" : ""}`;
-// array of more class active on desktop 
+  const moreDesktopActivePaths = ["/more-menu", "/contact-us", "/faq",
+    "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/addproperty"];
+  const shouldMoreDesktopActive = moreDesktopActivePaths.includes(location.pathname);
+  const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? "active" : ""}`;
+  // array of more class active on desktop 
 
+  // display navbar on top Array 
+  const excludedPaths = ["/", "/about-us", "/contact-us", "/more-menu", "/faq"];
+  const shouldOnTop = excludedPaths.includes(location.pathname);
+  const navbarClassName = `navbarparent ${shouldOnTop ? "" : "on_top"}`;
+  // display navbar on top Array 
+
+  // array for header social media hide after login
+  const socialMediaHidePaths = ["/", "aboutus", "contactus", "more-menu"];
+  const shouldSocialMediaHide = socialMediaHidePaths.includes(location.pathname);
+  const socialMediaClass = `menu_social_media ${shouldSocialMediaHide ? "" : "d_none"}`;
+  // array for header social media hide after login 
+
+
+  // arrrays  end
   return (
     <header className={navbarClassName}>
-     
-        <nav className={navClass}>
-          <ul>
-            <li className="logo pointer" onClick={logoClick}>
-              <img src="./assets/img/logo_propdial.png" alt="logo" />
-            </li>
-            <li className="main_menus">
-              <div
-                onClick={showHome}
-                // className={`menu_single pointer ${
-                //   location.pathname === "/" ||
-                //   location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard"
-                //     ? "active"
-                //     : ""
-                // }`}
-                className="menu_single pointer"
-              >
-                <span class="material-symbols-outlined">{firstMenuIcon}</span>
-                {firstMenu}
-              </div>
 
-              <div
-                onClick={showDashboard}
-                // className={`menu_single pointer ${
-                //   location.pathname === "/search-property" || location.pathname === "/bills"? "active" : "" || location.pathname === "/pgpropertylist" ? "active" : ""
-                // }`}
-                className="menu_single pointer"
-              >
-                <span class="material-symbols-outlined">{secondMenuIcon}</span>
-                {secondMenu}
-              </div>
+      <nav className={navClass}>
+        <ul>
+          <li className="logo pointer" onClick={logoClick}>
+            <img src="./assets/img/logo_propdial.png" alt="logo" />
+          </li>
+          <li className="main_menus">
+            <div
+              onClick={showHome}
+              // className={`menu_single pointer ${
+              //   location.pathname === "/" ||
+              //   location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard"
+              //     ? "active"
+              //     : ""
+              // }`}
+              className="menu_single pointer"
+            >
+              <span class="material-symbols-outlined">{firstMenuIcon}</span>
+              {firstMenu}
+            </div>
 
-              <div
-                onClick={showSecondPage}
-                // className={`menu_single pointer ${
-                //   location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : "" || location.pathname === "/users" ? "active" : ""
-                // }`}
-                className="menu_single pointer"
-              >
-                <span class="material-symbols-outlined">{thirdMenuIcon}</span>
-                {thirdMenu}
-              </div>
+            <div
+              onClick={showDashboard}
+              // className={`menu_single pointer ${
+              //   location.pathname === "/search-property" || location.pathname === "/bills"? "active" : "" || location.pathname === "/pgpropertylist" ? "active" : ""
+              // }`}
+              className="menu_single pointer"
+            >
+              <span class="material-symbols-outlined">{secondMenuIcon}</span>
+              {secondMenu}
+            </div>
 
-              <Link to="/more-menu">
-                <div
-                  className={moreDesktopActiveClass}
-                >
-                  <span class="material-symbols-outlined">More</span>
-                  More
+            <div
+              onClick={showSecondPage}
+              // className={`menu_single pointer ${
+              //   location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : "" || location.pathname === "/users" ? "active" : ""
+              // }`}
+              className="menu_single pointer"
+            >
+              <span class="material-symbols-outlined">{thirdMenuIcon}</span>
+              {thirdMenu}
+            </div>
+
+            <Link to="/more-menu">
+              <div
+                className={moreDesktopActiveClass}
+              >
+                <span class="material-symbols-outlined">More</span>
+                More
+              </div>
+            </Link>
+            {user ? (
+              <Link
+                to="/profile"
+                className={`menu_single profile pointer ${location.pathname === "/profile" ? "active" : ""
+                  }`}
+              >
+                <span>Hi, {user.fullName}</span>
+                <div className="user_img">
+                  {user.photoURL === "" ? (
+                    <img
+                      src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
+                      alt=""
+                    />
+                  ) : (
+                    <img src={user.photoURL} alt="" />
+                  )}
                 </div>
               </Link>
-              {user ? (
-                <Link
-                  to="/profile"
-                  className={`menu_single profile pointer ${
-                    location.pathname === "/profile" ? "active" : ""
-                  }`}
-                >
-                  <span>Hi, {user.fullName}</span>
-                  <div className="user_img">
-                    {user.photoURL === "" ? (
-                      <img
-                        src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
-                        alt=""
-                      />
-                    ) : (
-                      <img src={user.photoURL} alt="" />
-                    )}
-                  </div>
-                </Link>
-              ) : (
-                <Link to="/login">
-                  <div
-                    className={`menu_single login pointer ${
-                      location.pathname === "/login" ? "active" : ""
+            ) : (
+              <Link to="/login">
+                <div
+                  className={`menu_single login pointer ${location.pathname === "/login" ? "active" : ""
                     }`}
-                  >
-                    <span class="material-symbols-outlined ba_animation">
-                      login
-                    </span>
-                    Login
-                  </div>
-                </Link>
-              )}
+                >
+                  <span class="material-symbols-outlined ba_animation">
+                    login
+                  </span>
+                  Login
+                </div>
+              </Link>
+            )}
 
-              {/* <div className="menu_single pointer ">
+            {/* <div className="menu_single pointer ">
                 <span class="material-symbols-outlined">
                   settings_applications
                 </span>
@@ -281,35 +290,35 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
                   Login/Signup
                 </div>
               </Link> */}
-            </li>
-            <li className="menu_social_media">
-              <Link
-                className="msm_single pointer"
-                to="https://www.facebook.com/propdial"
-              >
-                <img src="./assets/img/facebook.png"></img>
-              </Link>
-              <Link
-                className="msm_single pointer"
-                to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg"
-              >
-                <img src="./assets/img/youtube.png"></img>
-              </Link>
-              <Link
-                className="msm_single pointer"
-                to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/"
-              >
-                <img src="./assets/img/linkedin.png"></img>
-              </Link>
-              <Link
-                className="msm_single pointer"
-                to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial"
-              >
-                <img src="./assets/img/twitter.png"></img>
-              </Link>
-            </li>
+          </li>
+          <li className={socialMediaClass}>
+            <Link
+              className="msm_single pointer"
+              to="https://www.facebook.com/propdial"
+            >
+              <img src="./assets/img/facebook.png"></img>
+            </Link>
+            <Link
+              className="msm_single pointer"
+              to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg"
+            >
+              <img src="./assets/img/youtube.png"></img>
+            </Link>
+            <Link
+              className="msm_single pointer"
+              to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/"
+            >
+              <img src="./assets/img/linkedin.png"></img>
+            </Link>
+            <Link
+              className="msm_single pointer"
+              to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial"
+            >
+              <img src="./assets/img/twitter.png"></img>
+            </Link>
+          </li>
 
-            {/* {user && (
+          {/* {user && (
           <div className='small'>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div></div>
@@ -325,8 +334,8 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
           </div>
         )} */}
 
-            {/* <div className='large'> */}
-            {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* <div className='large'> */}
+          {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div></div>
             <div className='navbar-laptop-menu-links-div'>
 
@@ -383,7 +392,7 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
 
           </div> */}
 
-            {/* <div className={expandNavbar ? 'navbar-menu-expand-div open' : 'navbar-menu-expand-div'}>
+          {/* <div className={expandNavbar ? 'navbar-menu-expand-div open' : 'navbar-menu-expand-div'}>
             <div className='navbar-menu-expand-div-content'>
               <div className='navbar-menu-expand-div-close-btn' onClick={closeNavbarMenu}>
                 <span className="material-symbols-outlined">
@@ -408,23 +417,23 @@ const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? 
             </div>
           </div> */}
 
-            {/* </div> */}
+          {/* </div> */}
 
-            {/* {!user && (
+          {/* {!user && (
           <>
             <li><Link to="/login">Login</Link></li>
             <li><Link to="/signup">Signup</Link></li>
           </>
         )} */}
 
-            {/* {user && (
+          {/* {user && (
           <li>
             {!isPending && <button className="btn" onClick={logout}>Logout</button>}
             {isPending && <button className="btn" disabled>Logging out...</button>}
           </li>
         )} */}
-          </ul>
-        </nav>  
+        </ul>
+      </nav>
     </header>
   );
 }

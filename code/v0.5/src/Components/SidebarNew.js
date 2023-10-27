@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext'
-import Avatar from '../components/Avatar';
+// import Avatar from '../components/Avatar';
 import './SideBarNew.css';
 import { Link } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';

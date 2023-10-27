@@ -32,7 +32,7 @@ const PGMoreMenu = () => {
       <section className="more-menus sect_padding">
         <div className="container">
           <div className="more-div-big-icon-div">
-            <div className="more-div-big-icon-div-inner">
+            <div className="more-div-big-icon-div-inner pointer">
               <div>
                 <Link to="/profile">
                   <span className="material-symbols-outlined">person</span>
@@ -43,14 +43,14 @@ const PGMoreMenu = () => {
               </Link>
             </div>
 
-            <div className="more-div-big-icon-div-inner">
+            <div className="more-div-big-icon-div-inner pointer">
               <div>
                 <span className="material-symbols-outlined">notifications</span>
               </div>
               <h1>Notifications</h1>
             </div>
 
-            <div className="more-div-big-icon-div-inner">
+            <div className="more-div-big-icon-div-inner pointer">
               <div>
                 <span className="material-symbols-outlined">
                   account_balance_wallet

@@ -65,14 +65,19 @@ audio.c_interview {
 .testimonial_single h5 {
     color: var(--white-color);
     font-weight: 400;
-    font-size: 18px;
+    font-size: 16px;
     opacity: 0.8;
 }
 .client_info {
     color: var(--white-color);
 }
-.client_info h6{
+.client_info h6 {
     opacity: 0.8;
+    font-weight: 400;
+    font-size: 16px;
+}
+.client_info h4 {
+    font-size: 20px;
 }
 
 

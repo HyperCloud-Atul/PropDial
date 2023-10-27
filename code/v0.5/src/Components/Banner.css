@@ -10,8 +10,7 @@
 }
 
 .home_banner {
-    position: relative;
-    margin-top: -68px;
+    position: relative;  
 }
 
 .home_banner::after {
@@ -223,16 +222,22 @@ h2.banner_heading {
 .for_buy_rent div.active{
     transition: 0.3s;
     border-color: white;
+}   
+@media only screen and (max-width: 1199px) {
+    .banner_content {    
+        padding-top: 0px;
+        padding: 15px;
+    }
 }
 @media only screen and (max-width: 1024px) {
     .banner_content .react-tabs {
         display: none;
-    }
-    .banner_content {    
-        padding-top: 0px;
-    }
+    } 
 }
 @media only screen and (max-width: 767px) {
+    .search_area {
+      display: none;
+    }
     .home_banner .ad_container img {
         aspect-ratio: unset;
         height: 255px;

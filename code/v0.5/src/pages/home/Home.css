@@ -66,7 +66,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 1.4;
-  color: #939393;
+  color: grey;
 }
 
 .about_us .ab_right ul {
@@ -76,8 +76,9 @@
 
 .about_us .ab_right ul li {
   padding: 10px 0px !important;
-  color: #939393;
+  color: grey;
   border-bottom: 1px solid #b5b5b5;
+  font-size: 14px;
 }
 
 .house_gif {
@@ -279,9 +280,10 @@
 }
 
 .section-services .single-service .title {
-  margin-bottom: 18px !important;
-  font-weight: 700;
-  font-size: 23px;
+  margin-bottom: 8px !important;
+  font-weight: 500;
+  font-size: 20px;
+  color: #303030;
   transition: color .3s;
 }
 
@@ -297,6 +299,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  color: grey;
 }
 
 .section-services .single-service:hover .description {
@@ -459,21 +462,30 @@ section.perfect_layout:after {
 
 
 h4.wucs_title {
-  margin: 20px 0px !important;
+  margin: 8px 0px !important;
+  line-height: 32px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #303030;
 }
 
 
+
 h6.wucs_desc {
+  font-size: 14px;
   color: grey;
   font-weight: 400;
-}
-
-h6.wucs_desc {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-height: 22px;
 }
+
+
+
+
+
 
 @media only screen and (min-width: 768px) {
 
@@ -546,13 +558,14 @@ h6.wucs_desc {
   max-width: 355px;
   width: 100%;
   margin: 0 auto !important;
-  font-size: 42px;
+  font-size: 32px;
 }
 
 .fs_right .section_title h6 {
   color: white;
   margin-top: 10px !important;
   margin-bottom: 40px !important;
+  font-weight: 400;
 }
 
 .fs_right {
@@ -598,6 +611,7 @@ h6.wucs_desc {
 }
 
 @media only screen and (max-width: 767px) {
+
   .fs_right {
     margin-bottom: 30px;
     padding: 15px;
@@ -637,13 +651,16 @@ h6.wucs_desc {
 }
 
 .wf_single h4 {
-  font-size: 14px;
+  font-size: 16px;
   text-transform: capitalize;
+  color: #303030;
 }
 
 .wf_single h5 {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
+  margin-top: 3px !IMPORTANT;
+  color: grey;
 }
 
 .wf_single {
@@ -701,6 +718,16 @@ h6.wucs_desc {
   }
   .wf_first .col-sm-3 {
     width: 50%;
+}
+.wf_single .icon_div {
+  width: 100px;
+  height: 100px;
+  padding: 6px;
+}
+.wf_single .steps {
+  width: 25px;
+  height: 25px;
+  font-size: 16px; 
 }
 
 }

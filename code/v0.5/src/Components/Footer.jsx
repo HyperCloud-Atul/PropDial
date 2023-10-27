@@ -15,12 +15,23 @@ export default function Footer() {
   const logoClick = () => {
     navigate("/");
   };
+   //  display none Array 
+   const excludedPaths = ["/", "aboutus", "contactus", "more-menu"];
+   const shouldHide = excludedPaths.includes(location.pathname);
+   const className = `loc_em_ph ${shouldHide ? "" : "d_none"}`;
+   //  display none Array 
+
+   //  add class on footer display none Array 
+   const excludedFooterPaths = ["/", "aboutus", "contactus", "more-menu"];
+   const shouldClassAdd = excludedFooterPaths.includes(location.pathname);
+   const footerClassName = `footer-section ${shouldClassAdd ? "" : "margin-padding"}`;
+   //  add class on footer  display none Array 
   return (
     <>
       <CollapsibleGroup></CollapsibleGroup>
       <FooterBefore></FooterBefore>
       <footer
-        className="footer-section"
+        className={footerClassName}
         style={{
           backgroundImage: "url('./assets/img/footer-bg.png')",
           backgroundSize: "cover",
@@ -32,7 +43,7 @@ export default function Footer() {
         }}
       >
         <div className="container">
-          <section className="loc_em_ph">
+          <section className={className}>
             <div className="container">
               <div
                 className="loc_em_ph_inner"

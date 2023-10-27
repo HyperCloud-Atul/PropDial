@@ -3,9 +3,6 @@ section.hero img {
   aspect-ratio: 3/0.8;
   object-fit: cover;
 }
-.hero_component {
-  margin-top: -68px;
-}
 section.hero:after {
   content: '';
   background: black;

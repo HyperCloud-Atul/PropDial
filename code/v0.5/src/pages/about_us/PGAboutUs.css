@@ -16,6 +16,7 @@
     text-transform: capitalize;
     line-height: 28px;
     margin-bottom: 55px !important;
+    color: #303030;
 }
 .about_content .abc_left {
     position: relative;
@@ -30,7 +31,9 @@
     letter-spacing: 4px;
     position: relative;
     display: inline-block;
+    color: #303030;
 }
+
 .abcr_div .our_ex h3:after {
     content: '';
     width: 100px;
@@ -43,11 +46,15 @@
 }
 .about_content .abc_left h2 {
     max-width: 412px;
-    font-size: 40px;
+    font-size: 35px;
     margin-bottom: 20px !important;
+    color: #303030;
 }
+
 .about_content .abc_left p {
     margin-bottom: 8px !important;
+    font-size: 16px;
+    color: grey;
 }
 .about_content .abc_left p:last-child {
     margin-bottom: 0px !important;
