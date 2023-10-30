@@ -6,7 +6,7 @@
     align-items: center;    
 }
 .single_user .left {
-    border-right: 1px solid lightgrey;
+    border-right: 1px solid #e7e7e7;
     padding-right: 8px;
 }
 .single_user .user_img {

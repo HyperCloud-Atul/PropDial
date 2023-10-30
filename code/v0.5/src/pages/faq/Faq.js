@@ -56,7 +56,7 @@ const Faq = () => {
                     PMS stands Property Management Services that we provide to our customers, and includes following services at a high level.
                     <ol>
                       <li>
-                        Renting/Leasing – we will find the tenant if you want to let out
+                        Renting/Leasing - we will find the tenant if you want to let out
                       </li>
                       <li>
                         Tenant background verification and rental agreement
@@ -139,7 +139,7 @@ const Faq = () => {
                     aria-expanded="true"
                     aria-controls="a2collapseOne"
                   >
-                     I don’t think I need full PMS services. I just want to rent out my property.
+                     I don't think I need full PMS services. I just want to rent out my property.
                   </button>
                 </h2>
                 <div
@@ -173,7 +173,7 @@ const Faq = () => {
                   data-bs-parent="#a2accordion_section"
                 >
                   <div class="accordion-body">
-                  We have a big broker network who work for us on payment. We pass this brokerage to the brokers to have them work on your property on high priority. Propdial doesn’t keep any brokerage amount.
+                  We have a big broker network who work for us on payment. We pass this brokerage to the brokers to have them work on your property on high priority. Propdial doesn't keep any brokerage amount.
                   </div>
                 </div>
               </div>
@@ -378,7 +378,7 @@ const Faq = () => {
                     aria-expanded="false"
                     aria-controls="a4collapsefour"
                   >
-                  How you will market or advertise my property? What’s different?
+                  How you will market or advertise my property? What's different?
                   </button>
                 </h2>
                 <div

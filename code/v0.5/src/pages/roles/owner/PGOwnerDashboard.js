@@ -9,6 +9,7 @@ import { Link, useLocation } from "react-router-dom";
 import Filters from "../../../Components/Filters";
 import PropertyList from "../../../Components/PropertyList";
 import LeftSidebar from "../../../Components/LeftSidebar";
+import PropertyDetail from "../../../Components/PropertyDetail";
 
 // styles
 // import './UserDashboard.css'
@@ -436,6 +437,9 @@ export default function PGOwnerDashboard() {
               {/* {billsdocuments && <Filters changeFilter={changeFilter} />} */}
               {properties && <PropertyList properties={properties}/>}
               {/* {bills && <BillList bills={bills} />} */}
+              <div className="property_card_left">
+                    {propertiesdocuments && <PropertyDetail propertiesdocuments={propertiesdocuments} />}
+                  </div>
             </div>
           </section>
 
@@ -586,6 +590,7 @@ export default function PGOwnerDashboard() {
             <br />
           </section>
           <br />
+
         </div>
       </div>
     </div>

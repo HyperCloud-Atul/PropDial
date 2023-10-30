@@ -12,9 +12,9 @@ import "./PDSingle.css"
 import PropertyImageGallery from "./PropertyImageGallery";
 import { Carousel } from "react-bootstrap";
 const PDSingle = () => {
-      // get user from useauthcontext
-  const { user } = useAuthContext();
-  // get user from useauthcontext
+    // get user from useauthcontext
+    const { user } = useAuthContext();
+    // get user from useauthcontext
     // switch 
     const [checked, setChecked] = useState(false);
     const handleChange = (checked) => {
@@ -54,8 +54,64 @@ const PDSingle = () => {
         },
     };
     // owl Carousel controls 
+
+    // 9 dots controls 
+    const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+    const openMoreAddOptions = () => {
+        setHandleMoreOptionsClick(true);
+    };
+    const closeMoreAddOptions = () => {
+        setHandleMoreOptionsClick(false);
+    };
+    // 9 dots controls 
+
+
     return (
         <div className="pg_property aflbg pd_single">
+
+
+            {/* 9 dots html  */}
+            <div onClick={openMoreAddOptions} className="property-list-add-property">
+                <span className="material-symbols-outlined">apps</span>
+            </div>
+            <div
+                className={
+                    handleMoreOptionsClick
+                        ? "more-add-options-div open"
+                        : "more-add-options-div"
+                }
+                onClick={closeMoreAddOptions}
+                id="moreAddOptions"
+            >
+                <div className="more-add-options-inner-div">
+                    <div className="more-add-options-icons">
+                        <h1>Close</h1>
+                        <span className="material-symbols-outlined">close</span>
+                    </div>                  
+
+                    <Link to="" className="more-add-options-icons">
+                        <h1>Property Image</h1>
+                        <span className="material-symbols-outlined">location_city</span>
+                    </Link>
+
+                    <Link to="" className="more-add-options-icons">
+                        <h1>Property Document</h1>
+                        <span className="material-symbols-outlined">holiday_village</span>
+                    </Link>
+
+                    <Link to="" className="more-add-options-icons">
+                        <h1>Property Report</h1>
+                        <span className="material-symbols-outlined">home</span>
+                    </Link>
+                    <Link to="" className="more-add-options-icons">
+                        <h1>Property Bills</h1>
+                        <span className="material-symbols-outlined">home</span>
+                    </Link>
+                </div>
+            </div>
+             {/* 9 dots html  */}
+
+
             <div className="top_search_bar">
                 <div className="back_btn">
                     <span class="material-symbols-outlined">
@@ -217,215 +273,136 @@ const PDSingle = () => {
                             {user && user.role === "owner" && (
                                 <div className="property_card_single">
                                     <div className="more_detail_card_inner">
-                                        <div className="property_full_address">
-                                            <h2 className="card_title">A-504</h2>
-                                            <h3>High Mont Society, Hinjewadi Phase II</h3>
-                                            <h3>Pune, Maharashtra, 411057</h3>
-                                        </div>
-                                        <div className="property_connected_people userlist">
-                                            <OwlCarousel className="owl-theme" {...propertyPeople}>
-                                                <div className="item pcp_single">
-                                                    <div className="property_people_designation">
-                                                        Owner
+                                        <div className="row no-gutters">
+                                            <div className="col-md-6">
+                                                <div className="property_full_address">
+                                                    <h2 className="card_title">A-504</h2>
+                                                    <h3>High Mont Society, Hinjewadi Phase II</h3>
+                                                    <h3>Pune, Maharashtra, 411057</h3>
+                                                </div>
+                                                <div className="property_connected_people userlist">
+
+                                                    <div className="item pcp_single">
+                                                        <div className="property_people_designation">
+                                                            Property Manager
+                                                        </div>
+                                                        <div className="single_user">
+                                                            <div className="left">
+                                                                <div className="user_img">
+                                                                    <img src="./assets/img/user.png" alt="" />
+                                                                </div>
+                                                            </div>
+                                                            <div className="right">
+                                                                <h5>Khushi Shrivastav</h5>
+                                                                <h6>9698569856</h6>
+                                                                <h6>Bhopal, India</h6>
+                                                            </div>
+                                                        </div>
+                                                        <div className="contacts">
+                                                            <Link to="tel:+918770534650" className="contacts_single">
+                                                                <div className="icon">
+                                                                    <span class="material-symbols-outlined">
+                                                                        call
+                                                                    </span>
+                                                                </div>
+                                                                <h6>
+                                                                    Call
+                                                                </h6>
+                                                            </Link>
+                                                            <Link to="https://wa.me/918770534650" className="contacts_single">
+                                                                <div className="icon">
+                                                                    <img
+                                                                        src="./assets/img/whatsapp.png"
+                                                                        alt="" />
+                                                                </div>
+                                                                <h6>
+                                                                    Whatsapp
+                                                                </h6>
+                                                            </Link>
+                                                            <Link to="mailto:solankisanskar8@gmail.com" className="contacts_single">
+                                                                <div className="icon">
+                                                                    <span class="material-symbols-outlined">
+                                                                        mail
+                                                                    </span>
+                                                                </div>
+                                                                <h6>
+                                                                    Email
+                                                                </h6>
+                                                            </Link>
+                                                        </div>
                                                     </div>
-                                                    <div className="single_user">
-                                                        <div className="left">
-                                                            <div className="user_img">
+
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="userlist property_owners">
+                                                    <div class="single_user">
+                                                        <div className="property_people_designation">Owner
+                                                        </div>
+                                                        <div class="left">
+
+                                                            <div class="user_img">
                                                                 <img src="./assets/img/user.png" alt="" />
                                                             </div>
                                                         </div>
-                                                        <div className="right">
+                                                        <div class="right">
                                                             <h5>Sanskar Solanki</h5>
                                                             <h6>8770534650</h6>
                                                             <h6>Ujjain, India</h6>
+                                                            <div class="wc">
+                                                                <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
+                                                                <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="contacts">
-                                                        <Link to="tel:+918770534650" className="contacts_single">
-                                                            <div className="icon">
-                                                                <span class="material-symbols-outlined">
-                                                                    call
-                                                                </span>
-                                                            </div>
-                                                            <h6>
-                                                                Call
-                                                            </h6>
-                                                        </Link>
-                                                        <Link to="https://wa.me/918770534650" className="contacts_single">
-                                                            <div className="icon">
-                                                                <img
-                                                                    src="./assets/img/whatsapp.png"
-                                                                    alt="" />
-                                                            </div>
-                                                            <h6>
-                                                                Whatsapp
-                                                            </h6>
-                                                        </Link>
-                                                        <Link to="mailto:solankisanskar8@gmail.com" className="contacts_single">
-                                                            <div className="icon">
-                                                                <span class="material-symbols-outlined">
-                                                                    mail
-                                                                </span>
-                                                            </div>
-                                                            <h6>
-                                                                Email
-                                                            </h6>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                                <div className="item pcp_single">
-                                                    <div className="property_people_designation">
-                                                        Co-Owner
-                                                    </div>
-                                                    <div className="single_user">
-                                                        <div className="left">
-                                                            <div className="user_img">
+                                                    <div class="single_user">
+                                                        <div className="property_people_designation">
+                                                            Co-Owner
+                                                        </div>
+                                                        <div class="left">
+                                                            <div class="user_img">
                                                                 <img src="./assets/img/user.png" alt="" />
                                                             </div>
                                                         </div>
-                                                        <div className="right">
-                                                            <h5>Naman Gaur</h5>
-                                                            <h6>8958965896</h6>
-                                                            <h6>Guna, India</h6>
-                                                        </div>
-                                                    </div>
-                                                    <div className="contacts">
-                                                        <Link to="tel:+918770534650" className="contacts_single">
-                                                            <div className="icon">
-                                                                <span class="material-symbols-outlined">
-                                                                    call
-                                                                </span>
-                                                            </div>
-                                                            <h6>
-                                                                Call
-                                                            </h6>
-                                                        </Link>
-                                                        <Link to="https://wa.me/918770534650" className="contacts_single">
-                                                            <div className="icon">
-                                                                <img
-                                                                    src="./assets/img/whatsapp.png"
-                                                                    alt="" />
-                                                            </div>
-                                                            <h6>
-                                                                Whatsapp
-                                                            </h6>
-                                                        </Link>
-                                                        <Link to="mailto:solankisanskar8@gmail.com" className="contacts_single">
-                                                            <div className="icon">
-                                                                <span class="material-symbols-outlined">
-                                                                    mail
-                                                                </span>
-                                                            </div>
-                                                            <h6>
-                                                                Email
-                                                            </h6>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                                <div className="item pcp_single">
-                                                    <div className="property_people_designation">
-                                                      Property Manager
-                                                    </div>
-                                                    <div className="single_user">
-                                                        <div className="left">
-                                                            <div className="user_img">
-                                                                <img src="./assets/img/user.png" alt="" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="right">
-                                                            <h5>Khushi Shrivastav</h5>
-                                                            <h6>9698569856</h6>
-                                                            <h6>Bhopal, India</h6>
-                                                        </div>
-                                                    </div>
-                                                    <div className="contacts">
-                                                        <Link to="tel:+918770534650" className="contacts_single">
-                                                            <div className="icon">
-                                                                <span class="material-symbols-outlined">
-                                                                    call
-                                                                </span>
-                                                            </div>
-                                                            <h6>
-                                                                Call
-                                                            </h6>
-                                                        </Link>
-                                                        <Link to="https://wa.me/918770534650" className="contacts_single">
-                                                            <div className="icon">
-                                                                <img
-                                                                    src="./assets/img/whatsapp.png"
-                                                                    alt="" />
-                                                            </div>
-                                                            <h6>
-                                                                Whatsapp
-                                                            </h6>
-                                                        </Link>
-                                                        <Link to="mailto:solankisanskar8@gmail.com" className="contacts_single">
-                                                            <div className="icon">
-                                                                <span class="material-symbols-outlined">
-                                                                    mail
-                                                                </span>
-                                                            </div>
-                                                            <h6>
-                                                                Email
-                                                            </h6>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                                <div className="item pcp_single">
-                                                    <div className="property_people_designation">
-                                                    POC
-                                                    </div>
-                                                    <div className="single_user">
-                                                        <div className="left">
-                                                            <div className="user_img">
-                                                                <img src="./assets/img/user.png" alt="" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="right">
-                                                            <h5>Mohan Yadav</h5>
-                                                            <h6>8787854658</h6>
+                                                        <div class="right">
+                                                            <h5>Sanskar Solanki</h5>
+                                                            <h6>8770534650</h6>
                                                             <h6>Ujjain, India</h6>
+                                                            <div class="wc">
+                                                                <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
+                                                                <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="contacts">
-                                                        <Link to="tel:+918770534650" className="contacts_single">
-                                                            <div className="icon">
-                                                                <span class="material-symbols-outlined">
-                                                                    call
-                                                                </span>
+                                                    <div class="single_user">
+                                                        <div className="property_people_designation">
+                                                            POC
+                                                        </div>
+                                                        <div class="left">
+                                                            <div class="user_img">
+                                                                <img src="./assets/img/user.png" alt="" />
                                                             </div>
-                                                            <h6>
-                                                                Call
-                                                            </h6>
-                                                        </Link>
-                                                        <Link to="https://wa.me/918770534650" className="contacts_single">
-                                                            <div className="icon">
-                                                                <img
-                                                                    src="./assets/img/whatsapp.png"
-                                                                    alt="" />
+                                                        </div>
+                                                        <div class="right">
+                                                            <h5>Sanskar Solanki</h5>
+                                                            <h6>8770534650</h6>
+                                                            <h6>Ujjain, India</h6>
+                                                            <div class="wc">
+                                                                <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
+                                                                <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+
                                                             </div>
-                                                            <h6>
-                                                                Whatsapp
-                                                            </h6>
-                                                        </Link>
-                                                        <Link to="mailto:solankisanskar8@gmail.com" className="contacts_single">
-                                                            <div className="icon">
-                                                                <span class="material-symbols-outlined">
-                                                                    mail
-                                                                </span>
-                                                            </div>
-                                                            <h6>
-                                                                Email
-                                                            </h6>
-                                                        </Link>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </OwlCarousel>
-
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
+
                             )}
                             <div className="property_card_single">
                                 <div className="more_detail_card_inner">
@@ -773,9 +750,9 @@ const PDSingle = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section >
             <br></br>
-        </div>
+        </div >
 
 
     )

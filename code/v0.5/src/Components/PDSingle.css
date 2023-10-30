@@ -122,6 +122,35 @@
     border-right: none;
     padding-right: 2px;
 }
+.userlist.property_owners {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+.userlist.property_owners .single_user {  
+    border: 1px solid;
+    border-radius: 15px;
+    border-color: #e7e7e7;   
+    position: relative;
+}
+.userlist.property_owners .single_user .property_people_designation {
+    position: absolute;
+    top: -15px;
+    right: 60px;
+    font-size: 12px;  
+    padding: 3px 10px;
+}
+.userlist.property_owners .single_user .property_people_designation:after {
+    content: '';
+    position: absolute;
+    height: 50%;
+    background: #f3f3f3;
+    width: 10px;
+    top: 2px;
+    left: -5px;  
+    transform: rotate(45deg);
+}
 .property_connected_people.userlist .single_user {
     padding: 0px;    
 }
