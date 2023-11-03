@@ -547,7 +547,10 @@ h6.wucs_desc {
   display: flex;
   gap: 30px;
 }
-
+iframe.img_div {
+  width: 100%;
+  border-radius: 15px;
+}
 .image_sect .img_div img {
   width: 100%;
   border-radius: 20px;
@@ -611,7 +614,9 @@ h6.wucs_desc {
 }
 
 @media only screen and (max-width: 767px) {
-
+  .image_sect {
+    flex-wrap: wrap;
+  }
   .fs_right {
     margin-bottom: 30px;
     padding: 15px;

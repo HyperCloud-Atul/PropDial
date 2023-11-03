@@ -1,8 +1,8 @@
 import { useCollection } from "../../../hooks/useCollection";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
-// import { useNavigate } from 'react-router-dom'
 import { Link, useLocation } from "react-router-dom";
+// import { useNavigate } from 'react-router-dom'
 import { useLogout } from "../../../hooks/useLogout";
 
 // components
@@ -15,13 +15,13 @@ import LeftSidebar from "../../../Components/LeftSidebar";
 
 const billsFilter = ["PENDING", "PMS", "BROKERAGE", "MAINTENANCE", "INACTIVE"];
 
-export default function PGBills() {
-        // Scroll to the top of the page whenever the location changes start
-        const location = useLocation();
-        useEffect(() => {
-          window.scrollTo(0, 0);
-        }, [location]);
-        // Scroll to the top of the page whenever the location changes end
+export default function PGTickets() {
+       // Scroll to the top of the page whenever the location changes start
+       const location = useLocation();
+       useEffect(() => {
+         window.scrollTo(0, 0);
+       }, [location]);
+       // Scroll to the top of the page whenever the location changes end
   const { user } = useAuthContext();
   const { logout, isPending } = useLogout();
   const { documents: billsdocuments, error: billserror } =
@@ -103,7 +103,7 @@ export default function PGBills() {
 
          
 
-            <h2 className="page-title">Bills</h2>
+            <h2 className="page-title">Tickets</h2>
             <div>
               {billserror && <p className="error">{billserror}</p>}
 

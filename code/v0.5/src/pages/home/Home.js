@@ -4,6 +4,12 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+// text 
+import { useFirestore } from "../../hooks/useFirestore";
+// text 
+
+
+
 // css
 import "./Home.css";
 
@@ -25,11 +31,58 @@ const Home = () => {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
+
+  // test 
+  const [propertyName, setPropertyName] = useState("");
+  const { addDocument, response } = useFirestore("testaddproperties"); // Firestore collection name
+  const handletestaddpropertySubmit = async (e) => {
+    e.preventDefault();
+
+    // Create a property object
+    const property = {
+      name: propertyName,
+      // Add more properties as needed
+    };
+
+    // Store the property data in Firestore
+    await addDocument(property);
+
+    // Reset the form after submission
+    setPropertyName("");
+
+    if (!response.error) {
+      // Handle success, e.g., show a success message or redirect the user
+    } else {
+      // Handle error, e.g., show an error message
+    }
+  };
+
+  // test 
+
+
   return (
     <div>
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <Banner></Banner>
       <ProductCarousel></ProductCarousel>
+
+
+      {/* testing form  */}
+      <form onSubmit={handletestaddpropertySubmit}>
+        <div className="form_field">
+          <label>Property Name</label>
+          <input
+            type="text"
+            className="property_name"
+            value={propertyName}
+            onChange={(e) => setPropertyName(e.target.value)}
+          />
+        </div>
+        <input type="submit" value="Add Property" />
+      </form>
+      {/* testing form  */}
+
+
 
       <section className="work_flow sect_padding">
         <div className="container">
@@ -52,7 +105,7 @@ const Home = () => {
                   </div>
                   <h4>Property On-Boarding</h4>
                   <h5>
-                  Property onboarding initiates by collecting pertinent data: ownership details, property type, and existing leases, fueling our management system efficiently.
+                    Property onboarding initiates by collecting pertinent data: ownership details, property type, and existing leases, fueling our management system efficiently.
 
                   </h5>
                 </div>
@@ -65,7 +118,7 @@ const Home = () => {
                   </div>
                   <h4>Inspection & Agreement</h4>
                   <h5>
-                  Propdial initiates a property inspection to evaluate its condition, guiding maintenance decisions. We facilitate lease agreement signings for clarity and mutual consent.
+                    Propdial initiates a property inspection to evaluate its condition, guiding maintenance decisions. We facilitate lease agreement signings for clarity and mutual consent.
 
                   </h5>
                 </div>
@@ -78,7 +131,7 @@ const Home = () => {
                   </div>
                   <h4>Financial & Legal Compliance</h4>
                   <h5>
-                  Propdial maintains thorough property financial records, delivering regular statements to owners. We guarantee property compliance with local, state, and government laws.
+                    Propdial maintains thorough property financial records, delivering regular statements to owners. We guarantee property compliance with local, state, and government laws.
                   </h5>
                 </div>
               </div>
@@ -90,7 +143,7 @@ const Home = () => {
                   </div>
                   <h4>Reporting & Communication</h4>
                   <h5>
-                  Propdial delivers periodic property reports to owners, including updates on property status, financial performance, and noteworthy developments.
+                    Propdial delivers periodic property reports to owners, including updates on property status, financial performance, and noteworthy developments.
                   </h5>
                 </div>
               </div>
@@ -98,6 +151,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+
       <CounterSection></CounterSection>
       <section className="about_us sect_padding relative">
         {/* <div className="bg_video">
@@ -192,9 +246,9 @@ const Home = () => {
       <AirBnb />
       <section
         className="why_us sect_padding"
-        // style={{
-        //   backgroundImage: "url('./assets/img/why_bg.jpg')",
-        // }}
+      // style={{
+      //   backgroundImage: "url('./assets/img/why_bg.jpg')",
+      // }}
       >
         <div className="container">
           <div className="section_title">
@@ -420,7 +474,7 @@ const Home = () => {
                   <div class="section_title_effect">FOUNDER'S SPEAK</div>
                   <h3>Click and watch video</h3>
                 </div>
-                <div className="image_sect">
+                {/* <div className="image_sect">
                   <Link
                     className="img_div"
                     to="https://www.youtube.com/watch?v=RphaFtAR8pw&feature=youtu.be"
@@ -435,6 +489,22 @@ const Home = () => {
                   >
                     <img src="./assets/img/VP-Interview-new.jpg" alt="" />
                   </Link>
+                </div> */}
+                <div className="image_sect">
+                  <iframe
+                    className="img_div"
+                    src="https://www.youtube.com/embed/RphaFtAR8pw"
+                    title="Founder's Video 1"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                  <iframe
+                    className="img_div"
+                    src="https://www.youtube.com/embed/H2bDZ4WLlyA"
+                    title="Founder's Video 2"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
                 </div>
               </div>
             </div>
@@ -445,7 +515,15 @@ const Home = () => {
                     <h3>We make your life a lot easier...</h3>
                     <h6>Understand in Just 2 min!</h6>
                   </div>
-                  <div className="btn_group">
+                  <iframe
+                    className="img_div"
+                    height="200px"
+                    src="https://www.youtube.com/embed/JV-lPfuBl20"
+                    title="Intro Video"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                  {/* <div className="btn_group">
                     <Link
                       to="https://www.youtube.com/watch?v=JV-lPfuBl20&t=5s"
                       target={"_blank"}
@@ -465,7 +543,7 @@ const Home = () => {
                         </span>
                       </button>
                     </Link>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

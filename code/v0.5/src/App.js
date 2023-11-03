@@ -21,6 +21,7 @@ import PGPropertyEdit from "./pages/roles/admin/PGPropertyEdit";
 import PGOwnerDashboard from "./pages/roles/owner/PGOwnerDashboard";
 import PGOwnerDashboardOld from "./pages/roles/owner/PGOwnerDashboard_old";
 import PGBills from "./pages/roles/owner/PGBills";
+import PGTickets from "./pages/roles/owner/PGTickets";
 // tenant
 import TenantDashboard from "./pages/roles/tenant/TenantDashboard";
 // executive
@@ -307,6 +308,13 @@ function App() {
                 path="/bills"
                 element={
                   user && user.role ? <PGBills /> : <Navigate to="/login" />
+                }
+              ></Route>
+
+<Route
+                path="/tickets"
+                element={
+                  user && user.role ? <PGTickets /> : <Navigate to="/login" />
                 }
               ></Route>
 

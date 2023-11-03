@@ -435,11 +435,14 @@ export default function PGOwnerDashboard() {
                 />
               )}
               {/* {billsdocuments && <Filters changeFilter={changeFilter} />} */}
-              {properties && <PropertyList properties={properties}/>}
+             
+                {properties && <PropertyList properties={properties} />}
+            
               {/* {bills && <BillList bills={bills} />} */}
+              <br></br>
               <div className="property_card_left">
-                    {propertiesdocuments && <PropertyDetail propertiesdocuments={propertiesdocuments} />}
-                  </div>
+                {propertiesdocuments && <PropertyDetail propertiesdocuments={propertiesdocuments} />}
+              </div>
             </div>
           </section>
 

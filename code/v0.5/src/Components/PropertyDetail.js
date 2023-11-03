@@ -1,9 +1,15 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 
 const PropertyDetail = ({ propertiesdocuments }) => {
+    // Scroll to the top of the page whenever the location changes start
+    const location = useLocation();
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location]);
+    // Scroll to the top of the page whenever the location changes end
   // read more read less
   const [height, setHeight] = useState(true);
 
@@ -26,7 +32,7 @@ const PropertyDetail = ({ propertiesdocuments }) => {
                 </h4>
                 <h6 className="property_location">{property.state}</h6>
                 <div className="fav_and_share">
-                  <span class="material-symbols-outlined mr-2" style={{
+                  <span class="material-symbols-outlined mr-2 fav" style={{
                     marginRight: "3px"
                   }}>
                     favorite
@@ -88,11 +94,11 @@ const PropertyDetail = ({ propertiesdocuments }) => {
               <h6 className="value_per_sqf">
                 <span>₹ </span> 9000 per sqf
               </h6>
-              <Link to="/contact-us" className="theme_btn no_icon btn_fill"
-                style={{ padding: "5px 20px" }}>Contact Agent</Link>
-              <button className="theme_btn no_icon btn_border" data-bs-toggle="modal" data-bs-target="#exampleModal"
+              {/* <Link to="/contact-us" className="theme_btn no_icon btn_fill"
+                style={{ padding: "5px 20px" }}>Contact Agent</Link> */}
+              <button className="theme_btn no_icon btn_fill" data-bs-toggle="modal" data-bs-target="#exampleModal"
                 style={{ padding: "5px 20px" }}>Enquire Now</button>
-              <h5 className="link">Check Loan Eligibility</h5>
+              {/* <h5 className="link">Check Loan Eligibility</h5> */}
             </div>
           </div>
         </div>
@@ -119,7 +125,7 @@ const PropertyDetail = ({ propertiesdocuments }) => {
                       <div class="field_inner select">
                         <select>
                           <option value="" disabled selected>I am</option>
-                          <option>Owner</option>
+                          {/* <option>Owner</option> */}
                           <option>Tenant</option>
                           <option>Agent</option>
                         </select>

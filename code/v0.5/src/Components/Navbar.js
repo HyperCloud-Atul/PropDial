@@ -33,7 +33,7 @@ export default function Navbar() {
   const showDashboard = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/");
+      navigate("/search-property");
       return; // Exit the function to prevent further checks
     }
     if (user && user.role === "superadmin") {
@@ -64,7 +64,7 @@ export default function Navbar() {
   const showSecondPage = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/search-property");
+      navigate("/about-us");
       return; // Exit the function to prevent further checks
     }
     if (user && user.role === "admin") {
@@ -74,7 +74,7 @@ export default function Navbar() {
     }
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
-      navigate("/bills");
+      navigate("/tickets");
     }
   };
   // const showThirdPage = () => {

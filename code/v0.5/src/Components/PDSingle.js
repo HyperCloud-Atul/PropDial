@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Gallery from "react-image-gallery";
 import Switch from "react-switch";
@@ -12,6 +14,12 @@ import "./PDSingle.css"
 import PropertyImageGallery from "./PropertyImageGallery";
 import { Carousel } from "react-bootstrap";
 const PDSingle = () => {
+    // Scroll to the top of the page whenever the location changes start
+    const location = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
+    // Scroll to the top of the page whenever the location changes end
     // get user from useauthcontext
     const { user } = useAuthContext();
     // get user from useauthcontext
@@ -87,7 +95,7 @@ const PDSingle = () => {
                     <div className="more-add-options-icons">
                         <h1>Close</h1>
                         <span className="material-symbols-outlined">close</span>
-                    </div>                  
+                    </div>
 
                     <Link to="" className="more-add-options-icons">
                         <h1>Property Image</h1>
@@ -109,16 +117,16 @@ const PDSingle = () => {
                     </Link>
                 </div>
             </div>
-             {/* 9 dots html  */}
+            {/* 9 dots html  */}
 
 
             <div className="top_search_bar">
-                <div className="back_btn">
+                <Link to="/search-property" className="back_btn">
                     <span class="material-symbols-outlined">
                         arrow_back
                     </span>
                     <span>Back</span>
-                </div>
+                </Link>
                 <div className="search_area_header">
 
                     <div className="for_buy_rent">
@@ -298,6 +306,7 @@ const PDSingle = () => {
                                                                 <h6>Bhopal, India</h6>
                                                             </div>
                                                         </div>
+                                                       
                                                         <div className="contacts">
                                                             <Link to="tel:+918770534650" className="contacts_single">
                                                                 <div className="icon">
@@ -330,6 +339,7 @@ const PDSingle = () => {
                                                                 </h6>
                                                             </Link>
                                                         </div>
+                         
                                                     </div>
 
                                                 </div>
@@ -349,11 +359,13 @@ const PDSingle = () => {
                                                             <h5>Sanskar Solanki</h5>
                                                             <h6>8770534650</h6>
                                                             <h6>Ujjain, India</h6>
+                                                            {user && user.role !== "owner" && (
                                                             <div class="wc">
                                                                 <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
                                                                 <img src="./assets/img/phone-call.png" class="pointer" alt="" />
 
                                                             </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div class="single_user">
@@ -402,7 +414,116 @@ const PDSingle = () => {
 
                                     </div>
                                 </div>
+                            )}
+                            {user && user.role === "owner" && (
+                                <div className="property_card_single">
+                                    <div className="more_detail_card_inner">
+                                        <div className="row no-gutters">
+                                            <div className="col-md-6">
+                                                <div className="property_full_address">
+                                                    <h2 className="card_title">escalation matrix</h2>                                        
+                                                </div>
+                                                <div className="property_connected_people userlist">
 
+                                                    <div className="item pcp_single">
+                                                        <div className="property_people_designation">
+                                                          Indian contact number
+                                                        </div>
+                                                        <div className="single_user">
+                                                            {/* <div className="left">
+                                                                <div className="user_img">
+                                                                    <img src="./assets/img/user.png" alt="" />
+                                                                </div>
+                                                            </div> */}
+                                                            <div className="right">
+                                                                <h5>+91 9698569856</h5>
+                                                                <h6>indiacontactnumber@gmail.com</h6>                                                             
+                                                            </div>
+                                                        </div>
+                                                        <div className="contacts">
+                                                            <Link to="tel:+918770534650" className="contacts_single">
+                                                                <div className="icon">
+                                                                    <span class="material-symbols-outlined">
+                                                                        call
+                                                                    </span>
+                                                                </div>
+                                                                <h6>
+                                                                    Call
+                                                                </h6>
+                                                            </Link>
+                                                            <Link to="https://wa.me/918770534650" className="contacts_single">
+                                                                <div className="icon">
+                                                                    <img
+                                                                        src="./assets/img/whatsapp.png"
+                                                                        alt="" />
+                                                                </div>
+                                                                <h6>
+                                                                    Whatsapp
+                                                                </h6>
+                                                            </Link>
+                                                            <Link to="mailto:solankisanskar8@gmail.com" className="contacts_single">
+                                                                <div className="icon">
+                                                                    <span class="material-symbols-outlined">
+                                                                        mail
+                                                                    </span>
+                                                                </div>
+                                                                <h6>
+                                                                    Email
+                                                                </h6>
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <div className="userlist property_owners">
+                                                    <div class="single_user">
+                                                        <div className="property_people_designation">Level 1
+                                                        </div>                                                 
+                                                        <div class="right">
+                                                            <h5>8770534650</h5>
+                                                            <h6>level1@gmail.com</h6>                                                            
+                                                            {/* <div class="wc">
+                                                                <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
+                                                                <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+
+                                                            </div> */}
+                                                        </div>
+                                                    </div>
+                                                    <div class="single_user">
+                                                        <div className="property_people_designation">Level 2
+                                                        </div>                                                 
+                                                        <div class="right">
+                                                            <h5>8770534650</h5>
+                                                            <h6>level2@gmail.com</h6>                                                            
+                                                            {/* <div class="wc">
+                                                                <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
+                                                                <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+
+                                                            </div> */}
+                                                        </div>
+                                                    </div>
+                                                    <div class="single_user">
+                                                        <div className="property_people_designation">Level 3
+                                                        </div>                                                 
+                                                        <div class="right">
+                                                            <h5>8770534650</h5>
+                                                            <h6>level3@gmail.com</h6>                                                            
+                                                            {/* <div class="wc">
+                                                                <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
+                                                                <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+
+                                                            </div> */}
+                                                        </div>
+                                                    </div>
+                                               
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             )}
                             <div className="property_card_single">
                                 <div className="more_detail_card_inner">

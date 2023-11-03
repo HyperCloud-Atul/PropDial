@@ -1,30 +1,19 @@
-import { useState, useEffect, useRef } from "react";
-import { useCollection } from "../../hooks/useCollection";
-import { useAuthContext } from "../../hooks/useAuthContext";
-import { timestamp, projectFirestore } from "../../firebase/config";
+import { useState, useEffect} from "react";
 import { useFirestore } from "../../hooks/useFirestore";
-import { useDocument } from "../../hooks/useDocument";
 import { useLocation } from "react-router-dom";
-import Select from "react-select";
-import { useNavigate, useParams } from "react-router-dom";
-import { format } from "date-fns";
-import DatePicker from "react-datepicker";
+
+import { useNavigate } from "react-router-dom";
+
 import "react-datepicker/dist/react-datepicker.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { Navigate, Link } from "react-router-dom";
 
 // styles
 import "./PGAddProperty.css";
-import { el } from "date-fns/locale";
 
 // component
-import Hero from "../../Components/Hero";
 import PropertySidebar from "../../Components/PropertySidebar";
 
-const categories = [
-  { value: "residential", label: "Residential" },
-  { value: "commercial", label: "Commercial" },
-];
+
 
 export default function PGAddProperty({ propertyid }) {
   // Scroll to the top of the page whenever the location changes start
@@ -46,406 +35,51 @@ export default function PGAddProperty({ propertyid }) {
   // radio button check
 
   const navigate = useNavigate();
-  const { document: propertyDocument, error: propertyerror } = useDocument(
-    "properties",
-    propertyid
-  );
-  const { addDocument, response: addDocumentResponse } =
-    useFirestore("properties");
-  const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties");
 
-  const { user } = useAuthContext();
-  const [users, setUsers] = useState([]);
-
-  const { documents } = useCollection("users");
 
   const [toggleFlag, setToggleFlag] = useState(false);
 
   // form field values
-  const [unitNumber, setUnitNumber] = useState("");
-  const [taggedUsers, setTaggedUsers] = useState([]);
-  const { document: masterPropertyPurpose, error: masterPropertyPurposeerror } =
-    useDocument("master", "PROPERTYPURPOSE");
-  const { documents: masterCountry, error: masterCountryerror } =
-    useCollection("m_countries");
-  const [country, setCountry] = useState({ label: "INDIA", value: "INDIA" });
-  const [state, setState] = useState();
-  const [city, setCity] = useState();
-  const [cityList, setCityList] = useState([]);
-
-  const [localityList, setLocalityList] = useState([]);
-  const [locality, setLocality] = useState();
-
-  const [society, setSociety] = useState("");
+  
   const [category, setCategory] = useState("residential"); //Residential/Commercial
-  const [purpose, setPurpose] = useState();
-  const [status, setStatus] = useState("active");
-  // const today = new Date();
-  // const formattedDate = format(today, 'yyyy-MM-dd');
-  const [onboardingDate, setOnboardingDate] = useState(new Date());
-  const [formError, setFormError] = useState(null);
+ 
+// test 
+const [propertyName, setPropertyName] = useState("");
+const { addDocument, response } = useFirestore("sanskarproperties"); // Firestore collection name
+const handletestaddpropertySubmit = async (e) => {
+  e.preventDefault();
 
-  let taggedUsersListShow = "";
-  if (propertyDocument) {
-    let taggedUsersListCount = propertyDocument.taggedUsersList.length;
-    // console.log('taggedUsersListCount', taggedUsersListCount)
-    for (var i = 0; i < taggedUsersListCount; i++) {
-      if (propertyDocument.taggedUsersList) {
-        // console.log('propertyDocument.taggedUsersList:', propertyDocument.taggedUsersList[i])
-        if (taggedUsersListShow === "")
-          taggedUsersListShow =
-            propertyDocument.taggedUsersList[i].displayName +
-            "(" +
-            propertyDocument.taggedUsersList[i].phoneNumber +
-            ")";
-        else
-          taggedUsersListShow =
-            taggedUsersListShow +
-            ", " +
-            propertyDocument.taggedUsersList[i].displayName +
-            "(" +
-            propertyDocument.taggedUsersList[i].phoneNumber +
-            ")";
-      }
-    }
+  // Create a property object
+  const property = {
+    name: propertyName,
+    // Add more properties as needed
+  };
+
+  // Store the property data in Firestore
+  await addDocument(property);
+
+  // Reset the form after submission
+  setPropertyName("");
+
+  if (!response.error) {
+    // Handle success, e.g., show a success message or redirect the user
+  } else {
+    // Handle error, e.g., show an error message
   }
+};
 
-  const propertyPurposeOptions = useRef([]);
-  const propertyPurposeOptionsSorted = useRef([]);
-  let countryOptions = useRef([]);
-  let countryOptionsSorted = useRef([]);
-  let statesOptions = useRef([]);
-  let statesOptionsSorted = useRef([]);
-  let citiesOptions = useRef([]);
-  let citiesOptionsSorted = useRef([]);
-  let localityOptions = useRef([]);
-  let localityOptionsSorted = useRef([]);
-  let societyOptions = useRef([]);
-  let societyOptionsSorted = useRef([]);
+// test 
 
-  useEffect(() => {
-    // console.log('in useeffect')
-    if (documents) {
-      setUsers(
-        documents.map((user) => {
-          return {
-            value: { ...user, id: user.id },
-            label: user.fullName + " ( " + user.phoneNumber + " )",
-          };
-        })
-      );
-    }
-
-    if (masterPropertyPurpose) {
-      propertyPurposeOptions.current = masterPropertyPurpose.data.map(
-        (propertyPurposeData) => ({
-          label: propertyPurposeData.toUpperCase(),
-          value: propertyPurposeData,
-        })
-      );
-
-      propertyPurposeOptionsSorted.current =
-        propertyPurposeOptions.current.sort((a, b) =>
-          a.label.localeCompare(b.label)
-        );
-    }
-
-    if (masterCountry) {
-      countryOptions.current = masterCountry.map((countryData) => ({
-        label: countryData.country,
-        value: countryData.country,
-      }));
-
-      countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
-        a.label.localeCompare(b.label)
-      );
-      handleCountryChange(country);
-    }
-
-    if (propertyDocument) {
-      setCategory(propertyDocument.category);
-      if (propertyDocument.category.toUpperCase() === "RESIDENTIAL")
-        setToggleFlag(false);
-      else setToggleFlag(true);
-
-      setUnitNumber(propertyDocument.unitNumber);
-      setPurpose({ label: propertyDocument.purpose });
-      const date = new Date(propertyDocument.onboardingDate.seconds * 1000);
-      setOnboardingDate(date);
-      setCountry({ label: propertyDocument.country });
-      setState({ label: propertyDocument.state });
-      setCity({ label: propertyDocument.city });
-      setLocality({ label: propertyDocument.locality });
-      setSociety({ label: propertyDocument.society });
-    }
-  }, [documents, propertyDocument, masterPropertyPurpose]);
+  
 
   const toggleBtnClick = () => {
     // console.log('toggleClick Category:', toggleFlag)
     if (toggleFlag) setCategory("residential");
     else setCategory("commercial");
-
     setToggleFlag(!toggleFlag);
   };
 
-  const usersSorted = users.sort((a, b) => a.label.localeCompare(b.label));
-
-  // Load dropdowns with db values
-  //Load data into Country dropdown
-  //Country select onchange
-  const handleCountryChange = async (option) => {
-    setCountry(option);
-    let countryname = option.label;
-    const ref = await projectFirestore
-      .collection("m_states")
-      .where("country", "==", countryname);
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          statesOptions.current = snapshot.docs.map((stateData) => ({
-            label: stateData.data().state,
-            value: stateData.data().state,
-          }));
-          // console.log('statesOptions:', statesOptions)
-          statesOptionsSorted.current = statesOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
-
-          if (countryname === "INDIA") {
-            setState({ label: "DELHI", value: "DELHI" });
-            handleStateChange({ label: "DELHI", value: "DELHI" });
-          } else {
-            setState({
-              label: statesOptionsSorted.current[0].label,
-              value: statesOptionsSorted.current[0].value,
-            });
-            handleStateChange({
-              label: statesOptionsSorted.current[0].label,
-              value: statesOptionsSorted.current[0].value,
-            });
-          }
-        } else {
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
-  };
-
-  const handleStateChange = async (option) => {
-    setState(option);
-    let statename = option.label;
-    console.log("statename:", statename);
-    const ref = await projectFirestore
-      .collection("m_cities")
-      .where("state", "==", statename);
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          citiesOptions.current = snapshot.docs.map((cityData) => ({
-            label: cityData.data().city,
-            value: cityData.data().city,
-          }));
-
-          citiesOptionsSorted.current = citiesOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
-
-          if (statename === "DELHI") {
-            setCity({ label: "DELHI", value: "DELHI" });
-            handleCityChange({ label: "DELHI", value: "DELHI" });
-          } else {
-            setCity({
-              label: citiesOptionsSorted.current[0].label,
-              value: citiesOptionsSorted.current[0].value,
-            });
-            handleCityChange({
-              label: citiesOptionsSorted.current[0].label,
-              value: citiesOptionsSorted.current[0].value,
-            });
-          }
-        } else {
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
-  };
-
-  //City select onchange
-  const handleCityChange = async (option) => {
-    setCity(option);
-    let cityname = option.label;
-    console.log("cityname:", cityname);
-    const ref = await projectFirestore
-      .collection("m_localities")
-      .where("city", "==", cityname);
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          localityOptions.current = snapshot.docs.map((localityData) => ({
-            label: localityData.data().locality,
-            value: localityData.data().locality,
-          }));
-
-          localityOptionsSorted.current = localityOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
-
-          setLocality({
-            label: localityOptionsSorted.current[0].label,
-            value: localityOptionsSorted.current[0].value,
-          });
-          handleLocalityChange({
-            label: localityOptionsSorted.current[0].label,
-            value: localityOptionsSorted.current[0].value,
-          });
-        } else {
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
-  };
-
-  //Locality select onchange
-  const handleLocalityChange = async (option) => {
-    setLocality(option);
-    let localityname = option.label;
-    // console.log('cityname:', localityname)
-    const ref = await projectFirestore
-      .collection("m_societies")
-      .where("locality", "==", localityname);
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          societyOptions.current = snapshot.docs.map((societyData) => ({
-            label: societyData.data().society,
-            value: societyData.data().society,
-          }));
-
-          societyOptionsSorted.current = societyOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
-
-          setSociety({
-            label: societyOptionsSorted.current[0].label,
-            value: societyOptionsSorted.current[0].value,
-          });
-          // setSociety({ label: societyOptionsSorted.current.label, value: societyOptionsSorted.current.value })
-          // handleCityChange({ label: statesOptionsSorted.current[0].label, value: statesOptionsSorted.current[0].value })
-        } else {
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormError(null);
-
-    if (!category) {
-      setFormError("Please select a property category.");
-      return;
-    }
-    if (taggedUsers.length < 1) {
-      setFormError("Please assign the property to at least 1 user");
-      return;
-    }
-
-    const taggedUsersList = taggedUsers.map((u) => {
-      return {
-        id: u.value.id,
-        displayName: u.value.fullName,
-        phoneNumber: u.value.phoneNumber,
-        photoURL: u.value.photoURL,
-        role: u.value.role,
-      };
-    });
-
-    const createdBy = {
-      displayName: user.displayName + "(" + user.role + ")",
-      photoURL: user.photoURL,
-      id: user.uid,
-    };
-
-    const updatedBy = {
-      displayName: user.displayName + "(" + user.role + ")",
-      photoURL: user.photoURL,
-      id: user.uid,
-    };
-
-    const property = {
-      unitNumber,
-      taggedUsersList,
-      country: country.label,
-      state: state.label,
-      city: city.label,
-      locality: locality.label,
-      society: society.label,
-      category: category,
-      purpose: purpose.label,
-      status: status,
-      updatedBy,
-      onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
-      comments: [],
-    };
-
-    if (propertyid) {
-      await updateDocument(propertyid, {
-        unitNumber: unitNumber,
-        taggedUsersList,
-        country: country.label,
-        state: state.label,
-        city: city.label,
-        locality: locality.label,
-        society: society.label,
-        category,
-        purpose: purpose.label,
-        status: status,
-        createdBy,
-        onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
-        comments: [],
-      });
-      if (updateDocumentResponse.error) {
-        // console.log('updateDocument Error:', updateDocumentResponse.error)
-        navigate("/");
-      } else {
-        // console.log('Property Udpated Successfully:', property)
-      }
-    } else {
-      await addDocument(property);
-      if (addDocumentResponse.error) {
-        navigate("/error");
-      } else {
-        navigate("/admindashboard");
-      }
-
-      // console.log('addDocument:', property)
-    }
-  };
-  // sticky top property details - start
-
-  function openPropertyDetails(propertyDetails) {
-    propertyDetails.classList.toggle("open");
-  }
-
-  // sticky top property details - end
+ 
 
   return (
     <div className="dashboard_pg aflbg property_setup">
@@ -1615,7 +1249,8 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Floor Number</label>
                       <div className="field_inner">
-                        <input type="text" placeholder="Floor Number..." />
+                        <input type="text" placeholder="Floor Number..."  value={propertyName}
+                  onChange={(e) => setPropertyName(e.target.value)}/>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
                             filter_none
@@ -1623,6 +1258,7 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                       </div>
                     </div>
+                    <input type="submit"></input>
                     <div className="form_field st-2">
                       <label>No. of Apt On Floor</label>
                       <div className="field_inner select">

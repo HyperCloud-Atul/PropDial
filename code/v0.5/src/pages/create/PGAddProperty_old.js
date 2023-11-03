@@ -380,11 +380,8 @@ export default function PGAddPropertyOld({ propertyid }) {
 
     return (
         <div>
-
-            <div className="pgadmindasboard dashboard_pg aflbg property_setup">
-                
-                    <LeftSidebar />
-               
+            <div className="pgadmindasboard dashboard_pg aflbg property_setup">                
+                    <LeftSidebar />               
                 <div className="right_main_content">
                     <br />
                     <h2 className='pg_title'>
@@ -501,7 +498,7 @@ export default function PGAddPropertyOld({ propertyid }) {
                                     </div>
 
                                 </div>
-                                {/* <div className="col-lg-4 col-md-4 col-sm-12">
+                                <div className="col-lg-4 col-md-4 col-sm-12">
                                     <div>
                                         <h1 className="owner-heading">Onboarding Date</h1>
                                         <div className="location-search">
@@ -519,7 +516,7 @@ export default function PGAddPropertyOld({ propertyid }) {
                                         </div>
                                     </div>
                                     <br /><br />
-                                </div> */}
+                                </div>
                                 <div className="col-lg-4">
                                     <div className="form_field st-2 mt-lg-0">
                                         <label>Tag Users : {taggedUsersListShow}</label>
