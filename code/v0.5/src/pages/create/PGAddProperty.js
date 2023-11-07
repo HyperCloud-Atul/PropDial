@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useLocation } from "react-router-dom";
 
@@ -40,37 +40,41 @@ export default function PGAddProperty({ propertyid }) {
   const [toggleFlag, setToggleFlag] = useState(false);
 
   // form field values
-  
+
   const [category, setCategory] = useState("residential"); //Residential/Commercial
- 
-// test 
-const [propertyName, setPropertyName] = useState("");
-const { addDocument, response } = useFirestore("sanskarproperties"); // Firestore collection name
-const handletestaddpropertySubmit = async (e) => {
-  e.preventDefault();
 
-  // Create a property object
-  const property = {
-    name: propertyName,
-    // Add more properties as needed
+  // test 
+  const [propertyName, setPropertyName] = useState("");
+  const [propertyLocality, setpropertyLocality] = useState("");
+  // const { addDocument, addResponse } = useFirestore("properties"); // Firestore collection name
+  const { updateDocument, updateResponse } = useFirestore("properties"); // Firestore collection name
+  const saveData = async (e) => {
+    e.preventDefault();
+
+    // Create a property object
+    const property = {
+      unitNumber: "A-504-2",
+      locality: propertyLocality
+      // Add more properties as needed
+    };
+
+    // console.log("saveData: ", property)
+    // Store the property data in Firestore
+    // await addDocument(property);
+    await updateDocument(propertyid, property);
+
+    // Reset the form after submission
+    // setPropertyName("");
+
+
+    if (!updateResponse.error) {
+      // Handle success, e.g., show a success message or redirect the user
+      console.log('updateresponse (not error): ', updateResponse)
+    } else {
+      // Handle error, e.g., show an error message
+      console.log('updateresponse (error) : ', updateResponse)
+    }
   };
-
-  // Store the property data in Firestore
-  await addDocument(property);
-
-  // Reset the form after submission
-  setPropertyName("");
-
-  if (!response.error) {
-    // Handle success, e.g., show a success message or redirect the user
-  } else {
-    // Handle error, e.g., show an error message
-  }
-};
-
-// test 
-
-  
 
   const toggleBtnClick = () => {
     // console.log('toggleClick Category:', toggleFlag)
@@ -79,7 +83,7 @@ const handletestaddpropertySubmit = async (e) => {
     setToggleFlag(!toggleFlag);
   };
 
- 
+
 
   return (
     <div className="dashboard_pg aflbg property_setup">
@@ -222,6 +226,15 @@ const handletestaddpropertySubmit = async (e) => {
               </span>
             </div>
           </div>
+          <div className="col-lg-6 col-md-6 col-sm-12">
+            <div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+              <button onClick={saveData} className="theme_btn btn_fill" style={{ height: '30px', paddingTop: '1px' }}>Save
+                <span class="material-symbols-outlined btn_arrow ba_animation" style={{ top: '5px' }}>arrow_forward</span>
+              </button>
+
+            </div>
+
+          </div>
         </div>
         <form>
           <Tabs>
@@ -330,14 +343,18 @@ const handletestaddpropertySubmit = async (e) => {
                     <div className="form_field st-2">
                       <label>Locality</label>
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected>
+                        <select onChange={(e) => {
+                          console.log('e', e.target.text, e.target, e.target.value)
+                          setpropertyLocality(e.target.text)
+                          console.log('propertyLocality', propertyLocality)
+                        }} >
+                          <option value="" selected={propertyLocality === 'Malviya Nagar' ? true : false}>
                             Malviya Nagar
                           </option>
-                          <option value="">Dwarka</option>
-                          <option value="">Rajori Garden</option>
-                          <option value="">Lajpat Nagar</option>
-                          <option value="">Saraojni Nagar</option>
+                          <option selected={propertyLocality === 'Dwarka' ? true : false} >Dwarka</option>
+                          <option selected={propertyLocality === 'Rajori Garden' ? true : false}>Rajori Garden</option>
+                          <option selected={propertyLocality === 'Lajpat Nagar' ? true : false}>Lajpat Nagar</option>
+                          <option selected={propertyLocality === 'Saraojni Nagar' ? true : false}>Saraojni Nagar</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -613,7 +630,7 @@ const handletestaddpropertySubmit = async (e) => {
                     <div className="form_field st-2">
                       <label>No. of Bathrooms</label>
                       <div className="field_inner select">
-                        <select>                        
+                        <select>
                           <option value="" selected disabled>
                             Number Of Bathrooms
                           </option>
@@ -795,7 +812,7 @@ const handletestaddpropertySubmit = async (e) => {
                     <div className="form_field st-2">
                       <label>No. of Living Area</label>
                       <div className="field_inner select">
-                        <select>                     
+                        <select>
                           <option value="" disabled>
                             Number Of Living Area
                           </option>
@@ -1240,7 +1257,7 @@ const handletestaddpropertySubmit = async (e) => {
                         <input type="text" placeholder="Total Floors..." />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
-                         
+
                             table_rows
                           </span>
                         </div>
@@ -1249,8 +1266,8 @@ const handletestaddpropertySubmit = async (e) => {
                     <div className="form_field st-2">
                       <label>Floor Number</label>
                       <div className="field_inner">
-                        <input type="text" placeholder="Floor Number..."  value={propertyName}
-                  onChange={(e) => setPropertyName(e.target.value)}/>
+                        <input type="text" placeholder="Floor Number..." value={propertyName}
+                          onChange={(e) => setPropertyName(e.target.value)} />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
                             filter_none
@@ -3190,6 +3207,6 @@ const handletestaddpropertySubmit = async (e) => {
           </Tabs>
         </form>
       </div>
-    </div>
+    </div >
   );
 }
