@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
+import { useDocument } from "../../hooks/useDocument";
 import { useLocation } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
@@ -45,16 +46,38 @@ export default function PGAddProperty({ propertyid }) {
 
   // test 
   const [propertyName, setPropertyName] = useState("");
-  const [propertyLocality, setpropertyLocality] = useState("");
+  // const [propertyLocality, setpropertyLocality] = useState("");
+  const [propertyDetails, setPropertyDetails] = useState({
+    Locality: '',
+    City: ''
+  });
+
   // const { addDocument, addResponse } = useFirestore("properties"); // Firestore collection name
+  const { document: property, error: propertyerror } = useDocument("properties", propertyid);
   const { updateDocument, updateResponse } = useFirestore("properties"); // Firestore collection name
+
+
+  // set property document values into form
+  useEffect(() => {
+    // console.log('property: ', property);
+
+    if (property) {
+      console.log('property.locality: ', property.locality);
+      setPropertyDetails({
+        Locality: property.locality,
+        City: property.city
+      })
+    }
+  }, [property])
+
+
   const saveData = async (e) => {
     e.preventDefault();
 
     // Create a property object
     const property = {
       unitNumber: "A-504-2",
-      locality: propertyLocality
+      locality: propertyDetails.Locality
       // Add more properties as needed
     };
 
@@ -343,18 +366,24 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Locality</label>
                       <div className="field_inner select">
-                        <select onChange={(e) => {
-                          console.log('e', e.target.text, e.target, e.target.value)
-                          setpropertyLocality(e.target.text)
-                          console.log('propertyLocality', propertyLocality)
+                        <select value={propertyDetails && propertyDetails.Locality} onChange={(e) => {
+                          // console.log('e', e.target.text, e.target, e.target.value)
+                          // console.log('propertyLocality', propertyLocality)
+                          // setpropertyLocality(e.target.value)
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            Locality: e.target.value
+                          })
+
+
                         }} >
-                          <option value="" selected={propertyLocality === 'Malviya Nagar' ? true : false}>
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Malviya Nagar' ? true : false}>
                             Malviya Nagar
                           </option>
-                          <option selected={propertyLocality === 'Dwarka' ? true : false} >Dwarka</option>
-                          <option selected={propertyLocality === 'Rajori Garden' ? true : false}>Rajori Garden</option>
-                          <option selected={propertyLocality === 'Lajpat Nagar' ? true : false}>Lajpat Nagar</option>
-                          <option selected={propertyLocality === 'Saraojni Nagar' ? true : false}>Saraojni Nagar</option>
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Dwarka' ? true : false} >Dwarka</option>
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Rajori Garden' ? true : false}>Rajori Garden</option>
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Lajpat Nagar' ? true : false}>Lajpat Nagar</option>
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Saraojni Nagar' ? true : false}>Saraojni Nagar</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
