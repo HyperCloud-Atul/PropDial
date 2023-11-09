@@ -77,22 +77,22 @@ export default function Navbar() {
       navigate("/tickets");
     }
   };
-  // const showThirdPage = () => {
-  //   if (!user) {
-  //     // User is not logged in, navigate to "/"
-  //     navigate("/about-us");
-  //     return; // Exit the function to prevent further checks
-  //   }
-  //   if (user && user.role === "admin") {
-  //     // console.log('in user', user.role)
-  //     // navigate("/adminproperties");
-  //     navigate("/users");
-  //   }
-  //   if (user && user.role === "owner") {
-  //     // console.log('in user', user.role)
-  //     navigate("/tickets");
-  //   }
-  // };
+  const showThirdPage = () => {
+    if (!user) {
+      // User is not logged in, navigate to "/"
+      navigate("/about-us");
+      return; // Exit the function to prevent further checks
+    }
+    if (user && user.role === "admin") {
+      // console.log('in user', user.role)
+      // navigate("/adminproperties");
+      navigate("/users");
+    }
+    if (user && user.role === "owner") {
+      // console.log('in user', user.role)
+      navigate("/tickets");
+    }
+  };
 
   const showFourthPage = () => {
     navigate("/more");
@@ -213,7 +213,7 @@ export default function Navbar() {
             </div>
 
             <div
-              onClick={showDashboard}
+              onClick={showSecondPage}
               // className={`menu_single pointer ${
               //   location.pathname === "/search-property" || location.pathname === "/bills"? "active" : "" || location.pathname === "/pgpropertylist" ? "active" : ""
               // }`}
@@ -224,7 +224,7 @@ export default function Navbar() {
             </div>
 
             <div
-              onClick={showSecondPage}
+              onClick={showThirdPage}
               // className={`menu_single pointer ${
               //   location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : "" || location.pathname === "/users" ? "active" : ""
               // }`}
