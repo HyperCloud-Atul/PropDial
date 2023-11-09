@@ -44,39 +44,41 @@ export default function PGAddProperty({ propertyid }) {
 
   const [category, setCategory] = useState("residential"); //Residential/Commercial
 
- 
+
   // const [propertyLocality, setpropertyLocality] = useState("");
   const [propertyDetails, setPropertyDetails] = useState({
+    UnitNumber: '',
     Locality: '',
     City: '',
-    Country:'',
-    State:'',
-    Society:'',
+    Country: '',
+    State: '',
+    Society: '',
     PropertyType: '',
-    YearOfConstruction:'',
-    Bhk:'',
-    NumberOfBedrooms: '',
-    NumberOfBathrooms: '',
-    NumberOfBalcony: '',
-    NumberOfKitchen: '',
-    NumberOfLivingArea: '',
-    NumberOfBasement: '',
-    NumberOfAptOnFloor: '',
-    NumberOfLifts: '',
-    NumberOfCarParking: '',
+    YearOfConstruction: '',
+    // Bhk: '',
+    // NumberOfBedrooms: '',
+    // NumberOfBathrooms: '',
+    // NumberOfBalcony: '',
+    // NumberOfKitchen: '',
+    // NumberOfLivingArea: '',
+    // NumberOfBasement: '',
+    // NumberOfAptOnFloor: '',
+    // NumberOfLifts: '',
+    // NumberOfCarParking: '',
   });
-  
+
   const { document: property, error: propertyerror } = useDocument("properties", propertyid);
   const { updateDocument, updateResponse } = useFirestore("properties"); // Firestore collection name
 
 
   // set property document values into form
   useEffect(() => {
-    // console.log('property: ', property);
+    console.log('property id: ', propertyid);
 
     if (property) {
       console.log('property: ', property);
       setPropertyDetails({
+        UnitNumber: property.unitNumber,
         Locality: property.locality,
         City: property.city,
         Country: property.country,
@@ -84,16 +86,16 @@ export default function PGAddProperty({ propertyid }) {
         Society: property.society,
         PropertyType: property.propertyType,
         YearOfConstruction: property.yearOfConstruction,
-        Bhk: property.bhk,
-        NumberOfBedrooms: property.numberOfBedrooms,
-        NumberOfBathrooms: property.numberOfBathrooms,
-        NumberOfBalcony: property.numberOfBalcony,
-        NumberOfKitchen: property.numberOfKitchen,
-        NumberOfLivingArea: property.numberOfLivingArea,
-        NumberOfBasement: property.numberOfBasement,
-        NumberOfAptOnFloor: property.numberOfAptOnFloor,
-        NumberOfLifts: property.numberOfLifts,
-        NumberOfCarParking: property.numberOfCarParking,
+        // Bhk: property.bhk,
+        // NumberOfBedrooms: property.numberOfBedrooms,
+        // NumberOfBathrooms: property.numberOfBathrooms,
+        // NumberOfBalcony: property.numberOfBalcony,
+        // NumberOfKitchen: property.numberOfKitchen,
+        // NumberOfLivingArea: property.numberOfLivingArea,
+        // NumberOfBasement: property.numberOfBasement,
+        // NumberOfAptOnFloor: property.numberOfAptOnFloor,
+        // NumberOfLifts: property.numberOfLifts,
+        // NumberOfCarParking: property.numberOfCarParking,
       })
     }
   }, [property])
@@ -103,8 +105,8 @@ export default function PGAddProperty({ propertyid }) {
     e.preventDefault();
 
     // Create a property object
-    const property = {
-      unitNumber: "A-504-2",
+    const updatedProperty = {
+      unitNumber: propertyDetails.UnitNumber,
       locality: propertyDetails.Locality,
       country: propertyDetails.Country,
       state: propertyDetails.State,
@@ -112,23 +114,24 @@ export default function PGAddProperty({ propertyid }) {
       society: propertyDetails.Society,
       propertyType: propertyDetails.PropertyType,
       yearOfConstruction: propertyDetails.YearOfConstruction,
-      bhk: propertyDetails.Bhk,
-      numberOfBedrooms : propertyDetails.NumberOfBedrooms,
-      numberOfBathrooms: propertyDetails.NumberOfBathrooms,
-      numberOfBalcony: propertyDetails.NumberOfBalcony,
-      numberOfKitchen: propertyDetails.NumberOfKitchen,
-      numberOfLivingArea: propertyDetails.NumberOfLivingArea,
-      numberOfBasement: propertyDetails.NumberOfBasement,
-      numberOfAptOnFloor: propertyDetails.NumberOfAptOnFloor,
-      numberOfLifts: propertyDetails.NumberOfLifts,
-      numberOfCarParking: propertyDetails.NumberOfCarParking,
+      // bhk: propertyDetails.Bhk,
+      // numberOfBedrooms: propertyDetails.NumberOfBedrooms,
+      // numberOfBathrooms: propertyDetails.NumberOfBathrooms,
+      // numberOfBalcony: propertyDetails.NumberOfBalcony,
+      // numberOfKitchen: propertyDetails.NumberOfKitchen,
+      // numberOfLivingArea: propertyDetails.NumberOfLivingArea,
+      // numberOfBasement: propertyDetails.NumberOfBasement,
+      // numberOfAptOnFloor: propertyDetails.NumberOfAptOnFloor,
+      // numberOfLifts: propertyDetails.NumberOfLifts,
+      // numberOfCarParking: propertyDetails.NumberOfCarParking,
       // Add more properties as needed
     };
 
     // console.log("saveData: ", property)
     // Store the property data in Firestore
     // await addDocument(property);
-    await updateDocument(propertyid, property);
+    console.log('save updated unit number: ', updatedProperty.unitNumber)
+    await updateDocument(propertyid, updatedProperty);
 
     // Reset the form after submission
     // setPropertyName("");
@@ -358,17 +361,17 @@ export default function PGAddProperty({ propertyid }) {
                       <label>Country</label>
                       <div className="field_inner select">
                         <select value={propertyDetails && propertyDetails.Country}
-                        onChange={(e) => {
-                          // console.log('e', e.target.text, e.target, e.target.value)
-                          // console.log('propertyLocality', propertyLocality)
-                          // setpropertyLocality(e.target.value)
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            Country: e.target.value
-                          })
-                        }}>
-                         <option selected={propertyDetails && propertyDetails.Country === 'India' ? true : false}>
-                         India
+                          onChange={(e) => {
+                            // console.log('e', e.target.text, e.target, e.target.value)
+                            // console.log('propertyLocality', propertyLocality)
+                            // setpropertyLocality(e.target.value)
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Country: e.target.value
+                            })
+                          }}>
+                          <option selected={propertyDetails && propertyDetails.Country === 'India' ? true : false}>
+                            India
                           </option>
                           <option selected={propertyDetails && propertyDetails.Country === 'USA' ? true : false} >USA</option>
                           <option selected={propertyDetails && propertyDetails.Country === 'UK' ? true : false}>UK</option>
@@ -383,18 +386,18 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>State</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.State}
-                        onChange={(e) => {
-                          // console.log('e', e.target.text, e.target, e.target.value)
-                          // console.log('propertyLocality', propertyLocality)
-                          // setpropertyLocality(e.target.value)
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            State: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.State}
+                          onChange={(e) => {
+                            // console.log('e', e.target.text, e.target, e.target.value)
+                            // console.log('propertyLocality', propertyLocality)
+                            // setpropertyLocality(e.target.value)
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              State: e.target.value
+                            })
+                          }}>
                           <option selected={propertyDetails && propertyDetails.State === 'Madhya Pradesh' ? true : false}>
-                         Madhya Pradesh
+                            Madhya Pradesh
                           </option>
                           <option selected={propertyDetails && propertyDetails.State === 'Maharastra' ? true : false} >Maharastra</option>
                           <option selected={propertyDetails && propertyDetails.State === 'Haryana' ? true : false}>Haryana</option>
@@ -411,15 +414,15 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>City</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.City}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            City: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.City}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              City: e.target.value
+                            })
+                          }}>
                           <option selected={propertyDetails && propertyDetails.City === 'Ujjain' ? true : false}>
-                         Ujjain
+                            Ujjain
                           </option>
                           <option selected={propertyDetails && propertyDetails.City === 'Indore' ? true : false} >Indore</option>
                           <option selected={propertyDetails && propertyDetails.City === 'Bhopal' ? true : false}>Bhopal</option>
@@ -474,23 +477,23 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Society</label>
                       <div className="field_inner select">
-                      
+
                         <select value={propertyDetails && propertyDetails.Society}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            Society: e.target.value
-                          })
-                        }}>
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Society: e.target.value
+                            })
+                          }}>
                           <option selected={propertyDetails && propertyDetails.Society === 'Society 1' ? true : false}>
-                         Society 1
+                            Society 1
                           </option>
                           <option selected={propertyDetails && propertyDetails.Society === 'Society 2' ? true : false} >Society 2</option>
                           <option selected={propertyDetails && propertyDetails.Society === 'Society 3' ? true : false}>Society 3</option>
                           <option selected={propertyDetails && propertyDetails.Society === 'Society 4' ? true : false}>Society 4</option>
                           <option selected={propertyDetails && propertyDetails.Society === 'Society 5' ? true : false}>Society 5</option>
                         </select>
-                       
+
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
                             holiday_village
@@ -502,8 +505,14 @@ export default function PGAddProperty({ propertyid }) {
                       <label>Unit Number</label>
                       <div className="field_inner">
                         <input
+                          required
                           type="text"
                           placeholder="Enter Property Unit Number"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            UnitNumber: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.UnitNumber}
                         />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -515,13 +524,13 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Property Type</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.PropertyType}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            PropertyType: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.PropertyType}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              PropertyType: e.target.value
+                            })
+                          }}>
                           <option selected disabled>
                             Choose Property Type
                           </option>
@@ -546,53 +555,53 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Year of Constuction</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.YearOfConstruction}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            YearOfConstruction: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.YearOfConstruction}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              YearOfConstruction: e.target.value
+                            })
+                          }}>
                           <option value="" disabled>
                             Year of Constuction
                           </option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1990' ? true : false}>1990</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1991' ? true : false}>1991</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1992' ? true : false}>1992</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1993' ? true : false}>1993</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1994' ? true : false}>1994</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1995' ? true : false}>1995</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1996' ? true : false}>1996</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1997' ? true : false}>1997</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1998' ? true : false}>1998</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '1999' ? true : false}>1999</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2000' ? true : false}>2000</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2001' ? true : false}>2001</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2002' ? true : false}>2002</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2019' ? true : false}>2003</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2004' ? true : false}>2004</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2005' ? true : false}>2005</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2006' ? true : false}>2006</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2007' ? true : false}>2007</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2008' ? true : false}>2008</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2009' ? true : false}>2009</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2010' ? true : false}>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1990' ? true : false}>1990</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1991' ? true : false}>1991</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1992' ? true : false}>1992</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1993' ? true : false}>1993</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1994' ? true : false}>1994</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1995' ? true : false}>1995</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1996' ? true : false}>1996</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1997' ? true : false}>1997</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1998' ? true : false}>1998</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1999' ? true : false}>1999</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2000' ? true : false}>2000</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2001' ? true : false}>2001</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2002' ? true : false}>2002</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2019' ? true : false}>2003</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2004' ? true : false}>2004</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2005' ? true : false}>2005</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2006' ? true : false}>2006</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2007' ? true : false}>2007</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2008' ? true : false}>2008</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2009' ? true : false}>2009</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2010' ? true : false}>
                             2010
                           </option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2011' ? true : false}>2011</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2012' ? true : false}>2012</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2013' ? true : false}>2013</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2014' ? true : false}>2014</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2015' ? true : false}>2015</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2016' ? true : false}>2016</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2017' ? true : false}>2017</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2018' ? true : false}>2018</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2019' ? true : false}>2019</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2020' ? true : false}>2020</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2021' ? true : false}>2021</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2022' ? true : false}>2022</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2023' ? true : false}>2023</option>
-                          <option selected={propertyDetails && propertyDetails.YearOfConstruction  === '2024' ? true : false}>2024</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2011' ? true : false}>2011</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2012' ? true : false}>2012</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2013' ? true : false}>2013</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2014' ? true : false}>2014</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2015' ? true : false}>2015</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2016' ? true : false}>2016</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2017' ? true : false}>2017</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2018' ? true : false}>2018</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2019' ? true : false}>2019</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2020' ? true : false}>2020</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2021' ? true : false}>2021</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2022' ? true : false}>2022</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2023' ? true : false}>2023</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2024' ? true : false}>2024</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -607,31 +616,31 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>BHK</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.Bhk}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            Bhk: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.Bhk}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Bhk: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Choose BHK
                           </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === 'EWS' ? true : false}>EWS</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '1 RK' ? true : false}>1 RK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === 'Studio' ? true : false}>Studio</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '1 BHK' ? true : false}>1 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '1.5 BHK' ? true : false}>1.5 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '2 BHK' ? true : false}>2 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '2.5 BHK' ? true : false}>2.5 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '3 BHK' ? true : false}>3 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '3.5 BHK' ? true : false}>3.5 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '4 BHK' ? true : false}>4 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '5 BHK' ? true : false}>5 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '6 BHK' ? true : false}>6 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '7 BHK' ? true : false}>7 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '8 BHK' ? true : false}>8 BHK</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk  === '9+ BHK' ? true : false}>9+ BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === 'EWS' ? true : false}>EWS</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '1 RK' ? true : false}>1 RK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === 'Studio' ? true : false}>Studio</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '1 BHK' ? true : false}>1 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '1.5 BHK' ? true : false}>1.5 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '2 BHK' ? true : false}>2 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '2.5 BHK' ? true : false}>2.5 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '3 BHK' ? true : false}>3 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '3.5 BHK' ? true : false}>3.5 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '4 BHK' ? true : false}>4 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '5 BHK' ? true : false}>5 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '6 BHK' ? true : false}>6 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '7 BHK' ? true : false}>7 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '8 BHK' ? true : false}>8 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '9+ BHK' ? true : false}>9+ BHK</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -731,27 +740,27 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2 mt-lg-0">
                       <label>No. of Bedrooms</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.NumberOfBedrooms}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            NumberOfBedrooms: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.NumberOfBedrooms}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfBedrooms: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Number Of Bedrooms
                           </option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '0' ? true : false}>0</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '1' ? true : false}>1</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '2' ? true : false}>2</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '3' ? true : false}>3</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '4' ? true : false}>4</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '5' ? true : false}>5</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '6' ? true : false}>6</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '7' ? true : false}>7</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '8' ? true : false}>8</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '9' ? true : false}>9</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms  === '10' ? true : false}>10</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '5' ? true : false}>5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '6' ? true : false}>6</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '7' ? true : false}>7</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '8' ? true : false}>8</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '9' ? true : false}>9</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '10' ? true : false}>10</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">bed</span>
@@ -761,27 +770,27 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Bathrooms</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.NumberOfBathrooms}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            NumberOfBathrooms: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.NumberOfBathrooms}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfBathrooms: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
-                            Number Of Bathrooms                            
+                            Number Of Bathrooms
                           </option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '0' ? true : false}>0</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '1' ? true : false}>1</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '2' ? true : false}>2</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '3' ? true : false}>3</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '4' ? true : false}>4</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '5' ? true : false}>5</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '6' ? true : false}>6</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '7' ? true : false}>7</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '8' ? true : false}>8</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '9' ? true : false}>9</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms  === '10' ? true : false}>10</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '5' ? true : false}>5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '6' ? true : false}>6</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '7' ? true : false}>7</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '8' ? true : false}>8</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '9' ? true : false}>9</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '10' ? true : false}>10</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">bathtub</span>
@@ -791,27 +800,27 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Balcony</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.NumberOfBalcony}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            NumberOfBalcony: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.NumberOfBalcony}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfBalcony: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Number Of Balcony
                           </option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '0' ? true : false}>0</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '1' ? true : false}>1</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '2' ? true : false}>2</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '3' ? true : false}>3</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '4' ? true : false}>4</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '5' ? true : false}>5</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '6' ? true : false}>6</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '7' ? true : false}>7</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '8' ? true : false}>8</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '9' ? true : false}>9</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony  === '10' ? true : false}>10</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '5' ? true : false}>5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '6' ? true : false}>6</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '7' ? true : false}>7</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '8' ? true : false}>8</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '9' ? true : false}>9</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '10' ? true : false}>10</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">balcony</span>
@@ -821,20 +830,20 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Kitchen</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.NumberOfKitchen}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            NumberOfKitchen: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.NumberOfKitchen}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfKitchen: e.target.value
+                            })
+                          }}>
                           <option value="" disabled>
                             Number Of Kitchen
                           </option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen  === '0' ? true : false}>0</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen  === '1' ? true : false}>1</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen  === '2' ? true : false}>2</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen  === '3' ? true : false}>3</option>                      
+                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen === '3' ? true : false}>3</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -960,22 +969,22 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Living Area</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.NumberOfLivingArea}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            NumberOfLivingArea: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.NumberOfLivingArea}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfLivingArea: e.target.value
+                            })
+                          }}>
                           <option value="" disabled>
                             Number Of Living Area
-                          </option>                          
-                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea  === '0' ? true : false}>0</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea  === '1' ? true : false}>1</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea  === '2' ? true : false}>2</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea  === '3' ? true : false}>3</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea  === '4' ? true : false}>4</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea  === '5' ? true : false}>5</option>                         
+                          </option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '5' ? true : false}>5</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">living</span>
@@ -1099,18 +1108,18 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Basement</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.NumberOfBasement}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            NumberOfBasement: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.NumberOfBasement}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfBasement: e.target.value
+                            })
+                          }}>
                           <option value="" disabled>
                             Number Of Basement
                           </option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBasement  === '0' ? true : false}>0</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfBasement  === '1' ? true : false}>1</option>                      
+                          <option selected={propertyDetails && propertyDetails.NumberOfBasement === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBasement === '1' ? true : false}>1</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -1431,31 +1440,31 @@ export default function PGAddProperty({ propertyid }) {
                           </span>
                         </div>
                       </div>
-                    </div>                
+                    </div>
                     <div className="form_field st-2">
                       <label>No. of Apt On Floor</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.NumberOfAptOnFloor}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            NumberOfAptOnFloor: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.NumberOfAptOnFloor}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfAptOnFloor: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Number of Apt On Floor
                           </option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '0' ? true : false}>0</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '1' ? true : false}>1</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '2' ? true : false}>2</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '3' ? true : false}>3</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '4' ? true : false}>4</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '5' ? true : false}>5</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '6' ? true : false}>6</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '7' ? true : false}>7</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '8' ? true : false}>8</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '9' ? true : false}>9</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor  === '10' ? true : false}>10</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '5' ? true : false}>5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '6' ? true : false}>6</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '7' ? true : false}>7</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '8' ? true : false}>8</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '9' ? true : false}>9</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '10' ? true : false}>10</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -1467,22 +1476,22 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Lifts</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.NumberOfLifts}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            NumberOfLifts: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.NumberOfLifts}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfLifts: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Number of Lifts
                           </option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLifts  === '0' ? true : false}>0</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLifts  === '1' ? true : false}>1</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLifts  === '2' ? true : false}>2</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLifts  === '3' ? true : false}>3</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLifts  === '4' ? true : false}>4</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfLifts  === '5' ? true : false}>5</option>                          
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '5' ? true : false}>5</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -1678,20 +1687,20 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Car Parking</label>
                       <div className="field_inner select">
-                      <select value={propertyDetails && propertyDetails.NumberOfCarParking}
-                        onChange={(e) => {                        
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            NumberOfCarParking: e.target.value
-                          })
-                        }}>
+                        <select value={propertyDetails && propertyDetails.NumberOfCarParking}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfCarParking: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>Number of Car Parking</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking  === '0' ? true : false}>0</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking  === '1' ? true : false}>1</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking  === '2' ? true : false}>2</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking  === '3' ? true : false}>3</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking  === '4' ? true : false}>4</option>
-                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking  === '5' ? true : false}>5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '5' ? true : false}>5</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
