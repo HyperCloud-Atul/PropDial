@@ -78,14 +78,14 @@ export default function PGAddProperty({ propertyid }) {
     if (property) {
       console.log('property: ', property);
       setPropertyDetails({
-        UnitNumber: property.unitNumber,
-        Locality: property.locality,
-        City: property.city,
-        Country: property.country,
-        State: property.state,
-        Society: property.society,
-        PropertyType: property.propertyType,
-        YearOfConstruction: property.yearOfConstruction,
+        UnitNumber: property.unitNumber ? property.unitNumber : '',
+        Locality: property.locality ? property.locality : '',
+        City: property.city ? property.city : '',
+        Country: property.country ? property.country : '',
+        State: property.state ? property.state : '',
+        Society: property.society ? property.society : '',
+        PropertyType: property.propertyType ? property.propertyType : '',
+        YearOfConstruction: property.yearOfConstruction ? property.yearOfConstruction : '',
         // Bhk: property.bhk,
         // NumberOfBedrooms: property.numberOfBedrooms,
         // NumberOfBathrooms: property.numberOfBathrooms,
@@ -104,16 +104,18 @@ export default function PGAddProperty({ propertyid }) {
   const saveData = async (e) => {
     e.preventDefault();
 
+    console.log('save updated yearOfConstruction: ', propertyDetails.YearOfConstruction)
+
     // Create a property object
     const updatedProperty = {
-      unitNumber: propertyDetails.UnitNumber,
-      locality: propertyDetails.Locality,
-      country: propertyDetails.Country,
-      state: propertyDetails.State,
-      city: propertyDetails.City,
-      society: propertyDetails.Society,
-      propertyType: propertyDetails.PropertyType,
-      yearOfConstruction: propertyDetails.YearOfConstruction,
+      unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : '',
+      locality: propertyDetails.Locality ? propertyDetails.Locality : '',
+      country: propertyDetails.Country ? propertyDetails.Country : '',
+      state: propertyDetails.State ? propertyDetails.State : '',
+      city: propertyDetails.City ? propertyDetails.City : '',
+      society: propertyDetails.Society ? propertyDetails.Society : '',
+      propertyType: propertyDetails.PropertyType ? propertyDetails.PropertyType : '',
+      yearOfConstruction: propertyDetails.YearOfConstruction ? propertyDetails.YearOfConstruction : '',
       // bhk: propertyDetails.Bhk,
       // numberOfBedrooms: propertyDetails.NumberOfBedrooms,
       // numberOfBathrooms: propertyDetails.NumberOfBathrooms,
@@ -127,10 +129,10 @@ export default function PGAddProperty({ propertyid }) {
       // Add more properties as needed
     };
 
-    // console.log("saveData: ", property)
+    console.log("saveData: ", updatedProperty)
     // Store the property data in Firestore
     // await addDocument(property);
-    console.log('save updated unit number: ', updatedProperty.unitNumber)
+
     await updateDocument(propertyid, updatedProperty);
 
     // Reset the form after submission
