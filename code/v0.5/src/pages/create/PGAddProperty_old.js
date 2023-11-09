@@ -370,7 +370,7 @@ export default function PGAddPropertyOld({ propertyid }) {
                 navigate('/error')
             }
             else {
-                navigate('/admindashboard')
+                navigate('/pgpropertylist')
             }
 
             // console.log('addDocument:', property)
