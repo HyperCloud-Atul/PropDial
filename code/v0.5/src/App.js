@@ -101,7 +101,7 @@ function App() {
                 element={<PGProperty></PGProperty>}
               ></Route>
               <Route
-                path="/pdsingle"
+                path="/pdsingle/:id"
                 element={<PDSingle></PDSingle>}
 
               ></Route>
