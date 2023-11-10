@@ -1,7 +1,9 @@
 import React from "react";
+import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useCollection } from "../hooks/useCollection";
+import { useDocument } from "../hooks/useDocument"
 import "react-image-gallery/styles/css/image-gallery.css";
 import Gallery from "react-image-gallery";
 import Switch from "react-switch";
@@ -15,6 +17,14 @@ import "./PDSingle.css"
 import PDSingleCard from "./PDSingleCard";
 import { Carousel } from "react-bootstrap";
 const PDSingle = () => {
+
+    const { id } = useParams()
+    console.log('property id: ', id)
+
+    const { document: propertyDoc, error: propertyDocError } = useDocument('properties', id)
+
+    // console.log('property document - unitNumber:', propertyDoc.unitNumber);
+
     // Scroll to the top of the page whenever the location changes start
     const location = useLocation();
     useEffect(() => {
@@ -22,10 +32,11 @@ const PDSingle = () => {
     }, [location]);
     // Scroll to the top of the page whenever the location changes end
     // get user from useauthcontext
-    const { user } = useAuthContext();
+    // const { user } = useAuthContext();
     // get user from useauthcontext
-    const { documents: propertiesdocuments, error: propertieserror } =
-    useCollection("properties");
+    // const { documents: propertiesdocuments, error: propertieserror } =
+    //     useCollection("properties");
+
     // switch 
     const [checked, setChecked] = useState(false);
     const handleChange = (checked) => {
@@ -190,9 +201,9 @@ const PDSingle = () => {
             <section className="property_cards">
                 <div className="container-fluid">
                     <div className="row">
-                    <div className="col-xl-9">
-                    {propertiesdocuments && <PDSingleCard propertiesdocuments={propertiesdocuments} />}
-                  </div>                        
+                        <div className="col-xl-9">
+                            {propertyDoc && <PDSingleCard propertyDocument={propertyDoc} />}
+                        </div>
                         <div className="col-xl-3">
                             <div className="pp_sidebar">
                                 <div className="pp_sidebar_cards">
