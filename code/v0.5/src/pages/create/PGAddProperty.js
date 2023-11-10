@@ -727,8 +727,7 @@ export default function PGAddProperty({ propertyid }) {
                           >
                             <input
                               type="radio"
-                              id="semi_furnished"
-                              value="semi_furnished"
+                              id="semi_furnished"                            
                               checked={propertyDetails && propertyDetails.NumberOfCarParking === '1' ? "by_default_check" : ''}                             
                             />
                             <label htmlFor="semi_furnished">
@@ -746,17 +745,12 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "fully_furnished"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="fully_furnished"
-                              value="fully_furnished"
-                              checked={selectedRadioOption === "fully_furnished"}
-                              onChange={handleRadioCheck}
+                              id="fully_furnished"                          
+                            
                             />
                             <label htmlFor="fully_furnished">
                               <div className="radio_icon">
@@ -773,17 +767,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "raw_furnished"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="raw_furnished"
-                              value="raw_furnished"
-                              checked={selectedRadioOption === "raw_furnished"}
-                              onChange={handleRadioCheck}
+                              id="raw_furnished"                           
                             />
                             <label htmlFor="raw_furnished">
                               <div className="radio_icon">
@@ -922,17 +910,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="dining_yes"                            
                             />
                             <label htmlFor="dining_yes">
                               <div className="radio_icon">
@@ -949,15 +931,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                         className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="dining_no"                            
                             />
                             <label htmlFor="dining_no">
                               <div className="radio_icon">
@@ -979,19 +957,13 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                       className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="living_dining_yes"                          
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="living_dining_yes">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1006,17 +978,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="living_dining_no"                             
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="living_dining_no">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1061,19 +1029,13 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                           className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="passage_yes"                         
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="passage_yes">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1088,17 +1050,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                         className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="passage_no"                           
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="passage_no">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1118,19 +1076,13 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                        className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="entrancegallery_yes"                             
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="entrancegallery_yes">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1145,17 +1097,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                        className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="entrancegallery_no"                            
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="entrancegallery_no">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1198,19 +1146,13 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="servent_room"                             
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="servent_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1225,17 +1167,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="office_room"                            
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="office_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1250,17 +1188,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="store_room"                             
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="store_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1275,17 +1209,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="pooja_room"                         
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="pooja_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1300,17 +1230,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                           className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="study_room"                             
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="study_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1325,17 +1251,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="power_room"                           
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1344,7 +1266,7 @@ export default function PGAddProperty({ propertyid }) {
                                   done
                                 </span>
                               </div>
-                              <h6> Powder Room</h6>
+                              <h6> Power Room</h6>
                             </label>
                           </div>
                         </div>
@@ -1355,19 +1277,13 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                        className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="front_yard"                           
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="front_yard">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1382,17 +1298,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="back_yard"                            
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="back_yard">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1407,17 +1319,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="terrace"                           
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="terrace">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1432,17 +1340,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="garden"                          
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="garden">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1457,17 +1361,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                        className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="garage"                             
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="garage">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1581,19 +1481,13 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="power_nobackup"                            
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="power_nobackup">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1608,17 +1502,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                           className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="power_fullbackup"                            
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_fullbackup">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1633,17 +1523,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                         className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="power_partialbackup"                              
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_partialbackup">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1658,17 +1544,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="power_liftonly"                          
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_liftonly">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1683,17 +1565,13 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                         className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="power_inverter"                           
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_inverter">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1834,19 +1712,13 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                           className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="carparking_open"                             
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="carparking_open">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1855,23 +1727,19 @@ export default function PGAddProperty({ propertyid }) {
                                   done
                                 </span>
                               </div>
-                              <h6>  Open</h6>
+                              <h6>Open</h6>
                             </label>
                           </div>
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="carparking_closed"                          
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="carparking_closed">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1891,19 +1759,13 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                          className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="twowheelerparking_yes"                           
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="twowheelerparking_yes">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1912,23 +1774,19 @@ export default function PGAddProperty({ propertyid }) {
                                   done
                                 </span>
                               </div>
-                              <h6>  Yes</h6>
+                              <h6>Yes</h6>
                             </label>
                           </div>
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="twowheelerparking_no"                            
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="twowheelerparking_no">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1937,7 +1795,7 @@ export default function PGAddProperty({ propertyid }) {
                                   done
                                 </span>
                               </div>
-                              <h6>  No</h6>
+                              <h6>No</h6>
                             </label>
                           </div>
                         </div>
@@ -1995,7 +1853,7 @@ export default function PGAddProperty({ propertyid }) {
                                   <div class="form_field st-2">
                                     <label>Total Area</label>
                                     <div class="field_inner">
-                                      <input type="text" value="1200 sqft 6 in" />
+                                      <input type="text" value="" />
                                       <div class="field_icon">
                                         <span class="material-symbols-outlined">crop_square</span>
                                       </div>
@@ -2054,19 +1912,13 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                        className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_yes"
-                                            value="dining_yes"
-                                            checked={selectedRadioOption === "by_default_check"}
-                                            onChange={handleRadioCheck}
+                                            id="yes_bathroomattach_masterbedroom"                                          
                                           />
-                                          <label htmlFor="dining_yes">
+                                          <label htmlFor="yes_bathroomattach_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2075,23 +1927,19 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>  Yes</h6>
+                                            <h6>Yes</h6>
                                           </label>
                                         </div>
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                    className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="no_bathroomattach_masterbedroom"                                          
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="no_bathroomattach_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2113,19 +1961,14 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                        className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_yes"
-                                            value="dining_yes"
-                                            checked={selectedRadioOption === "by_default_check"}
-                                            onChange={handleRadioCheck}
+                                            id="yes_balconyattach_masterbedroom"    
+                                                                                 
                                           />
-                                          <label htmlFor="dining_yes">
+                                          <label htmlFor="yes_balconyattach_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2140,17 +1983,13 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                       className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="no_balconyattach_masterbedroom"                                       
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="no_balconyattach_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2199,19 +2038,13 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                         className="custom_radio_button" 
                                         >
                                           <input
-                                            type="radio"
-                                            id="dining_yes"
-                                            value="dining_yes"
-                                            checked={selectedRadioOption === "by_default_check"}
-                                            onChange={handleRadioCheck}
+                                            type="checkbox"
+                                            id="fan_masterbedroom"                                          
                                           />
-                                          <label htmlFor="dining_yes">
+                                          <label htmlFor="fan_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2220,23 +2053,19 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>   Fan</h6>
+                                            <h6>Fan</h6>
                                           </label>
                                         </div>
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                       className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="tubelight_masterbedroom"                                         
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="tubelight_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2245,23 +2074,19 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>  Tube Light</h6>
+                                            <h6>Tube Light</h6>
                                           </label>
                                         </div>
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                       className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="almirah_masterbedroom"                                        
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="almirah_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2276,17 +2101,13 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="window_masterbedroom"                                           
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="window_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2295,7 +2116,7 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>  Window</h6>
+                                            <h6>Window</h6>
                                           </label>
                                         </div>
                                       </div>
@@ -2585,10 +2406,7 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                      className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
@@ -2606,14 +2424,13 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>  Yes</h6>
+                                            <h6> Yes</h6>
                                           </label>
                                         </div>
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                       className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
@@ -2671,10 +2488,7 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                         className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
@@ -2698,8 +2512,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                         className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
@@ -2723,8 +2536,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                        className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
@@ -2748,8 +2560,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                        className="custom_radio_button" 
                                         >
                                           <input
                                             type="radio"
