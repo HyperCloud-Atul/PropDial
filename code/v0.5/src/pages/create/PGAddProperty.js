@@ -92,7 +92,14 @@ export default function PGAddProperty({ propertyid }) {
   // set property document values into form
   useEffect(() => {
     console.log('property id: ', propertyid);
-
+    // property && property.additionalRooms && property.additionalRooms.forEach(element => {
+    //   if (property.additionalRooms.includes('Servent Room')) {
+    //     setserventRoomClick(true);
+    //   }
+    //   if (property.additionalRooms.includes('Office Room')) {
+    //     setOfficeRoomClick(true);
+    //   }
+    // });
     if (property) {
       console.log('property: ', property);
       setPropertyDetails({
@@ -137,7 +144,15 @@ export default function PGAddProperty({ propertyid }) {
         CarpetArea: property.carpetArea ? property.carpetArea : '',
         CarpetAreaUnit: property.carpetAreaUnit ? property.carpetAreaUnit : 'SqFt',
 
+        ServentRoomClick: property.additionalRooms && property.additionalRooms.includes('Servent Room') ? true : false,
+        OfficeRoomClick: property.additionalRooms && property.additionalRooms.includes('Office Room') ? true : false,
+        StoreRoomClick: property.additionalRooms && property.additionalRooms.includes('Store Room') ? true : false,
+        PoojaRoomClick: property.additionalRooms && property.additionalRooms.includes('Pooja Room') ? true : false,
+        StudyRoomClick: property.additionalRooms && property.additionalRooms.includes('Study Room') ? true : false,
+        PowerRoomClick: property.additionalRooms && property.additionalRooms.includes('Power Room') ? true : false,
+
       })
+
     }
   }, [property])
 
@@ -220,13 +235,6 @@ export default function PGAddProperty({ propertyid }) {
     else setCategory("commercial");
     setToggleFlag(!toggleFlag);
   };
-
-  const [serventRoomClick, setserventRoomClick] = useState(false);
-  const [officeRoom, setofficeRoom] = useState(false);
-  const [storeRoom, setstoreRoom] = useState(false);
-  const [poojaRoom, setpoojaRoom] = useState(false);
-  const [studyRoom, setstudyRoom] = useState(false);
-  const [powerRoom, setpowerRoom] = useState(false);
 
 
   return (
@@ -1188,23 +1196,28 @@ export default function PGAddProperty({ propertyid }) {
                       <label>Additional Rooms - ( 0 )</label>
                       <div className="radio_group">
                         <div className="radio_group_single">
-                          <div className={serventRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}>
-                            {/* <div
-                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms.includes('Servent Room')
-                                ? "radiochecked"
-                                : ""
-                              }`}
-                          > */}
+                          <div className={propertyDetails.ServentRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}>
+
                             <input
                               type="checkbox"
                               id="servent_room"
                               onClick={(e) => {
-                                console.log(e);
-                                setserventRoomClick(!serventRoomClick)
-                                // setPropertyDetails({
-                                //   ...propertyDetails,
-                                //   AdditionalRooms: propertyDetails.AdditionalRooms.includes('Servent Room') ? propertyDetails.AdditionalRooms : propertyDetails.AdditionalRooms.push('Servent Room')
-                                // })
+                                if (propertyDetails.ServentRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Servent Room'),
+                                    ServentRoomClick: !propertyDetails.ServentRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Servent Room'],
+                                    ServentRoomClick: !propertyDetails.ServentRoomClick
+                                  });
+
+                                }
+
                               }}
                             />
                             <label htmlFor="servent_room">
@@ -1222,19 +1235,28 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Office Room'
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                            className={propertyDetails.OfficeRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="checkbox"
                               id="office_room"
                               onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  AdditionalRooms: 'Office Room'
-                                })
+                                if (propertyDetails.OfficeRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Office Room'),
+                                    OfficeRoomClick: !propertyDetails.OfficeRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Office Room'],
+                                    OfficeRoomClick: !propertyDetails.OfficeRoomClick
+                                  });
+
+                                }
+
                               }}
                             />
                             <label htmlFor="office_room">
@@ -1252,20 +1274,28 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Store Room'
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                            className={propertyDetails.StoreRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="checkbox"
                               id="store_room"
                               onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  AdditionalRooms: 'Store Room'
-                                })
-                              }}
+                                if (propertyDetails.StoreRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Store Room'),
+                                    StoreRoomClick: !propertyDetails.StoreRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Store Room'],
+                                    StoreRoomClick: !propertyDetails.StoreRoomClick
+                                  });
+                                }
+                              }
+                              }
                             />
                             <label htmlFor="store_room">
                               <div className="radio_icon">
@@ -1283,20 +1313,28 @@ export default function PGAddProperty({ propertyid }) {
                         <div className="radio_group_single">
 
                           <div
-                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Pooja Room'
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                            className={propertyDetails.PoojaRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="checkbox"
                               id="pooja_room"
                               onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  AdditionalRooms: 'Pooja Room'
-                                })
+                                if (propertyDetails.PoojaRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Pooja Room'),
+                                    PoojaRoomClick: !propertyDetails.PoojaRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Pooja Room'],
+                                    PoojaRoomClick: !propertyDetails.PoojaRoomClick
+                                  });
+                                }
                               }}
+
                             />
                             <label htmlFor="pooja_room">
                               <div className="radio_icon">
@@ -1314,20 +1352,28 @@ export default function PGAddProperty({ propertyid }) {
                         <div className="radio_group_single">
 
                           <div
-                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Study Room'
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                            className={propertyDetails.StudyRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="checkbox"
                               id="study_room"
                               onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  AdditionalRooms: 'Study Room'
-                                })
+                                if (propertyDetails.StudyRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Study Room'),
+                                    StudyRoomClick: !propertyDetails.StudyRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Study Room'],
+                                    StudyRoomClick: !propertyDetails.StudyRoomClick
+                                  });
+                                }
                               }}
+
                             />
                             <label htmlFor="study_room">
                               <div className="radio_icon">
@@ -1345,19 +1391,26 @@ export default function PGAddProperty({ propertyid }) {
                         <div className="radio_group_single">
 
                           <div
-                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Power Room'
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                            className={propertyDetails.PowerRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="checkbox"
                               id="power_room"
                               onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  AdditionalRooms: 'Power Room'
-                                })
+                                if (propertyDetails.PowerRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Power Room'),
+                                    PowerRoomClick: !propertyDetails.PowerRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Power Room'],
+                                    PowerRoomClick: !propertyDetails.PowerRoomClick
+                                  });
+                                }
                               }}
                             />
                             <label htmlFor="power_room">
