@@ -827,6 +827,23 @@ h6.modal_subtitle{
 .form_field.st-2 .field_inner, .form_field.st-2 .field_inner.select{
   position: relative;
 }
+.form_field.st-2 .field_inner.i_and_s {
+  display: flex;
+}
+.form_field.st-2 .field_inner.i_and_s select {
+  padding-right: 0px;
+  width: 100%;
+}
+.form_field.st-2 .field_inner.i_and_s input{
+  padding-right: 10px;
+  width: 100%;
+}
+select{
+  cursor: pointer;
+}
+.form_field.st-2 .field_inner.i_and_s .inner_select {
+  width: 150px;
+}
 .form_field.st-2 .field_inner.select{
   cursor: pointer;
 }

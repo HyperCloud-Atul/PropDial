@@ -47,7 +47,8 @@ export default function PGAddProperty({ propertyid }) {
 
   // const [propertyLocality, setpropertyLocality] = useState("");
   const [propertyDetails, setPropertyDetails] = useState({
-    UnitNumber: '',
+
+    // All select type 
     Locality: '',
     City: '',
     Country: '',
@@ -55,16 +56,29 @@ export default function PGAddProperty({ propertyid }) {
     Society: '',
     PropertyType: '',
     YearOfConstruction: '',
-    // Bhk: '',
-    // NumberOfBedrooms: '',
-    // NumberOfBathrooms: '',
-    // NumberOfBalcony: '',
-    // NumberOfKitchen: '',
-    // NumberOfLivingArea: '',
-    // NumberOfBasement: '',
-    // NumberOfAptOnFloor: '',
-    // NumberOfLifts: '',
-    // NumberOfCarParking: '',
+    Bhk: '',
+    NumberOfBedrooms: '',
+    NumberOfBathrooms: '',
+    NumberOfBalcony: '',
+    NumberOfKitchen: '',
+    NumberOfLivingArea: '',
+    NumberOfBasement: '',
+    NumberOfAptOnFloor: '',
+    NumberOfLifts: '',
+    NumberOfCarParking: '',
+
+    // all input types text    
+    AddressLocator: '',
+    PinCode: '',
+    UnitNumber: '',
+    TotalFloor: '',
+    FloorNumber: '',
+
+    // input type text + select 
+    PlotArea: '',
+    SuperArea: '',
+    BuiltUpArea: '',
+    CarpetArea: '',
   });
 
   const { document: property, error: propertyerror } = useDocument("properties", propertyid);
@@ -78,7 +92,8 @@ export default function PGAddProperty({ propertyid }) {
     if (property) {
       console.log('property: ', property);
       setPropertyDetails({
-        UnitNumber: property.unitNumber ? property.unitNumber : '',
+
+        // All select type 
         Locality: property.locality ? property.locality : '',
         City: property.city ? property.city : '',
         Country: property.country ? property.country : '',
@@ -86,16 +101,34 @@ export default function PGAddProperty({ propertyid }) {
         Society: property.society ? property.society : '',
         PropertyType: property.propertyType ? property.propertyType : '',
         YearOfConstruction: property.yearOfConstruction ? property.yearOfConstruction : '',
-        // Bhk: property.bhk,
-        // NumberOfBedrooms: property.numberOfBedrooms,
-        // NumberOfBathrooms: property.numberOfBathrooms,
-        // NumberOfBalcony: property.numberOfBalcony,
-        // NumberOfKitchen: property.numberOfKitchen,
-        // NumberOfLivingArea: property.numberOfLivingArea,
-        // NumberOfBasement: property.numberOfBasement,
-        // NumberOfAptOnFloor: property.numberOfAptOnFloor,
-        // NumberOfLifts: property.numberOfLifts,
-        // NumberOfCarParking: property.numberOfCarParking,
+        Bhk: property.bhk ? property.bhk : '',
+        NumberOfBedrooms: property.numberOfBedrooms ? property.numberOfBedrooms : '',
+        NumberOfBathrooms: property.numberOfBathrooms ? property.numberOfBathrooms : '',
+        NumberOfBalcony: property.numberOfBalcony ? property.numberOfBalcony : '',
+        NumberOfKitchen: property.numberOfKitchen ? property.numberOfKitchen : '',
+        NumberOfLivingArea: property.numberOfLivingArea ? property.numberOfLivingArea : '',
+        NumberOfBasement: property.numberOfBasement ? property.numberOfBasement : '',
+        NumberOfAptOnFloor: property.numberOfAptOnFloor ? property.numberOfAptOnFloor : '',
+        NumberOfLifts: property.numberOfLifts ? property.numberOfLifts : '',
+        NumberOfCarParking: property.numberOfCarParking ? property.numberOfCarParking : '',
+
+        // all input type text        
+        AddressLocator: property.addressLocator ? property.addressLocator : '',
+        PinCode: property.pinCode ? property.pinCode : '',
+        UnitNumber: property.unitNumber ? property.unitNumber : '',
+        TotalFloor: property.totalFloor ? property.totalFloor : '',
+        FloorNumber: property.floorNumber ? property.floorNumber : '',
+
+        // input type text + select 
+        PlotArea: property.plotArea ? property.plotArea : '',
+        PlotAreaUnit: property.plotAreaUnit ? property.plotAreaUnit : 'SqFt',
+        SuperArea: property.superArea ? property.superArea : '',
+        SuperAreaUnit: property.superAreaUnit ? property.superAreaUnit : 'SqFt',
+        BuiltUpArea: property.builtUpArea ? property.builtUpArea : '',
+        BuiltUpAreaUnit: property.builtUpAreaUnit ? property.builtUpAreaUnit : 'SqFt',
+        CarpetArea: property.carpetArea ? property.carpetArea : '',
+        CarpetAreaUnit: property.carpetAreaUnit ? property.carpetAreaUnit : 'SqFt',
+
       })
     }
   }, [property])
@@ -104,11 +137,12 @@ export default function PGAddProperty({ propertyid }) {
   const saveData = async (e) => {
     e.preventDefault();
 
-    console.log('save updated yearOfConstruction: ', propertyDetails.YearOfConstruction)
+    console.log('save updated for property details: ', propertyDetails)
 
     // Create a property object
     const updatedProperty = {
-      unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : '',
+
+      // All select type 
       locality: propertyDetails.Locality ? propertyDetails.Locality : '',
       country: propertyDetails.Country ? propertyDetails.Country : '',
       state: propertyDetails.State ? propertyDetails.State : '',
@@ -116,20 +150,40 @@ export default function PGAddProperty({ propertyid }) {
       society: propertyDetails.Society ? propertyDetails.Society : '',
       propertyType: propertyDetails.PropertyType ? propertyDetails.PropertyType : '',
       yearOfConstruction: propertyDetails.YearOfConstruction ? propertyDetails.YearOfConstruction : '',
-      // bhk: propertyDetails.Bhk,
-      // numberOfBedrooms: propertyDetails.NumberOfBedrooms,
-      // numberOfBathrooms: propertyDetails.NumberOfBathrooms,
-      // numberOfBalcony: propertyDetails.NumberOfBalcony,
-      // numberOfKitchen: propertyDetails.NumberOfKitchen,
-      // numberOfLivingArea: propertyDetails.NumberOfLivingArea,
-      // numberOfBasement: propertyDetails.NumberOfBasement,
-      // numberOfAptOnFloor: propertyDetails.NumberOfAptOnFloor,
-      // numberOfLifts: propertyDetails.NumberOfLifts,
-      // numberOfCarParking: propertyDetails.NumberOfCarParking,
+      bhk: propertyDetails.Bhk ? propertyDetails.Bhk : '',
+      numberOfBedrooms: propertyDetails.NumberOfBedrooms ? propertyDetails.NumberOfBedrooms : '1',
+      numberOfBathrooms: propertyDetails.NumberOfBathrooms ? propertyDetails.NumberOfBathrooms : '',
+      numberOfBalcony: propertyDetails.NumberOfBalcony ? propertyDetails.NumberOfBalcony : '',
+      numberOfKitchen: propertyDetails.NumberOfKitchen ? propertyDetails.NumberOfKitchen : '',
+      numberOfLivingArea: propertyDetails.NumberOfLivingArea ? propertyDetails.NumberOfLivingArea : '',
+      numberOfBasement: propertyDetails.NumberOfBasement ? propertyDetails.NumberOfBasement : '',
+      numberOfAptOnFloor: propertyDetails.NumberOfAptOnFloor ? propertyDetails.NumberOfAptOnFloor : '',
+      numberOfLifts: propertyDetails.NumberOfLifts ? propertyDetails.NumberOfLifts : '',
+      numberOfCarParking: propertyDetails.NumberOfCarParking ? propertyDetails.NumberOfCarParking : '',
+
+      // All input type text       
+      addressLocator: propertyDetails.AddressLocator ? propertyDetails.AddressLocator : '',
+      pinCode: propertyDetails.PinCode ? propertyDetails.PinCode : '',
+      unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : '',
+      totalFloor: propertyDetails.TotalFloor ? propertyDetails.TotalFloor : '',
+      floorNumber: propertyDetails.FloorNumber ? propertyDetails.FloorNumber : '',
+
+
+      // input type text + select 
+      plotArea: propertyDetails.PlotArea ? propertyDetails.PlotArea : '',
+      plotAreaUnit: propertyDetails.PlotAreaUnit ? propertyDetails.PlotAreaUnit : 'SqFt',
+      superArea: propertyDetails.SuperArea ? propertyDetails.SuperArea : '',
+      superAreaUnit: propertyDetails.SuperAreaUnit ? propertyDetails.SuperAreaUnit : 'SqFt',
+      builtUpArea: propertyDetails.BuiltUpArea ? propertyDetails.BuiltUpArea : '',
+      builtUpAreaUnit: propertyDetails.BuiltUpAreaUnit ? propertyDetails.BuiltUpAreaUnit : 'SqFt',
+      carpetArea: propertyDetails.CarpetArea ? propertyDetails.CarpetArea : '',
+      carpetAreaUnit: propertyDetails.CarpetAreaUnit ? propertyDetails.CarpetAreaUnit : 'SqFt',
+
+
       // Add more properties as needed
     };
 
-    console.log("saveData: ", updatedProperty)
+    console.log("saveData updated property: ", updatedProperty)
     // Store the property data in Firestore
     // await addDocument(property);
 
@@ -353,6 +407,11 @@ export default function PGAddProperty({ propertyid }) {
                         <input
                           type="text"
                           placeholder="Enter Property Unit Number"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            AddressLocator: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.AddressLocator}
                         />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">map</span>
@@ -468,7 +527,12 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Pin Code</label>
                       <div className="field_inner">
-                        <input type="number" placeholder="Enter Pin Code" />
+                        <input type="number" placeholder="Enter Pin Code"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            PinCode: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.PinCode} />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
                             drive_file_rename_outline
@@ -656,7 +720,7 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.NumberOfCarParking === '1'
                               ? "radiochecked"
                               : ""
                               }`}
@@ -665,8 +729,7 @@ export default function PGAddProperty({ propertyid }) {
                               type="radio"
                               id="semi_furnished"
                               value="semi_furnished"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              checked={propertyDetails && propertyDetails.NumberOfCarParking === '1' ? "by_default_check" : ''}                             
                             />
                             <label htmlFor="semi_furnished">
                               <div className="radio_icon">
@@ -1424,7 +1487,13 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2 mt-lg-0">
                       <label>Total Floor</label>
                       <div className="field_inner">
-                        <input type="text" placeholder="Total Floors..." />
+                        <input type="text" placeholder="Total Floors"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            TotalFloor: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.TotalFloor}
+                        />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
                             table_rows
@@ -1435,7 +1504,12 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Floor Number</label>
                       <div className="field_inner">
-                        <input type="text" placeholder="Floor Number..." />
+                        <input type="text" placeholder="Floor Number"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            FloorNumber: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.FloorNumber} />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
                             filter_none
@@ -1636,52 +1710,96 @@ export default function PGAddProperty({ propertyid }) {
                     </div>
                     <div className="form_field st-2">
                       <label>Plot Area</label>
-                      <div className="field_inner">
-                        <input type="text" placeholder="Plot Area..." />
-                        <div className="field_icon">
-                          <select>
-                            <option value="">SqFt</option>
-                            <option value="">SqMtr</option>
-                            <option value="">SqYd</option>
+                      <div className="field_inner i_and_s">
+                        <input type="text" placeholder="Plot Area"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            PlotArea: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.PlotArea} />
+                        <div className="inner_select">
+                          <select value={propertyDetails && propertyDetails.PlotAreaUnit}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                PlotAreaUnit: e.target.value
+                              })
+                            }}>
+                            <option selected={propertyDetails && propertyDetails.PlotAreaUnit === 'SqFt' ? true : false}>SqFt</option>
+                            <option selected={propertyDetails && propertyDetails.PlotAreaUnit === 'SqMtr' ? true : false}>SqMtr</option>
+                            <option selected={propertyDetails && propertyDetails.PlotAreaUnit === 'SqYd' ? true : false}>SqYd</option>
                           </select>
                         </div>
                       </div>
                     </div>
                     <div className="form_field st-2">
                       <label>Super Area</label>
-                      <div className="field_inner">
-                        <input type="text" placeholder="Super Area..." />
-                        <div className="field_icon">
-                          <select>
-                            <option value="">SqFt</option>
-                            <option value="">SqMtr</option>
-                            <option value="">SqYd</option>
+                      <div className="field_inner i_and_s">
+                        <input type="text" placeholder="Super Area"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            SuperArea: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.SuperArea} />
+                        <div className="inner_select">
+                          <select value={propertyDetails && propertyDetails.SuperAreaUnit}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                SuperAreaUnit: e.target.value
+                              })
+                            }}>
+                            <option selected={propertyDetails && propertyDetails.SuperAreaUnit === 'SqFt' ? true : false}>SqFt</option>
+                            <option selected={propertyDetails && propertyDetails.SuperAreaUnit === 'SqMtr' ? true : false}>SqMtr</option>
+                            <option selected={propertyDetails && propertyDetails.SuperAreaUnit === 'SqYd' ? true : false}>SqYd</option>
                           </select>
                         </div>
                       </div>
                     </div>
                     <div className="form_field st-2">
                       <label>Built-up Area</label>
-                      <div className="field_inner">
-                        <input type="text" placeholder="Build Area..." />
-                        <div className="field_icon">
-                          <select>
-                            <option value="">SqFt</option>
-                            <option value="">SqMtr</option>
-                            <option value="">SqYd</option>
+                      <div className="field_inner i_and_s">
+                        <input type="text" placeholder="Build Area"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            BuiltUpArea: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.BuiltUpArea} />
+                        <div className="inner_select">
+                          <select value={propertyDetails && propertyDetails.BuiltUpAreaUnit}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BuiltUpAreaUnit: e.target.value
+                              })
+                            }}>
+                            <option selected={propertyDetails && propertyDetails.BuiltUpAreaUnit === 'SqFt' ? true : false}>SqFt</option>
+                            <option selected={propertyDetails && propertyDetails.BuiltUpAreaUnit === 'SqMtr' ? true : false}>SqMtr</option>
+                            <option selected={propertyDetails && propertyDetails.BuiltUpAreaUnit === 'SqYd' ? true : false}>SqYd</option>
                           </select>
                         </div>
                       </div>
                     </div>
                     <div className="form_field st-2">
                       <label>Carpet Area</label>
-                      <div className="field_inner">
-                        <input type="text" placeholder="Carpet Area..." />
-                        <div className="field_icon">
-                          <select>
-                            <option value="">SqFt</option>
-                            <option value="">SqMtr</option>
-                            <option value="">SqYd</option>
+                      <div className="field_inner i_and_s">
+                        <input type="text" placeholder="Carpet Area"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            CarpetArea: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.CarpetArea} />
+                        <div className="inner_select">
+                          <select value={propertyDetails && propertyDetails.CarpetAreaUnit}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                CarpetAreaUnit: e.target.value
+                              })
+                            }}>
+                            <option selected={propertyDetails && propertyDetails.CarpetAreaUnit === 'SqFt' ? true : false}>SqFt</option>
+                            <option selected={propertyDetails && propertyDetails.CarpetAreaUnit === 'SqMtr' ? true : false}>SqMtr</option>
+                            <option selected={propertyDetails && propertyDetails.CarpetAreaUnit === 'SqYd' ? true : false}>SqYd</option>
                           </select>
                         </div>
                       </div>
