@@ -15,9 +15,12 @@ const PDSingleCard = ({ propertyDocument }) => {
     const { user } = useAuthContext();
     // get user from useauthcontext
     console.log("propertiesdocument:", propertyDocument);
+
+    // variable of property age 
+    const ageOfProperty = 2023 - propertyDocument.yearOfConstruction;
+    // variable of property age 
     return (
         <>
-            {/* {propertyDocument.map((property) => ( */}
             <div className=''>
                 <div className="property_card_single">
                     <div className="pcs_inner pointer" to="/pdsingle">
@@ -25,20 +28,20 @@ const PDSingleCard = ({ propertyDocument }) => {
                         <div className="pcs_main_detail">
                             <div className="pmd_top">
                                 <h4 className="property_name">
-                                    {propertyDocument.unitNumber} - BHK 1030 Sq-ft Flat For Sale<br />
+                                    {propertyDocument.unitNumber} - {propertyDocument.bhk} BHK, {propertyDocument.plotArea} {propertyDocument.plotAreaUnit}, {propertyDocument.propertyType}, {propertyDocument.purpose}<br />
                                 </h4>
-                                <h6 className="property_location">Geeta Bhavan, Indore, Madhya pradesh</h6>
+                                <h6 className="property_location">{propertyDocument.locality}, {propertyDocument.city}, {propertyDocument.state}</h6>
                             </div>
                             <div className="divider">
                             </div>
                             <div className="pmd_section2 row">
                                 <div className="pdms_single col-4">
                                     <h4><span className="currency">₹</span>47.6<span className="price">L</span></h4>
-                                    <h6>6,999 / sq ft</h6>
+                                    <h6>{propertyDocument.superArea} / {propertyDocument.superAreaUnit}</h6>
                                 </div>
                                 <div className="pdms_single col-4">
-                                    <h4>470</h4>
-                                    <h6>Area in sq ft</h6>
+                                    <h4>{propertyDocument.builtUpArea}</h4>
+                                    <h6>Area in {propertyDocument.builtUpAreaUnit}</h6>
                                 </div>
                                 <div className="pdms_single col-4">
                                     {/* <h4>Under Construction</h4>
@@ -49,15 +52,15 @@ const PDSingleCard = ({ propertyDocument }) => {
                             </div>
                             <div className="pmd_section2 pmd_section3 row">
                                 <div className="pdms_single col-4">
-                                    <h4><img src="./assets/img/home-black.png"></img>2</h4>
+                                    <h4><img src="./assets/img/home-black.png"></img>{propertyDocument.bhk}</h4>
                                     <h6>BHK</h6>
                                 </div>
                                 <div className="pdms_single col-4">
-                                    <h4><img src="./assets/img/double-bed-black.png"></img>2</h4>
+                                    <h4><img src="./assets/img/double-bed-black.png"></img>{propertyDocument.numberOfBedrooms}</h4>
                                     <h6>Bedrooms</h6>
                                 </div>
                                 <div className="pdms_single col-4">
-                                    <h4><img src="./assets/img/bathtub-black.png"></img>2</h4>
+                                    <h4><img src="./assets/img/bathtub-black.png"></img>{propertyDocument.numberOfBathrooms}</h4>
                                     <h6>Bathroom</h6>
                                 </div>
                             </div>
@@ -78,7 +81,75 @@ const PDSingleCard = ({ propertyDocument }) => {
                                     <a className="theme_btn no_icon btn_fill" style={{
                                         marginRight: "10px"
                                     }}> Contact Agent</a>
-                                    <a className="theme_btn no_icon btn_border"> Enquire Now</a>
+                                    <a className="theme_btn no_icon btn_border" data-bs-toggle="modal" data-bs-target="#exampleModal"> Enquire Now</a>
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content relative">
+                                                <span class="material-symbols-outlined close_modal" data-bs-dismiss="modal">
+                                                    close
+                                                </span>
+
+                                                <div class="modal-body">
+                                                    <form>
+                                                        <div className="row">
+                                                            <div className="col-sm-12">
+                                                                <div className="section_title mb-4">
+                                                                    <h3>Enquiry</h3>
+                                                                    <h6 className="modal_subtitle">Thank you for your interest in reaching out to us. Please use the form below to submit any question.</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-12">
+                                                                <div class="form_field st-2">
+                                                                    <div class="field_inner select">
+                                                                        <select>
+                                                                            <option value="" disabled selected>I am</option>
+                                                                            {/* <option>Owner</option> */}
+                                                                            <option>Tenant</option>
+                                                                            <option>Agent</option>
+                                                                        </select>
+                                                                        <div class="field_icon">
+                                                                            <span class="material-symbols-outlined">person</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-12">
+                                                                <div class="form_field st-2">
+                                                                    <div class="field_inner">
+                                                                        <input type="text" placeholder="Name" />
+                                                                        <div class="field_icon">
+                                                                            <span class="material-symbols-outlined">person</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-12">
+                                                                <div class="form_field st-2">
+                                                                    <div class="field_inner">
+                                                                        <input type="text" placeholder="Phone Number" />
+                                                                        <div class="field_icon">
+                                                                            <span class="material-symbols-outlined">call</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-12">
+                                                                <div className="submit_btn mt-4">
+                                                                    <button type="submit" className="modal_btn theme_btn no_icon btn_fill">
+                                                                        Submit
+                                                                        {/* <span class="material-symbols-outlined btn_arrow ba_animation">
+                          arrow_forward
+                        </span> */}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -91,9 +162,9 @@ const PDSingleCard = ({ propertyDocument }) => {
                             <div className="row no-gutters">
                                 <div className="col-md-6">
                                     <div className="property_full_address">
-                                        <h2 className="card_title">A-504</h2>
-                                        <h3>High Mont Society, Hinjewadi Phase II</h3>
-                                        <h3>Pune, Maharashtra, 411057</h3>
+                                        <h2 className="card_title">{propertyDocument.unitNumber}, {propertyDocument.society}</h2>
+                                        <h3>{propertyDocument.locality}, {propertyDocument.city} </h3>
+                                        <h3>{propertyDocument.state}, {propertyDocument.country}, {propertyDocument.pinCode}</h3>
                                     </div>
                                     <div className="property_connected_people userlist">
 
@@ -340,7 +411,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                         <div class="p_info">
                             <div class="p_info_single">
                                 <h6>Type:</h6>
-                                <h5>2 BHK
+                                <h5>{propertyDocument.bhk} BHK
                                 </h5>
                             </div>
                             <div class="p_info_single">
@@ -348,74 +419,81 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 <h6>Floor no:
                                 </h6>
                                 <h5>
-                                    5th
+                                {propertyDocument.floorNumber}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Age of Property:
                                 </h6>
-                                <h5>12
+                                <h5> {ageOfProperty} year
 
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Furnishing:
                                 </h6>
-                                <h5>Semi
+                                <h5>{propertyDocument.furnishing}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Bedrooms:
                                 </h6>
-                                <h5>2
+                                <h5>{propertyDocument.numberOfBedrooms}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Bathrooms:
                                 </h6>
-                                <h5>2
+                                <h5>{propertyDocument.numberOfBathrooms}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Balcony:
                                 </h6>
-                                <h5>2
+                                <h5>{propertyDocument.numberOfBalcony}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Kitchen:
                                 </h6>
-                                <h5>1
+                                <h5>{propertyDocument.numberOfKitchen}
+                                
+                                </h5>
+                            </div>
+                            <div class="p_info_single">
+                                <h6>Living Area:
+                                </h6>
+                                <h5>{propertyDocument.numberOfLivingArea}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Dining Area:
                                 </h6>
-                                <h5>No
+                                <h5>{propertyDocument.diningArea}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Living & Dining:
                                 </h6>
-                                <h5>Yes
+                                <h5>{propertyDocument.livingAndDiningArea}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Passages:
                                 </h6>
-                                <h5>Yes
+                                <h5>{propertyDocument.passages}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Entrance Gallery:
                                 </h6>
-                                <h5>Yes
+                                <h5>{propertyDocument.entranceGallery}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Basement:
                                 </h6>
-                                <h5>No
+                                <h5>{propertyDocument.numberOfBasement}
                                 </h5>
                             </div>
                         </div>
@@ -430,26 +508,26 @@ const PDSingleCard = ({ propertyDocument }) => {
                         <div class="p_info">
                             <div class="p_info_single">
                                 <h6>Plot Area:</h6>
-                                <h5>1500 SqFt
+                                <h5>{propertyDocument.plotArea} {propertyDocument.plotArea ? propertyDocument.plotAreaUnit : ''}
                                 </h5>
                             </div>
                             <div class="p_info_single">
 
                                 <h6>Super Area:
                                 </h6>
-                                <h5>1500 SqFt
+                                <h5>{propertyDocument.superArea} {propertyDocument.superArea ? propertyDocument.superAreaUnit : ''}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Built-up Area:
                                 </h6>
-                                <h5>1500 SqFt
+                                <h5>{propertyDocument.builtUpArea} {propertyDocument.builtUpArea ? propertyDocument.builtUpAreaUnit : ''}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Carpet Area:
                                 </h6>
-                                <h5>1500 SqFt
+                                <h5>{propertyDocument.carpetArea} {propertyDocument.carpetArea ? propertyDocument.carpetAreaUnit : ''}
                                 </h5>
                             </div>
                         </div>
@@ -464,7 +542,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                         <div class="p_info">
                             <div class="p_info_single">
                                 <h6>Car Parking:</h6>
-                                <h5>2
+                                <h5>{propertyDocument.numberOfCarParking}
                                 </h5>
                             </div>
                             <div class="p_info_single">
@@ -472,6 +550,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 <h6>2 Wheeler Parking:
                                 </h6>
                                 <h5>2
+                                {/* pending  */}
                                 </h5>
                             </div>
                         </div>
@@ -481,7 +560,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                 <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
-                            Additional Rooms
+                            Additional Rooms {/* pending  */}
                         </h2>
                         <div class="p_info">
                             <div class="p_info_single">
@@ -535,7 +614,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                 <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
-                            Additional Area
+                            Additional Area {/* pending  */}
                         </h2>
                         <div class="p_info">
                             <div class="p_info_single">
@@ -593,7 +672,14 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 <h6>Total Floors
 
                                     :</h6>
-                                <h5>22
+                                <h5>{propertyDocument.totalFloor}
+                                </h5>
+                            </div>
+                            <div class="p_info_single">
+                                <h6>Floor Number
+
+                                    :</h6>
+                                <h5>{propertyDocument.floorNumber}
                                 </h5>
                             </div>
                             <div class="p_info_single">
@@ -602,7 +688,7 @@ const PDSingleCard = ({ propertyDocument }) => {
 
                                     :
                                 </h6>
-                                <h5>6
+                                <h5>{propertyDocument.numberOfAptOnFloor}
                                 </h5>
                             </div>
                             <div class="p_info_single">
@@ -610,22 +696,19 @@ const PDSingleCard = ({ propertyDocument }) => {
 
                                     :
                                 </h6>
-                                <h5>3
+                                <h5>{propertyDocument.numberOfLifts}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Terrace
-
-
-
+                                 {/* pending  */}
                                 </h6>
                                 <h5>Yes
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Power Backup
-
-
+{/* pending  */}
                                 </h6>
                                 <h5>Partial Backup
                                 </h5>
@@ -636,7 +719,7 @@ const PDSingleCard = ({ propertyDocument }) => {
 
                 </div>
             </div>
-            // ))}
+
         </>
     )
 }
