@@ -57,6 +57,7 @@ export default function PGAddProperty({ propertyid }) {
     PropertyType: '',
     YearOfConstruction: '',
     Bhk: '',
+    Furnishing: '',
     NumberOfBedrooms: '',
     NumberOfBathrooms: '',
     NumberOfBalcony: '',
@@ -102,6 +103,7 @@ export default function PGAddProperty({ propertyid }) {
         PropertyType: property.propertyType ? property.propertyType : '',
         YearOfConstruction: property.yearOfConstruction ? property.yearOfConstruction : '',
         Bhk: property.bhk ? property.bhk : '',
+        Furnishing: property.furnishing ? property.furnishing : '',
         NumberOfBedrooms: property.numberOfBedrooms ? property.numberOfBedrooms : '',
         NumberOfBathrooms: property.numberOfBathrooms ? property.numberOfBathrooms : '',
         NumberOfBalcony: property.numberOfBalcony ? property.numberOfBalcony : '',
@@ -151,6 +153,7 @@ export default function PGAddProperty({ propertyid }) {
       propertyType: propertyDetails.PropertyType ? propertyDetails.PropertyType : '',
       yearOfConstruction: propertyDetails.YearOfConstruction ? propertyDetails.YearOfConstruction : '',
       bhk: propertyDetails.Bhk ? propertyDetails.Bhk : '',
+      furnishing: propertyDetails.Furnishing ? propertyDetails.Furnishing : '',
       numberOfBedrooms: propertyDetails.NumberOfBedrooms ? propertyDetails.NumberOfBedrooms : '1',
       numberOfBathrooms: propertyDetails.NumberOfBathrooms ? propertyDetails.NumberOfBathrooms : '',
       numberOfBalcony: propertyDetails.NumberOfBalcony ? propertyDetails.NumberOfBalcony : '',
@@ -720,15 +723,21 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${propertyDetails && propertyDetails.NumberOfCarParking === '1'
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === 'Semi'
                               ? "radiochecked"
                               : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="semi_furnished"                            
-                              checked={propertyDetails && propertyDetails.NumberOfCarParking === '1' ? "by_default_check" : ''}                             
+                              id="semi_furnished"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Furnishing: 'Semi'
+                                })
+                              }}
+                            // checked={propertyDetails && propertyDetails.Furnishing === true ? true : false}
                             />
                             <label htmlFor="semi_furnished">
                               <div className="radio_icon">
@@ -744,13 +753,23 @@ export default function PGAddProperty({ propertyid }) {
                           </div>
                         </div>
                         <div className="radio_group_single">
+
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === 'Fully'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
-                              id="fully_furnished"                          
-                            
+                              id="fully_furnished"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Furnishing: 'Fully'
+                                })
+                              }}
+
                             />
                             <label htmlFor="fully_furnished">
                               <div className="radio_icon">
@@ -767,11 +786,20 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === 'Raw'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
-                              id="raw_furnished"                           
+                              id="raw_furnished"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Furnishing: 'Raw'
+                                })
+                              }}
                             />
                             <label htmlFor="raw_furnished">
                               <div className="radio_icon">
@@ -910,11 +938,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"                            
+                              id="dining_yes"
                             />
                             <label htmlFor="dining_yes">
                               <div className="radio_icon">
@@ -931,11 +959,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                         className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"                            
+                              id="dining_no"
                             />
                             <label htmlFor="dining_no">
                               <div className="radio_icon">
@@ -957,11 +985,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                       className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="living_dining_yes"                          
+                              id="living_dining_yes"
                             />
                             <label htmlFor="living_dining_yes">
                               <div className="radio_icon">
@@ -978,11 +1006,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="living_dining_no"                             
+                              id="living_dining_no"
                             />
                             <label htmlFor="living_dining_no">
                               <div className="radio_icon">
@@ -1029,11 +1057,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                           className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="passage_yes"                         
+                              id="passage_yes"
                             />
                             <label htmlFor="passage_yes">
                               <div className="radio_icon">
@@ -1050,11 +1078,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                         className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="passage_no"                           
+                              id="passage_no"
                             />
                             <label htmlFor="passage_no">
                               <div className="radio_icon">
@@ -1076,11 +1104,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                        className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="entrancegallery_yes"                             
+                              id="entrancegallery_yes"
                             />
                             <label htmlFor="entrancegallery_yes">
                               <div className="radio_icon">
@@ -1097,11 +1125,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                        className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="entrancegallery_no"                            
+                              id="entrancegallery_no"
                             />
                             <label htmlFor="entrancegallery_no">
                               <div className="radio_icon">
@@ -1146,11 +1174,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="servent_room"                             
+                              id="servent_room"
                             />
                             <label htmlFor="servent_room">
                               <div className="radio_icon">
@@ -1167,11 +1195,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="office_room"                            
+                              id="office_room"
                             />
                             <label htmlFor="office_room">
                               <div className="radio_icon">
@@ -1188,11 +1216,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="store_room"                             
+                              id="store_room"
                             />
                             <label htmlFor="store_room">
                               <div className="radio_icon">
@@ -1209,11 +1237,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="pooja_room"                         
+                              id="pooja_room"
                             />
                             <label htmlFor="pooja_room">
                               <div className="radio_icon">
@@ -1230,11 +1258,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                           className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="study_room"                             
+                              id="study_room"
                             />
                             <label htmlFor="study_room">
                               <div className="radio_icon">
@@ -1251,11 +1279,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="power_room"                           
+                              id="power_room"
                             />
                             <label htmlFor="power_room">
                               <div className="radio_icon">
@@ -1277,11 +1305,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                        className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="front_yard"                           
+                              id="front_yard"
                             />
                             <label htmlFor="front_yard">
                               <div className="radio_icon">
@@ -1298,11 +1326,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="back_yard"                            
+                              id="back_yard"
                             />
                             <label htmlFor="back_yard">
                               <div className="radio_icon">
@@ -1323,7 +1351,7 @@ export default function PGAddProperty({ propertyid }) {
                           >
                             <input
                               type="radio"
-                              id="terrace"                           
+                              id="terrace"
                             />
                             <label htmlFor="terrace">
                               <div className="radio_icon">
@@ -1340,11 +1368,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="garden"                          
+                              id="garden"
                             />
                             <label htmlFor="garden">
                               <div className="radio_icon">
@@ -1361,11 +1389,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                        className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="garage"                             
+                              id="garage"
                             />
                             <label htmlFor="garage">
                               <div className="radio_icon">
@@ -1481,11 +1509,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="power_nobackup"                            
+                              id="power_nobackup"
                             />
                             <label htmlFor="power_nobackup">
                               <div className="radio_icon">
@@ -1502,11 +1530,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                           className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="power_fullbackup"                            
+                              id="power_fullbackup"
                             />
                             <label htmlFor="power_fullbackup">
                               <div className="radio_icon">
@@ -1523,11 +1551,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                         className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="power_partialbackup"                              
+                              id="power_partialbackup"
                             />
                             <label htmlFor="power_partialbackup">
                               <div className="radio_icon">
@@ -1548,7 +1576,7 @@ export default function PGAddProperty({ propertyid }) {
                           >
                             <input
                               type="radio"
-                              id="power_liftonly"                          
+                              id="power_liftonly"
                             />
                             <label htmlFor="power_liftonly">
                               <div className="radio_icon">
@@ -1565,11 +1593,11 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                         className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="power_inverter"                           
+                              id="power_inverter"
                             />
                             <label htmlFor="power_inverter">
                               <div className="radio_icon">
@@ -1712,11 +1740,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                           className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="carparking_open"                             
+                              id="carparking_open"
                             />
                             <label htmlFor="carparking_open">
                               <div className="radio_icon">
@@ -1737,7 +1765,7 @@ export default function PGAddProperty({ propertyid }) {
                           >
                             <input
                               type="radio"
-                              id="carparking_closed"                          
+                              id="carparking_closed"
                             />
                             <label htmlFor="carparking_closed">
                               <div className="radio_icon">
@@ -1759,11 +1787,11 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                          className="custom_radio_button"
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="twowheelerparking_yes"                           
+                              id="twowheelerparking_yes"
                             />
                             <label htmlFor="twowheelerparking_yes">
                               <div className="radio_icon">
@@ -1784,7 +1812,7 @@ export default function PGAddProperty({ propertyid }) {
                           >
                             <input
                               type="radio"
-                              id="twowheelerparking_no"                            
+                              id="twowheelerparking_no"
                             />
                             <label htmlFor="twowheelerparking_no">
                               <div className="radio_icon">
@@ -1912,11 +1940,11 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                        className="custom_radio_button"
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="yes_bathroomattach_masterbedroom"                                          
+                                            id="yes_bathroomattach_masterbedroom"
                                           />
                                           <label htmlFor="yes_bathroomattach_masterbedroom">
                                             <div className="radio_icon">
@@ -1933,11 +1961,11 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                    className="custom_radio_button"
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="no_bathroomattach_masterbedroom"                                          
+                                            id="no_bathroomattach_masterbedroom"
                                           />
                                           <label htmlFor="no_bathroomattach_masterbedroom">
                                             <div className="radio_icon">
@@ -1961,12 +1989,12 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                        className="custom_radio_button"
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="yes_balconyattach_masterbedroom"    
-                                                                                 
+                                            id="yes_balconyattach_masterbedroom"
+
                                           />
                                           <label htmlFor="yes_balconyattach_masterbedroom">
                                             <div className="radio_icon">
@@ -1983,11 +2011,11 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                       className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="no_balconyattach_masterbedroom"                                       
+                                            id="no_balconyattach_masterbedroom"
                                           />
                                           <label htmlFor="no_balconyattach_masterbedroom">
                                             <div className="radio_icon">
@@ -2038,11 +2066,11 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                         className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="checkbox"
-                                            id="fan_masterbedroom"                                          
+                                            id="fan_masterbedroom"
                                           />
                                           <label htmlFor="fan_masterbedroom">
                                             <div className="radio_icon">
@@ -2059,11 +2087,11 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                       className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="tubelight_masterbedroom"                                         
+                                            id="tubelight_masterbedroom"
                                           />
                                           <label htmlFor="tubelight_masterbedroom">
                                             <div className="radio_icon">
@@ -2080,11 +2108,11 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                       className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="almirah_masterbedroom"                                        
+                                            id="almirah_masterbedroom"
                                           />
                                           <label htmlFor="almirah_masterbedroom">
                                             <div className="radio_icon">
@@ -2101,11 +2129,11 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="window_masterbedroom"                                           
+                                            id="window_masterbedroom"
                                           />
                                           <label htmlFor="window_masterbedroom">
                                             <div className="radio_icon">
@@ -2406,7 +2434,7 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                      className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2430,7 +2458,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                       className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2488,7 +2516,7 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                         className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2512,7 +2540,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                         className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2536,7 +2564,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                        className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2560,7 +2588,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                        className="custom_radio_button" 
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
