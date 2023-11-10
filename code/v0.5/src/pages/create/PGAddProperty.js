@@ -64,6 +64,9 @@ export default function PGAddProperty({ propertyid }) {
     NumberOfKitchen: '',
     NumberOfLivingArea: '',
     NumberOfBasement: '',
+
+    AdditionalRooms: [],
+
     NumberOfAptOnFloor: '',
     NumberOfLifts: '',
     NumberOfCarParking: '',
@@ -110,6 +113,9 @@ export default function PGAddProperty({ propertyid }) {
         NumberOfKitchen: property.numberOfKitchen ? property.numberOfKitchen : '',
         NumberOfLivingArea: property.numberOfLivingArea ? property.numberOfLivingArea : '',
         NumberOfBasement: property.numberOfBasement ? property.numberOfBasement : '',
+
+        AdditionalRooms: property.additionalRooms ? property.additionalRooms : [],
+
         NumberOfAptOnFloor: property.numberOfAptOnFloor ? property.numberOfAptOnFloor : '',
         NumberOfLifts: property.numberOfLifts ? property.numberOfLifts : '',
         NumberOfCarParking: property.numberOfCarParking ? property.numberOfCarParking : '',
@@ -160,6 +166,9 @@ export default function PGAddProperty({ propertyid }) {
       numberOfKitchen: propertyDetails.NumberOfKitchen ? propertyDetails.NumberOfKitchen : '',
       numberOfLivingArea: propertyDetails.NumberOfLivingArea ? propertyDetails.NumberOfLivingArea : '',
       numberOfBasement: propertyDetails.NumberOfBasement ? propertyDetails.NumberOfBasement : '',
+
+      additionalRooms: propertyDetails.AdditionalRooms ? propertyDetails.AdditionalRooms : [],
+
       numberOfAptOnFloor: propertyDetails.NumberOfAptOnFloor ? propertyDetails.NumberOfAptOnFloor : '',
       numberOfLifts: propertyDetails.NumberOfLifts ? propertyDetails.NumberOfLifts : '',
       numberOfCarParking: propertyDetails.NumberOfCarParking ? propertyDetails.NumberOfCarParking : '',
@@ -212,6 +221,12 @@ export default function PGAddProperty({ propertyid }) {
     setToggleFlag(!toggleFlag);
   };
 
+  const [serventRoomClick, setserventRoomClick] = useState(false);
+  const [officeRoom, setofficeRoom] = useState(false);
+  const [storeRoom, setstoreRoom] = useState(false);
+  const [poojaRoom, setpoojaRoom] = useState(false);
+  const [studyRoom, setstudyRoom] = useState(false);
+  const [powerRoom, setpowerRoom] = useState(false);
 
 
   return (
@@ -1173,12 +1188,24 @@ export default function PGAddProperty({ propertyid }) {
                       <label>Additional Rooms - ( 0 )</label>
                       <div className="radio_group">
                         <div className="radio_group_single">
-                          <div
-                            className="custom_radio_button"
-                          >
+                          <div className={serventRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}>
+                            {/* <div
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms.includes('Servent Room')
+                                ? "radiochecked"
+                                : ""
+                              }`}
+                          > */}
                             <input
-                              type="radio"
+                              type="checkbox"
                               id="servent_room"
+                              onClick={(e) => {
+                                console.log(e);
+                                setserventRoomClick(!serventRoomClick)
+                                // setPropertyDetails({
+                                //   ...propertyDetails,
+                                //   AdditionalRooms: propertyDetails.AdditionalRooms.includes('Servent Room') ? propertyDetails.AdditionalRooms : propertyDetails.AdditionalRooms.push('Servent Room')
+                                // })
+                              }}
                             />
                             <label htmlFor="servent_room">
                               <div className="radio_icon">
@@ -1195,11 +1222,20 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Office Room'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
-                              type="radio"
+                              type="checkbox"
                               id="office_room"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  AdditionalRooms: 'Office Room'
+                                })
+                              }}
                             />
                             <label htmlFor="office_room">
                               <div className="radio_icon">
@@ -1216,11 +1252,20 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Store Room'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
-                              type="radio"
+                              type="checkbox"
                               id="store_room"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  AdditionalRooms: 'Store Room'
+                                })
+                              }}
                             />
                             <label htmlFor="store_room">
                               <div className="radio_icon">
@@ -1236,12 +1281,22 @@ export default function PGAddProperty({ propertyid }) {
                           </div>
                         </div>
                         <div className="radio_group_single">
+
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Pooja Room'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
-                              type="radio"
+                              type="checkbox"
                               id="pooja_room"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  AdditionalRooms: 'Pooja Room'
+                                })
+                              }}
                             />
                             <label htmlFor="pooja_room">
                               <div className="radio_icon">
@@ -1257,12 +1312,22 @@ export default function PGAddProperty({ propertyid }) {
                           </div>
                         </div>
                         <div className="radio_group_single">
+
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Study Room'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
-                              type="radio"
+                              type="checkbox"
                               id="study_room"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  AdditionalRooms: 'Study Room'
+                                })
+                              }}
                             />
                             <label htmlFor="study_room">
                               <div className="radio_icon">
@@ -1278,12 +1343,22 @@ export default function PGAddProperty({ propertyid }) {
                           </div>
                         </div>
                         <div className="radio_group_single">
+
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms === 'Power Room'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
-                              type="radio"
+                              type="checkbox"
                               id="power_room"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  AdditionalRooms: 'Power Room'
+                                })
+                              }}
                             />
                             <label htmlFor="power_room">
                               <div className="radio_icon">
