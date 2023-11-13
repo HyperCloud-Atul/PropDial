@@ -58,11 +58,20 @@ export default function PGAddProperty({ propertyid }) {
     YearOfConstruction: '',
     Bhk: '',
     Furnishing: '',
+
     NumberOfBedrooms: '',
     NumberOfBathrooms: '',
     NumberOfBalcony: '',
     NumberOfKitchen: '',
+
+    DiningArea: '',
+    LivingDining: '',
+
     NumberOfLivingArea: '',
+
+    Passages: '',
+    EntranceGallery: '',
+
     NumberOfBasement: '',
 
     AdditionalRooms: [],
@@ -91,15 +100,7 @@ export default function PGAddProperty({ propertyid }) {
 
   // set property document values into form
   useEffect(() => {
-    console.log('property id: ', propertyid);
-    // property && property.additionalRooms && property.additionalRooms.forEach(element => {
-    //   if (property.additionalRooms.includes('Servent Room')) {
-    //     setserventRoomClick(true);
-    //   }
-    //   if (property.additionalRooms.includes('Office Room')) {
-    //     setOfficeRoomClick(true);
-    //   }
-    // });
+    // console.log('property id: ', propertyid);    
     if (property) {
       console.log('property: ', property);
       setPropertyDetails({
@@ -113,12 +114,21 @@ export default function PGAddProperty({ propertyid }) {
         PropertyType: property.propertyType ? property.propertyType : '',
         YearOfConstruction: property.yearOfConstruction ? property.yearOfConstruction : '',
         Bhk: property.bhk ? property.bhk : '',
-        Furnishing: property.furnishing ? property.furnishing : '',
+
+        LivingDining: property.livingdining ? property.livingdining : '',
         NumberOfBedrooms: property.numberOfBedrooms ? property.numberOfBedrooms : '',
         NumberOfBathrooms: property.numberOfBathrooms ? property.numberOfBathrooms : '',
         NumberOfBalcony: property.numberOfBalcony ? property.numberOfBalcony : '',
         NumberOfKitchen: property.numberOfKitchen ? property.numberOfKitchen : '',
+
+        Furnishing: property.furnishing ? property.furnishing : '',
+        DiningArea: property.diningarea ? property.diningarea : '',
+
         NumberOfLivingArea: property.numberOfLivingArea ? property.numberOfLivingArea : '',
+
+        Passages: property.passages ? property.passages : '',
+        EntranceGallery: property.entrancegallery ? property.entrancegallery : '',
+
         NumberOfBasement: property.numberOfBasement ? property.numberOfBasement : '',
 
         AdditionalRooms: property.additionalRooms ? property.additionalRooms : [],
@@ -160,7 +170,7 @@ export default function PGAddProperty({ propertyid }) {
   const saveData = async (e) => {
     e.preventDefault();
 
-    console.log('save updated for property details: ', propertyDetails)
+    // console.log('save updated for property details: ', propertyDetails)
 
     // Create a property object
     const updatedProperty = {
@@ -175,11 +185,20 @@ export default function PGAddProperty({ propertyid }) {
       yearOfConstruction: propertyDetails.YearOfConstruction ? propertyDetails.YearOfConstruction : '',
       bhk: propertyDetails.Bhk ? propertyDetails.Bhk : '',
       furnishing: propertyDetails.Furnishing ? propertyDetails.Furnishing : '',
+
       numberOfBedrooms: propertyDetails.NumberOfBedrooms ? propertyDetails.NumberOfBedrooms : '1',
       numberOfBathrooms: propertyDetails.NumberOfBathrooms ? propertyDetails.NumberOfBathrooms : '',
       numberOfBalcony: propertyDetails.NumberOfBalcony ? propertyDetails.NumberOfBalcony : '',
       numberOfKitchen: propertyDetails.NumberOfKitchen ? propertyDetails.NumberOfKitchen : '',
+
+      diningarea: propertyDetails.DiningArea ? propertyDetails.DiningArea : '',
+      livingdining: propertyDetails.LivingDining ? propertyDetails.LivingDining : '',
+
       numberOfLivingArea: propertyDetails.NumberOfLivingArea ? propertyDetails.NumberOfLivingArea : '',
+
+      passages: propertyDetails.Passages ? propertyDetails.Passages : '',
+      entrancegallery: propertyDetails.EntranceGallery ? propertyDetails.EntranceGallery : '',
+
       numberOfBasement: propertyDetails.NumberOfBasement ? propertyDetails.NumberOfBasement : '',
 
       additionalRooms: propertyDetails.AdditionalRooms ? propertyDetails.AdditionalRooms : [],
@@ -760,7 +779,6 @@ export default function PGAddProperty({ propertyid }) {
                                   Furnishing: 'Semi'
                                 })
                               }}
-                            // checked={propertyDetails && propertyDetails.Furnishing === true ? true : false}
                             />
                             <label htmlFor="semi_furnished">
                               <div className="radio_icon">
@@ -961,11 +979,20 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.DiningArea === 'Yes'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
                               id="dining_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  DiningArea: 'Yes'
+                                })
+                              }}
                             />
                             <label htmlFor="dining_yes">
                               <div className="radio_icon">
@@ -982,11 +1009,20 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.DiningArea === 'No'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
                               id="dining_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  DiningArea: 'No'
+                                })
+                              }}
                             />
                             <label htmlFor="dining_no">
                               <div className="radio_icon">
@@ -1008,11 +1044,20 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.LivingDining === 'Yes'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
                               id="living_dining_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  LivingDining: 'Yes'
+                                })
+                              }}
                             />
                             <label htmlFor="living_dining_yes">
                               <div className="radio_icon">
@@ -1029,11 +1074,20 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.LivingDining === 'No'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
                               id="living_dining_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  LivingDining: 'No'
+                                })
+                              }}
                             />
                             <label htmlFor="living_dining_no">
                               <div className="radio_icon">
@@ -1080,11 +1134,20 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Passages === 'Yes'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
                               id="passage_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Passages: 'Yes'
+                                })
+                              }}
                             />
                             <label htmlFor="passage_yes">
                               <div className="radio_icon">
@@ -1101,11 +1164,20 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Passages === 'No'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
                               id="passage_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Passages: 'No'
+                                })
+                              }}
                             />
                             <label htmlFor="passage_no">
                               <div className="radio_icon">
@@ -1127,11 +1199,20 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.EntranceGallery === 'Yes'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
                               id="entrancegallery_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  EntranceGallery: 'Yes'
+                                })
+                              }}
                             />
                             <label htmlFor="entrancegallery_yes">
                               <div className="radio_icon">
@@ -1148,11 +1229,20 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className="custom_radio_button"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.EntranceGallery === 'No'
+                              ? "radiochecked"
+                              : ""
+                              }`}
                           >
                             <input
                               type="radio"
                               id="entrancegallery_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  EntranceGallery: 'No'
+                                })
+                              }}
                             />
                             <label htmlFor="entrancegallery_no">
                               <div className="radio_icon">

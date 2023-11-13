@@ -469,13 +469,13 @@ const PDSingleCard = ({ propertyDocument }) => {
                             <div class="p_info_single">
                                 <h6>Dining Area:
                                 </h6>
-                                <h5>{propertyDocument.diningArea}
+                                <h5>{propertyDocument.diningarea}
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Living & Dining:
                                 </h6>
-                                <h5>{propertyDocument.livingAndDiningArea}
+                                <h5>{propertyDocument.livingdining}
                                 </h5>
                             </div>
                             <div class="p_info_single">
@@ -487,15 +487,17 @@ const PDSingleCard = ({ propertyDocument }) => {
                             <div class="p_info_single">
                                 <h6>Entrance Gallery:
                                 </h6>
-                                <h5>{propertyDocument.entranceGallery}
+                                <h5>{propertyDocument.entrancegallery}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
-                                <h6>Basement:
-                                </h6>
-                                <h5>{propertyDocument.numberOfBasement}
-                                </h5>
-                            </div>
+                            {propertyDocument.numberOfBasement && propertyDocument.numberOfBasement !== '0' &&
+                                <div class="p_info_single">
+                                    <h6>Basement:
+                                    </h6>
+                                    <h5>{propertyDocument.numberOfBasement}
+                                    </h5>
+                                </div>
+                            }
                         </div>
                     </div>
 
@@ -557,60 +559,29 @@ const PDSingleCard = ({ propertyDocument }) => {
                     </div>
 
                 </div>
-                <div className="property_card_single">
-                    <div className="more_detail_card_inner">
-                        <h2 className="card_title">
-                            Additional Rooms {/* pending  */}
-                        </h2>
-                        <div class="p_info">
-                            <div class="p_info_single">
-                                <h6>Office Room
-                                    :</h6>
-                                <h5>1
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
 
-                                <h6>Pooja Room
-                                    :
-                                </h6>
-                                <h5>1
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
-                                <h6>Servent Room
-                                    :
-                                </h6>
-                                <h5>1
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
-                                <h6>Power Room
-
-                                </h6>
-                                <h5>1
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
-                                <h6>Store Room
+                {propertyDocument.additionalRooms &&
+                    propertyDocument.additionalRooms !== null &&
+                    propertyDocument.additionalRooms !== '' &&
+                    propertyDocument.additionalRooms.length > 0 &&
 
 
-                                </h6>
-                                <h5>1
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
-                                <h6>Study Room
-
-
-                                </h6>
-                                <h5>1
-                                </h5>
+                    < div className="property_card_single">
+                        <div className="more_detail_card_inner">
+                            <h2 className="card_title">
+                                Additional Rooms {/* pending  */}
+                            </h2>
+                            <div class="p_info">
+                                {propertyDocument.additionalRooms.map((additionalroom) => (
+                                    <div class="p_info_single">
+                                        <h6>{additionalroom}
+                                        </h6>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
-
-                </div>
+                }
                 <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
@@ -718,7 +689,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                     </div>
 
                 </div>
-            </div>
+            </div >
 
         </>
     )
