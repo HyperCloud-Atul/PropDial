@@ -28,7 +28,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                         <div className="pcs_main_detail">
                             <div className="pmd_top">
                                 <h4 className="property_name">
-                                    {propertyDocument.unitNumber} - {propertyDocument.bhk} BHK, {propertyDocument.plotArea} {propertyDocument.plotAreaUnit}, {propertyDocument.propertyType}, {propertyDocument.purpose}<br />
+                                    {propertyDocument.bhk} | {propertyDocument.furnishing} Furnished | for {propertyDocument.purpose}<br />
                                 </h4>
                                 <h6 className="property_location">{propertyDocument.locality}, {propertyDocument.city}, {propertyDocument.state}</h6>
                             </div>
@@ -419,7 +419,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 <h6>Floor no:
                                 </h6>
                                 <h5>
-                                {propertyDocument.floorNumber}
+                                    {propertyDocument.floorNumber}
                                 </h5>
                             </div>
                             <div class="p_info_single">
@@ -457,7 +457,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 <h6>Kitchen:
                                 </h6>
                                 <h5>{propertyDocument.numberOfKitchen}
-                                
+
                                 </h5>
                             </div>
                             <div class="p_info_single">
@@ -550,7 +550,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 <h6>2 Wheeler Parking:
                                 </h6>
                                 <h5>2
-                                {/* pending  */}
+                                    {/* pending  */}
                                 </h5>
                             </div>
                         </div>
@@ -701,14 +701,14 @@ const PDSingleCard = ({ propertyDocument }) => {
                             </div>
                             <div class="p_info_single">
                                 <h6>Terrace
-                                 {/* pending  */}
+                                    {/* pending  */}
                                 </h6>
                                 <h5>Yes
                                 </h5>
                             </div>
                             <div class="p_info_single">
                                 <h6>Power Backup
-{/* pending  */}
+                                    {/* pending  */}
                                 </h6>
                                 <h5>Partial Backup
                                 </h5>

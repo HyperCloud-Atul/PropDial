@@ -4,12 +4,12 @@ import { Link, useLocation } from "react-router-dom";
 
 
 const PropertyDetail = ({ propertiesdocuments }) => {
-    // Scroll to the top of the page whenever the location changes start
-    const location = useLocation();
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [location]);
-    // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   // read more read less
   const [height, setHeight] = useState(true);
 
@@ -28,9 +28,9 @@ const PropertyDetail = ({ propertiesdocuments }) => {
             <div className="pcs_main_detail">
               <div className="pmd_top relative" >
                 <h4 className="property_name">
-                  {property.society}
+                  {property.bhk} | {property.furnishing} Furnished for {property.purpose} | {property.locality}
                 </h4>
-                <h6 className="property_location">{property.state}</h6>
+                <h6 className="property_location">{property.city}, {property.state}</h6>
                 <div className="fav_and_share">
                   <span class="material-symbols-outlined mr-2 fav" style={{
                     marginRight: "3px"
@@ -59,7 +59,7 @@ const PropertyDetail = ({ propertiesdocuments }) => {
                   <div className="pi_single">
                     <h6>BHK</h6>
                     <h5>{property.bhk}</h5>
-                  </div>               
+                  </div>
                   <div className="pi_single">
                     <h6>Bedrooms</h6>
                     <h5>{property.numberOfBedrooms}</h5>

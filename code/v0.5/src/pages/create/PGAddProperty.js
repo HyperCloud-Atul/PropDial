@@ -721,18 +721,18 @@ export default function PGAddProperty({ propertyid }) {
                           <option selected={propertyDetails && propertyDetails.Bhk === 'EWS' ? true : false}>EWS</option>
                           <option selected={propertyDetails && propertyDetails.Bhk === '1 RK' ? true : false}>1 RK</option>
                           <option selected={propertyDetails && propertyDetails.Bhk === 'Studio' ? true : false}>Studio</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '1 ' ? true : false}>1</option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '1.5 ' ? true : false}>1.5 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '2 ' ? true : false}>2 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '2.5 ' ? true : false}>2.5 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '3 ' ? true : false}>3 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '3.5 ' ? true : false}>3.5 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '4 ' ? true : false}>4 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '5 ' ? true : false}>5 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '6 ' ? true : false}>6 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '7 ' ? true : false}>7 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '8 ' ? true : false}>8 </option>
-                          <option selected={propertyDetails && propertyDetails.Bhk === '9+ ' ? true : false}>9+ </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '1 ' ? true : false}>1 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '1.5 ' ? true : false}>1.5 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '2 ' ? true : false}>2 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '2.5 ' ? true : false}>2.5 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '3 ' ? true : false}>3 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '3.5 ' ? true : false}>3.5 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '4 ' ? true : false}>4 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '5 ' ? true : false}>5 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '6 ' ? true : false}>6 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '7 ' ? true : false}>7 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '8 ' ? true : false}>8 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '9+ ' ? true : false}>9+ BHK </option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">

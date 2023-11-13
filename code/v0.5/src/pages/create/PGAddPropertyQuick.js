@@ -24,7 +24,7 @@ const categories = [
     { value: 'commercial', label: 'Commercial' },
 ]
 
-export default function PGAddPropertyOld({ propertyid }) {
+export default function PGAddPropertyQuick({ propertyid }) {
     // Scroll to the top of the page whenever the location changes start
     const location = useLocation();
     useEffect(() => {
@@ -103,7 +103,7 @@ export default function PGAddPropertyOld({ propertyid }) {
 
         if (masterPropertyPurpose) {
             propertyPurposeOptions.current = masterPropertyPurpose.data.map(propertyPurposeData => ({
-                label: propertyPurposeData.toUpperCase(),
+                label: propertyPurposeData,
                 value: propertyPurposeData
             }))
 
@@ -380,8 +380,8 @@ export default function PGAddPropertyOld({ propertyid }) {
 
     return (
         <div>
-            <div className="pgadmindasboard dashboard_pg aflbg property_setup">                
-                    <LeftSidebar />               
+            <div className="pgadmindasboard dashboard_pg aflbg property_setup">
+                <LeftSidebar />
                 <div className="right_main_content">
                     <br />
                     <h2 className='pg_title'>
@@ -486,7 +486,7 @@ export default function PGAddPropertyOld({ propertyid }) {
                                                         ...baseStyles,
                                                         outline: 'none',
                                                         background: '#efefef',
-                                                        border:'none',
+                                                        border: 'none',
                                                         borderBottom: 'none'
                                                     }),
                                                 }}
@@ -521,18 +521,18 @@ export default function PGAddPropertyOld({ propertyid }) {
                                     <div className="form_field st-2 mt-lg-0">
                                         <label>Tag Users : {taggedUsersListShow}</label>
                                         <div className="field_inner select">
-                                        <Select className=''
+                                            <Select className=''
                                                 onChange={(option) => setTaggedUsers(option)}
                                                 options={usersSorted}
-                                                 styles={{
+                                                styles={{
                                                     control: (baseStyles, state) => ({
                                                         ...baseStyles,
                                                         outline: 'none',
                                                         background: '#efefef',
-                                                        border:'none',
+                                                        border: 'none',
                                                         borderBottom: 'none',
-                                                        position:"relative",
-                                                        zIndex:"99"
+                                                        position: "relative",
+                                                        zIndex: "99"
                                                     }),
                                                 }}
                                                 isMulti
@@ -548,16 +548,16 @@ export default function PGAddPropertyOld({ propertyid }) {
                                     <div className="form_field st-2">
                                         <label>Country</label>
                                         <div className="field_inner select">
-                                        <Select className=''
+                                            <Select className=''
                                                 onChange={handleCountryChange}
                                                 options={countryOptionsSorted.current}
                                                 value={country}
-                                                 styles={{
+                                                styles={{
                                                     control: (baseStyles, state) => ({
                                                         ...baseStyles,
                                                         outline: 'none',
                                                         background: '#efefef',
-                                                        border:'none',
+                                                        border: 'none',
                                                         borderBottom: 'none'
                                                     }),
                                                 }}
@@ -573,18 +573,18 @@ export default function PGAddPropertyOld({ propertyid }) {
                                     <div className="form_field st-2">
                                         <label>State</label>
                                         <div className="field_inner select">
-                                        <Select className=''
+                                            <Select className=''
                                                 // onChange={(option) => setState(option)}
                                                 onChange={handleStateChange}
                                                 options={statesOptionsSorted.current}
                                                 // options={stateList}
                                                 value={state}
-                                                 styles={{
+                                                styles={{
                                                     control: (baseStyles, state) => ({
                                                         ...baseStyles,
                                                         outline: 'none',
                                                         background: '#efefef',
-                                                        border:'none',
+                                                        border: 'none',
                                                         borderBottom: 'none'
                                                     }),
                                                 }}
@@ -600,20 +600,20 @@ export default function PGAddPropertyOld({ propertyid }) {
                                     <div className="form_field st-2">
                                         <label>City</label>
                                         <div className="field_inner select">
-                                        <Select className=''
-                                                    onChange={handleCityChange}
-                                                    options={citiesOptionsSorted.current}
-                                                    value={city}
-                                                    styles={{
+                                            <Select className=''
+                                                onChange={handleCityChange}
+                                                options={citiesOptionsSorted.current}
+                                                value={city}
+                                                styles={{
                                                     control: (baseStyles, state) => ({
                                                         ...baseStyles,
                                                         outline: 'none',
                                                         background: '#efefef',
-                                                        border:'none',
+                                                        border: 'none',
                                                         borderBottom: 'none'
                                                     }),
                                                 }}
-                                                />
+                                            />
                                             <div className="field_icon">
                                                 <span class="material-symbols-outlined">       apartment</span>
                                             </div>
@@ -625,20 +625,20 @@ export default function PGAddPropertyOld({ propertyid }) {
                                     <div className="form_field st-2">
                                         <label>Locality</label>
                                         <div className="field_inner select">
-                                        <Select className=''
-                                                    onChange={handleLocalityChange}
-                                                    options={localityOptionsSorted.current}
-                                                    value={locality}
-                                                 styles={{
+                                            <Select className=''
+                                                onChange={handleLocalityChange}
+                                                options={localityOptionsSorted.current}
+                                                value={locality}
+                                                styles={{
                                                     control: (baseStyles, state) => ({
                                                         ...baseStyles,
                                                         outline: 'none',
                                                         background: '#efefef',
-                                                        border:'none',
+                                                        border: 'none',
                                                         borderBottom: 'none'
                                                     }),
                                                 }}
-                                                />
+                                            />
                                             <div className="field_icon">
                                                 <span class="material-symbols-outlined">        holiday_village</span>
                                             </div>
@@ -650,20 +650,20 @@ export default function PGAddPropertyOld({ propertyid }) {
                                     <div className="form_field st-2">
                                         <label>Society</label>
                                         <div className="field_inner select">
-                                        <Select className=''
-                                                    onChange={(option) => setSociety(option)}
-                                                    options={societyOptionsSorted.current}
-                                                    value={society}
-                                                 styles={{
+                                            <Select className=''
+                                                onChange={(option) => setSociety(option)}
+                                                options={societyOptionsSorted.current}
+                                                value={society}
+                                                styles={{
                                                     control: (baseStyles, state) => ({
                                                         ...baseStyles,
                                                         outline: 'none',
                                                         background: '#efefef',
-                                                        border:'none',
+                                                        border: 'none',
                                                         borderBottom: 'none'
                                                     }),
                                                 }}
-                                                />
+                                            />
                                             <div className="field_icon">
                                                 <span class="material-symbols-outlined">          home</span>
                                             </div>
@@ -671,11 +671,11 @@ export default function PGAddPropertyOld({ propertyid }) {
                                     </div>
 
                                 </div>
-                            </div>                           
+                            </div>
                             <div className='mt-4'>
                                 <button className="theme_btn btn_fill">{propertyid ? 'Update Property' : 'Add Property'}</button>
                                 {formError && <p className="error">{formError}</p>}
-                            </div>                          
+                            </div>
                         </form>
                     </div>
                 </div>
