@@ -97,6 +97,14 @@ export default function PGAddProperty({ propertyid }) {
     SuperArea: '',
     BuiltUpArea: '',
     CarpetArea: '',
+
+    // More tab (menu) fields
+    PropertyDesciption: '',
+    OwnerInstruction: '',
+    KeyDetailsHandover: '',
+    BillTypeSetting: '',
+    Advertising: '',
+
   });
 
   const { document: property, error: propertyerror } = useDocument("properties", propertyid);
@@ -163,6 +171,13 @@ export default function PGAddProperty({ propertyid }) {
         BuiltUpAreaUnit: property.builtUpAreaUnit ? property.builtUpAreaUnit : 'SqFt',
         CarpetArea: property.carpetArea ? property.carpetArea : '',
         CarpetAreaUnit: property.carpetAreaUnit ? property.carpetAreaUnit : 'SqFt',
+
+        // More tab (menu) fields
+        PropertyDesciption: property.propertydesciption ? property.propertydesciption : '',
+        OwnerInstruction: property.ownerinstruction ? property.ownerinstruction : '',
+        KeyDetailsHandover: property.keydetailshandover ? property.keydetailshandover : '',
+        BillTypeSetting: property.billtypesetting ? property.billtypesetting : '',
+        Advertising: property.advertising ? property.advertising : '',
 
         ServentRoomClick: property.additionalRooms && property.additionalRooms.includes('Servent Room') ? true : false,
         OfficeRoomClick: property.additionalRooms && property.additionalRooms.includes('Office Room') ? true : false,
@@ -247,7 +262,13 @@ export default function PGAddProperty({ propertyid }) {
       carpetAreaUnit: propertyDetails.CarpetAreaUnit ? propertyDetails.CarpetAreaUnit : 'SqFt',
 
 
-      // Add more properties as needed
+      // More tab (menu) fields
+      propertydesciption: propertyDetails.PropertyDesciption ? propertyDetails.PropertyDesciption : '',
+      ownerinstruction: propertyDetails.OwnerInstruction ? propertyDetails.OwnerInstruction : '',
+      keydetailshandover: propertyDetails.KeyDetailsHandover ? propertyDetails.KeyDetailsHandover : '',
+      billtypesetting: propertyDetails.BillTypeSetting ? propertyDetails.BillTypeSetting : '',
+      advertising: propertyDetails.Advertising ? propertyDetails.Advertising : '',
+
     };
 
     console.log("saveData updated property: ", updatedProperty)
@@ -1304,7 +1325,7 @@ export default function PGAddProperty({ propertyid }) {
                       </div>
                     </div>
                     <div className="form_field st-2">
-                      <label>Additional Rooms - ( 0 )</label>
+                      <label>Additional Rooms - ( {propertyDetails.AdditionalRooms.length} )</label>
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div className={propertyDetails.ServentRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}>
@@ -1539,7 +1560,7 @@ export default function PGAddProperty({ propertyid }) {
                       </div>
                     </div>
                     <div className="form_field st-2">
-                      <label>Additional Area - ( 0 )</label>
+                      <label>Additional Area - ( {propertyDetails.AdditionalArea.length} )</label>
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
@@ -2099,7 +2120,7 @@ export default function PGAddProperty({ propertyid }) {
                       </div>
                     </div>
                     <div className="form_field st-2">
-                      <label>Car Parking - ( 0 )</label>
+                      <label>Car Parking - ( {propertyDetails.NumberOfCarParking} )</label>
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
@@ -3670,7 +3691,15 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Property Description</label>
-                      <textarea></textarea>
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          PropertyDesciption: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.PropertyDesciption}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
@@ -3682,7 +3711,16 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Owner Instruction</label>
-                      <textarea></textarea>
+
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          OwnerInstruction: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.OwnerInstruction}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
@@ -3694,7 +3732,15 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Key details / Key Handover</label>
-                      <textarea></textarea>
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          KeyDetailsHandover: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.KeyDetailsHandover}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
@@ -3706,7 +3752,15 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Bill Type Setting</label>
-                      <textarea></textarea>
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          BillTypeSetting: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.BillTypeSetting}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
@@ -3718,7 +3772,15 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Advertising</label>
-                      <textarea></textarea>
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          Advertising: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.Advertising}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
