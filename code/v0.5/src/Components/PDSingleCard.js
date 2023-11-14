@@ -551,8 +551,7 @@ const PDSingleCard = ({ propertyDocument }) => {
 
                                 <h6>2 Wheeler Parking:
                                 </h6>
-                                <h5>2
-                                    {/* pending  */}
+                                <h5>{propertyDocument.twowheelerparking}
                                 </h5>
                             </div>
                         </div>
@@ -564,8 +563,6 @@ const PDSingleCard = ({ propertyDocument }) => {
                     propertyDocument.additionalRooms !== null &&
                     propertyDocument.additionalRooms !== '' &&
                     propertyDocument.additionalRooms.length > 0 &&
-
-
                     < div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <h2 className="card_title">
@@ -582,57 +579,29 @@ const PDSingleCard = ({ propertyDocument }) => {
                         </div>
                     </div>
                 }
-                <div className="property_card_single">
-                    <div className="more_detail_card_inner">
-                        <h2 className="card_title">
-                            Additional Area {/* pending  */}
-                        </h2>
-                        <div class="p_info">
-                            <div class="p_info_single">
-                                <h6>Back Yard
 
-                                    :</h6>
-                                <h5>No
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
-
-                                <h6>Front Yard
-
-                                    :
-                                </h6>
-                                <h5>Yes
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
-                                <h6>Garage
-
-                                    :
-                                </h6>
-                                <h5>No
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
-                                <h6>Garden
-
-
-                                </h6>
-                                <h5>Yes
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
-                                <h6>Terrace
-
-
-
-                                </h6>
-                                <h5>Yes
-                                </h5>
+                {propertyDocument.additionalArea &&
+                    propertyDocument.additionalArea !== null &&
+                    propertyDocument.additionalArea !== '' &&
+                    propertyDocument.additionalArea.length > 0 &&
+                    < div className="property_card_single">
+                        <div className="more_detail_card_inner">
+                            <h2 className="card_title">
+                                Additional Area {/* pending  */}
+                            </h2>
+                            <div class="p_info">
+                                {propertyDocument.additionalArea.map((additionalarea) => (
+                                    <div class="p_info_single">
+                                        <h6>{additionalarea}
+                                        </h6>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
+                }
 
-                </div>
+
                 <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
@@ -671,17 +640,10 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 </h5>
                             </div>
                             <div class="p_info_single">
-                                <h6>Terrace
-                                    {/* pending  */}
-                                </h6>
-                                <h5>Yes
-                                </h5>
-                            </div>
-                            <div class="p_info_single">
                                 <h6>Power Backup
                                     {/* pending  */}
                                 </h6>
-                                <h5>Partial Backup
+                                <h5>{propertyDocument.powerbackup}
                                 </h5>
                             </div>
 
