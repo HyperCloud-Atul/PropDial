@@ -505,7 +505,7 @@ export default function PGAddProperty({ propertyid }) {
                         {property && property.coownerDetails &&
                           <a href={'https://wa.me/+91' + property.coownerDetails.phoneNumber}>
                             <div>
-                              <img src="../img/whatsapp_square_icon.png" alt="" />
+                              <img src="/assets/img/whatsapp_square_icon.png" alt="" />
                               <h1>WhatsApp</h1>
                             </div>
                           </a>
