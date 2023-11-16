@@ -49,15 +49,18 @@ export default function PGAddProperty({ propertyid }) {
   const [category, setCategory] = useState("Residential"); //Residential/Commercial
   const [taggedOwner, setTaggedOwner] = useState([])
   const [taggedCoOwner, setTaggedCoOwner] = useState([])
+  const [taggedPropertyManager, setTaggedPropertyManager] = useState([])
 
   // const { user } = useAuthContext()
   const [owners, setOwners] = useState([])
   const [coowners, setCoOwners] = useState([])
+  const [propertymanagers, setPropertyManagers] = useState([])
 
   // const [propertyLocality, setpropertyLocality] = useState("");
   const [propertyDetails, setPropertyDetails] = useState({
 
     // All select type 
+    PropertyPOC: '',
     Locality: '',
     City: '',
     Country: '',
@@ -119,6 +122,8 @@ export default function PGAddProperty({ propertyid }) {
   // const { documents: userList } = useCollection('users')
   const { documents: ownerList } = useCollection('users', ["role", "==", "owner"])
   const { documents: coownerList } = useCollection('users', ["role", "==", "coowner"])
+  const { documents: propertymanagerList } = useCollection('users', ["role", "==", "propertymanager"])
+
   const { document: property, error: propertyerror } = useDocument("properties", propertyid);
   const { updateDocument, updateResponse } = useFirestore("properties"); // Firestore collection name
 
@@ -139,6 +144,12 @@ export default function PGAddProperty({ propertyid }) {
       }))
     }
 
+    if (propertymanagerList) {
+      setPropertyManagers(propertymanagerList.map(user => {
+        return { value: { ...user, id: user.id }, label: user.fullName + ' ( ' + user.phoneNumber + ' )' }
+      }))
+    }
+
     if (property) {
       // console.log('property: ', property);
 
@@ -154,6 +165,7 @@ export default function PGAddProperty({ propertyid }) {
       setPropertyDetails({
 
         // All select type 
+        PropertyPOC: property.propertyPOC ? property.propertyPOC : '',
         // category: property.category ? property.category : 'Residential',
         Locality: property.locality ? property.locality : '',
         City: property.city ? property.city : '',
@@ -231,10 +243,7 @@ export default function PGAddProperty({ propertyid }) {
       })
 
     }
-  }, [property, ownerList, coownerList])
-
-
-
+  }, [property, ownerList, coownerList, propertymanagerList])
 
   const saveData = async (e) => {
     e.preventDefault();
@@ -244,7 +253,8 @@ export default function PGAddProperty({ propertyid }) {
     // Create a property object
     let updatedProperty = {
 
-      // All select type 
+      // All select type
+      propertyPOC: propertyDetails.PropertyPOC ? propertyDetails.PropertyPOC : '',
       category,
       // ownerDetails,
       // coownerDetails,
@@ -315,7 +325,7 @@ export default function PGAddProperty({ propertyid }) {
     // console.log('tagged Owner details:', taggedOwner)
     // console.log('tagged Owner Length:', taggedOwner.length)
     let ownerDetails = '';
-    if (taggedOwner && taggedOwner.length != 0) {
+    if (taggedOwner && taggedOwner.length !== 0) {
       console.log('tagged Owner details:', taggedOwner)
       ownerDetails = {
         id: taggedOwner.value.id,
@@ -330,7 +340,7 @@ export default function PGAddProperty({ propertyid }) {
     }
 
     let coownerDetails = '';
-    if (taggedCoOwner && taggedCoOwner.length != 0) {
+    if (taggedCoOwner && taggedCoOwner.length !== 0) {
       console.log('tagged Owner details:', taggedCoOwner)
       coownerDetails = {
         id: taggedCoOwner.value.id,
@@ -342,7 +352,21 @@ export default function PGAddProperty({ propertyid }) {
       }
 
       updatedProperty = { ...updatedProperty, coownerDetails }
+    }
 
+    let propertymanagerDetails = '';
+    if (taggedPropertyManager && taggedPropertyManager.length !== 0) {
+      console.log('tagged Owner details:', taggedPropertyManager)
+      propertymanagerDetails = {
+        id: taggedPropertyManager.value.id,
+        displayName: taggedPropertyManager.value.fullName,
+        phoneNumber: taggedPropertyManager.value.phoneNumber,
+        emailID: taggedPropertyManager.value.email,
+        photoURL: taggedPropertyManager.value.photoURL,
+        role: taggedPropertyManager.value.role
+      }
+
+      updatedProperty = { ...updatedProperty, propertymanagerDetails }
     }
 
     console.log("saveData updated property: ", updatedProperty)
@@ -375,6 +399,10 @@ export default function PGAddProperty({ propertyid }) {
     a.label.localeCompare(b.label)
   );
   const coownerListSorted = coowners.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
+
+  const propertyManagerListSorted = propertymanagers.sort((a, b) =>
     a.label.localeCompare(b.label)
   );
 
@@ -588,7 +616,6 @@ export default function PGAddProperty({ propertyid }) {
                       <label>Owner: </label>
                       {property && property.ownerDetails &&
                         <>
-                          {/* <label>Owner: </label> */}
                           <span style={{ fontWeight: "normal", fontSize: 14 }}>
                             {property.ownerDetails.role === 'owner' ? " " + property.ownerDetails.displayName : ' Not Assigned'} (
                             {property.ownerDetails.role === 'owner' ? property.ownerDetails.phoneNumber : ''} )
@@ -622,7 +649,6 @@ export default function PGAddProperty({ propertyid }) {
                       <label>Co-Owner</label>
                       {property && property.coownerDetails &&
                         <>
-                          {/* <label>Co-Owner: </label> */}
                           <span style={{ fontWeight: "normal", fontSize: 14 }}>
                             {property.coownerDetails.role === 'coowner' ? " " + property.coownerDetails.displayName : ' Not Assigned'} (
                             {property.coownerDetails.role === 'coowner' ? property.coownerDetails.phoneNumber : ''} )
@@ -633,6 +659,56 @@ export default function PGAddProperty({ propertyid }) {
                         <Select className=''
                           onChange={(option) => setTaggedCoOwner(option)}
                           options={coownerListSorted}
+                          styles={{
+                            control: (baseStyles, state) => ({
+                              ...baseStyles,
+                              outline: 'none',
+                              background: '#efefef',
+                              border: 'none',
+                              borderBottom: 'none',
+                              position: "relative",
+                              zIndex: "99"
+                            }),
+                          }}
+                        // isMulti
+                        />
+                        <div className="field_icon">
+                          <span class="material-symbols-outlined">group</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form_field st-2">
+                      <label>Property POC (Name-Mobile)</label>
+                      <div className="field_inner">
+                        <input type="text" placeholder="Enter POC Name & Mobile Number"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            PropertyPOC: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.PropertyPOC} />
+                        <div className="field_icon">
+                          <span class="material-symbols-outlined">
+                            drive_file_rename_outline
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form_field st-2">
+                      <label>Property Manager</label>
+                      {property && property.propertymanagerDetails &&
+                        <>
+                          <span style={{ fontWeight: "normal", fontSize: 14 }}>
+                            {property.propertymanagerDetails.role === 'propertymanager' ? " " + property.propertymanagerDetails.displayName : ' Not Assigned'} (
+                            {property.propertymanagerDetails.role === 'propertymanager' ? property.propertymanagerDetails.phoneNumber : ''} )
+                          </span>
+                        </>
+                      }
+                      <div className="field_inner select">
+                        <Select className=''
+                          onChange={(option) => setTaggedPropertyManager(option)}
+                          options={propertyManagerListSorted}
                           styles={{
                             control: (baseStyles, state) => ({
                               ...baseStyles,
