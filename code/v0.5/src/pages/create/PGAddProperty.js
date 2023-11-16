@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
+import { useCollection } from "../../hooks/useCollection";
+import { useAuthContext } from '../../hooks/useAuthContext';
 import { useLocation } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import Select from 'react-select'
 
 // styles
 import "./PGAddProperty.css";
@@ -18,6 +21,7 @@ import PropertySidebar from "../../Components/PropertySidebar";
 
 export default function PGAddProperty({ propertyid }) {
   // Scroll to the top of the page whenever the location changes start
+
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -42,8 +46,13 @@ export default function PGAddProperty({ propertyid }) {
 
   // form field values
 
-  const [category, setCategory] = useState("residential"); //Residential/Commercial
+  const [category, setCategory] = useState("Residential"); //Residential/Commercial
+  const [taggedOwner, setTaggedOwner] = useState([])
+  const [taggedCoOwner, setTaggedCoOwner] = useState([])
 
+  // const { user } = useAuthContext()
+  const [owners, setOwners] = useState([])
+  const [coowners, setCoOwners] = useState([])
 
   // const [propertyLocality, setpropertyLocality] = useState("");
   const [propertyDetails, setPropertyDetails] = useState({
@@ -107,18 +116,45 @@ export default function PGAddProperty({ propertyid }) {
 
   });
 
+  // const { documents: userList } = useCollection('users')
+  const { documents: ownerList } = useCollection('users', ["role", "==", "owner"])
+  const { documents: coownerList } = useCollection('users', ["role", "==", "coowner"])
   const { document: property, error: propertyerror } = useDocument("properties", propertyid);
   const { updateDocument, updateResponse } = useFirestore("properties"); // Firestore collection name
 
 
   // set property document values into form
   useEffect(() => {
-    // console.log('property id: ', propertyid);    
+    // console.log('property id: ', propertyid);
+    // console.log('ownerList : ', ownerList)
+    if (ownerList) {
+      setOwners(ownerList.map(user => {
+        return { value: { ...user, id: user.id }, label: user.fullName + ' ( ' + user.phoneNumber + ' )' }
+      }))
+    }
+
+    if (coownerList) {
+      setCoOwners(coownerList.map(user => {
+        return { value: { ...user, id: user.id }, label: user.fullName + ' ( ' + user.phoneNumber + ' )' }
+      }))
+    }
+
     if (property) {
-      console.log('property: ', property);
+      // console.log('property: ', property);
+
+      setCategory(property.category)
+
+      if (property.category === 'Residential')
+        setToggleFlag(false);
+      else
+        setToggleFlag(true)
+
+      setCategory(property.category)
+
       setPropertyDetails({
 
         // All select type 
+        // category: property.category ? property.category : 'Residential',
         Locality: property.locality ? property.locality : '',
         City: property.city ? property.city : '',
         Country: property.country ? property.country : '',
@@ -195,7 +231,9 @@ export default function PGAddProperty({ propertyid }) {
       })
 
     }
-  }, [property])
+  }, [property, ownerList, coownerList])
+
+
 
 
   const saveData = async (e) => {
@@ -204,9 +242,12 @@ export default function PGAddProperty({ propertyid }) {
     // console.log('save updated for property details: ', propertyDetails)
 
     // Create a property object
-    const updatedProperty = {
+    let updatedProperty = {
 
       // All select type 
+      category,
+      // ownerDetails,
+      // coownerDetails,
       locality: propertyDetails.Locality ? propertyDetails.Locality : '',
       country: propertyDetails.Country ? propertyDetails.Country : '',
       state: propertyDetails.State ? propertyDetails.State : '',
@@ -271,6 +312,39 @@ export default function PGAddProperty({ propertyid }) {
 
     };
 
+    // console.log('tagged Owner details:', taggedOwner)
+    // console.log('tagged Owner Length:', taggedOwner.length)
+    let ownerDetails = '';
+    if (taggedOwner && taggedOwner.length != 0) {
+      console.log('tagged Owner details:', taggedOwner)
+      ownerDetails = {
+        id: taggedOwner.value.id,
+        displayName: taggedOwner.value.fullName,
+        phoneNumber: taggedOwner.value.phoneNumber,
+        emailID: taggedOwner.value.email,
+        photoURL: taggedOwner.value.photoURL,
+        role: taggedOwner.value.role
+      }
+
+      updatedProperty = { ...updatedProperty, ownerDetails }
+    }
+
+    let coownerDetails = '';
+    if (taggedCoOwner && taggedCoOwner.length != 0) {
+      console.log('tagged Owner details:', taggedCoOwner)
+      coownerDetails = {
+        id: taggedCoOwner.value.id,
+        displayName: taggedCoOwner.value.fullName,
+        phoneNumber: taggedCoOwner.value.phoneNumber,
+        emailID: taggedCoOwner.value.email,
+        photoURL: taggedCoOwner.value.photoURL,
+        role: taggedCoOwner.value.role
+      }
+
+      updatedProperty = { ...updatedProperty, coownerDetails }
+
+    }
+
     console.log("saveData updated property: ", updatedProperty)
     // Store the property data in Firestore
     // await addDocument(property);
@@ -292,11 +366,17 @@ export default function PGAddProperty({ propertyid }) {
 
   const toggleBtnClick = () => {
     // console.log('toggleClick Category:', toggleFlag)
-    if (toggleFlag) setCategory("residential");
-    else setCategory("commercial");
+    if (toggleFlag) setCategory("Residential");
+    else setCategory("Commercial");
     setToggleFlag(!toggleFlag);
   };
 
+  const ownerListSorted = owners.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
+  const coownerListSorted = coowners.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
 
   return (
     <div className="dashboard_pg aflbg property_setup">
@@ -318,16 +398,25 @@ export default function PGAddProperty({ propertyid }) {
                 >
                   <div className="inner">
                     <div className="left">
-                      <h5>A-502</h5>
+                      <h5>{property && property.unitNumber} - {property && property.society}</h5>
                       <h6>
-                        High Mont Society,
+                        {property && property.locality}, {property && property.city}
                         <br />
-                        Hinjewadi, Pune
+                        {property && property.state}, {property && property.country}
                       </h6>
                     </div>
                     <div className="right">
-                      <h5>Sanskar Solanki</h5>
-                      <h6>8770534650</h6>
+                      {property && property.ownerDetails &&
+                        <div>
+                          <h5>
+                            {property.ownerDetails.role === 'owner' ? property.ownerDetails.displayName : 'No Owner Assigned'}
+                          </h5>
+                          <h6>
+                            {property.ownerDetails.role === 'owner' ? property.ownerDetails.phoneNumber : 'No Phone Number'}
+                          </h6>
+
+                        </div>
+                      }
                     </div>
                   </div>
                 </button>
@@ -341,7 +430,13 @@ export default function PGAddProperty({ propertyid }) {
                 <div class="accordion-body">
                   <div class="secondary-details-display">
                     <div class="secondary-details-inside-display">
-                      <h5 style={{ textAlign: "center" }}>Atul Tripathi</h5>
+                      {property && property.ownerDetails &&
+                        <div>
+                          <h5 style={{ textAlign: "center" }}>
+                            {property.ownerDetails.role === 'owner' ? property.ownerDetails.displayName : 'No Owner Assigned'}
+                          </h5>
+                        </div>
+                      }
                       <div
                         class="property-contact-div property-media-icons-horizontal"
                         style={{
@@ -350,28 +445,47 @@ export default function PGAddProperty({ propertyid }) {
                           height: "auto",
                         }}
                       >
-                        <div>
-                          <span class="material-symbols-outlined">call</span>
-                          <h1>Call</h1>
-                        </div>
-                        <div>
-                          <img
-                            src="./assets/img/whatsapp_square_icon.png"
-                            alt=""
-                          />
-                          <h1>WhatsApp</h1>
-                        </div>
-                        <div>
-                          <span class="material-symbols-outlined">
-                            alternate_email
-                          </span>
-                          <h1>Mail</h1>
-                        </div>
+                        {property && property.ownerDetails &&
+                          <a href={'Tel: +91' + property.ownerDetails.phoneNumber}>
+                            <div>
+                              <span class="material-symbols-outlined">call</span>
+                              <h1>Call</h1>
+                            </div>
+                          </a>
+                        }
+
+                        {property && property.ownerDetails &&
+                          <a href={'https://wa.me/+91' + property.ownerDetails.phoneNumber}>
+                            <div>
+                              <img
+                                src="/assets/img/whatsapp_square_icon.png"
+                                alt=""
+                              />
+                              <h1>WhatsApp</h1>
+                            </div>
+                          </a>
+                        }
+                        {property && property.ownerDetails &&
+                          <a href={'mailto:' + property.ownerDetails.phoneNumber}>
+                            <div>
+                              <span class="material-symbols-outlined">
+                                alternate_email
+                              </span>
+                              <h1>Mail</h1>
+                            </div>
+                          </a>
+                        }
                       </div>
                     </div>
                     <hr class="secondary-details-hr" />
                     <div style={{ width: "100%" }}>
-                      <h5 style={{ textAlign: "center" }}>Vinay Prajapati</h5>
+                      {property && property.coownerDetails &&
+                        <div>
+                          <h5 style={{ textAlign: "center" }}>
+                            {property.coownerDetails.role === 'coowner' ? property.coownerDetails.displayName : 'No Co-Owner Assigned'}
+                          </h5>
+                        </div>
+                      }
                       <div
                         class="property-contact-div property-media-icons-horizontal"
                         style={{
@@ -380,20 +494,32 @@ export default function PGAddProperty({ propertyid }) {
                           height: "auto",
                         }}
                       >
-                        <div>
-                          <span class="material-symbols-outlined">call</span>
-                          <h1>Call</h1>
-                        </div>
-                        <div>
-                          <img src="../img/whatsapp_square_icon.png" alt="" />
-                          <h1>WhatsApp</h1>
-                        </div>
-                        <div>
-                          <span class="material-symbols-outlined">
-                            alternate_email
-                          </span>
-                          <h1>Mail</h1>
-                        </div>
+                        {property && property.coownerDetails &&
+                          <a href={'Tel: +91' + property.coownerDetails.phoneNumber}>
+                            <div>
+                              <span class="material-symbols-outlined">call</span>
+                              <h1>Call</h1>
+                            </div>
+                          </a>
+                        }
+                        {property && property.coownerDetails &&
+                          <a href={'https://wa.me/+91' + property.coownerDetails.phoneNumber}>
+                            <div>
+                              <img src="../img/whatsapp_square_icon.png" alt="" />
+                              <h1>WhatsApp</h1>
+                            </div>
+                          </a>
+                        }
+                        {property && property.coownerDetails &&
+                          <a href={'mailto: ' + property.coownerDetails.phoneNumber}>
+                            <div>
+                              <span class="material-symbols-outlined">
+                                alternate_email
+                              </span>
+                              <h1>Mail</h1>
+                            </div>
+                          </a>
+                        }
                       </div>
                     </div>
                   </div>
@@ -459,30 +585,67 @@ export default function PGAddProperty({ propertyid }) {
                 <div className="row no-gutters">
                   <div className="col-lg-4 first_col">
                     <div className="form_field st-2 mt-lg-0">
-                      <label>Owner Name</label>
+                      <label>Owner: </label>
+                      {property && property.ownerDetails &&
+                        <>
+                          {/* <label>Owner: </label> */}
+                          <span style={{ fontWeight: "normal", fontSize: 14 }}>
+                            {property.ownerDetails.role === 'owner' ? " " + property.ownerDetails.displayName : ' Not Assigned'} (
+                            {property.ownerDetails.role === 'owner' ? property.ownerDetails.phoneNumber : ''} )
+                          </span>
+                        </>
+                      }
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected disabled>
-                            Select Owner
-                          </option>
-                          <option>1</option>
-                          <option>2</option>
-                        </select>
+                        <Select className=''
+                          onChange={(option) => setTaggedOwner(option)}
+                          options={ownerListSorted}
+                          styles={{
+                            control: (baseStyles, state) => ({
+                              ...baseStyles,
+                              outline: 'none',
+                              background: '#efefef',
+                              border: 'none',
+                              borderBottom: 'none',
+                              position: "relative",
+                              zIndex: "99"
+                            }),
+                          }}
+                        // isMulti
+                        />
+
                         <div className="field_icon">
                           <span class="material-symbols-outlined">person</span>
                         </div>
                       </div>
                     </div>
                     <div className="form_field st-2">
-                      <label>Co-Owner Name</label>
+                      <label>Co-Owner</label>
+                      {property && property.coownerDetails &&
+                        <>
+                          {/* <label>Co-Owner: </label> */}
+                          <span style={{ fontWeight: "normal", fontSize: 14 }}>
+                            {property.coownerDetails.role === 'coowner' ? " " + property.coownerDetails.displayName : ' Not Assigned'} (
+                            {property.coownerDetails.role === 'coowner' ? property.coownerDetails.phoneNumber : ''} )
+                          </span>
+                        </>
+                      }
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected disabled>
-                            Select Co-Owner
-                          </option>
-                          <option>1</option>
-                          <option>2</option>
-                        </select>
+                        <Select className=''
+                          onChange={(option) => setTaggedCoOwner(option)}
+                          options={coownerListSorted}
+                          styles={{
+                            control: (baseStyles, state) => ({
+                              ...baseStyles,
+                              outline: 'none',
+                              background: '#efefef',
+                              border: 'none',
+                              borderBottom: 'none',
+                              position: "relative",
+                              zIndex: "99"
+                            }),
+                          }}
+                        // isMulti
+                        />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">group</span>
                         </div>

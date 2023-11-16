@@ -45,7 +45,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
 
     // form field values
     const [unitNumber, setUnitNumber] = useState('')
-    const [taggedUsers, setTaggedUsers] = useState([])
+    const [taggedOwner, setTaggedOwner] = useState([])
     const { document: masterPropertyPurpose, error: masterPropertyPurposeerror } = useDocument('master', 'PROPERTYPURPOSE')
     const { documents: masterCountry, error: masterCountryerror } = useCollection('m_countries')
     const [country, setCountry] = useState({ label: 'INDIA', value: 'INDIA' })
@@ -95,6 +95,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
 
     useEffect(() => {
         // console.log('in useeffect')
+        // console.log('users from db: ', documents)
         if (documents) {
             setUsers(documents.map(user => {
                 return { value: { ...user, id: user.id }, label: user.fullName + ' ( ' + user.phoneNumber + ' )' }
@@ -297,20 +298,23 @@ export default function PGAddPropertyQuick({ propertyid }) {
             setFormError('Please select a property category.')
             return
         }
-        if (taggedUsers.length < 1) {
+        if (taggedOwner.length < 1) {
             setFormError('Please assign the property to at least 1 user')
             return
         }
 
-        const taggedUsersList = taggedUsers.map(u => {
-            return {
-                id: u.value.id,
-                displayName: u.value.fullName,
-                phoneNumber: u.value.phoneNumber,
-                photoURL: u.value.photoURL,
-                role: u.value.role
-            }
-        })
+        console.log('tagged owner details: ', taggedOwner);
+
+        const ownerDetails =
+        {
+            id: taggedOwner.value.id,
+            displayName: taggedOwner.value.fullName,
+            phoneNumber: taggedOwner.value.phoneNumber,
+            emailID: taggedOwner.value.email,
+            photoURL: taggedOwner.value.photoURL,
+            role: taggedOwner.value.role
+        }
+
 
         const createdBy = {
             displayName: user.displayName + '(' + user.role + ')',
@@ -326,7 +330,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
 
         const property = {
             unitNumber,
-            taggedUsersList,
+            ownerDetails,
             country: country.label,
             state: state.label,
             city: city.label,
@@ -341,21 +345,8 @@ export default function PGAddPropertyQuick({ propertyid }) {
         }
 
         if (propertyid) {
-            await updateDocument(propertyid, {
-                unitNumber: unitNumber,
-                taggedUsersList,
-                country: country.label,
-                state: state.label,
-                city: city.label,
-                locality: locality.label,
-                society: society.label,
-                category,
-                purpose: purpose.label,
-                status: status,
-                createdBy,
-                onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
-                comments: []
-            })
+            await updateDocument(propertyid, property)
+
             if (updateDocumentResponse.error) {
                 // console.log('updateDocument Error:', updateDocumentResponse.error)
                 navigate('/')
@@ -519,10 +510,10 @@ export default function PGAddPropertyQuick({ propertyid }) {
                                 </div>
                                 <div className="col-lg-4">
                                     <div className="form_field st-2 mt-lg-0">
-                                        <label>Tag Users : {taggedUsersListShow}</label>
+                                        <label>Owner: {taggedUsersListShow}</label>
                                         <div className="field_inner select">
                                             <Select className=''
-                                                onChange={(option) => setTaggedUsers(option)}
+                                                onChange={(option) => setTaggedOwner(option)}
                                                 options={usersSorted}
                                                 styles={{
                                                     control: (baseStyles, state) => ({
@@ -535,7 +526,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
                                                         zIndex: "99"
                                                     }),
                                                 }}
-                                                isMulti
+
                                             />
                                             <div className="field_icon">
                                                 <span class="material-symbols-outlined">   person</span>
