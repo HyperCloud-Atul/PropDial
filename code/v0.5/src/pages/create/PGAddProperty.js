@@ -61,6 +61,7 @@ export default function PGAddProperty({ propertyid }) {
 
     // All select type 
     PropertyPOC: '',
+    PostedBy: '',
     Locality: '',
     City: '',
     Country: '',
@@ -166,6 +167,7 @@ export default function PGAddProperty({ propertyid }) {
 
         // All select type 
         PropertyPOC: property.propertyPOC ? property.propertyPOC : '',
+        PostedBy: property.postedBy ? property.postedBy : '',
         // category: property.category ? property.category : 'Residential',
         Locality: property.locality ? property.locality : '',
         City: property.city ? property.city : '',
@@ -255,6 +257,7 @@ export default function PGAddProperty({ propertyid }) {
 
       // All select type
       propertyPOC: propertyDetails.PropertyPOC ? propertyDetails.PropertyPOC : '',
+      postedBy: propertyDetails.PostedBy ? propertyDetails.PostedBy : '',
       category,
       // ownerDetails,
       // coownerDetails,
@@ -727,6 +730,76 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                       </div>
                     </div>
+
+
+                    <div className="form_field st-2">
+                      <label>Posted By</label>
+                      <div className="radio_group">
+                        <div className="radio_group_single">
+                          <div
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.PostedBy === 'Propdial'
+                              ? "radiochecked"
+                              : ""
+                              }`}
+                          >
+                            <input
+                              type="radio"
+                              id="postedBy_propdial"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PostedBy: 'Propdial'
+                                })
+                              }}
+                            />
+                            <label htmlFor="postedBy_propdial">
+                              <div className="radio_icon">
+                                <span className="material-symbols-outlined add">
+                                  add
+                                </span>
+                                <span className="material-symbols-outlined check">
+                                  done
+                                </span>
+                              </div>
+                              <h6>Propdial</h6>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="radio_group_single">
+
+                          <div
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.PostedBy === 'Agent'
+                              ? "radiochecked"
+                              : ""
+                              }`}
+                          >
+                            <input
+                              type="radio"
+                              id="postedBy_agent"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PostedBy: 'Agent'
+                                })
+                              }}
+
+                            />
+                            <label htmlFor="postedBy_agent">
+                              <div className="radio_icon">
+                                <span className="material-symbols-outlined add">
+                                  add
+                                </span>
+                                <span className="material-symbols-outlined check">
+                                  done
+                                </span>
+                              </div>
+                              <h6>Agent</h6>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="form_field st-2">
                       <label>Address Locator</label>
                       <div className="field_inner">

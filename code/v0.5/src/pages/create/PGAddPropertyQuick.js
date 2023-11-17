@@ -339,7 +339,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
             category: category,
             purpose: purpose.label,
             status: status,
-            postedBy: 'propdial',
+            postedBy: 'Propdial',
             updatedBy,
             onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
             comments: []
