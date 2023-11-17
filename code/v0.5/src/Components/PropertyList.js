@@ -32,7 +32,7 @@ export default function PropertyList({ properties }) {
                     {user.role === "admin" && (
                       <Link to={`/propertyedit/${property.id}`} key={property.id}>
                         <div className={"event-id " + property.category}>
-                          <h5>{property.category}</h5>
+                          <h5>{property.category} 123456</h5>
                         </div>
                         <div
                           className="address-div"

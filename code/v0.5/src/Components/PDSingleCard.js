@@ -52,15 +52,15 @@ const PDSingleCard = ({ propertyDocument }) => {
                             </div>
                             <div className="pmd_section2 pmd_section3 row">
                                 <div className="pdms_single col-4">
-                                    <h4><img src="./assets/img/home-black.png"></img>{propertyDocument.bhk}</h4>
+                                    <h4><img src="/assets/img/home-black.png"></img>{propertyDocument.bhk}</h4>
                                     <h6>BHK</h6>
                                 </div>
                                 <div className="pdms_single col-4">
-                                    <h4><img src="./assets/img/double-bed-black.png"></img>{propertyDocument.numberOfBedrooms}</h4>
+                                    <h4><img src="/assets/img/double-bed-black.png"></img>{propertyDocument.numberOfBedrooms}</h4>
                                     <h6>Bedrooms</h6>
                                 </div>
                                 <div className="pdms_single col-4">
-                                    <h4><img src="./assets/img/bathtub-black.png"></img>{propertyDocument.numberOfBathrooms}</h4>
+                                    <h4><img src="/assets/img/bathtub-black.png"></img>{propertyDocument.numberOfBathrooms}</h4>
                                     <h6>Bathroom</h6>
                                 </div>
                             </div>
@@ -175,7 +175,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             <div className="single_user">
                                                 <div className="left">
                                                     <div className="user_img">
-                                                        <img src="./assets/img/user.png" alt="" />
+                                                        <img src="/assets/img/user.png" alt="" />
                                                     </div>
                                                 </div>
                                                 <div className="right">
@@ -199,7 +199,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 <Link to="https://wa.me/918770534650" className="contacts_single">
                                                     <div className="icon">
                                                         <img
-                                                            src="./assets/img/whatsapp.png"
+                                                            src="/assets/img/whatsapp.png"
                                                             alt="" />
                                                     </div>
                                                     <h6>
@@ -230,7 +230,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             <div class="left">
 
                                                 <div class="user_img">
-                                                    <img src="./assets/img/user.png" alt="" />
+                                                    <img src="/assets/img/user.png" alt="" />
                                                 </div>
                                             </div>
                                             <div class="right">
@@ -239,8 +239,8 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 <h6>Ujjain, India</h6>
                                                 {user && user.role !== "owner" && (
                                                     <div class="wc">
-                                                        <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
-                                                        <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+                                                        <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
+                                                        <img src="/assets/img/phone-call.png" class="pointer" alt="" />
 
                                                     </div>
                                                 )}
@@ -252,7 +252,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             </div>
                                             <div class="left">
                                                 <div class="user_img">
-                                                    <img src="./assets/img/user.png" alt="" />
+                                                    <img src="/assets/img/user.png" alt="" />
                                                 </div>
                                             </div>
                                             <div class="right">
@@ -260,8 +260,8 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 <h6>8770534650</h6>
                                                 <h6>Ujjain, India</h6>
                                                 <div class="wc">
-                                                    <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
-                                                    <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+                                                    <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
+                                                    <img src="/assets/img/phone-call.png" class="pointer" alt="" />
 
                                                 </div>
                                             </div>
@@ -272,7 +272,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             </div>
                                             <div class="left">
                                                 <div class="user_img">
-                                                    <img src="./assets/img/user.png" alt="" />
+                                                    <img src="/assets/img/user.png" alt="" />
                                                 </div>
                                             </div>
                                             <div class="right">
@@ -280,8 +280,8 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 <h6>8770534650</h6>
                                                 <h6>Ujjain, India</h6>
                                                 <div class="wc">
-                                                    <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
-                                                    <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+                                                    <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
+                                                    <img src="/assets/img/phone-call.png" class="pointer" alt="" />
 
                                                 </div>
                                             </div>
@@ -310,7 +310,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             <div className="single_user">
                                                 {/* <div className="left">
                                         <div className="user_img">
-                                            <img src="./assets/img/user.png" alt="" />
+                                            <img src="/assets/img/user.png" alt="" />
                                         </div>
                                     </div> */}
                                                 <div className="right">
@@ -332,7 +332,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 <Link to="https://wa.me/918770534650" className="contacts_single">
                                                     <div className="icon">
                                                         <img
-                                                            src="./assets/img/whatsapp.png"
+                                                            src="/assets/img/whatsapp.png"
                                                             alt="" />
                                                     </div>
                                                     <h6>
@@ -363,8 +363,8 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 <h5>8770534650</h5>
                                                 <h6>level1@gmail.com</h6>
                                                 {/* <div class="wc">
-                                        <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
-                                        <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+                                        <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
+                                        <img src="/assets/img/phone-call.png" class="pointer" alt="" />
 
                                     </div> */}
                                             </div>
@@ -376,8 +376,8 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 <h5>8770534650</h5>
                                                 <h6>level2@gmail.com</h6>
                                                 {/* <div class="wc">
-                                        <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
-                                        <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+                                        <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
+                                        <img src="/assets/img/phone-call.png" class="pointer" alt="" />
 
                                     </div> */}
                                             </div>
@@ -389,8 +389,8 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 <h5>8770534650</h5>
                                                 <h6>level3@gmail.com</h6>
                                                 {/* <div class="wc">
-                                        <img src="./assets/img/whatsapp.png" class="pointer" alt="" />
-                                        <img src="./assets/img/phone-call.png" class="pointer" alt="" />
+                                        <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
+                                        <img src="/assets/img/phone-call.png" class="pointer" alt="" />
 
                                     </div> */}
                                             </div>

@@ -68,41 +68,55 @@ export default function PGOwnerDashboard() {
       let filteredProperty = false;
       switch (filter) {
         case "ALL":
-          document.taggedUsersList.forEach((u) => {
-            if (u.id === user.uid) {
-              filteredProperty = true;
-            }
-          });
+          // document.taggedUsersList.forEach((u) => {
+          //   if (u.id === user.uid) {
+          //     filteredProperty = true;
+          //   }
+          // });
+
+          document.ownerDetails.id === user.uid ? filteredProperty = true : filteredProperty = false;
+
           return filteredProperty;
         case "RESIDENTIAL":
-          document.taggedUsersList.forEach((u) => {
-            if (
-              u.id === user.uid &&
-              document.category.toUpperCase() === "RESIDENTIAL"
-            ) {
-              filteredProperty = true;
-            }
-          });
+          // document.taggedUsersList.forEach((u) => {
+          //   if (
+          //     u.id === user.uid &&
+          //     document.category.toUpperCase() === "RESIDENTIAL"
+          //   ) {
+          //     filteredProperty = true;
+          //   }
+          // });
+
+          document.ownerDetails.id === user.uid &&
+            document.category.toUpperCase() === "RESIDENTIAL" ? filteredProperty = true : filteredProperty = false;
+
           return filteredProperty;
         case "COMMERCIAL":
-          document.taggedUsersList.forEach((u) => {
-            if (
-              u.id === user.uid &&
-              document.category.toUpperCase() === "COMMERCIAL"
-            ) {
-              filteredProperty = true;
-            }
-          });
+          // document.taggedUsersList.forEach((u) => {
+          //   if (
+          //     u.id === user.uid &&
+          //     document.category.toUpperCase() === "COMMERCIAL"
+          //   ) {
+          //     filteredProperty = true;
+          //   }
+          // });
+          document.ownerDetails.id === user.uid &&
+            document.category.toUpperCase() === "COMMERCIAL" ? filteredProperty = true : filteredProperty = false;
+
           return filteredProperty;
         case "INACTIVE":
-          document.taggedUsersList.forEach((u) => {
-            if (
-              u.id === user.uid &&
-              document.status.toUpperCase() === "INACTIVE"
-            ) {
-              filteredProperty = true;
-            }
-          });
+          // document.taggedUsersList.forEach((u) => {
+          //   if (
+          //     u.id === user.uid &&
+          //     document.status.toUpperCase() === "INACTIVE"
+          //   ) {
+          //     filteredProperty = true;
+          //   }
+          // });
+
+          document.ownerDetails.id === user.uid &&
+            document.status.toUpperCase() === "INACTIVE" ? filteredProperty = true : filteredProperty = false;
+
           return filteredProperty;
         default:
           return true;
@@ -435,9 +449,9 @@ export default function PGOwnerDashboard() {
                 />
               )}
               {/* {billsdocuments && <Filters changeFilter={changeFilter} />} */}
-             
-                {properties && <PropertyList properties={properties} />}
-            
+
+              {properties && <PropertyList properties={properties} />}
+
               {/* {bills && <BillList bills={bills} />} */}
               <br></br>
               <div className="property_card_left">
