@@ -33,6 +33,7 @@ export default function PGOwnerDashboard() {
     let flag = ((user && user.role === "owner") || (user && user.role === "coowner"));
     // if ((user && user.role === "owner") || (user && user.role === "coowner"))
     // flag = true;
+    console.log('flag: ', flag)
     if (!flag) {
       logout();
     }
@@ -76,7 +77,7 @@ export default function PGOwnerDashboard() {
           //   }
           // });
 
-          document.ownerDetails.id === user.uid ? filteredProperty = true : filteredProperty = false;
+          (document.ownerDetails.id === user.uid) || (document.coownerDetails.id === user.uid) ? filteredProperty = true : filteredProperty = false;
 
           return filteredProperty;
         case "RESIDENTIAL":

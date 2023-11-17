@@ -77,8 +77,8 @@ export default function PGProfile() {
       navigate("/admindashboard");
     }
 
-    if (user && user.role === "owner" || user && user.role === "coowner") {
-      // console.log('in user', user.role)
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
+      console.log('in user', user.role)
       navigate("/ownerdashboard");
     }
 
@@ -175,13 +175,13 @@ export default function PGProfile() {
         msg={"Are you sure you want to logout?"}
       />
       <section className="hero relative">
-        <img src="./assets/img/profile_bg.jpeg"></img>
+        <img src="/assets/img/profile_bg.jpeg" alt=''></img>
       </section>
       <section className="section_name profile_card">
         <div className="container">
           <div className="sn_inner">
             <div className="user_img relative">
-              <img src={user.photoURL}></img>
+              <img src={user.photoURL} alt=''></img>
               <input
                 type="file"
                 onChange={handleFileChange}

@@ -332,7 +332,7 @@ function App() {
               <Route
                 path="/ownerdashboard"
                 element={
-                  user && user.role === "owner" ? (
+                  (user && user.role === "owner") || (user && user.role === "coowner") ? (
                     <PGOwnerDashboard />
                   ) : (
                     <Navigate to="/login" />
