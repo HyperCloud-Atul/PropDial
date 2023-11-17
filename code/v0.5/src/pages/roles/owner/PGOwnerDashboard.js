@@ -31,9 +31,7 @@ export default function PGOwnerDashboard() {
 
   useEffect(() => {
     let flag = ((user && user.role === "owner") || (user && user.role === "coowner"));
-    // if ((user && user.role === "owner") || (user && user.role === "coowner"))
-    // flag = true;
-    console.log('flag: ', flag)
+
     if (!flag) {
       logout();
     }
@@ -90,7 +88,7 @@ export default function PGOwnerDashboard() {
           //   }
           // });
 
-          document.ownerDetails.id === user.uid &&
+          ((document.ownerDetails.id === user.uid) || (document.coownerDetails.id === user.uid)) &&
             document.category.toUpperCase() === "RESIDENTIAL" ? filteredProperty = true : filteredProperty = false;
 
           return filteredProperty;
@@ -103,7 +101,7 @@ export default function PGOwnerDashboard() {
           //     filteredProperty = true;
           //   }
           // });
-          document.ownerDetails.id === user.uid &&
+          ((document.ownerDetails.id === user.uid) || (document.coownerDetails.id === user.uid)) &&
             document.category.toUpperCase() === "COMMERCIAL" ? filteredProperty = true : filteredProperty = false;
 
           return filteredProperty;
@@ -117,7 +115,7 @@ export default function PGOwnerDashboard() {
           //   }
           // });
 
-          document.ownerDetails.id === user.uid &&
+          ((document.ownerDetails.id === user.uid) || (document.coownerDetails.id === user.uid)) &&
             document.status.toUpperCase() === "INACTIVE" ? filteredProperty = true : filteredProperty = false;
 
           return filteredProperty;

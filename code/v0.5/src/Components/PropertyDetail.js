@@ -33,7 +33,7 @@ const PropertyDetail = ({ propertiesdocuments }) => {
             <div className="pcs_main_detail">
               <div className="pmd_top relative" >
                 <h4 className="property_name">
-                  {user.role === 'owner' || user.role === 'coowner' ? property.unitNumber : ''} - {user.role === 'owner' ? property.society : ''}<br></br>
+                  {user.role === 'owner' || user.role === 'coowner' ? property.unitNumber : ''} - {user.role === 'owner' || user.role === 'coowner' ? property.society : ''}<br></br>
                   {property.bhk} | {property.furnishing} Furnished for {property.purpose} | {property.locality}
                 </h4>
                 <h6 className="property_location">{property.city}, {property.state}</h6>

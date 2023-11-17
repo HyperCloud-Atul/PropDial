@@ -27,7 +27,7 @@ const LeftSidebar = () => {
       navigate("/admindashboard");
     }
 
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/ownerdashboard");
     }
@@ -36,7 +36,7 @@ const LeftSidebar = () => {
       // console.log('in user', user.role)
       navigate("/tenantdashboard");
     }
-    if (user && user.role === "executive") {
+    if (user && user.role === "propertymanager") {
       // console.log('in user', user.role)
       navigate("/executivedashboard");
     }
@@ -48,7 +48,7 @@ const LeftSidebar = () => {
       // navigate("/adminproperties");
       navigate("/users");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/bills");
     }
@@ -59,7 +59,7 @@ const LeftSidebar = () => {
       // navigate("/adminproperties");
       navigate("/pgpropertylist");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/tickets");
     }
@@ -71,7 +71,7 @@ const LeftSidebar = () => {
       // navigate("/adminproperties");
       navigate("/addproperty_quick");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/search-property");
     }
@@ -82,7 +82,7 @@ const LeftSidebar = () => {
       // navigate("/adminproperties");
       navigate("/pgsearch");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("");
     }
@@ -112,7 +112,7 @@ const LeftSidebar = () => {
     fifthMenuIcon = "search"
     fifthMenu = "Search"
   }
-  if (user && user.role === "owner") {
+  if ((user && user.role === "owner") || (user && user.role === "coowner")) {
     firstMenu = "Owner Dashboard";
     secondMenuIcon = "receipt_long";
     secondMenu = "Bills";
@@ -120,15 +120,15 @@ const LeftSidebar = () => {
     thirdMenu = "Tickets";
     fourthMenuIcon = "receipt_long";
     fourthMenu = "Property"
-    fifthMenuIcon = ""
-    fifthMenu = ""
+    fifthMenuIcon = "receipt_long"
+    fifthMenu = "Report"
   }
   if (user && user.role === "tenant") {
     firstMenu = "Tenant Dashboard";
     secondMenu = "Rent";
     thirdMenu = "Tickets";
   }
-  if (user && user.role === "executive") {
+  if (user && user.role === "propertymanager") {
     firstMenu = "";
     secondMenu = "Bills";
     thirdMenu = "Tickets";
