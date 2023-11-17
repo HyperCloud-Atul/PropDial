@@ -30,7 +30,9 @@ export default function PGOwnerDashboard() {
   const [filter, setFilter] = useState("ALL");
 
   useEffect(() => {
-    let flag = user && user.role === "owner";
+    let flag = ((user && user.role === "owner") || (user && user.role === "coowner"));
+    // if ((user && user.role === "owner") || (user && user.role === "coowner"))
+    // flag = true;
     if (!flag) {
       logout();
     }

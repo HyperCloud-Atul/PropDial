@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 
 const PropertyDetail = ({ propertiesdocuments }) => {
@@ -10,8 +11,12 @@ const PropertyDetail = ({ propertiesdocuments }) => {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
+
+  const { user } = useAuthContext();
+
   // read more read less
   const [height, setHeight] = useState(true);
+
 
   const handleHeight = () => {
     setHeight(!height);
@@ -23,11 +28,12 @@ const PropertyDetail = ({ propertiesdocuments }) => {
         <div className="property_card_single">
           <Link className="pcs_inner pointer" to={`/pdsingle/${property.id}`} key={property.id}>
             <div className="pcs_image_area">
-              <img src="./assets/img/property/p1.jpg" className="bigimage"></img>
+              <img src="/assets/img/property/p1.jpg" className="bigimage"></img>
             </div>
             <div className="pcs_main_detail">
               <div className="pmd_top relative" >
                 <h4 className="property_name">
+                  {user.role === 'owner' || user.role === 'coowner' ? property.unitNumber : ''} - {user.role === 'owner' ? property.society : ''}<br></br>
                   {property.bhk} | {property.furnishing} Furnished for {property.purpose} | {property.locality}
                 </h4>
                 <h6 className="property_location">{property.city}, {property.state}</h6>

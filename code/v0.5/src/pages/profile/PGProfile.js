@@ -16,13 +16,13 @@ import { useLocation } from "react-router-dom";
 import "./PGProfile.css";
 
 export default function PGProfile() {
-    // Scroll to the top of the page whenever the location changes start
-    const location = useLocation();
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [location]);
-    // Scroll to the top of the page whenever the location changes end
-    
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
+
   const { user } = useAuthContext();
   // const { document, error } = useDocument('users', user.uid)
   // const [email, setEmail] = useState('')
@@ -77,7 +77,7 @@ export default function PGProfile() {
       navigate("/admindashboard");
     }
 
-    if (user && user.role === "owner") {
+    if (user && user.role === "owner" || user && user.role === "coowner") {
       // console.log('in user', user.role)
       navigate("/ownerdashboard");
     }
@@ -237,136 +237,136 @@ export default function PGProfile() {
           </div>
         </div>
       </section>
-  <div className="container">
-  <div className="visit_dashboard">
-        <span>Visit Dashboard for more deatils</span>
-        <span className="theme_btn btn_fill pointer" onClick={showDashboard}>
-          Dashboard
-          <span class="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span>
-        </span>
+      <div className="container">
+        <div className="visit_dashboard">
+          <span>Visit Dashboard for more deatils</span>
+          <span className="theme_btn btn_fill pointer" onClick={showDashboard}>
+            Dashboard
+            <span class="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span>
+          </span>
 
-      </div>
-  </div>
-    <div className="container">
-    <div className="row no-gutters">
-        <div className="col-lg-6 col-md-12 col-sm-12">
-          <div className="property-status-padding-div">
-            <div className="profile-card-div">
-              <div className="address-div">
-                <div
-                  className="icon"
-                  style={{ background: "rgba(84,204,203,0.3)" }}
-                >
-                  <span className="material-symbols-outlined">security</span>
-                </div>
-
-                <div className="address-text">
-                  <h5>Security alert list</h5>
-                  <div className="">
-                    <span className="material-symbols-outlined">
-                      chevron_right
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <hr
-                style={{
-                  margin: "0",
-                  border: "none",
-                  borderBottom: "1px solid #eee",
-                }}
-              />
-
-              <div className="address-div" style={{ cursor: "pointer" }}>
-                <div
-                  className="icon"
-                  style={{ background: "rgba(84,204,203,0.3)" }}
-                >
-                  <span className="material-symbols-outlined">sms</span>
-                </div>
-
-                <div className="address-text">
-                  {/* {!isPending && <button className="btn" onClick={sendEmail} >Send Email</button>}
-                                        {isPending && <button className="btn" disabled>Processing...</button>} */}
-                  <h5>Help & Support</h5>
-                  <div className="">
-                    <span className="material-symbols-outlined">
-                      chevron_right
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        <div className="col-lg-6 col-md-12 col-sm-12">
-          <div className="property-status-padding-div">
-            <div className="profile-card-div">
-              <div
-                className="address-div"
-                style={{ cursor: "pointer" }}
-                onClick={changePwd}
-              >
-                <div
-                  className="icon"
-                  style={{ background: "rgba(84,204,203,0.3)" }}
-                >
-                  <span className="material-symbols-outlined">lock_open</span>
-                </div>
+      </div>
+      <div className="container">
+        <div className="row no-gutters">
+          <div className="col-lg-6 col-md-12 col-sm-12">
+            <div className="property-status-padding-div">
+              <div className="profile-card-div">
+                <div className="address-div">
+                  <div
+                    className="icon"
+                    style={{ background: "rgba(84,204,203,0.3)" }}
+                  >
+                    <span className="material-symbols-outlined">security</span>
+                  </div>
 
-                {user && (
                   <div className="address-text">
-                    {/* {!isPending && <button className="btn" onClick={changePwd} >Change Password</button>}
-                                        {isPending && <button className="btn" disabled>Processing...</button>} */}
-                    <h5>Change Password</h5>
+                    <h5>Security alert list</h5>
                     <div className="">
                       <span className="material-symbols-outlined">
                         chevron_right
                       </span>
                     </div>
                   </div>
-                )}
-              </div>
-              <hr
-                style={{
-                  margin: "0",
-                  border: "none",
-                  borderBottom: "1px solid #aaa",
-                }}
-              />
-
-              <div
-                className="address-div"
-                style={{ cursor: "pointer" }}
-                onClick={showPopup}
-              >
-                <div
-                  className="icon"
-                  style={{ background: "rgba(84,204,203,0.3)" }}
-                >
-                  <span className="material-symbols-outlined">logout</span>
                 </div>
+                <hr
+                  style={{
+                    margin: "0",
+                    border: "none",
+                    borderBottom: "1px solid #eee",
+                  }}
+                />
 
-                {user && (
+                <div className="address-div" style={{ cursor: "pointer" }}>
+                  <div
+                    className="icon"
+                    style={{ background: "rgba(84,204,203,0.3)" }}
+                  >
+                    <span className="material-symbols-outlined">sms</span>
+                  </div>
+
                   <div className="address-text">
-                    {/* {!isPending && <button className="btn" onClick={logout}>Logout</button>}
+                    {/* {!isPending && <button className="btn" onClick={sendEmail} >Send Email</button>}
+                                        {isPending && <button className="btn" disabled>Processing...</button>} */}
+                    <h5>Help & Support</h5>
+                    <div className="">
+                      <span className="material-symbols-outlined">
+                        chevron_right
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6 col-md-12 col-sm-12">
+            <div className="property-status-padding-div">
+              <div className="profile-card-div">
+                <div
+                  className="address-div"
+                  style={{ cursor: "pointer" }}
+                  onClick={changePwd}
+                >
+                  <div
+                    className="icon"
+                    style={{ background: "rgba(84,204,203,0.3)" }}
+                  >
+                    <span className="material-symbols-outlined">lock_open</span>
+                  </div>
+
+                  {user && (
+                    <div className="address-text">
+                      {/* {!isPending && <button className="btn" onClick={changePwd} >Change Password</button>}
+                                        {isPending && <button className="btn" disabled>Processing...</button>} */}
+                      <h5>Change Password</h5>
+                      <div className="">
+                        <span className="material-symbols-outlined">
+                          chevron_right
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <hr
+                  style={{
+                    margin: "0",
+                    border: "none",
+                    borderBottom: "1px solid #aaa",
+                  }}
+                />
+
+                <div
+                  className="address-div"
+                  style={{ cursor: "pointer" }}
+                  onClick={showPopup}
+                >
+                  <div
+                    className="icon"
+                    style={{ background: "rgba(84,204,203,0.3)" }}
+                  >
+                    <span className="material-symbols-outlined">logout</span>
+                  </div>
+
+                  {user && (
+                    <div className="address-text">
+                      {/* {!isPending && <button className="btn" onClick={logout}>Logout</button>}
                                         {isPending && <button className="btn" disabled>Logging out...</button>} */}
-                    <h5>Logout</h5>
-                    <div className="">
-                      <span className="material-symbols-outlined">
-                        chevron_right
-                      </span>
+                      <h5>Logout</h5>
+                      <div className="">
+                        <span className="material-symbols-outlined">
+                          chevron_right
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <br></br>
-    <br></br>
+      <br></br>
+      <br></br>
       {/* <form onSubmit={handleSubmit}>
                 <label>
                     <span>Full Name:</span>
