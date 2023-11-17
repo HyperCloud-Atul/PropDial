@@ -146,7 +146,7 @@ export default function PropertyList({ properties }) {
                       </div>
                     )}
                     {
-                      property.ownerDetails.role === "executive" ?
+                      property.ownerDetails.role === "propertymanager" ?
                         <>
                           <div
                             className="secondary-details-inside-display"
@@ -207,7 +207,7 @@ export default function PropertyList({ properties }) {
                               <a href={"https://wa.me/" + property.ownerDetails.phoneNumber}>
                                 <div style={{ margin: "5px 0" }}>
                                   <img
-                                    src="./assets/img/whatsapp_square_icon.png"
+                                    src="/assets/img/whatsapp_square_icon.png"
                                     alt=""
                                   />
                                 </div>

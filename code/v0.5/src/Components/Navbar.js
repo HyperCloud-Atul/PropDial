@@ -46,7 +46,7 @@ export default function Navbar() {
       navigate("/admindashboard");
     }
 
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/ownerdashboard");
     }
@@ -55,7 +55,7 @@ export default function Navbar() {
       // console.log('in user', user.role)
       navigate("/tenantdashboard");
     }
-    if (user && user.role === "executive") {
+    if (user && user.role === "propertymanager") {
       // console.log('in user', user.role)
       navigate("/executivedashboard");
     }
@@ -72,9 +72,9 @@ export default function Navbar() {
       // navigate("/adminproperties");
       navigate("/pgpropertylist");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/tickets");
+      navigate("/ownerdashboard");
     }
   };
   const showThirdPage = () => {
@@ -88,7 +88,7 @@ export default function Navbar() {
       // navigate("/adminproperties");
       navigate("/users");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/tickets");
     }
@@ -141,7 +141,7 @@ export default function Navbar() {
     secondMenu = "Rent";
     thirdMenu = "Tickets";
   }
-  if (user && user.role === "executive") {
+  if (user && user.role === "propertymanager") {
     secondMenu = "Bills";
     thirdMenu = "Tickets";
   }
@@ -195,7 +195,7 @@ export default function Navbar() {
       <nav className={navClass}>
         <ul>
           <li className="logo pointer" onClick={logoClick}>
-            <img src="./assets/img/logo_propdial.png" alt="logo" />
+            <img src="/assets/img/logo_propdial.png" alt="logo" />
           </li>
           <li className="main_menus">
             <div
@@ -296,25 +296,25 @@ export default function Navbar() {
               className="msm_single pointer"
               to="https://www.facebook.com/propdial"
             >
-              <img src="./assets/img/facebook.png"></img>
+              <img src="/assets/img/facebook.png"></img>
             </Link>
             <Link
               className="msm_single pointer"
               to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg"
             >
-              <img src="./assets/img/youtube.png"></img>
+              <img src="/assets/img/youtube.png"></img>
             </Link>
             <Link
               className="msm_single pointer"
               to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/"
             >
-              <img src="./assets/img/linkedin.png"></img>
+              <img src="/assets/img/linkedin.png"></img>
             </Link>
             <Link
               className="msm_single pointer"
               to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial"
             >
-              <img src="./assets/img/twitter.png"></img>
+              <img src="/assets/img/twitter.png"></img>
             </Link>
           </li>
 

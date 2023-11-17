@@ -81,7 +81,7 @@ export default function Sidebar(props) {
                 </li>
               }
 
-              {user && user.role === 'executive' &&
+              {user && user.role === 'propertymanager' &&
                 <li>
                   <NavLink exact to="/executivedashboard">
                     <img src={DashboardIcon} alt="dashboard icon" />

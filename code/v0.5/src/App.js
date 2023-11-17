@@ -369,7 +369,7 @@ function App() {
               <Route
                 path="/executivedashboard"
                 element={
-                  user && user.role === "executive" ? (
+                  user && user.role === "propertymanager" ? (
                     <ExecutiveDashboard />
                   ) : (
                     <Navigate to="/login" />

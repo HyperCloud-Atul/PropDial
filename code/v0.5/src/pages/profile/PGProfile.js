@@ -87,7 +87,7 @@ export default function PGProfile() {
       navigate("/tenantdashboard");
     }
 
-    if (user && user.role === "executive") {
+    if (user && user.role === "propertymanager") {
       // console.log('in user', user.role)
       navigate("/executivedashboard");
     }
