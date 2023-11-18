@@ -224,7 +224,7 @@ const PDSingle = () => {
                                 <div className="pp_sidebar_cards">
                                     <div className="pp_sidebarcard_single">
                                         <div className="ppss_img">
-                                            <img src="./assets/img/property/p2.jpg" alt="" />
+                                            <img src="/assets/img/property/p2.jpg" alt="" />
                                         </div>
                                         <div className="ppss_header">
                                             <h5>Brij Residency Phase 2</h5>
@@ -241,7 +241,7 @@ const PDSingle = () => {
                                     </div>
                                     <div className="pp_sidebarcard_single">
                                         <div className="ppss_img">
-                                            <img src="./assets/img/property/p2.jpg" alt="" />
+                                            <img src="/assets/img/property/p2.jpg" alt="" />
                                         </div>
                                         <div className="ppss_header">
                                             <h5>Brij Residency Phase 2</h5>
