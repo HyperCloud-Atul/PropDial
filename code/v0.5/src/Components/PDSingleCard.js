@@ -22,6 +22,7 @@ const PDSingleCard = ({ propertyDocument }) => {
     return (
         <>
             <div className=''>
+
                 <div className="property_card_single">
                     <div className="pcs_inner pointer" to="/pdsingle">
                         <PropertyImageGallery></PropertyImageGallery>
@@ -77,86 +78,87 @@ const PDSingleCard = ({ propertyDocument }) => {
                                         share
                                     </span>
                                 </div>
-                                <div className="right">
-                                    <a className="theme_btn no_icon btn_fill" style={{
-                                        marginRight: "10px"
-                                    }}> Contact Agent</a>
-                                    <a className="theme_btn no_icon btn_border" data-bs-toggle="modal" data-bs-target="#exampleModal"> Enquire Now</a>
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content relative">
-                                                <span class="material-symbols-outlined close_modal" data-bs-dismiss="modal">
-                                                    close
-                                                </span>
+                                {!((user && user.role === "owner") || (user && user.role === "coowner") || (user && user.role === "admin")) && (
+                                    <div className="right">
+                                        <a className="theme_btn no_icon btn_fill" style={{
+                                            marginRight: "10px"
+                                        }}> Contact Agent</a>
+                                        <a className="theme_btn no_icon btn_border" data-bs-toggle="modal" data-bs-target="#exampleModal"> Enquire Now</a>
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content relative">
+                                                    <span class="material-symbols-outlined close_modal" data-bs-dismiss="modal">
+                                                        close
+                                                    </span>
 
-                                                <div class="modal-body">
-                                                    <form>
-                                                        <div className="row">
-                                                            <div className="col-sm-12">
-                                                                <div className="section_title mb-4">
-                                                                    <h3>Enquiry</h3>
-                                                                    <h6 className="modal_subtitle">Thank you for your interest in reaching out to us. Please use the form below to submit any question.</h6>
+                                                    <div class="modal-body">
+                                                        <form>
+                                                            <div className="row">
+                                                                <div className="col-sm-12">
+                                                                    <div className="section_title mb-4">
+                                                                        <h3>Enquiry</h3>
+                                                                        <h6 className="modal_subtitle">Thank you for your interest in reaching out to us. Please use the form below to submit any question.</h6>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="col-sm-12">
-                                                                <div class="form_field st-2">
-                                                                    <div class="field_inner select">
-                                                                        <select>
-                                                                            <option value="" disabled selected>I am</option>
-                                                                            {/* <option>Owner</option> */}
-                                                                            <option>Tenant</option>
-                                                                            <option>Agent</option>
-                                                                        </select>
-                                                                        <div class="field_icon">
-                                                                            <span class="material-symbols-outlined">person</span>
+                                                                <div className="col-sm-12">
+                                                                    <div class="form_field st-2">
+                                                                        <div class="field_inner select">
+                                                                            <select>
+                                                                                <option value="" disabled selected>I am</option>
+                                                                                {/* <option>Owner</option> */}
+                                                                                <option>Tenant</option>
+                                                                                <option>Agent</option>
+                                                                            </select>
+                                                                            <div class="field_icon">
+                                                                                <span class="material-symbols-outlined">person</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="col-sm-12">
-                                                                <div class="form_field st-2">
-                                                                    <div class="field_inner">
-                                                                        <input type="text" placeholder="Name" />
-                                                                        <div class="field_icon">
-                                                                            <span class="material-symbols-outlined">person</span>
+                                                                <div className="col-sm-12">
+                                                                    <div class="form_field st-2">
+                                                                        <div class="field_inner">
+                                                                            <input type="text" placeholder="Name" />
+                                                                            <div class="field_icon">
+                                                                                <span class="material-symbols-outlined">person</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="col-sm-12">
-                                                                <div class="form_field st-2">
-                                                                    <div class="field_inner">
-                                                                        <input type="text" placeholder="Phone Number" />
-                                                                        <div class="field_icon">
-                                                                            <span class="material-symbols-outlined">call</span>
+                                                                <div className="col-sm-12">
+                                                                    <div class="form_field st-2">
+                                                                        <div class="field_inner">
+                                                                            <input type="text" placeholder="Phone Number" />
+                                                                            <div class="field_icon">
+                                                                                <span class="material-symbols-outlined">call</span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="col-sm-12">
-                                                                <div className="submit_btn mt-4">
-                                                                    <button type="submit" className="modal_btn theme_btn no_icon btn_fill">
-                                                                        Submit
-                                                                        {/* <span class="material-symbols-outlined btn_arrow ba_animation">
+                                                                <div className="col-sm-12">
+                                                                    <div className="submit_btn mt-4">
+                                                                        <button type="submit" className="modal_btn theme_btn no_icon btn_fill">
+                                                                            Submit
+                                                                            {/* <span class="material-symbols-outlined btn_arrow ba_animation">
                           arrow_forward
                         </span> */}
-                                                                    </button>
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
+                                                        </form>
+                                                    </div>)
 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div>)}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {user && user.role === "owner" && (
+                {((user && user.role === "owner") || (user && user.role === "coowner")) && (
                     <div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <div className="row no-gutters">

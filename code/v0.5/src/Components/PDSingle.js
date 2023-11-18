@@ -19,7 +19,8 @@ import { Carousel } from "react-bootstrap";
 const PDSingle = () => {
 
     const { id } = useParams()
-    console.log('property id: ', id)
+    // console.log('property id: ', id)
+    const { user } = useAuthContext();
 
     const { document: propertyDoc, error: propertyDocError } = useDocument('properties', id)
 
@@ -111,7 +112,20 @@ const PDSingle = () => {
             {/* 9 dots html  */}
 
 
-            <div className="top_search_bar">
+            {/* top search bar */}
+
+            {!user && (
+                <div className="top_search_bar">
+                    <Link to="/search-property" className="back_btn">
+                        <span class="material-symbols-outlined">
+                            arrow_back
+                        </span>
+                        <span>Back</span>
+                    </Link>
+                </div>
+            )}
+
+            {/* <div className="top_search_bar">
                 <Link to="/search-property" className="back_btn">
                     <span class="material-symbols-outlined">
                         arrow_back
@@ -196,7 +210,8 @@ const PDSingle = () => {
                         </Link>
                     </div>
                 </div>
-            </div>
+            </div> */}
+
             <br></br>
             <section className="property_cards">
                 <div className="container-fluid">
