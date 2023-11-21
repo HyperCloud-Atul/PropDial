@@ -19,10 +19,27 @@ const PDSingleCard = ({ propertyDocument }) => {
     // variable of property age 
     const ageOfProperty = 2023 - propertyDocument.yearOfConstruction;
     // variable of property age 
+
+    // share url code 
+    const handleShareClick = async () => {
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    // title: `${property.unitNumber} - ${property.society}`,
+                    // text: `${property.bhk} | ${property.furnishing} Furnished for ${property.purpose} | ${property.locality}`,
+                    url: window.location.href, // You can replace this with the actual URL of the property details page
+                });
+            } else {
+                alert('Web Share API not supported in your browser');
+            }
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
+    // share url code 
     return (
         <>
             <div className=''>
-
                 <div className="property_card_single">
                     <div className="pcs_inner pointer" to="/pdsingle">
                         <PropertyImageGallery></PropertyImageGallery>
@@ -74,7 +91,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                     }}>
                                         favorite
                                     </span>
-                                    <span class="material-symbols-outlined">
+                                    <span class="material-symbols-outlined" onClick={handleShareClick}>
                                         share
                                     </span>
                                 </div>

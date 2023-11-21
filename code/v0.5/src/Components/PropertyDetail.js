@@ -22,6 +22,8 @@ const PropertyDetail = ({ propertiesdocuments }) => {
     setHeight(!height);
   };
   // read more read less
+
+
   return (
     <>
       {propertiesdocuments.map((property) => (
@@ -43,9 +45,9 @@ const PropertyDetail = ({ propertiesdocuments }) => {
                   }}>
                     favorite
                   </span>
-                  <span class="material-symbols-outlined">
+                  {/* <span class="material-symbols-outlined" >
                     share
-                  </span>
+                  </span> */}
                 </div>
               </div>
               <div className="pmd_body">
