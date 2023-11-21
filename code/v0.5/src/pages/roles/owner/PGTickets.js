@@ -13,15 +13,15 @@ import LeftSidebar from "../../../Components/LeftSidebar";
 // styles
 // import './UserDashboard.css'
 
-const billsFilter = ["PENDING", "PMS", "BROKERAGE", "MAINTENANCE", "INACTIVE"];
+const billsFilter = ["PENDING", "COMPLETED", "CANCELLED"];
 
 export default function PGTickets() {
-       // Scroll to the top of the page whenever the location changes start
-       const location = useLocation();
-       useEffect(() => {
-         window.scrollTo(0, 0);
-       }, [location]);
-       // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   const { user } = useAuthContext();
   const { logout, isPending } = useLogout();
   const { documents: billsdocuments, error: billserror } =
@@ -47,46 +47,27 @@ export default function PGTickets() {
             }
           });
           return filteredProperty;
-        case "PMS":
+        case "COMPLETED":
           document.taggedUsersList.forEach((u) => {
             if (
               u.id === user.uid &&
-              document.billType.toUpperCase() === "PMS"
+              document.billType.toUpperCase() === "COMPLETED"
             ) {
               filteredProperty = true;
             }
           });
           return filteredProperty;
-        case "BROKERAGE":
+        case "CANCELLED":
           document.taggedUsersList.forEach((u) => {
             if (
               u.id === user.uid &&
-              document.billType.toUpperCase() === "BROKERAGE"
+              document.billType.toUpperCase() === "CANCELLED"
             ) {
               filteredProperty = true;
             }
           });
           return filteredProperty;
-        case "MAINTENANCE":
-          document.taggedUsersList.forEach((u) => {
-            if (
-              u.id === user.uid &&
-              document.billType.toUpperCase() === "MAINTENANCE"
-            ) {
-              filteredProperty = true;
-            }
-          });
-          return filteredProperty;
-        case "INACTIVE":
-          document.taggedUsersList.forEach((u) => {
-            if (
-              u.id === user.uid &&
-              document.status.toUpperCase() === "INACTIVE"
-            ) {
-              filteredProperty = true;
-            }
-          });
-          return filteredProperty;
+
         default:
           return true;
       }
@@ -101,23 +82,49 @@ export default function PGTickets() {
 
           <br />
 
-         
-
-            <h2 className="page-title">Tickets</h2>
-            <div>
-              {billserror && <p className="error">{billserror}</p>}
-
-              {billsdocuments && (
-                <Filters
-                  changeFilter={changeFilter}
-                  filterList={billsFilter}
-                  filterLength={bills.length}
-                />
-              )}
-
-              {bills && <BillList bills={bills} />}
+          <div
+            className="col-lg-6 col-md-12 col-sm-12"
+            style={{ padding: "10px" }}
+          >
+            {/* Tickets */}
+            <div className="tenant-dashboard-ticket-card">
+              <div className="ticket-round-left"></div>
+              <div className="ticket-round-right"></div>
+              <h1 className="tenant-dashboard-ticket-card-heading">Tickets</h1>
+              <hr />
+              <div className="tenant-dashboard-ticket-card-content">
+                <div>
+                  <h1>Pending Tickets</h1>
+                  <h2>10</h2>
+                  <h3>Last Raised Date</h3>
+                  <h4>15 Jan 2023</h4>
+                </div>
+                <div>
+                  <h1>Closed Tickets</h1>
+                  <h2>30</h2>
+                  <button className="mybutton button5">Raise Ticket</button>
+                </div>
+              </div>
             </div>
-        
+          </div>
+
+
+
+          <h2 className="page-title">Tickets</h2>
+          <div>
+            {billserror && <p className="error">{billserror}</p>}
+
+            {billsdocuments && (
+              <Filters
+                changeFilter={changeFilter}
+                filterList={billsFilter}
+                filterLength={bills.length}
+              />
+            )}
+
+            {bills && <BillList bills={bills} />}
+          </div>
+
 
 
 

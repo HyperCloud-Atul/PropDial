@@ -73,7 +73,7 @@ const LeftSidebar = () => {
     }
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/search-property");
+      navigate("/ownerdashboard");
     }
   };
   const showFifthMenu = () => {
