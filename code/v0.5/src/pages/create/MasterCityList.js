@@ -215,7 +215,7 @@ export default function MasterCityList() {
     : null;
 
   return (
-    <div>
+    <div className="pg_property">
       <Hero
         pageTitle="City List"
         pageSubTitle="Add or update City
