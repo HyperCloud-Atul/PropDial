@@ -1,0 +1,28 @@
+MOM Of Propdial (21/11/23 Tuesday)
+
+1. Convert search data (like society) into keys for easy searching.
+2. Will discuss with vinay ji about POC (Point of contact).
+3. Take user mobile number with country code and also display with country code.
+4. Search owner by full name. EX:- sanskar solanki/ujjain/india
+5. Remove 0(Zero) from number no of bathrooms, no of bedrooms etc.
+6. Replace dropdown of basement with radio button (yes, no).
+7. Unit of Plot Area, Super Area, Built-up Area, Carpet Area should be select by default.
+8. If user fills Plot Area, Super Area, Built-up Area, Carpet Area then it is required to fill its units also.
+9. Unit of plot area may be different but unit of Super Area, Built-up Area, Carpet Area should be same.
+10. Super area should be less than or equal to plot area, Built-up area should be less than of equal to plot area and super area, Carpet area should be less than of equal to plot area, super area and built-up area.
+11. If we check on no in dining area, two wheeler parking than its should not be display on property detail card.
+12. Add country code or country flag field in enquiry popup.
+13. In search bar replace rent with lease if switch to commercial.
+14. Attach a flag with each property.
+15. Package flag
+16. Arrange well I am dropdown in enquiry popup
+17. Fetch google review on home page
+
+
+
+From client side
+
+1. List of Airbnb properties
+2. All YouTube videos
+3. Top 5 FAQ for show on home page
+4. Arrage FAQ page with category wise
