@@ -221,15 +221,17 @@ export default function PropertyList({ properties }) {
                     {user && user.role === "admin" && (
                       <div className="secondary-details-inside-display-btn-div">
                         {/* <button onClick={() => navigate('/addbill', { state: { propertyid: property.id } })}>Add Bill</button> */}
-                        <div
+                        {/* <div
                           onClick={() =>
-                            navigate("/addbill", {
-                              state: { propertyid: property.id },
-                            })
+                            navigate("/addbill/" + property.id)
                           }
-                        >
-                          <h1>Add Bills</h1>
-                        </div>
+                        > */}
+                        <Link to={`/addbill/${property.id}`} key={property.id}>
+                          <div>
+
+                            <h1>Add Bills</h1>
+                          </div>
+                        </Link>
                         <div
                           onClick={() =>
                             navigate("/adddocument", {

@@ -412,7 +412,8 @@ export default function PGAddProperty({ propertyid }) {
   return (
     <div className="dashboard_pg aflbg property_setup">
       <div className="sidebarwidth">
-        <PropertySidebar />
+        {/* <PropertySidebar ({propertyid}) /> */}
+        {propertyid && <PropertySidebar propertyid={propertyid} />}
       </div>
       <div className="right_main_content">
         <div className="property-detail">

@@ -39,10 +39,13 @@ import AddPhoto from "./pages/create/AddPhoto";
 import AddDocument from "./pages/create/AddDocument";
 import AddDocumentNew from "./pages/create/AddDocumentNew";
 import PropertyStatus from "./Components/PropertyStatus";
+
 import PGProperty from "./pages/property/PGProperty";
-import UserList from "./pages/user/UserList";
-// import Property from './pages/property/Property'
+import PGPropertyBills from "./pages/property/PGPropertyBills";
 import PGPropertyDetails from "./pages/property/PGPropertyDetails";
+
+import UserList from "./pages/user/UserList";
+
 import PDSingle from "./Components/PDSingle";
 // import OnlineUsers from './components/OnlineUsers'
 
@@ -199,7 +202,7 @@ function App() {
               ></Route>
 
               <Route
-                path="/addbill"
+                path="/addbill/:propertyid"
                 element={
                   user && user.role === "admin" ? (
                     <AddBill />
@@ -285,8 +288,19 @@ function App() {
               <Route
                 path="/propertyedit/:id"
                 element={
-                  user && user.role ? (
+                  user && user.role === "admin" ? (
                     <PGPropertyEdit />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+
+              <Route
+                path="/propertybills/:propertyid"
+                element={
+                  user && user.role === "admin" ? (
+                    <PGPropertyBills />
                   ) : (
                     <Navigate to="/login" />
                   )

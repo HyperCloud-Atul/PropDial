@@ -1,9 +1,12 @@
 import React from 'react'
 // import "./LeftSidebar.css"
 import { useNavigate } from "react-router-dom";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const PropertySidebar = () => {
+const PropertySidebar = ({ propertyid }) => {
+
+    console.log('PropertySidebar-property id: ', propertyid)
+
     const location = useLocation(); // Get the current location
     const navigate = useNavigate();
     const psidemenuone = () => {
@@ -15,6 +18,19 @@ const PropertySidebar = () => {
     const psidemenuthree = () => {
         navigate("/propertystatus");
     };
+
+
+    const handleSideMenuClick = (option) => {
+        console.log('Option: ', option)
+        switch (option) {
+            case "propertybills":
+                return navigate("/propertybills/" + propertyid);
+            default:
+                return navigate("/propertystatus");
+        }
+    };
+
+
     return (
         <div>
             <div class="side-navbar side-navbar-large property-list-side-navbar"
@@ -44,6 +60,18 @@ const PropertySidebar = () => {
                             <small>Property Images</small>
                         </div>
 
+                    </li >
+                    <li className={`pointer sn_menu ${location.pathname === "/addbill" ? "active" : ""
+                        }`} onClick={() => handleSideMenuClick('propertybills')}>
+                        <b></b>
+                        <b></b>
+
+                        <div className='sn_menu'>
+                            <span class="material-symbols-outlined">
+                                description
+                            </span>
+                            <small>Property Bills</small>
+                        </div>
                     </li>
                     <li className={`pointer ${["/addphoto", "/adddocumentnew", "/propertystatus"].includes(location.pathname) ? "" : "active"}`}>
                         <b></b>
@@ -57,6 +85,7 @@ const PropertySidebar = () => {
                         </div>
 
                     </li>
+
                     <li className={`pointer sn_menu ${location.pathname === "/adddocumentnew" ? "active" : ""
                         }`} onClick={psidemenuone}>
                         <b></b>
@@ -68,8 +97,6 @@ const PropertySidebar = () => {
                             </span>
                             <small>Property Documents</small>
                         </div>
-
-
                     </li>
                     <li className='pointer'>
                         <b></b>
@@ -95,9 +122,9 @@ const PropertySidebar = () => {
                         </div>
 
                     </li>
-                </ul>
-            </div>
-        </div>
+                </ul >
+            </div >
+        </div >
     )
 }
 

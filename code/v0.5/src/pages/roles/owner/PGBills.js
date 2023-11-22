@@ -16,12 +16,12 @@ import LeftSidebar from "../../../Components/LeftSidebar";
 const billsFilter = ["PENDING", "PMS", "BROKERAGE", "MAINTENANCE", "INACTIVE"];
 
 export default function PGBills() {
-        // Scroll to the top of the page whenever the location changes start
-        const location = useLocation();
-        useEffect(() => {
-          window.scrollTo(0, 0);
-        }, [location]);
-        // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   const { user } = useAuthContext();
   const { logout, isPending } = useLogout();
   const { documents: billsdocuments, error: billserror } =
@@ -101,23 +101,23 @@ export default function PGBills() {
 
           <br />
 
-         
 
-            <h2 className="page-title">Bills</h2>
-            <div>
-              {billserror && <p className="error">{billserror}</p>}
 
-              {billsdocuments && (
-                <Filters
-                  changeFilter={changeFilter}
-                  filterList={billsFilter}
-                  filterLength={bills.length}
-                />
-              )}
+          <h2 className="page-title">Bills</h2>
+          <div>
+            {billserror && <p className="error">{billserror}</p>}
 
-              {bills && <BillList bills={bills} />}
-            </div>
-        
+            {billsdocuments && (
+              <Filters
+                changeFilter={changeFilter}
+                filterList={billsFilter}
+                filterLength={bills.length}
+              />
+            )}
+
+            {bills && <BillList bills={bills} />}
+          </div>
+
 
 
 
