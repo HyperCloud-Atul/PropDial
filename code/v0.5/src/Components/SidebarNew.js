@@ -100,7 +100,7 @@ export default function SidebarNew(props) {
                 <hr style={{ border: 'none', borderTop: '2px solid #fff' }} /> */}
 
                     <Link to="/admindashboard" onClick={() => sideNavbarMenuClick('admindashboard')} style={{ textDecoration: 'none' }} >
-                        <li className={sideNavbarActive == 'admindashboard' ? 'active' : ''}>
+                        <li className={sideNavbarActive === 'admindashboard' ? 'active' : ''}>
                             <b></b>
                             <b></b>
                             <div>
@@ -112,7 +112,7 @@ export default function SidebarNew(props) {
                         </li>
                     </Link>
                     <Link to="/addproperty" onClick={() => sideNavbarMenuClick('addproperty')} style={{ textDecoration: 'none' }} >
-                        <li className={sideNavbarActive == 'addproperty' ? 'active' : ''}>
+                        <li className={sideNavbarActive === 'addproperty' ? 'active' : ''}>
                             <b></b>
                             <b></b>
 
@@ -127,7 +127,7 @@ export default function SidebarNew(props) {
 
                     {/* Super Admin Links */}
                     <Link to="/userlist" onClick={() => sideNavbarMenuClick('userlist')} style={{ textDecoration: 'none' }} >
-                        <li className={sideNavbarActive == 'userlist' ? 'active' : ''}>
+                        <li className={sideNavbarActive === 'userlist' ? 'active' : ''}>
                             <b></b>
                             <b></b>
                             <div>
@@ -141,7 +141,7 @@ export default function SidebarNew(props) {
 
                     {/* Common Links */}
                     <Link to="/adminsettings" onClick={() => sideNavbarMenuClick('adminsettings')} style={{ textDecoration: 'none' }} >
-                        <li className={sideNavbarActive == 'adminsettings' ? 'active' : ''}>
+                        <li className={sideNavbarActive === 'adminsettings' ? 'active' : ''}>
                             <b></b>
                             <b></b>
                             <div>
@@ -153,7 +153,7 @@ export default function SidebarNew(props) {
                         </li>
                     </Link>
                     <Link to="/" onClick={showPopup} style={{ textDecoration: 'none' }} >
-                        <li className={sideNavbarActive == 'logout' ? 'active' : ''}>
+                        <li className={sideNavbarActive === 'logout' ? 'active' : ''}>
                             <b></b>
                             <b></b>
                             <div>
