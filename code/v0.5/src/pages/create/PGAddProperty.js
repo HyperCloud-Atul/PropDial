@@ -498,7 +498,7 @@ export default function PGAddProperty({ propertyid }) {
                           </a>
                         }
                         {property && property.ownerDetails &&
-                          <a href={'mailto:' + property.ownerDetails.phoneNumber}>
+                          <a href={'mailto:' + property.ownerDetails.emailID}>
                             <div>
                               <span class="material-symbols-outlined">
                                 alternate_email
@@ -543,7 +543,7 @@ export default function PGAddProperty({ propertyid }) {
                           </a>
                         }
                         {property && property.coownerDetails &&
-                          <a href={'mailto: ' + property.coownerDetails.phoneNumber}>
+                          <a href={'mailto: ' + property.coownerDetails.emailID}>
                             <div>
                               <span class="material-symbols-outlined">
                                 alternate_email
