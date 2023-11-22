@@ -26,6 +26,9 @@ import PGTickets from "./pages/roles/owner/PGTickets";
 import TenantDashboard from "./pages/roles/tenant/TenantDashboard";
 // executive
 import ExecutiveDashboard from "./pages/roles/executive/ExecutiveDashboard";
+// prop agent 
+import PGAgentDashboard from "./pages/roles/agent/PGAgentDashboard";
+import PGAgentProperties from "./pages/roles/agent/PGAgentProperties";
 
 // other pages
 import UserDashboard from "./pages/dashboard/UserDashboard";
@@ -358,6 +361,29 @@ function App() {
                 element={
                   user && user.role === "owner" ? (
                     <PGOwnerDashboardOld />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+
+
+              {/* propagent  */}
+              <Route
+                path="/agentdashboard"
+                element={
+                  user && user.role === "propagent" ? (
+                    <PGAgentDashboard></PGAgentDashboard>
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+                  <Route
+                path="/agentproperties"
+                element={
+                  user && user.role === "propagent" ? (
+                    <PGAgentProperties></PGAgentProperties>
                   ) : (
                     <Navigate to="/login" />
                   )

@@ -44,6 +44,10 @@ export default function NavbarBottom() {
       // console.log('in user', user.role)
       navigate("/executivedashboard");
     }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentdashboard");
+    }
   };
 
   const showSecondPage = () => {
@@ -60,6 +64,10 @@ export default function NavbarBottom() {
       // console.log('in user', user.role)
       navigate("/bills");
     }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/addproperty_quick");
+    }
   };
   const showThirdPage = () => {
     if (!user) {
@@ -70,6 +78,10 @@ export default function NavbarBottom() {
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
       navigate("/customerproperties");
+    }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentproperties");
     }
   };
   const showFourthPage = () => {
@@ -118,7 +130,12 @@ export default function NavbarBottom() {
     secondMenu = "Bills";
     thirdMenu = "Tickets";
   }
-
+  if (user && user.role === "propagent") {
+    secondMenuIcon = "add";
+    secondMenu = "Add";
+    thirdMenuIcon = "confirmation_number";
+    thirdMenu = "Properties";
+  }
   // more acitve class Array 
   const moreActivePaths = ["/more-menu", "/about-us", "/contact-us", "/faq",
     "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/addproperty"];
@@ -127,49 +144,10 @@ export default function NavbarBottom() {
   // more acitve class Array 
 
 
-  return (
-    // <div className="small navbar-mobile-bottom">
-    //     <div className="navbar-mobile-bottom-menu" id="divBottomNavBar">
-    //         <div className="navbar-mobile-bottom-menu-a"
-    //             style={{ display: 'flex', flexDirection: 'column' }} onClick={showDashboard} >
-    //             <span className="material-symbols-outlined">
-    //                 {firstMenuIcon}
-    //             </span>
-    //             <small>{firstMenu}</small>
-    //         </div>
-    //         <div className="navbar-mobile-bottom-menu-a "
-    //             style={{ display: 'flex', flexDirection: 'column' }} onClick={showSecondPage}>
-    //             <span className="material-symbols-outlined">
-    //                 {secondMenuIcon}
-    //             </span>
-    //             <small>{secondMenu}</small>
-    //         </div>
-    //         <a href="/">
-    //         </a>
-    //         <div to="/" className="navbar-mobile-bottom-menu-a "
-    //             style={{ display: 'flex', flexDirection: 'column' }}>
-    //             <span className="material-symbols-outlined">
-    //                 {thirdMenuIcon}
-    //             </span>
-    //             <small>{thirdMenu}</small>
-    //         </div>
-    //         <div className="navbar-mobile-bottom-menu-a"
-    //             style={{ display: 'flex', flexDirection: 'column' }} onClick={showFourthPage}>
-    //             <span className="material-symbols-outlined">
-    //                 {fourthMenuIcon}
-    //             </span>
-    //             <small>{fourthMenu}</small>
-    //         </div>
-    //     </div>
-    //     <Link to="/profile" className="new-user " >
-    //         <span className="material-symbols-outlined">
-    //             person
-    //         </span>
-    //     </Link>
-    // </div>
+  return (  
     <section className="bottom_menu_bar">
       <div
-        className={`b_menu_single ${location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard" ? "b_menu_active" : ""
+        className={`b_menu_single ${location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard" ? "b_menu_active" : "" || location.pathname === "/agentdashboard" ? "b_menu_active" : ""
           }`}
         onClick={showDashboard}
       >

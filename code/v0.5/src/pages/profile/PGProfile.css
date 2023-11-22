@@ -295,6 +295,7 @@
     object-fit: cover;
     border-radius: 18px;
     border: 5px solid var(--theme-blue);
+    object-position: top;
 }
 .profile_card .profile-upload-label {
 bottom: -30px;

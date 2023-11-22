@@ -59,6 +59,10 @@ export default function Navbar() {
       // console.log('in user', user.role)
       navigate("/executivedashboard");
     }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentdashboard");
+    }
   };
 
   const showSecondPage = () => {
@@ -76,6 +80,10 @@ export default function Navbar() {
       // console.log('in user', user.role)
       navigate("/ownerdashboard");
     }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentdashboard");
+    }
   };
   const showThirdPage = () => {
     if (!user) {
@@ -91,6 +99,10 @@ export default function Navbar() {
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/tickets");
+    }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentproperties");
     }
   };
 
@@ -144,6 +156,12 @@ export default function Navbar() {
   if (user && user.role === "propertymanager") {
     secondMenu = "Bills";
     thirdMenu = "Tickets";
+  }
+  if (user && user.role === "propagent") {
+    secondMenuIcon = "home";
+    secondMenu = "Dashboard";
+    thirdMenuIcon = "confirmation_number";
+    thirdMenu = "Properties";
   }
 
   // Add class on scroll start

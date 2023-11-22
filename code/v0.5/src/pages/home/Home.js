@@ -32,57 +32,12 @@ const Home = () => {
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
 
-  // test 
-  const [propertyName, setPropertyName] = useState("");
-  const { addDocument, response } = useFirestore("testaddproperties"); // Firestore collection name
-  const handletestaddpropertySubmit = async (e) => {
-    e.preventDefault();
-
-    // Create a property object
-    const property = {
-      name: propertyName,
-      // Add more properties as needed
-    };
-
-    // Store the property data in Firestore
-    await addDocument(property);
-
-    // Reset the form after submission
-    setPropertyName("");
-
-    if (!response.error) {
-      // Handle success, e.g., show a success message or redirect the user
-    } else {
-      // Handle error, e.g., show an error message
-    }
-  };
-
-  // test 
-
 
   return (
     <div>
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <Banner></Banner>
       <ProductCarousel></ProductCarousel>
-
-
-      {/* testing form  */}
-      <form onSubmit={handletestaddpropertySubmit}>
-        <div className="form_field">
-          <label>Property Name</label>
-          <input
-            type="text"
-            className="property_name"
-            value={propertyName}
-            onChange={(e) => setPropertyName(e.target.value)}
-          />
-        </div>
-        <input type="submit" value="Add Property" />
-      </form>
-      {/* testing form  */}
-
-
 
       <section className="work_flow sect_padding">
         <div className="container">
@@ -157,7 +112,6 @@ const Home = () => {
         {/* <div className="bg_video">
         <img src="./assets/gif/bg.gif"></img>
       </div> */}
-
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6">

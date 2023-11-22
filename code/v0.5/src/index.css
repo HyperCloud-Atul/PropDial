@@ -1059,5 +1059,10 @@ h2.card_title {
 .pgadmindasboard, .dashboard_pg {
   margin-top: 68px;
 }
+@media only screen and (min-width: 1200px){
+  .top_header_pg {
+    padding-top: 68px;
+}
+}
 
 /* sanskar media query css end  */

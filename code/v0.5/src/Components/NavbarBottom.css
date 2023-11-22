@@ -137,6 +137,7 @@ section.bottom_menu_bar {
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+    object-position: top;
 }
 .bottom_menu_bar .menu_name {
     font-size: 13px;
