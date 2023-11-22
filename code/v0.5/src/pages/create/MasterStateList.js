@@ -158,7 +158,7 @@ export default function MasterStateList() {
   };
 
   return (
-    <div>
+    <div className="pg_property">
         <Hero
         pageTitle="State List"
         pageSubTitle="Add or update state

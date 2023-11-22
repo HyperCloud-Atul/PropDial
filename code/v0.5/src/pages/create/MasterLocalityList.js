@@ -229,7 +229,7 @@ export default function MasterLocalityList() {
   };
 
   return (
-    <div>
+    <div className="pg_property">
               <Hero
         pageTitle="Locality List"
         pageSubTitle="Add or update locality

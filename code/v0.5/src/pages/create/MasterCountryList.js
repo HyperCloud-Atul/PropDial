@@ -108,7 +108,7 @@ export default function MasterCountryList() {
     }
 
     return (
-        <div>
+        <div className="pg_property">
   <Hero
         pageTitle="Country List"
         pageSubTitle="Add or update country
