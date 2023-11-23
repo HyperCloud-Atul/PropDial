@@ -118,7 +118,7 @@ const PGAgentProperties = () => {
     return (
         <div className='top_header_pg aflbg '> 
         <div className='brf_icon'>
-                <Link to=''>
+                <Link to='/agentaddproperties'>
                     <div className='brfi_single'>
                         <span class="material-symbols-outlined">
                             add
@@ -127,9 +127,10 @@ const PGAgentProperties = () => {
                 </Link>
             </div>      
             <div className='container'>
+            <br />
             <section className='single_card'>
             <div
-              className="d-flex frs_single"
+              className="d-flex"
               style={{
                 alignItems: "center",
               }}
