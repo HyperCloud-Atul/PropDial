@@ -952,6 +952,12 @@ select{
   background: #efefef;
   padding-left: 12px;
 }
+.single_card{
+  height: 50px;
+  margin: 10px 0px;
+  background: var(--white-color);
+  padding: 10px;
+}
 .form_field.st-2 .css-1jqq78o-placeholder:focus{
   border: none;
   outline: none;

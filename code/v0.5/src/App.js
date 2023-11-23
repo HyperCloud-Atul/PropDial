@@ -29,6 +29,7 @@ import ExecutiveDashboard from "./pages/roles/executive/ExecutiveDashboard";
 // prop agent 
 import PGAgentDashboard from "./pages/roles/agent/PGAgentDashboard";
 import PGAgentProperties from "./pages/roles/agent/PGAgentProperties";
+import PGAgentAddProperties from "./pages/roles/agent/PGAgentAddProperties";
 
 // other pages
 import UserDashboard from "./pages/dashboard/UserDashboard";
@@ -379,7 +380,7 @@ function App() {
                   )
                 }
               ></Route>
-                  <Route
+              <Route
                 path="/agentproperties"
                 element={
                   user && user.role === "propagent" ? (
@@ -389,6 +390,19 @@ function App() {
                   )
                 }
               ></Route>
+                   <Route
+                path="/agentaddproperties"
+                element={
+                  user && user.role === "propagent" ? (
+                    <PGAgentAddProperties></PGAgentAddProperties>
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+
+
+              
 
               <Route
                 path="/more"
