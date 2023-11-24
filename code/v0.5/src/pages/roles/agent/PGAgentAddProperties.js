@@ -369,8 +369,7 @@ export default function PGAgentAddProperties({ propertyid }) {
 
     return (
        <div className='top_header_pg aflbg '>
-         <div className='container'>   
-               
+         <div className='container'>                  
                <br />
                <h2 className='pg_title'>
                    ADD PROPERTY
