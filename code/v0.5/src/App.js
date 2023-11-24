@@ -26,10 +26,11 @@ import PGTickets from "./pages/roles/owner/PGTickets";
 import TenantDashboard from "./pages/roles/tenant/TenantDashboard";
 // executive
 import ExecutiveDashboard from "./pages/roles/executive/ExecutiveDashboard";
-// prop agent 
+// prop agent
 import PGAgentDashboard from "./pages/roles/agent/PGAgentDashboard";
 import PGAgentProperties from "./pages/roles/agent/PGAgentProperties";
 import PGAgentAddProperties from "./pages/roles/agent/PGAgentAddProperties";
+import PropAgentHome from "./pages/roles/agent/PropAgentHome";
 
 // other pages
 import UserDashboard from "./pages/dashboard/UserDashboard";
@@ -85,7 +86,7 @@ function App() {
   console.log("user in App.js", user);
   // console.log('user role in App.js', user.role)
 
-  useEffect(() => { }, [user]);
+  useEffect(() => {}, [user]);
 
   return (
     <div className="App">
@@ -110,7 +111,6 @@ function App() {
               <Route
                 path="/pdsingle/:id"
                 element={<PDSingle></PDSingle>}
-
               ></Route>
               <Route path="/about-us" element={<PGAboutUs />}></Route>
               <Route path="/contact-us" element={<PGContactUs />}></Route>
@@ -350,7 +350,8 @@ function App() {
               <Route
                 path="/ownerdashboard"
                 element={
-                  (user && user.role === "owner") || (user && user.role === "coowner") ? (
+                  (user && user.role === "owner") ||
+                  (user && user.role === "coowner") ? (
                     <PGOwnerDashboard />
                   ) : (
                     <Navigate to="/login" />
@@ -367,7 +368,6 @@ function App() {
                   )
                 }
               ></Route>
-
 
               {/* propagent  */}
               <Route
@@ -390,7 +390,7 @@ function App() {
                   )
                 }
               ></Route>
-                   <Route
+              <Route
                 path="/agentaddproperties"
                 element={
                   user && user.role === "propagent" ? (
@@ -400,10 +400,13 @@ function App() {
                   )
                 }
               ></Route>
-
-
-              
-
+                  <Route
+                path="/agenthome"
+                element={            
+                    <PropAgentHome></PropAgentHome>               
+                }
+              ></Route>
+              {/* propagent  */}
               <Route
                 path="/more"
                 element={user ? <More /> : <Navigate to="/login" />}

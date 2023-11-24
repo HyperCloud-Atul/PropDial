@@ -209,7 +209,6 @@ export default function Navbar() {
   // arrrays  end
   return (
     <header className={navbarClassName}>
-
       <nav className={navClass}>
         <ul>
           <li className="logo pointer" onClick={logoClick}>
