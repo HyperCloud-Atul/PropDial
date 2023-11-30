@@ -311,17 +311,17 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
             }
         })
 
-        const createdBy = {
-            displayName: user.displayName + '(' + user.role + ')',
-            photoURL: user.photoURL,
-            id: user.uid
-        }
+        // const createdBy = {
+        //     displayName: user.displayName + '(' + user.role + ')',
+        //     photoURL: user.photoURL,
+        //     id: user.uid
+        // }
 
-        const updatedBy = {
-            displayName: user.displayName + '(' + user.role + ')',
-            photoURL: user.photoURL,
-            id: user.uid
-        }
+        // const updatedBy = {
+        //     displayName: user.displayName + '(' + user.role + ')',
+        //     photoURL: user.photoURL,
+        //     id: user.uid
+        // }
 
         const property = {
             unitNumber,
@@ -334,7 +334,6 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
             category: category,
             purpose: purpose.label,
             status: status,
-            updatedBy,
             onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
             comments: []
         }
@@ -351,7 +350,6 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
                 category,
                 purpose: purpose.label,
                 status: status,
-                createdBy,
                 onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
                 comments: []
             })

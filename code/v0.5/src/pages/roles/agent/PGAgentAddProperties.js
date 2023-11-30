@@ -313,17 +313,17 @@ export default function PGAgentAddProperties({ propertyid }) {
         }
 
 
-        const createdBy = {
-            displayName: user.displayName + '(' + user.role + ')',
-            photoURL: user.photoURL,
-            id: user.uid
-        }
+        // const createdBy = {
+        //     displayName: user.displayName + '(' + user.role + ')',
+        //     photoURL: user.photoURL,
+        //     id: user.uid
+        // }
 
-        const updatedBy = {
-            displayName: user.displayName + '(' + user.role + ')',
-            photoURL: user.photoURL,
-            id: user.uid
-        }
+        // const updatedBy = {
+        //     displayName: user.displayName + '(' + user.role + ')',
+        //     photoURL: user.photoURL,
+        //     id: user.uid
+        // }
 
         const property = {
             unitNumber,
@@ -337,7 +337,6 @@ export default function PGAgentAddProperties({ propertyid }) {
             purpose: purpose.label,
             status: status,
             postedBy: 'Propdial',
-            updatedBy,
             onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
             comments: []
         }
@@ -368,308 +367,308 @@ export default function PGAgentAddProperties({ propertyid }) {
     }
 
     return (
-       <div className='top_header_pg aflbg '>
-         <div className='container'>                  
-               <br />
-               <h2 className='pg_title'>
-                   ADD PROPERTY
-               </h2>
-               <hr />
-               <div
-                   className="row no-gutters"
-                   style={{ margin: "10px 0px ", height: "50px", background: "white" }}
-               >
-                   <div className="col-md-6 col-sm-12 d-flex " style={{
-                       alignItems: "center",
-                       height: "50px"
-                   }}                          >
-                       <div className="residential-commercial-switch" style={{ top: "0" }}>
-                           <span className={toggleFlag ? '' : 'active'} style={{ color: 'var(--theme-blue)' }}>Residential</span>
-                           <div className={toggleFlag ? 'toggle-switch on commercial' : 'toggle-switch off residential'} style={{ padding: '0 10px' }}>
-                               {/* <small>{toggleFlag ? 'On' : 'Off'}</small> */}
-                               <div onClick={toggleBtnClick}>
-                                   <div></div>
-                               </div>
-                           </div>
-                           <span className={toggleFlag ? 'active' : ''} style={{ color: 'var(--theme-orange)' }}>Commercial</span>
-                       </div>
-                   </div>
-                   <div className="col-md-6 col-sm-12 d-flex" style={{
-                       alignItems: "center",
-                       height: "50px"
-                   }}                        >
-                       <div className="details-radio" style={{ top: "0" }}>
-                           <div></div>
-                           <div className='details-radio-inner'>
-                               <div className="row no-gutters">
-                                   <div className="col-6" style={{ padding: '0 5px' }}>
-                                       <input type="checkbox" className="checkbox" style={{ width: '0px' }}
-                                           name="BusinessType" id="businessTypeRent" value="Rent"
-                                           onClick={() => setPurpose('rent')}
-                                       />
-                                       <label className="checkbox-label pointer" for="businessTypeRent" style={{ margin: "0px" }}>
-                                           <span className="material-symbols-outlined add">
-                                               add
-                                           </span>
-                                           <span className="material-symbols-outlined done">
-                                               done
-                                           </span>
-                                           <small>Rent</small>
-                                       </label>
-                                   </div>
+        <div className='top_header_pg aflbg '>
+            <div className='container'>
+                <br />
+                <h2 className='pg_title'>
+                    ADD PROPERTY
+                </h2>
+                <hr />
+                <div
+                    className="row no-gutters"
+                    style={{ margin: "10px 0px ", height: "50px", background: "white" }}
+                >
+                    <div className="col-md-6 col-sm-12 d-flex " style={{
+                        alignItems: "center",
+                        height: "50px"
+                    }}                          >
+                        <div className="residential-commercial-switch" style={{ top: "0" }}>
+                            <span className={toggleFlag ? '' : 'active'} style={{ color: 'var(--theme-blue)' }}>Residential</span>
+                            <div className={toggleFlag ? 'toggle-switch on commercial' : 'toggle-switch off residential'} style={{ padding: '0 10px' }}>
+                                {/* <small>{toggleFlag ? 'On' : 'Off'}</small> */}
+                                <div onClick={toggleBtnClick}>
+                                    <div></div>
+                                </div>
+                            </div>
+                            <span className={toggleFlag ? 'active' : ''} style={{ color: 'var(--theme-orange)' }}>Commercial</span>
+                        </div>
+                    </div>
+                    <div className="col-md-6 col-sm-12 d-flex" style={{
+                        alignItems: "center",
+                        height: "50px"
+                    }}                        >
+                        <div className="details-radio" style={{ top: "0" }}>
+                            <div></div>
+                            <div className='details-radio-inner'>
+                                <div className="row no-gutters">
+                                    <div className="col-6" style={{ padding: '0 5px' }}>
+                                        <input type="checkbox" className="checkbox" style={{ width: '0px' }}
+                                            name="BusinessType" id="businessTypeRent" value="Rent"
+                                            onClick={() => setPurpose('rent')}
+                                        />
+                                        <label className="checkbox-label pointer" for="businessTypeRent" style={{ margin: "0px" }}>
+                                            <span className="material-symbols-outlined add">
+                                                add
+                                            </span>
+                                            <span className="material-symbols-outlined done">
+                                                done
+                                            </span>
+                                            <small>Rent</small>
+                                        </label>
+                                    </div>
 
-                                   <div className="col-6" style={{ padding: '0 5px' }}>
-                                       <input type="checkbox" className="checkbox" style={{ width: '0px' }}
-                                           name="BusinessType" id="businessTypeSale" value="Sale"
-                                           onClick={() => setPurpose('sale')}
-                                       />
-                                       <label className="checkbox-label pointer" for="businessTypeSale" style={{ margin: "0px" }}>
-                                           <span className="material-symbols-outlined add">
-                                               add
-                                           </span>
-                                           <span className="material-symbols-outlined done">
-                                               done
-                                           </span>
-                                           <small>Sale</small>
-                                       </label>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-               <div className='d_inner_card'>
-                   <form onSubmit={handleSubmit}>
-                       <div className="row no-gutters">
-                           <div className="col-lg-4">
-                               <div class="form_field st-2 mt-lg-0">
-                                   <label>Unit Number</label>
-                                   <div class="field_inner">
-                                       <input required
-                                           type="text"
-                                           placeholder="e.g. A-504"
-                                           maxLength={70}
-                                           onChange={(e) => setUnitNumber(e.target.value)}
-                                           value={unitNumber} />
-                                       <div class="field_icon">
-                                           <span class="material-symbols-outlined">
-                                               drive_file_rename_outline
-                                           </span>
-                                       </div>
-                                   </div>
-                               </div>
-                           </div>
-                           <div className="col-lg-4">
-                               <div className="form_field st-2 mt-lg-0">
-                                   <label>Purpose</label>
-                                   <div className="field_inner select">
-                                       <Select className=''
-                                           onChange={(option) => setPurpose(option)}
-                                           options={propertyPurposeOptionsSorted.current}
-                                           // value={propertyDocument ? propertyDocument.purpose : purpose}
-                                           value={purpose}
-                                           styles={{
-                                               control: (baseStyles, state) => ({
-                                                   ...baseStyles,
-                                                   outline: 'none',
-                                                   background: '#efefef',
-                                                   border: 'none',
-                                                   borderBottom: 'none'
-                                               }),
-                                           }}
-                                       />
-                                       <div className="field_icon">
-                                           <span class="material-symbols-outlined"> drive_file_rename_outline</span>
-                                       </div>
-                                   </div>
-                               </div>
+                                    <div className="col-6" style={{ padding: '0 5px' }}>
+                                        <input type="checkbox" className="checkbox" style={{ width: '0px' }}
+                                            name="BusinessType" id="businessTypeSale" value="Sale"
+                                            onClick={() => setPurpose('sale')}
+                                        />
+                                        <label className="checkbox-label pointer" for="businessTypeSale" style={{ margin: "0px" }}>
+                                            <span className="material-symbols-outlined add">
+                                                add
+                                            </span>
+                                            <span className="material-symbols-outlined done">
+                                                done
+                                            </span>
+                                            <small>Sale</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className='d_inner_card'>
+                    <form onSubmit={handleSubmit}>
+                        <div className="row no-gutters">
+                            <div className="col-lg-4">
+                                <div class="form_field st-2 mt-lg-0">
+                                    <label>Unit Number</label>
+                                    <div class="field_inner">
+                                        <input required
+                                            type="text"
+                                            placeholder="e.g. A-504"
+                                            maxLength={70}
+                                            onChange={(e) => setUnitNumber(e.target.value)}
+                                            value={unitNumber} />
+                                        <div class="field_icon">
+                                            <span class="material-symbols-outlined">
+                                                drive_file_rename_outline
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2 mt-lg-0">
+                                    <label>Purpose</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            onChange={(option) => setPurpose(option)}
+                                            options={propertyPurposeOptionsSorted.current}
+                                            // value={propertyDocument ? propertyDocument.purpose : purpose}
+                                            value={purpose}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
+                                                }),
+                                            }}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined"> drive_file_rename_outline</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                           </div>
-                           <div className="col-lg-4 col-md-4 col-sm-12">
-                               <div>
-                                   <h1 className="owner-heading">Onboarding Date</h1>
-                                   <div className="location-search">
-                                       <DatePicker
-                                           selected={onboardingDate}
-                                           maxDate={new Date()}
-                                           required
-                                           onChange={(onboardingDate) => setOnboardingDate(onboardingDate)}
-                                       // value={onboardingDate}
-                                       />
-                                       <div className="underline"></div>
-                                       <span className="material-symbols-outlined">
-                                           calendar_month
-                                       </span>
-                                   </div>
-                               </div>
-                               <br /><br />
-                           </div>
-                           <div className="col-lg-4">
-                               <div className="form_field st-2 mt-lg-0">
-                                   <label>Owner: {taggedUsersListShow}</label>
-                                   <div className="field_inner select">
-                                       <Select className=''
-                                           onChange={(option) => setTaggedOwner(option)}
-                                           options={usersSorted}
-                                           styles={{
-                                               control: (baseStyles, state) => ({
-                                                   ...baseStyles,
-                                                   outline: 'none',
-                                                   background: '#efefef',
-                                                   border: 'none',
-                                                   borderBottom: 'none',
-                                                   position: "relative",
-                                                   zIndex: "99"
-                                               }),
-                                           }}
+                            </div>
+                            <div className="col-lg-4 col-md-4 col-sm-12">
+                                <div>
+                                    <h1 className="owner-heading">Onboarding Date</h1>
+                                    <div className="location-search">
+                                        <DatePicker
+                                            selected={onboardingDate}
+                                            maxDate={new Date()}
+                                            required
+                                            onChange={(onboardingDate) => setOnboardingDate(onboardingDate)}
+                                        // value={onboardingDate}
+                                        />
+                                        <div className="underline"></div>
+                                        <span className="material-symbols-outlined">
+                                            calendar_month
+                                        </span>
+                                    </div>
+                                </div>
+                                <br /><br />
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2 mt-lg-0">
+                                    <label>Owner: {taggedUsersListShow}</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            onChange={(option) => setTaggedOwner(option)}
+                                            options={usersSorted}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none',
+                                                    position: "relative",
+                                                    zIndex: "99"
+                                                }),
+                                            }}
 
-                                       />
-                                       <div className="field_icon">
-                                           <span class="material-symbols-outlined">   person</span>
-                                       </div>
-                                   </div>
-                               </div>
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">   person</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                           </div>
-                           <div className="col-lg-4">
-                               <div className="form_field st-2">
-                                   <label>Country</label>
-                                   <div className="field_inner select">
-                                       <Select className=''
-                                           onChange={handleCountryChange}
-                                           options={countryOptionsSorted.current}
-                                           value={country}
-                                           styles={{
-                                               control: (baseStyles, state) => ({
-                                                   ...baseStyles,
-                                                   outline: 'none',
-                                                   background: '#efefef',
-                                                   border: 'none',
-                                                   borderBottom: 'none'
-                                               }),
-                                           }}
-                                       />
-                                       <div className="field_icon">
-                                           <span class="material-symbols-outlined">       public</span>
-                                       </div>
-                                   </div>
-                               </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>Country</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            onChange={handleCountryChange}
+                                            options={countryOptionsSorted.current}
+                                            value={country}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
+                                                }),
+                                            }}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">       public</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                           </div>
-                           <div className="col-lg-4">
-                               <div className="form_field st-2">
-                                   <label>State</label>
-                                   <div className="field_inner select">
-                                       <Select className=''
-                                           // onChange={(option) => setState(option)}
-                                           onChange={handleStateChange}
-                                           options={statesOptionsSorted.current}
-                                           // options={stateList}
-                                           value={state}
-                                           styles={{
-                                               control: (baseStyles, state) => ({
-                                                   ...baseStyles,
-                                                   outline: 'none',
-                                                   background: '#efefef',
-                                                   border: 'none',
-                                                   borderBottom: 'none'
-                                               }),
-                                           }}
-                                       />
-                                       <div className="field_icon">
-                                           <span class="material-symbols-outlined">       emoji_transportation</span>
-                                       </div>
-                                   </div>
-                               </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>State</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            // onChange={(option) => setState(option)}
+                                            onChange={handleStateChange}
+                                            options={statesOptionsSorted.current}
+                                            // options={stateList}
+                                            value={state}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
+                                                }),
+                                            }}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">       emoji_transportation</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                           </div>
-                           <div className="col-lg-4">
-                               <div className="form_field st-2">
-                                   <label>City</label>
-                                   <div className="field_inner select">
-                                       <Select className=''
-                                           onChange={handleCityChange}
-                                           options={citiesOptionsSorted.current}
-                                           value={city}
-                                           styles={{
-                                               control: (baseStyles, state) => ({
-                                                   ...baseStyles,
-                                                   outline: 'none',
-                                                   background: '#efefef',
-                                                   border: 'none',
-                                                   borderBottom: 'none'
-                                               }),
-                                           }}
-                                       />
-                                       <div className="field_icon">
-                                           <span class="material-symbols-outlined">       apartment</span>
-                                       </div>
-                                   </div>
-                               </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>City</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            onChange={handleCityChange}
+                                            options={citiesOptionsSorted.current}
+                                            value={city}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
+                                                }),
+                                            }}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">       apartment</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                           </div>
-                           <div className="col-lg-4">
-                               <div className="form_field st-2">
-                                   <label>Locality</label>
-                                   <div className="field_inner select">
-                                       <Select className=''
-                                           onChange={handleLocalityChange}
-                                           options={localityOptionsSorted.current}
-                                           value={locality}
-                                           styles={{
-                                               control: (baseStyles, state) => ({
-                                                   ...baseStyles,
-                                                   outline: 'none',
-                                                   background: '#efefef',
-                                                   border: 'none',
-                                                   borderBottom: 'none'
-                                               }),
-                                           }}
-                                       />
-                                       <div className="field_icon">
-                                           <span class="material-symbols-outlined">        holiday_village</span>
-                                       </div>
-                                   </div>
-                               </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>Locality</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            onChange={handleLocalityChange}
+                                            options={localityOptionsSorted.current}
+                                            value={locality}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
+                                                }),
+                                            }}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">        holiday_village</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                           </div>
-                           <div className="col-lg-4">
-                               <div className="form_field st-2">
-                                   <label>Society</label>
-                                   <div className="field_inner select">
-                                       <Select className=''
-                                           onChange={(option) => setSociety(option)}
-                                           options={societyOptionsSorted.current}
-                                           value={society}
-                                           styles={{
-                                               control: (baseStyles, state) => ({
-                                                   ...baseStyles,
-                                                   outline: 'none',
-                                                   background: '#efefef',
-                                                   border: 'none',
-                                                   borderBottom: 'none'
-                                               }),
-                                           }}
-                                       />
-                                       <div className="field_icon">
-                                           <span class="material-symbols-outlined">          home</span>
-                                       </div>
-                                   </div>
-                               </div>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>Society</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            onChange={(option) => setSociety(option)}
+                                            options={societyOptionsSorted.current}
+                                            value={society}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
+                                                }),
+                                            }}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">          home</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                           </div>
-                       </div>
-                       <div className='mt-4'>
-                           <button className="theme_btn btn_fill">{propertyid ? 'Update Property' : 'Add Property'}</button>
-                           {formError && <p className="error">{formError}</p>}
-                       </div>
-                   </form>
-               </div>
-           
-               <br />
+                            </div>
+                        </div>
+                        <div className='mt-4'>
+                            <button className="theme_btn btn_fill">{propertyid ? 'Update Property' : 'Add Property'}</button>
+                            {formError && <p className="error">{formError}</p>}
+                        </div>
+                    </form>
+                </div>
 
-   </div >
-       </div>
+                <br />
+
+            </div >
+        </div>
     )
 }
 
