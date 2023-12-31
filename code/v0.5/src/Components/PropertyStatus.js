@@ -20,6 +20,9 @@ const PropertyStatus = () => {
   const closeMoreAddOptions = () => {
     setHandleMoreOptionsClick(false);
   };
+
+
+
   // switch
   const [toggleFlag, setToggleFlag] = useState(false);
   const [propertyList, setPropertyList] = useState("residential"); //Residential/Commercial
@@ -30,6 +33,8 @@ const PropertyStatus = () => {
     setToggleFlag(!toggleFlag);
   };
   // switch
+
+  
   return (
     <div className="dashboard_pg aflbg property_setup property_image">
       <div className="sidebarwidth">

@@ -827,6 +827,23 @@ h6.modal_subtitle{
 .form_field.st-2 .field_inner, .form_field.st-2 .field_inner.select{
   position: relative;
 }
+.form_field.st-2 .field_inner.i_and_s {
+  display: flex;
+}
+.form_field.st-2 .field_inner.i_and_s select {
+  padding-right: 0px;
+  width: 100%;
+}
+.form_field.st-2 .field_inner.i_and_s input{
+  padding-right: 10px;
+  width: 100%;
+}
+select{
+  cursor: pointer;
+}
+.form_field.st-2 .field_inner.i_and_s .inner_select {
+  width: 150px;
+}
 .form_field.st-2 .field_inner.select{
   cursor: pointer;
 }
@@ -935,6 +952,12 @@ h6.modal_subtitle{
   background: #efefef;
   padding-left: 12px;
 }
+.single_card{
+  height: 50px;
+  margin: 10px 0px;
+  background: var(--white-color);
+  padding: 10px;
+}
 .form_field.st-2 .css-1jqq78o-placeholder:focus{
   border: none;
   outline: none;
@@ -1041,6 +1064,11 @@ h2.card_title {
 }
 .pgadmindasboard, .dashboard_pg {
   margin-top: 68px;
+}
+@media only screen and (min-width: 1200px){
+  .top_header_pg {
+    padding-top: 68px;
+}
 }
 
 /* sanskar media query css end  */

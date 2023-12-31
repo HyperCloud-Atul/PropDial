@@ -215,12 +215,12 @@ export default function MasterCityList() {
     : null;
 
   return (
-    <div>
+    <div className="pg_property">
       <Hero
         pageTitle="City List"
         pageSubTitle="Add or update City
         "
-        heroImage="./assets/img/city_banner.jpg"
+        heroImage="/assets/img/city_banner.jpg"
       ></Hero>
       <div onClick={openMoreAddOptions} className="property-list-add-property">
         <span className="material-symbols-outlined">apps</span>

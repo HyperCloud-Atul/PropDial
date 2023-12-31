@@ -13,10 +13,10 @@ const LeftSidebar = () => {
   };
   //   add class when click on advance toggle
   const { user } = useAuthContext();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
 
-  const showLDashboard = () => {   
+  const showLDashboard = () => {
     if (user && user.role === "superadmin") {
       // console.log('in superadmin', user.role)
       navigate("/superadmindashboard");
@@ -27,7 +27,7 @@ const LeftSidebar = () => {
       navigate("/admindashboard");
     }
 
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/ownerdashboard");
     }
@@ -36,7 +36,7 @@ const LeftSidebar = () => {
       // console.log('in user', user.role)
       navigate("/tenantdashboard");
     }
-    if (user && user.role === "executive") {
+    if (user && user.role === "propertymanager") {
       // console.log('in user', user.role)
       navigate("/executivedashboard");
     }
@@ -48,18 +48,18 @@ const LeftSidebar = () => {
       // navigate("/adminproperties");
       navigate("/users");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/bills");
     }
   };
-  const showThirdMenu = () => { 
+  const showThirdMenu = () => {
     if (user && user.role === "admin") {
       // console.log('in user', user.role)
       // navigate("/adminproperties");
       navigate("/pgpropertylist");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/tickets");
     }
@@ -69,11 +69,11 @@ const LeftSidebar = () => {
     if (user && user.role === "admin") {
       // console.log('in user', user.role)
       // navigate("/adminproperties");
-      navigate("/addproperty_old");
+      navigate("/addproperty_quick");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/search-property");
+      navigate("/ownerdashboard");
     }
   };
   const showFifthMenu = () => {
@@ -82,7 +82,7 @@ const LeftSidebar = () => {
       // navigate("/adminproperties");
       navigate("/pgsearch");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("");
     }
@@ -101,7 +101,7 @@ const LeftSidebar = () => {
   let fifthMenuIcon = "";
 
 
-  if (user && user.role === "admin") {  
+  if (user && user.role === "admin") {
     firstMenu = "Admin Dashboard";
     secondMenuIcon = "account_box";
     secondMenu = "User List";
@@ -112,7 +112,7 @@ const LeftSidebar = () => {
     fifthMenuIcon = "search"
     fifthMenu = "Search"
   }
-  if (user && user.role === "owner") {
+  if ((user && user.role === "owner") || (user && user.role === "coowner")) {
     firstMenu = "Owner Dashboard";
     secondMenuIcon = "receipt_long";
     secondMenu = "Bills";
@@ -120,15 +120,15 @@ const LeftSidebar = () => {
     thirdMenu = "Tickets";
     fourthMenuIcon = "receipt_long";
     fourthMenu = "Property"
-    fifthMenuIcon = ""
-    fifthMenu = ""
+    fifthMenuIcon = "receipt_long"
+    fifthMenu = "Report"
   }
   if (user && user.role === "tenant") {
     firstMenu = "Tenant Dashboard";
     secondMenu = "Rent";
     thirdMenu = "Tickets";
   }
-  if (user && user.role === "executive") {
+  if (user && user.role === "propertymanager") {
     firstMenu = "";
     secondMenu = "Bills";
     thirdMenu = "Tickets";
@@ -144,9 +144,8 @@ const LeftSidebar = () => {
           <br />
           <ul>
             <li
-              className={`pointer ${
-                location.pathname === "/admindashboard" ? "active" : "" || location.pathname === "/ownerdashboard" ? "active" : ""
-              }`}
+              className={`pointer ${location.pathname === "/admindashboard" ? "active" : "" || location.pathname === "/ownerdashboard" ? "active" : ""
+                }`}
               onClick={showLDashboard}
             >
               <b></b>
@@ -159,9 +158,8 @@ const LeftSidebar = () => {
               </div>
             </li>
             <li
-              className={`sb_menu pointer ${
-                location.pathname === "/users" ? "active" : "" || location.pathname === "/bills" ? "active" : ""
-              }`}
+              className={`sb_menu pointer ${location.pathname === "/users" ? "active" : "" || location.pathname === "/bills" ? "active" : ""
+                }`}
               onClick={showSecondMenu}
             >
               <b></b>
@@ -173,9 +171,8 @@ const LeftSidebar = () => {
               </div>
             </li>
             <li
-              className={`sb_menu pointer ${
-                location.pathname === "/pgpropertylist" ? "active" : "" || location.pathname === "/tickets" ? "active" : ""
-              }`}
+              className={`sb_menu pointer ${location.pathname === "/pgpropertylist" ? "active" : "" || location.pathname === "/tickets" ? "active" : ""
+                }`}
               onClick={showThirdMenu}
             >
               <b></b>
@@ -187,9 +184,8 @@ const LeftSidebar = () => {
               </div>
             </li>
             <li
-              className={`sb_menu pointer ${
-                location.pathname === "/addproperty_old" ? "active" : ""
-              }`}
+              className={`sb_menu pointer ${location.pathname === "/addproperty_quick" ? "active" : ""
+                }`}
               onClick={showFourthMenu}
             >
               <b></b>
@@ -201,9 +197,8 @@ const LeftSidebar = () => {
               </div>
             </li>
             <li
-              className={`sb_menu pointer ${
-                location.pathname === "/pgsearch" ? "active" : ""
-              }`}
+              className={`sb_menu pointer ${location.pathname === "/pgsearch" ? "active" : ""
+                }`}
               onClick={showFifthMenu}
             >
               <b></b>

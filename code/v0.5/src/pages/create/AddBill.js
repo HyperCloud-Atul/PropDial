@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom"
 import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { timestamp } from "../../firebase/config";
@@ -17,15 +18,20 @@ import { el } from "date-fns/locale";
 // components 
 import Hero from "../../Components/Hero";
 
-export default function AddBill(props) {
-     // Scroll to the top of the page whenever the location changes start
-     const location = useLocation();
-     useEffect(() => {
-       window.scrollTo(0, 0);
-     }, [location]);
-     // Scroll to the top of the page whenever the location changes end
-  const { state } = useLocation();
-  const { propertyid } = state;
+// export default function AddBill(props) {
+export default function AddBill() {
+
+  const { propertyid } = useParams()
+  console.log('property id: ', propertyid)
+
+  // Scroll to the top of the page whenever the location changes start
+  // const location = useLocation();
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, [location]);
+  // Scroll to the top of the page whenever the location changes end
+  // const { state } = useLocation();
+  // const { propertyid } = state;
   const navigate = useNavigate();
   const { addDocument, response } = useFirestore("bills");
   const { document: property, error: propertyerror } = useDocument(
@@ -68,23 +74,23 @@ export default function AddBill(props) {
   }
 
   // create user values for react-select
-  useEffect(() => {
-    if (documents) {
-      setUsers(
-        documents.map((user) => {
-          var userDetails = user.displayName + "(" + user.role + ")";
-          // console.log('userDetails:', userDetails)
-          return { value: { ...user, id: user.id }, label: userDetails };
-        })
-      );
-    }
+  // useEffect(() => {
+  //   // if (documents) {
+  //   //   setUsers(
+  //   //     documents.map((user) => {
+  //   //       var userDetails = user.displayName + "(" + user.role + ")";
+  //   //       // console.log('userDetails:', userDetails)
+  //   //       return { value: { ...user, id: user.id }, label: userDetails };
+  //   //     })
+  //   //   );
+  //   // }
 
-    if (billTypeOptions) {
-      setbillTypeOptionsSorted(
-        billTypeOptions.sort((a, b) => a.label.localeCompare(b.label))
-      );
-    }
-  }, [documents, billTypeOptions]);
+  //   if (billTypeOptions) {
+  //     setbillTypeOptionsSorted(
+  //       billTypeOptions.sort((a, b) => a.label.localeCompare(b.label))
+  //     );
+  //   }
+  // }, [billTypeOptions]);
 
   const usersSorted = users.sort((a, b) => a.label.localeCompare(b.label));
 
@@ -191,7 +197,7 @@ export default function AddBill(props) {
       billSubject,
       billDetails,
       // billPayerList,
-      taggedUsersList: property.taggedUsersList,
+      // ownerDetails: property.ownerDetails,
       billType: billType.label,
       billAmount,
       agencyCommissionAmount,
@@ -218,136 +224,136 @@ export default function AddBill(props) {
         heroImage="./assets/img/about_us_banner.jpg"
       ></Hero>
 
-<div className="container">
-<div style={{ overflow: "hidden" }}>
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="row no-gutters">
-            <div className="col-lg-6 col-md-6 col-sm-12">
-              <div>
-                <h1 className="owner-heading">Bill Type</h1>
-                <div className="">
-                  <Select
-                    className=""
-                    onChange={(option) => setBillType(option)}
-                    options={billTypeOptionsSorted}
-                    value={billType}
-                    styles={{
-                      control: (baseStyles, state) => ({
-                        ...baseStyles,
-                        outline: "none",
-                        background: "#eee",
-                        borderBottom: " 1px solid var(--theme-blue)",
-                      }),
-                    }}
-                  />
-                  {/* <div className="underline"></div> */}
-                  {/* <span className="material-symbols-outlined">
+      <div className="container">
+        <div style={{ overflow: "hidden" }}>
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="row no-gutters">
+              <div className="col-lg-6 col-md-6 col-sm-12">
+                <div>
+                  <h1 className="owner-heading">Bill Type</h1>
+                  <div className="">
+                    <Select
+                      className=""
+                      onChange={(option) => setBillType(option)}
+                      options={billTypeOptionsSorted}
+                      value={billType}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                        }),
+                      }}
+                    />
+                    {/* <div className="underline"></div> */}
+                    {/* <span className="material-symbols-outlined">
                                         public
                                     </span> */}
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <br />
-                <h1 className="owner-heading">Bill Subject</h1>
-                <input
-                  required
-                  type="text"
-                  onChange={(e) => setBillSubject(e.target.value)}
-                  value={billSubject}
-                />
-              </div>
-
-              <div>
-                <br />
-                <h1 className="owner-heading">Bill Details</h1>
-                <input
-                  type="text"
-                  placeholder="you can put here the complete details"
-                  onChange={(e) => setBillDetails(e.target.value)}
-                  value={billDetails}
-                />
-              </div>
-
-              <div>
-                <br />
-                <h1 className="owner-heading">Bill Amount</h1>
-                <input
-                  required
-                  type="number"
-                  // onChange={(e) => setBillAmount(e.target.value)}
-                  onChange={(e) => billAmountAdded(e.target.value)}
-                  value={billAmount}
-                />
-              </div>
-
-              <div>
-                <br />
-                <h1 className="owner-heading">Agency Commission (if any)</h1>
-                <input
-                  required
-                  type="number"
-                  // onChange={(e) => setAgencyCommissionAmount(e.target.value)}
-                  onChange={(e) => agencyCommissionAmountAdded(e.target.value)}
-                  value={agencyCommissionAmount}
-                />
-              </div>
-
-              <div>
-                <br />
-                <h1 className="owner-heading">Tax (if any) </h1>
-                <input
-                  required
-                  type="number"
-                  // onChange={(e) => setTaxAmount(e.target.value)}
-                  onChange={(e) => taxAmountAdded(e.target.value)}
-                  value={taxAmount}
-                />
-              </div>
-
-              <div>
-                <br />
-                <h1 className="owner-heading">Adjustment (if any)</h1>
-                <input
-                  required
-                  type="number"
-                  // onChange={(e) => setAdjustmentAmount(e.target.value)}
-                  onChange={(e) => adjustmentAmountAdded(e.target.value)}
-                  value={adjustmentAmount}
-                />
-              </div>
-
-              <div>
-                <br />
-                <h1 className="owner-heading">Bill Total Amount</h1>
-                <input readOnly type="number" value={billTotalAmount} />
-              </div>
-
-              <div>
-                <div className="">
-                  <h1 className="owner-heading">Bill Due Date</h1>
-                  <DatePicker
-                    selected={billDueDate}
-                    maxDate={new Date()}
+                <div>
+                  <br />
+                  <h1 className="owner-heading">Bill Subject</h1>
+                  <input
                     required
-                    onChange={(billDueDate) => setBillDueDate(billDueDate)}
+                    type="text"
+                    onChange={(e) => setBillSubject(e.target.value)}
+                    value={billSubject}
                   />
-                  <span className="material-symbols-outlined">
-                    calendar_month
-                  </span>
+                </div>
+
+                <div>
+                  <br />
+                  <h1 className="owner-heading">Bill Details</h1>
+                  <input
+                    type="text"
+                    placeholder="you can put here the complete details"
+                    onChange={(e) => setBillDetails(e.target.value)}
+                    value={billDetails}
+                  />
+                </div>
+
+                <div>
+                  <br />
+                  <h1 className="owner-heading">Bill Amount</h1>
+                  <input
+                    required
+                    type="number"
+                    // onChange={(e) => setBillAmount(e.target.value)}
+                    onChange={(e) => billAmountAdded(e.target.value)}
+                    value={billAmount}
+                  />
+                </div>
+
+                <div>
+                  <br />
+                  <h1 className="owner-heading">Agency Commission (if any)</h1>
+                  <input
+                    required
+                    type="number"
+                    // onChange={(e) => setAgencyCommissionAmount(e.target.value)}
+                    onChange={(e) => agencyCommissionAmountAdded(e.target.value)}
+                    value={agencyCommissionAmount}
+                  />
+                </div>
+
+                <div>
+                  <br />
+                  <h1 className="owner-heading">Tax (if any) </h1>
+                  <input
+                    required
+                    type="number"
+                    // onChange={(e) => setTaxAmount(e.target.value)}
+                    onChange={(e) => taxAmountAdded(e.target.value)}
+                    value={taxAmount}
+                  />
+                </div>
+
+                <div>
+                  <br />
+                  <h1 className="owner-heading">Adjustment (if any)</h1>
+                  <input
+                    required
+                    type="number"
+                    // onChange={(e) => setAdjustmentAmount(e.target.value)}
+                    onChange={(e) => adjustmentAmountAdded(e.target.value)}
+                    value={adjustmentAmount}
+                  />
+                </div>
+
+                <div>
+                  <br />
+                  <h1 className="owner-heading">Bill Total Amount</h1>
+                  <input readOnly type="number" value={billTotalAmount} />
+                </div>
+
+                <div>
+                  <div className="">
+                    <h1 className="owner-heading">Bill Due Date</h1>
+                    <DatePicker
+                      selected={billDueDate}
+                      maxDate={new Date()}
+                      required
+                      onChange={(billDueDate) => setBillDueDate(billDueDate)}
+                    />
+                    <span className="material-symbols-outlined">
+                      calendar_month
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <br />
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <button className="theme_btn btn_fill">Add Bill</button>
-            {formError && <p className="error">{formError}</p>}
-          </div>
-          <br />
-        </form>
+            <br />
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <button className="theme_btn btn_fill">Add Bill</button>
+              {formError && <p className="error">{formError}</p>}
+            </div>
+            <br />
+          </form>
+        </div>
       </div>
-</div>
     </div>
   );
 }

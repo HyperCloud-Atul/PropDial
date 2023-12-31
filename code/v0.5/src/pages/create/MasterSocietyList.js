@@ -276,7 +276,7 @@ export default function MasterSocietyList() {
   };
 
   return (
-    <div>
+    <div className="pg_property">
       <Hero
         pageTitle="Society List"
         pageSubTitle="Add or update society

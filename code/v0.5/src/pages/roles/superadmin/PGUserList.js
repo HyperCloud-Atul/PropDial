@@ -10,7 +10,7 @@ import UserList from "../../../Components/UserList";
 // styles
 import "./PGUserList.css";
 
-const userFilter = ["ALL", "ADMIN", "OWNER", "TENANT", "EXECUTIVE", "INACTIVE"];
+const userFilter = ["ALL", "ADMIN", "OWNER", "TENANT", "PROPERTYMANAGER", "INACTIVE"];
 export default function PGUserList() {
   const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
@@ -31,23 +31,23 @@ export default function PGUserList() {
 
   const users = documents
     ? documents.filter((document) => {
-        switch (filter) {
-          case "ALL":
-            return true;
-          case "ADMIN":
-            return document.role === "admin";
-          case "OWNER":
-            return document.role === "owner";
-          case "TENANT":
-            return document.role === "tenant";
-          case "EXECUTIVE":
-            return document.role === "executive";
-          case "INACTIVE":
-            return document.status === "inactive";
-          default:
-            return true;
-        }
-      })
+      switch (filter) {
+        case "ALL":
+          return true;
+        case "ADMIN":
+          return document.role === "admin";
+        case "OWNER":
+          return (document.role === "owner") || (document.role === "coowner");
+        case "TENANT":
+          return document.role === "tenant";
+        case "PROPERTYMANAGER":
+          return document.role === "propertymanager";
+        case "INACTIVE":
+          return document.status === "inactive";
+        default:
+          return true;
+      }
+    })
     : null;
 
   return (

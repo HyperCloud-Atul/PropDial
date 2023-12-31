@@ -63,7 +63,7 @@ const AirBnb = () => {
       <div className="container">
         <div className="section_title">
           <h2 class="section_title_effect">Air BNB</h2>
-          <h3>Service Apartments - Daily/Short Time Rental</h3>
+          <h3>Service Apartments - Short Time Rental</h3>
         </div>
         <OwlCarousel className="owl-theme ab_p_carousel" {...options}>
           <Link className="item card_single" to="https://www.airbnb.co.in/rooms/966417708640526996?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_fA6WCaHp3etyoJem" target="_blank">
@@ -81,7 +81,7 @@ const AirBnb = () => {
             </div>
             <div className="card_inner">
               <h4 className="location">
-              Goa: 2 BHK in Tata Rio T3-201 (no airbnb fee)
+              Goa: 2 BHK in Tata Rio T3-201
               </h4>
               <div className="p_info">
                 <div className="p_info_single">
@@ -126,7 +126,7 @@ const AirBnb = () => {
             </div>
             <div className="card_inner">
               <h4 className="location">
-              Goa: 2 BHK in Tata Rio T4-607 (no airbnb fee)
+              Goa: 2 BHK in Tata Rio T4-607
               </h4>
               <div className="p_info">
                 <div className="p_info_single">
@@ -168,7 +168,7 @@ const AirBnb = () => {
             </div>
             <div className="card_inner">
               <h4 className="location">
-              Goa: 2 BHK in Tata Rio T6-306 (no airbnb fee)
+              Goa: 2 BHK in Tata Rio T6-306
               </h4>
               <div className="p_info">
                 <div className="p_info_single">
@@ -212,7 +212,7 @@ const AirBnb = () => {
             </div>
             <div className="card_inner">
               <h4 className="location">
-              Entire rental unit hosted by Propdial
+              Goa: 2 BHK in Tata Rio T9-205
               </h4>
               <div className="p_info">
                 <div className="p_info_single">

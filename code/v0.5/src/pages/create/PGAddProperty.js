@@ -1,33 +1,27 @@
-import { useState, useEffect, useRef } from "react";
-import { useCollection } from "../../hooks/useCollection";
-import { useAuthContext } from "../../hooks/useAuthContext";
-import { timestamp, projectFirestore } from "../../firebase/config";
+import { useState, useEffect } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
+import { useCollection } from "../../hooks/useCollection";
+import { useAuthContext } from '../../hooks/useAuthContext';
 import { useLocation } from "react-router-dom";
-import Select from "react-select";
-import { useNavigate, useParams } from "react-router-dom";
-import { format } from "date-fns";
-import DatePicker from "react-datepicker";
+
+import { useNavigate } from "react-router-dom";
+
 import "react-datepicker/dist/react-datepicker.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { Navigate, Link } from "react-router-dom";
+import Select from 'react-select'
 
 // styles
 import "./PGAddProperty.css";
-import { el } from "date-fns/locale";
 
 // component
-import Hero from "../../Components/Hero";
 import PropertySidebar from "../../Components/PropertySidebar";
 
-const categories = [
-  { value: "residential", label: "Residential" },
-  { value: "commercial", label: "Commercial" },
-];
+
 
 export default function PGAddProperty({ propertyid }) {
   // Scroll to the top of the page whenever the location changes start
+
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -46,411 +40,380 @@ export default function PGAddProperty({ propertyid }) {
   // radio button check
 
   const navigate = useNavigate();
-  const { document: propertyDocument, error: propertyerror } = useDocument(
-    "properties",
-    propertyid
-  );
-  const { addDocument, response: addDocumentResponse } =
-    useFirestore("properties");
-  const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties");
 
-  const { user } = useAuthContext();
-  const [users, setUsers] = useState([]);
-
-  const { documents } = useCollection("users");
 
   const [toggleFlag, setToggleFlag] = useState(false);
 
   // form field values
-  const [unitNumber, setUnitNumber] = useState("");
-  const [taggedUsers, setTaggedUsers] = useState([]);
-  const { document: masterPropertyPurpose, error: masterPropertyPurposeerror } =
-    useDocument("master", "PROPERTYPURPOSE");
-  const { documents: masterCountry, error: masterCountryerror } =
-    useCollection("m_countries");
-  const [country, setCountry] = useState({ label: "INDIA", value: "INDIA" });
-  const [state, setState] = useState();
-  const [city, setCity] = useState();
-  const [cityList, setCityList] = useState([]);
 
-  const [localityList, setLocalityList] = useState([]);
-  const [locality, setLocality] = useState();
+  const [category, setCategory] = useState("Residential"); //Residential/Commercial
+  const [taggedOwner, setTaggedOwner] = useState([])
+  const [taggedCoOwner, setTaggedCoOwner] = useState([])
+  const [taggedPropertyManager, setTaggedPropertyManager] = useState([])
 
-  const [society, setSociety] = useState("");
-  const [category, setCategory] = useState("residential"); //Residential/Commercial
-  const [purpose, setPurpose] = useState();
-  const [status, setStatus] = useState("active");
-  // const today = new Date();
-  // const formattedDate = format(today, 'yyyy-MM-dd');
-  const [onboardingDate, setOnboardingDate] = useState(new Date());
-  const [formError, setFormError] = useState(null);
+  // const { user } = useAuthContext()
+  const [owners, setOwners] = useState([])
+  const [coowners, setCoOwners] = useState([])
+  const [propertymanagers, setPropertyManagers] = useState([])
 
-  let taggedUsersListShow = "";
-  if (propertyDocument) {
-    let taggedUsersListCount = propertyDocument.taggedUsersList.length;
-    // console.log('taggedUsersListCount', taggedUsersListCount)
-    for (var i = 0; i < taggedUsersListCount; i++) {
-      if (propertyDocument.taggedUsersList) {
-        // console.log('propertyDocument.taggedUsersList:', propertyDocument.taggedUsersList[i])
-        if (taggedUsersListShow === "")
-          taggedUsersListShow =
-            propertyDocument.taggedUsersList[i].displayName +
-            "(" +
-            propertyDocument.taggedUsersList[i].phoneNumber +
-            ")";
-        else
-          taggedUsersListShow =
-            taggedUsersListShow +
-            ", " +
-            propertyDocument.taggedUsersList[i].displayName +
-            "(" +
-            propertyDocument.taggedUsersList[i].phoneNumber +
-            ")";
-      }
-    }
-  }
+  // const [propertyLocality, setpropertyLocality] = useState("");
+  const [propertyDetails, setPropertyDetails] = useState({
 
-  const propertyPurposeOptions = useRef([]);
-  const propertyPurposeOptionsSorted = useRef([]);
-  let countryOptions = useRef([]);
-  let countryOptionsSorted = useRef([]);
-  let statesOptions = useRef([]);
-  let statesOptionsSorted = useRef([]);
-  let citiesOptions = useRef([]);
-  let citiesOptionsSorted = useRef([]);
-  let localityOptions = useRef([]);
-  let localityOptionsSorted = useRef([]);
-  let societyOptions = useRef([]);
-  let societyOptionsSorted = useRef([]);
+    // All select type 
+    PropertyPOC: '',
+    PostedBy: '',
+    Locality: '',
+    City: '',
+    Country: '',
+    State: '',
+    Society: '',
+    PropertyType: '',
+    YearOfConstruction: '',
+    Bhk: '',
+    Furnishing: '',
 
+    NumberOfBedrooms: '',
+    NumberOfBathrooms: '',
+    NumberOfBalcony: '',
+    NumberOfKitchen: '',
+
+    DiningArea: '',
+    LivingDining: '',
+
+    NumberOfLivingArea: '',
+
+    Passages: '',
+    EntranceGallery: '',
+
+    NumberOfBasement: '',
+
+    AdditionalRooms: [],
+    AdditionalArea: [],
+
+    NumberOfAptOnFloor: '',
+    NumberOfLifts: '',
+
+    PowerBackup: '',
+
+    NumberOfCarParking: '',
+    TwoWheelerParking: '',
+
+    // all input types text    
+    AddressLocator: '',
+    PinCode: '',
+    UnitNumber: '',
+    TotalFloor: '',
+    FloorNumber: '',
+
+    // input type text + select 
+    PlotArea: '',
+    SuperArea: '',
+    BuiltUpArea: '',
+    CarpetArea: '',
+
+    // More tab (menu) fields
+    PropertyDesciption: '',
+    OwnerInstruction: '',
+    KeyDetailsHandover: '',
+    BillTypeSetting: '',
+    Advertising: '',
+
+  });
+
+  // const { documents: userList } = useCollection('users')
+  const { documents: ownerList } = useCollection('users', ["role", "==", "owner"])
+  const { documents: coownerList } = useCollection('users', ["role", "==", "coowner"])
+  const { documents: propertymanagerList } = useCollection('users', ["role", "==", "propertymanager"])
+
+  const { document: property, error: propertyerror } = useDocument("properties", propertyid);
+  const { updateDocument, updateResponse } = useFirestore("properties"); // Firestore collection name
+
+
+  // set property document values into form
   useEffect(() => {
-    // console.log('in useeffect')
-    if (documents) {
-      setUsers(
-        documents.map((user) => {
-          return {
-            value: { ...user, id: user.id },
-            label: user.fullName + " ( " + user.phoneNumber + " )",
-          };
-        })
-      );
+    // console.log('property id: ', propertyid);
+    // console.log('ownerList : ', ownerList)
+    if (ownerList) {
+      setOwners(ownerList.map(user => {
+        return { value: { ...user, id: user.id }, label: user.fullName + ' ( ' + user.phoneNumber + ' )' }
+      }))
     }
 
-    if (masterPropertyPurpose) {
-      propertyPurposeOptions.current = masterPropertyPurpose.data.map(
-        (propertyPurposeData) => ({
-          label: propertyPurposeData.toUpperCase(),
-          value: propertyPurposeData,
-        })
-      );
-
-      propertyPurposeOptionsSorted.current =
-        propertyPurposeOptions.current.sort((a, b) =>
-          a.label.localeCompare(b.label)
-        );
+    if (coownerList) {
+      setCoOwners(coownerList.map(user => {
+        return { value: { ...user, id: user.id }, label: user.fullName + ' ( ' + user.phoneNumber + ' )' }
+      }))
     }
 
-    if (masterCountry) {
-      countryOptions.current = masterCountry.map((countryData) => ({
-        label: countryData.country,
-        value: countryData.country,
-      }));
-
-      countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
-        a.label.localeCompare(b.label)
-      );
-      handleCountryChange(country);
+    if (propertymanagerList) {
+      setPropertyManagers(propertymanagerList.map(user => {
+        return { value: { ...user, id: user.id }, label: user.fullName + ' ( ' + user.phoneNumber + ' )' }
+      }))
     }
 
-    if (propertyDocument) {
-      setCategory(propertyDocument.category);
-      if (propertyDocument.category.toUpperCase() === "RESIDENTIAL")
+    if (property) {
+      // console.log('property: ', property);
+
+      setCategory(property.category)
+
+      if (property.category === 'Residential')
         setToggleFlag(false);
-      else setToggleFlag(true);
+      else
+        setToggleFlag(true)
 
-      setUnitNumber(propertyDocument.unitNumber);
-      setPurpose({ label: propertyDocument.purpose });
-      const date = new Date(propertyDocument.onboardingDate.seconds * 1000);
-      setOnboardingDate(date);
-      setCountry({ label: propertyDocument.country });
-      setState({ label: propertyDocument.state });
-      setCity({ label: propertyDocument.city });
-      setLocality({ label: propertyDocument.locality });
-      setSociety({ label: propertyDocument.society });
+      setCategory(property.category)
+
+      setPropertyDetails({
+
+        // All select type 
+        PropertyPOC: property.propertyPOC ? property.propertyPOC : '',
+        PostedBy: property.postedBy ? property.postedBy : '',
+        // category: property.category ? property.category : 'Residential',
+        Locality: property.locality ? property.locality : '',
+        City: property.city ? property.city : '',
+        Country: property.country ? property.country : '',
+        State: property.state ? property.state : '',
+        Society: property.society ? property.society : '',
+        PropertyType: property.propertyType ? property.propertyType : '',
+        YearOfConstruction: property.yearOfConstruction ? property.yearOfConstruction : '',
+        Bhk: property.bhk ? property.bhk : '',
+
+        LivingDining: property.livingdining ? property.livingdining : '',
+        NumberOfBedrooms: property.numberOfBedrooms ? property.numberOfBedrooms : '',
+        NumberOfBathrooms: property.numberOfBathrooms ? property.numberOfBathrooms : '',
+        NumberOfBalcony: property.numberOfBalcony ? property.numberOfBalcony : '',
+        NumberOfKitchen: property.numberOfKitchen ? property.numberOfKitchen : '',
+
+        Furnishing: property.furnishing ? property.furnishing : '',
+        DiningArea: property.diningarea ? property.diningarea : '',
+
+        NumberOfLivingArea: property.numberOfLivingArea ? property.numberOfLivingArea : '',
+
+        Passages: property.passages ? property.passages : '',
+        EntranceGallery: property.entrancegallery ? property.entrancegallery : '',
+
+        NumberOfBasement: property.numberOfBasement ? property.numberOfBasement : '',
+
+        AdditionalRooms: property.additionalRooms ? property.additionalRooms : [],
+        AdditionalArea: property.additionalArea ? property.additionalArea : [],
+
+        NumberOfAptOnFloor: property.numberOfAptOnFloor ? property.numberOfAptOnFloor : '',
+        NumberOfLifts: property.numberOfLifts ? property.numberOfLifts : '',
+
+        PowerBackup: property.powerbackup ? property.powerbackup : '',
+
+        NumberOfCarParking: property.numberOfCarParking ? property.numberOfCarParking : '',
+        TwoWheelerParking: property.twowheelerparking ? property.twowheelerparking : '',
+
+        // all input type text        
+        AddressLocator: property.addressLocator ? property.addressLocator : '',
+        PinCode: property.pinCode ? property.pinCode : '',
+        UnitNumber: property.unitNumber ? property.unitNumber : '',
+        TotalFloor: property.totalFloor ? property.totalFloor : '',
+        FloorNumber: property.floorNumber ? property.floorNumber : '',
+
+        // input type text + select 
+        PlotArea: property.plotArea ? property.plotArea : '',
+        PlotAreaUnit: property.plotAreaUnit ? property.plotAreaUnit : 'SqFt',
+        SuperArea: property.superArea ? property.superArea : '',
+        SuperAreaUnit: property.superAreaUnit ? property.superAreaUnit : 'SqFt',
+        BuiltUpArea: property.builtUpArea ? property.builtUpArea : '',
+        BuiltUpAreaUnit: property.builtUpAreaUnit ? property.builtUpAreaUnit : 'SqFt',
+        CarpetArea: property.carpetArea ? property.carpetArea : '',
+        CarpetAreaUnit: property.carpetAreaUnit ? property.carpetAreaUnit : 'SqFt',
+
+        // More tab (menu) fields
+        PropertyDesciption: property.propertydesciption ? property.propertydesciption : '',
+        OwnerInstruction: property.ownerinstruction ? property.ownerinstruction : '',
+        KeyDetailsHandover: property.keydetailshandover ? property.keydetailshandover : '',
+        BillTypeSetting: property.billtypesetting ? property.billtypesetting : '',
+        Advertising: property.advertising ? property.advertising : '',
+
+        ServentRoomClick: property.additionalRooms && property.additionalRooms.includes('Servent Room') ? true : false,
+        OfficeRoomClick: property.additionalRooms && property.additionalRooms.includes('Office Room') ? true : false,
+        StoreRoomClick: property.additionalRooms && property.additionalRooms.includes('Store Room') ? true : false,
+        PoojaRoomClick: property.additionalRooms && property.additionalRooms.includes('Pooja Room') ? true : false,
+        StudyRoomClick: property.additionalRooms && property.additionalRooms.includes('Study Room') ? true : false,
+        PowerRoomClick: property.additionalRooms && property.additionalRooms.includes('Power Room') ? true : false,
+
+        FrontYardClick: property.additionalArea && property.additionalArea.includes('Front Yard') ? true : false,
+        BackYardClick: property.additionalArea && property.additionalArea.includes('Back Yard') ? true : false,
+        TerraceClick: property.additionalArea && property.additionalArea.includes('Terrace') ? true : false,
+        GardenClick: property.additionalArea && property.additionalArea.includes('Garden') ? true : false,
+        GarageClick: property.additionalArea && property.additionalArea.includes('Garage') ? true : false,
+
+      })
+
     }
-  }, [documents, propertyDocument, masterPropertyPurpose]);
+  }, [property, ownerList, coownerList, propertymanagerList])
+
+  const saveData = async (e) => {
+    e.preventDefault();
+
+    // console.log('save updated for property details: ', propertyDetails)
+
+    // Create a property object
+    let updatedProperty = {
+
+      // All select type
+      propertyPOC: propertyDetails.PropertyPOC ? propertyDetails.PropertyPOC : '',
+      postedBy: propertyDetails.PostedBy ? propertyDetails.PostedBy : '',
+      category,
+      // ownerDetails,
+      // coownerDetails,
+      locality: propertyDetails.Locality ? propertyDetails.Locality : '',
+      country: propertyDetails.Country ? propertyDetails.Country : '',
+      state: propertyDetails.State ? propertyDetails.State : '',
+      city: propertyDetails.City ? propertyDetails.City : '',
+      society: propertyDetails.Society ? propertyDetails.Society : '',
+      propertyType: propertyDetails.PropertyType ? propertyDetails.PropertyType : '',
+      yearOfConstruction: propertyDetails.YearOfConstruction ? propertyDetails.YearOfConstruction : '',
+      bhk: propertyDetails.Bhk ? propertyDetails.Bhk : '',
+      furnishing: propertyDetails.Furnishing ? propertyDetails.Furnishing : '',
+
+      numberOfBedrooms: propertyDetails.NumberOfBedrooms ? propertyDetails.NumberOfBedrooms : '1',
+      numberOfBathrooms: propertyDetails.NumberOfBathrooms ? propertyDetails.NumberOfBathrooms : '',
+      numberOfBalcony: propertyDetails.NumberOfBalcony ? propertyDetails.NumberOfBalcony : '',
+      numberOfKitchen: propertyDetails.NumberOfKitchen ? propertyDetails.NumberOfKitchen : '',
+
+      diningarea: propertyDetails.DiningArea ? propertyDetails.DiningArea : '',
+      livingdining: propertyDetails.LivingDining ? propertyDetails.LivingDining : '',
+
+      numberOfLivingArea: propertyDetails.NumberOfLivingArea ? propertyDetails.NumberOfLivingArea : '',
+
+      passages: propertyDetails.Passages ? propertyDetails.Passages : '',
+      entrancegallery: propertyDetails.EntranceGallery ? propertyDetails.EntranceGallery : '',
+
+      numberOfBasement: propertyDetails.NumberOfBasement ? propertyDetails.NumberOfBasement : '',
+
+      additionalRooms: propertyDetails.AdditionalRooms ? propertyDetails.AdditionalRooms : [],
+      additionalArea: propertyDetails.AdditionalArea ? propertyDetails.AdditionalArea : [],
+
+      numberOfAptOnFloor: propertyDetails.NumberOfAptOnFloor ? propertyDetails.NumberOfAptOnFloor : '',
+      numberOfLifts: propertyDetails.NumberOfLifts ? propertyDetails.NumberOfLifts : '',
+
+      powerbackup: propertyDetails.PowerBackup ? propertyDetails.PowerBackup : '',
+
+      numberOfCarParking: propertyDetails.NumberOfCarParking ? propertyDetails.NumberOfCarParking : '',
+      twowheelerparking: propertyDetails.TwoWheelerParking ? propertyDetails.TwoWheelerParking : '',
+
+      // All input type text       
+      addressLocator: propertyDetails.AddressLocator ? propertyDetails.AddressLocator : '',
+      pinCode: propertyDetails.PinCode ? propertyDetails.PinCode : '',
+      unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : '',
+      totalFloor: propertyDetails.TotalFloor ? propertyDetails.TotalFloor : '',
+      floorNumber: propertyDetails.FloorNumber ? propertyDetails.FloorNumber : '',
+
+
+      // input type text + select 
+      plotArea: propertyDetails.PlotArea ? propertyDetails.PlotArea : '',
+      plotAreaUnit: propertyDetails.PlotAreaUnit ? propertyDetails.PlotAreaUnit : 'SqFt',
+      superArea: propertyDetails.SuperArea ? propertyDetails.SuperArea : '',
+      superAreaUnit: propertyDetails.SuperAreaUnit ? propertyDetails.SuperAreaUnit : 'SqFt',
+      builtUpArea: propertyDetails.BuiltUpArea ? propertyDetails.BuiltUpArea : '',
+      builtUpAreaUnit: propertyDetails.BuiltUpAreaUnit ? propertyDetails.BuiltUpAreaUnit : 'SqFt',
+      carpetArea: propertyDetails.CarpetArea ? propertyDetails.CarpetArea : '',
+      carpetAreaUnit: propertyDetails.CarpetAreaUnit ? propertyDetails.CarpetAreaUnit : 'SqFt',
+
+
+      // More tab (menu) fields
+      propertydesciption: propertyDetails.PropertyDesciption ? propertyDetails.PropertyDesciption : '',
+      ownerinstruction: propertyDetails.OwnerInstruction ? propertyDetails.OwnerInstruction : '',
+      keydetailshandover: propertyDetails.KeyDetailsHandover ? propertyDetails.KeyDetailsHandover : '',
+      billtypesetting: propertyDetails.BillTypeSetting ? propertyDetails.BillTypeSetting : '',
+      advertising: propertyDetails.Advertising ? propertyDetails.Advertising : '',
+
+    };
+
+    // console.log('tagged Owner details:', taggedOwner)
+    // console.log('tagged Owner Length:', taggedOwner.length)
+    let ownerDetails = '';
+    if (taggedOwner && taggedOwner.length !== 0) {
+      console.log('tagged Owner details:', taggedOwner)
+      ownerDetails = {
+        id: taggedOwner.value.id,
+        displayName: taggedOwner.value.fullName,
+        phoneNumber: taggedOwner.value.phoneNumber,
+        emailID: taggedOwner.value.email,
+        photoURL: taggedOwner.value.photoURL,
+        role: taggedOwner.value.role
+      }
+
+      updatedProperty = { ...updatedProperty, ownerDetails }
+    }
+
+    let coownerDetails = '';
+    if (taggedCoOwner && taggedCoOwner.length !== 0) {
+      console.log('tagged Owner details:', taggedCoOwner)
+      coownerDetails = {
+        id: taggedCoOwner.value.id,
+        displayName: taggedCoOwner.value.fullName,
+        phoneNumber: taggedCoOwner.value.phoneNumber,
+        emailID: taggedCoOwner.value.email,
+        photoURL: taggedCoOwner.value.photoURL,
+        role: taggedCoOwner.value.role
+      }
+
+      updatedProperty = { ...updatedProperty, coownerDetails }
+    }
+
+    let propertymanagerDetails = '';
+    if (taggedPropertyManager && taggedPropertyManager.length !== 0) {
+      console.log('tagged Owner details:', taggedPropertyManager)
+      propertymanagerDetails = {
+        id: taggedPropertyManager.value.id,
+        displayName: taggedPropertyManager.value.fullName,
+        phoneNumber: taggedPropertyManager.value.phoneNumber,
+        emailID: taggedPropertyManager.value.email,
+        photoURL: taggedPropertyManager.value.photoURL,
+        role: taggedPropertyManager.value.role
+      }
+
+      updatedProperty = { ...updatedProperty, propertymanagerDetails }
+    }
+
+    console.log("saveData updated property: ", updatedProperty)
+    // Store the property data in Firestore
+    // await addDocument(property);
+
+    await updateDocument(propertyid, updatedProperty);
+
+    // Reset the form after submission
+    // setPropertyName("");
+
+
+    if (!updateResponse.error) {
+      // Handle success, e.g., show a success message or redirect the user
+      console.log('updateresponse (not error): ', updateResponse)
+    } else {
+      // Handle error, e.g., show an error message
+      console.log('updateresponse (error) : ', updateResponse)
+    }
+  };
 
   const toggleBtnClick = () => {
     // console.log('toggleClick Category:', toggleFlag)
-    if (toggleFlag) setCategory("residential");
-    else setCategory("commercial");
-
+    if (toggleFlag) setCategory("Residential");
+    else setCategory("Commercial");
     setToggleFlag(!toggleFlag);
   };
 
-  const usersSorted = users.sort((a, b) => a.label.localeCompare(b.label));
+  const ownerListSorted = owners.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
+  const coownerListSorted = coowners.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
 
-  // Load dropdowns with db values
-  //Load data into Country dropdown
-  //Country select onchange
-  const handleCountryChange = async (option) => {
-    setCountry(option);
-    let countryname = option.label;
-    const ref = await projectFirestore
-      .collection("m_states")
-      .where("country", "==", countryname);
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          statesOptions.current = snapshot.docs.map((stateData) => ({
-            label: stateData.data().state,
-            value: stateData.data().state,
-          }));
-          // console.log('statesOptions:', statesOptions)
-          statesOptionsSorted.current = statesOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
-
-          if (countryname === "INDIA") {
-            setState({ label: "DELHI", value: "DELHI" });
-            handleStateChange({ label: "DELHI", value: "DELHI" });
-          } else {
-            setState({
-              label: statesOptionsSorted.current[0].label,
-              value: statesOptionsSorted.current[0].value,
-            });
-            handleStateChange({
-              label: statesOptionsSorted.current[0].label,
-              value: statesOptionsSorted.current[0].value,
-            });
-          }
-        } else {
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
-  };
-
-  const handleStateChange = async (option) => {
-    setState(option);
-    let statename = option.label;
-    console.log("statename:", statename);
-    const ref = await projectFirestore
-      .collection("m_cities")
-      .where("state", "==", statename);
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          citiesOptions.current = snapshot.docs.map((cityData) => ({
-            label: cityData.data().city,
-            value: cityData.data().city,
-          }));
-
-          citiesOptionsSorted.current = citiesOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
-
-          if (statename === "DELHI") {
-            setCity({ label: "DELHI", value: "DELHI" });
-            handleCityChange({ label: "DELHI", value: "DELHI" });
-          } else {
-            setCity({
-              label: citiesOptionsSorted.current[0].label,
-              value: citiesOptionsSorted.current[0].value,
-            });
-            handleCityChange({
-              label: citiesOptionsSorted.current[0].label,
-              value: citiesOptionsSorted.current[0].value,
-            });
-          }
-        } else {
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
-  };
-
-  //City select onchange
-  const handleCityChange = async (option) => {
-    setCity(option);
-    let cityname = option.label;
-    console.log("cityname:", cityname);
-    const ref = await projectFirestore
-      .collection("m_localities")
-      .where("city", "==", cityname);
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          localityOptions.current = snapshot.docs.map((localityData) => ({
-            label: localityData.data().locality,
-            value: localityData.data().locality,
-          }));
-
-          localityOptionsSorted.current = localityOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
-
-          setLocality({
-            label: localityOptionsSorted.current[0].label,
-            value: localityOptionsSorted.current[0].value,
-          });
-          handleLocalityChange({
-            label: localityOptionsSorted.current[0].label,
-            value: localityOptionsSorted.current[0].value,
-          });
-        } else {
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
-  };
-
-  //Locality select onchange
-  const handleLocalityChange = async (option) => {
-    setLocality(option);
-    let localityname = option.label;
-    // console.log('cityname:', localityname)
-    const ref = await projectFirestore
-      .collection("m_societies")
-      .where("locality", "==", localityname);
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          societyOptions.current = snapshot.docs.map((societyData) => ({
-            label: societyData.data().society,
-            value: societyData.data().society,
-          }));
-
-          societyOptionsSorted.current = societyOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
-
-          setSociety({
-            label: societyOptionsSorted.current[0].label,
-            value: societyOptionsSorted.current[0].value,
-          });
-          // setSociety({ label: societyOptionsSorted.current.label, value: societyOptionsSorted.current.value })
-          // handleCityChange({ label: statesOptionsSorted.current[0].label, value: statesOptionsSorted.current[0].value })
-        } else {
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormError(null);
-
-    if (!category) {
-      setFormError("Please select a property category.");
-      return;
-    }
-    if (taggedUsers.length < 1) {
-      setFormError("Please assign the property to at least 1 user");
-      return;
-    }
-
-    const taggedUsersList = taggedUsers.map((u) => {
-      return {
-        id: u.value.id,
-        displayName: u.value.fullName,
-        phoneNumber: u.value.phoneNumber,
-        photoURL: u.value.photoURL,
-        role: u.value.role,
-      };
-    });
-
-    const createdBy = {
-      displayName: user.displayName + "(" + user.role + ")",
-      photoURL: user.photoURL,
-      id: user.uid,
-    };
-
-    const updatedBy = {
-      displayName: user.displayName + "(" + user.role + ")",
-      photoURL: user.photoURL,
-      id: user.uid,
-    };
-
-    const property = {
-      unitNumber,
-      taggedUsersList,
-      country: country.label,
-      state: state.label,
-      city: city.label,
-      locality: locality.label,
-      society: society.label,
-      category: category,
-      purpose: purpose.label,
-      status: status,
-      updatedBy,
-      onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
-      comments: [],
-    };
-
-    if (propertyid) {
-      await updateDocument(propertyid, {
-        unitNumber: unitNumber,
-        taggedUsersList,
-        country: country.label,
-        state: state.label,
-        city: city.label,
-        locality: locality.label,
-        society: society.label,
-        category,
-        purpose: purpose.label,
-        status: status,
-        createdBy,
-        onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
-        comments: [],
-      });
-      if (updateDocumentResponse.error) {
-        // console.log('updateDocument Error:', updateDocumentResponse.error)
-        navigate("/");
-      } else {
-        // console.log('Property Udpated Successfully:', property)
-      }
-    } else {
-      await addDocument(property);
-      if (addDocumentResponse.error) {
-        navigate("/error");
-      } else {
-        navigate("/admindashboard");
-      }
-
-      // console.log('addDocument:', property)
-    }
-  };
-  // sticky top property details - start
-
-  function openPropertyDetails(propertyDetails) {
-    propertyDetails.classList.toggle("open");
-  }
-
-  // sticky top property details - end
+  const propertyManagerListSorted = propertymanagers.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
 
   return (
     <div className="dashboard_pg aflbg property_setup">
       <div className="sidebarwidth">
-        <PropertySidebar />
+        {/* <PropertySidebar ({propertyid}) /> */}
+        {propertyid && <PropertySidebar propertyid={propertyid} />}
       </div>
       <div className="right_main_content">
         <div className="property-detail">
@@ -467,16 +430,25 @@ export default function PGAddProperty({ propertyid }) {
                 >
                   <div className="inner">
                     <div className="left">
-                      <h5>A-502</h5>
+                      <h5>{property && property.unitNumber} - {property && property.society}</h5>
                       <h6>
-                        High Mont Society,
+                        {property && property.locality}, {property && property.city}
                         <br />
-                        Hinjewadi, Pune
+                        {property && property.state}, {property && property.country}
                       </h6>
                     </div>
                     <div className="right">
-                      <h5>Sanskar Solanki</h5>
-                      <h6>8770534650</h6>
+                      {property && property.ownerDetails &&
+                        <div>
+                          <h5>
+                            {property.ownerDetails.role === 'owner' ? property.ownerDetails.displayName : 'No Owner Assigned'}
+                          </h5>
+                          <h6>
+                            {property.ownerDetails.role === 'owner' ? property.ownerDetails.phoneNumber : 'No Phone Number'}
+                          </h6>
+
+                        </div>
+                      }
                     </div>
                   </div>
                 </button>
@@ -490,7 +462,13 @@ export default function PGAddProperty({ propertyid }) {
                 <div class="accordion-body">
                   <div class="secondary-details-display">
                     <div class="secondary-details-inside-display">
-                      <h5 style={{ textAlign: "center" }}>Atul Tripathi</h5>
+                      {property && property.ownerDetails &&
+                        <div>
+                          <h5 style={{ textAlign: "center" }}>
+                            {property.ownerDetails.role === 'owner' ? property.ownerDetails.displayName : 'No Owner Assigned'}
+                          </h5>
+                        </div>
+                      }
                       <div
                         class="property-contact-div property-media-icons-horizontal"
                         style={{
@@ -499,28 +477,47 @@ export default function PGAddProperty({ propertyid }) {
                           height: "auto",
                         }}
                       >
-                        <div>
-                          <span class="material-symbols-outlined">call</span>
-                          <h1>Call</h1>
-                        </div>
-                        <div>
-                          <img
-                            src="./assets/img/whatsapp_square_icon.png"
-                            alt=""
-                          />
-                          <h1>WhatsApp</h1>
-                        </div>
-                        <div>
-                          <span class="material-symbols-outlined">
-                            alternate_email
-                          </span>
-                          <h1>Mail</h1>
-                        </div>
+                        {property && property.ownerDetails &&
+                          <a href={'Tel: +91' + property.ownerDetails.phoneNumber}>
+                            <div>
+                              <span class="material-symbols-outlined">call</span>
+                              <h1>Call</h1>
+                            </div>
+                          </a>
+                        }
+
+                        {property && property.ownerDetails &&
+                          <a href={'https://wa.me/+91' + property.ownerDetails.phoneNumber}>
+                            <div>
+                              <img
+                                src="/assets/img/whatsapp_square_icon.png"
+                                alt=""
+                              />
+                              <h1>WhatsApp</h1>
+                            </div>
+                          </a>
+                        }
+                        {property && property.ownerDetails &&
+                          <a href={'mailto:' + property.ownerDetails.emailID}>
+                            <div>
+                              <span class="material-symbols-outlined">
+                                alternate_email
+                              </span>
+                              <h1>Mail</h1>
+                            </div>
+                          </a>
+                        }
                       </div>
                     </div>
                     <hr class="secondary-details-hr" />
                     <div style={{ width: "100%" }}>
-                      <h5 style={{ textAlign: "center" }}>Vinay Prajapati</h5>
+                      {property && property.coownerDetails &&
+                        <div>
+                          <h5 style={{ textAlign: "center" }}>
+                            {property.coownerDetails.role === 'coowner' ? property.coownerDetails.displayName : 'No Co-Owner Assigned'}
+                          </h5>
+                        </div>
+                      }
                       <div
                         class="property-contact-div property-media-icons-horizontal"
                         style={{
@@ -529,20 +526,32 @@ export default function PGAddProperty({ propertyid }) {
                           height: "auto",
                         }}
                       >
-                        <div>
-                          <span class="material-symbols-outlined">call</span>
-                          <h1>Call</h1>
-                        </div>
-                        <div>
-                          <img src="../img/whatsapp_square_icon.png" alt="" />
-                          <h1>WhatsApp</h1>
-                        </div>
-                        <div>
-                          <span class="material-symbols-outlined">
-                            alternate_email
-                          </span>
-                          <h1>Mail</h1>
-                        </div>
+                        {property && property.coownerDetails &&
+                          <a href={'Tel: +91' + property.coownerDetails.phoneNumber}>
+                            <div>
+                              <span class="material-symbols-outlined">call</span>
+                              <h1>Call</h1>
+                            </div>
+                          </a>
+                        }
+                        {property && property.coownerDetails &&
+                          <a href={'https://wa.me/+91' + property.coownerDetails.phoneNumber}>
+                            <div>
+                              <img src="/assets/img/whatsapp_square_icon.png" alt="" />
+                              <h1>WhatsApp</h1>
+                            </div>
+                          </a>
+                        }
+                        {property && property.coownerDetails &&
+                          <a href={'mailto: ' + property.coownerDetails.emailID}>
+                            <div>
+                              <span class="material-symbols-outlined">
+                                alternate_email
+                              </span>
+                              <h1>Mail</h1>
+                            </div>
+                          </a>
+                        }
                       </div>
                     </div>
                   </div>
@@ -588,6 +597,13 @@ export default function PGAddProperty({ propertyid }) {
               </span>
             </div>
           </div>
+          <div className="col-lg-6 col-md-6 col-sm-12">
+            <div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+              <button onClick={saveData} className="theme_btn btn_fill" style={{ height: '30px', paddingTop: '1px' }}>Save
+                <span class="material-symbols-outlined btn_arrow ba_animation" style={{ top: '5px' }}>arrow_forward</span>
+              </button>
+            </div>
+          </div>
         </div>
         <form>
           <Tabs>
@@ -601,41 +617,201 @@ export default function PGAddProperty({ propertyid }) {
                 <div className="row no-gutters">
                   <div className="col-lg-4 first_col">
                     <div className="form_field st-2 mt-lg-0">
-                      <label>Owner Name</label>
+                      <label>Owner: </label>
+                      {property && property.ownerDetails &&
+                        <>
+                          <span style={{ fontWeight: "normal", fontSize: 14 }}>
+                            {property.ownerDetails.role === 'owner' ? " " + property.ownerDetails.displayName : ' Not Assigned'} (
+                            {property.ownerDetails.role === 'owner' ? property.ownerDetails.phoneNumber : ''} )
+                          </span>
+                        </>
+                      }
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected disabled>
-                            Select Owner
-                          </option>
-                          <option>1</option>
-                          <option>2</option>
-                        </select>
+                        <Select className=''
+                          onChange={(option) => setTaggedOwner(option)}
+                          options={ownerListSorted}
+                          styles={{
+                            control: (baseStyles, state) => ({
+                              ...baseStyles,
+                              outline: 'none',
+                              background: '#efefef',
+                              border: 'none',
+                              borderBottom: 'none',
+                              position: "relative",
+                              zIndex: "99"
+                            }),
+                          }}
+                        // isMulti
+                        />
+
                         <div className="field_icon">
                           <span class="material-symbols-outlined">person</span>
                         </div>
                       </div>
                     </div>
                     <div className="form_field st-2">
-                      <label>Co-Owner Name</label>
+                      <label>Co-Owner</label>
+                      {property && property.coownerDetails &&
+                        <>
+                          <span style={{ fontWeight: "normal", fontSize: 14 }}>
+                            {property.coownerDetails.role === 'coowner' ? " " + property.coownerDetails.displayName : ' Not Assigned'} (
+                            {property.coownerDetails.role === 'coowner' ? property.coownerDetails.phoneNumber : ''} )
+                          </span>
+                        </>
+                      }
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected disabled>
-                            Select Co-Owner
-                          </option>
-                          <option>1</option>
-                          <option>2</option>
-                        </select>
+                        <Select className=''
+                          onChange={(option) => setTaggedCoOwner(option)}
+                          options={coownerListSorted}
+                          styles={{
+                            control: (baseStyles, state) => ({
+                              ...baseStyles,
+                              outline: 'none',
+                              background: '#efefef',
+                              border: 'none',
+                              borderBottom: 'none',
+                              position: "relative",
+                              zIndex: "99"
+                            }),
+                          }}
+                        // isMulti
+                        />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">group</span>
                         </div>
                       </div>
                     </div>
+
+                    <div className="form_field st-2">
+                      <label>Property POC (Name-Mobile)</label>
+                      <div className="field_inner">
+                        <input type="text" placeholder="Enter POC Name & Mobile Number"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            PropertyPOC: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.PropertyPOC} />
+                        <div className="field_icon">
+                          <span class="material-symbols-outlined">
+                            drive_file_rename_outline
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form_field st-2">
+                      <label>Property Manager</label>
+                      {property && property.propertymanagerDetails &&
+                        <>
+                          <span style={{ fontWeight: "normal", fontSize: 14 }}>
+                            {property.propertymanagerDetails.role === 'propertymanager' ? " " + property.propertymanagerDetails.displayName : ' Not Assigned'} (
+                            {property.propertymanagerDetails.role === 'propertymanager' ? property.propertymanagerDetails.phoneNumber : ''} )
+                          </span>
+                        </>
+                      }
+                      <div className="field_inner select">
+                        <Select className=''
+                          onChange={(option) => setTaggedPropertyManager(option)}
+                          options={propertyManagerListSorted}
+                          styles={{
+                            control: (baseStyles, state) => ({
+                              ...baseStyles,
+                              outline: 'none',
+                              background: '#efefef',
+                              border: 'none',
+                              borderBottom: 'none',
+                              position: "relative",
+                              zIndex: "99"
+                            }),
+                          }}
+                        // isMulti
+                        />
+                        <div className="field_icon">
+                          <span class="material-symbols-outlined">group</span>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className="form_field st-2">
+                      <label>Posted By</label>
+                      <div className="radio_group">
+                        <div className="radio_group_single">
+                          <div
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.PostedBy === 'Propdial'
+                              ? "radiochecked"
+                              : ""
+                              }`}
+                          >
+                            <input
+                              type="radio"
+                              id="postedBy_propdial"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PostedBy: 'Propdial'
+                                })
+                              }}
+                            />
+                            <label htmlFor="postedBy_propdial">
+                              <div className="radio_icon">
+                                <span className="material-symbols-outlined add">
+                                  add
+                                </span>
+                                <span className="material-symbols-outlined check">
+                                  done
+                                </span>
+                              </div>
+                              <h6>Propdial</h6>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="radio_group_single">
+
+                          <div
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.PostedBy === 'Agent'
+                              ? "radiochecked"
+                              : ""
+                              }`}
+                          >
+                            <input
+                              type="radio"
+                              id="postedBy_agent"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PostedBy: 'Agent'
+                                })
+                              }}
+
+                            />
+                            <label htmlFor="postedBy_agent">
+                              <div className="radio_icon">
+                                <span className="material-symbols-outlined add">
+                                  add
+                                </span>
+                                <span className="material-symbols-outlined check">
+                                  done
+                                </span>
+                              </div>
+                              <h6>Agent</h6>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="form_field st-2">
                       <label>Address Locator</label>
                       <div className="field_inner">
                         <input
                           type="text"
                           placeholder="Enter Property Unit Number"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            AddressLocator: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.AddressLocator}
                         />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">map</span>
@@ -645,13 +821,23 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Country</label>
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected>
+                        <select value={propertyDetails && propertyDetails.Country}
+                          onChange={(e) => {
+                            // console.log('e', e.target.text, e.target, e.target.value)
+                            // console.log('propertyLocality', propertyLocality)
+                            // setpropertyLocality(e.target.value)
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Country: e.target.value
+                            })
+                          }}>
+                          <option selected={propertyDetails && propertyDetails.Country === 'India' ? true : false}>
                             India
                           </option>
-                          <option value="">Denmark</option>
-                          <option value="">Malasia</option>
-                          <option value="">China</option>
+                          <option selected={propertyDetails && propertyDetails.Country === 'USA' ? true : false} >USA</option>
+                          <option selected={propertyDetails && propertyDetails.Country === 'UK' ? true : false}>UK</option>
+                          <option selected={propertyDetails && propertyDetails.Country === 'Denmark' ? true : false}>Denmark</option>
+                          <option selected={propertyDetails && propertyDetails.Country === 'Malasia' ? true : false}>Malasia</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">public</span>
@@ -661,13 +847,23 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>State</label>
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected>
-                            Delhi
+                        <select value={propertyDetails && propertyDetails.State}
+                          onChange={(e) => {
+                            // console.log('e', e.target.text, e.target, e.target.value)
+                            // console.log('propertyLocality', propertyLocality)
+                            // setpropertyLocality(e.target.value)
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              State: e.target.value
+                            })
+                          }}>
+                          <option selected={propertyDetails && propertyDetails.State === 'Madhya Pradesh' ? true : false}>
+                            Madhya Pradesh
                           </option>
-                          <option value="">Harayana</option>
-                          <option value="">Uttar Pradesh</option>
-                          <option value="">Maharashtra</option>
+                          <option selected={propertyDetails && propertyDetails.State === 'Maharastra' ? true : false} >Maharastra</option>
+                          <option selected={propertyDetails && propertyDetails.State === 'Haryana' ? true : false}>Haryana</option>
+                          <option selected={propertyDetails && propertyDetails.State === 'Uttar Pradesh' ? true : false}>Uttar Pradesh</option>
+                          <option selected={propertyDetails && propertyDetails.State === 'Kerala' ? true : false}>Kerala</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -679,14 +875,20 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>City</label>
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected>
-                            Delhi
+                        <select value={propertyDetails && propertyDetails.City}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              City: e.target.value
+                            })
+                          }}>
+                          <option selected={propertyDetails && propertyDetails.City === 'Ujjain' ? true : false}>
+                            Ujjain
                           </option>
-                          <option value="">Gurugram</option>
-                          <option value="">Noida</option>
-                          <option value="">Pune</option>
-                          <option value="">Hyderabad</option>
+                          <option selected={propertyDetails && propertyDetails.City === 'Indore' ? true : false} >Indore</option>
+                          <option selected={propertyDetails && propertyDetails.City === 'Bhopal' ? true : false}>Bhopal</option>
+                          <option selected={propertyDetails && propertyDetails.City === 'Delhi' ? true : false}>Delhi</option>
+                          <option selected={propertyDetails && propertyDetails.City === 'Gwalior' ? true : false}>Gwalior</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">apartment</span>
@@ -696,14 +898,24 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Locality</label>
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected>
+                        <select value={propertyDetails && propertyDetails.Locality} onChange={(e) => {
+                          // console.log('e', e.target.text, e.target, e.target.value)
+                          // console.log('propertyLocality', propertyLocality)
+                          // setpropertyLocality(e.target.value)
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            Locality: e.target.value
+                          })
+
+
+                        }} >
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Malviya Nagar' ? true : false}>
                             Malviya Nagar
                           </option>
-                          <option value="">Dwarka</option>
-                          <option value="">Rajori Garden</option>
-                          <option value="">Lajpat Nagar</option>
-                          <option value="">Saraojni Nagar</option>
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Dwarka' ? true : false} >Dwarka</option>
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Rajori Garden' ? true : false}>Rajori Garden</option>
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Lajpat Nagar' ? true : false}>Lajpat Nagar</option>
+                          <option selected={propertyDetails && propertyDetails.Locality === 'Saraojni Nagar' ? true : false}>Saraojni Nagar</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -715,7 +927,12 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Pin Code</label>
                       <div className="field_inner">
-                        <input type="number" placeholder="Enter Pin Code" />
+                        <input type="number" placeholder="Enter Pin Code"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            PinCode: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.PinCode} />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
                             drive_file_rename_outline
@@ -726,15 +943,23 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Society</label>
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected disabled>
-                            Choose Society
+
+                        <select value={propertyDetails && propertyDetails.Society}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Society: e.target.value
+                            })
+                          }}>
+                          <option selected={propertyDetails && propertyDetails.Society === 'Society 1' ? true : false}>
+                            Society 1
                           </option>
-                          <option value="">Society 1</option>
-                          <option value="">Society 2</option>
-                          <option value="">Society 3</option>
-                          <option value="">Society 4</option>
+                          <option selected={propertyDetails && propertyDetails.Society === 'Society 2' ? true : false} >Society 2</option>
+                          <option selected={propertyDetails && propertyDetails.Society === 'Society 3' ? true : false}>Society 3</option>
+                          <option selected={propertyDetails && propertyDetails.Society === 'Society 4' ? true : false}>Society 4</option>
+                          <option selected={propertyDetails && propertyDetails.Society === 'Society 5' ? true : false}>Society 5</option>
                         </select>
+
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
                             holiday_village
@@ -746,8 +971,14 @@ export default function PGAddProperty({ propertyid }) {
                       <label>Unit Number</label>
                       <div className="field_inner">
                         <input
+                          required
                           type="text"
                           placeholder="Enter Property Unit Number"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            UnitNumber: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.UnitNumber}
                         />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -759,20 +990,26 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Property Type</label>
                       <div className="field_inner select">
-                        <select>
-                          <option value="" selected disabled>
+                        <select value={propertyDetails && propertyDetails.PropertyType}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              PropertyType: e.target.value
+                            })
+                          }}>
+                          <option selected disabled>
                             Choose Property Type
                           </option>
-                          <option value="">High Rise Apt</option>
-                          <option value="">Low Rise Apt</option>
-                          <option value="">Builder Floor</option>
-                          <option value="">Kothi</option>
-                          <option value="">Villa - Simplex</option>
-                          <option value="">Villa - Duplex</option>
-                          <option value="">Row House - Simplex</option>
-                          <option value="">Row House - Duplex</option>
-                          <option value="">Pent House - Simplex</option>
-                          <option value="">Pent House - Duplex</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'High Rise Apt' ? true : false}>High Rise Apt</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'Low Rise Apt' ? true : false}>Low Rise Apt</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'Builder Floor' ? true : false}>Builder Floor</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'Kothi' ? true : false}>Kothi</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'Villa - Simplex' ? true : false}>Villa - Simplex</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'Villa - Duplex' ? true : false}>Villa - Duplex</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'Row House - Simplex' ? true : false}>Row House - Simplex</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'Row House - Duplex' ? true : false}>Row House - Duplex</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'Pent House - Simplex' ? true : false}>Pent House - Simplex</option>
+                          <option selected={propertyDetails && propertyDetails.PropertyType === 'Pent House - Duplex' ? true : false}>Pent House - Duplex</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -784,45 +1021,53 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Year of Constuction</label>
                       <div className="field_inner select">
-                        <select>
+                        <select value={propertyDetails && propertyDetails.YearOfConstruction}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              YearOfConstruction: e.target.value
+                            })
+                          }}>
                           <option value="" disabled>
                             Year of Constuction
                           </option>
-                          <option value="">1990</option>
-                          <option value="">1991</option>
-                          <option value="">1992</option>
-                          <option value="">1993</option>
-                          <option value="">1994</option>
-                          <option value="">1995</option>
-                          <option value="">1996</option>
-                          <option value="">1997</option>
-                          <option value="">1998</option>
-                          <option value="">1999</option>
-                          <option value="">2000</option>
-                          <option value="">2001</option>
-                          <option value="">2002</option>
-                          <option value="">2003</option>
-                          <option value="">2004</option>
-                          <option value="">2005</option>
-                          <option value="">2006</option>
-                          <option value="">2007</option>
-                          <option value="">2008</option>
-                          <option value="">2009</option>
-                          <option value="" selected>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1990' ? true : false}>1990</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1991' ? true : false}>1991</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1992' ? true : false}>1992</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1993' ? true : false}>1993</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1994' ? true : false}>1994</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1995' ? true : false}>1995</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1996' ? true : false}>1996</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1997' ? true : false}>1997</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1998' ? true : false}>1998</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '1999' ? true : false}>1999</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2000' ? true : false}>2000</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2001' ? true : false}>2001</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2002' ? true : false}>2002</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2019' ? true : false}>2003</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2004' ? true : false}>2004</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2005' ? true : false}>2005</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2006' ? true : false}>2006</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2007' ? true : false}>2007</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2008' ? true : false}>2008</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2009' ? true : false}>2009</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2010' ? true : false}>
                             2010
                           </option>
-                          <option value="">2011</option>
-                          <option value="">2012</option>
-                          <option value="">2013</option>
-                          <option value="">2014</option>
-                          <option value="">2015</option>
-                          <option value="">2016</option>
-                          <option value="">2017</option>
-                          <option value="">2018</option>
-                          <option value="">2019</option>
-                          <option value="">2020</option>
-                          <option value="">2021</option>
-                          <option value="">2022</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2011' ? true : false}>2011</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2012' ? true : false}>2012</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2013' ? true : false}>2013</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2014' ? true : false}>2014</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2015' ? true : false}>2015</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2016' ? true : false}>2016</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2017' ? true : false}>2017</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2018' ? true : false}>2018</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2019' ? true : false}>2019</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2020' ? true : false}>2020</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2021' ? true : false}>2021</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2022' ? true : false}>2022</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2023' ? true : false}>2023</option>
+                          <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2024' ? true : false}>2024</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -837,25 +1082,31 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>BHK</label>
                       <div className="field_inner select">
-                        <select>
+                        <select value={propertyDetails && propertyDetails.Bhk}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Bhk: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Choose BHK
                           </option>
-                          <option value="">EWS</option>
-                          <option value="">1 RK</option>
-                          <option value="">Studio</option>
-                          <option value="">1 BHK</option>
-                          <option value="">1.5 BHK</option>
-                          <option value="">2 BHK</option>
-                          <option value="">2.5 BHK</option>
-                          <option value="">3 BHK</option>
-                          <option value="">2.5 BHK</option>
-                          <option value="">4 BHK</option>
-                          <option value="">5 BHK</option>
-                          <option value="">6 BHK</option>
-                          <option value="">7 BHK</option>
-                          <option value="">8 BHK</option>
-                          <option value="">9+ BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === 'EWS' ? true : false}>EWS</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '1 RK' ? true : false}>1 RK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === 'Studio' ? true : false}>Studio</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '1 ' ? true : false}>1 BHK</option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '1.5 ' ? true : false}>1.5 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '2 ' ? true : false}>2 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '2.5 ' ? true : false}>2.5 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '3 ' ? true : false}>3 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '3.5 ' ? true : false}>3.5 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '4 ' ? true : false}>4 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '5 ' ? true : false}>5 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '6 ' ? true : false}>6 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '7 ' ? true : false}>7 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '8 ' ? true : false}>8 BHK </option>
+                          <option selected={propertyDetails && propertyDetails.Bhk === '9+ ' ? true : false}>9+ BHK </option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -869,7 +1120,7 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === 'Semi'
                               ? "radiochecked"
                               : ""
                               }`}
@@ -877,9 +1128,12 @@ export default function PGAddProperty({ propertyid }) {
                             <input
                               type="radio"
                               id="semi_furnished"
-                              value="semi_furnished"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Furnishing: 'Semi'
+                                })
+                              }}
                             />
                             <label htmlFor="semi_furnished">
                               <div className="radio_icon">
@@ -895,8 +1149,9 @@ export default function PGAddProperty({ propertyid }) {
                           </div>
                         </div>
                         <div className="radio_group_single">
+
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "fully_furnished"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === 'Fully'
                               ? "radiochecked"
                               : ""
                               }`}
@@ -904,9 +1159,13 @@ export default function PGAddProperty({ propertyid }) {
                             <input
                               type="radio"
                               id="fully_furnished"
-                              value="fully_furnished"
-                              checked={selectedRadioOption === "fully_furnished"}
-                              onChange={handleRadioCheck}
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Furnishing: 'Fully'
+                                })
+                              }}
+
                             />
                             <label htmlFor="fully_furnished">
                               <div className="radio_icon">
@@ -923,7 +1182,7 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "raw_furnished"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === 'Raw'
                               ? "radiochecked"
                               : ""
                               }`}
@@ -931,9 +1190,12 @@ export default function PGAddProperty({ propertyid }) {
                             <input
                               type="radio"
                               id="raw_furnished"
-                              value="raw_furnished"
-                              checked={selectedRadioOption === "raw_furnished"}
-                              onChange={handleRadioCheck}
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Furnishing: 'Raw'
+                                })
+                              }}
                             />
                             <label htmlFor="raw_furnished">
                               <div className="radio_icon">
@@ -955,21 +1217,27 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2 mt-lg-0">
                       <label>No. of Bedrooms</label>
                       <div className="field_inner select">
-                        <select>
+                        <select value={propertyDetails && propertyDetails.NumberOfBedrooms}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfBedrooms: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Number Of Bedrooms
                           </option>
-                          <option value="">0</option>
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                          <option value="">4</option>
-                          <option value="">5</option>
-                          <option value="">6</option>
-                          <option value="">7</option>
-                          <option value="">8</option>
-                          <option value="">9</option>
-                          <option value="">10</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '5' ? true : false}>5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '6' ? true : false}>6</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '7' ? true : false}>7</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '8' ? true : false}>8</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '9' ? true : false}>9</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '10' ? true : false}>10</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">bed</span>
@@ -979,21 +1247,27 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Bathrooms</label>
                       <div className="field_inner select">
-                        <select>                        
+                        <select value={propertyDetails && propertyDetails.NumberOfBathrooms}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfBathrooms: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Number Of Bathrooms
                           </option>
-                          <option value="">0</option>
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                          <option value="">4</option>
-                          <option value="">5</option>
-                          <option value="">6</option>
-                          <option value="">7</option>
-                          <option value="">8</option>
-                          <option value="">9</option>
-                          <option value="">10</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '5' ? true : false}>5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '6' ? true : false}>6</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '7' ? true : false}>7</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '8' ? true : false}>8</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '9' ? true : false}>9</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '10' ? true : false}>10</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">bathtub</span>
@@ -1003,21 +1277,27 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Balcony</label>
                       <div className="field_inner select">
-                        <select>
+                        <select value={propertyDetails && propertyDetails.NumberOfBalcony}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfBalcony: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Number Of Balcony
                           </option>
-                          <option value="">0</option>
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                          <option value="">4</option>
-                          <option value="">5</option>
-                          <option value="">6</option>
-                          <option value="">7</option>
-                          <option value="">8</option>
-                          <option value="">9</option>
-                          <option value="">10</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '5' ? true : false}>5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '6' ? true : false}>6</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '7' ? true : false}>7</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '8' ? true : false}>8</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '9' ? true : false}>9</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '10' ? true : false}>10</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">balcony</span>
@@ -1027,15 +1307,20 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Kitchen</label>
                       <div className="field_inner select">
-                        <select>
+                        <select value={propertyDetails && propertyDetails.NumberOfKitchen}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfKitchen: e.target.value
+                            })
+                          }}>
                           <option value="" disabled>
                             Number Of Kitchen
                           </option>
-                          <option value="">0</option>
-                          <option value="" selected>
-                            1
-                          </option>
-                          <option value="">2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfKitchen === '3' ? true : false}>3</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -1049,7 +1334,7 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.DiningArea === 'Yes'
                               ? "radiochecked"
                               : ""
                               }`}
@@ -1057,9 +1342,12 @@ export default function PGAddProperty({ propertyid }) {
                             <input
                               type="radio"
                               id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  DiningArea: 'Yes'
+                                })
+                              }}
                             />
                             <label htmlFor="dining_yes">
                               <div className="radio_icon">
@@ -1076,15 +1364,20 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.DiningArea === 'No'
+                              ? "radiochecked"
+                              : ""
                               }`}
                           >
                             <input
                               type="radio"
                               id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  DiningArea: 'No'
+                                })
+                              }}
                             />
                             <label htmlFor="dining_no">
                               <div className="radio_icon">
@@ -1106,19 +1399,22 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.LivingDining === 'Yes'
                               ? "radiochecked"
                               : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="living_dining_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  LivingDining: 'Yes'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="living_dining_yes">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1133,17 +1429,22 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.LivingDining === 'No'
+                              ? "radiochecked"
+                              : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="living_dining_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  LivingDining: 'No'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="living_dining_no">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1161,15 +1462,22 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Living Area</label>
                       <div className="field_inner select">
-                        <select>                     
+                        <select value={propertyDetails && propertyDetails.NumberOfLivingArea}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfLivingArea: e.target.value
+                            })
+                          }}>
                           <option value="" disabled>
                             Number Of Living Area
                           </option>
-                          <option value="">0</option>
-                          <option value="" selected>
-                            1
-                          </option>
-                          <option value="">2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '5' ? true : false}>5</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">living</span>
@@ -1181,19 +1489,22 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Passages === 'Yes'
                               ? "radiochecked"
                               : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="passage_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Passages: 'Yes'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="passage_yes">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1208,17 +1519,22 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.Passages === 'No'
+                              ? "radiochecked"
+                              : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="passage_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Passages: 'No'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="passage_no">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1238,19 +1554,22 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.EntranceGallery === 'Yes'
                               ? "radiochecked"
                               : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="entrancegallery_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  EntranceGallery: 'Yes'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="entrancegallery_yes">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1265,17 +1584,22 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.EntranceGallery === 'No'
+                              ? "radiochecked"
+                              : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="entrancegallery_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  EntranceGallery: 'No'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="entrancegallery_no">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1293,14 +1617,18 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Basement</label>
                       <div className="field_inner select">
-                        <select>
+                        <select value={propertyDetails && propertyDetails.NumberOfBasement}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfBasement: e.target.value
+                            })
+                          }}>
                           <option value="" disabled>
                             Number Of Basement
                           </option>
-                          <option value="" selected>
-                            0
-                          </option>
-                          <option value="">1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBasement === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfBasement === '1' ? true : false}>1</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -1310,23 +1638,34 @@ export default function PGAddProperty({ propertyid }) {
                       </div>
                     </div>
                     <div className="form_field st-2">
-                      <label>Additional Rooms - ( 0 )</label>
+                      <label>Additional Rooms - ( {propertyDetails.AdditionalRooms.length} )</label>
                       <div className="radio_group">
                         <div className="radio_group_single">
-                          <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
-                          >
+                          <div className={propertyDetails.ServentRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}>
+
                             <input
-                              type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              type="checkbox"
+                              id="servent_room"
+                              onClick={(e) => {
+                                if (propertyDetails.ServentRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Servent Room'),
+                                    ServentRoomClick: !propertyDetails.ServentRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Servent Room'],
+                                    ServentRoomClick: !propertyDetails.ServentRoomClick
+                                  });
+
+                                }
+
+                              }}
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="servent_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1341,17 +1680,31 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className={propertyDetails.OfficeRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
-                              type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              type="checkbox"
+                              id="office_room"
+                              onClick={(e) => {
+                                if (propertyDetails.OfficeRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Office Room'),
+                                    OfficeRoomClick: !propertyDetails.OfficeRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Office Room'],
+                                    OfficeRoomClick: !propertyDetails.OfficeRoomClick
+                                  });
+
+                                }
+
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="office_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1366,17 +1719,30 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className={propertyDetails.StoreRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
-                              type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              type="checkbox"
+                              id="store_room"
+                              onClick={(e) => {
+                                if (propertyDetails.StoreRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Store Room'),
+                                    StoreRoomClick: !propertyDetails.StoreRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Store Room'],
+                                    StoreRoomClick: !propertyDetails.StoreRoomClick
+                                  });
+                                }
+                              }
+                              }
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="store_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1390,18 +1756,32 @@ export default function PGAddProperty({ propertyid }) {
                           </div>
                         </div>
                         <div className="radio_group_single">
+
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className={propertyDetails.PoojaRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
-                              type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              type="checkbox"
+                              id="pooja_room"
+                              onClick={(e) => {
+                                if (propertyDetails.PoojaRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Pooja Room'),
+                                    PoojaRoomClick: !propertyDetails.PoojaRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Pooja Room'],
+                                    PoojaRoomClick: !propertyDetails.PoojaRoomClick
+                                  });
+                                }
+                              }}
+
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="pooja_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1415,18 +1795,32 @@ export default function PGAddProperty({ propertyid }) {
                           </div>
                         </div>
                         <div className="radio_group_single">
+
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className={propertyDetails.StudyRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
-                              type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              type="checkbox"
+                              id="study_room"
+                              onClick={(e) => {
+                                if (propertyDetails.StudyRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Study Room'),
+                                    StudyRoomClick: !propertyDetails.StudyRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Study Room'],
+                                    StudyRoomClick: !propertyDetails.StudyRoomClick
+                                  });
+                                }
+                              }}
+
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="study_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1441,17 +1835,29 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className={propertyDetails.PowerRoomClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
-                              type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              type="checkbox"
+                              id="power_room"
+                              onClick={(e) => {
+                                if (propertyDetails.PowerRoomClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: propertyDetails.AdditionalRooms && propertyDetails.AdditionalRooms.filter(elem => elem !== 'Power Room'),
+                                    PowerRoomClick: !propertyDetails.PowerRoomClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalRooms: [...propertyDetails.AdditionalRooms, 'Power Room'],
+                                    PowerRoomClick: !propertyDetails.PowerRoomClick
+                                  });
+                                }
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_room">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1460,30 +1866,40 @@ export default function PGAddProperty({ propertyid }) {
                                   done
                                 </span>
                               </div>
-                              <h6> Powder Room</h6>
+                              <h6> Power Room</h6>
                             </label>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="form_field st-2">
-                      <label>Additional Area - ( 0 )</label>
+                      <label>Additional Area - ( {propertyDetails.AdditionalArea.length} )</label>
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                            className={propertyDetails.FrontYardClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="front_yard"
+                              onClick={(e) => {
+                                if (propertyDetails.FrontYardClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: propertyDetails.AdditionalArea && propertyDetails.AdditionalArea.filter(elem => elem !== 'Front Yard'),
+                                    FrontYardClick: !propertyDetails.FrontYardClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: [...propertyDetails.AdditionalArea, 'Front Yard'],
+                                    FrontYardClick: !propertyDetails.FrontYardClick
+                                  });
+                                }
+                              }}
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="front_yard">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1498,17 +1914,29 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className={propertyDetails.BackYardClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="back_yard"
+                              onClick={(e) => {
+                                if (propertyDetails.BackYardClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: propertyDetails.AdditionalArea && propertyDetails.AdditionalArea.filter(elem => elem !== 'Back Yard'),
+                                    BackYardClick: !propertyDetails.BackYardClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: [...propertyDetails.AdditionalArea, 'Back Yard'],
+                                    BackYardClick: !propertyDetails.BackYardClick
+                                  });
+                                }
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="back_yard">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1523,17 +1951,29 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className={propertyDetails.TerraceClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="terrace"
+                              onClick={(e) => {
+                                if (propertyDetails.TerraceClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: propertyDetails.AdditionalArea && propertyDetails.AdditionalArea.filter(elem => elem !== 'Terrace'),
+                                    TerraceClick: !propertyDetails.TerraceClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: [...propertyDetails.AdditionalArea, 'Terrace'],
+                                    TerraceClick: !propertyDetails.TerraceClick
+                                  });
+                                }
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="terrace">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1548,17 +1988,29 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className={propertyDetails.GardenClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="garden"
+                              onClick={(e) => {
+                                if (propertyDetails.GardenClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: propertyDetails.AdditionalArea && propertyDetails.AdditionalArea.filter(elem => elem !== 'Garden'),
+                                    GardenClick: !propertyDetails.GardenClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: [...propertyDetails.AdditionalArea, 'Garden'],
+                                    GardenClick: !propertyDetails.GardenClick
+                                  });
+                                }
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="garden">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1573,17 +2025,29 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className={propertyDetails.GarageClick ? 'custom_radio_button radiochecked' : 'custom_radio_button'}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="garage"
+                              onClick={(e) => {
+                                if (propertyDetails.GarageClick) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: propertyDetails.AdditionalArea && propertyDetails.AdditionalArea.filter(elem => elem !== 'Garage'),
+                                    GarageClick: !propertyDetails.GarageClick
+                                  })
+
+                                } else {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    AdditionalArea: [...propertyDetails.AdditionalArea, 'Garage'],
+                                    GarageClick: !propertyDetails.GarageClick
+                                  });
+                                }
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="garage">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1603,10 +2067,15 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2 mt-lg-0">
                       <label>Total Floor</label>
                       <div className="field_inner">
-                        <input type="text" placeholder="Total Floors..." />
+                        <input type="text" placeholder="Total Floors"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            TotalFloor: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.TotalFloor}
+                        />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
-                         
                             table_rows
                           </span>
                         </div>
@@ -1615,7 +2084,12 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>Floor Number</label>
                       <div className="field_inner">
-                        <input type="text" placeholder="Floor Number..." />
+                        <input type="text" placeholder="Floor Number"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            FloorNumber: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.FloorNumber} />
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
                             filter_none
@@ -1626,20 +2100,27 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Apt On Floor</label>
                       <div className="field_inner select">
-                        <select>
+                        <select value={propertyDetails && propertyDetails.NumberOfAptOnFloor}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfAptOnFloor: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Number of Apt On Floor
                           </option>
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                          <option value="">4</option>
-                          <option value="">5</option>
-                          <option value="">6</option>
-                          <option value="">7</option>
-                          <option value="">8</option>
-                          <option value="">9</option>
-                          <option value="">10</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '5' ? true : false}>5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '6' ? true : false}>6</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '7' ? true : false}>7</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '8' ? true : false}>8</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '9' ? true : false}>9</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '10' ? true : false}>10</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -1651,15 +2132,22 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Lifts</label>
                       <div className="field_inner select">
-                        <select>
+                        <select value={propertyDetails && propertyDetails.NumberOfLifts}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfLifts: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>
                             Number of Lifts
                           </option>
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                          <option value="">4</option>
-                          <option value="">5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfLifts === '5' ? true : false}>5</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -1673,19 +2161,22 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === 'No Backup'
                               ? "radiochecked"
                               : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="power_nobackup"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PowerBackup: 'No Backup'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="power_nobackup">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1700,17 +2191,22 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === 'Full Backup'
+                              ? "radiochecked"
+                              : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="power_fullbackup"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PowerBackup: 'Full Backup'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_fullbackup">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1725,17 +2221,22 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === 'Partial Backup'
+                              ? "radiochecked"
+                              : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="power_partialbackup"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PowerBackup: 'Partial Backup'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_partialbackup">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1750,17 +2251,22 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === 'Lift Only'
+                              ? "radiochecked"
+                              : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="power_liftonly"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PowerBackup: 'Lift Only'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_liftonly">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1775,17 +2281,22 @@ export default function PGAddProperty({ propertyid }) {
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === 'Inverter'
+                              ? "radiochecked"
+                              : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="power_inverter"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PowerBackup: 'Inverter'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="power_inverter">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1802,52 +2313,96 @@ export default function PGAddProperty({ propertyid }) {
                     </div>
                     <div className="form_field st-2">
                       <label>Plot Area</label>
-                      <div className="field_inner">
-                        <input type="text" placeholder="Plot Area..." />
-                        <div className="field_icon">
-                          <select>
-                            <option value="">SqFt</option>
-                            <option value="">SqMtr</option>
-                            <option value="">SqYd</option>
+                      <div className="field_inner i_and_s">
+                        <input type="text" placeholder="Plot Area"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            PlotArea: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.PlotArea} />
+                        <div className="inner_select">
+                          <select value={propertyDetails && propertyDetails.PlotAreaUnit}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                PlotAreaUnit: e.target.value
+                              })
+                            }}>
+                            <option selected={propertyDetails && propertyDetails.PlotAreaUnit === 'SqFt' ? true : false}>SqFt</option>
+                            <option selected={propertyDetails && propertyDetails.PlotAreaUnit === 'SqMtr' ? true : false}>SqMtr</option>
+                            <option selected={propertyDetails && propertyDetails.PlotAreaUnit === 'SqYd' ? true : false}>SqYd</option>
                           </select>
                         </div>
                       </div>
                     </div>
                     <div className="form_field st-2">
                       <label>Super Area</label>
-                      <div className="field_inner">
-                        <input type="text" placeholder="Super Area..." />
-                        <div className="field_icon">
-                          <select>
-                            <option value="">SqFt</option>
-                            <option value="">SqMtr</option>
-                            <option value="">SqYd</option>
+                      <div className="field_inner i_and_s">
+                        <input type="text" placeholder="Super Area"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            SuperArea: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.SuperArea} />
+                        <div className="inner_select">
+                          <select value={propertyDetails && propertyDetails.SuperAreaUnit}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                SuperAreaUnit: e.target.value
+                              })
+                            }}>
+                            <option selected={propertyDetails && propertyDetails.SuperAreaUnit === 'SqFt' ? true : false}>SqFt</option>
+                            <option selected={propertyDetails && propertyDetails.SuperAreaUnit === 'SqMtr' ? true : false}>SqMtr</option>
+                            <option selected={propertyDetails && propertyDetails.SuperAreaUnit === 'SqYd' ? true : false}>SqYd</option>
                           </select>
                         </div>
                       </div>
                     </div>
                     <div className="form_field st-2">
                       <label>Built-up Area</label>
-                      <div className="field_inner">
-                        <input type="text" placeholder="Build Area..." />
-                        <div className="field_icon">
-                          <select>
-                            <option value="">SqFt</option>
-                            <option value="">SqMtr</option>
-                            <option value="">SqYd</option>
+                      <div className="field_inner i_and_s">
+                        <input type="text" placeholder="Build Area"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            BuiltUpArea: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.BuiltUpArea} />
+                        <div className="inner_select">
+                          <select value={propertyDetails && propertyDetails.BuiltUpAreaUnit}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BuiltUpAreaUnit: e.target.value
+                              })
+                            }}>
+                            <option selected={propertyDetails && propertyDetails.BuiltUpAreaUnit === 'SqFt' ? true : false}>SqFt</option>
+                            <option selected={propertyDetails && propertyDetails.BuiltUpAreaUnit === 'SqMtr' ? true : false}>SqMtr</option>
+                            <option selected={propertyDetails && propertyDetails.BuiltUpAreaUnit === 'SqYd' ? true : false}>SqYd</option>
                           </select>
                         </div>
                       </div>
                     </div>
                     <div className="form_field st-2">
                       <label>Carpet Area</label>
-                      <div className="field_inner">
-                        <input type="text" placeholder="Carpet Area..." />
-                        <div className="field_icon">
-                          <select>
-                            <option value="">SqFt</option>
-                            <option value="">SqMtr</option>
-                            <option value="">SqYd</option>
+                      <div className="field_inner i_and_s">
+                        <input type="text" placeholder="Carpet Area"
+                          onChange={(e) => setPropertyDetails({
+                            ...propertyDetails,
+                            CarpetArea: e.target.value
+                          })}
+                          value={propertyDetails && propertyDetails.CarpetArea} />
+                        <div className="inner_select">
+                          <select value={propertyDetails && propertyDetails.CarpetAreaUnit}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                CarpetAreaUnit: e.target.value
+                              })
+                            }}>
+                            <option selected={propertyDetails && propertyDetails.CarpetAreaUnit === 'SqFt' ? true : false}>SqFt</option>
+                            <option selected={propertyDetails && propertyDetails.CarpetAreaUnit === 'SqMtr' ? true : false}>SqMtr</option>
+                            <option selected={propertyDetails && propertyDetails.CarpetAreaUnit === 'SqYd' ? true : false}>SqYd</option>
                           </select>
                         </div>
                       </div>
@@ -1855,13 +2410,20 @@ export default function PGAddProperty({ propertyid }) {
                     <div className="form_field st-2">
                       <label>No. of Car Parking</label>
                       <div className="field_inner select">
-                        <select>
+                        <select value={propertyDetails && propertyDetails.NumberOfCarParking}
+                          onChange={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              NumberOfCarParking: e.target.value
+                            })
+                          }}>
                           <option value="" selected disabled>Number of Car Parking</option>
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                          <option value="">4</option>
-                          <option value="">5</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '0' ? true : false}>0</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '1' ? true : false}>1</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '2' ? true : false}>2</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '3' ? true : false}>3</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '4' ? true : false}>4</option>
+                          <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '5' ? true : false}>5</option>
                         </select>
                         <div className="field_icon">
                           <span class="material-symbols-outlined">
@@ -1871,23 +2433,17 @@ export default function PGAddProperty({ propertyid }) {
                       </div>
                     </div>
                     <div className="form_field st-2">
-                      <label>Car Parking - ( 0 )</label>
+                      <label>Car Parking - ( {propertyDetails.NumberOfCarParking} )</label>
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                              ? "radiochecked"
-                              : ""
-                              }`}
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="carparking_open"
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="carparking_open">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1896,23 +2452,19 @@ export default function PGAddProperty({ propertyid }) {
                                   done
                                 </span>
                               </div>
-                              <h6>  Open</h6>
+                              <h6>Open</h6>
                             </label>
                           </div>
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                              }`}
+                            className="custom_radio_button"
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="carparking_closed"
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="carparking_closed">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1932,19 +2484,22 @@ export default function PGAddProperty({ propertyid }) {
                       <div className="radio_group">
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "by_default_check"
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.TwoWheelerParking === 'Yes'
                               ? "radiochecked"
                               : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_yes"
-                              value="dining_yes"
-                              checked={selectedRadioOption === "by_default_check"}
-                              onChange={handleRadioCheck}
+                              id="twowheelerparking_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  TwoWheelerParking: 'Yes'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_yes">
+                            <label htmlFor="twowheelerparking_yes">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1953,23 +2508,28 @@ export default function PGAddProperty({ propertyid }) {
                                   done
                                 </span>
                               </div>
-                              <h6>  Yes</h6>
+                              <h6>Yes</h6>
                             </label>
                           </div>
                         </div>
                         <div className="radio_group_single">
                           <div
-                            className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
+                            className={`custom_radio_button ${propertyDetails && propertyDetails.TwoWheelerParking === 'No'
+                              ? "radiochecked"
+                              : ""
                               }`}
                           >
                             <input
                               type="radio"
-                              id="dining_no"
-                              value="dining_no"
-                              checked={selectedRadioOption === "no"}
-                              onChange={handleRadioCheck}
+                              id="twowheelerparking_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  TwoWheelerParking: 'No'
+                                })
+                              }}
                             />
-                            <label htmlFor="dining_no">
+                            <label htmlFor="twowheelerparking_no">
                               <div className="radio_icon">
                                 <span className="material-symbols-outlined add">
                                   add
@@ -1978,7 +2538,7 @@ export default function PGAddProperty({ propertyid }) {
                                   done
                                 </span>
                               </div>
-                              <h6>  No</h6>
+                              <h6>No</h6>
                             </label>
                           </div>
                         </div>
@@ -2036,7 +2596,7 @@ export default function PGAddProperty({ propertyid }) {
                                   <div class="form_field st-2">
                                     <label>Total Area</label>
                                     <div class="field_inner">
-                                      <input type="text" value="1200 sqft 6 in" />
+                                      <input type="text" value="" />
                                       <div class="field_icon">
                                         <span class="material-symbols-outlined">crop_square</span>
                                       </div>
@@ -2095,19 +2655,13 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_yes"
-                                            value="dining_yes"
-                                            checked={selectedRadioOption === "by_default_check"}
-                                            onChange={handleRadioCheck}
+                                            id="yes_bathroomattach_masterbedroom"
                                           />
-                                          <label htmlFor="dining_yes">
+                                          <label htmlFor="yes_bathroomattach_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2116,23 +2670,19 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>  Yes</h6>
+                                            <h6>Yes</h6>
                                           </label>
                                         </div>
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="no_bathroomattach_masterbedroom"
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="no_bathroomattach_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2154,19 +2704,14 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_yes"
-                                            value="dining_yes"
-                                            checked={selectedRadioOption === "by_default_check"}
-                                            onChange={handleRadioCheck}
+                                            id="yes_balconyattach_masterbedroom"
+
                                           />
-                                          <label htmlFor="dining_yes">
+                                          <label htmlFor="yes_balconyattach_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2181,17 +2726,13 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="no_balconyattach_masterbedroom"
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="no_balconyattach_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2240,19 +2781,13 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
-                                            type="radio"
-                                            id="dining_yes"
-                                            value="dining_yes"
-                                            checked={selectedRadioOption === "by_default_check"}
-                                            onChange={handleRadioCheck}
+                                            type="checkbox"
+                                            id="fan_masterbedroom"
                                           />
-                                          <label htmlFor="dining_yes">
+                                          <label htmlFor="fan_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2261,23 +2796,19 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>   Fan</h6>
+                                            <h6>Fan</h6>
                                           </label>
                                         </div>
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="tubelight_masterbedroom"
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="tubelight_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2286,23 +2817,19 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>  Tube Light</h6>
+                                            <h6>Tube Light</h6>
                                           </label>
                                         </div>
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="almirah_masterbedroom"
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="almirah_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2317,17 +2844,13 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
-                                            id="dining_no"
-                                            value="dining_no"
-                                            checked={selectedRadioOption === "no"}
-                                            onChange={handleRadioCheck}
+                                            id="window_masterbedroom"
                                           />
-                                          <label htmlFor="dining_no">
+                                          <label htmlFor="window_masterbedroom">
                                             <div className="radio_icon">
                                               <span className="material-symbols-outlined add">
                                                 add
@@ -2336,7 +2859,7 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>  Window</h6>
+                                            <h6>Window</h6>
                                           </label>
                                         </div>
                                       </div>
@@ -2626,10 +3149,7 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2647,14 +3167,13 @@ export default function PGAddProperty({ propertyid }) {
                                                 done
                                               </span>
                                             </div>
-                                            <h6>  Yes</h6>
+                                            <h6> Yes</h6>
                                           </label>
                                         </div>
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2712,10 +3231,7 @@ export default function PGAddProperty({ propertyid }) {
                                     <div className="radio_group">
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "by_default_check"
-                                            ? "radiochecked"
-                                            : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2739,8 +3255,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2764,8 +3279,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -2789,8 +3303,7 @@ export default function PGAddProperty({ propertyid }) {
                                       </div>
                                       <div className="radio_group_single">
                                         <div
-                                          className={`custom_radio_button ${selectedRadioOption === "no" ? "radiochecked" : ""
-                                            }`}
+                                          className="custom_radio_button"
                                         >
                                           <input
                                             type="radio"
@@ -3491,7 +4004,15 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Property Description</label>
-                      <textarea></textarea>
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          PropertyDesciption: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.PropertyDesciption}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
@@ -3503,7 +4024,16 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Owner Instruction</label>
-                      <textarea></textarea>
+
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          OwnerInstruction: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.OwnerInstruction}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
@@ -3515,7 +4045,15 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Key details / Key Handover</label>
-                      <textarea></textarea>
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          KeyDetailsHandover: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.KeyDetailsHandover}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
@@ -3527,7 +4065,15 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Bill Type Setting</label>
-                      <textarea></textarea>
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          BillTypeSetting: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.BillTypeSetting}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
@@ -3539,7 +4085,15 @@ export default function PGAddProperty({ propertyid }) {
                   <div className="col-lg-6">
                     <div class="form_field st-2">
                       <label>Advertising</label>
-                      <textarea></textarea>
+                      <textarea
+                        type="text"
+                        placeholder="Enter the details here"
+                        onChange={(e) => setPropertyDetails({
+                          ...propertyDetails,
+                          Advertising: e.target.value
+                        })}
+                        value={propertyDetails && propertyDetails.Advertising}
+                      />
                       <div class="field_icon">
                         <span class="material-symbols-outlined">
                           border_color
@@ -3554,6 +4108,6 @@ export default function PGAddProperty({ propertyid }) {
           </Tabs>
         </form>
       </div>
-    </div>
+    </div >
   );
 }

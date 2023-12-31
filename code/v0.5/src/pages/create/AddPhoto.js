@@ -29,7 +29,9 @@ export default function AddPhoto(props) {
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
   const { state } = useLocation();
-  const { propertyid } = state;
+  // const { propertyid } = state;
+  const [propertyid, setPropertyID] = useState(state);
+  console.log('property id: ', propertyid)
   const navigate = useNavigate();
   const { addDocument, response } = useFirestore("photos");
   // const { document, error } = useDocument('properties', propertyid)
@@ -37,18 +39,10 @@ export default function AddPhoto(props) {
   const { document: masterDataPhotoType, error: masterDataPhotoTypeerror } =
     useDocument("master", "PHOTOTYPE");
   // const { document: photosDocuments, error: photosDocumentserror } = useCollection('photos', ['propertyid', '==', propertyid])
-  const { documents: photosdocuments, error: photoserror } = useCollection(
-    "photos",
-    ["propertyid", "==", propertyid]
-  );
-
-  // if (photosDocuments) {
-  //     // photosCount = photosDocuments.length;
-  //     console.log('photosDocuments:', photosDocuments)
-  // }
+  const { documents: photosdocuments, error: photoserror } = useCollection("photos", ["propertyid", "==", propertyid]);
 
   const { user } = useAuthContext();
-  const { documents } = useCollection("users");
+  const { documents: appusers } = useCollection("users");
   const [users, setUsers] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailError, setThumbnailError] = useState(null);
@@ -73,9 +67,9 @@ export default function AddPhoto(props) {
 
   // create user values for react-select
   useEffect(() => {
-    if (documents) {
+    if (appusers) {
       setUsers(
-        documents.map((user) => {
+        appusers.map((user) => {
           var userDetails = user.displayName + "(" + user.role + ")";
           // console.log('userDetails:', userDetails)
           return { value: { ...user, id: user.id }, label: userDetails };
@@ -88,19 +82,24 @@ export default function AddPhoto(props) {
         photoTypeOptions.sort((a, b) => a.label.localeCompare(b.label))
       );
     }
-  }, [documents]);
+  }, [appusers]);
+
+  // if (photosDocuments) {
+  //   photosCount = photosDocuments.length;
+  //   console.log('photosDocuments:', photosDocuments)
+  // }
 
   const handleFileChange = async (e) => {
     setThumbnail(null);
     let file = e.target.files[0];
-    // console.log('file original selected:', file)
-    // console.log('file size original selected:', file.size)
+    console.log('file original selected:', file)
+    console.log('file size original selected:', file.size)
     // const image = await resizeFile(file);
     // const newImageFile = dataURIToBlob(image);
 
     const compressedImage = await imgUpload(file, 300, 300);
-    // console.log('imgCom compressed in Signup.js', compressedImage);
-    // console.log('imgCom size after compressed in Signup.js', compressedImage.size);
+    console.log('imgCom compressed in Signup.js', compressedImage);
+    console.log('imgCom size after compressed in Signup.js', compressedImage.size);
 
     if (!compressedImage) {
       setThumbnailError("Please select a file");
@@ -270,7 +269,7 @@ export default function AddPhoto(props) {
             </TabList>
             <TabPanel className="">
               <div className="row no-gutters">
-                {/* <div className="col-lg-8 col-md-12">
+                <div className="col-lg-8 col-md-12">
                   <div className="upload_property_img">
                     <form onSubmit={handleSubmit}>
                       <div className="row no-gutters">
@@ -320,7 +319,7 @@ export default function AddPhoto(props) {
                         </div>
                         <div className="col-sm-12">
                           <input type="file" onChange={handleFileChange} />
-                        
+
                         </div>
                         <div style={{ display: "flex", justifyContent: "center" }}>
                           <button className="theme_btn btn_fill">Add Photo</button>
@@ -329,12 +328,12 @@ export default function AddPhoto(props) {
                       </div>
                     </form>
                   </div>
-  
-                </div> */}
+
+                </div>
                 {/* {thumbnailError && <div className="error">{thumbnailError}</div>} */}
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
-                    <img src="./assets/img/p_img/fullview.jpg"></img>
+                    <img src="/assets/img/p_img/fullview.jpg"></img>
                     <span class="material-symbols-outlined delete">
                       delete
                     </span>
@@ -349,7 +348,7 @@ export default function AddPhoto(props) {
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
-                    <img src="./assets/img/p_img/drawingroom.jpg"></img>
+                    <img src="/assets/img/p_img/drawingroom.jpg"></img>
                     <span class="material-symbols-outlined delete">
                       delete
                     </span>

@@ -35,7 +35,7 @@ button.accordion-button.collapsed {
     background: none;
     box-shadow: none;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 16px;
 }
 .accordion-body {
     color: grey;

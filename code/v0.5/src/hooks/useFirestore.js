@@ -80,6 +80,8 @@ export const useFirestore = (collection) => {
     dispatch({ type: "IS_PENDING" })
 
     try {
+      // console.log("updateDocument id : ", id)
+      // console.log("updateDocument data : ", updates)
       const updatedDocument = await ref.doc(id).update(updates)
       dispatchIfNotCancelled({ type: "UPDATED_DOCUMENT", payload: updatedDocument })
       return updatedDocument

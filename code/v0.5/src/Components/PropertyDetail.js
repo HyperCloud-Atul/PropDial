@@ -1,66 +1,80 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 
 const PropertyDetail = ({ propertiesdocuments }) => {
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
+
+  const { user } = useAuthContext();
+
   // read more read less
   const [height, setHeight] = useState(true);
+
 
   const handleHeight = () => {
     setHeight(!height);
   };
   // read more read less
+
+
   return (
     <>
       {propertiesdocuments.map((property) => (
         <div className="property_card_single">
-          <Link className="pcs_inner pointer" to="/pdsingle">
+          <Link className="pcs_inner pointer" to={`/pdsingle/${property.id}`} key={property.id}>
             <div className="pcs_image_area">
-              <img src="./assets/img/property/p1.jpg" className="bigimage"></img>
+              <img src="/assets/img/property/p1.jpg" className="bigimage"></img>
             </div>
             <div className="pcs_main_detail">
               <div className="pmd_top relative" >
                 <h4 className="property_name">
-                  {property.society}
+                  {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.unitNumber : ''} - {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.society : ''}<br></br>
+                  {property.bhk} | {property.furnishing} Furnished for {property.purpose} | {property.locality}
                 </h4>
-                <h6 className="property_location">{property.state}</h6>
+                <h6 className="property_location">{property.city}, {property.state}</h6>
                 <div className="fav_and_share">
-                  <span class="material-symbols-outlined mr-2" style={{
+                  <span class="material-symbols-outlined mr-2 fav" style={{
                     marginRight: "3px"
                   }}>
                     favorite
                   </span>
-                  <span class="material-symbols-outlined">
+                  {/* <span class="material-symbols-outlined" >
                     share
-                  </span>
+                  </span> */}
                 </div>
               </div>
               <div className="pmd_body">
                 <div className="property_information">
                   <div className="pi_single">
                     <h6>Carpet area</h6>
-                    <h5>8500 sqft</h5>
+                    <h5>{property.carpetArea}</h5>
                   </div>
                   <div className="pi_single">
-                    <h6>STATUS</h6>
-                    <h5>Ready to Move</h5>
+                    <h6>Floor number</h6>
+                    <h5>{property.floorNumber}</h5>
                   </div>
                   <div className="pi_single">
                     <h6>TRANSACTION</h6>
                     <h5>New Property</h5>
                   </div>
                   <div className="pi_single">
-                    <h6>FURNISHING</h6>
-                    <h5>Unfurnished</h5>
-                  </div>
-                  <div className="pi_single">
-                    <h6>Society</h6>
-                    <h5>Indore</h5>
-                  </div>
-                  <div className="pi_single">
                     <h6>BHK</h6>
-                    <h5>2</h5>
+                    <h5>{property.bhk}</h5>
+                  </div>
+                  <div className="pi_single">
+                    <h6>Bedrooms</h6>
+                    <h5>{property.numberOfBedrooms}</h5>
+                  </div>
+                  <div className="pi_single">
+                    <h6>Kitchen</h6>
+                    <h5>{property.numberOfKitchen}</h5>
                   </div>
                 </div>
               </div>
@@ -88,11 +102,11 @@ const PropertyDetail = ({ propertiesdocuments }) => {
               <h6 className="value_per_sqf">
                 <span>₹ </span> 9000 per sqf
               </h6>
-              <Link to="/contact-us" className="theme_btn no_icon btn_fill"
-                style={{ padding: "5px 20px" }}>Contact Agent</Link>
-              <button className="theme_btn no_icon btn_border" data-bs-toggle="modal" data-bs-target="#exampleModal"
+              {/* <Link to="/contact-us" className="theme_btn no_icon btn_fill"
+                style={{ padding: "5px 20px" }}>Contact Agent</Link> */}
+              <button className="theme_btn no_icon btn_fill" data-bs-toggle="modal" data-bs-target="#exampleModal"
                 style={{ padding: "5px 20px" }}>Enquire Now</button>
-              <h5 className="link">Check Loan Eligibility</h5>
+              {/* <h5 className="link">Check Loan Eligibility</h5> */}
             </div>
           </div>
         </div>
@@ -119,7 +133,7 @@ const PropertyDetail = ({ propertiesdocuments }) => {
                       <div class="field_inner select">
                         <select>
                           <option value="" disabled selected>I am</option>
-                          <option>Owner</option>
+                          {/* <option>Owner</option> */}
                           <option>Tenant</option>
                           <option>Agent</option>
                         </select>

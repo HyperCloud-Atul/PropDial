@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
-import { useCollection } from '../../hooks/useCollection'
-import { useAuthContext } from '../../hooks/useAuthContext'
-import { timestamp, projectFirestore } from '../../firebase/config'
-import { useFirestore } from '../../hooks/useFirestore'
-import { useDocument } from '../../hooks/useDocument'
+import { useCollection } from '../../../hooks/useCollection'
+import { useAuthContext } from '../../../hooks/useAuthContext'
+import { timestamp, projectFirestore } from '../../../firebase/config'
+import { useFirestore } from '../../../hooks/useFirestore'
+import { useDocument } from '../../../hooks/useDocument'
 import { useLocation } from "react-router-dom";
 import Select from 'react-select'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -11,19 +11,17 @@ import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
-// styles
-import './PGAddProperty.css'
+
 import { el } from 'date-fns/locale'
 
-// component 
-import Hero from '../../Components/Hero'
+
 
 const categories = [
     { value: 'residential', label: 'Residential' },
     { value: 'commercial', label: 'Commercial' },
 ]
 
-export default function PGAddProperty_oldbackup({ propertyid }) {
+export default function PGAgentAddProperties({ propertyid }) {
     // Scroll to the top of the page whenever the location changes start
     const location = useLocation();
     useEffect(() => {
@@ -44,7 +42,7 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
 
     // form field values
     const [unitNumber, setUnitNumber] = useState('')
-    const [taggedUsers, setTaggedUsers] = useState([])
+    const [taggedOwner, setTaggedOwner] = useState([])
     const { document: masterPropertyPurpose, error: masterPropertyPurposeerror } = useDocument('master', 'PROPERTYPURPOSE')
     const { documents: masterCountry, error: masterCountryerror } = useCollection('m_countries')
     const [country, setCountry] = useState({ label: 'INDIA', value: 'INDIA' })
@@ -94,6 +92,7 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
 
     useEffect(() => {
         // console.log('in useeffect')
+        // console.log('users from db: ', documents)
         if (documents) {
             setUsers(documents.map(user => {
                 return { value: { ...user, id: user.id }, label: user.fullName + ' ( ' + user.phoneNumber + ' )' }
@@ -102,7 +101,7 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
 
         if (masterPropertyPurpose) {
             propertyPurposeOptions.current = masterPropertyPurpose.data.map(propertyPurposeData => ({
-                label: propertyPurposeData.toUpperCase(),
+                label: propertyPurposeData,
                 value: propertyPurposeData
             }))
 
@@ -296,20 +295,23 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
             setFormError('Please select a property category.')
             return
         }
-        if (taggedUsers.length < 1) {
+        if (taggedOwner.length < 1) {
             setFormError('Please assign the property to at least 1 user')
             return
         }
 
-        const taggedUsersList = taggedUsers.map(u => {
-            return {
-                id: u.value.id,
-                displayName: u.value.fullName,
-                phoneNumber: u.value.phoneNumber,
-                photoURL: u.value.photoURL,
-                role: u.value.role
-            }
-        })
+        console.log('tagged owner details: ', taggedOwner);
+
+        const ownerDetails =
+        {
+            id: taggedOwner.value.id,
+            displayName: taggedOwner.value.fullName,
+            phoneNumber: taggedOwner.value.phoneNumber,
+            emailID: taggedOwner.value.email,
+            photoURL: taggedOwner.value.photoURL,
+            role: taggedOwner.value.role
+        }
+
 
         // const createdBy = {
         //     displayName: user.displayName + '(' + user.role + ')',
@@ -325,7 +327,7 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
 
         const property = {
             unitNumber,
-            taggedUsersList,
+            ownerDetails,
             country: country.label,
             state: state.label,
             city: city.label,
@@ -334,25 +336,14 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
             category: category,
             purpose: purpose.label,
             status: status,
+            postedBy: 'Propdial',
             onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
             comments: []
         }
 
         if (propertyid) {
-            await updateDocument(propertyid, {
-                unitNumber: unitNumber,
-                taggedUsersList,
-                country: country.label,
-                state: state.label,
-                city: city.label,
-                locality: locality.label,
-                society: society.label,
-                category,
-                purpose: purpose.label,
-                status: status,
-                onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
-                comments: []
-            })
+            await updateDocument(propertyid, property)
+
             if (updateDocumentResponse.error) {
                 // console.log('updateDocument Error:', updateDocumentResponse.error)
                 navigate('/')
@@ -367,7 +358,7 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
                 navigate('/error')
             }
             else {
-                navigate('/admindashboard')
+                navigate('/pgpropertylist')
             }
 
             // console.log('addDocument:', property)
@@ -376,29 +367,37 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
     }
 
     return (
-        <div>
-
+        <div className='top_header_pg aflbg '>
             <div className='container'>
-                <div className="row no-gutters" style={{ margin: '20px 0 0px 0', height: '50px' }}>
-
-
-                    <div className="col-lg-6 col-md-6 col-sm-12"
-                        style={{ background: 'rgba(var(--green-color), 0.5)', padding: ' 0 10px', borderRadius: '8px 0px 0px 8px' }}>
-                        <div className="residential-commercial-switch" style={{ height: 'calc(100% - 10px)' }}>
+                <br />
+                <h2 className='pg_title'>
+                    ADD PROPERTY
+                </h2>
+                <hr />
+                <div
+                    className="row no-gutters"
+                    style={{ margin: "10px 0px ", height: "50px", background: "white" }}
+                >
+                    <div className="col-md-6 col-sm-12 d-flex " style={{
+                        alignItems: "center",
+                        height: "50px"
+                    }}                          >
+                        <div className="residential-commercial-switch" style={{ top: "0" }}>
                             <span className={toggleFlag ? '' : 'active'} style={{ color: 'var(--theme-blue)' }}>Residential</span>
-
                             <div className={toggleFlag ? 'toggle-switch on commercial' : 'toggle-switch off residential'} style={{ padding: '0 10px' }}>
                                 {/* <small>{toggleFlag ? 'On' : 'Off'}</small> */}
                                 <div onClick={toggleBtnClick}>
                                     <div></div>
                                 </div>
                             </div>
-                            <span className={toggleFlag ? 'active' : ''} style={{ color: 'var(--red-color)' }}>Commercial</span>
+                            <span className={toggleFlag ? 'active' : ''} style={{ color: 'var(--theme-orange)' }}>Commercial</span>
                         </div>
                     </div>
-                    <div className="col-lg-6 col-md-6 col-sm-12"
-                        style={{ background: 'rgba(var(--green-color), 0.5)', padding: '10px 10px 0 10px', borderRadius: '0px 8px 8px 0px' }}>
-                        <div className="details-radio">
+                    <div className="col-md-6 col-sm-12 d-flex" style={{
+                        alignItems: "center",
+                        height: "50px"
+                    }}                        >
+                        <div className="details-radio" style={{ top: "0" }}>
                             <div></div>
                             <div className='details-radio-inner'>
                                 <div className="row no-gutters">
@@ -407,7 +406,7 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
                                             name="BusinessType" id="businessTypeRent" value="Rent"
                                             onClick={() => setPurpose('rent')}
                                         />
-                                        <label className="checkbox-label" for="businessTypeRent">
+                                        <label className="checkbox-label pointer" for="businessTypeRent" style={{ margin: "0px" }}>
                                             <span className="material-symbols-outlined add">
                                                 add
                                             </span>
@@ -423,7 +422,7 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
                                             name="BusinessType" id="businessTypeSale" value="Sale"
                                             onClick={() => setPurpose('sale')}
                                         />
-                                        <label className="checkbox-label" for="businessTypeSale">
+                                        <label className="checkbox-label pointer" for="businessTypeSale" style={{ margin: "0px" }}>
                                             <span className="material-symbols-outlined add">
                                                 add
                                             </span>
@@ -437,36 +436,32 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-                <div style={{ overflow: 'hidden' }}>
-                    <form onSubmit={handleSubmit} className="auth-form">
+                <div className='d_inner_card'>
+                    <form onSubmit={handleSubmit}>
                         <div className="row no-gutters">
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div" style={{ border: 'none', paddingBottom: '0' }}>
-                                    <h1 className="owner-heading">Unit Number</h1>
-                                    <div className="location-search">
-                                        <input
-                                            required
+                            <div className="col-lg-4">
+                                <div class="form_field st-2 mt-lg-0">
+                                    <label>Unit Number</label>
+                                    <div class="field_inner">
+                                        <input required
                                             type="text"
                                             placeholder="e.g. A-504"
                                             maxLength={70}
                                             onChange={(e) => setUnitNumber(e.target.value)}
-                                            value={unitNumber}
-                                        />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            drive_file_rename_outline
-                                        </span>
+                                            value={unitNumber} />
+                                        <div class="field_icon">
+                                            <span class="material-symbols-outlined">
+                                                drive_file_rename_outline
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div" style={{ border: 'none', paddingBottom: '0' }}>
-                                    <h1 className="owner-heading">Purpose</h1>
-                                    <div className="location-search">
-
+                            <div className="col-lg-4">
+                                <div className="form_field st-2 mt-lg-0">
+                                    <label>Purpose</label>
+                                    <div className="field_inner select">
                                         <Select className=''
                                             onChange={(option) => setPurpose(option)}
                                             options={propertyPurposeOptionsSorted.current}
@@ -476,20 +471,21 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
                                                 control: (baseStyles, state) => ({
                                                     ...baseStyles,
                                                     outline: 'none',
-                                                    background: '#eee',
-                                                    borderBottom: ' 1px solid var(--theme-blue)'
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
                                                 }),
                                             }}
                                         />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            drive_file_rename_outline
-                                        </span>
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined"> drive_file_rename_outline</span>
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
                             <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div" style={{ border: 'none', paddingBottom: '0' }}>
+                                <div>
                                     <h1 className="owner-heading">Onboarding Date</h1>
                                     <div className="location-search">
                                         <DatePicker
@@ -507,37 +503,37 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
                                 </div>
                                 <br /><br />
                             </div>
-
-                        </div>
-
-                        <div className="row no-gutters">
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div">
-                                    <h1 className="owner-heading">Tag Users : {taggedUsersListShow}</h1>
-                                    <div className="location-search">
+                            <div className="col-lg-4">
+                                <div className="form_field st-2 mt-lg-0">
+                                    <label>Owner: {taggedUsersListShow}</label>
+                                    <div className="field_inner select">
                                         <Select className=''
-                                            onChange={(option) => setTaggedUsers(option)}
+                                            onChange={(option) => setTaggedOwner(option)}
                                             options={usersSorted}
                                             styles={{
                                                 control: (baseStyles, state) => ({
                                                     ...baseStyles,
                                                     outline: 'none',
-                                                    background: '#eee',
-                                                    borderBottom: ' 1px solid var(--theme-blue)'
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none',
+                                                    position: "relative",
+                                                    zIndex: "99"
                                                 }),
                                             }}
-                                            isMulti
+
                                         />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            person
-                                        </span>
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">   person</span>
+                                        </div>
                                     </div>
-                                </div></div>
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div">
-                                    <h1 className="owner-heading">Country</h1>
-                                    <div className="location-search">
+                                </div>
+
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>Country</label>
+                                    <div className="field_inner select">
                                         <Select className=''
                                             onChange={handleCountryChange}
                                             options={countryOptionsSorted.current}
@@ -546,22 +542,23 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
                                                 control: (baseStyles, state) => ({
                                                     ...baseStyles,
                                                     outline: 'none',
-                                                    background: '#eee',
-                                                    borderBottom: ' 1px solid var(--theme-blue)'
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
                                                 }),
                                             }}
                                         />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            public
-                                        </span>
-                                    </div><br />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">       public</span>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
-                            <div className="col-lg-4 col-md-4 col-sm-12">
-                                <div className="property-form-border-div">
-                                    <h1 className="owner-heading">State</h1>
-                                    <div className="location-search">
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>State</label>
+                                    <div className="field_inner select">
                                         <Select className=''
                                             // onChange={(option) => setState(option)}
                                             onChange={handleStateChange}
@@ -572,258 +569,106 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
                                                 control: (baseStyles, state) => ({
                                                     ...baseStyles,
                                                     outline: 'none',
-                                                    background: '#eee',
-                                                    borderBottom: ' 1px solid var(--theme-blue)'
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
                                                 }),
                                             }}
                                         />
-                                        <div className="underline"></div>
-                                        <span className="material-symbols-outlined">
-                                            emoji_transportation
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row no-gutters">
-                                <div className="col-lg-4 col-md-6 col-sm-12">
-                                    <div className="property-form-border-div" style={{ border: 'none', }}>
-                                        <h1 className="owner-heading">City</h1>
-                                        <div className="location-search">
-                                            <Select className=''
-                                                onChange={handleCityChange}
-                                                options={citiesOptionsSorted.current}
-                                                value={city}
-                                                styles={{
-                                                    control: (baseStyles, state) => ({
-                                                        ...baseStyles,
-                                                        outline: 'none',
-                                                        background: '#eee',
-                                                        borderBottom: ' 1px solid var(--theme-blue)'
-                                                    }),
-                                                }}
-                                            />
-                                            <div className="underline"></div>
-                                            <span className="material-symbols-outlined">
-                                                apartment
-                                            </span>
-                                        </div><br />
-                                    </div>
-                                </div>
-                                <div className="col-lg-4 col-md-6 col-sm-12">
-                                    <div className="property-form-border-div" style={{ border: 'none', }}>
-                                        <h1 className="owner-heading">Lacality</h1>
-                                        <div className="location-search">
-                                            <Select className=''
-                                                onChange={handleLocalityChange}
-                                                options={localityOptionsSorted.current}
-                                                value={locality}
-                                                styles={{
-                                                    control: (baseStyles, state) => ({
-                                                        ...baseStyles,
-                                                        outline: 'none',
-                                                        background: '#eee',
-                                                        borderBottom: ' 1px solid var(--theme-blue)'
-                                                    }),
-                                                }}
-                                            />
-                                            <div className="underline"></div>
-                                            <span className="material-symbols-outlined">
-                                                holiday_village
-                                            </span>
-                                        </div><br />
-                                    </div>
-                                </div>
-                                <div className="col-lg-4 col-md-6 col-sm-12">
-                                    <div className="property-form-border-div" style={{ border: 'none', }}>
-
-                                        <h1 className="owner-heading">Society</h1>
-                                        <div className="location-search">
-                                            <Select className=''
-                                                onChange={(option) => setSociety(option)}
-                                                options={societyOptionsSorted.current}
-                                                value={society}
-                                                styles={{
-                                                    control: (baseStyles, state) => ({
-                                                        ...baseStyles,
-                                                        outline: 'none',
-                                                        background: '#eee',
-                                                        borderBottom: ' 1px solid var(--theme-blue)'
-                                                    }),
-                                                }}
-                                            />
-                                            <div className="underline"></div>
-                                            <span className="material-symbols-outlined">
-                                                home
-                                            </span>
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">       emoji_transportation</span>
                                         </div>
-
-                                        <br />
                                     </div>
-
                                 </div>
+
                             </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>City</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            onChange={handleCityChange}
+                                            options={citiesOptionsSorted.current}
+                                            value={city}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
+                                                }),
+                                            }}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">       apartment</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            {/* <div className="col-lg-4 col-md-6 col-sm-12">
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>Locality</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            onChange={handleLocalityChange}
+                                            options={localityOptionsSorted.current}
+                                            value={locality}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
+                                                }),
+                                            }}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">        holiday_village</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-            <label>
-                <div className='form-field-title'>
-                    <span className="material-symbols-outlined">
-                        badge
-                    </span>
-                    <h1>Unit No </h1>
-                    <input
-                        required
-                        type="text"
-                        maxLength={70}
-                        onChange={(e) => setName(e.target.value)}
-                        value={name}
-                    />
-                </div>
-            </label>
+                            </div>
+                            <div className="col-lg-4">
+                                <div className="form_field st-2">
+                                    <label>Society</label>
+                                    <div className="field_inner select">
+                                        <Select className=''
+                                            onChange={(option) => setSociety(option)}
+                                            options={societyOptionsSorted.current}
+                                            value={society}
+                                            styles={{
+                                                control: (baseStyles, state) => ({
+                                                    ...baseStyles,
+                                                    outline: 'none',
+                                                    background: '#efefef',
+                                                    border: 'none',
+                                                    borderBottom: 'none'
+                                                }),
+                                            }}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">          home</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-            <label>
-                <div className='form-field-title'>
-                    <span className="material-symbols-outlined">
-                        badge
-                    </span>
-                    <h1>Property Details </h1>
-                    <textarea
-                        required
-                        type="text"
-                        maxLength={70}
-                        onChange={(e) => setDetails(e.target.value)}
-                        value={details}
-                    />
-                </div>
-            </label>
-        </div> */}
-                            {/* <label>
-            <div className='form-field-title'>
-            <span className="material-symbols-outlined">
-                badge
-            </span>
-            <h1>Owners</h1>
-            <Select className='select'
-                onChange={(option) => setAssignedUsers(option)}
-                options={users}
-                isMulti
-            />
-            </div>
-        </label> */}
-                            {/* <div className="col-lg-6 col-md-6 col-sm-12">
-            <label>
-                <h1>test</h1>
-                <Select className='select'
-                    onChange={(option) => setAssignedUsers(option)}
-                    options={users}
-                    styles={{
-                        control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            borderColor: state.isFocused ? 'grey' : 'red',
-                            background: 'yellow',
-                            zIndex: '999'
-                        }),
-                    }}
-                    isMulti
-                />
-            </label>
-            <label>
-                <div className='form-field-title'>
-                    <span className="material-symbols-outlined">
-                        badge
-                    </span>
-                    <h1>Country</h1>
-                    <Select
-                        onChange={(option) => setCategory(option)}
-                        options={categories}
-                    />
-                </div>
-            </label>
-        </div> */}
-                            {/* <div className="col-lg-6 col-md-6 col-sm-12">
-            <div style={{ position: 'relative' }}>
-                <label>
-                    <span style={{
-                        position: 'absolute',
-                        top: '37px',
-                        right: '5px',
-                        color: 'var(--theme-blue)',
-                        background: '#eee',
-                        width: '30px',
-                        height: '30px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        zIndex: '999',
-                        pointerEvents: 'none'
-                    }} className="material-symbols-outlined">
-                        badge
-                    </span>
-                    <h1>test</h1>
-                    <Select className='select'
-                        onChange={(option) => setAssignedUsers(option)}
-                        options={users}
-                        styles={{
-                            control: (baseStyles, state) => ({
-                                ...baseStyles,
-                                outline: 'none',
-                                background: '#eee',
-                                borderBottom: ' 3px solid var(--theme-blue)'
-                            }),
-                        }}
-                        isMulti
-                    />
-                </label>
-            </div>
-
-            <label>
-                <h1 style={{ fontSize: '0.9rem', fontWeight: 'bolder', paddingLeft: '4px', color: 'var(--theme-blue)' }}>Country</h1>
-                <Select
-                    onChange={(option) => setCategory(option)}
-                    options={categories}
-                />
-            </label>
-        </div> */}
-                            {/* <label>
-            <span>Set Onboarding Date:</span>
-            <input
-                required
-                type="date"
-                onChange={(e) => setDueDate(e.target.value)}
-                value={onboardingDate}
-            />
-        </label> */}
-
-
+                            </div>
                         </div>
-                        <br />
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <div className='mt-4'>
                             <button className="theme_btn btn_fill">{propertyid ? 'Update Property' : 'Add Property'}</button>
                             {formError && <p className="error">{formError}</p>}
                         </div>
-                        <br />
                     </form>
-                    <br /><br />
+                </div>
 
-                    {/* <br /><hr />
-<br /><br /><br /><br /> */}
-                    {/* <div className="row no-gutters section-btn-div">
-    <div className="col-12">
-        <div className="section-btn">
-            <a href="propertyList.html" style={{ textDecoration: 'none', width: '100%' }}>
-                <button type="button" name="button" onclick="addPropertyMenu('Details')"
-                    className="mybutton button5">
-                    Add
-                </button>
-            </a>
+                <br />
 
+            </div >
         </div>
-    </div>
-</div> */}
-                </div >
-            </div>
-
-        </div >
     )
 }
 

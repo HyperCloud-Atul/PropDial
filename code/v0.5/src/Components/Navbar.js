@@ -33,7 +33,7 @@ export default function Navbar() {
   const showDashboard = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/");
+      navigate("/search-property");
       return; // Exit the function to prevent further checks
     }
     if (user && user.role === "superadmin") {
@@ -46,7 +46,7 @@ export default function Navbar() {
       navigate("/admindashboard");
     }
 
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/ownerdashboard");
     }
@@ -55,16 +55,20 @@ export default function Navbar() {
       // console.log('in user', user.role)
       navigate("/tenantdashboard");
     }
-    if (user && user.role === "executive") {
+    if (user && user.role === "propertymanager") {
       // console.log('in user', user.role)
       navigate("/executivedashboard");
+    }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentdashboard");
     }
   };
 
   const showSecondPage = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/search-property");
+      navigate("/about-us");
       return; // Exit the function to prevent further checks
     }
     if (user && user.role === "admin") {
@@ -72,27 +76,35 @@ export default function Navbar() {
       // navigate("/adminproperties");
       navigate("/pgpropertylist");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/bills");
+      navigate("/ownerdashboard");
+    }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentdashboard");
     }
   };
-  // const showThirdPage = () => {
-  //   if (!user) {
-  //     // User is not logged in, navigate to "/"
-  //     navigate("/about-us");
-  //     return; // Exit the function to prevent further checks
-  //   }
-  //   if (user && user.role === "admin") {
-  //     // console.log('in user', user.role)
-  //     // navigate("/adminproperties");
-  //     navigate("/users");
-  //   }
-  //   if (user && user.role === "owner") {
-  //     // console.log('in user', user.role)
-  //     navigate("/tickets");
-  //   }
-  // };
+  const showThirdPage = () => {
+    if (!user) {
+      // User is not logged in, navigate to "/"
+      navigate("/about-us");
+      return; // Exit the function to prevent further checks
+    }
+    if (user && user.role === "admin") {
+      // console.log('in user', user.role)
+      // navigate("/adminproperties");
+      navigate("/users");
+    }
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
+      // console.log('in user', user.role)
+      navigate("/tickets");
+    }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentproperties");
+    }
+  };
 
   const showFourthPage = () => {
     navigate("/more");
@@ -141,9 +153,15 @@ export default function Navbar() {
     secondMenu = "Rent";
     thirdMenu = "Tickets";
   }
-  if (user && user.role === "executive") {
+  if (user && user.role === "propertymanager") {
     secondMenu = "Bills";
     thirdMenu = "Tickets";
+  }
+  if (user && user.role === "propagent") {
+    secondMenuIcon = "home";
+    secondMenu = "Dashboard";
+    thirdMenuIcon = "confirmation_number";
+    thirdMenu = "Properties";
   }
 
   // Add class on scroll start
@@ -191,11 +209,10 @@ export default function Navbar() {
   // arrrays  end
   return (
     <header className={navbarClassName}>
-
       <nav className={navClass}>
         <ul>
           <li className="logo pointer" onClick={logoClick}>
-            <img src="./assets/img/logo_propdial.png" alt="logo" />
+            <img src="/assets/img/logo_propdial.png" alt="logo" />
           </li>
           <li className="main_menus">
             <div
@@ -213,7 +230,7 @@ export default function Navbar() {
             </div>
 
             <div
-              onClick={showDashboard}
+              onClick={showSecondPage}
               // className={`menu_single pointer ${
               //   location.pathname === "/search-property" || location.pathname === "/bills"? "active" : "" || location.pathname === "/pgpropertylist" ? "active" : ""
               // }`}
@@ -224,7 +241,7 @@ export default function Navbar() {
             </div>
 
             <div
-              onClick={showSecondPage}
+              onClick={showThirdPage}
               // className={`menu_single pointer ${
               //   location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : "" || location.pathname === "/users" ? "active" : ""
               // }`}
@@ -296,25 +313,25 @@ export default function Navbar() {
               className="msm_single pointer"
               to="https://www.facebook.com/propdial"
             >
-              <img src="./assets/img/facebook.png"></img>
+              <img src="/assets/img/facebook.png"></img>
             </Link>
             <Link
               className="msm_single pointer"
               to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg"
             >
-              <img src="./assets/img/youtube.png"></img>
+              <img src="/assets/img/youtube.png"></img>
             </Link>
             <Link
               className="msm_single pointer"
               to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/"
             >
-              <img src="./assets/img/linkedin.png"></img>
+              <img src="/assets/img/linkedin.png"></img>
             </Link>
             <Link
               className="msm_single pointer"
               to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial"
             >
-              <img src="./assets/img/twitter.png"></img>
+              <img src="/assets/img/twitter.png"></img>
             </Link>
           </li>
 

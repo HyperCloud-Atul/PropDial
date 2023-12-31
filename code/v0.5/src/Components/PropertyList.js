@@ -32,7 +32,7 @@ export default function PropertyList({ properties }) {
                     {user.role === "admin" && (
                       <Link to={`/propertyedit/${property.id}`} key={property.id}>
                         <div className={"event-id " + property.category}>
-                          <h5>{property.category}</h5>
+                          <h5>{property.category} </h5>
                         </div>
                         <div
                           className="address-div"
@@ -145,96 +145,93 @@ export default function PropertyList({ properties }) {
                         </div>
                       </div>
                     )}
-                    {property.taggedUsersList.map((ele) => {
-                      return ele.role === "executive" ? (
-                        <div
-                          className="secondary-details-inside-display"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            paddingLeft: "15px",
-                          }}
-                        >
+                    {
+                      property.ownerDetails.role === "propertymanager" ?
+                        <>
                           <div
+                            className="secondary-details-inside-display"
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              width: "70%",
+                              justifyContent: "space-between",
+                              paddingLeft: "15px",
                             }}
                           >
-                            <div className="secondary-details-inside-display-img">
-                              <Avatar src={ele.photoURL} />
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                width: "70%",
+                              }}
+                            >
+                              <div className="secondary-details-inside-display-img">
+                                <Avatar src={property.ownerDetails.photoURL} />
+                              </div>
+                              <div style={{ paddingLeft: "10px" }}>
+                                <h5
+                                  style={{
+                                    textAlign: "center",
+                                    padding: "10px 0 0 0",
+                                    fontSize: "0.9rem",
+                                    fontWeight: "bold",
+                                    color: "#444",
+                                    margin: "0",
+                                  }}
+                                >
+                                  {property.ownerDetails.displayName} : {property.ownerDetails.phoneNumber}
+
+                                </h5>
+                                <h6
+                                  style={{
+                                    fontSize: "0.8rem",
+                                    fontWeight: "normal",
+                                    color: "#aaa",
+                                  }}
+                                >
+                                  Property Manager
+                                </h6>
+                              </div>
                             </div>
-                            <div style={{ paddingLeft: "10px" }}>
-                              <h5
-                                style={{
-                                  textAlign: "center",
-                                  padding: "10px 0 0 0",
-                                  fontSize: "0.9rem",
-                                  fontWeight: "bold",
-                                  color: "#444",
-                                  margin: "0",
-                                }}
-                              >
-                                {ele.displayName} : {ele.phoneNumber}
-                                {/* {property.taggedUsersList[0].displayName} */}
-                                {/* {property.taggedUsersList.map((ele) => {
-                                                        return ele.role === 'executive' ? ele.displayName : ''
-                                                        // console.log('ele:', ele.display)
-                                                        // return null
-                                                    })} */}
-                              </h5>
-                              <h6
-                                style={{
-                                  fontSize: "0.8rem",
-                                  fontWeight: "normal",
-                                  color: "#aaa",
-                                }}
-                              >
-                                Property Manager
-                              </h6>
+                            <div
+                              className="property-contact-div"
+                              style={{ width: "30%", height: "auto" }}
+                            >
+                              <a href={"tel:" + property.ownerDetails.phoneNumber}>
+                                {/* {console.log("tel:" + ele.phoneNumber)} */}
+                                <div style={{ margin: "5px 0" }}>
+                                  <span className="material-symbols-outlined">
+                                    call
+                                  </span>
+                                </div>
+                              </a>
+                              <a href={"https://wa.me/" + property.ownerDetails.phoneNumber}>
+                                <div style={{ margin: "5px 0" }}>
+                                  <img
+                                    src="/assets/img/whatsapp_square_icon.png"
+                                    alt=""
+                                  />
+                                </div>
+                              </a>
                             </div>
                           </div>
-                          <div
-                            className="property-contact-div"
-                            style={{ width: "30%", height: "auto" }}
-                          >
-                            <a href={"tel:" + ele.phoneNumber}>
-                              {/* {console.log("tel:" + ele.phoneNumber)} */}
-                              <div style={{ margin: "5px 0" }}>
-                                <span className="material-symbols-outlined">
-                                  call
-                                </span>
-                              </div>
-                            </a>
-                            <a href={"https://wa.me/" + ele.phoneNumber}>
-                              <div style={{ margin: "5px 0" }}>
-                                <img
-                                  src="./assets/img/whatsapp_square_icon.png"
-                                  alt=""
-                                />
-                              </div>
-                            </a>
-                          </div>
-                        </div>
-                      ) : (
-                        ""
-                      );
-                    })}
+                        </>
+                        : ''
+                    }
 
                     {user && user.role === "admin" && (
                       <div className="secondary-details-inside-display-btn-div">
                         {/* <button onClick={() => navigate('/addbill', { state: { propertyid: property.id } })}>Add Bill</button> */}
-                        <div
+                        {/* <div
                           onClick={() =>
-                            navigate("/addbill", {
-                              state: { propertyid: property.id },
-                            })
+                            navigate("/addbill/" + property.id)
                           }
-                        >
-                          <h1>Add Bills</h1>
-                        </div>
+                        > */}
+                        <Link to={`/addbill/${property.id}`} key={property.id}>
+                          <div>
+
+                            <h1>Add Bills</h1>
+                          </div>
+                        </Link>
                         <div
                           onClick={() =>
                             navigate("/adddocument", {

@@ -40,9 +40,13 @@ export default function NavbarBottom() {
       // console.log('in user', user.role)
       navigate("/tenantdashboard");
     }
-    if (user && user.role === "executive") {
+    if (user && user.role === "propertymanager") {
       // console.log('in user', user.role)
       navigate("/executivedashboard");
+    }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentdashboard");
     }
   };
 
@@ -60,6 +64,10 @@ export default function NavbarBottom() {
       // console.log('in user', user.role)
       navigate("/bills");
     }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/addproperty_quick");
+    }
   };
   const showThirdPage = () => {
     if (!user) {
@@ -70,6 +78,10 @@ export default function NavbarBottom() {
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
       navigate("/customerproperties");
+    }
+    if (user && user.role === "propagent") {
+      // console.log('in user', user.role)
+      navigate("/agentproperties");
     }
   };
   const showFourthPage = () => {
@@ -114,64 +126,29 @@ export default function NavbarBottom() {
     secondMenu = "Rent";
     thirdMenu = "Tickets";
   }
-  if (user && user.role === "executive") {
+  if (user && user.role === "propertymanager") {
     secondMenu = "Bills";
     thirdMenu = "Tickets";
   }
+  if (user && user.role === "propagent") {
+    secondMenuIcon = "add";
+    secondMenu = "Add";
+    thirdMenuIcon = "confirmation_number";
+    thirdMenu = "Properties";
+  }
+  // more acitve class Array 
+  const moreActivePaths = ["/more-menu", "/about-us", "/contact-us", "/faq",
+    "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/addproperty"];
+  const shouldMoreActive = moreActivePaths.includes(location.pathname);
+  const moreActiveClass = `b_menu_single ${shouldMoreActive ? "b_menu_active" : ""}`;
+  // more acitve class Array 
 
-// more acitve class Array 
-const moreActivePaths = ["/more-menu", "/about-us", "/contact-us", "/faq",
-"/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/addproperty"];
-const shouldMoreActive = moreActivePaths.includes(location.pathname);
-const moreActiveClass = `b_menu_single ${shouldMoreActive ? "b_menu_active" : ""}`;
-// more acitve class Array 
 
-
-  return (
-    // <div className="small navbar-mobile-bottom">
-    //     <div className="navbar-mobile-bottom-menu" id="divBottomNavBar">
-    //         <div className="navbar-mobile-bottom-menu-a"
-    //             style={{ display: 'flex', flexDirection: 'column' }} onClick={showDashboard} >
-    //             <span className="material-symbols-outlined">
-    //                 {firstMenuIcon}
-    //             </span>
-    //             <small>{firstMenu}</small>
-    //         </div>
-    //         <div className="navbar-mobile-bottom-menu-a "
-    //             style={{ display: 'flex', flexDirection: 'column' }} onClick={showSecondPage}>
-    //             <span className="material-symbols-outlined">
-    //                 {secondMenuIcon}
-    //             </span>
-    //             <small>{secondMenu}</small>
-    //         </div>
-    //         <a href="/">
-    //         </a>
-    //         <div to="/" className="navbar-mobile-bottom-menu-a "
-    //             style={{ display: 'flex', flexDirection: 'column' }}>
-    //             <span className="material-symbols-outlined">
-    //                 {thirdMenuIcon}
-    //             </span>
-    //             <small>{thirdMenu}</small>
-    //         </div>
-    //         <div className="navbar-mobile-bottom-menu-a"
-    //             style={{ display: 'flex', flexDirection: 'column' }} onClick={showFourthPage}>
-    //             <span className="material-symbols-outlined">
-    //                 {fourthMenuIcon}
-    //             </span>
-    //             <small>{fourthMenu}</small>
-    //         </div>
-    //     </div>
-    //     <Link to="/profile" className="new-user " >
-    //         <span className="material-symbols-outlined">
-    //             person
-    //         </span>
-    //     </Link>
-    // </div>
+  return (  
     <section className="bottom_menu_bar">
       <div
-        className={`b_menu_single ${
-          location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard" ? "b_menu_active" : ""
-        }`}
+        className={`b_menu_single ${location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard" ? "b_menu_active" : "" || location.pathname === "/agentdashboard" ? "b_menu_active" : ""
+          }`}
         onClick={showDashboard}
       >
         <div className="menu_icon">
@@ -180,9 +157,8 @@ const moreActiveClass = `b_menu_single ${shouldMoreActive ? "b_menu_active" : ""
         <div className="menu_name">{firstMenu}</div>
       </div>
       <div
-        className={`b_menu_single ${
-          location.pathname === "/search-property" || location.pathname === "/bills"? "b_menu_active" : ""
-        }`}
+        className={`b_menu_single ${location.pathname === "/search-property" || location.pathname === "/bills" ? "b_menu_active" : ""
+          }`}
         onClick={showSecondPage}
       >
         <div className="menu_icon">
@@ -193,32 +169,30 @@ const moreActiveClass = `b_menu_single ${shouldMoreActive ? "b_menu_active" : ""
 
       <Link
         to="/profile"
-        className={`b_menu_single profile ${
-          location.pathname === "/profile" ? "b_menu_active" : ""
-        }`}
+        className={`b_menu_single profile ${location.pathname === "/profile" ? "b_menu_active" : ""
+          }`}
       >
         <div className="menu_icon">
-         {user ?
-          (     user.photoURL === "" ? (
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
-              alt=""
-            />
-          ) : (
-            <img src={user.photoURL} alt="" />
-          ) ) 
-          :
-           (
-            <span class="material-symbols-outlined">person</span> 
+          {user ?
+            (user.photoURL === "" ? (
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
+                alt=""
+              />
+            ) : (
+              <img src={user.photoURL} alt="" />
+            ))
+            :
+            (
+              <span class="material-symbols-outlined">person</span>
             )
-            }    
+          }
         </div>
       </Link>
       <div
-        className={`b_menu_single ${
-          location.pathname === "/about-us" ? "b_menu_active" : ""
-        }`}
-      onClick={showThirdPage}
+        className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""
+          }`}
+        onClick={showThirdPage}
       >
         <div className="menu_icon">
           <span class="material-symbols-outlined">{thirdMenuIcon}</span>

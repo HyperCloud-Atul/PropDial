@@ -19,7 +19,7 @@ export default function ExecutiveDashboard() {
   // const navigate = useNavigate();
 
   useEffect(() => {
-    let flag = user && user.role === "executive";
+    let flag = user && user.role === "propertymanager";
     if (!flag) {
       logout();
     }
@@ -31,42 +31,42 @@ export default function ExecutiveDashboard() {
 
   const properties = documents
     ? documents.filter((document) => {
-        let filteredProperty = false;
-        switch (filter) {
-          case "all":
-            document.assignedUsersList.forEach((u) => {
-              if (u.id === user.uid) {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "residential":
-            document.assignedUsersList.forEach((u) => {
-              if (u.id === user.uid && document.category === "residential") {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "commercial":
-            document.assignedUsersList.forEach((u) => {
-              if (u.id === user.uid && document.category === "commercial") {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          case "active":
-          case "inactive":
-            document.assignedUsersList.forEach((u) => {
-              if (u.id === user.uid && document.status === "inactive") {
-                filteredProperty = true;
-              }
-            });
-            return filteredProperty;
-          // return document.status === filter
-          default:
-            return true;
-        }
-      })
+      let filteredProperty = false;
+      switch (filter) {
+        case "all":
+          document.assignedUsersList.forEach((u) => {
+            if (u.id === user.uid) {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "residential":
+          document.assignedUsersList.forEach((u) => {
+            if (u.id === user.uid && document.category === "residential") {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "commercial":
+          document.assignedUsersList.forEach((u) => {
+            if (u.id === user.uid && document.category === "commercial") {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        case "active":
+        case "inactive":
+          document.assignedUsersList.forEach((u) => {
+            if (u.id === user.uid && document.status === "inactive") {
+              filteredProperty = true;
+            }
+          });
+          return filteredProperty;
+        // return document.status === filter
+        default:
+          return true;
+      }
+    })
     : null;
 
   return (

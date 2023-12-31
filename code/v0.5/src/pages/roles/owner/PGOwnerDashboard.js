@@ -9,6 +9,7 @@ import { Link, useLocation } from "react-router-dom";
 import Filters from "../../../Components/Filters";
 import PropertyList from "../../../Components/PropertyList";
 import LeftSidebar from "../../../Components/LeftSidebar";
+import PropertyDetail from "../../../Components/PropertyDetail";
 
 // styles
 // import './UserDashboard.css'
@@ -29,7 +30,8 @@ export default function PGOwnerDashboard() {
   const [filter, setFilter] = useState("ALL");
 
   useEffect(() => {
-    let flag = user && user.role === "owner";
+    let flag = ((user && user.role === "owner") || (user && user.role === "coowner"));
+
     if (!flag) {
       logout();
     }
@@ -67,41 +69,55 @@ export default function PGOwnerDashboard() {
       let filteredProperty = false;
       switch (filter) {
         case "ALL":
-          document.taggedUsersList.forEach((u) => {
-            if (u.id === user.uid) {
-              filteredProperty = true;
-            }
-          });
+          // document.taggedUsersList.forEach((u) => {
+          //   if (u.id === user.uid) {
+          //     filteredProperty = true;
+          //   }
+          // });
+
+          (document.ownerDetails.id === user.uid) || (document.coownerDetails.id === user.uid) ? filteredProperty = true : filteredProperty = false;
+
           return filteredProperty;
         case "RESIDENTIAL":
-          document.taggedUsersList.forEach((u) => {
-            if (
-              u.id === user.uid &&
-              document.category.toUpperCase() === "RESIDENTIAL"
-            ) {
-              filteredProperty = true;
-            }
-          });
+          // document.taggedUsersList.forEach((u) => {
+          //   if (
+          //     u.id === user.uid &&
+          //     document.category.toUpperCase() === "RESIDENTIAL"
+          //   ) {
+          //     filteredProperty = true;
+          //   }
+          // });
+
+          ((document.ownerDetails.id === user.uid) || (document.coownerDetails.id === user.uid)) &&
+            document.category.toUpperCase() === "RESIDENTIAL" ? filteredProperty = true : filteredProperty = false;
+
           return filteredProperty;
         case "COMMERCIAL":
-          document.taggedUsersList.forEach((u) => {
-            if (
-              u.id === user.uid &&
-              document.category.toUpperCase() === "COMMERCIAL"
-            ) {
-              filteredProperty = true;
-            }
-          });
+          // document.taggedUsersList.forEach((u) => {
+          //   if (
+          //     u.id === user.uid &&
+          //     document.category.toUpperCase() === "COMMERCIAL"
+          //   ) {
+          //     filteredProperty = true;
+          //   }
+          // });
+          ((document.ownerDetails.id === user.uid) || (document.coownerDetails.id === user.uid)) &&
+            document.category.toUpperCase() === "COMMERCIAL" ? filteredProperty = true : filteredProperty = false;
+
           return filteredProperty;
         case "INACTIVE":
-          document.taggedUsersList.forEach((u) => {
-            if (
-              u.id === user.uid &&
-              document.status.toUpperCase() === "INACTIVE"
-            ) {
-              filteredProperty = true;
-            }
-          });
+          // document.taggedUsersList.forEach((u) => {
+          //   if (
+          //     u.id === user.uid &&
+          //     document.status.toUpperCase() === "INACTIVE"
+          //   ) {
+          //     filteredProperty = true;
+          //   }
+          // });
+
+          ((document.ownerDetails.id === user.uid) || (document.coownerDetails.id === user.uid)) &&
+            document.status.toUpperCase() === "INACTIVE" ? filteredProperty = true : filteredProperty = false;
+
           return filteredProperty;
         default:
           return true;
@@ -124,10 +140,10 @@ export default function PGOwnerDashboard() {
               <div className="col-lg-3 col-md-3 relative" style={{ padding: "15px" }}>
                 <Link to="/pgpropertylist" className="admin-property-count-card">
                   <div className="">
-                    <h1>80623</h1>
+                    <h1>3</h1>
                     <div className="rent-sale-div">
-                      <h3 className="rent-span">Rent (579)</h3>
-                      <h3 className="sale-span">Sale (790)</h3>
+                      <h3 className="rent-span">Residential (2)</h3>
+                      <h3 className="sale-span">Commercial (1)</h3>
                     </div>
                   </div>
                   <div className="">
@@ -160,20 +176,20 @@ export default function PGOwnerDashboard() {
               <div className="col-lg-3 col-md-3 relative" style={{ padding: "15px" }}>
                 <Link to="/users" className="admin-property-count-card">
                   <div className="">
-                    <h1>1,504</h1>
+                    <h1>₹ 93,504</h1>
                     <div className="rent-sale-div">
-                      <h3 className="rent-span">Rent (579)</h3>
-                      <h3 className="sale-span">Sale (790)</h3>
+                      <h3 className="rent-span">Residential (₹43,504)</h3>
+                      <h3 className="sale-span">Commercial (₹50,000)</h3>
                     </div>
                   </div>
                   <div className="">
                     <span className="material-symbols-outlined">
-                      person
+                      payments
                     </span>
                   </div>
                   <div
                     className="admin_card_bottom">
-                    <h2>Owners</h2>
+                    <h2>Bills</h2>
                   </div>
                 </Link>
               </div>
@@ -187,7 +203,7 @@ export default function PGOwnerDashboard() {
                   </div>
                   <div className="">
                     <span className="material-symbols-outlined">
-                      hail
+                      person
                     </span>
                   </div>
                   <div
@@ -199,9 +215,9 @@ export default function PGOwnerDashboard() {
               <div className="col-lg-3 col-md-3 relative" style={{ padding: "15px" }}>
                 <div className="admin-property-count-card">
                   <div className="">
-                    <h1>₹29,036</h1>
+                    <h1>34</h1>
                     <div className="rent-sale-div">
-                      <h3>New : 67</h3>
+                      <h3>Open : 2</h3>
                     </div>
                   </div>
                   <div className="">
@@ -212,7 +228,7 @@ export default function PGOwnerDashboard() {
                   <div
 
                     className="admin_card_bottom">
-                    <h2>Projected</h2>
+                    <h2>Tickets</h2>
                   </div>
                 </div>
               </div>
@@ -297,7 +313,7 @@ export default function PGOwnerDashboard() {
           <br />
           <section>
             <div className="row no-gutters">
-              <div
+              {/* <div
                 className="col-lg-6 col-md-12 col-sm-12"
                 style={{ padding: "10px" }}
               >
@@ -306,8 +322,7 @@ export default function PGOwnerDashboard() {
                     <div>
                       <h6>PMS Due</h6>
                       <h1 style={{ color: "var(--red-color)" }}>₹42000</h1>
-                      <h3>Cut-off Date : 12 Jun'23</h3>
-                      {/* <h4>Due Date Exceeded : ₹100</h4> */}
+                      <h3>Cut-off Date : 12 Jun'23</h3>                      
                     </div>
                     <div>
                       <h6>Property</h6>
@@ -319,9 +334,9 @@ export default function PGOwnerDashboard() {
                     <button className="btn">Pay Now</button>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <div
+              {/* <div
                 className="col-lg-6 col-md-12 col-sm-12"
                 style={{ padding: "10px" }}
               >
@@ -331,7 +346,7 @@ export default function PGOwnerDashboard() {
                       <h6>Brokerage Billing</h6>
                       <h1 style={{ color: "var(--red-color)" }}>₹2000</h1>
                       <h3>Cut-off Date : 12 Jun'23</h3>
-                      {/* <h4>Due Date Exceeded : ₹100</h4> */}
+                      
                     </div>
                     <div>
                       <h6>Property</h6>
@@ -343,8 +358,8 @@ export default function PGOwnerDashboard() {
                     <button className="btn">Pay Now</button>
                   </div>
                 </div>
-              </div>
-              <div
+              </div> */}
+              {/* <div
                 className="col-lg-6 col-md-12 col-sm-12"
                 style={{ padding: "10px" }}
               >
@@ -354,7 +369,7 @@ export default function PGOwnerDashboard() {
                       <h6>Maintenance Billing</h6>
                       <h1 style={{ color: "var(--red-color)" }}>₹12000</h1>
                       <h3>Cut-off Date : 12 Jun'23</h3>
-                      {/* <h4>Due Date Exceeded : ₹100</h4> */}
+                      
                     </div>
                     <div>
                       <h6>Property</h6>
@@ -366,9 +381,9 @@ export default function PGOwnerDashboard() {
                     <button className="btn">Pay Now</button>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <div
+              {/* <div
                 className="col-lg-6 col-md-12 col-sm-12"
                 style={{ padding: "10px" }}
               >
@@ -378,7 +393,7 @@ export default function PGOwnerDashboard() {
                       <h6>Sale Registration Advance or Registration Dues</h6>
                       <h1 style={{ color: "var(--red-color)" }}>₹15000</h1>
                       <h3>Cut-off Date : 12 Jun'23</h3>
-                      {/* <h4>Due Date Exceeded : ₹100</h4> */}
+                      
                     </div>
                     <div>
                       <h6>Property</h6>
@@ -390,32 +405,8 @@ export default function PGOwnerDashboard() {
                     <button className="btn">Pay Now</button>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <div
-                className="col-lg-6 col-md-12 col-sm-12"
-                style={{ padding: "10px" }}
-              >
-                <div className="tenant-dashboard-ticket-card">
-                  <div className="ticket-round-left"></div>
-                  <div className="ticket-round-right"></div>
-                  <h1 className="tenant-dashboard-ticket-card-heading">Tickets</h1>
-                  <hr />
-                  <div className="tenant-dashboard-ticket-card-content">
-                    <div>
-                      <h1>Pending Tickets</h1>
-                      <h2>10</h2>
-                      <h3>Last Raised Date</h3>
-                      <h4>15 Jan 2023</h4>
-                    </div>
-                    <div>
-                      <h1>Closed Tickets</h1>
-                      <h2>30</h2>
-                      <button className="mybutton button5">Raise Ticket</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </section>
           <section>
@@ -434,8 +425,14 @@ export default function PGOwnerDashboard() {
                 />
               )}
               {/* {billsdocuments && <Filters changeFilter={changeFilter} />} */}
-              {properties && <PropertyList properties={properties}/>}
+
+              {/* {properties && <PropertyList properties={properties} />} */}
+
               {/* {bills && <BillList bills={bills} />} */}
+              <br></br>
+              <div className="property_card_left">
+                {propertiesdocuments && <PropertyDetail propertiesdocuments={propertiesdocuments} />}
+              </div>
             </div>
           </section>
 
@@ -443,7 +440,7 @@ export default function PGOwnerDashboard() {
 
 
 
-          <section style={{ display: "none" }}>
+          <section style={{ display: "block" }}>
             <div className="row no-gutters">
               <div className="col-lg-6 col-md-6 col-sm-12">
                 <div className="profile-card-div" style={{ background: "#ff5757" }}>
@@ -478,7 +475,7 @@ export default function PGOwnerDashboard() {
 
                     <div className="address-text">
                       <div style={{ textAlign: "left", position: "relative", top: "-1px" }}>
-                        <h5 style={{ color: "#fff", fontWeight: "bold" }}>Brokerage Due</h5>
+                        <h5 style={{ color: "#fff", fontWeight: "bold" }}>Brokerage Billing</h5>
                         <h5 style={{ margin: "0", fontSize: "0.8rem", color: "#dedede" }}>10</h5>
                       </div>
                       <div className="" style={{ position: "relative", top: "-6px" }}>
@@ -499,7 +496,7 @@ export default function PGOwnerDashboard() {
 
                     <div className="address-text">
                       <div style={{ textAlign: "left", position: "relative", top: "-1px" }}>
-                        <h5 style={{ color: "#fff", fontWeight: "bold" }}>Maintenance Due</h5>
+                        <h5 style={{ color: "#fff", fontWeight: "bold" }}>Maintenance Billing</h5>
                         <h5 style={{ margin: "0", fontSize: "0.8rem", color: "#dedede" }}>167</h5>
                       </div>
                       <div className="" style={{ position: "relative", top: "-6px" }}>
@@ -521,7 +518,7 @@ export default function PGOwnerDashboard() {
 
                     <div className="address-text">
                       <div style={{ textAlign: "left", position: "relative", top: "-1px" }}>
-                        <h5 style={{ color: "#fff", fontWeight: "bold" }}>Maintenance Advance</h5>
+                        <h5 style={{ color: "#fff", fontWeight: "bold" }}>Sale Registration Advance or Registration Dues</h5>
                         <h5 style={{ margin: "0", fontSize: "0.8rem", color: "#dedede" }}>147</h5>
                       </div>
                       <div className="" style={{ position: "relative", top: "-6px" }}>
@@ -586,6 +583,7 @@ export default function PGOwnerDashboard() {
             <br />
           </section>
           <br />
+
         </div>
       </div>
     </div>

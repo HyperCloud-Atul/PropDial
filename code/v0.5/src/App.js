@@ -21,10 +21,16 @@ import PGPropertyEdit from "./pages/roles/admin/PGPropertyEdit";
 import PGOwnerDashboard from "./pages/roles/owner/PGOwnerDashboard";
 import PGOwnerDashboardOld from "./pages/roles/owner/PGOwnerDashboard_old";
 import PGBills from "./pages/roles/owner/PGBills";
+import PGTickets from "./pages/roles/owner/PGTickets";
 // tenant
 import TenantDashboard from "./pages/roles/tenant/TenantDashboard";
 // executive
 import ExecutiveDashboard from "./pages/roles/executive/ExecutiveDashboard";
+// prop agent
+import PGAgentDashboard from "./pages/roles/agent/PGAgentDashboard";
+import PGAgentProperties from "./pages/roles/agent/PGAgentProperties";
+import PGAgentAddProperties from "./pages/roles/agent/PGAgentAddProperties";
+import PropAgentHome from "./pages/roles/agent/PropAgentHome";
 
 // other pages
 import UserDashboard from "./pages/dashboard/UserDashboard";
@@ -32,16 +38,19 @@ import PGLogin from "./pages/login/PGLogin";
 import PGSignup from "./pages/login/PGSignup";
 import PGProfile from "./pages/profile/PGProfile";
 import PGAddProperty from "./pages/create/PGAddProperty";
-import PGAddPropertyOld from "./pages/create/PGAddProperty_old";
+import PGAddPropertyQuick from "./pages/create/PGAddPropertyQuick";
 import AddBill from "./pages/create/AddBill";
 import AddPhoto from "./pages/create/AddPhoto";
 import AddDocument from "./pages/create/AddDocument";
 import AddDocumentNew from "./pages/create/AddDocumentNew";
 import PropertyStatus from "./Components/PropertyStatus";
+
 import PGProperty from "./pages/property/PGProperty";
-import UserList from "./pages/user/UserList";
-// import Property from './pages/property/Property'
+import PGPropertyBills from "./pages/property/PGPropertyBills";
 import PGPropertyDetails from "./pages/property/PGPropertyDetails";
+
+import UserList from "./pages/user/UserList";
+
 import PDSingle from "./Components/PDSingle";
 // import OnlineUsers from './components/OnlineUsers'
 
@@ -77,7 +86,7 @@ function App() {
   console.log("user in App.js", user);
   // console.log('user role in App.js', user.role)
 
-  useEffect(() => { }, [user]);
+  useEffect(() => {}, [user]);
 
   return (
     <div className="App">
@@ -100,9 +109,8 @@ function App() {
                 element={<PGProperty></PGProperty>}
               ></Route>
               <Route
-                path="/pdsingle"
+                path="/pdsingle/:id"
                 element={<PDSingle></PDSingle>}
-
               ></Route>
               <Route path="/about-us" element={<PGAboutUs />}></Route>
               <Route path="/contact-us" element={<PGContactUs />}></Route>
@@ -176,10 +184,10 @@ function App() {
                 }
               ></Route>
               <Route
-                path="/addproperty_old"
+                path="/addproperty_quick"
                 element={
                   user && user.role === "admin" ? (
-                    <PGAddPropertyOld />
+                    <PGAddPropertyQuick />
                   ) : (
                     <Navigate to="/login" />
                   )
@@ -198,7 +206,7 @@ function App() {
               ></Route>
 
               <Route
-                path="/addbill"
+                path="/addbill/:propertyid"
                 element={
                   user && user.role === "admin" ? (
                     <AddBill />
@@ -284,8 +292,19 @@ function App() {
               <Route
                 path="/propertyedit/:id"
                 element={
-                  user && user.role ? (
+                  user && user.role === "admin" ? (
                     <PGPropertyEdit />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+
+              <Route
+                path="/propertybills/:propertyid"
+                element={
+                  user && user.role === "admin" ? (
+                    <PGPropertyBills />
                   ) : (
                     <Navigate to="/login" />
                   )
@@ -311,6 +330,13 @@ function App() {
               ></Route>
 
               <Route
+                path="/tickets"
+                element={
+                  user && user.role ? <PGTickets /> : <Navigate to="/login" />
+                }
+              ></Route>
+
+              <Route
                 path="/userdashboard"
                 element={
                   user && user.role === "user" ? (
@@ -324,7 +350,8 @@ function App() {
               <Route
                 path="/ownerdashboard"
                 element={
-                  user && user.role === "owner" ? (
+                  (user && user.role === "owner") ||
+                  (user && user.role === "coowner") ? (
                     <PGOwnerDashboard />
                   ) : (
                     <Navigate to="/login" />
@@ -342,6 +369,44 @@ function App() {
                 }
               ></Route>
 
+              {/* propagent  */}
+              <Route
+                path="/agentdashboard"
+                element={
+                  user && user.role === "propagent" ? (
+                    <PGAgentDashboard></PGAgentDashboard>
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+              <Route
+                path="/agentproperties"
+                element={
+                  user && user.role === "propagent" ? (
+                    <PGAgentProperties></PGAgentProperties>
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+              <Route
+                path="/agentaddproperties"
+                element={
+                  user && user.role === "propagent" ? (
+                    <PGAgentAddProperties></PGAgentAddProperties>
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              ></Route>
+                  <Route
+                path="/agenthome"
+                element={            
+                    <PropAgentHome></PropAgentHome>               
+                }
+              ></Route>
+              {/* propagent  */}
               <Route
                 path="/more"
                 element={user ? <More /> : <Navigate to="/login" />}
@@ -361,7 +426,7 @@ function App() {
               <Route
                 path="/executivedashboard"
                 element={
-                  user && user.role === "executive" ? (
+                  user && user.role === "propertymanager" ? (
                     <ExecutiveDashboard />
                   ) : (
                     <Navigate to="/login" />
