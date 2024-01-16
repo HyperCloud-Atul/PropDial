@@ -1,0 +1,285 @@
+.loginsignpg {
+    display: flex;
+    min-height: 90vh;
+}
+
+.ls_sidebar {
+    width: 30%;
+    transition: width 0.5s ease;
+    /* Updated transition property */
+    box-sizing: border-box;
+    padding: 30px;
+    /* transform: translateX(0%); */
+}
+
+.lss_content {
+    position: relative;
+    z-index: 9;
+}
+
+.lss_content h3 {
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 33px;
+    color: #fff;
+    margin-bottom: 20px !important;
+}
+
+.lss_content ul li {
+    width: 100%;
+    height: auto;
+    list-style: none;
+    margin: 0px !important;
+    padding: 10px 0 10px 19px !important;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    line-height: 19px;
+    position: relative;
+}
+
+.lss_content ul li .li_icon {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.ls_sidebar .open_close_icon {
+    position: absolute;
+    top: 50%;
+    right: 2px;
+    transform: translateY(-50%);
+    color: white;
+    z-index: 9;
+}
+
+.sidebar-close .ls_sidebar {
+    transition: width 0.5s ease;
+    /* Updated transition property */
+    width: 2%;
+    padding: 0px;
+    /* transform: translateX(-92%); */
+}
+
+
+.sidebar-close .ls_sidebar .lss_content {
+    display: none;
+
+}
+
+.sidebar-close .ls_sidebar .open_close_icon {
+    right: 7px;
+}
+
+.ls_sidebar .open_close_icon span {
+    transition: transform 0.6s;
+    /* Updated transition property */
+    cursor: pointer;
+}
+
+.sidebar-close .ls_sidebar .open_close_icon span {
+    transform: rotate(180deg);
+    transition: transform 0.6s;
+    /* Updated transition property */
+}
+
+/* right form css start  */
+
+.right_main_form {
+
+    width: 70%;
+    transition: width 0.5s ease;
+    /* Updated transition property */
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-close .right_main_form {
+    transition: width 0.5s ease;
+    /* Updated transition property */
+    width: 98%;
+}
+
+.rmf_inner {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 7px;
+    border: 1px solid #d7d7d7;
+    box-sizing: border-box;
+    min-width: 405px;
+    max-width: 405px;
+}
+
+.rmf_inner h4.title {
+    font-size: 22px;
+    color: #303030;
+    font-weight: 600;
+    padding-top: 11px;
+    min-height: 37px;
+    padding-bottom: 14px !important;
+
+}
+
+.form_footer {
+    padding: 30px 15px;
+    color: #303030;
+    background: #f7f7f7;
+    margin: 30px -20px -20px -20px;
+    text-align: center;
+}
+
+/* right form css start  */
+
+
+/* floating label css start  */
+.fl_form_field {
+    position: relative;
+}
+
+/* .floating-label {
+    
+    pointer-events: none;
+  
+    left: 0px;
+    top: 64%;
+    transform: translateY(-50%);
+    transition: transform 0.3s, font-size 0.3s;
+} */
+
+.no-floating {
+    position: absolute;
+    margin: 0px;
+    font-size: 14px;
+    color: #909090;
+    top: 5px;
+    left: 12px;
+}
+
+
+.react-tel-input input.form-control {
+    border: 1px solid #d7d7d7;
+    border-radius: 0px;
+    padding: 25px 12px 6px 12px;
+    border-radius: 7px;    
+}
+.react-tel-input .special-label {
+    position: absolute;
+    margin: 0px; 
+    font-size: 14px;
+    color: #909090;   
+    top: 5px;
+    left: 12px;
+}
+.fl_form_field input {
+    border: 1px solid #d7d7d7;   
+    padding: 25px 12px 6px 12px;
+    border-radius: 7px;
+}
+.fl_form_field select, .fl_form_field textarea {
+    border: 1px solid #d7d7d7;
+    padding: 25px 12px 6px 12px;
+    border-radius: 7px;
+    width: 100%;
+}
+.fl_form_field.top_margin{
+    margin-top: 15px;
+}
+input.form-control:focus {
+    box-shadow: none;
+    border-color: var(--p-theme-grey);
+}
+.fl_form_field input:focus {
+    border-color: var(--p-theme-grey);
+}
+
+
+.field_icon.hs_pass.pointer {
+    right: 0px;
+    left: inherit;
+    bottom: 0;
+    top: inherit;
+}
+/* remove  */
+.fl_form_field input:placeholder-shown + .floating-label {
+    transform: translateY(-50%) scale(1);
+    font-size: 16px;
+    color: #909090;
+    left: 0;
+}
+.fl_form_field input:-webkit-autofill,
+.fl_form_field input:-webkit-autofill:hover {
+    box-shadow: 0 0 0 30px white inset !important; /* Adjust the box-shadow color */
+}
+.floating-label {
+    z-index: 1;
+}
+/* remove  */
+/* floating label css end  */
+
+
+@media only screen and (max-width: 1199px) {
+    .ls_sidebar {
+        display: none;
+    }
+
+    .right_main_form {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .right_main_form {
+        padding: 15px;
+        /* background-image: none !important; */
+        display: block;
+        min-height: 80vh;
+        position: relative;
+
+    } 
+    .otp_input_parent {      
+        background: white;
+    }
+    
+    
+    .rmf_inner {
+        background-color: transparent;
+        padding: 0px;
+        border-radius: 0px;
+        border: none;
+      
+        display: flex;
+        height: 84%;
+        align-items: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .rmf_inner h4.title {
+        font-size: 26px;
+        text-align: center;
+        /* margin-top: 40px !important; */
+    }
+
+    .form_footer {
+        margin: 30px -15px 0px -15px;
+        position: absolute;
+        width: 100%;
+        /* left: 0; */
+        bottom: 0;
+    }
+
+    .loginsignpg {
+        min-height: inherit;
+    }
+    .form_footer {
+        display: none;
+    }
+}
+@media only screen and (max-width: 575px) {
+    .rmf_inner {
+max-width: inherit;
+min-width: inherit;
+    }
+}

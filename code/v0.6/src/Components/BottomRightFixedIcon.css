@@ -1,0 +1,52 @@
+.brf_icon {
+    display: grid;
+    gap: 10px;
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 99;
+}
+.brfi_single {
+    width: 55px;
+    height: 55px;
+    padding: 3px;
+    background: var(--p-theme-orange);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.brfi_single span.material-symbols-outlined {
+    color: var(--white-color);
+    font-size: 45px;
+    background: var(--p-theme-purple);
+    border-radius: 50%;
+}
+.brfi_single:hover {  
+    background: var(--p-theme-purple);
+    transition: 0.3s;
+
+}
+.brfi_single img{
+    width: 100%;
+}
+.brfi_single:hover span.material-symbols-outlined{
+    background: var(--p-theme-orange);
+}
+
+@media only screen and (max-width: 1199px) {
+.brf_icon {
+    bottom: 80px; 
+}
+}
+@media only screen and (max-width: 767px) {
+    .brfi_single {
+        width: 40px;
+        height: 40px;
+    }
+    .brfi_single span.material-symbols-outlined {        
+        font-size: 32px;      
+    }
+}

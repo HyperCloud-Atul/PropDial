@@ -1,0 +1,72 @@
+/* sanskar css start  */
+.search_card {   
+    position: relative;
+  
+}
+.sc_first_row{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;   
+    align-items: center;
+}
+.sc_second_row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;   
+    align-items: center;
+}
+.trs_single {
+    width: 23%;
+    margin-top: 22px !important;
+}
+.frs_single{
+    width: 32%;
+}
+.expand_btn {
+    display: flex;
+    align-items: center;
+    gap: 2px;   
+    height: 25px;
+    color: var(--theme-green);
+    border-bottom: 1px solid var(--theme-green);
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    cursor: pointer;
+}
+span.expand_less {
+    display: none;
+}
+.advanced_search span.expand_less {
+    display: inherit;
+}
+
+
+.see_img_doc a{   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 35%;
+    height: 90px;
+    border-radius: 10px;
+    background: #efefef;
+    padding: 10px;
+    cursor: pointer;
+    color: #444;
+   
+}
+.see_img_doc a h6{
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 10px !important;
+    text-transform: uppercase;
+}
+.property_status .right img{
+    height: 200px;
+}
+.property_status .right h6{
+    font-size: 1.1rem;
+    margin-top: 10px !important;
+    color: var(--theme-orange);
+}

@@ -1,0 +1,223 @@
+/* pg about content css start  */
+
+.abcr_div {
+    border: 4px solid var(--theme-orange);
+    position: absolute;
+    top: -120px;
+    padding: 25px;
+    left: 95px;
+    background: white;
+    max-width: 382px;
+    width: 100%;
+}
+.abcr_div h4 {
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: capitalize;
+    line-height: 28px;
+    margin-bottom: 55px !important;
+    color: #303030;
+}
+.about_content .abc_left {
+    position: relative;
+    top: -30px;
+}
+.abcr_div .our_ex h6 {
+    font-size: 14px;
+    font-weight: 400;
+}
+.abcr_div .our_ex h3 {
+    font-size: 100px;
+    letter-spacing: 4px;
+    position: relative;
+    display: inline-block;
+    color: #303030;
+}
+
+.abcr_div .our_ex h3:after {
+    content: '';
+    width: 100px;
+    height: 100px;
+    background: var(--theme-orange);
+    position: absolute;
+    border-radius: 50%;
+    right: 0px;
+    opacity: 0.4;
+}
+.about_content .abc_left h2 {
+    max-width: 412px;
+    font-size: 35px;
+    margin-bottom: 20px !important;
+    color: #303030;
+}
+
+.about_content .abc_left p {
+    margin-bottom: 8px !important;
+    font-size: 16px;
+    color: grey;
+}
+.about_content .abc_left p:last-child {
+    margin-bottom: 0px !important;
+}
+.abc_left button.theme_btn.btn_fill {
+    margin-top: 10px;
+    padding: 10px 28px;
+}
+.main_about_content h3 {
+    font-size: 35px;
+    margin-bottom: 22px !important;
+}
+.main_about_content h6 {
+    margin-top: 14px !important;
+    font-size: 18px;
+}
+@media (max-width: 991px) {
+.abc_right {
+    text-align: center;
+    margin-top: 75px;
+}
+.about_content .abc_left {
+    top: 0px;
+    margin-top: 30px;
+}
+
+}
+@media (max-width: 767px) {
+    .abcr_div {
+        top: -75px;
+        padding: 10px;
+        left: 50px;
+        max-width: 215px;
+        text-align: center;
+    }
+.abcr_div h4 {
+    font-size: 18px; 
+    line-height: 22px;
+    margin-bottom: 22px !important;
+}
+.abcr_div .our_ex h6 {
+    font-size: 12px; 
+}
+.abcr_div .our_ex h3 {
+    font-size: 55px;  
+}
+.abcr_div .our_ex h3:after {   
+    width: 60px;
+    height: 60px;  
+    right: 0px;
+
+}
+.abc_right img {
+    max-width: 230px;
+    width: 100%;
+}
+.about_content .abc_left {  
+    margin-top: 15px;
+}
+.about_content .abc_left h2 {   
+    font-size: 22px;
+    margin-bottom: 5px !important;
+}
+.about_content .abc_left p {
+    margin-bottom: 5px !important;
+    font-size: 14px;
+}
+}
+
+/* main about us content css start  */
+section.main_about_content.sect_padding {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--white-color);
+    z-index: 1;
+}
+section.main_about_content:after {
+    content: '';
+    background: black;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+.mabc_right p{
+    color: lightgrey;
+}
+@media (min-width: 992px) {
+    .mabc_right{
+        padding-left: 60px;
+    }
+}
+@media (max-width: 991px) {
+.mabc_right {   
+    margin-top: 40px;
+}
+}
+@media (max-width: 767px) {
+    .mabc_right {
+        margin-top: 25px;
+    }
+    .main_about_content h3 {
+        font-size: 22px;
+        margin-bottom: 10px !important;
+    }
+    .mabc_right p {    
+        font-size: 14px;
+    }
+    .main_about_content h6 {       
+        font-size: 16px;
+    }
+    
+    
+}
+/* our vision section css start  */
+.our_vision {
+    background: #0000009c;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.our_vision .section_title_effect {
+    font-size: 45px;
+    -webkit-text-stroke-color: var(--theme-orange);
+}
+.vision_points .vs_single .bullet_icon {
+    position: absolute;
+    height: 18px;
+    left: 0;
+    top: 4px;
+}
+
+.vision_points .vs_single {
+    position: relative;
+    padding-left: 25px;
+    margin-top: 12px !important;
+    line-height: 20px;
+}
+.vision_points .vs_single:first-child {
+    margin-top: 0px !important;    
+}
+@media (max-width: 767px) {
+    .our_vision .section_title_effect {
+        font-size: 24px;
+        -webkit-text-stroke-color: var(--theme-orange);
+        margin-bottom: 20px;
+    }
+    .vision_points .vs_single {
+        position: relative;
+        padding-left: 20px;
+        margin-top: 12px !important;
+        line-height: 20px;
+        font-size: 14px;
+    }
+    .vision_points .vs_single .bullet_icon {    
+        height: 12px;     
+    }
+}
+/* our vision section css end  */
+
