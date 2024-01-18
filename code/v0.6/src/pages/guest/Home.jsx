@@ -1,7 +1,51 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+import Blog from "../../component/Blog";
 
 const Home = () => {
+  const testimonialResponsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 2,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 2,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 1,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+  const blogOptions = {
+    items: 3,
+    dots: false,
+    loop: true,
+    margin: 30,
+    nav: false,
+    smartSpeed: 1500,
+    autoplay: true,
+    autoplayTimeout: 3000,
+    responsive: {
+      // Define breakpoints and the number of items to show at each breakpoint
+      0: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+      992: {
+        items: 3,
+      },
+    },
+  };
   return (
     <div className="home_pg">
       <div className="home_inner">
@@ -331,143 +375,329 @@ const Home = () => {
             </div>
           </div>
         </section>
-        <section
-        className="sect_services"
-      
-      >
-      <div className="section-services sect_padding relative"
-        style={{
-          backgroundImage: "url('./assets/img/service_bg.jpg')",
-        }}>
-      <div className="container">
-          <div className="section_title">
-            <h2 class="section_title_effect">Services</h2>
-            <h3>Services offered in our PMS package</h3>
+        <section className="sect_services">
+          <div
+            className="section-services sect_padding relative"
+            style={{
+              backgroundImage: "url('./assets/img/service_bg.jpg')",
+            }}
+          >
+            <div className="container">
+              <div className="section_title">
+                <h2 class="section_title_effect">Services</h2>
+                <h3>Services offered in our PMS package</h3>
+              </div>
+              <div className="row oneline_parent">
+                <div className="col-md-6 col-lg-4 op_child">
+                  <div className="single-service">
+                    <div className="content">
+                      <span className="icon">
+                        <span class="material-symbols-outlined">cottage</span>
+                      </span>
+                      <h3 className="title">Property On Boarding</h3>
+                      <p className="description">
+                        Once the PMS agreement is signed by the property owner,
+                        propdial assigns a dedicated property manager, who
+                        collects the keys and conducts a full inspection to
+                        prepare the property for renting
+                      </p>
+                      <Link to="/about-us" className="learn-more">
+                        know more
+                      </Link>
+                    </div>
+                    <span className="circle-before"></span>
+                  </div>
+                </div>
+                <div className="col-md-6 col-lg-4 op_child">
+                  <div className="single-service">
+                    <div className="content">
+                      <span className="icon">
+                        <span class="material-symbols-outlined">
+                          manage_search
+                        </span>
+                      </span>
+                      <h3 className="title">Tenant Discovery</h3>
+                      <p className="description">
+                        Our wide network of offline brokers and extensive reach
+                        across online platforms ensure we do not miss out on any
+                        potential tenant.
+                      </p>
+                      <Link to="/about-us" className="learn-more">
+                        know more
+                      </Link>
+                    </div>
+                    <span className="circle-before"></span>
+                  </div>
+                </div>
+                <div className="col-md-6 col-lg-4 op_child">
+                  <div className="single-service">
+                    <div className="content">
+                      <span className="icon">
+                        <span class="material-symbols-outlined">handshake</span>
+                      </span>
+                      <h3 className="title">Tenant On Board</h3>
+                      <p className="description">
+                        You will never be required to visit the house. We
+                        facilitate a thorough professional background check of
+                        tenants to avoid any surprises. Also, all rental
+                        paperwork will be taken care of by our team in India.
+                      </p>
+                      <Link to="/about-us" className="learn-more">
+                        know more
+                      </Link>
+                    </div>
+                    <span className="circle-before"></span>
+                  </div>
+                </div>
+                <div className="col-md-6 col-lg-4 op_child">
+                  <div className="single-service">
+                    <div className="content">
+                      <span className="icon">
+                        <span class="material-symbols-outlined">article</span>
+                      </span>
+                      <h3 className="title">Property Inspections</h3>
+                      <p className="description">
+                        We conduct a thorough property inspection at the time of
+                        move-in and move-out and provide detailed reports to the
+                        owner for transparency. In addition to that, we also
+                        conduct issue-based and periodic property inspections
+                        and provide detailed reports to the owner.
+                      </p>
+                      <Link to="/about-us" className="learn-more">
+                        know more
+                      </Link>
+                    </div>
+                    <span className="circle-before"></span>
+                  </div>
+                </div>
+                <div className="col-md-6 col-lg-4 op_child">
+                  <div className="single-service">
+                    <div className="content">
+                      <span className="icon">
+                        <span class="material-symbols-outlined">
+                          engineering
+                        </span>
+                      </span>
+                      <h3 className="title">Maintenance Services</h3>
+                      <p className="description">
+                        We have an in-house and partner team of plumbers,
+                        carpenters, handymen, construction workers etc. to
+                        provide all the maintenance services, from deep cleaning
+                        to painting, on a demand basis.
+                      </p>
+                      <Link to="/about-us" className="learn-more">
+                        know more
+                      </Link>
+                    </div>
+                    <span className="circle-before"></span>
+                  </div>
+                </div>
+                <div className="col-md-6 col-lg-4 op_child">
+                  <div className="single-service">
+                    <div className="content">
+                      <span className="icon">
+                        <span class="material-symbols-outlined">
+                          description
+                        </span>
+                      </span>
+                      <h3 className="title">Personalised Dashboard</h3>
+                      <p className="description">
+                        Our dashboard includes an online document vault,
+                        transaction history of the tenant, personal expense
+                        tracker, inspection reports, and more, accessible at the
+                        click of a button.
+                      </p>
+                      <Link to="/about-us" className="learn-more">
+                        know more
+                      </Link>
+                    </div>
+                    <span className="circle-before"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="row oneline_parent">
-            <div className="col-md-6 col-lg-4 op_child">
-              <div className="single-service">
-                <div className="content">
-                  <span className="icon">
-                    <span class="material-symbols-outlined">cottage</span>
-                  </span>
-                  <h3 className="title">Property On Boarding</h3>
-                  <p className="description">
-                    Once the PMS agreement is signed by the property owner,
-                    propdial assigns a dedicated property manager, who collects
-                    the keys and conducts a full inspection to prepare the
-                    property for renting
-                  </p>
-                  <Link to="/about-us" className="learn-more">
-                    know more
-                  </Link>
+        </section>
+        <section className="sect_founder_speak">
+          <div className="founder_speak sect_padding relative">
+            <div className="container">
+              <div className="row reverse-1199">
+                <div className="col-xl-8">
+                  <div className="fs_left">
+                    <div className="section_title">
+                      <div class="section_title_effect">FOUNDER'S SPEAK</div>
+                      <h3>Click and watch video</h3>
+                    </div>
+                    <div className="image_sect">
+                      <iframe
+                        className="img_div"
+                        src="https://www.youtube.com/embed/RphaFtAR8pw"
+                        title="Founder's Video 1"
+                        frameBorder="0"
+                        allowFullScreen
+                      ></iframe>
+                      <iframe
+                        className="img_div"
+                        src="https://www.youtube.com/embed/H2bDZ4WLlyA"
+                        title="Founder's Video 2"
+                        frameBorder="0"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  </div>
                 </div>
-                <span className="circle-before"></span>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-4 op_child">
-              <div className="single-service">
-                <div className="content">
-                  <span className="icon">
-                    <span class="material-symbols-outlined">manage_search</span>
-                  </span>
-                  <h3 className="title">Tenant Discovery</h3>
-                  <p className="description">
-                    Our wide network of offline brokers and extensive reach
-                    across online platforms ensure we do not miss out on any
-                    potential tenant.
-                  </p>
-                  <Link to="/about-us" className="learn-more">
-                    know more
-                  </Link>
+                <div className="col-xl-4">
+                  <div className="fs_right">
+                    <div className="fsr_inner">
+                      <div className="section_title">
+                        <h3>We make your life a lot easier...</h3>
+                        <h6>Understand in Just 2 min!</h6>
+                      </div>
+                      <iframe
+                        className="img_div"
+                        height="200px"
+                        src="https://www.youtube.com/embed/JV-lPfuBl20"
+                        title="Intro Video"
+                        frameBorder="0"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  </div>
                 </div>
-                <span className="circle-before"></span>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-4 op_child">
-              <div className="single-service">
-                <div className="content">
-                  <span className="icon">
-                    <span class="material-symbols-outlined">handshake</span>
-                  </span>
-                  <h3 className="title">Tenant On Board</h3>
-                  <p className="description">
-                    You will never be required to visit the house. We facilitate
-                    a thorough professional background check of tenants to avoid
-                    any surprises. Also, all rental paperwork will be taken care
-                    of by our team in India.
-                  </p>
-                  <Link to="/about-us" className="learn-more">
-                    know more
-                  </Link>
-                </div>
-                <span className="circle-before"></span>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-4 op_child">
-              <div className="single-service">
-                <div className="content">
-                  <span className="icon">
-                    <span class="material-symbols-outlined">article</span>
-                  </span>
-                  <h3 className="title">Property Inspections</h3>
-                  <p className="description">
-                    We conduct a thorough property inspection at the time of
-                    move-in and move-out and provide detailed reports to the
-                    owner for transparency. In addition to that, we also conduct
-                    issue-based and periodic property inspections and provide
-                    detailed reports to the owner.
-                  </p>
-                  <Link to="/about-us" className="learn-more">
-                    know more
-                  </Link>
-                </div>
-                <span className="circle-before"></span>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-4 op_child">
-              <div className="single-service">
-                <div className="content">
-                  <span className="icon">
-                    <span class="material-symbols-outlined">engineering</span>
-                  </span>
-                  <h3 className="title">Maintenance Services</h3>
-                  <p className="description">
-                    We have an in-house and partner team of plumbers,
-                    carpenters, handymen, construction workers etc. to provide
-                    all the maintenance services, from deep cleaning to
-                    painting, on a demand basis.
-                  </p>
-                  <Link to="/about-us" className="learn-more">
-                    know more
-                  </Link>
-                </div>
-                <span className="circle-before"></span>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-4 op_child">
-              <div className="single-service">
-                <div className="content">
-                  <span className="icon">
-                    <span class="material-symbols-outlined">description</span>
-                  </span>
-                  <h3 className="title">Personalised Dashboard</h3>
-                  <p className="description">
-                    Our dashboard includes an online document vault, transaction
-                    history of the tenant, personal expense tracker, inspection
-                    reports, and more, accessible at the click of a button.
-                  </p>
-                  <Link to="/about-us" className="learn-more">
-                    know more
-                  </Link>
-                </div>
-                <span className="circle-before"></span>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      </section>
+        </section>
+        <section className="sect_testimonial">
+          <div className="sect_padding testimonial_sect">
+            <div className="container">
+              <div className="section_title">
+                <h2 class="section_title_effect">Audible Testimonial</h2>
+                <h3>
+                  Clients Radio Interview, We collect reviews from our
+                  customers.
+                </h3>
+              </div>
+
+              <Carousel
+                swipeable={true}
+                draggable={true}
+                showDots={true}
+                responsive={testimonialResponsive}
+                ssr={true} // means to render carousel on the server-side.
+                infinite={true}
+                autoPlay={false} // Enable auto-play for the second carousel
+                // autoPlaySpeed={4000}
+                keyBoardControl={true}
+                customTransition="all .5"
+                transitionDuration={500}
+                // containerClass="carousel-container"
+                removeArrowOnDeviceType={[]}
+                // dotListClass="custom-dot-list-style"
+                // itemClass="carousel-item-padding-40-px"
+                className="carousel_container"
+              >
+                <div className="testimonial_single relative">
+                  <h5>
+                    Propdial brought convenience and efficiency to managing my
+                    Indian property
+                  </h5>
+                  <audio controls className="c_interview">
+                    <source src="./assets/audio/parvinder-1.mp3" />
+                  </audio>
+                  <div className="client_info_div">
+                    <div className="client_img">
+                      <img src="./assets/img/client_img_1.jpg" alt="" />
+                    </div>
+                    <div className="client_info">
+                      <h4>Mr. Parvinder</h4>
+                      <h6>Satisfied Propdial Client</h6>
+                    </div>
+                    <div className="quote_down quote">
+                      <img src="./assets/img/quote.png" alt="" />
+                    </div>
+                    <div className="quote_up quote">
+                      <img src="./assets/img/quote.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+                <div className="testimonial_single relative">
+                  <h5>
+                    Propdial's service bridged the gap for managing my Indian
+                    property
+                  </h5>
+                  <audio controls className="c_interview">
+                    <source src="./assets/audio/snehlata-1.mp3" />
+                  </audio>
+                  <div className="client_info_div">
+                    <div className="client_img">
+                      <img src="./assets/img/client_img_2.jpg" alt="" />
+                    </div>
+                    <div className="client_info">
+                      <h4>Mrs. Sneh Lata</h4>
+                      <h6>Satisfied Propdial Client</h6>
+                    </div>
+                    <div className="quote_down quote">
+                      <img src="./assets/img/quote.png" alt="" />
+                    </div>
+                    <div className="quote_up quote">
+                      <img src="./assets/img/quote.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+                <div className="testimonial_single relative">
+                  <h5>
+                    Propdial made managing my Indian property from the US
+                    effortless.
+                  </h5>
+                  <audio controls className="c_interview">
+                    <source src="./assets/audio/sachin-1.mp3" />
+                  </audio>
+                  <div className="client_info_div">
+                    <div className="client_img">
+                      <img src="./assets/img/client_img_3.jpg" alt="" />
+                    </div>
+                    <div className="client_info">
+                      <h4>Mr. Sachin Jain</h4>
+                      <h6>US Resident</h6>
+                    </div>
+                    <div className="quote_down quote">
+                      <img src="./assets/img/quote.png" alt="" />
+                    </div>
+                    <div className="quote_up quote">
+                      <img src="./assets/img/quote.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+                <div className="testimonial_single relative">
+                  <h5>
+                    Propdial made long-distance property management hassle-free
+                    and stress-free.
+                  </h5>
+                  <audio controls className="c_interview">
+                    <source src="./assets/audio/nishant-1.mp3" />
+                  </audio>
+                  <div className="client_info_div">
+                    <div className="client_img">
+                      <img src="./assets/img/client_img_6.jpg" alt="" />
+                    </div>
+                    <div className="client_info">
+                      <h4>Mr. Nishant Sharma</h4>
+                      <h6>Satisfied Propdial Client</h6>
+                    </div>
+                    <div className="quote_down quote">
+                      <img src="./assets/img/quote.png" alt="" />
+                    </div>
+                    <div className="quote_up quote">
+                      <img src="./assets/img/quote.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+              </Carousel>
+            </div>
+          </div>
+        </section>
+   <Blog/>
       </div>
     </div>
   );

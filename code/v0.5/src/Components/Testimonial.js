@@ -4,7 +4,7 @@ import "react-multi-carousel/lib/styles.css";
 import "./Testimonial.css";
 
 const ProductCarousel = () => {
-  const responsive = {
+  const testimonialResponsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
       items: 2,
@@ -35,7 +35,7 @@ const ProductCarousel = () => {
           swipeable={true}
           draggable={true}
           showDots={true}
-          responsive={responsive}
+          responsive={testimonialResponsive}
           ssr={true} // means to render carousel on the server-side.
           infinite={true}
           autoPlay={false} // Enable auto-play for the second carousel
