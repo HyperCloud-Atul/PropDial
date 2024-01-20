@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 // guest component 
 import Home from "./pages/guest/Home";
 import Navbar from "./component/Navbar";
+import TopFiveFaq from "./component/TopFiveFaq";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>}></Route>
       </Routes>
+<TopFiveFaq/>
     </BrowserRouter>
   );
 }

@@ -26,8 +26,15 @@ export default function Footer() {
    const shouldClassAdd = excludedFooterPaths.includes(location.pathname);
    const footerClassName = `footer-section ${shouldClassAdd ? "" : "margin-padding"}`;
    //  add class on footer  display none Array 
+
+      // hide page_footer array 
+      const pageFooterHidePaths = ["/phonelogin"];
+      const shouldPageFooerHide = pageFooterHidePaths.includes(location.pathname);
+      const pageFooterClass= `${shouldPageFooerHide ? "page_footer_hide" : ""}`;
+      // hide page_footer array 
+
   return (
-    <>
+    <div className={pageFooterClass}>
       <CollapsibleGroup></CollapsibleGroup>
       <FooterBefore></FooterBefore>
       <footer
@@ -182,6 +189,6 @@ export default function Footer() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

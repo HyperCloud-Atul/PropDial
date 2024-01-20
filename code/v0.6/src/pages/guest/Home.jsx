@@ -696,8 +696,7 @@ const Home = () => {
               </Carousel>
             </div>
           </div>
-        </section>
-   <Blog/>
+        </section> 
       </div>
     </div>
   );

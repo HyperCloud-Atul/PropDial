@@ -74,6 +74,11 @@ import PGSearch from "./pages/search/PGSearch";
 
 // import BillList from './components/BillList'
 
+// New component import start 
+import PhoneLogin from "./pages/login/PhoneLogin";
+
+// New component import start 
+
 function App() {
   const { authIsReady, user } = useAuthContext();
   // const [sideNavbar, setSideNavbar] = useState(null);
@@ -86,7 +91,7 @@ function App() {
   console.log("user in App.js", user);
   // console.log('user role in App.js', user.role)
 
-  useEffect(() => {}, [user]);
+  useEffect(() => { }, [user]);
 
   return (
     <div className="App">
@@ -351,7 +356,7 @@ function App() {
                 path="/ownerdashboard"
                 element={
                   (user && user.role === "owner") ||
-                  (user && user.role === "coowner") ? (
+                    (user && user.role === "coowner") ? (
                     <PGOwnerDashboard />
                   ) : (
                     <Navigate to="/login" />
@@ -400,10 +405,10 @@ function App() {
                   )
                 }
               ></Route>
-                  <Route
+              <Route
                 path="/agenthome"
-                element={            
-                    <PropAgentHome></PropAgentHome>               
+                element={
+                  <PropAgentHome></PropAgentHome>
                 }
               ></Route>
               {/* propagent  */}
@@ -499,6 +504,16 @@ function App() {
                 }
               ></Route>
               <Route path="/error" element={<PGError />}></Route>
+
+              {/* new route start  */}
+              <Route
+                path="/phonelogin"
+                element={<PhoneLogin/>}
+
+
+              ></Route>
+              {/* new route end  */}
+
             </Routes>
           </div>
 

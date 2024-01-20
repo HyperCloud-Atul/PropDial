@@ -274,13 +274,15 @@ input[type=number] {
     margin-right: -25px;
     width: auto;
 }
-.property-detail   .accordion-button::after {    
+
+.property-detail .accordion-button::after {
     position: absolute;
     left: 0;
     right: 0;
     margin: 0 auto;
-    bottom: 0;  
+    bottom: 0;
 }
+
 .property-detail .accordion button.accordion-button {
     padding: 0px;
     border: none !IMPORTANT;
@@ -346,21 +348,27 @@ input[type=number] {
     width: 33.3333333%;
     text-align: center;
 }
+
 .property_setup .react-tabs__tab--selected {
     border-bottom: 3px solid;
 }
-.property_setup .basic_detail_inner, .property_setup .map_inner {
+
+.property_setup .basic_detail_inner,
+.property_setup .map_inner {
     background: white;
-    margin-top: 10px;  
+    margin-top: 10px;
     padding: 20px 15px;
 }
-.property_setup .react-tabs__tab-panel--selected {   
-    margin-top: 10px;    
+
+.property_setup .react-tabs__tab-panel--selected {
+    margin-top: 10px;
 }
+
 .property_setup .col-lg-4.second_col {
     border-right: 2px solid #ededed;
     border-left: 2px solid #ededed;
 }
+
 #property_detail_accordion button.accordion-button {
     padding: 14px;
     background: var(--theme-green);
@@ -369,11 +377,13 @@ input[type=number] {
     font-size: 18px;
     font-weight: 400;
 }
+
 #property_detail_accordion .button_title {
     display: flex;
     gap: 10px;
     align-items: center;
 }
+
 #property_detail_accordion .accordion-body {
     padding: 15px;
     background: white;
