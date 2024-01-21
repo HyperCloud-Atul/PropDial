@@ -76,6 +76,7 @@ import PGSearch from "./pages/search/PGSearch";
 
 // New component import start 
 import PhoneLogin from "./pages/login/PhoneLogin";
+import PropertySingleCard from "./pages/property/PropertySingleCard";
 
 // New component import start 
 
@@ -512,6 +513,13 @@ function App() {
 
 
               ></Route>
+                   <Route
+                path="/propertysinglecard"
+                element={< PropertySingleCard/>}
+
+
+              ></Route>
+             
               {/* new route end  */}
 
             </Routes>
