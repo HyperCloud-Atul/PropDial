@@ -11,16 +11,14 @@ const PropertySingleCard = () => {
   // sexpand more expand less end
   return (
     <div
-      className="container"
+      className="top_header_pg"
       style={{
         background: "#f5f5f5",
       }}
-    >
-      <h1>hello world</h1>
-      <h1>hello world</h1>
-      <h1>hello world</h1>
-      <h1>hello world</h1>
-      <div className="property_cards_parent">
+    >    
+      <div className="property_cards_parent" style={{
+        padding:"22px"
+      }}>
         <div className="property_single_card">
           <div className="top relative">
             <div className="fav">

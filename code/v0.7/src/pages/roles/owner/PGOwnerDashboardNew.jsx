@@ -59,13 +59,11 @@ const PGOwnerDashboardNew = () => {
   // advertisement img option in owl carousel
   return (
     <div>
-      <h1>Hello world</h1>
-      <h1>Hello world</h1>
-      <h1>Hello world</h1>
-      <h1>Hello world</h1>
-      <h1>Hello world</h1>
       <div className="top_header_pg pa_bg propagent_dashboard">
-      <div className="pa_inner_page container">  
+      <div className="pa_inner_page" style={{
+        padding:"22px",
+        background:"whitesmoke"
+      }}>  
         <div className="pg_header">
           <h2 className="p_title">Dashboard</h2>
           <h4 className="p_subtitle">
@@ -131,7 +129,9 @@ const PGOwnerDashboardNew = () => {
             
               </div>
             </section>
-         
+            <div className="verticall_gap" style={{
+              height:"22px"
+            }}></div>
             <section className="self_property_detail">
               <div className="spd_single">
                 <div className="left residential">
@@ -188,7 +188,9 @@ const PGOwnerDashboardNew = () => {
                 </div>
               </div>
             </section>
-        
+            <div className="verticall_gap" style={{
+              height:"22px"
+            }}></div>
             <section className="add_section row">
               <div className="add_single col-lg-6">
                 <OwlCarousel className="owl-theme" {...addImgOptions2}>

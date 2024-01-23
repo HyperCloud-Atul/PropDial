@@ -1,7 +1,15 @@
 /* common css start  */
 :root {
     --p-theme-purple: #5A10D5;
-    --p-theme-orange: #FA6304;
+  --p-theme-orange: #FA6304;
+  --p-theme-grey: #888888;
+  --p-theme-green: #00a8a8;
+  --p-theme-green-bg: #e2ffe7;
+  --white-color: #fff;
+  --black-color: #000;
+  --light-black: #303030;
+  --p-theme-purple-bg: #efe5ff;
+  --p-theme-orange-bg: #ffefe5;
 }
 
 .navbarhide,
