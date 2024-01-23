@@ -1,0 +1,29 @@
+/* common css start  */
+:root {
+    --p-theme-purple: #5A10D5;
+    --p-theme-orange: #FA6304;
+}
+
+.navbarhide,
+.page_footer_hide {
+    display: none;
+}
+
+.page_inner_logo img {
+    width: 135px;
+    height: auto;
+}
+
+.m20 {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.my_click_text {
+    text-decoration: none;
+    color: var(--theme-green);
+}
+
+
+
+/* common css end*/
