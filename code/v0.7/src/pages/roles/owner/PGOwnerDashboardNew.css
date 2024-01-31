@@ -14,12 +14,12 @@
 
 .total_prop_card .content h4.title {
     font-size: 22px;
-    font-family: r_medium;
+    font-weight:500;
 }
 
 .total_prop_card .number {
     font-size: 44px;
-    font-family: r_bold;
+    font-weight:700;
     margin-left: 30px;
 }
 
@@ -30,7 +30,7 @@
 
 .total_prop_card .content h6 {
     font-size: 14px;
-    font-family: r_light;
+    font-weight:300;
 }
 
 .total_prop_card .content .bar {
@@ -72,7 +72,7 @@
 
 .propagent_dashboard_inner .ps_single h5 {
     font-size: 30px;
-    font-family: 'r_medium';
+    font-weight:500;
     margin-bottom: 5px !important;
 }
 
@@ -116,7 +116,7 @@
 }
 .property_detail_single .left h5 { 
     font-size: 30px;
-    font-family: 'r_medium';
+    font-weight:500;
     margin-top: 10px !important;
 }
 .property_detail_circular-progress {
@@ -145,7 +145,7 @@
 }
 .self_property_detail .spd_single .right h5{
     font-size: 30px;
-    font-family: 'r_medium';
+    font-weight:500;
     margin-top: 10px !important;
 }
 
@@ -200,7 +200,7 @@
 }
 .pi_cities_single h5 {
     font-size: 18px;
-    font-family: 'r_medium';
+    font-weight:500;
     margin-bottom: 3px !important;
 }
 .pi_cities_single .bar {
