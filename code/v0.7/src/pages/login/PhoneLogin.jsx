@@ -162,7 +162,7 @@ const PhoneLogin = () => {
       <div className="right col_right">
         <img src="./assets/img/login_img.jpeg" alt="" />
       </div>
-      <div className={`left col_left ${showOtpInput ? "show-otp" : ""}`}>
+      <div className="left col_left">
         {!otpSliderState && (
           <div className="left_inner col_left_inner">
             <div className="page_inner_logo">
@@ -173,12 +173,11 @@ const PhoneLogin = () => {
               Security.
             </h5>
             <form action="">
-              <div className="new_form_field with_icon">
+              <div className="new_form_field with_icon phoneinput">
                 <label htmlFor="" className="text-center">
                   Mobile Number
                 </label>
                 <div className="nff_inner">
-                  {/* <input type="number" placeholder="10 digit mobile number" /> */}
                   <PhoneInput
                     country={"in"}
                     // onlyCountries={['in', 'us']}
@@ -189,7 +188,7 @@ const PhoneLogin = () => {
                     // countryCallingCodeEditable={false}
                     countryCodeEditable={false}
                     // disableCountryCode={true}
-                    //   placeholder="10 Digit Phone Number"
+                    placeholder="10 Digit Phone Number"
                     inputProps={{
                       name: "phone",
                       required: true,
@@ -203,7 +202,7 @@ const PhoneLogin = () => {
               </div>
               <div className="new_form_field">
                 <div className="checkbox">
-                  <input type="checkbox" id="agree_tcp" />
+                  <input type="checkbox" id="agree_tcp" checked />
                   <label htmlFor="agree_tcp">
                     I agree to PropAgent{" "}
                     <Link to="" class="my_click_text">
@@ -216,13 +215,13 @@ const PhoneLogin = () => {
                   </label>
                 </div>
               </div>
+
               <div
-                className="d-flex justify-content-center"
-                style={{ margin: "10px 0px 10px 0px" }}
-              >
-                {" "}
-                <div id="recapcha-container"></div>
-              </div>
+                id="recapcha-container"
+                style={{
+                  marginTop: "20px",
+                }}
+              ></div>
               <div
                 className="p_theme_btn w_full"
                 onClick={handleOtpButtonClick}
@@ -280,36 +279,44 @@ const PhoneLogin = () => {
             </form>
           </div>
         )} */}
-            {otpSliderState && (
-                        <div className="d-flex justify-content-center flex-column align-items-center">
-                          <OtpInput
-                            value={otp}
-                            onChange={setOtp}
-                            numInputs={6}
-                            renderSeparator={
-                              <span style={{ margin: "10px 5px 20px 5px" }}>
-                                {" "}
-                                -{" "}
-                              </span>
-                            }
-                            renderInput={(props) => (
-                              <input
-                                {...props}
-                                type="number"
-                                onWheel={handleWheel}
-                                inputMode="numeric"
-                                style={{
-                                  width: "40px",
-                                  height: "40px",
-                                  border: "1px solid gray",
-                                  textAlign: "center",
-                                  borderRadius: "5px",
-                                  margin: "10px 0px 20px 0px",
-                                }}
-                              />
-                            )}
-                          />
-                          <p className="resend_otp_timer">
+        {otpSliderState && (
+          <div className="left_inner col_left_inner">
+            <div className="page_inner_logo">
+              <img src="/assets/img/logo_propdial.png" alt="" />
+            </div>
+            <h5 className="m20 mt-3 mb-4">
+              Unlocking Your Property Prospects: PropDial - Where Realty Meets
+              Security.
+            </h5>
+        <div className="otp_input">
+          <label htmlFor="">Enter 6 digit OTP</label>
+        <OtpInput
+           
+           value={otp}
+           onChange={setOtp}
+           numInputs={6}
+           renderSeparator={
+             <span style={{ margin: "10px 5px 20px 5px" }}> - </span>
+           }
+           renderInput={(props) => (
+             <input
+               {...props}
+               type="number"
+               onWheel={handleWheel}
+               inputMode="numeric"
+               style={{
+                 width: "40px",
+                 height: "40px",
+                 border: "1px solid gray",
+                 textAlign: "center",
+                 borderRadius: "5px",
+                 margin: "10px 0px 20px 0px",
+               }}
+             />
+           )}
+         />
+        </div>
+            {/* <p className="resend_otp_timer">
                             Haven't received the OTP?{" "}
                             {otptimer > 0 ? (
                               <span>Resend In {otptimer} seconds</span>
@@ -325,12 +332,12 @@ const PhoneLogin = () => {
                                 <a style={{ color: "blue" }}> Resend Now</a>{" "}
                               </span>
                             )}
-                          </p>
-                          <button className="btn_fill" onClick={verifyOTP}>
-                            Confirm
-                          </button>
-                        </div>
-                      )}
+                          </p> */}
+            <button className="p_theme_btn w_full" onClick={verifyOTP}>
+              Confirm
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -32,6 +32,11 @@
     color: var(--theme-green);
 }
 
-
+.vg10{
+    height: 10px;
+}
+.otp_input div {
+    justify-content: center;
+}
 
 /* common css end*/

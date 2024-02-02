@@ -5,7 +5,7 @@
     width: 50%;
     img {
       width: 100%;
-      aspect-ratio: 6/5.4;
+    height: 100vh;
       object-fit: cover;
     }
   }
@@ -14,7 +14,7 @@
     padding: 15px 30px;
     .col_left_inner {
       text-align: center;
-      max-width: 400px;
+      max-width: 445px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -84,6 +84,12 @@
       padding-right: 45px;
     }
   }
+  &.phoneinput {
+    .special-label{
+      display: none;
+    }
+   
+}
 }
 .p_theme_btn {
   background: linear-gradient(
