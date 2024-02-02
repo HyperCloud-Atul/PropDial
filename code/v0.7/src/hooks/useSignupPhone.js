@@ -1,23 +1,30 @@
-import { useState, useEffect, useRef } from 'react'
-import { projectFirestore, projectAuth, projectAuthObj } from '../firebase/config'
-import { useAuthContext } from './useAuthContext'
-import { timestamp } from '../firebase/config'
+import { useState, useEffect, useRef } from "react";
+import {
+  projectFirestore,
+  projectAuth,
+  projectAuthObj,
+} from "../firebase/config";
+import { useAuthContext } from "./useAuthContext";
+import { timestamp } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
 
 export const useSignupPhone = () => {
-  const [isCancelled, setIsCancelled] = useState(false)
-  const [error, setError] = useState(null)
-  const [isPending, setIsPending] = useState(false)
-  const { dispatch } = useAuthContext()
+  const [isCancelled, setIsCancelled] = useState(false);
+  const [error, setError] = useState(null);
+  const [isPending, setIsPending] = useState(false);
+  const { dispatch } = useAuthContext();
   let recaptchaVerifier = useRef(null);
   const [mobileNo, setMobileNo] = useState();
   const navigate = useNavigate();
 
   function setUpRecapcha(number) {
     // console.log('in setUpRecapcha', number);
-    setMobileNo(number)
+    setMobileNo(number);
     // recaptchaVerifier = new RecaptchaVerifier('recapcha-container', {}, auth);
-    recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recapcha-container', {});
+    recaptchaVerifier = new projectAuthObj.RecaptchaVerifier(
+      "recapcha-container",
+      {}
+    );
 
     // const recaptchaVerifier = new RecaptchaVerifier('recapcha-container', {}, auth);
     recaptchaVerifier.render();
@@ -27,7 +34,6 @@ export const useSignupPhone = () => {
   function resendOTP(number) {
     // console.log('In resendOTP: ', number)
     // console.log('recaptchaVerifier:', recaptchaVerifier)
-
     // return projectAuth.signInWithPhoneNumber(number, recaptchaVerifier);
   }
   // useEffect(() => {
@@ -54,7 +60,5 @@ export const useSignupPhone = () => {
   //     }
   // }, [projectAuthObj]);
 
-
-
-  return { setUpRecapcha, resendOTP, error, isPending }
-}
+  return { setUpRecapcha, resendOTP, error, isPending };
+};
