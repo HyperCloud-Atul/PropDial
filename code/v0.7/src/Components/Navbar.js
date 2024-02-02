@@ -205,11 +205,11 @@ export default function Navbar() {
   const socialMediaClass = `menu_social_media ${shouldSocialMediaHide ? "" : "d_none"}`;
   // array for header social media hide after login 
 
-   // hide navbar array 
-   const navbarHidePaths = ["/phonelogin"];
-   const shouldNavbarHide = navbarHidePaths.includes(location.pathname);
-   const navbarHideClass = `${shouldNavbarHide ? "navbarhide" : ""}`;
-   // hide navbar array 
+  // hide navbar array 
+  const navbarHidePaths = ["/phonelogin"];
+  const shouldNavbarHide = navbarHidePaths.includes(location.pathname);
+  const navbarHideClass = `${shouldNavbarHide ? "navbarhide" : ""}`;
+  // hide navbar array 
 
 
   // arrrays  end
@@ -315,7 +315,13 @@ export default function Navbar() {
                 </div>
               </Link> */}
             </li>
-            <li className={socialMediaClass}>
+            <li className="menu_social_media">
+              <Link to="/notification">
+              <span class="material-symbols-outlined">
+                notifications
+              </span>
+              </Link>
+          
               <Link
                 className="msm_single pointer"
                 to="https://www.facebook.com/propdial"

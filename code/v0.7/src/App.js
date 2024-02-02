@@ -78,7 +78,8 @@ import PGSearch from "./pages/search/PGSearch";
 import PhoneLogin from "./pages/login/PhoneLogin";
 import PropertySingleCard from "./pages/property/PropertySingleCard";
 import PGOwnerDashboardNew from "./pages/roles/owner/PGOwnerDashboardNew";
-
+import AddNotification from "./pages/create/AddNotification";
+import PGNotification from "./pages/notification/PGNotification";
 // New component import start 
 
 function App() {
@@ -524,8 +525,18 @@ function App() {
                 element={< PGOwnerDashboardNew />}
               ></Route>
 
+              <Route
+                path="/addnotification/:notificationid"
+                element={< AddNotification />}
+              ></Route>
 
-              PGOwnerDashboardNew
+<Route
+                path="/notification"
+                element={< PGNotification />}
+              ></Route>
+
+
+
 
               {/* new route end  */}
 

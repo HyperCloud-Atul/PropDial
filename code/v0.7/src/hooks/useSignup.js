@@ -21,7 +21,6 @@ export const useSignup = () => {
         throw new Error('Could not complete signup')
       }
 
-
       // upload user thumbnail
       // console.log('thumbnail in useSignup 1:', thumbnail)
       let imgUrl = ''
@@ -45,8 +44,11 @@ export const useSignup = () => {
       // add display AND PHOTO_URL name to user
       const lastIndex = displayName.lastIndexOf(" ");
       const firstName = displayName.substring(0, lastIndex);
+
+      console.log('first name: ', firstName)
       await res.user.updateProfile({ phoneNumber, displayName: firstName, photoURL: imgUrl })
 
+      // console.log('after updateProfile:', imgUrl)
       // Send an email verification link
       await res.user.sendEmailVerification();
 
@@ -54,8 +56,6 @@ export const useSignup = () => {
       const verificationLink = res.user.emailVerificationLink;
       console.log('email verificationLink:', verificationLink)
 
-
-      // console.log('after updateProfile:', imgUrl)
       // create a user document
       await projectFirestore.collection('users').doc(res.user.uid).set({
         online: true,
@@ -66,7 +66,7 @@ export const useSignup = () => {
         city: '',
         address: '',
         photoURL: imgUrl,
-        role: 'user',
+        role: 'propagent',
         status: 'active',
         createdAt: timestamp.fromDate(new Date()),
         lastLoginTimestamp: timestamp.fromDate(new Date())
@@ -79,6 +79,7 @@ export const useSignup = () => {
         setIsPending(false)
         setError(null)
       }
+
     }
     catch (err) {
       if (!isCancelled) {

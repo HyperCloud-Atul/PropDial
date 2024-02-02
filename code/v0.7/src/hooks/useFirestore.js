@@ -36,9 +36,10 @@ export const useFirestore = (collection) => {
 
   // only dispatch if not cancelled
   const dispatchIfNotCancelled = (action) => {
-    if (!isCancelled) {
-      dispatch(action)
-    }
+    // if (!isCancelled) {
+    dispatch(action)
+    // }
+
   }
 
   // add a document
@@ -48,13 +49,22 @@ export const useFirestore = (collection) => {
     try {
 
       const createdBy = {
+        id: user.uid,
         displayName: user.displayName + '(' + user.role + ')',
-        photoURL: user.photoURL,
-        id: user.uid
+        fullName: user.fullName,
+        phoneNumber: user.phoneNumber,
+        emailID: user.email,
+        photoURL: user.photoURL
       }
       const createdAt = timestamp.fromDate(new Date())
       const addedDocument = await ref.add({ ...doc, createdAt, createdBy })
-      dispatchIfNotCancelled({ type: 'ADDED_DOCUMENT', payload: addedDocument })
+
+      dispatchIfNotCancelled({
+        type: 'ADDED_DOCUMENT', payload: {
+          ...addedDocument,
+          id: addedDocument.id
+        }
+      })
     }
     catch (err) {
       console.log('Firestore adddocument err:', err)
@@ -82,6 +92,7 @@ export const useFirestore = (collection) => {
     try {
       // console.log("updateDocument id : ", id)
       // console.log("updateDocument data : ", updates)
+
       const updatedDocument = await ref.doc(id).update(updates)
       dispatchIfNotCancelled({ type: "UPDATED_DOCUMENT", payload: updatedDocument })
       return updatedDocument

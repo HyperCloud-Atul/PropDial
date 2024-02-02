@@ -38,5 +38,7 @@
 .otp_input div {
     justify-content: center;
 }
-
+.page_inner{
+    padding: 22px;
+}
 /* common css end*/

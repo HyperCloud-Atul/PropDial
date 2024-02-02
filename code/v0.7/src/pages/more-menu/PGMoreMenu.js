@@ -439,6 +439,14 @@ const PGMoreMenu = () => {
                   chevron_right
                 </span>
               </Link>
+              <Link className="mm_single" to="/addnotification/new">
+                <span class="material-symbols-outlined mms_icon">report</span>
+                <h5>Add notification</h5>
+                <h6>Lorem ipsum text dummy text</h6>
+                <span class="material-symbols-outlined mms_ra">
+                  chevron_right
+                </span>
+              </Link>
               <Link className="mm_single" to="">
                 <span class="material-symbols-outlined mms_icon">gavel</span>
                 <h5>Terms & Condition</h5>
