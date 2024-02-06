@@ -80,6 +80,8 @@ import PropertySingleCard from "./pages/property/PropertySingleCard";
 import PGOwnerDashboardNew from "./pages/roles/owner/PGOwnerDashboardNew";
 import AddNotification from "./pages/create/AddNotification";
 import PGNotification from "./pages/notification/PGNotification";
+import CreateTicket from "./chatboard/CreateTicket";
+import TicketDetail from "./chatboard/TicketDetail";
 // New component import start 
 
 function App() {
@@ -97,451 +99,468 @@ function App() {
   useEffect(() => { }, [user]);
 
   return (
-    <div className="App">
+    <div className="page">
       {authIsReady && (
         <BrowserRouter>
           {/* {user && <Sidebar setFlag={openSideNavbar} />} */}
           <Navbar />
           {/* <Navbar setFlag={openSideNavbar} /> */}
-
-          <div className={"full-content page"}>
-            <Routes>
-              {/* <Route path='/' element={
+          <Routes>
+            {/* <Route path='/' element={
                 user ? < PGProfile /> : <PGLogin />
               }>
               </Route> */}
 
-              <Route path="/" element={<Home></Home>}></Route>
-              <Route
-                path="/search-property"
-                element={<PGProperty></PGProperty>}
-              ></Route>
-              <Route
-                path="/pdsingle/:id"
-                element={<PDSingle></PDSingle>}
-              ></Route>
-              <Route path="/about-us" element={<PGAboutUs />}></Route>
-              <Route path="/contact-us" element={<PGContactUs />}></Route>
-              <Route path="/faq" element={<Faq></Faq>}></Route>
-              <Route
-                path="/more-menu"
-                element={<PGMoreMenu></PGMoreMenu>}
-              ></Route>
+            <Route path="/" element={<Home></Home>}></Route>
+            <Route
+              path="/search-property"
+              element={<PGProperty></PGProperty>}
+            ></Route>
+            <Route
+              path="/pdsingle/:id"
+              element={<PDSingle></PDSingle>}
+            ></Route>
+            <Route path="/about-us" element={<PGAboutUs />}></Route>
+            <Route path="/contact-us" element={<PGContactUs />}></Route>
+            <Route path="/faq" element={<Faq></Faq>}></Route>
+            <Route
+              path="/more-menu"
+              element={<PGMoreMenu></PGMoreMenu>}
+            ></Route>
 
-              <Route path="/adminsettings" element={<AdminSettings />}></Route>
+            <Route path="/adminsettings" element={<AdminSettings />}></Route>
 
-              <Route
-                path="/updatepwd"
-                element={user ? <UpdatePassword /> : <PGLogin />}
-              ></Route>
+            <Route
+              path="/updatepwd"
+              element={user ? <UpdatePassword /> : <PGLogin />}
+            ></Route>
 
-              <Route
-                exact
-                path="/superadmindashboard"
-                element={
-                  user && user.role === "superadmin" ? (
-                    <SuperAdminDashboard />
+            <Route
+              exact
+              path="/superadmindashboard"
+              element={
+                user && user.role === "superadmin" ? (
+                  <SuperAdminDashboard />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              exact
+              path="/userlist"
+              element={
+                user && user.role === "superadmin" ? (
+                  <PGUserList />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/admindashboard"
+              element={
+                user && user.role === "admin" ? (
+                  <PGAdminDashboard />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/adminproperties"
+              element={
+                user && user.role === "admin" ? (
+                  <PGAdminProperties />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/addproperty"
+              element={
+                user && user.role === "admin" ? (
+                  <PGAddProperty />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+            <Route
+              path="/addproperty_quick"
+              element={
+                user && user.role === "admin" ? (
+                  <PGAddPropertyQuick />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/addproperty/:propertyid"
+              element={
+                user && user.role === "admin" ? (
+                  <PGAddProperty />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/addbill/:propertyid"
+              element={
+                user && user.role === "admin" ? (
+                  <AddBill />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/addphoto"
+              element={
+                user && user.role === "admin" ? (
+                  <AddPhoto />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/adddocument"
+              element={
+                user && user.role === "admin" ? (
+                  <AddDocument />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+            <Route
+              path="/adddocumentnew"
+              element={
+                user && user.role === "admin" ? (
+                  <AddDocumentNew />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+            <Route
+              path="/users"
+              element={
+                user && user.role === "admin" ? (
+                  <UserList />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+            <Route
+              path="/pgpropertylist"
+              element={
+                user && user.role === "admin" ? (
+                  <PGPropertyList />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+            <Route
+              path="/pgsearch"
+              element={
+                user && user.role === "admin" ? (
+                  <PGSearch />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/propertystatus"
+              element={
+                user && user.role === "admin" ? (
+                  <PropertyStatus />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/propertyedit/:id"
+              element={
+                user && user.role === "admin" ? (
+                  <PGPropertyEdit />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/propertybills/:propertyid"
+              element={
+                user && user.role === "admin" ? (
+                  <PGPropertyBills />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/propertydetails"
+              element={
+                user && user.role ? (
+                  <PGPropertyDetails />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/bills"
+              element={
+                user && user.role ? <PGBills /> : <Navigate to="/login" />
+              }
+            ></Route>
+
+            <Route
+              path="/tickets"
+              element={
+                user && user.role ? <PGTickets /> : <Navigate to="/login" />
+              }
+            ></Route>
+
+            <Route
+              path="/userdashboard"
+              element={
+                user && user.role === "user" ? (
+                  <UserDashboard />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/ownerdashboard"
+              element={
+                (user && user.role === "owner") ||
+                  (user && user.role === "coowner") ? (
+                  <PGOwnerDashboard />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+            <Route
+              path="/ownerdashboardold"
+              element={
+                user && user.role === "owner" ? (
+                  <PGOwnerDashboardOld />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            {/* propagent  */}
+            <Route
+              path="/agentdashboard"
+              element={
+                user && user.role === "propagent" ? (
+                  <PGAgentDashboard></PGAgentDashboard>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+            <Route
+              path="/agentproperties"
+              element={
+                user && user.role === "propagent" ? (
+                  <PGAgentProperties></PGAgentProperties>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+            <Route
+              path="/agentaddproperties"
+              element={
+                user && user.role === "propagent" ? (
+                  <PGAgentAddProperties></PGAgentAddProperties>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+            <Route
+              path="/agenthome"
+              element={
+                <PropAgentHome></PropAgentHome>
+              }
+            ></Route>
+            <Route
+              path="/createticket"
+              element={
+                user && user.status === 'active' &&
+                  ((user.role !== "propagent") || user.role !== 'propagentadmin')
+                  ? (
+                    <CreateTicket />
                   ) : (
-                    <Navigate to="/login" />
+
+                    <Navigate to="/phonelogin" />
                   )
-                }
-              ></Route>
+              }
+            ></Route>
+            <Route
+              path="/ticketdetail"
+              element={
+                user && user.status === 'active' && (user.role !== "propagent" || user.role !== "propagentadmin") ?
+                  <TicketDetail /> : <Navigate to="/phonelogin" />
+              }
+            ></Route>
 
-              <Route
-                exact
-                path="/userlist"
-                element={
-                  user && user.role === "superadmin" ? (
-                    <PGUserList />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
+            <Route
+              path="/more"
+              element={user ? <More /> : <Navigate to="/login" />}
+            ></Route>
 
-              <Route
-                path="/admindashboard"
-                element={
-                  user && user.role === "admin" ? (
-                    <PGAdminDashboard />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
+            <Route
+              path="/tenantdashboard"
+              element={
+                user && user.role === "tenant" ? (
+                  <TenantDashboard />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
 
-              <Route
-                path="/adminproperties"
-                element={
-                  user && user.role === "admin" ? (
-                    <PGAdminProperties />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
+            <Route
+              path="/executivedashboard"
+              element={
+                user && user.role === "propertymanager" ? (
+                  <ExecutiveDashboard />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
 
-              <Route
-                path="/addproperty"
-                element={
-                  user && user.role === "admin" ? (
-                    <PGAddProperty />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/addproperty_quick"
-                element={
-                  user && user.role === "admin" ? (
-                    <PGAddPropertyQuick />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
+            <Route
+              path="/login"
+              element={user ? <Navigate to="/" /> : <PGLogin />}
+            ></Route>
+            <Route
+              path="/signup"
+              element={user ? <Navigate to="/" /> : <PGSignup />}
+            ></Route>
+            <Route
+              path="/profile"
+              element={user ? <PGProfile /> : <PGLogin />}
+            ></Route>
 
-              <Route
-                path="/addproperty/:propertyid"
-                element={
-                  user && user.role === "admin" ? (
-                    <PGAddProperty />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
+            {/* Master data */}
+            <Route
+              path="/countrylist"
+              element={
+                user && user.role === "admin" ? (
+                  <MasterCountryList />
+                ) : (
+                  <PGLogin />
+                )
+              }
+            ></Route>
+            <Route
+              path="/statelist"
+              element={
+                user && user.role === "admin" ? (
+                  <MasterStateList />
+                ) : (
+                  <PGLogin />
+                )
+              }
+            ></Route>
+            <Route
+              path="/citylist"
+              element={
+                user && user.role === "admin" ? (
+                  <MasterCityList />
+                ) : (
+                  <PGLogin />
+                )
+              }
+            ></Route>
+            <Route
+              path="/localitylist"
+              element={
+                user && user.role === "admin" ? (
+                  <MasterLocalityList />
+                ) : (
+                  <PGLogin />
+                )
+              }
+            ></Route>
+            <Route
+              path="/societylist"
+              element={
+                user && user.role === "admin" ? (
+                  <MasterSocietyList />
+                ) : (
+                  <PGLogin />
+                )
+              }
+            ></Route>
+            <Route path="/error" element={<PGError />}></Route>
 
-              <Route
-                path="/addbill/:propertyid"
-                element={
-                  user && user.role === "admin" ? (
-                    <AddBill />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/addphoto"
-                element={
-                  user && user.role === "admin" ? (
-                    <AddPhoto />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/adddocument"
-                element={
-                  user && user.role === "admin" ? (
-                    <AddDocument />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/adddocumentnew"
-                element={
-                  user && user.role === "admin" ? (
-                    <AddDocumentNew />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/users"
-                element={
-                  user && user.role === "admin" ? (
-                    <UserList />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/pgpropertylist"
-                element={
-                  user && user.role === "admin" ? (
-                    <PGPropertyList />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/pgsearch"
-                element={
-                  user && user.role === "admin" ? (
-                    <PGSearch />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/propertystatus"
-                element={
-                  user && user.role === "admin" ? (
-                    <PropertyStatus />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/propertyedit/:id"
-                element={
-                  user && user.role === "admin" ? (
-                    <PGPropertyEdit />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/propertybills/:propertyid"
-                element={
-                  user && user.role === "admin" ? (
-                    <PGPropertyBills />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/propertydetails"
-                element={
-                  user && user.role ? (
-                    <PGPropertyDetails />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/bills"
-                element={
-                  user && user.role ? <PGBills /> : <Navigate to="/login" />
-                }
-              ></Route>
-
-              <Route
-                path="/tickets"
-                element={
-                  user && user.role ? <PGTickets /> : <Navigate to="/login" />
-                }
-              ></Route>
-
-              <Route
-                path="/userdashboard"
-                element={
-                  user && user.role === "user" ? (
-                    <UserDashboard />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/ownerdashboard"
-                element={
-                  (user && user.role === "owner") ||
-                    (user && user.role === "coowner") ? (
-                    <PGOwnerDashboard />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/ownerdashboardold"
-                element={
-                  user && user.role === "owner" ? (
-                    <PGOwnerDashboardOld />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              {/* propagent  */}
-              <Route
-                path="/agentdashboard"
-                element={
-                  user && user.role === "propagent" ? (
-                    <PGAgentDashboard></PGAgentDashboard>
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/agentproperties"
-                element={
-                  user && user.role === "propagent" ? (
-                    <PGAgentProperties></PGAgentProperties>
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/agentaddproperties"
-                element={
-                  user && user.role === "propagent" ? (
-                    <PGAgentAddProperties></PGAgentAddProperties>
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/agenthome"
-                element={
-                  <PropAgentHome></PropAgentHome>
-                }
-              ></Route>
-              {/* propagent  */}
-              <Route
-                path="/more"
-                element={user ? <More /> : <Navigate to="/login" />}
-              ></Route>
-
-              <Route
-                path="/tenantdashboard"
-                element={
-                  user && user.role === "tenant" ? (
-                    <TenantDashboard />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/executivedashboard"
-                element={
-                  user && user.role === "propertymanager" ? (
-                    <ExecutiveDashboard />
-                  ) : (
-                    <Navigate to="/login" />
-                  )
-                }
-              ></Route>
-
-              <Route
-                path="/login"
-                element={user ? <Navigate to="/" /> : <PGLogin />}
-              ></Route>
-              <Route
-                path="/signup"
-                element={user ? <Navigate to="/" /> : <PGSignup />}
-              ></Route>
-              <Route
-                path="/profile"
-                element={user ? <PGProfile /> : <PGLogin />}
-              ></Route>
-
-              {/* Master data */}
-              <Route
-                path="/countrylist"
-                element={
-                  user && user.role === "admin" ? (
-                    <MasterCountryList />
-                  ) : (
-                    <PGLogin />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/statelist"
-                element={
-                  user && user.role === "admin" ? (
-                    <MasterStateList />
-                  ) : (
-                    <PGLogin />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/citylist"
-                element={
-                  user && user.role === "admin" ? (
-                    <MasterCityList />
-                  ) : (
-                    <PGLogin />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/localitylist"
-                element={
-                  user && user.role === "admin" ? (
-                    <MasterLocalityList />
-                  ) : (
-                    <PGLogin />
-                  )
-                }
-              ></Route>
-              <Route
-                path="/societylist"
-                element={
-                  user && user.role === "admin" ? (
-                    <MasterSocietyList />
-                  ) : (
-                    <PGLogin />
-                  )
-                }
-              ></Route>
-              <Route path="/error" element={<PGError />}></Route>
-
-              {/* new route start  */}
-              <Route
-                path="/phonelogin"
-                element={<PhoneLogin />}
+            {/* new route start  */}
+            <Route
+              path="/phonelogin"
+              element={<PhoneLogin />}
 
 
-              ></Route>
-              <Route
-                path="/propertysinglecard"
-                element={< PropertySingleCard />}
-              ></Route>
+            ></Route>
+            <Route
+              path="/propertysinglecard"
+              element={< PropertySingleCard />}
+            ></Route>
 
-              <Route
-                path="/ownerdashboard_new"
-                element={< PGOwnerDashboardNew />}
-              ></Route>
+            <Route
+              path="/ownerdashboard_new"
+              element={< PGOwnerDashboardNew />}
+            ></Route>
 
-              <Route
-                path="/addnotification/:notificationid"
-                element={< AddNotification />}
-              ></Route>
+            <Route
+              path="/addnotification/:notificationid"
+              element={< AddNotification />}
+            ></Route>
 
-<Route
-                path="/notification"
-                element={< PGNotification />}
-              ></Route>
+            <Route
+              path="/notification"
+              element={< PGNotification />}
+            ></Route>
 
 
 
 
-              {/* new route end  */}
+            {/* new route end  */}
 
-            </Routes>
-          </div>
+          </Routes>
 
           {user && user.role !== "user" && <NavbarBottom></NavbarBottom>}
           <Footer></Footer>

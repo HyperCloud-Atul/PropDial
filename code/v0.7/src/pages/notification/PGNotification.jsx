@@ -31,8 +31,8 @@ const PGNotification = () => {
       dbnotifications.filter((item) => item.status === "active");
   
   return (
-    <div className="top_header_pg pa_bg">
-      <div className="pa_inner_page">
+    <div className="top_header_pg pg_bg">
+      <div className="page_spacing">
         {user && user.role === "propagentadmin" && (
           <div className="brf_icon">
             <Link to="/propagentaddnotification/new">
@@ -43,11 +43,11 @@ const PGNotification = () => {
           </div>
         )}
         <div className="pg_header">
-          <h2 className="p_title">Alert Center!</h2>
-          <h4 className="p_subtitle">Your Notifications, Stay Updated</h4>
+          <h2 className="m22 mb-1">Alert Center!</h2>
+          <h4 className="r16 light_black">Your Notifications, Stay Updated</h4>
         </div>
-        <div className="verticall_gap"></div>
-        <div className="propagentuser propagentnotification">
+        <div className="vg22"></div>
+        <div className="my_small_card_parent">
           {activeNotifications &&
             activeNotifications.map((notification) => (
               <PDNotification
@@ -56,7 +56,7 @@ const PGNotification = () => {
               />
             ))}
         </div>
-        <div className="verticall_gap"></div>
+        <div className="vg22"></div>
       </div>
     </div>
   )

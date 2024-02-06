@@ -59,11 +59,8 @@ const PGOwnerDashboardNew = () => {
   // advertisement img option in owl carousel
   return (
     <div>
-      <div className="top_header_pg pa_bg propagent_dashboard">
-      <div className="pa_inner_page" style={{
-        padding:"22px",
-        background:"whitesmoke"
-      }}>  
+      <div className="top_header_pg pg_bg propagent_dashboard">
+      <div className="page_spacing">  
         <div className="pg_header">
           <h2 className="p_title">Dashboard</h2>
           <h4 className="p_subtitle">

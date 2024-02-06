@@ -21,14 +21,12 @@
   --darkgrey-color: #666;
   --lightgrey-color: #aaa;
   --red-color: #E4021B;
-  --peach-color: #FFBF90;
-  
+  --peach-color: #FFBF90;  
   --green-color: 188, 236, 224;
   --yellow-color: #FEEBA0;
   --cream-color: #F4F2EB;
   --bg-color: #F4F2EB;
-  --buttonfg-color: #F4F2EB;
-  
+  --buttonfg-color: #F4F2EB;  
   --light-green: #8af5fc;
 }
 
@@ -36,12 +34,13 @@
 body {
   font-family: 'Comfortaa', cursive;
   margin: 0;
-  background: var(--bg-color); 
 }
-
 *{
   margin: 0px;
   padding: 0px;
+}
+.page h1, .page h2,.page h3,.page h4,.page h5,.page h6,.page a,.page p{
+  margin: 0px;
 }
 
 

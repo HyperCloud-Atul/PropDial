@@ -10,35 +10,63 @@
   --light-black: #303030;
   --p-theme-purple-bg: #efe5ff;
   --p-theme-orange-bg: #ffefe5;
+  --page-bg:#f5f5f5;
 }
 
+/* color css start  */
+.light_black{
+    color: var(--light-black);
+}
+
+/* font css start  */
+.m20 {
+    font-size: 20px;
+    font-weight: 500;
+    word-break: break-all;
+}
+.m22{
+    font-size: 22px;
+    font-weight: 500;
+    word-break: break-all;
+}
+.r16{
+    font-size: 16px;
+    font-weight: 400;
+    word-break: break-all;
+}
+.m16{
+    font-size: 16px;
+    font-weight: 500;
+    word-break: break-all;
+}
+/* font css end  */
+.page_spacing {
+    padding: 22px;
+}
 .navbarhide,
 .page_footer_hide {
     display: none;
 }
-
+.pg_bg{
+    background: var(--page-bg);
+}
 .page_inner_logo img {
     width: 135px;
     height: auto;
-}
-
-.m20 {
-    font-size: 20px;
-    font-weight: 500;
 }
 
 .my_click_text {
     text-decoration: none;
     color: var(--theme-green);
 }
-
-.vg10{
-    height: 10px;
-}
 .otp_input div {
     justify-content: center;
 }
-.page_inner{
-    padding: 22px;
+/* verticall_gap css start  */
+.vg10{
+    height: 10px;
+}
+.vg22{
+    height: 22px;
 }
 /* common css end*/

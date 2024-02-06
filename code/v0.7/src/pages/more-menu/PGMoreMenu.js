@@ -291,7 +291,7 @@ const PGMoreMenu = () => {
                 </Link>
               </div>
             )}
-                   {user && user.role === "owner" && (
+            {user && user.role === "owner" && (
               <div className="mm_inner">
                 <h6 className="title">Properties</h6>
                 <Link className="mm_single" to="/bills">
@@ -423,9 +423,17 @@ const PGMoreMenu = () => {
                   chevron_right
                 </span>
               </Link> */}
-                <Link className="mm_single" to="/propertysinglecard">
+              <Link className="mm_single" to="/propertysinglecard">
                 <span class="material-symbols-outlined mms_icon">help</span>
                 <h5>Property card</h5>
+                <h6>Lorem ipsum text dummy text</h6>
+                <span class="material-symbols-outlined mms_ra">
+                  chevron_right
+                </span>
+              </Link>
+              <Link className="mm_single" to="/createticket">
+                <span class="material-symbols-outlined mms_icon">help</span>
+                <h5>create ticket</h5>
                 <h6>Lorem ipsum text dummy text</h6>
                 <span class="material-symbols-outlined mms_ra">
                   chevron_right

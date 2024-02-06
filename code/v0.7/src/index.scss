@@ -286,3 +286,33 @@
     }
   }
 }
+
+.my_small_card_parent {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 22px;
+  grid-row-gap: 22px;
+  .my_small_card {
+    box-shadow: 0rem 0.3125rem 0.3125rem 0rem rgba(82, 63, 105, 0.05);
+    background: var(--white-color);
+    border-radius: 15px;
+    padding: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    .title{
+      font-size: 16px;
+      font-weight: 500;
+      word-break: break-all;
+    }
+    .sub_title{
+      font-size: 14px;
+    color: var(--p-theme-grey);
+    margin-top: 2px !important;
+    font-weight: 400;
+    word-break: break-all;
+    }
+    .left {
+    }
+  }
+}
