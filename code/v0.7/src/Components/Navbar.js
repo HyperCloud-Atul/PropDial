@@ -317,7 +317,7 @@ export default function Navbar() {
               </Link> */}
             </li>
             <li className="menu_social_media">
-              <Link to="/notification">
+              <Link to="/ticketdetail">
               <img src="./assets/img/ticketicon_navbar.png" alt=""
                className="pointer"/>
               </Link>
