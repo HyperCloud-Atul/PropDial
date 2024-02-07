@@ -423,7 +423,7 @@ const PGMoreMenu = () => {
                   chevron_right
                 </span>
               </Link> */}
-              <Link className="mm_single" to="/propertysinglecard">
+              <Link className="mm_single" to="/pgpropertynew">
                 <span class="material-symbols-outlined mms_icon">help</span>
                 <h5>Property card</h5>
                 <h6>Lorem ipsum text dummy text</h6>

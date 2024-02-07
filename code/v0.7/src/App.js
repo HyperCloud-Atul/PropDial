@@ -76,12 +76,14 @@ import PGSearch from "./pages/search/PGSearch";
 
 // New component import start 
 import PhoneLogin from "./pages/login/PhoneLogin";
-import PropertySingleCard from "./pages/property/PropertySingleCard";
 import PGOwnerDashboardNew from "./pages/roles/owner/PGOwnerDashboardNew";
 import AddNotification from "./pages/create/AddNotification";
 import PGNotification from "./pages/notification/PGNotification";
 import CreateTicket from "./chatboard/CreateTicket";
 import TicketDetail from "./chatboard/TicketDetail";
+import PGPropertyNew from "./pages/property/PGPropertyNew";
+import PGSingleProperty from "./pages/property/PGSingleProperty";
+
 // New component import start 
 
 function App() {
@@ -536,9 +538,14 @@ function App() {
 
             ></Route>
             <Route
-              path="/propertysinglecard"
-              element={< PropertySingleCard />}
+              path="/pgpropertynew"
+              element={< PGPropertyNew />}
             ></Route>
+            <Route
+              path="/pgsingleproperty"
+              element={< PGSingleProperty />}
+            ></Route>
+
 
             <Route
               path="/ownerdashboard_new"

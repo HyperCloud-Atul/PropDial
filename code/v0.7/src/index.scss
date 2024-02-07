@@ -316,3 +316,35 @@
     }
   }
 }
+.my_big_card{  
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: var(--white-color);
+  border-radius: 22px;
+  padding: 20px;
+}
+
+
+@media only screen and (max-width: 991px) {
+  .property_cards_parent {
+    grid-template-columns: repeat(1, 1fr);
+}
+}
+@media only screen and (max-width: 767px) {
+  .my_big_card {   
+    border-radius: 20px;
+    padding: 15px;
+  }
+  .page .propagent_dashboard_inner .all_payments {   
+    grid-template-columns: repeat(2,1fr) !important;
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+}
+.r14 {
+  font-size: 12px; 
+}
+.dashboard_number_small {
+  font-size: 18px; 
+}
+
+
+}

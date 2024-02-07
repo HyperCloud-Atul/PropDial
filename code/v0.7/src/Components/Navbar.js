@@ -78,7 +78,7 @@ export default function Navbar() {
     }
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/ownerdashboard");
+      navigate("/ownerdashboard_new");
     }
     if (user && user.role === "propagent") {
       // console.log('in user', user.role)
@@ -88,7 +88,7 @@ export default function Navbar() {
   const showThirdPage = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/about-us");
+      navigate("/pgpropertynew");
       return; // Exit the function to prevent further checks
     }
     if (user && user.role === "admin") {
@@ -98,7 +98,7 @@ export default function Navbar() {
     }
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/tickets");
+      navigate("/pgpropertynew");
     }
     if (user && user.role === "propagent") {
       // console.log('in user', user.role)
@@ -125,10 +125,10 @@ export default function Navbar() {
   if (!user) {
     firstMenuIcon = "home";
     firstMenu = "Home";
-    secondMenuIcon = "countertops";
-    secondMenu = "Property";
-    thirdMenuIcon = "import_contacts";
-    thirdMenu = "About Us";
+    secondMenuIcon = "import_contacts";
+    secondMenu = "About Us";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Property";
   }
   if (user && user.role !== "user") {
     // firstMenuIcon = "home";
@@ -144,10 +144,11 @@ export default function Navbar() {
     thirdMenu = "Users";
   }
   if (user && user.role === "owner") {
-    secondMenuIcon = "home";
+    secondMenuIcon = "dashboard";
     secondMenu = "Dashboard";
-    thirdMenuIcon = "support_agent";
-    thirdMenu = "Tickets";
+    // thirdMenuIcon = "support_agent";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Property";
   }
   if (user && user.role === "tenant") {
     secondMenu = "Rent";
@@ -317,12 +318,20 @@ export default function Navbar() {
             </li>
             <li className="menu_social_media">
               <Link to="/notification">
-              <span class="material-symbols-outlined">
-                notifications
-              </span>
+              <img src="./assets/img/ticketicon_navbar.png" alt=""
+               className="pointer"/>
               </Link>
-          
-              <Link
+              <Link to="/notification">
+              <img src="./assets/img/notification.png" alt=""
+               className="pointer"
+               style={{
+                width:"22px",
+                height:"auto"
+               }}
+               />
+              </Link>         
+
+              {/* <Link
                 className="msm_single pointer"
                 to="https://www.facebook.com/propdial"
               >
@@ -345,7 +354,7 @@ export default function Navbar() {
                 to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial"
               >
                 <img src="/assets/img/twitter.png"></img>
-              </Link>
+              </Link> */}
             </li>
 
             {/* {user && (

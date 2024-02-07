@@ -32,7 +32,7 @@ align-items: center;
 li.menu_social_media {
   width: 15%;
   display: flex;
-  gap: 5px;
+  gap: 10px;
   justify-content: end;
 }
 li.menu_social_media .msm_single {

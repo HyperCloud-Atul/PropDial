@@ -97,15 +97,16 @@ export default function NavbarBottom() {
   let fourthMenu = "";
   let fourthMenuIcon = "";
   if (!user) {
+    firstMenuIcon = "home";
     firstMenu = "Home";
-    secondMenuIcon = "search";
-    secondMenu = "Property";
-    thirdMenuIcon = "import_contacts";
-    thirdMenu = "About";
+    secondMenuIcon = "import_contacts";
+    secondMenu = "About Us";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Property";
   }
   if (user && user.role !== "user") {
     firstMenuIcon = "home";
-    firstMenu = "Dashboard";
+    firstMenu = "Home";
     fourthMenuIcon = "apps";
     fourthMenu = "More";
   }
@@ -117,10 +118,11 @@ export default function NavbarBottom() {
     thirdMenu = "Users";
   }
   if (user && user.role === "owner") {
-    secondMenuIcon = "receipt_long";
-    secondMenu = "Bills";
-    thirdMenuIcon = "support_agent";
-    thirdMenu = "Tickets";
+    secondMenuIcon = "dashboard";
+    secondMenu = "Dashboard";
+    // thirdMenuIcon = "support_agent";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Property";
   }
   if (user && user.role === "tenant") {
     secondMenu = "Rent";
