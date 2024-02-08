@@ -95,7 +95,7 @@ const TicketDetail = () => {
           <div className="chat_page">
             <div className={mobileDisplay ? "chat_list hide" : "chat_list"} >
               <div className="all_tickets_left relative">
-                <div className="search-select">
+                <div className="search-select relative">
                   <span className="material-symbols-outlined">search</span>
                   <input
                     className="input-wrapper"
