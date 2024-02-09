@@ -145,71 +145,78 @@ export default function NavbarBottom() {
   const moreActiveClass = `b_menu_single ${shouldMoreActive ? "b_menu_active" : ""}`;
   // more acitve class Array 
 
+  // hide page_footer array 
+  const pageBottomMenuHidePaths = ["/addproperty"];
+  const shouldPageFooerHide = pageBottomMenuHidePaths.includes(location.pathname);
+  const pageBottomMenuClass = `${shouldPageFooerHide ? "page_footer_hide" : ""}`;
+  // hide page_footer array 
+  return (
 
-  return (  
-    <section className="bottom_menu_bar">
-      <div
-        className={`b_menu_single ${location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard" ? "b_menu_active" : "" || location.pathname === "/agentdashboard" ? "b_menu_active" : ""
-          }`}
-        onClick={showDashboard}
-      >
-        <div className="menu_icon">
-          <span class="material-symbols-outlined">home</span>
+    <div className={pageBottomMenuClass}>
+      <section className="bottom_menu_bar">
+        <div
+          className={`b_menu_single ${location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard" ? "b_menu_active" : "" || location.pathname === "/agentdashboard" ? "b_menu_active" : ""
+            }`}
+          onClick={showDashboard}
+        >
+          <div className="menu_icon">
+            <span class="material-symbols-outlined">home</span>
+          </div>
+          <div className="menu_name">{firstMenu}</div>
         </div>
-        <div className="menu_name">{firstMenu}</div>
-      </div>
-      <div
-        className={`b_menu_single ${location.pathname === "/search-property" || location.pathname === "/bills" ? "b_menu_active" : ""
-          }`}
-        onClick={showSecondPage}
-      >
-        <div className="menu_icon">
-          <span class="material-symbols-outlined">{secondMenuIcon}</span>
+        <div
+          className={`b_menu_single ${location.pathname === "/search-property" || location.pathname === "/bills" ? "b_menu_active" : ""
+            }`}
+          onClick={showSecondPage}
+        >
+          <div className="menu_icon">
+            <span class="material-symbols-outlined">{secondMenuIcon}</span>
+          </div>
+          <div className="menu_name">{secondMenu}</div>
         </div>
-        <div className="menu_name">{secondMenu}</div>
-      </div>
 
-      <Link
-        to="/profile"
-        className={`b_menu_single profile ${location.pathname === "/profile" ? "b_menu_active" : ""
-          }`}
-      >
-        <div className="menu_icon">
-          {user ?
-            (user.photoURL === "" ? (
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
-                alt=""
-              />
-            ) : (
-              <img src={user.photoURL} alt="" />
-            ))
-            :
-            (
-              <span class="material-symbols-outlined">person</span>
-            )
-          }
+        <Link
+          to="/profile"
+          className={`b_menu_single profile ${location.pathname === "/profile" ? "b_menu_active" : ""
+            }`}
+        >
+          <div className="menu_icon">
+            {user ?
+              (user.photoURL === "" ? (
+                <img
+                  src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
+                  alt=""
+                />
+              ) : (
+                <img src={user.photoURL} alt="" />
+              ))
+              :
+              (
+                <span class="material-symbols-outlined">person</span>
+              )
+            }
+          </div>
+        </Link>
+        <div
+          className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""
+            }`}
+          onClick={showThirdPage}
+        >
+          <div className="menu_icon">
+            <span class="material-symbols-outlined">{thirdMenuIcon}</span>
+          </div>
+          <div className="menu_name">{thirdMenu}</div>
         </div>
-      </Link>
-      <div
-        className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""
-          }`}
-        onClick={showThirdPage}
-      >
-        <div className="menu_icon">
-          <span class="material-symbols-outlined">{thirdMenuIcon}</span>
+        <div
+          className={moreActiveClass}
+          onClick={showFourthPage}
+        >
+          <div className="menu_icon">
+            <span class="material-symbols-outlined">menu</span>
+          </div>
+          <div className="menu_name">More</div>
         </div>
-        <div className="menu_name">{thirdMenu}</div>
-      </div>
-      <div
-        className={moreActiveClass}
-        onClick={showFourthPage}
-      >
-        <div className="menu_icon">
-          <span class="material-symbols-outlined">menu</span>
-        </div>
-        <div className="menu_name">More</div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

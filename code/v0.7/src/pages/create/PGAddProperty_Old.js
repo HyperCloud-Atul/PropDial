@@ -19,7 +19,7 @@ import PropertySidebar from "../../Components/PropertySidebar";
 
 
 
-export default function PGAddProperty({ propertyid }) {
+export default function PGAddProperty_Old({ propertyid }) {
   // Scroll to the top of the page whenever the location changes start
 
   const location = useLocation();

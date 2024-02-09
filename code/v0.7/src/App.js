@@ -186,7 +186,7 @@ function App() {
             <Route
               path="/addproperty"
               element={
-                user && user.role === "admin" ? (
+                user && user.role !== "admin" ? (
                   <PGAddProperty />
                 ) : (
                   <Navigate to="/login" />
