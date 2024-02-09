@@ -192,9 +192,9 @@ const PGContactUs = () => {
                 <div className="submit_btn">
                   <button type="submit" className=" theme_btn btn_fill">
                     Send
-                    <span class="material-symbols-outlined btn_arrow ba_animation">
-                                arrow_forward
-                              </span>
+                    <span className="material-symbols-outlined btn_arrow ba_animation">
+                      arrow_forward
+                    </span>
                   </button>
                 </div>
               </div>

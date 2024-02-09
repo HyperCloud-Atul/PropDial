@@ -27,7 +27,7 @@ const ProductCarousel = () => {
       <div className="container">
 
         <div className="section_title">
-          <h2 class="section_title_effect">Audible Testimonial</h2>
+          <h2 className="section_title_effect">Audible Testimonial</h2>
           <h3>Clients Radio Interview, We collect reviews from our customers.</h3>
         </div>
 
@@ -43,10 +43,10 @@ const ProductCarousel = () => {
           keyBoardControl={true}
           customTransition="all .5"
           transitionDuration={500}
-          // containerClass="carousel-container"
+          // containerclassName="carousel-container"
           removeArrowOnDeviceType={[]}
-          // dotListClass="custom-dot-list-style"
-          // itemClass="carousel-item-padding-40-px"
+          // dotListclassName="custom-dot-list-style"
+          // itemclassName="carousel-item-padding-40-px"
           className="carousel_container"
         >
           <div className="testimonial_single relative">
@@ -175,10 +175,10 @@ const ProductCarousel = () => {
         keyBoardControl={true}
         customTransition="all .5"
         transitionDuration={500}
-        containerClass="carousel-container"
+        containerclassName="carousel-container"
         removeArrowOnDeviceType={["tablet", "mobile"]}
-        dotListClass="custom-dot-list-style"
-        itemClass="carousel-item-padding-40-px"
+        dotListclassName="custom-dot-list-style"
+        itemclassName="carousel-item-padding-40-px"
       >
         <div>Item 1</div>
         <div>Item 2</div>
@@ -231,7 +231,7 @@ export default ProductCarousel;
 //       <div className="container">
 
 //         <div className="section_title">
-//           <h2 class="section_title_effect">Audible Testimonial</h2>
+//           <h2 className="section_title_effect">Audible Testimonial</h2>
 //           <h3>Clients Radio Interview, We collect reviews from our customers.</h3>
 //         </div>
 //         <OwlCarousel className="owl-theme" {...testimonialOptions}>

@@ -42,7 +42,7 @@ const Home = () => {
       <section className="work_flow sect_padding">
         <div className="container">
           <div className="section_title">
-            <div class="section_title_effect">work flow</div>
+            <div className="section_title_effect">work flow</div>
             <h3>Property Management Services</h3>
           </div>
           <div
@@ -149,7 +149,7 @@ const Home = () => {
             <div className="col-lg-6">
               <div className="ab_right">
                 <div className="section_title">
-                  <div class="section_title_effect">ABOUT</div>
+                  <div className="section_title_effect">ABOUT</div>
                   <h3>Your Trusted Property Management Partner</h3>
                 </div>
                 <h6>
@@ -182,7 +182,7 @@ const Home = () => {
                 <Link to="/about-us">
                   <button className="theme_btn btn_fill">
                     More About
-                    <span class="material-symbols-outlined btn_arrow ba_animation">
+                    <span className="material-symbols-outlined btn_arrow ba_animation">
                       arrow_forward
                     </span>
                   </button>
@@ -206,7 +206,7 @@ const Home = () => {
       >
         <div className="container">
           <div className="section_title">
-            <div class="section_title_effect">WHY US</div>
+            <div className="section_title_effect">WHY US</div>
             <h3>Elevating Properties, Simplifying Management</h3>
           </div>
           <div className="why_us_cards">
@@ -291,7 +291,7 @@ const Home = () => {
       >
         <div className="container">
           <div className="section_title">
-            <h2 class="section_title_effect">Services</h2>
+            <h2 className="section_title_effect">Services</h2>
             <h3>Services offered in our PMS package</h3>
           </div>
           <div className="row oneline_parent">
@@ -299,7 +299,7 @@ const Home = () => {
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
-                    <span class="material-symbols-outlined">cottage</span>
+                    <span className="material-symbols-outlined">cottage</span>
                   </span>
                   <h3 className="title">Property On Boarding</h3>
                   <p className="description">
@@ -319,7 +319,7 @@ const Home = () => {
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
-                    <span class="material-symbols-outlined">manage_search</span>
+                    <span className="material-symbols-outlined">manage_search</span>
                   </span>
                   <h3 className="title">Tenant Discovery</h3>
                   <p className="description">
@@ -338,7 +338,7 @@ const Home = () => {
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
-                    <span class="material-symbols-outlined">handshake</span>
+                    <span className="material-symbols-outlined">handshake</span>
                   </span>
                   <h3 className="title">Tenant On Board</h3>
                   <p className="description">
@@ -358,7 +358,7 @@ const Home = () => {
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
-                    <span class="material-symbols-outlined">article</span>
+                    <span className="material-symbols-outlined">article</span>
                   </span>
                   <h3 className="title">Property Inspections</h3>
                   <p className="description">
@@ -379,7 +379,7 @@ const Home = () => {
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
-                    <span class="material-symbols-outlined">engineering</span>
+                    <span className="material-symbols-outlined">engineering</span>
                   </span>
                   <h3 className="title">Maintenance Services</h3>
                   <p className="description">
@@ -399,7 +399,7 @@ const Home = () => {
               <div className="single-service">
                 <div className="content">
                   <span className="icon">
-                    <span class="material-symbols-outlined">description</span>
+                    <span className="material-symbols-outlined">description</span>
                   </span>
                   <h3 className="title">Personalised Dashboard</h3>
                   <p className="description">
@@ -425,7 +425,7 @@ const Home = () => {
             <div className="col-xl-8">
               <div className="fs_left">
                 <div className="section_title">
-                  <div class="section_title_effect">FOUNDER'S SPEAK</div>
+                  <div className="section_title_effect">FOUNDER'S SPEAK</div>
                   <h3>Click and watch video</h3>
                 </div>
                 {/* <div className="image_sect">
@@ -484,7 +484,7 @@ const Home = () => {
                     >
                       <button className="theme_btn btn_white">
                         Watch Video
-                        <span class="material-symbols-outlined btn_arrow ba_animation">
+                        <span className="material-symbols-outlined btn_arrow ba_animation">
                           arrow_forward
                         </span>
                       </button>
@@ -492,7 +492,7 @@ const Home = () => {
                     <Link to="/contact-us">
                       <button className="theme_btn btn_white">
                         Get Started
-                        <span class="material-symbols-outlined btn_arrow ba_animation">
+                        <span className="material-symbols-outlined btn_arrow ba_animation">
                           arrow_forward
                         </span>
                       </button>
@@ -513,7 +513,7 @@ const Home = () => {
       >
         <div className="container">
           <div className="section_title">
-            <div class="section_title_effect">APARTMENT</div>
+            <div className="section_title_effect">APARTMENT</div>
             <h3>The Perfect Layouts of your dream house</h3>
           </div>
           <div className="tabs">

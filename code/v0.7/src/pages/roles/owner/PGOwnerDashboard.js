@@ -239,7 +239,7 @@ export default function PGOwnerDashboard() {
             <OwlCarousel className="owl-theme" {...servicesOptions}>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     groups
                   </span>
                   <h6>12749</h6>
@@ -248,7 +248,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     bedroom_parent
                   </span>
                   <h6>2617</h6>
@@ -257,7 +257,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     real_estate_agent
                   </span>
                   <h6>1824</h6>
@@ -266,7 +266,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     group_work
                   </span>
                   <h6>182</h6>
@@ -275,7 +275,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     apartment
                   </span>
                   <h6>12</h6>
@@ -284,7 +284,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     reduce_capacity
                   </span>
                   <h6>29</h6>
@@ -293,7 +293,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     support_agent
                   </span>
                   <h6>10</h6>
@@ -302,7 +302,7 @@ export default function PGOwnerDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     event_available
                   </span>
                   <h5>Holiday List</h5>

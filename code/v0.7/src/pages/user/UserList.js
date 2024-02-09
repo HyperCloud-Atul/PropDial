@@ -79,18 +79,18 @@ const UserList = () => {
             <div
               className="col-md-6 col-sm-12">
 
-              <div class="form_field st-2 mt-lg-0">
-                <div class="field_inner">
+              <div className="form_field st-2 mt-lg-0">
+                <div className="field_inner">
                   <input type="text" placeholder="Search here" />
-                  <div class="field_icon">
-                    <span class="material-symbols-outlined">manage_search</span>
+                  <div className="field_icon">
+                    <span className="material-symbols-outlined">manage_search</span>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-md-6 col-sm-12">
-              <div class="form_field st-2 mt-lg-2">
-                <div class="field_inner select">
+              <div className="form_field st-2 mt-lg-2">
+                <div className="field_inner select">
                   <select>
                     <option selected="">Property Owner (900)</option>
                     <option> Property Tenant (4000)</option>
@@ -99,8 +99,8 @@ const UserList = () => {
                     <option>Frontdesk (20)</option>
                     <option>Admin (12)</option>
                   </select>
-                  <div class="field_icon">
-                    <span class="material-symbols-outlined">hourglass_bottom</span>
+                  <div className="field_icon">
+                    <span className="material-symbols-outlined">hourglass_bottom</span>
                   </div>
                 </div>
               </div>

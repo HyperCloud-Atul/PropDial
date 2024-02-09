@@ -24,15 +24,15 @@ export default function PGProfile() {
   // Scroll to the top of the page whenever the location changes end
 
   const { user } = useAuthContext();
-  // const { document, error } = useDocument('users', user.uid)
+  // console.log('user:', user)
   // const [email, setEmail] = useState('')
   const [userFullName, setUserFullName] = useState(user.fullName);
   const [userPhoneNumber, setUserPhoneNumber] = useState(user.phoneNumber);
   const { updateDocument, response } = useFirestore("users");
-  const { document: userDocument, error: userDocumentError } = useDocument(
-    "users",
-    user.uid
-  );
+  // const { document: userDocument, error: userDocumentError } = useDocument(
+  //   "users",
+  //   user.uid
+  // );
   const [formError, setFormError] = useState(null);
   const { logout, isPending } = useLogout();
   //Popup Flags
@@ -146,7 +146,12 @@ export default function PGProfile() {
     setisProfileEdit(false);
     // setUserFullName(e.target.value)
     // console.log('e.target.value:', e)
+    let splitName = userFullName.split(" ");
+
+    // Extract the first name
+    let firstName = splitName[0];
     await updateDocument(user.uid, {
+      displayName: firstName,
       fullName: userFullName,
       phoneNumber: userPhoneNumber,
     });
@@ -161,6 +166,14 @@ export default function PGProfile() {
 
   const changePwd = (e) => {
     navigate("/updatepwd");
+  };
+
+  const changeRole = async (changedRole) => {
+    // console.log('userid:', user.uid)
+    // console.log('changedRole:', changedRole)
+    await updateDocument(user.uid, {
+      rolePropDial: changedRole,
+    });
   };
 
   // --------------------HTML UI Codebase------------------
@@ -237,12 +250,52 @@ export default function PGProfile() {
           </div>
         </div>
       </section>
+      {user && user.rolesPropDial && user.rolesPropDial.length > 1 && <div className="container">
+        <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
+          <div className="visit_dashboard">
+            <span className="no-floating">Role</span>
+            <div
+              className="radio_group"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+
+              {user.rolesPropDial.map((userrole) => (
+                <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${user && user.rolePropDial === userrole
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id={userrole}
+                      onClick={(e) => changeRole(userrole)}
+                    />
+                    <label htmlFor={userrole}>
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>{userrole}</h6>
+                    </label>
+                  </div>
+                </div>))}
+            </div>
+          </div>
+        </div>
+      </div>}
       <div className="container">
         <div className="visit_dashboard">
           <span>Visit Dashboard for more deatils</span>
           <span className="theme_btn btn_fill pointer" onClick={showDashboard}>
             Dashboard
-            <span class="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span>
+            <span className="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span>
           </span>
 
         </div>

@@ -60,11 +60,11 @@ export default function PGPropertyBills() {
                 </div>
                 <div className="right_main_content">
                     <div className="property-detail">
-                        <div class="accordion" id="a1accordion_section">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="a1headingOne">
+                        <div className="accordion" id="a1accordion_section">
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="a1headingOne">
                                     <button
-                                        class="accordion-button"
+                                        className="accordion-button"
                                         type="button"
                                         data-bs-toggle="collapse"
                                         data-bs-target="#a1collapseOne"
@@ -89,16 +89,16 @@ export default function PGPropertyBills() {
                                 </h2>
                                 <div
                                     id="a1collapseOne"
-                                    class="accordion-collapse collapse"
+                                    className="accordion-collapse collapse"
                                     aria-labelledby="a1headingOne"
                                     data-bs-parent="#a1accordion_section"
                                 >
-                                    <div class="accordion-body">
-                                        <div class="secondary-details-display">
-                                            <div class="secondary-details-inside-display">
+                                    <div className="accordion-body">
+                                        <div className="secondary-details-display">
+                                            <div className="secondary-details-inside-display">
                                                 <h5 style={{ textAlign: "center" }}>Atul Tripathi</h5>
                                                 <div
-                                                    class="property-contact-div property-media-icons-horizontal"
+                                                    className="property-contact-div property-media-icons-horizontal"
                                                     style={{
                                                         flexDirection: "row",
                                                         width: "100%",
@@ -108,7 +108,7 @@ export default function PGPropertyBills() {
                                                     {propertydoc && propertydoc.ownerDetails &&
                                                         <a href={'Tel: +91' + propertydoc.ownerDetails.phoneNumber}>
                                                             <div>
-                                                                <span class="material-symbols-outlined">call</span>
+                                                                <span className="material-symbols-outlined">call</span>
                                                                 <h1>Call</h1>
                                                             </div>
                                                         </a>
@@ -127,7 +127,7 @@ export default function PGPropertyBills() {
                                                     {propertydoc && propertydoc.ownerDetails &&
                                                         <a href={'mailto:' + propertydoc.ownerDetails.emailID}>
                                                             <div>
-                                                                <span class="material-symbols-outlined">
+                                                                <span className="material-symbols-outlined">
                                                                     alternate_email
                                                                 </span>
                                                                 <h1>Mail</h1>
@@ -136,7 +136,7 @@ export default function PGPropertyBills() {
                                                     }
                                                 </div>
                                             </div>
-                                            <hr class="secondary-details-hr" />
+                                            <hr className="secondary-details-hr" />
                                             <div style={{ width: "100%" }}>
                                                 {propertydoc && propertydoc.coownerDetails &&
                                                     <div>
@@ -146,7 +146,7 @@ export default function PGPropertyBills() {
                                                     </div>
                                                 }
                                                 <div
-                                                    class="property-contact-div property-media-icons-horizontal"
+                                                    className="property-contact-div property-media-icons-horizontal"
                                                     style={{
                                                         flexDirection: "row",
                                                         width: "100%",
@@ -156,7 +156,7 @@ export default function PGPropertyBills() {
                                                     {propertydoc && propertydoc.coownerDetails &&
                                                         <a href={'Tel: +91' + propertydoc.coownerDetails.phoneNumber}>
                                                             <div>
-                                                                <span class="material-symbols-outlined">call</span>
+                                                                <span className="material-symbols-outlined">call</span>
                                                                 <h1>Call</h1>
                                                             </div>
                                                         </a>
@@ -172,7 +172,7 @@ export default function PGPropertyBills() {
                                                     {propertydoc && propertydoc.coownerDetails &&
                                                         <a href={'mailto: ' + propertydoc.coownerDetails.emailID}>
                                                             <div>
-                                                                <span class="material-symbols-outlined">
+                                                                <span className="material-symbols-outlined">
                                                                     alternate_email
                                                                 </span>
                                                                 <h1>Mail</h1>

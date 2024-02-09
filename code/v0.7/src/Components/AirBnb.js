@@ -62,7 +62,7 @@ const AirBnb = () => {
     >
       <div className="container">
         <div className="section_title">
-          <h2 class="section_title_effect">Air BNB</h2>
+          <h2 className="section_title_effect">Air BNB</h2>
           <h3>Service Apartments - Short Time Rental</h3>
         </div>
         <OwlCarousel className="owl-theme ab_p_carousel" {...options}>
@@ -70,18 +70,18 @@ const AirBnb = () => {
             <div className="card_img">
               <Carousel
                 showDots={true}
-                responsive={responsiveimg}          
+                responsive={responsiveimg}
               >
-                
+
                 <img src="./assets/img/airbnb/property1/2.jpeg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property1/1.jpg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property1/3.jpg" alt="" className="ic_img-single" />
-                <img src="./assets/img/airbnb/property1/10.jpg" alt="" className="ic_img-single" />              
+                <img src="./assets/img/airbnb/property1/10.jpg" alt="" className="ic_img-single" />
               </Carousel>
             </div>
             <div className="card_inner">
               <h4 className="location">
-              Goa: 2 BHK in Tata Rio T3-201
+                Goa: 2 BHK in Tata Rio T3-201
               </h4>
               <div className="p_info">
                 <div className="p_info_single">
@@ -107,26 +107,26 @@ const AirBnb = () => {
               <Link className="know_detail learn-more" to="https://www.airbnb.co.in/rooms/966417708640526996?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_fA6WCaHp3etyoJem" target="_blank">
                 view detail
               </Link>
-        
+
             </div>
           </Link>
           <Link className="item card_single" to="https://www.airbnb.co.in/rooms/971457138024310477?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_IHy7Zg9xo5dt7OLG" target="_blank">
             <div className="card_img">
               <Carousel
                 showDots={true}
-                responsive={responsiveimg}          
+                responsive={responsiveimg}
               >
-               <img src="./assets/img/airbnb/property2/2.jpeg" alt="" className="ic_img-single" />  
-              <img src="./assets/img/airbnb/property2/3.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/property2/2.jpeg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/property2/3.jpeg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property2/1.jpg" alt="" className="ic_img-single" />
-                          
-                
+
+
                 <img src="./assets/img/airbnb/property2/4.jpeg" alt="" className="ic_img-single" />
               </Carousel>
             </div>
             <div className="card_inner">
               <h4 className="location">
-              Goa: 2 BHK in Tata Rio T4-607
+                Goa: 2 BHK in Tata Rio T4-607
               </h4>
               <div className="p_info">
                 <div className="p_info_single">
@@ -158,17 +158,17 @@ const AirBnb = () => {
             <div className="card_img">
               <Carousel
                 showDots={true}
-                responsive={responsiveimg}            
+                responsive={responsiveimg}
               >
                 <img src="./assets/img/airbnb/property3/1.jpeg" alt="" className="ic_img-single" />
-                <img src="./assets/img/airbnb/property3/2.jpg" alt="" className="ic_img-single" />             
+                <img src="./assets/img/airbnb/property3/2.jpg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property3/4.jpeg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property3/3.jpg" alt="" className="ic_img-single" />
               </Carousel>
             </div>
             <div className="card_inner">
               <h4 className="location">
-              Goa: 2 BHK in Tata Rio T6-306
+                Goa: 2 BHK in Tata Rio T6-306
               </h4>
               <div className="p_info">
                 <div className="p_info_single">
@@ -200,19 +200,19 @@ const AirBnb = () => {
             <div className="card_img">
               <Carousel
                 showDots={true}
-                responsive={responsiveimg}  
-              
+                responsive={responsiveimg}
+
               >
-                
-                <img src="./assets/img/airbnb/property4/2.jpg" alt="" className="ic_img-single" /> 
-                <img src="./assets/img/airbnb/property4/1.jpg" alt="" className="ic_img-single" />            
+
+                <img src="./assets/img/airbnb/property4/2.jpg" alt="" className="ic_img-single" />
+                <img src="./assets/img/airbnb/property4/1.jpg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property4/3.jpg" alt="" className="ic_img-single" />
                 <img src="./assets/img/airbnb/property4/4.jpg" alt="" className="ic_img-single" />
               </Carousel>
             </div>
             <div className="card_inner">
               <h4 className="location">
-              Goa: 2 BHK in Tata Rio T9-205
+                Goa: 2 BHK in Tata Rio T9-205
               </h4>
               <div className="p_info">
                 <div className="p_info_single">
@@ -239,7 +239,7 @@ const AirBnb = () => {
                 view detail
               </Link>
             </div>
-          </Link>          
+          </Link>
         </OwlCarousel>
       </div>
     </section>

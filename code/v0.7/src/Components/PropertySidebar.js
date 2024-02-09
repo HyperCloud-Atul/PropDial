@@ -33,7 +33,7 @@ const PropertySidebar = ({ propertyid }) => {
 
     return (
         <div>
-            <div class="side-navbar side-navbar-large property-list-side-navbar"
+            <div className="side-navbar side-navbar-large property-list-side-navbar"
             >
                 <br />
                 <ul>
@@ -42,7 +42,7 @@ const PropertySidebar = ({ propertyid }) => {
                         <b></b>
                         <b></b>
                         <div className='sn_menu'>
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                                 home
                             </span>
                             <small>Property Status</small>
@@ -54,7 +54,7 @@ const PropertySidebar = ({ propertyid }) => {
 
                         <div className={`pointer sn_menu ${location.pathname === "/addphoto" ? "active" : ""
                             }`}>
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                                 image
                             </span>
                             <small>Property Images</small>
@@ -67,7 +67,7 @@ const PropertySidebar = ({ propertyid }) => {
                         <b></b>
 
                         <div className='sn_menu'>
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                                 description
                             </span>
                             <small>Property Bills</small>
@@ -78,7 +78,7 @@ const PropertySidebar = ({ propertyid }) => {
                         <b></b>
 
                         <div className='sn_menu'>
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                                 category
                             </span>
                             <small>Property Setup</small>
@@ -92,7 +92,7 @@ const PropertySidebar = ({ propertyid }) => {
                         <b></b>
 
                         <div className='sn_menu'>
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                                 description
                             </span>
                             <small>Property Documents</small>
@@ -103,7 +103,7 @@ const PropertySidebar = ({ propertyid }) => {
                         <b></b>
 
                         <div className='sn_menu'>
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                                 volunteer_activism
                             </span>
                             <small>Reports</small>
@@ -115,7 +115,7 @@ const PropertySidebar = ({ propertyid }) => {
                         <b></b>
                         <b></b>
                         <div className='sn_menu'>
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                                 logout
                             </span>
                             <small>Logout</small>

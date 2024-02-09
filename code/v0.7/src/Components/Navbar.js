@@ -233,7 +233,7 @@ export default function Navbar() {
                 // }`}
                 className="menu_single pointer"
               >
-                <span class="material-symbols-outlined">{firstMenuIcon}</span>
+                <span className="material-symbols-outlined">{firstMenuIcon}</span>
                 {firstMenu}
               </div>
 
@@ -244,7 +244,7 @@ export default function Navbar() {
                 // }`}
                 className="menu_single pointer"
               >
-                <span class="material-symbols-outlined">{secondMenuIcon}</span>
+                <span className="material-symbols-outlined">{secondMenuIcon}</span>
                 {secondMenu}
               </div>
 
@@ -255,7 +255,7 @@ export default function Navbar() {
                 // }`}
                 className="menu_single pointer"
               >
-                <span class="material-symbols-outlined">{thirdMenuIcon}</span>
+                <span className="material-symbols-outlined">{thirdMenuIcon}</span>
                 {thirdMenu}
               </div>
 
@@ -263,7 +263,7 @@ export default function Navbar() {
                 <div
                   className={moreDesktopActiveClass}
                 >
-                  <span class="material-symbols-outlined">More</span>
+                  <span className="material-symbols-outlined">More</span>
                   More
                 </div>
               </Link>
@@ -291,7 +291,7 @@ export default function Navbar() {
                     className={`menu_single login pointer ${location.pathname === "/login" ? "active" : ""
                       }`}
                   >
-                    <span class="material-symbols-outlined ba_animation">
+                    <span className="material-symbols-outlined ba_animation">
                       login
                     </span>
                     Login
@@ -300,7 +300,7 @@ export default function Navbar() {
               )}
 
               {/* <div className="menu_single pointer ">
-                <span class="material-symbols-outlined">
+                <span className="material-symbols-outlined">
                   settings_applications
                 </span>
                 Services
@@ -311,25 +311,25 @@ export default function Navbar() {
                     location.pathname === "/login" ? "active" : ""
                   }`}
                 >
-                  <span class="material-symbols-outlined">login</span>
+                  <span className="material-symbols-outlined">login</span>
                   Login/Signup
                 </div>
               </Link> */}
             </li>
             <li className="menu_social_media">
               <Link to="/ticketdetail">
-              <img src="./assets/img/ticketicon_navbar.png" alt=""
-               className="pointer"/>
+                <img src="./assets/img/ticketicon_navbar.png" alt=""
+                  className="pointer" />
               </Link>
               <Link to="/notification">
-              <img src="./assets/img/notification.png" alt=""
-               className="pointer"
-               style={{
-                width:"22px",
-                height:"auto"
-               }}
-               />
-              </Link>         
+                <img src="./assets/img/notification.png" alt=""
+                  className="pointer"
+                  style={{
+                    width: "22px",
+                    height: "auto"
+                  }}
+                />
+              </Link>
 
               {/* <Link
                 className="msm_single pointer"

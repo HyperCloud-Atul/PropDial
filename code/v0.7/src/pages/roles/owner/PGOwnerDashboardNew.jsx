@@ -1,5 +1,7 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import LinearProgressBar from "./LinearProgressBar";
+import { useLocation } from "react-router-dom";
 
 // owl carousel
 import OwlCarousel from "react-owl-carousel";
@@ -14,6 +16,12 @@ import PropertySingleCard from "../../property/PropertySingleCard";
 import "./PGOwnerDashboardNew.css";
 
 const PGOwnerDashboardNew = () => {
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   // advertisement img option in owl carousel
   const addImgOptions = {
     items: 1,
@@ -101,7 +109,7 @@ const PGOwnerDashboardNew = () => {
                 </div>
 
                 <div className="col-xl-7 bg_575">
-                <div className="vg22_1199"></div>
+                  <div className="vg22_1199"></div>
                   <div className="property_status">
                     <div className="ps_single pending">
                       <h5>5</h5>

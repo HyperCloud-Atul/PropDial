@@ -135,12 +135,12 @@ const LeftSidebar = () => {
   }
 
   return (
-    <div class={`sidebarparent ${leftSidebar ? "baropen" : ""}`}>
+    <div className={`sidebarparent ${leftSidebar ? "baropen" : ""}`}>
       <div className="sidebartoggle" onClick={sidebarToggle}>
-        <span class="material-symbols-outlined">menu</span>
+        <span className="material-symbols-outlined">menu</span>
       </div>
       <div className="sidebarwidth">
-        <div class="side-navbar side-navbar-large property-list-side-navbar">
+        <div className="side-navbar side-navbar-large property-list-side-navbar">
           <br />
           <ul>
             <li
@@ -151,7 +151,7 @@ const LeftSidebar = () => {
               <b></b>
               <b></b>
               <div className="sn_menu">
-                <span class="material-symbols-outlined">{firstMenuIcon}</span>
+                <span className="material-symbols-outlined">{firstMenuIcon}</span>
                 <small>
                   {firstMenu}
                 </small>
@@ -166,7 +166,7 @@ const LeftSidebar = () => {
               <b></b>
 
               <div className="sn_menu">
-                <span class="material-symbols-outlined"> {secondMenuIcon} </span>
+                <span className="material-symbols-outlined"> {secondMenuIcon} </span>
                 <small> {secondMenu} </small>
               </div>
             </li>
@@ -179,7 +179,7 @@ const LeftSidebar = () => {
               <b></b>
 
               <div className="sn_menu">
-                <span class="material-symbols-outlined"> {thirdMenuIcon} </span>
+                <span className="material-symbols-outlined"> {thirdMenuIcon} </span>
                 <small> {thirdMenu} </small>
               </div>
             </li>
@@ -192,7 +192,7 @@ const LeftSidebar = () => {
               <b></b>
 
               <div className="sn_menu">
-                <span class="material-symbols-outlined"> {fourthMenuIcon} </span>
+                <span className="material-symbols-outlined"> {fourthMenuIcon} </span>
                 <small> {fourthMenu} </small>
               </div>
             </li>
@@ -205,7 +205,7 @@ const LeftSidebar = () => {
               <b></b>
 
               <div className="sn_menu">
-                <span class="material-symbols-outlined"> {fifthMenuIcon} </span>
+                <span className="material-symbols-outlined"> {fifthMenuIcon} </span>
                 <small> {fifthMenu} </small>
               </div>
             </li>
@@ -213,7 +213,7 @@ const LeftSidebar = () => {
               <b></b>
               <b></b>
               <div className="sn_menu">
-                <span class="material-symbols-outlined">handyman</span>
+                <span className="material-symbols-outlined">handyman</span>
                 <small>Enquiries</small>
               </div>
             </li>
@@ -221,7 +221,7 @@ const LeftSidebar = () => {
               <b></b>
               <b></b>
               <div className="sn_menu">
-                <span class="material-symbols-outlined">
+                <span className="material-symbols-outlined">
                   volunteer_activism
                 </span>
                 <small>Refer & Earn</small>
@@ -231,7 +231,7 @@ const LeftSidebar = () => {
               <b></b>
               <b></b>
               <div className="sn_menu">
-                <span class="material-symbols-outlined">logout</span>
+                <span className="material-symbols-outlined">logout</span>
                 <small>Logout</small>
               </div>
             </li>

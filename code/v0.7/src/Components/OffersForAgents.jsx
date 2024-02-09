@@ -16,7 +16,7 @@ const OffersForAgents = () => {
                 <div>
                   <div className="d-flex align-items-center card_upper">
                     <img src="https://www.squareyards.com/assets/images/broker-performance/prime-connect.svg" />
-                    <div> 
+                    <div>
                       <h4>Prime Connect</h4>
                       <div
                         className="heading_underline"
@@ -41,10 +41,10 @@ const OffersForAgents = () => {
                   <div className="btn_div d-flex align-items-center">
                     <button
                       type="button"
-                      class="btn btn-primary text-dark know_more_btn"
+                      className="btn btn-primary text-dark know_more_btn"
                     >
                       Know more
-                      <i class="bi bi-arrow-right"></i>
+                      <i className="bi bi-arrow-right"></i>
                     </button>
                   </div>
                 </div>
@@ -83,10 +83,10 @@ const OffersForAgents = () => {
                   <div className="btn_div d-flex align-items-center">
                     <button
                       type="button"
-                      class="btn btn-primary text-dark know_more_btn"
+                      className="btn btn-primary text-dark know_more_btn"
                     >
                       Know more
-                      <i class="bi bi-arrow-right"></i>
+                      <i className="bi bi-arrow-right"></i>
                     </button>
                   </div>
                 </div>
@@ -131,10 +131,10 @@ const OffersForAgents = () => {
                   <div className="btn_div d-flex align-items-center">
                     <button
                       type="button"
-                      class="btn btn-primary text-dark know_more_btn"
+                      className="btn btn-primary text-dark know_more_btn"
                     >
                       Know more
-                      <i class="bi bi-arrow-right"></i>
+                      <i className="bi bi-arrow-right"></i>
                     </button>
                   </div>
                 </div>
@@ -173,10 +173,10 @@ const OffersForAgents = () => {
                   <div className="btn_div d-flex align-items-center">
                     <button
                       type="button"
-                      class="btn btn-primary text-dark know_more_btn"
+                      className="btn btn-primary text-dark know_more_btn"
                     >
                       Know more
-                      <i class="bi bi-arrow-right"></i>
+                      <i className="bi bi-arrow-right"></i>
                     </button>
                   </div>
                 </div>

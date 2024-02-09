@@ -8,14 +8,14 @@ const TopCitiesInIndia = () => {
       <section className="top_cities sect_padding">
         <div className="first_div">
           <div
-            className="cities_single title"        
+            className="cities_single title"
           >
             <div>
               <div className="section_title">
-              <div class="section_title_effect">States</div>
+                <div className="section_title_effect">States</div>
                 <h3>we are
-operational in</h3>                
-              </div>           
+                  operational in</h3>
+              </div>
             </div>
           </div>
           <div className="cities_single down">
@@ -36,10 +36,10 @@ operational in</h3>
                 className="city_image"
               />
               <div className="city_number">01.</div>
-         
-                <h6>Karnataka</h6>
-                <h5>Silicon Valley of India</h5>
-          
+
+              <h6>Karnataka</h6>
+              <h5>Silicon Valley of India</h5>
+
             </div>
             <div className="cities_single first_row_img pointer">
               <img
@@ -48,10 +48,10 @@ operational in</h3>
                 className="city_image"
               />
               <div className="city_number">02.</div>
-            
-                <h6>Goa</h6>
-                <h5>Party Capital of India</h5>
-             
+
+              <h6>Goa</h6>
+              <h5>Party Capital of India</h5>
+
             </div>
             <div className="cities_single first_row_img pointer">
               <img
@@ -60,10 +60,10 @@ operational in</h3>
                 className="city_image"
               />
               <div className="city_number">03.</div>
-           
-                <h6>uttar pradesh</h6>
-                <h5>Heartland of India</h5>
-            
+
+              <h6>uttar pradesh</h6>
+              <h5>Heartland of India</h5>
+
             </div>
           </div>
           <div className="second_row">
@@ -74,10 +74,10 @@ operational in</h3>
                 className="city_image"
               />
               <div className="city_number">05.</div>
-          
-                <h6>Maharashtra</h6>
-                <h5>Financial Capital of India</h5>
-             
+
+              <h6>Maharashtra</h6>
+              <h5>Financial Capital of India</h5>
+
             </div>
             <div className="cities_single sr_img_2 pointer">
               <img
@@ -86,15 +86,15 @@ operational in</h3>
                 className="city_image"
               />
               <div className="city_number">06.</div>
-            
-                <h6>Haryana</h6>
-                <h5>India's Green City</h5>
-       
+
+              <h6>Haryana</h6>
+              <h5>India's Green City</h5>
+
             </div>
           </div>
         </div>
       </section>
-     
+
       {/* <div className="container">
         <div className="top-cities-heading">
           <h3>
@@ -136,8 +136,8 @@ operational in</h3>
             </div>
           </div>
         </div>
-        <div class="more-btn-div">
-          <button type="button" class="more-btn-info">
+        <div className="more-btn-div">
+          <button type="button" className="more-btn-info">
             More
           </button>
         </div>

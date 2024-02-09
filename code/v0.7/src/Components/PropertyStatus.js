@@ -6,12 +6,12 @@ import { Link, useLocation } from "react-router-dom";
 import PropertySidebar from "./PropertySidebar";
 
 const PropertyStatus = () => {
-   // Scroll to the top of the page whenever the location changes start
-   const location = useLocation();
-   useEffect(() => {
-     window.scrollTo(0, 0);
-   }, [location]);
-   // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
 
   const openMoreAddOptions = () => {
@@ -34,7 +34,7 @@ const PropertyStatus = () => {
   };
   // switch
 
-  
+
   return (
     <div className="dashboard_pg aflbg property_setup property_image">
       <div className="sidebarwidth">
@@ -81,11 +81,11 @@ const PropertyStatus = () => {
       </div>
       <div className="right_main_content">
         <div className="property-detail">
-          <div class="accordion" id="a1accordion_section">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="a1headingOne">
+          <div className="accordion" id="a1accordion_section">
+            <div className="accordion-item">
+              <h2 className="accordion-header" id="a1headingOne">
                 <button
-                  class="accordion-button"
+                  className="accordion-button"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#a1collapseOne"
@@ -110,16 +110,16 @@ const PropertyStatus = () => {
               </h2>
               <div
                 id="a1collapseOne"
-                class="accordion-collapse collapse"
+                className="accordion-collapse collapse"
                 aria-labelledby="a1headingOne"
                 data-bs-parent="#a1accordion_section"
               >
-                <div class="accordion-body">
-                  <div class="secondary-details-display">
-                    <div class="secondary-details-inside-display">
+                <div className="accordion-body">
+                  <div className="secondary-details-display">
+                    <div className="secondary-details-inside-display">
                       <h5 style={{ textAlign: "center" }}>Atul Tripathi</h5>
                       <div
-                        class="property-contact-div property-media-icons-horizontal"
+                        className="property-contact-div property-media-icons-horizontal"
                         style={{
                           flexDirection: "row",
                           width: "100%",
@@ -127,7 +127,7 @@ const PropertyStatus = () => {
                         }}
                       >
                         <div>
-                          <span class="material-symbols-outlined">call</span>
+                          <span className="material-symbols-outlined">call</span>
                           <h1>Call</h1>
                         </div>
                         <div>
@@ -138,18 +138,18 @@ const PropertyStatus = () => {
                           <h1>WhatsApp</h1>
                         </div>
                         <div>
-                          <span class="material-symbols-outlined">
+                          <span className="material-symbols-outlined">
                             alternate_email
                           </span>
                           <h1>Mail</h1>
                         </div>
                       </div>
                     </div>
-                    <hr class="secondary-details-hr" />
+                    <hr className="secondary-details-hr" />
                     <div style={{ width: "100%" }}>
                       <h5 style={{ textAlign: "center" }}>Vinay Prajapati</h5>
                       <div
-                        class="property-contact-div property-media-icons-horizontal"
+                        className="property-contact-div property-media-icons-horizontal"
                         style={{
                           flexDirection: "row",
                           width: "100%",
@@ -157,7 +157,7 @@ const PropertyStatus = () => {
                         }}
                       >
                         <div>
-                          <span class="material-symbols-outlined">call</span>
+                          <span className="material-symbols-outlined">call</span>
                           <h1>Call</h1>
                         </div>
                         <div>
@@ -165,7 +165,7 @@ const PropertyStatus = () => {
                           <h1>WhatsApp</h1>
                         </div>
                         <div>
-                          <span class="material-symbols-outlined">
+                          <span className="material-symbols-outlined">
                             alternate_email
                           </span>
                           <h1>Mail</h1>
@@ -232,7 +232,7 @@ const PropertyStatus = () => {
                       justifyContent: "center",
                     }}
                   >
-                    <span class="material-symbols-outlined">home</span>
+                    <span className="material-symbols-outlined">home</span>
                     <span>Residential - 3 BHK</span>
                   </div>
                   <div
@@ -269,13 +269,13 @@ const PropertyStatus = () => {
                   <p
                     style={{
                       fontSize: "0.8rem",
-                      
+
                       color: "#666"
                     }}
                   >
                     PMS Premium - PMS After Rent
                   </p>
-                  <h6                 
+                  <h6
                   >
                     On Boarding 2nd Jan'22
                   </h6>
@@ -285,16 +285,16 @@ const PropertyStatus = () => {
           </div>
         </div>
         <div className="d_inner_card">
-            <div className="row">
-                <div className="col-6">
-                See & Edit Property Details
-                </div>
-                <div className="col-6 text-end">
-                    <Link className="theme_btn btn_fill">
-                 Edit
-                    </Link>
-                </div>
+          <div className="row">
+            <div className="col-6">
+              See & Edit Property Details
             </div>
+            <div className="col-6 text-end">
+              <Link className="theme_btn btn_fill">
+                Edit
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

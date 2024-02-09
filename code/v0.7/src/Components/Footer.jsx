@@ -15,26 +15,26 @@ export default function Footer() {
   const logoClick = () => {
     navigate("/");
   };
-   //  display none Array 
-   const excludedPaths = ["/", "aboutus", "contactus", "more-menu"];
-   const shouldHide = excludedPaths.includes(location.pathname);
-   const className = `loc_em_ph ${shouldHide ? "" : "d_none"}`;
-   //  display none Array 
+  //  display none Array 
+  const excludedPaths = ["/", "aboutus", "contactus", "more-menu"];
+  const shouldHide = excludedPaths.includes(location.pathname);
+  const className = `loc_em_ph ${shouldHide ? "" : "d_none"}`;
+  //  display none Array 
 
-   //  add class on footer display none Array 
-   const excludedFooterPaths = ["/", "aboutus", "contactus", "more-menu"];
-   const shouldClassAdd = excludedFooterPaths.includes(location.pathname);
-   const footerClassName = `footer-section ${shouldClassAdd ? "" : "margin-padding"}`;
-   //  add class on footer  display none Array 
+  //  add class on footer display none Array 
+  const excludedFooterPaths = ["/", "aboutus", "contactus", "more-menu"];
+  const shouldClassAdd = excludedFooterPaths.includes(location.pathname);
+  const footerClassName = `footer-section ${shouldClassAdd ? "" : "margin-padding"}`;
+  //  add class on footer  display none Array 
 
-      // hide page_footer array 
-      const pageFooterHidePaths = ["/phonelogin", "/ticketdetail", "/addproperty"];
-      const shouldPageFooerHide = pageFooterHidePaths.includes(location.pathname);
-      const pageFooterClass= `${shouldPageFooerHide ? "page_footer_hide" : ""}`;
-      // hide page_footer array 
+  // hide page_footer array 
+  const pageFooterHidePaths = ["/phonelogin", "/ticketdetail", "/addproperty"];
+  const shouldPageFooerHide = pageFooterHidePaths.includes(location.pathname);
+  const pageFooterclassName = `${shouldPageFooerHide ? "page_footer_hide" : ""}`;
+  // hide page_footer array 
 
   return (
-    <div className={pageFooterClass}>
+    <div className={pageFooterclassName}>
       <CollapsibleGroup></CollapsibleGroup>
       <FooterBefore></FooterBefore>
       <footer
@@ -113,13 +113,13 @@ export default function Footer() {
                 <div className="footer_single_title">Important Links</div>
                 <div className="footer_link">
                   <Link to="faq" className={`pointer ${location.pathname === "/faq" ? "active_f_link" : ""
-                  }`}>FAQ</Link>
+                    }`}>FAQ</Link>
                   <Link to="/" className={`pointer ${location.pathname === "/" ? "active_f_link" : ""
-                  }`}>Home</Link>
+                    }`}>Home</Link>
                   <Link to="/about-us" className={`pointer ${location.pathname === "/about-us" ? "active_f_link" : ""
-                  }`}>About Us</Link>
+                    }`}>About Us</Link>
                   <Link to="contact-us" className={`pointer ${location.pathname === "/contact-us" ? "active_f_link" : ""
-                  }`}>Contact Us</Link>
+                    }`}>Contact Us</Link>
                   <Link>Privacy Policy</Link>
                   <Link>Terms & Condition</Link>
                 </div>

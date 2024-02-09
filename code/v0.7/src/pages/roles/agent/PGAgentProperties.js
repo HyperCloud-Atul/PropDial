@@ -23,16 +23,16 @@ const PGAgentProperties = () => {
     }, [location]);
     // Scroll to the top of the page whenever the location changes end
 
-  // switch
-  const [toggleFlag, setToggleFlag] = useState(false);
-  const [propertyList, setPropertyList] = useState("byMe"); //by me/by other
-  const toggleBtnClick = () => {
-    if (toggleFlag) setPropertyList("byMe");
-    else setPropertyList("byOthers");
+    // switch
+    const [toggleFlag, setToggleFlag] = useState(false);
+    const [propertyList, setPropertyList] = useState("byMe"); //by me/by other
+    const toggleBtnClick = () => {
+        if (toggleFlag) setPropertyList("byMe");
+        else setPropertyList("byOthers");
 
-    setToggleFlag(!toggleFlag);
-  };
-  // switch
+        setToggleFlag(!toggleFlag);
+    };
+    // switch
 
     const { user } = useAuthContext();
     const { logout, isPending } = useLogout();
@@ -42,7 +42,7 @@ const PGAgentProperties = () => {
     const [filter, setFilter] = useState("ALL");
 
     useEffect(() => {
-        let flag = ((user && user.role === "propagent") );
+        let flag = ((user && user.role === "propagent"));
 
         if (!flag) {
             logout();
@@ -116,58 +116,58 @@ const PGAgentProperties = () => {
 
 
     return (
-        <div className='top_header_pg aflbg '> 
-        <div className='brf_icon'>
+        <div className='top_header_pg aflbg '>
+            <div className='brf_icon'>
                 <Link to='/agentaddproperties'>
                     <div className='brfi_single'>
-                        <span class="material-symbols-outlined">
+                        <span className="material-symbols-outlined">
                             add
                         </span>
                     </div>
                 </Link>
-            </div>      
-            <div className='container'>
-            <br />
-            <section className='single_card'>
-            <div
-              className="d-flex"
-              style={{
-                alignItems: "center",
-              }}
-            >
-              <div
-                className="residential-commercial-switch"
-                style={{ top: "0" }}
-              >
-                <span
-                  className={toggleFlag ? "" : "active"}
-                  style={{ color: "var(--theme-blue)" }}
-                >
-               By Me
-                </span>
-                <div
-                  className={
-                    toggleFlag
-                      ? "toggle-switch on commercial"
-                      : "toggle-switch off residential"
-                  }
-                  style={{ padding: "0 10px" }}
-                >
-                  {/* <small>{toggleFlag ? 'On' : 'Off'}</small> */}
-                  <div onClick={toggleBtnClick}>
-                    <div></div>
-                  </div>
-                </div>
-                <span
-                  className={toggleFlag ? "active" : ""}
-                  style={{ color: "var(--theme-orange)" }}
-                >
-                 By Others
-                </span>
-              </div>
             </div>
-            </section>
-                         
+            <div className='container'>
+                <br />
+                <section className='single_card'>
+                    <div
+                        className="d-flex"
+                        style={{
+                            alignItems: "center",
+                        }}
+                    >
+                        <div
+                            className="residential-commercial-switch"
+                            style={{ top: "0" }}
+                        >
+                            <span
+                                className={toggleFlag ? "" : "active"}
+                                style={{ color: "var(--theme-blue)" }}
+                            >
+                                By Me
+                            </span>
+                            <div
+                                className={
+                                    toggleFlag
+                                        ? "toggle-switch on commercial"
+                                        : "toggle-switch off residential"
+                                }
+                                style={{ padding: "0 10px" }}
+                            >
+                                {/* <small>{toggleFlag ? 'On' : 'Off'}</small> */}
+                                <div onClick={toggleBtnClick}>
+                                    <div></div>
+                                </div>
+                            </div>
+                            <span
+                                className={toggleFlag ? "active" : ""}
+                                style={{ color: "var(--theme-orange)" }}
+                            >
+                                By Others
+                            </span>
+                        </div>
+                    </div>
+                </section>
+
                 <section>
                     <div>
                         <div className="page-title">
@@ -193,9 +193,9 @@ const PGAgentProperties = () => {
                             {propertiesdocuments && <PropertyDetail propertiesdocuments={propertiesdocuments} />}
                         </div>
                     </div>
-                </section>               
+                </section>
                 <br />
-                            </div>
+            </div>
         </div>
     )
 }

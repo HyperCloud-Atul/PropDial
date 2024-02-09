@@ -17,14 +17,14 @@ import PropertyList from "../../Components/PropertyList";
 import "./PGPropetyList.css";
 
 export default function PGPropertyList() {
-    // Scroll to the top of the page whenever the location changes start
-    const location = useLocation();
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [location]);
-    // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
   const propertyFilter = ["ALL", "RESIDENTIAL", "COMMERCIAL", "INACTIVE"];
-  const { user } = useAuthContext(); 
+  const { user } = useAuthContext();
   const { documents, error } = useCollection("properties");
   const [filter, setFilter] = useState("all");
   const changeFilter = (newFilter) => {
@@ -75,17 +75,16 @@ export default function PGPropertyList() {
   return (
     <div className="pgadmindasboard pgls_mobile aflbg">
       <div className="dashboard_pg pg_width">
-    
-          <LeftSidebar />
-    
+
+        <LeftSidebar />
+
         <div className="right_main_content">
           <br />
           <h2 className="pg_title">property List</h2>
           <hr />
           <div
-            className={`search_card${
-              isAdvancedSearch ? " advanced_search" : ""
-            }`}
+            className={`search_card${isAdvancedSearch ? " advanced_search" : ""
+              }`}
             style={{
               margin: "10px 0px ",
               background: "white",
@@ -94,10 +93,10 @@ export default function PGPropertyList() {
           >
             <div className="expand_btn" onClick={toggleAdvancedSearch}>
               <span>Advance search</span>
-              <span class="material-symbols-outlined expand_more">
+              <span className="material-symbols-outlined expand_more">
                 expand_more
               </span>
-              <span class="material-symbols-outlined expand_less">
+              <span className="material-symbols-outlined expand_less">
                 expand_less
               </span>
             </div>
@@ -139,12 +138,12 @@ export default function PGPropertyList() {
                   </span>
                 </div>
               </div>
-              <div class="form_field st-2 mt-lg-0 frs_single">
+              <div className="form_field st-2 mt-lg-0 frs_single">
                 {/* <label>Unit Number</label> */}
-                <div class="field_inner">
+                <div className="field_inner">
                   <input type="text" placeholder="Search here" />
-                  <div class="field_icon">
-                    <span class="material-symbols-outlined">manage_search</span>
+                  <div className="field_icon">
+                    <span className="material-symbols-outlined">manage_search</span>
                   </div>
                 </div>
               </div>
@@ -160,14 +159,14 @@ export default function PGPropertyList() {
                     <option>2019</option>
                   </select>
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">
+                    <span className="material-symbols-outlined">
                       hourglass_bottom
                     </span>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="sc_second_row">              
+            <div className="sc_second_row">
               <div className="form_field st-2 trs_single">
                 <div className="field_inner select">
                   <select>
@@ -180,7 +179,7 @@ export default function PGPropertyList() {
                     <option>China</option>
                   </select>
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">
+                    <span className="material-symbols-outlined">
                       hourglass_bottom
                     </span>
                   </div>
@@ -194,10 +193,10 @@ export default function PGPropertyList() {
                     </option>
                     <option>Delhi</option>
                     <option>Haryana</option>
-                    <option>Madhya Pradesh</option>              
+                    <option>Madhya Pradesh</option>
                   </select>
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">
+                    <span className="material-symbols-outlined">
                       hourglass_bottom
                     </span>
                   </div>
@@ -207,14 +206,14 @@ export default function PGPropertyList() {
                 <div className="field_inner select">
                   <select>
                     <option selected disabled>
-                   City
+                      City
                     </option>
                     <option>Mumbai</option>
                     <option>Pune</option>
-                    <option>Orangabad</option>                  
+                    <option>Orangabad</option>
                   </select>
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">
+                    <span className="material-symbols-outlined">
                       hourglass_bottom
                     </span>
                   </div>
@@ -234,7 +233,7 @@ export default function PGPropertyList() {
                     className={toggleFlag ? "" : "active"}
                     style={{ color: "var(--theme-blue)" }}
                   >
-                  Rent
+                    Rent
                   </span>
                   <div
                     className={
@@ -252,18 +251,18 @@ export default function PGPropertyList() {
                     className={toggleFlag ? "active" : ""}
                     style={{ color: "var(--theme-orange)" }}
                   >
-                   Sale
+                    Sale
                   </span>
                 </div>
               </div>
-            
-                <button className="theme_btn btn_fill">
-                    Search
-                </button>
-           
+
+              <button className="theme_btn btn_fill">
+                Search
+              </button>
+
             </div>
           </div>
-         
+
           {error && <p className="error">{error}</p>}
           {documents && (
             <Filters

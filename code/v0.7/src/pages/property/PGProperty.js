@@ -111,7 +111,7 @@ const PGProperty = () => {
             <Link to="/search-property">
               <button className="theme_btn btn_fill">
                 Search
-                <span class="material-symbols-outlined btn_arrow ba_animation">
+                <span className="material-symbols-outlined btn_arrow ba_animation">
                   arrow_forward
                 </span>
               </button>

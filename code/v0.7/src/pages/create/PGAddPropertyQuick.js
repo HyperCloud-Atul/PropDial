@@ -446,17 +446,17 @@ export default function PGAddPropertyQuick({ propertyid }) {
                         <form onSubmit={handleSubmit}>
                             <div className="row no-gutters">
                                 <div className="col-lg-4">
-                                    <div class="form_field st-2 mt-lg-0">
+                                    <div className="form_field st-2 mt-lg-0">
                                         <label>Unit Number</label>
-                                        <div class="field_inner">
+                                        <div className="field_inner">
                                             <input required
                                                 type="text"
                                                 placeholder="e.g. A-504"
                                                 maxLength={70}
                                                 onChange={(e) => setUnitNumber(e.target.value)}
                                                 value={unitNumber} />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">
                                                     drive_file_rename_outline
                                                 </span>
                                             </div>
@@ -483,7 +483,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
                                                 }}
                                             />
                                             <div className="field_icon">
-                                                <span class="material-symbols-outlined"> drive_file_rename_outline</span>
+                                                <span className="material-symbols-outlined"> drive_file_rename_outline</span>
                                             </div>
                                         </div>
                                     </div>
@@ -529,7 +529,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
 
                                             />
                                             <div className="field_icon">
-                                                <span class="material-symbols-outlined">   person</span>
+                                                <span className="material-symbols-outlined">   person</span>
                                             </div>
                                         </div>
                                     </div>
@@ -554,7 +554,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
                                                 }}
                                             />
                                             <div className="field_icon">
-                                                <span class="material-symbols-outlined">       public</span>
+                                                <span className="material-symbols-outlined">       public</span>
                                             </div>
                                         </div>
                                     </div>
@@ -581,7 +581,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
                                                 }}
                                             />
                                             <div className="field_icon">
-                                                <span class="material-symbols-outlined">       emoji_transportation</span>
+                                                <span className="material-symbols-outlined">       emoji_transportation</span>
                                             </div>
                                         </div>
                                     </div>
@@ -606,7 +606,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
                                                 }}
                                             />
                                             <div className="field_icon">
-                                                <span class="material-symbols-outlined">       apartment</span>
+                                                <span className="material-symbols-outlined">       apartment</span>
                                             </div>
                                         </div>
                                     </div>
@@ -631,7 +631,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
                                                 }}
                                             />
                                             <div className="field_icon">
-                                                <span class="material-symbols-outlined">        holiday_village</span>
+                                                <span className="material-symbols-outlined">        holiday_village</span>
                                             </div>
                                         </div>
                                     </div>
@@ -656,7 +656,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
                                                 }}
                                             />
                                             <div className="field_icon">
-                                                <span class="material-symbols-outlined">          home</span>
+                                                <span className="material-symbols-outlined">          home</span>
                                             </div>
                                         </div>
                                     </div>

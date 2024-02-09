@@ -356,12 +356,14 @@ function App() {
               <Route
                 path="/ownerdashboard"
                 element={
-                  (user && user.role === "owner") ||
-                    (user && user.role === "coowner") ? (
+                  // (user && user.role === "owner") ||
+                  //   (user && user.role === "coowner") ? 
+                  (
                     <PGOwnerDashboard />
-                  ) : (
-                    <Navigate to="/login" />
                   )
+                  // : (
+                  //   <Navigate to="/login" />
+                  // )
                 }
               ></Route>
               <Route
@@ -509,17 +511,17 @@ function App() {
               {/* new route start  */}
               <Route
                 path="/phonelogin"
-                element={<PhoneLogin/>}
+                element={<PhoneLogin />}
 
 
               ></Route>
-                   <Route
+              <Route
                 path="/propertysinglecard"
-                element={< PropertySingleCard/>}
+                element={< PropertySingleCard />}
 
 
               ></Route>
-             
+
               {/* new route end  */}
 
             </Routes>

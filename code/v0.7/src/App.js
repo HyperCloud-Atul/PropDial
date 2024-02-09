@@ -95,7 +95,7 @@ function App() {
   // console.log('opensidenavbar flag in aap.js : ', flag);
   // setSideNavbar(flag);
   // }
-  console.log("user in App.js", user);
+  // console.log("user in App.js", user);
   // console.log('user role in App.js', user.role)
 
   useEffect(() => { }, [user]);

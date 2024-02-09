@@ -158,11 +158,11 @@ export default function AddPhoto(props) {
       </div>
       <div className="right_main_content">
         <div className="property-detail">
-          <div class="accordion" id="a1accordion_section">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="a1headingOne">
+          <div className="accordion" id="a1accordion_section">
+            <div className="accordion-item">
+              <h2 className="accordion-header" id="a1headingOne">
                 <button
-                  class="accordion-button"
+                  className="accordion-button"
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#a1collapseOne"
@@ -187,16 +187,16 @@ export default function AddPhoto(props) {
               </h2>
               <div
                 id="a1collapseOne"
-                class="accordion-collapse collapse"
+                className="accordion-collapse collapse"
                 aria-labelledby="a1headingOne"
                 data-bs-parent="#a1accordion_section"
               >
-                <div class="accordion-body">
-                  <div class="secondary-details-display">
-                    <div class="secondary-details-inside-display">
+                <div className="accordion-body">
+                  <div className="secondary-details-display">
+                    <div className="secondary-details-inside-display">
                       <h5 style={{ textAlign: "center" }}>Atul Tripathi</h5>
                       <div
-                        class="property-contact-div property-media-icons-horizontal"
+                        className="property-contact-div property-media-icons-horizontal"
                         style={{
                           flexDirection: "row",
                           width: "100%",
@@ -204,7 +204,7 @@ export default function AddPhoto(props) {
                         }}
                       >
                         <div>
-                          <span class="material-symbols-outlined">call</span>
+                          <span className="material-symbols-outlined">call</span>
                           <h1>Call</h1>
                         </div>
                         <div>
@@ -215,18 +215,18 @@ export default function AddPhoto(props) {
                           <h1>WhatsApp</h1>
                         </div>
                         <div>
-                          <span class="material-symbols-outlined">
+                          <span className="material-symbols-outlined">
                             alternate_email
                           </span>
                           <h1>Mail</h1>
                         </div>
                       </div>
                     </div>
-                    <hr class="secondary-details-hr" />
+                    <hr className="secondary-details-hr" />
                     <div style={{ width: "100%" }}>
                       <h5 style={{ textAlign: "center" }}>Vinay Prajapati</h5>
                       <div
-                        class="property-contact-div property-media-icons-horizontal"
+                        className="property-contact-div property-media-icons-horizontal"
                         style={{
                           flexDirection: "row",
                           width: "100%",
@@ -234,7 +234,7 @@ export default function AddPhoto(props) {
                         }}
                       >
                         <div>
-                          <span class="material-symbols-outlined">call</span>
+                          <span className="material-symbols-outlined">call</span>
                           <h1>Call</h1>
                         </div>
                         <div>
@@ -242,7 +242,7 @@ export default function AddPhoto(props) {
                           <h1>WhatsApp</h1>
                         </div>
                         <div>
-                          <span class="material-symbols-outlined">
+                          <span className="material-symbols-outlined">
                             alternate_email
                           </span>
                           <h1>Mail</h1>
@@ -292,7 +292,7 @@ export default function AddPhoto(props) {
                                 }}
                               />
                               <div className="field_icon">
-                                <span class="material-symbols-outlined">bed</span>
+                                <span className="material-symbols-outlined">bed</span>
                               </div>
                             </div>
                           </div>
@@ -309,7 +309,7 @@ export default function AddPhoto(props) {
                                 placeholder="Photo Name"
                               />
                               <div className="field_icon">
-                                <span class="material-symbols-outlined">
+                                <span className="material-symbols-outlined">
 
                                   table_rows
                                 </span>
@@ -334,121 +334,121 @@ export default function AddPhoto(props) {
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="/assets/img/p_img/fullview.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     house - full view
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="/assets/img/p_img/drawingroom.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     DRAWING ROOM
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/masterbedroom.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     MASTER BED ROOM
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/room_1.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     ROOM ADJECENT TO HALL
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/room_2.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     ROOM ADJECENT TO KITCHEN
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/balcony.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     BALCONY
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/kitchen.webp"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     KITCHEN
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/bathroom.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     BATHROOM
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
               </div>
@@ -458,121 +458,121 @@ export default function AddPhoto(props) {
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/fullview.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     house - full view
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/drawingroom.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     DRAWING ROOM
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/masterbedroom.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     MASTER BED ROOM
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/room_1.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     ROOM ADJECENT TO HALL
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/room_2.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     ROOM ADJECENT TO KITCHEN
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/balcony.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     BALCONY
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/kitchen.webp"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     KITCHEN
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/bathroom.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     BATHROOM
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
               </div>
@@ -582,121 +582,121 @@ export default function AddPhoto(props) {
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/fullview.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     house - full view
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/drawingroom.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     DRAWING ROOM
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/masterbedroom.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     MASTER BED ROOM
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/room_1.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     ROOM ADJECENT TO HALL
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/room_2.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     ROOM ADJECENT TO KITCHEN
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/balcony.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     BALCONY
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/kitchen.webp"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     KITCHEN
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
                 <div className="col-lg-4 col-md-6">
                   <div className="property-img-container">
                     <img src="./assets/img/p_img/bathroom.jpg"></img>
-                    <span class="material-symbols-outlined delete">
+                    <span className="material-symbols-outlined delete">
                       delete
                     </span>
-                    <span class="material-symbols-outlined upload">
+                    <span className="material-symbols-outlined upload">
                       publish
                     </span>
                   </div>
                   <h4 className="property_desc">
                     BATHROOM
-                    <div class="indicating-letter"></div>
+                    <div className="indicating-letter"></div>
                   </h4>
                 </div>
               </div>

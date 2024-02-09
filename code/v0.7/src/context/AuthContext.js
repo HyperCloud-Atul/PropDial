@@ -53,7 +53,8 @@ export const AuthContextProvider = ({ children }) => {
         const unsubscribe = documentRef.onSnapshot(snapshot => {
           // need to make sure the doc exists & has data
           if (snapshot.data()) {
-            let role = snapshot.data().role;
+            let role = snapshot.data().rolePropDial;
+            let roles = snapshot.data().rolesPropDial;
             let online = snapshot.data().online;
             let displayName = snapshot.data().displayName;
             let fullName = snapshot.data().fullName;
@@ -70,6 +71,7 @@ export const AuthContextProvider = ({ children }) => {
             let userData = {
               ...user,
               role,
+              roles,
               online,
               displayName,
               fullName,

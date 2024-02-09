@@ -77,7 +77,7 @@ const PGAboutUs = () => {
             <div className="col-lg-5">
               <div className="our_vision">
                 <div className="section_title">
-                  <div class="section_title_effect">OUR VISION</div>
+                  <div className="section_title_effect">OUR VISION</div>
                 </div>
                 <div className="vision_points">
                   <div className="vs_single">

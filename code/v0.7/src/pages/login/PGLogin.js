@@ -87,7 +87,7 @@ export default function Login() {
                       value={email}
                       placeholder='Email'
                     />
-                    <div class="field_icon"><span class="material-symbols-outlined">mail</span></div>
+                    <div className="field_icon"><span className="material-symbols-outlined">mail</span></div>
                   </div>
                 </div>
                 <div className='col-sm-6'>
@@ -99,17 +99,17 @@ export default function Login() {
                       value={password}
                       placeholder='Password'
                     />
-                    <div class="field_icon"><span class="material-symbols-outlined">mail</span></div>
+                    <div className="field_icon"><span className="material-symbols-outlined">mail</span></div>
                   </div>
                 </div>
                 <div className='col-sm-12' style={{
                   textAlign: "center"
                 }}>
-                  {!isPending && <button className="theme_btn btn_fill">Log in<span class="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span></button>}
-                  {isPending && <button className="theme_btn btn_fill" disabled>Signing...<span class="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span></button>}
+                  {!isPending && <button className="theme_btn btn_fill">Log in<span className="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span></button>}
+                  {isPending && <button className="theme_btn btn_fill" disabled>Signing...<span className="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span></button>}
                   {error && <div className="error">{error}</div>}
                   <div onClick={() => setLoginAsOwner(!loginAsOwner)} className={`back_login_option ${loginAsOwner ? 'hidden' : 'show'}`}>
-                    <span class="material-symbols-outlined">
+                    <span className="material-symbols-outlined">
                       arrow_back
                     </span>
                     Back to Login Options

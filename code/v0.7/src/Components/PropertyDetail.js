@@ -40,12 +40,12 @@ const PropertyDetail = ({ propertiesdocuments }) => {
                 </h4>
                 <h6 className="property_location">{property.city}, {property.state}</h6>
                 <div className="fav_and_share">
-                  <span class="material-symbols-outlined mr-2 fav" style={{
+                  <span className="material-symbols-outlined mr-2 fav" style={{
                     marginRight: "3px"
                   }}>
                     favorite
                   </span>
-                  {/* <span class="material-symbols-outlined" >
+                  {/* <span className="material-symbols-outlined" >
                     share
                   </span> */}
                 </div>
@@ -112,14 +112,14 @@ const PropertyDetail = ({ propertiesdocuments }) => {
         </div>
 
       ))}
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content relative">
-            <span class="material-symbols-outlined close_modal" data-bs-dismiss="modal">
+      <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content relative">
+            <span className="material-symbols-outlined close_modal" data-bs-dismiss="modal">
               close
             </span>
 
-            <div class="modal-body">
+            <div className="modal-body">
               <form>
                 <div className="row">
                   <div className="col-sm-12">
@@ -129,36 +129,36 @@ const PropertyDetail = ({ propertiesdocuments }) => {
                     </div>
                   </div>
                   <div className="col-sm-12">
-                    <div class="form_field st-2">
-                      <div class="field_inner select">
+                    <div className="form_field st-2">
+                      <div className="field_inner select">
                         <select>
                           <option value="" disabled selected>I am</option>
                           {/* <option>Owner</option> */}
                           <option>Tenant</option>
                           <option>Agent</option>
                         </select>
-                        <div class="field_icon">
-                          <span class="material-symbols-outlined">person</span>
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">person</span>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="col-sm-12">
-                    <div class="form_field st-2">
-                      <div class="field_inner">
+                    <div className="form_field st-2">
+                      <div className="field_inner">
                         <input type="text" placeholder="Name" />
-                        <div class="field_icon">
-                          <span class="material-symbols-outlined">person</span>
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">person</span>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="col-sm-12">
-                    <div class="form_field st-2">
-                      <div class="field_inner">
+                    <div className="form_field st-2">
+                      <div className="field_inner">
                         <input type="text" placeholder="Phone Number" />
-                        <div class="field_icon">
-                          <span class="material-symbols-outlined">call</span>
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">call</span>
                         </div>
                       </div>
                     </div>
@@ -167,7 +167,7 @@ const PropertyDetail = ({ propertiesdocuments }) => {
                     <div className="submit_btn mt-4">
                       <button type="submit" className="modal_btn theme_btn no_icon btn_fill">
                         Submit
-                        {/* <span class="material-symbols-outlined btn_arrow ba_animation">
+                        {/* <span className="material-symbols-outlined btn_arrow ba_animation">
                           arrow_forward
                         </span> */}
                       </button>

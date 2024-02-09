@@ -117,7 +117,7 @@ const PDSingle = () => {
             {!user && (
                 <div className="top_search_bar">
                     <Link to="/search-property" className="back_btn">
-                        <span class="material-symbols-outlined">
+                        <span className="material-symbols-outlined">
                             arrow_back
                         </span>
                         <span>Back</span>
@@ -127,7 +127,7 @@ const PDSingle = () => {
 
             {/* <div className="top_search_bar">
                 <Link to="/search-property" className="back_btn">
-                    <span class="material-symbols-outlined">
+                    <span className="material-symbols-outlined">
                         arrow_back
                     </span>
                     <span>Back</span>
@@ -203,7 +203,7 @@ const PDSingle = () => {
                         <Link to="/search-property">
                             <button className="theme_btn btn_fill">
                                 Search
-                                <span class="material-symbols-outlined btn_arrow ba_animation">
+                                <span className="material-symbols-outlined btn_arrow ba_animation">
                                     arrow_forward
                                 </span>
                             </button>

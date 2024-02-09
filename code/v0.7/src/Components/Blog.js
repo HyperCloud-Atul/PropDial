@@ -33,7 +33,7 @@ const Blog = () => {
         <section className="blog_sect sect_padding">
             <div className='container'>
                 <div className="section_title">
-                    <h2 class="section_title_effect">News & Media</h2>
+                    <h2 className="section_title_effect">News & Media</h2>
                     <h3>Journeying Through Untold Stories and Hidden Reals</h3>
                 </div>
 
@@ -189,10 +189,10 @@ const Blog = () => {
                                     <img src="./assets/img/blog_source5.png" alt="" />
                                 </div>
                                 <h3>
-                                49 Top Indian Property Management Companies and Startups of 2021
+                                    49 Top Indian Property Management Companies and Startups of 2021
                                 </h3>
                                 <p className="card-subtitle">
-                                These startups and companies are taking a variety of approaches to innovating the Property Management industry, but are all exceptional companies well worth a follow.                             
+                                    These startups and companies are taking a variety of approaches to innovating the Property Management industry, but are all exceptional companies well worth a follow.
 
                                 </p>
                                 <div className="card-author">
@@ -217,10 +217,10 @@ const Blog = () => {
                                     <img src="./assets/img/blog_source6.png" alt="" />
                                 </div>
                                 <h3>
-                                Housing.com Joins Hands With Gurugram-Based Propdial To Tap Into Rental, Property Management Tech
+                                    Housing.com Joins Hands With Gurugram-Based Propdial To Tap Into Rental, Property Management Tech
                                 </h3>
                                 <p className="card-subtitle">
-                                National, 9th February 2021:  In a move that would help India s leading real-estate portal, Housing.com, further expand its footprint; the portal has announced a partnership with Gurugram-based property and rental management technology company, Propdial.                            
+                                    National, 9th February 2021:  In a move that would help India s leading real-estate portal, Housing.com, further expand its footprint; the portal has announced a partnership with Gurugram-based property and rental management technology company, Propdial.
 
                                 </p>
                                 <div className="card-author">
@@ -245,10 +245,10 @@ const Blog = () => {
                                     <img src="./assets/img/blog_source2.svg" alt="" />
                                 </div>
                                 <h3>
-                                HOW THIS REALTY MANAGED MARKETPLACE OFFERS PEACE OF MIND TO NRI PROPERTY OWNERS
+                                    HOW THIS REALTY MANAGED MARKETPLACE OFFERS PEACE OF MIND TO NRI PROPERTY OWNERS
                                 </h3>
                                 <p className="card-subtitle">
-                                Propdial provides end-to-end property management solution to NRIs, where it maintains, manages, and rents out property on their behalf.Not long ago, when Vinay Prajapati was running a real estate brokerage firm catering to NRIs, he would receive lots of queries by them on property maintenance.                         
+                                    Propdial provides end-to-end property management solution to NRIs, where it maintains, manages, and rents out property on their behalf.Not long ago, when Vinay Prajapati was running a real estate brokerage firm catering to NRIs, he would receive lots of queries by them on property maintenance.
 
                                 </p>
                                 <div className="card-author">
@@ -273,10 +273,10 @@ const Blog = () => {
                                     <img src="./assets/img/blog_source7.png" alt="" />
                                 </div>
                                 <h3>
-                                Propdial India: A Name you can Trust Upon A Platform with its Unique Approach
+                                    Propdial India: A Name you can Trust Upon A Platform with its Unique Approach
                                 </h3>
                                 <p className="card-subtitle">
-                                Over the past few years, technology has grown by leaps and bounds and the industries across verticals are adapting to it in a large way round. Just like every other industry, the property management industry is also in a constant state of evolution by merging itself with the latest trends.                    
+                                    Over the past few years, technology has grown by leaps and bounds and the industries across verticals are adapting to it in a large way round. Just like every other industry, the property management industry is also in a constant state of evolution by merging itself with the latest trends.
 
                                 </p>
                                 <div className="card-author">
@@ -302,12 +302,12 @@ const Blog = () => {
                                 </div>
 
                                 <h3>
-                                Housing.com partners Propdial to strengthen rental services business
+                                    Housing.com partners Propdial to strengthen rental services business
                                 </h3>
                                 <p className="card-subtitle">
-                                Realty portal Housing.com on Tuesday said it has tied up with Gurugram-based property and rental management technology firm Propdial to strengthen its rent services business. The tie-up will help the company to provide property management services such as renting/leasing, tenant background verification, rental agreement and rent collection/bill payment, Housing.com said in a statement.
+                                    Realty portal Housing.com on Tuesday said it has tied up with Gurugram-based property and rental management technology firm Propdial to strengthen its rent services business. The tie-up will help the company to provide property management services such as renting/leasing, tenant background verification, rental agreement and rent collection/bill payment, Housing.com said in a statement.
 
-               
+
 
                                 </p>
                                 <div className="card-author">
@@ -332,10 +332,10 @@ const Blog = () => {
                                     <img src="./assets/img/blog_source8.png" alt="" />
                                 </div>
                                 <h3>
-                                Housing.com partners startup Propdial to boost rental services business
+                                    Housing.com partners startup Propdial to boost rental services business
                                 </h3>
                                 <p className="card-subtitle">
-                                The tie-up will help the company to provide property management services such as renting/leasing, tenant background verification, rental agreement and rent collection/bill payment, Housing.com said in a statement.           
+                                    The tie-up will help the company to provide property management services such as renting/leasing, tenant background verification, rental agreement and rent collection/bill payment, Housing.com said in a statement.
 
                                 </p>
                                 <div className="card-author">
@@ -349,7 +349,7 @@ const Blog = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>       
+                        </div>
 
 
 

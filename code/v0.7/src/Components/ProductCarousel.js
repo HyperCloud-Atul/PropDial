@@ -12,7 +12,7 @@ const ProductCarousel = () => {
     nav: true,
     // animateOut: 'fadeOut', // Fade out animation
     // animateIn: 'fadeIn',   // Fade in animation
-    dots:false,
+    dots: false,
     smartSpeed: 2000,
     autoplay: true, // Enable autoplay
     autoplayTimeout: 5000, // Set autoplay interval (in milliseconds)
@@ -41,13 +41,13 @@ const ProductCarousel = () => {
             <div className="section_title">
               <div className="section_title_effect">Our Presence</div>
               <h3>
-              Our Impactful and Extensive Global Reach
+                Our Impactful and Extensive Global Reach
               </h3>
             </div>
           </div>
           <div className="col-md-8">
             <div className="lc_right">
-            <OwlCarousel className="owl-theme" {...citiesOptions}>
+              <OwlCarousel className="owl-theme" {...citiesOptions}>
                 <div className="item lc_slide_single">
                   <img src="./assets/img/faridabad.jpg" alt="" />
                   <h6>Faridabad</h6>
@@ -141,13 +141,13 @@ const ProductCarousel = () => {
 
                   <h6>goa</h6>
                 </div>
-               
+
                 <div className="item lc_slide_single">
                   <img src="./assets/img/dehradun.jpg" alt="" />
 
                   <h6>dehradun</h6>
                 </div>
-                </OwlCarousel>
+              </OwlCarousel>
             </div>
           </div>
         </div>
@@ -165,10 +165,10 @@ const ProductCarousel = () => {
         keyBoardControl={true}
         customTransition="all .5"
         transitionDuration={500}
-        containerClass="carousel-container"
+        containerclassName="carousel-container"
         removeArrowOnDeviceType={["tablet", "mobile"]}
-        dotListClass="custom-dot-list-style"
-        itemClass="carousel-item-padding-40-px"
+        dotListclassName="custom-dot-list-style"
+        itemclassName="carousel-item-padding-40-px"
       >
         <div>Item 1</div>
         <div>Item 2</div>

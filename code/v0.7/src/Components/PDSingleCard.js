@@ -86,12 +86,12 @@ const PDSingleCard = ({ propertyDocument }) => {
                             </div>
                             <div className="pmd_section4">
                                 <div className="left">
-                                    <span class="material-symbols-outlined mr-2" style={{
+                                    <span className="material-symbols-outlined mr-2" style={{
                                         marginRight: "3px"
                                     }}>
                                         favorite
                                     </span>
-                                    <span class="material-symbols-outlined" onClick={handleShareClick}>
+                                    <span className="material-symbols-outlined" onClick={handleShareClick}>
                                         share
                                     </span>
                                 </div>
@@ -101,14 +101,14 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             marginRight: "10px"
                                         }}> Contact Agent</a>
                                         <a className="theme_btn no_icon btn_border" data-bs-toggle="modal" data-bs-target="#exampleModal"> Enquire Now</a>
-                                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content relative">
-                                                    <span class="material-symbols-outlined close_modal" data-bs-dismiss="modal">
+                                        <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div className="modal-dialog">
+                                                <div className="modal-content relative">
+                                                    <span className="material-symbols-outlined close_modal" data-bs-dismiss="modal">
                                                         close
                                                     </span>
 
-                                                    <div class="modal-body">
+                                                    <div className="modal-body">
                                                         <form>
                                                             <div className="row">
                                                                 <div className="col-sm-12">
@@ -118,36 +118,36 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-sm-12">
-                                                                    <div class="form_field st-2">
-                                                                        <div class="field_inner select">
+                                                                    <div className="form_field st-2">
+                                                                        <div className="field_inner select">
                                                                             <select>
                                                                                 <option value="" disabled selected>I am</option>
                                                                                 {/* <option>Owner</option> */}
                                                                                 <option>Tenant</option>
                                                                                 <option>Agent</option>
                                                                             </select>
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">person</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">person</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-sm-12">
-                                                                    <div class="form_field st-2">
-                                                                        <div class="field_inner">
+                                                                    <div className="form_field st-2">
+                                                                        <div className="field_inner">
                                                                             <input type="text" placeholder="Name" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">person</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">person</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-sm-12">
-                                                                    <div class="form_field st-2">
-                                                                        <div class="field_inner">
+                                                                    <div className="form_field st-2">
+                                                                        <div className="field_inner">
                                                                             <input type="text" placeholder="Phone Number" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">call</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">call</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -156,7 +156,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                                     <div className="submit_btn mt-4">
                                                                         <button type="submit" className="modal_btn theme_btn no_icon btn_fill">
                                                                             Submit
-                                                                            {/* <span class="material-symbols-outlined btn_arrow ba_animation">
+                                                                            {/* <span className="material-symbols-outlined btn_arrow ba_animation">
                           arrow_forward
                         </span> */}
                                                                         </button>
@@ -207,7 +207,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             <div className="contacts">
                                                 <Link to="tel:+918770534650" className="contacts_single">
                                                     <div className="icon">
-                                                        <span class="material-symbols-outlined">
+                                                        <span className="material-symbols-outlined">
                                                             call
                                                         </span>
                                                     </div>
@@ -227,7 +227,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 </Link>
                                                 <Link to="mailto:solankisanskar8@gmail.com" className="contacts_single">
                                                     <div className="icon">
-                                                        <span class="material-symbols-outlined">
+                                                        <span className="material-symbols-outlined">
                                                             mail
                                                         </span>
                                                     </div>
@@ -243,64 +243,64 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 </div>
                                 <div className="col-md-6">
                                     <div className="userlist property_owners">
-                                        <div class="single_user">
+                                        <div className="single_user">
                                             <div className="property_people_designation">Owner
                                             </div>
-                                            <div class="left">
+                                            <div className="left">
 
-                                                <div class="user_img">
+                                                <div className="user_img">
                                                     <img src="/assets/img/user.png" alt="" />
                                                 </div>
                                             </div>
-                                            <div class="right">
+                                            <div className="right">
                                                 <h5>Sanskar Solanki</h5>
                                                 <h6>8770534650</h6>
                                                 <h6>Ujjain, India</h6>
                                                 {user && user.role !== "owner" && (
-                                                    <div class="wc">
-                                                        <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
-                                                        <img src="/assets/img/phone-call.png" class="pointer" alt="" />
+                                                    <div className="wc">
+                                                        <img src="/assets/img/whatsapp.png" className="pointer" alt="" />
+                                                        <img src="/assets/img/phone-call.png" className="pointer" alt="" />
 
                                                     </div>
                                                 )}
                                             </div>
                                         </div>
-                                        <div class="single_user">
+                                        <div className="single_user">
                                             <div className="property_people_designation">
                                                 Co-Owner
                                             </div>
-                                            <div class="left">
-                                                <div class="user_img">
+                                            <div className="left">
+                                                <div className="user_img">
                                                     <img src="/assets/img/user.png" alt="" />
                                                 </div>
                                             </div>
-                                            <div class="right">
+                                            <div className="right">
                                                 <h5>Sanskar Solanki</h5>
                                                 <h6>8770534650</h6>
                                                 <h6>Ujjain, India</h6>
-                                                <div class="wc">
-                                                    <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
-                                                    <img src="/assets/img/phone-call.png" class="pointer" alt="" />
+                                                <div className="wc">
+                                                    <img src="/assets/img/whatsapp.png" className="pointer" alt="" />
+                                                    <img src="/assets/img/phone-call.png" className="pointer" alt="" />
 
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="single_user">
+                                        <div className="single_user">
                                             <div className="property_people_designation">
                                                 POC
                                             </div>
-                                            <div class="left">
-                                                <div class="user_img">
+                                            <div className="left">
+                                                <div className="user_img">
                                                     <img src="/assets/img/user.png" alt="" />
                                                 </div>
                                             </div>
-                                            <div class="right">
+                                            <div className="right">
                                                 <h5>Sanskar Solanki</h5>
                                                 <h6>8770534650</h6>
                                                 <h6>Ujjain, India</h6>
-                                                <div class="wc">
-                                                    <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
-                                                    <img src="/assets/img/phone-call.png" class="pointer" alt="" />
+                                                <div className="wc">
+                                                    <img src="/assets/img/whatsapp.png" className="pointer" alt="" />
+                                                    <img src="/assets/img/phone-call.png" className="pointer" alt="" />
 
                                                 </div>
                                             </div>
@@ -340,7 +340,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             <div className="contacts">
                                                 <Link to="tel:+918770534650" className="contacts_single">
                                                     <div className="icon">
-                                                        <span class="material-symbols-outlined">
+                                                        <span className="material-symbols-outlined">
                                                             call
                                                         </span>
                                                     </div>
@@ -360,7 +360,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 </Link>
                                                 <Link to="mailto:solankisanskar8@gmail.com" className="contacts_single">
                                                     <div className="icon">
-                                                        <span class="material-symbols-outlined">
+                                                        <span className="material-symbols-outlined">
                                                             mail
                                                         </span>
                                                     </div>
@@ -375,41 +375,41 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 </div>
                                 <div className="col-md-6">
                                     <div className="userlist property_owners">
-                                        <div class="single_user">
+                                        <div className="single_user">
                                             <div className="property_people_designation">Level 1
                                             </div>
-                                            <div class="right">
+                                            <div className="right">
                                                 <h5>8770534650</h5>
                                                 <h6>level1@gmail.com</h6>
-                                                {/* <div class="wc">
-                                        <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
-                                        <img src="/assets/img/phone-call.png" class="pointer" alt="" />
+                                                {/* <div className="wc">
+                                        <img src="/assets/img/whatsapp.png" className="pointer" alt="" />
+                                        <img src="/assets/img/phone-call.png" className="pointer" alt="" />
 
                                     </div> */}
                                             </div>
                                         </div>
-                                        <div class="single_user">
+                                        <div className="single_user">
                                             <div className="property_people_designation">Level 2
                                             </div>
-                                            <div class="right">
+                                            <div className="right">
                                                 <h5>8770534650</h5>
                                                 <h6>level2@gmail.com</h6>
-                                                {/* <div class="wc">
-                                        <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
-                                        <img src="/assets/img/phone-call.png" class="pointer" alt="" />
+                                                {/* <div className="wc">
+                                        <img src="/assets/img/whatsapp.png" className="pointer" alt="" />
+                                        <img src="/assets/img/phone-call.png" className="pointer" alt="" />
 
                                     </div> */}
                                             </div>
                                         </div>
-                                        <div class="single_user">
+                                        <div className="single_user">
                                             <div className="property_people_designation">Level 3
                                             </div>
-                                            <div class="right">
+                                            <div className="right">
                                                 <h5>8770534650</h5>
                                                 <h6>level3@gmail.com</h6>
-                                                {/* <div class="wc">
-                                        <img src="/assets/img/whatsapp.png" class="pointer" alt="" />
-                                        <img src="/assets/img/phone-call.png" class="pointer" alt="" />
+                                                {/* <div className="wc">
+                                        <img src="/assets/img/whatsapp.png" className="pointer" alt="" />
+                                        <img src="/assets/img/phone-call.png" className="pointer" alt="" />
 
                                     </div> */}
                                             </div>
@@ -427,13 +427,13 @@ const PDSingleCard = ({ propertyDocument }) => {
                         <h2 className="card_title">
                             Property Type
                         </h2>
-                        <div class="p_info">
-                            <div class="p_info_single">
+                        <div className="p_info">
+                            <div className="p_info_single">
                                 <h6>Type:</h6>
                                 <h5>{propertyDocument.bhk} BHK
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
 
                                 <h6>Floor no:
                                 </h6>
@@ -441,76 +441,76 @@ const PDSingleCard = ({ propertyDocument }) => {
                                     {propertyDocument.floorNumber}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Age of Property:
                                 </h6>
                                 <h5> {ageOfProperty} year
 
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Furnishing:
                                 </h6>
                                 <h5>{propertyDocument.furnishing}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Bedrooms:
                                 </h6>
                                 <h5>{propertyDocument.numberOfBedrooms}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Bathrooms:
                                 </h6>
                                 <h5>{propertyDocument.numberOfBathrooms}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Balcony:
                                 </h6>
                                 <h5>{propertyDocument.numberOfBalcony}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Kitchen:
                                 </h6>
                                 <h5>{propertyDocument.numberOfKitchen}
 
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Living Area:
                                 </h6>
                                 <h5>{propertyDocument.numberOfLivingArea}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Dining Area:
                                 </h6>
                                 <h5>{propertyDocument.diningarea}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Living & Dining:
                                 </h6>
                                 <h5>{propertyDocument.livingdining}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Passages:
                                 </h6>
                                 <h5>{propertyDocument.passages}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Entrance Gallery:
                                 </h6>
                                 <h5>{propertyDocument.entrancegallery}
                                 </h5>
                             </div>
                             {propertyDocument.numberOfBasement && propertyDocument.numberOfBasement !== '0' &&
-                                <div class="p_info_single">
+                                <div className="p_info_single">
                                     <h6>Basement:
                                     </h6>
                                     <h5>{propertyDocument.numberOfBasement}
@@ -526,26 +526,26 @@ const PDSingleCard = ({ propertyDocument }) => {
                         <h2 className="card_title">
                             Property Size
                         </h2>
-                        <div class="p_info">
-                            <div class="p_info_single">
+                        <div className="p_info">
+                            <div className="p_info_single">
                                 <h6>Plot Area:</h6>
                                 <h5>{propertyDocument.plotArea} {propertyDocument.plotArea ? propertyDocument.plotAreaUnit : ''}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
 
                                 <h6>Super Area:
                                 </h6>
                                 <h5>{propertyDocument.superArea} {propertyDocument.superArea ? propertyDocument.superAreaUnit : ''}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Built-up Area:
                                 </h6>
                                 <h5>{propertyDocument.builtUpArea} {propertyDocument.builtUpArea ? propertyDocument.builtUpAreaUnit : ''}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Carpet Area:
                                 </h6>
                                 <h5>{propertyDocument.carpetArea} {propertyDocument.carpetArea ? propertyDocument.carpetAreaUnit : ''}
@@ -560,13 +560,13 @@ const PDSingleCard = ({ propertyDocument }) => {
                         <h2 className="card_title">
                             Parking
                         </h2>
-                        <div class="p_info">
-                            <div class="p_info_single">
+                        <div className="p_info">
+                            <div className="p_info_single">
                                 <h6>Car Parking:</h6>
                                 <h5>{propertyDocument.numberOfCarParking}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
 
                                 <h6>2 Wheeler Parking:
                                 </h6>
@@ -587,9 +587,9 @@ const PDSingleCard = ({ propertyDocument }) => {
                             <h2 className="card_title">
                                 Additional Rooms {/* pending  */}
                             </h2>
-                            <div class="p_info">
+                            <div className="p_info">
                                 {propertyDocument.additionalRooms.map((additionalroom) => (
-                                    <div class="p_info_single">
+                                    <div className="p_info_single">
                                         <h6>{additionalroom}
                                         </h6>
                                     </div>
@@ -608,9 +608,9 @@ const PDSingleCard = ({ propertyDocument }) => {
                             <h2 className="card_title">
                                 Additional Area {/* pending  */}
                             </h2>
-                            <div class="p_info">
+                            <div className="p_info">
                                 {propertyDocument.additionalArea.map((additionalarea) => (
-                                    <div class="p_info_single">
+                                    <div className="p_info_single">
                                         <h6>{additionalarea}
                                         </h6>
                                     </div>
@@ -626,22 +626,22 @@ const PDSingleCard = ({ propertyDocument }) => {
                         <h2 className="card_title">
                             Building
                         </h2>
-                        <div class="p_info">
-                            <div class="p_info_single">
+                        <div className="p_info">
+                            <div className="p_info_single">
                                 <h6>Total Floors
 
                                     :</h6>
                                 <h5>{propertyDocument.totalFloor}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Floor Number
 
                                     :</h6>
                                 <h5>{propertyDocument.floorNumber}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
 
                                 <h6>Apartment on Floor
 
@@ -650,7 +650,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 <h5>{propertyDocument.numberOfAptOnFloor}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Lift
 
                                     :
@@ -658,7 +658,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                 <h5>{propertyDocument.numberOfLifts}
                                 </h5>
                             </div>
-                            <div class="p_info_single">
+                            <div className="p_info_single">
                                 <h6>Power Backup
                                     {/* pending  */}
                                 </h6>

@@ -95,9 +95,9 @@ export default function PGAdminDashboard() {
   return (
     <div className="pgadmindasboard pgls_mobile aflbg" >
       <div className="dashboard_pg pg_width">
-      
-          <LeftSidebar />
-        
+
+        <LeftSidebar />
+
         <div className="right_main_content">
           <section>
             <br />
@@ -204,7 +204,7 @@ export default function PGAdminDashboard() {
             <OwlCarousel className="owl-theme" {...servicesOptions}>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     groups
                   </span>
                   <h6>12749</h6>
@@ -213,7 +213,7 @@ export default function PGAdminDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     bedroom_parent
                   </span>
                   <h6>2617</h6>
@@ -222,7 +222,7 @@ export default function PGAdminDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     real_estate_agent
                   </span>
                   <h6>1824</h6>
@@ -231,7 +231,7 @@ export default function PGAdminDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     group_work
                   </span>
                   <h6>182</h6>
@@ -240,7 +240,7 @@ export default function PGAdminDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     apartment
                   </span>
                   <h6>12</h6>
@@ -249,7 +249,7 @@ export default function PGAdminDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     reduce_capacity
                   </span>
                   <h6>29</h6>
@@ -258,7 +258,7 @@ export default function PGAdminDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     support_agent
                   </span>
                   <h6>10</h6>
@@ -267,15 +267,15 @@ export default function PGAdminDashboard() {
               </div>
               <div className="item asc_single ">
                 <center>
-                  <span class="material-symbols-outlined">
+                  <span className="material-symbols-outlined">
                     event_available
                   </span>
                   <h5>Holiday List</h5>
                 </center>
               </div>
-            </OwlCarousel>           
+            </OwlCarousel>
           </section>
-          <br/>
+          <br />
           <section>
             <div className="row no-gutters">
               <div className="col-lg-6 col-md-6 col-sm-12">
@@ -418,8 +418,8 @@ export default function PGAdminDashboard() {
             </div>
             <br />
           </section>
-        
-       
+
+
 
           {/* <div className="row no-gutters">
             <div
@@ -471,18 +471,18 @@ export default function PGAdminDashboard() {
             </div>
           </div> */}
 
-       <div style={{display:"none"}}>
-       {error && <p className="error">{error}</p>}
-          {documents && (
-            <Filters
-              changeFilter={changeFilter}
-              filterList={propertyFilter}
-              filterLength={properties.length}
-            />
-          )}
-          {properties && <PropertyList properties={properties} />}
-          <br />
-       </div>
+          <div style={{ display: "none" }}>
+            {error && <p className="error">{error}</p>}
+            {documents && (
+              <Filters
+                changeFilter={changeFilter}
+                filterList={propertyFilter}
+                filterLength={properties.length}
+              />
+            )}
+            {properties && <PropertyList properties={properties} />}
+            <br />
+          </div>
           <br />
         </div>
       </div>

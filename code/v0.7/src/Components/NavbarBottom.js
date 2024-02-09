@@ -160,7 +160,7 @@ export default function NavbarBottom() {
           onClick={showDashboard}
         >
           <div className="menu_icon">
-            <span class="material-symbols-outlined">home</span>
+            <span className="material-symbols-outlined">home</span>
           </div>
           <div className="menu_name">{firstMenu}</div>
         </div>
@@ -170,7 +170,7 @@ export default function NavbarBottom() {
           onClick={showSecondPage}
         >
           <div className="menu_icon">
-            <span class="material-symbols-outlined">{secondMenuIcon}</span>
+            <span className="material-symbols-outlined">{secondMenuIcon}</span>
           </div>
           <div className="menu_name">{secondMenu}</div>
         </div>
@@ -192,7 +192,7 @@ export default function NavbarBottom() {
               ))
               :
               (
-                <span class="material-symbols-outlined">person</span>
+                <span className="material-symbols-outlined">person</span>
               )
             }
           </div>
@@ -203,7 +203,7 @@ export default function NavbarBottom() {
           onClick={showThirdPage}
         >
           <div className="menu_icon">
-            <span class="material-symbols-outlined">{thirdMenuIcon}</span>
+            <span className="material-symbols-outlined">{thirdMenuIcon}</span>
           </div>
           <div className="menu_name">{thirdMenu}</div>
         </div>
@@ -212,7 +212,7 @@ export default function NavbarBottom() {
           onClick={showFourthPage}
         >
           <div className="menu_icon">
-            <span class="material-symbols-outlined">menu</span>
+            <span className="material-symbols-outlined">menu</span>
           </div>
           <div className="menu_name">More</div>
         </div>

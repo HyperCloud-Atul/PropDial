@@ -416,11 +416,11 @@ export default function PGPropertyBills({ propertyid }) {
             </div>
             <div className="right_main_content">
                 <div className="property-detail">
-                    <div class="accordion" id="a1accordion_section">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="a1headingOne">
+                    <div className="accordion" id="a1accordion_section">
+                        <div className="accordion-item">
+                            <h2 className="accordion-header" id="a1headingOne">
                                 <button
-                                    class="accordion-button"
+                                    className="accordion-button"
                                     type="button"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#a1collapseOne"
@@ -454,13 +454,13 @@ export default function PGPropertyBills({ propertyid }) {
                             </h2>
                             <div
                                 id="a1collapseOne"
-                                class="accordion-collapse collapse"
+                                className="accordion-collapse collapse"
                                 aria-labelledby="a1headingOne"
                                 data-bs-parent="#a1accordion_section"
                             >
-                                <div class="accordion-body">
-                                    <div class="secondary-details-display">
-                                        <div class="secondary-details-inside-display">
+                                <div className="accordion-body">
+                                    <div className="secondary-details-display">
+                                        <div className="secondary-details-inside-display">
                                             {property && property.ownerDetails &&
                                                 <div>
                                                     <h5 style={{ textAlign: "center" }}>
@@ -469,7 +469,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 </div>
                                             }
                                             <div
-                                                class="property-contact-div property-media-icons-horizontal"
+                                                className="property-contact-div property-media-icons-horizontal"
                                                 style={{
                                                     flexDirection: "row",
                                                     width: "100%",
@@ -479,7 +479,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 {property && property.ownerDetails &&
                                                     <a href={'Tel: +91' + property.ownerDetails.phoneNumber}>
                                                         <div>
-                                                            <span class="material-symbols-outlined">call</span>
+                                                            <span className="material-symbols-outlined">call</span>
                                                             <h1>Call</h1>
                                                         </div>
                                                     </a>
@@ -499,7 +499,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 {property && property.ownerDetails &&
                                                     <a href={'mailto:' + property.ownerDetails.phoneNumber}>
                                                         <div>
-                                                            <span class="material-symbols-outlined">
+                                                            <span className="material-symbols-outlined">
                                                                 alternate_email
                                                             </span>
                                                             <h1>Mail</h1>
@@ -508,7 +508,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 }
                                             </div>
                                         </div>
-                                        <hr class="secondary-details-hr" />
+                                        <hr className="secondary-details-hr" />
                                         <div style={{ width: "100%" }}>
                                             {property && property.coownerDetails &&
                                                 <div>
@@ -518,7 +518,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 </div>
                                             }
                                             <div
-                                                class="property-contact-div property-media-icons-horizontal"
+                                                className="property-contact-div property-media-icons-horizontal"
                                                 style={{
                                                     flexDirection: "row",
                                                     width: "100%",
@@ -528,7 +528,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 {property && property.coownerDetails &&
                                                     <a href={'Tel: +91' + property.coownerDetails.phoneNumber}>
                                                         <div>
-                                                            <span class="material-symbols-outlined">call</span>
+                                                            <span className="material-symbols-outlined">call</span>
                                                             <h1>Call</h1>
                                                         </div>
                                                     </a>
@@ -544,7 +544,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 {property && property.coownerDetails &&
                                                     <a href={'mailto: ' + property.coownerDetails.phoneNumber}>
                                                         <div>
-                                                            <span class="material-symbols-outlined">
+                                                            <span className="material-symbols-outlined">
                                                                 alternate_email
                                                             </span>
                                                             <h1>Mail</h1>
@@ -599,7 +599,7 @@ export default function PGPropertyBills({ propertyid }) {
                     <div className="col-lg-6 col-md-6 col-sm-12">
                         <div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                             <button onClick={saveData} className="theme_btn btn_fill" style={{ height: '30px', paddingTop: '1px' }}>Save
-                                <span class="material-symbols-outlined btn_arrow ba_animation" style={{ top: '5px' }}>arrow_forward</span>
+                                <span className="material-symbols-outlined btn_arrow ba_animation" style={{ top: '5px' }}>arrow_forward</span>
                             </button>
                         </div>
                     </div>
@@ -644,7 +644,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 />
 
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">person</span>
+                                                    <span className="material-symbols-outlined">person</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -676,7 +676,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 // isMulti
                                                 />
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">group</span>
+                                                    <span className="material-symbols-outlined">group</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -691,7 +691,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     })}
                                                     value={propertyDetails && propertyDetails.PropertyPOC} />
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         drive_file_rename_outline
                                                     </span>
                                                 </div>
@@ -726,7 +726,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 // isMulti
                                                 />
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">group</span>
+                                                    <span className="material-symbols-outlined">group</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -813,7 +813,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     value={propertyDetails && propertyDetails.AddressLocator}
                                                 />
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">map</span>
+                                                    <span className="material-symbols-outlined">map</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -839,7 +839,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.Country === 'Malasia' ? true : false}>Malasia</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">public</span>
+                                                    <span className="material-symbols-outlined">public</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -865,7 +865,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.State === 'Kerala' ? true : false}>Kerala</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         emoji_transportation
                                                     </span>
                                                 </div>
@@ -890,7 +890,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.City === 'Gwalior' ? true : false}>Gwalior</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">apartment</span>
+                                                    <span className="material-symbols-outlined">apartment</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -917,7 +917,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.Locality === 'Saraojni Nagar' ? true : false}>Saraojni Nagar</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         holiday_village
                                                     </span>
                                                 </div>
@@ -933,7 +933,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     })}
                                                     value={propertyDetails && propertyDetails.PinCode} />
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         drive_file_rename_outline
                                                     </span>
                                                 </div>
@@ -960,7 +960,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                 </select>
 
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         holiday_village
                                                     </span>
                                                 </div>
@@ -980,7 +980,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     value={propertyDetails && propertyDetails.UnitNumber}
                                                 />
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         drive_file_rename_outline
                                                     </span>
                                                 </div>
@@ -1011,7 +1011,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.PropertyType === 'Pent House - Duplex' ? true : false}>Pent House - Duplex</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         format_list_bulleted
                                                     </span>
                                                 </div>
@@ -1069,7 +1069,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.YearOfConstruction === '2024' ? true : false}>2024</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         engineering
                                                     </span>
                                                 </div>
@@ -1108,7 +1108,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.Bhk === '9+ ' ? true : false}>9+ BHK </option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         bedroom_parent
                                                     </span>
                                                 </div>
@@ -1239,7 +1239,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.NumberOfBedrooms === '10' ? true : false}>10</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">bed</span>
+                                                    <span className="material-symbols-outlined">bed</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1269,7 +1269,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.NumberOfBathrooms === '10' ? true : false}>10</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">bathtub</span>
+                                                    <span className="material-symbols-outlined">bathtub</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1299,7 +1299,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.NumberOfBalcony === '10' ? true : false}>10</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">balcony</span>
+                                                    <span className="material-symbols-outlined">balcony</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1322,7 +1322,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.NumberOfKitchen === '3' ? true : false}>3</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         soup_kitchen
                                                     </span>
                                                 </div>
@@ -1479,7 +1479,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.NumberOfLivingArea === '5' ? true : false}>5</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">living</span>
+                                                    <span className="material-symbols-outlined">living</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1630,7 +1630,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.NumberOfBasement === '1' ? true : false}>1</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         foundation
                                                     </span>
                                                 </div>
@@ -2074,7 +2074,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     value={propertyDetails && propertyDetails.TotalFloor}
                                                 />
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         table_rows
                                                     </span>
                                                 </div>
@@ -2090,7 +2090,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     })}
                                                     value={propertyDetails && propertyDetails.FloorNumber} />
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         filter_none
                                                     </span>
                                                 </div>
@@ -2122,7 +2122,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.NumberOfAptOnFloor === '10' ? true : false}>10</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         filter_none
                                                     </span>
                                                 </div>
@@ -2149,7 +2149,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.NumberOfLifts === '5' ? true : false}>5</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         full_stacked_bar_chart
                                                     </span>
                                                 </div>
@@ -2425,7 +2425,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                     <option selected={propertyDetails && propertyDetails.NumberOfCarParking === '5' ? true : false}>5</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                         local_parking
                                                     </span>
                                                 </div>
@@ -2557,11 +2557,11 @@ export default function PGPropertyBills({ propertyid }) {
                                     </div>
                                     <div className="col-md-8">
                                         <div className="right">
-                                            <div class="accordion" id="property_detail_accordion">
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="bedroom">
+                                            <div className="accordion" id="property_detail_accordion">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="bedroom">
                                                         <button
-                                                            class="accordion-button"
+                                                            className="accordion-button"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#bedroom_collapse"
@@ -2569,14 +2569,14 @@ export default function PGPropertyBills({ propertyid }) {
                                                             aria-controls="bedroom_collapse"
                                                         >
                                                             <div className="button_title">
-                                                                <span class="material-symbols-outlined button_icon">
+                                                                <span className="material-symbols-outlined button_icon">
                                                                     bed
                                                                 </span>
                                                                 Bedrooms - (4)
-                                                                {/* <span class="material-symbols-outlined done">
+                                                                {/* <span className="material-symbols-outlined done">
                                   done
                                 </span> */}
-                                                                <span class="material-symbols-outlined close">
+                                                                <span className="material-symbols-outlined close">
                                                                     close
                                                                 </span>
                                                             </div>
@@ -2584,39 +2584,39 @@ export default function PGPropertyBills({ propertyid }) {
                                                     </h2>
                                                     <div
                                                         id="bedroom_collapse"
-                                                        class="accordion-collapse collapse"
+                                                        className="accordion-collapse collapse"
                                                         aria-labelledby="bedroom"
                                                         data-bs-parent="#property_detail_accordion"
                                                     >
-                                                        <div class="accordion-body">
+                                                        <div className="accordion-body">
                                                             <h6 className="mt-2 text-center">Master Bedroom</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -2626,20 +2626,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -2767,7 +2767,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                                                 <option value="">Red Oxide</option>
                                                                             </select>
                                                                             <div className="field_icon">
-                                                                                <span class="material-symbols-outlined">
+                                                                                <span className="material-symbols-outlined">
                                                                                     crop_square
                                                                                 </span>
                                                                             </div>
@@ -2870,31 +2870,31 @@ export default function PGPropertyBills({ propertyid }) {
                                                             <h6 className="mt-2 text-center">Bedroom 2</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -2904,20 +2904,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -2931,31 +2931,31 @@ export default function PGPropertyBills({ propertyid }) {
                                                             <h6 className="mt-2 text-center">Bedroom 3</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -2965,20 +2965,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -2992,31 +2992,31 @@ export default function PGPropertyBills({ propertyid }) {
                                                             <h6 className="mt-2 text-center">Bedroom 4</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3026,20 +3026,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3052,10 +3052,10 @@ export default function PGPropertyBills({ propertyid }) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="bathroom">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="bathroom">
                                                         <button
-                                                            class="accordion-button collapsed"
+                                                            className="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#bathroom_collapse"
@@ -3063,14 +3063,14 @@ export default function PGPropertyBills({ propertyid }) {
                                                             aria-controls="bathroom_collapse"
                                                         >
                                                             <div className="button_title">
-                                                                <span class="material-symbols-outlined button_icon">
+                                                                <span className="material-symbols-outlined button_icon">
                                                                     bathtub
                                                                 </span>
                                                                 Bathrooms - (1)
-                                                                {/* <span class="material-symbols-outlined done">
+                                                                {/* <span className="material-symbols-outlined done">
                                   done
                                 </span> */}
-                                                                <span class="material-symbols-outlined close">
+                                                                <span className="material-symbols-outlined close">
                                                                     close
                                                                 </span>
                                                             </div>
@@ -3078,39 +3078,39 @@ export default function PGPropertyBills({ propertyid }) {
                                                     </h2>
                                                     <div
                                                         id="bathroom_collapse"
-                                                        class="accordion-collapse collapse"
+                                                        className="accordion-collapse collapse"
                                                         aria-labelledby="bathroom"
                                                         data-bs-parent="#property_detail_accordion"
                                                     >
-                                                        <div class="accordion-body">
+                                                        <div className="accordion-body">
                                                             <h6 className="mt-2 text-center">Bathroom 1</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3120,20 +3120,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3217,7 +3217,7 @@ export default function PGPropertyBills({ propertyid }) {
                                                                                 <option value="">Red Oxide</option>
                                                                             </select>
                                                                             <div className="field_icon">
-                                                                                <span class="material-symbols-outlined">
+                                                                                <span className="material-symbols-outlined">
                                                                                     crop_square
                                                                                 </span>
                                                                             </div>
@@ -3331,10 +3331,10 @@ export default function PGPropertyBills({ propertyid }) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="balcony">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="balcony">
                                                         <button
-                                                            class="accordion-button collapsed"
+                                                            className="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#balcony_collapse"
@@ -3342,14 +3342,14 @@ export default function PGPropertyBills({ propertyid }) {
                                                             aria-controls="balcony_collapse"
                                                         >
                                                             <div className="button_title">
-                                                                <span class="material-symbols-outlined button_icon">
+                                                                <span className="material-symbols-outlined button_icon">
                                                                     balcony
                                                                 </span>
                                                                 Balcony - (4)
-                                                                {/* <span class="material-symbols-outlined done">
+                                                                {/* <span className="material-symbols-outlined done">
                                   done
                                 </span> */}
-                                                                <span class="material-symbols-outlined close">
+                                                                <span className="material-symbols-outlined close">
                                                                     close
                                                                 </span>
                                                             </div>
@@ -3357,39 +3357,39 @@ export default function PGPropertyBills({ propertyid }) {
                                                     </h2>
                                                     <div
                                                         id="balcony_collapse"
-                                                        class="accordion-collapse collapse"
+                                                        className="accordion-collapse collapse"
                                                         aria-labelledby="balcony"
                                                         data-bs-parent="#property_detail_accordion"
                                                     >
-                                                        <div class="accordion-body">
+                                                        <div className="accordion-body">
                                                             <h6 className="mt-2 text-center">Balcony 1</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3399,20 +3399,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3425,10 +3425,10 @@ export default function PGPropertyBills({ propertyid }) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="kitchen">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="kitchen">
                                                         <button
-                                                            class="accordion-button collapsed"
+                                                            className="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#kitchen_collapse"
@@ -3436,14 +3436,14 @@ export default function PGPropertyBills({ propertyid }) {
                                                             aria-controls="kitchen_collapse"
                                                         >
                                                             <div className="button_title">
-                                                                <span class="material-symbols-outlined button_icon">
+                                                                <span className="material-symbols-outlined button_icon">
                                                                     kitchen
                                                                 </span>
                                                                 All Kitchen - (4)
-                                                                {/* <span class="material-symbols-outlined done">
+                                                                {/* <span className="material-symbols-outlined done">
                                   done
                                 </span> */}
-                                                                <span class="material-symbols-outlined close">
+                                                                <span className="material-symbols-outlined close">
                                                                     close
                                                                 </span>
                                                             </div>
@@ -3451,39 +3451,39 @@ export default function PGPropertyBills({ propertyid }) {
                                                     </h2>
                                                     <div
                                                         id="kitchen_collapse"
-                                                        class="accordion-collapse collapse"
+                                                        className="accordion-collapse collapse"
                                                         aria-labelledby="kitchen"
                                                         data-bs-parent="#property_detail_accordion"
                                                     >
-                                                        <div class="accordion-body">
+                                                        <div className="accordion-body">
                                                             <h6 className="mt-2 text-center">Kitchen 1</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3493,20 +3493,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3519,10 +3519,10 @@ export default function PGPropertyBills({ propertyid }) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="living">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="living">
                                                         <button
-                                                            class="accordion-button collapsed"
+                                                            className="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#living_collapse"
@@ -3530,14 +3530,14 @@ export default function PGPropertyBills({ propertyid }) {
                                                             aria-controls="living_collapse"
                                                         >
                                                             <div className="button_title">
-                                                                <span class="material-symbols-outlined button_icon">
+                                                                <span className="material-symbols-outlined button_icon">
                                                                     chair
                                                                 </span>
                                                                 All Living - (4)
-                                                                {/* <span class="material-symbols-outlined done">
+                                                                {/* <span className="material-symbols-outlined done">
                                   done
                                 </span> */}
-                                                                <span class="material-symbols-outlined close">
+                                                                <span className="material-symbols-outlined close">
                                                                     close
                                                                 </span>
                                                             </div>
@@ -3545,39 +3545,39 @@ export default function PGPropertyBills({ propertyid }) {
                                                     </h2>
                                                     <div
                                                         id="living_collapse"
-                                                        class="accordion-collapse collapse"
+                                                        className="accordion-collapse collapse"
                                                         aria-labelledby="living"
                                                         data-bs-parent="#property_detail_accordion"
                                                     >
-                                                        <div class="accordion-body">
+                                                        <div className="accordion-body">
                                                             <h6 className="mt-2 text-center">Living 1</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3587,20 +3587,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3613,10 +3613,10 @@ export default function PGPropertyBills({ propertyid }) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="living_dining">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="living_dining">
                                                         <button
-                                                            class="accordion-button collapsed"
+                                                            className="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#living_dining_collapse"
@@ -3624,14 +3624,14 @@ export default function PGPropertyBills({ propertyid }) {
                                                             aria-controls="living_dining_collapse"
                                                         >
                                                             <div className="button_title">
-                                                                <span class="material-symbols-outlined button_icon">
+                                                                <span className="material-symbols-outlined button_icon">
                                                                     dinner_dining
                                                                 </span>
                                                                 All Living & Dining - (4)
-                                                                {/* <span class="material-symbols-outlined done">
+                                                                {/* <span className="material-symbols-outlined done">
                                   done
                                 </span> */}
-                                                                <span class="material-symbols-outlined close">
+                                                                <span className="material-symbols-outlined close">
                                                                     close
                                                                 </span>
                                                             </div>
@@ -3639,39 +3639,39 @@ export default function PGPropertyBills({ propertyid }) {
                                                     </h2>
                                                     <div
                                                         id="living_dining_collapse"
-                                                        class="accordion-collapse collapse"
+                                                        className="accordion-collapse collapse"
                                                         aria-labelledby="living_dining"
                                                         data-bs-parent="#property_detail_accordion"
                                                     >
-                                                        <div class="accordion-body">
+                                                        <div className="accordion-body">
                                                             <h6 className="mt-2 text-center">Living & Dining 1</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3681,20 +3681,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3707,10 +3707,10 @@ export default function PGPropertyBills({ propertyid }) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="gallery_passage">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="gallery_passage">
                                                         <button
-                                                            class="accordion-button collapsed"
+                                                            className="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#gallery_passage_collapse"
@@ -3718,14 +3718,14 @@ export default function PGPropertyBills({ propertyid }) {
                                                             aria-controls="gallery_passage_collapse"
                                                         >
                                                             <div className="button_title">
-                                                                <span class="material-symbols-outlined button_icon">
+                                                                <span className="material-symbols-outlined button_icon">
                                                                     gallery_thumbnail
                                                                 </span>
                                                                 Gallery & Passages - (4)
-                                                                {/* <span class="material-symbols-outlined done">
+                                                                {/* <span className="material-symbols-outlined done">
                                   done
                                 </span> */}
-                                                                <span class="material-symbols-outlined close">
+                                                                <span className="material-symbols-outlined close">
                                                                     close
                                                                 </span>
                                                             </div>
@@ -3733,39 +3733,39 @@ export default function PGPropertyBills({ propertyid }) {
                                                     </h2>
                                                     <div
                                                         id="gallery_passage_collapse"
-                                                        class="accordion-collapse collapse"
+                                                        className="accordion-collapse collapse"
                                                         aria-labelledby="gallery_passage"
                                                         data-bs-parent="#property_detail_accordion"
                                                     >
-                                                        <div class="accordion-body">
+                                                        <div className="accordion-body">
                                                             <h6 className="mt-2 text-center">Gallery & Passage 1</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3775,20 +3775,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3801,10 +3801,10 @@ export default function PGPropertyBills({ propertyid }) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="bassment">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="bassment">
                                                         <button
-                                                            class="accordion-button collapsed"
+                                                            className="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#bassment_collapse"
@@ -3812,14 +3812,14 @@ export default function PGPropertyBills({ propertyid }) {
                                                             aria-controls="bassment_collapse"
                                                         >
                                                             <div className="button_title">
-                                                                <span class="material-symbols-outlined button_icon">
+                                                                <span className="material-symbols-outlined button_icon">
                                                                     floor
                                                                 </span>
                                                                 Bassment - (4)
-                                                                {/* <span class="material-symbols-outlined done">
+                                                                {/* <span className="material-symbols-outlined done">
                                   done
                                 </span> */}
-                                                                <span class="material-symbols-outlined close">
+                                                                <span className="material-symbols-outlined close">
                                                                     close
                                                                 </span>
                                                             </div>
@@ -3827,39 +3827,39 @@ export default function PGPropertyBills({ propertyid }) {
                                                     </h2>
                                                     <div
                                                         id="bassment_collapse"
-                                                        class="accordion-collapse collapse"
+                                                        className="accordion-collapse collapse"
                                                         aria-labelledby="bassment"
                                                         data-bs-parent="#property_detail_accordion"
                                                     >
-                                                        <div class="accordion-body">
+                                                        <div className="accordion-body">
                                                             <h6 className="mt-2 text-center">Basement 1</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3869,20 +3869,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3895,10 +3895,10 @@ export default function PGPropertyBills({ propertyid }) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="additional_room">
+                                                <div className="accordion-item">
+                                                    <h2 className="accordion-header" id="additional_room">
                                                         <button
-                                                            class="accordion-button collapsed"
+                                                            className="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#additional_room_collapse"
@@ -3906,14 +3906,14 @@ export default function PGPropertyBills({ propertyid }) {
                                                             aria-controls="additional_room_collapse"
                                                         >
                                                             <div className="button_title">
-                                                                <span class="material-symbols-outlined button_icon">
+                                                                <span className="material-symbols-outlined button_icon">
                                                                     meeting_room
                                                                 </span>
                                                                 Additional Rooms - (4)
-                                                                {/* <span class="material-symbols-outlined done">
+                                                                {/* <span className="material-symbols-outlined done">
                                   done
                                 </span> */}
-                                                                <span class="material-symbols-outlined close">
+                                                                <span className="material-symbols-outlined close">
                                                                     close
                                                                 </span>
                                                             </div>
@@ -3921,39 +3921,39 @@ export default function PGPropertyBills({ propertyid }) {
                                                     </h2>
                                                     <div
                                                         id="additional_room_collapse"
-                                                        class="accordion-collapse collapse"
+                                                        className="accordion-collapse collapse"
                                                         aria-labelledby="additional_room"
                                                         data-bs-parent="#property_detail_accordion"
                                                     >
-                                                        <div class="accordion-body">
+                                                        <div className="accordion-body">
                                                             <h6 className="mt-2 text-center">Additional Rooms 1</h6>
                                                             <div className="row no-gutters">
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Total Area</label>
-                                                                        <div class="field_inner">
+                                                                        <div className="field_inner">
                                                                             <input type="text" value="1200 sqft 6 in" />
-                                                                            <div class="field_icon">
-                                                                                <span class="material-symbols-outlined">crop_square</span>
+                                                                            <div className="field_icon">
+                                                                                <span className="material-symbols-outlined">crop_square</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>Length</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -3963,20 +3963,20 @@ export default function PGPropertyBills({ propertyid }) {
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 col-md-6">
-                                                                    <div class="form_field st-2">
+                                                                    <div className="form_field st-2">
                                                                         <label>width</label>
                                                                         <div className="field_two">
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="Feet" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         ft
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="field_inner">
+                                                                            <div className="field_inner">
                                                                                 <input type="text" placeholder="inch" />
-                                                                                <div class="field_icon">
+                                                                                <div className="field_icon">
                                                                                     <div className="text_icon">
                                                                                         in
                                                                                     </div>
@@ -4001,7 +4001,7 @@ export default function PGPropertyBills({ propertyid }) {
                             <div className="map_inner">
                                 <div className="row no-gutters">
                                     <div className="col-lg-6">
-                                        <div class="form_field st-2">
+                                        <div className="form_field st-2">
                                             <label>Property Description</label>
                                             <textarea
                                                 type="text"
@@ -4012,8 +4012,8 @@ export default function PGPropertyBills({ propertyid }) {
                                                 })}
                                                 value={propertyDetails && propertyDetails.PropertyDesciption}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">
                                                     border_color
                                                 </span>
                                             </div>
@@ -4021,7 +4021,7 @@ export default function PGPropertyBills({ propertyid }) {
                                         </div>
                                     </div>
                                     <div className="col-lg-6">
-                                        <div class="form_field st-2">
+                                        <div className="form_field st-2">
                                             <label>Owner Instruction</label>
 
                                             <textarea
@@ -4033,8 +4033,8 @@ export default function PGPropertyBills({ propertyid }) {
                                                 })}
                                                 value={propertyDetails && propertyDetails.OwnerInstruction}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">
                                                     border_color
                                                 </span>
                                             </div>
@@ -4042,7 +4042,7 @@ export default function PGPropertyBills({ propertyid }) {
                                         </div>
                                     </div>
                                     <div className="col-lg-6">
-                                        <div class="form_field st-2">
+                                        <div className="form_field st-2">
                                             <label>Key details / Key Handover</label>
                                             <textarea
                                                 type="text"
@@ -4053,8 +4053,8 @@ export default function PGPropertyBills({ propertyid }) {
                                                 })}
                                                 value={propertyDetails && propertyDetails.KeyDetailsHandover}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">
                                                     border_color
                                                 </span>
                                             </div>
@@ -4062,7 +4062,7 @@ export default function PGPropertyBills({ propertyid }) {
                                         </div>
                                     </div>
                                     <div className="col-lg-6">
-                                        <div class="form_field st-2">
+                                        <div className="form_field st-2">
                                             <label>Bill Type Setting</label>
                                             <textarea
                                                 type="text"
@@ -4073,8 +4073,8 @@ export default function PGPropertyBills({ propertyid }) {
                                                 })}
                                                 value={propertyDetails && propertyDetails.BillTypeSetting}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">
                                                     border_color
                                                 </span>
                                             </div>
@@ -4082,7 +4082,7 @@ export default function PGPropertyBills({ propertyid }) {
                                         </div>
                                     </div>
                                     <div className="col-lg-6">
-                                        <div class="form_field st-2">
+                                        <div className="form_field st-2">
                                             <label>Advertising</label>
                                             <textarea
                                                 type="text"
@@ -4093,8 +4093,8 @@ export default function PGPropertyBills({ propertyid }) {
                                                 })}
                                                 value={propertyDetails && propertyDetails.Advertising}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">
                                                     border_color
                                                 </span>
                                             </div>

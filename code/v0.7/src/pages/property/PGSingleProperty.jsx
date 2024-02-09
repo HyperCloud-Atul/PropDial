@@ -10,7 +10,7 @@ const PGSingleProperty = () => {
         {/* {!user && (
           <div className="top_search_bar">
             <Link to="/search-property" className="back_btn">
-              <span class="material-symbols-outlined">arrow_back</span>
+              <span className="material-symbols-outlined">arrow_back</span>
               <span>Back</span>
             </Link>
           </div>
