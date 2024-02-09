@@ -158,12 +158,7 @@ export default function Navbar() {
     secondMenu = "Bills";
     thirdMenu = "Tickets";
   }
-  if (user && user.role === "propagent") {
-    secondMenuIcon = "home";
-    secondMenu = "Dashboard";
-    thirdMenuIcon = "confirmation_number";
-    thirdMenu = "Properties";
-  }
+
 
   // Add class on scroll start
   const [isScrolled, setIsScrolled] = useState(false);

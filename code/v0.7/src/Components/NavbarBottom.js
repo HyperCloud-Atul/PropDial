@@ -31,9 +31,9 @@ export default function NavbarBottom() {
       navigate("/admindashboard");
     }
 
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/ownerdashboard");
+      navigate("/");
     }
 
     if (user && user.role === "tenant") {
@@ -60,9 +60,9 @@ export default function NavbarBottom() {
       // console.log('in user', user.role)
       navigate("/adminproperties");
     }
-    if (user && user.role === "owner") {
+    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/bills");
+      navigate("/ownerdashboard_new");
     }
     if (user && user.role === "propagent") {
       // console.log('in user', user.role)
@@ -77,7 +77,7 @@ export default function NavbarBottom() {
     }
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
-      navigate("/customerproperties");
+      navigate("/pgpropertynew");
     }
     if (user && user.role === "propagent") {
       // console.log('in user', user.role)
@@ -155,7 +155,7 @@ export default function NavbarBottom() {
     <div className={pageBottomMenuClass}>
       <section className="bottom_menu_bar">
         <div
-          className={`b_menu_single ${location.pathname === "/" || location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard" ? "b_menu_active" : "" || location.pathname === "/agentdashboard" ? "b_menu_active" : ""
+          className={`b_menu_single ${location.pathname === "/" ? "b_menu_active" : "" || location.pathname === "/agentdashboard" ? "b_menu_active" : ""
             }`}
           onClick={showDashboard}
         >
@@ -165,7 +165,7 @@ export default function NavbarBottom() {
           <div className="menu_name">{firstMenu}</div>
         </div>
         <div
-          className={`b_menu_single ${location.pathname === "/search-property" || location.pathname === "/bills" ? "b_menu_active" : ""
+          className={`b_menu_single ${location.pathname === "/ownerdashboard_new" ? "b_menu_active" : ""
             }`}
           onClick={showSecondPage}
         >
@@ -198,7 +198,7 @@ export default function NavbarBottom() {
           </div>
         </Link>
         <div
-          className={`b_menu_single ${location.pathname === "/about-us" ? "b_menu_active" : ""
+          className={`b_menu_single ${location.pathname === "/pgpropertynew" ? "b_menu_active" : ""
             }`}
           onClick={showThirdPage}
         >
