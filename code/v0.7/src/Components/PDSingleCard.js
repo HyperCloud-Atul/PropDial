@@ -1,23 +1,27 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Gallery from "react-image-gallery";
 import Switch from "react-switch";
 import { Navigate, Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useDocument } from "../hooks/useDocument"
 
 // component 
 import PropertyImageGallery from "./PropertyImageGallery";
-const PDSingleCard = ({ propertyDocument }) => {
+const PDSingleCard = () => {
     // get user from useauthcontext
+    const { id } = useParams()
+    // console.log('property id: ', id)
     const { user } = useAuthContext();
-    // get user from useauthcontext
+
+    const { document: propertyDocument, error: propertyDocError } = useDocument('properties', id)
     console.log("propertiesdocument:", propertyDocument);
 
     // variable of property age 
-    const ageOfProperty = 2023 - propertyDocument.yearOfConstruction;
+    const ageOfProperty = "";//2023 - propertyDocument.yearOfConstruction;
     // variable of property age 
 
     // share url code 
@@ -40,8 +44,8 @@ const PDSingleCard = ({ propertyDocument }) => {
     return (
         <>
             <div className=''>
-                <div className="property_card_single">
-                    <div className="pcs_inner pointer" to="/pdsingle">
+                {propertyDocument && <div className="property_card_single">
+                    <div className="pcs_inner pointer" >
                         <PropertyImageGallery></PropertyImageGallery>
                         <div className="pcs_main_detail">
                             <div className="pmd_top">
@@ -54,16 +58,15 @@ const PDSingleCard = ({ propertyDocument }) => {
                             </div>
                             <div className="pmd_section2 row">
                                 <div className="pdms_single col-4">
-                                    <h4><span className="currency">₹</span>47.6<span className="price">L</span></h4>
-                                    <h6>{propertyDocument.superArea} / {propertyDocument.superAreaUnit}</h6>
+                                    <h4><span className="currency">₹</span>{propertyDocument.demandprice}<span className="price"></span></h4>
+                                    {propertyDocument.superArea !== '' ? <h6>{propertyDocument.superArea}  {propertyDocument.superAreaUnit}</h6> : <h6>{propertyDocument.carpetArea}  {propertyDocument.superAreaUnit}</h6>}
                                 </div>
                                 <div className="pdms_single col-4">
-                                    <h4>{propertyDocument.builtUpArea}</h4>
-                                    <h6>Area in {propertyDocument.builtUpAreaUnit}</h6>
+                                    <h4>{propertyDocument.carpetArea}</h4>
+                                    <h6>Area in {propertyDocument.superAreaUnit}</h6>
                                 </div>
                                 <div className="pdms_single col-4">
-                                    {/* <h4>Under Construction</h4>
-                        <h6>Construction status</h6> */}
+
                                 </div>
                             </div>
                             <div className="divider">
@@ -122,7 +125,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                                         <div className="field_inner select">
                                                                             <select>
                                                                                 <option value="" disabled selected>I am</option>
-                                                                                {/* <option>Owner</option> */}
+
                                                                                 <option>Tenant</option>
                                                                                 <option>Agent</option>
                                                                             </select>
@@ -156,9 +159,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                                     <div className="submit_btn mt-4">
                                                                         <button type="submit" className="modal_btn theme_btn no_icon btn_fill">
                                                                             Submit
-                                                                            {/* <span className="material-symbols-outlined btn_arrow ba_animation">
-                          arrow_forward
-                        </span> */}
+
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -173,9 +174,9 @@ const PDSingleCard = ({ propertyDocument }) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
 
-                {((user && user.role === "owner") || (user && user.role === "coowner")) && (
+                {/* {((user && user.role === "owner") || (user && user.role === "coowner")) && (
                     <div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <div className="row no-gutters">
@@ -311,8 +312,8 @@ const PDSingleCard = ({ propertyDocument }) => {
 
                         </div>
                     </div>
-                )}
-                {user && user.role === "owner" && (
+                )} */}
+                {/* {user && user.role === "owner" && (
                     <div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <div className="row no-gutters">
@@ -327,11 +328,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 Indian contact number
                                             </div>
                                             <div className="single_user">
-                                                {/* <div className="left">
-                                        <div className="user_img">
-                                            <img src="/assets/img/user.png" alt="" />
-                                        </div>
-                                    </div> */}
+
                                                 <div className="right">
                                                     <h5>+91 9698569856</h5>
                                                     <h6>indiacontactnumber@gmail.com</h6>
@@ -381,11 +378,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             <div className="right">
                                                 <h5>8770534650</h5>
                                                 <h6>level1@gmail.com</h6>
-                                                {/* <div className="wc">
-                                        <img src="/assets/img/whatsapp.png" className="pointer" alt="" />
-                                        <img src="/assets/img/phone-call.png" className="pointer" alt="" />
 
-                                    </div> */}
                                             </div>
                                         </div>
                                         <div className="single_user">
@@ -394,11 +387,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             <div className="right">
                                                 <h5>8770534650</h5>
                                                 <h6>level2@gmail.com</h6>
-                                                {/* <div className="wc">
-                                        <img src="/assets/img/whatsapp.png" className="pointer" alt="" />
-                                        <img src="/assets/img/phone-call.png" className="pointer" alt="" />
 
-                                    </div> */}
                                             </div>
                                         </div>
                                         <div className="single_user">
@@ -407,11 +396,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                             <div className="right">
                                                 <h5>8770534650</h5>
                                                 <h6>level3@gmail.com</h6>
-                                                {/* <div className="wc">
-                                        <img src="/assets/img/whatsapp.png" className="pointer" alt="" />
-                                        <img src="/assets/img/phone-call.png" className="pointer" alt="" />
 
-                                    </div> */}
                                             </div>
                                         </div>
 
@@ -421,8 +406,8 @@ const PDSingleCard = ({ propertyDocument }) => {
 
                         </div>
                     </div>
-                )}
-                <div className="property_card_single">
+                )} */}
+                {/* <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
                             Property Type
@@ -520,8 +505,8 @@ const PDSingleCard = ({ propertyDocument }) => {
                         </div>
                     </div>
 
-                </div>
-                <div className="property_card_single">
+                </div> */}
+                {/* <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
                             Property Size
@@ -554,8 +539,8 @@ const PDSingleCard = ({ propertyDocument }) => {
                         </div>
                     </div>
 
-                </div>
-                <div className="property_card_single">
+                </div> */}
+                {/* <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
                             Parking
@@ -576,17 +561,16 @@ const PDSingleCard = ({ propertyDocument }) => {
                         </div>
                     </div>
 
-                </div>
+                </div> */}
 
-                {propertyDocument.additionalRooms &&
+                {/* {propertyDocument.additionalRooms &&
                     propertyDocument.additionalRooms !== null &&
                     propertyDocument.additionalRooms !== '' &&
                     propertyDocument.additionalRooms.length > 0 &&
                     < div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <h2 className="card_title">
-                                Additional Rooms {/* pending  */}
-                            </h2>
+                                Additional Rooms                             </h2>
                             <div className="p_info">
                                 {propertyDocument.additionalRooms.map((additionalroom) => (
                                     <div className="p_info_single">
@@ -597,16 +581,16 @@ const PDSingleCard = ({ propertyDocument }) => {
                             </div>
                         </div>
                     </div>
-                }
+                } */}
 
-                {propertyDocument.additionalArea &&
+                {/* {propertyDocument.additionalArea &&
                     propertyDocument.additionalArea !== null &&
                     propertyDocument.additionalArea !== '' &&
                     propertyDocument.additionalArea.length > 0 &&
                     < div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <h2 className="card_title">
-                                Additional Area {/* pending  */}
+                                Additional Area
                             </h2>
                             <div className="p_info">
                                 {propertyDocument.additionalArea.map((additionalarea) => (
@@ -618,10 +602,10 @@ const PDSingleCard = ({ propertyDocument }) => {
                             </div>
                         </div>
                     </div>
-                }
+                } */}
 
 
-                <div className="property_card_single">
+                {/* <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
                             Building
@@ -660,7 +644,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                             </div>
                             <div className="p_info_single">
                                 <h6>Power Backup
-                                    {/* pending  */}
+
                                 </h6>
                                 <h5>{propertyDocument.powerbackup}
                                 </h5>
@@ -669,7 +653,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                         </div>
                     </div>
 
-                </div>
+                </div> */}
             </div >
 
         </>

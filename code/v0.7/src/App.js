@@ -83,6 +83,7 @@ import CreateTicket from "./chatboard/CreateTicket";
 import TicketDetail from "./chatboard/TicketDetail";
 import PGPropertyNew from "./pages/property/PGPropertyNew";
 import PGSingleProperty from "./pages/property/PGSingleProperty";
+import PDSingleCard from "./Components/PDSingleCard";
 
 // New component import start 
 
@@ -118,9 +119,13 @@ function App() {
               path="/search-property"
               element={<PGProperty></PGProperty>}
             ></Route>
-            <Route
+            {/* <Route
               path="/pdsingle/:id"
               element={<PDSingle></PDSingle>}
+            ></Route> */}
+            <Route
+              path="/pdsinglecard/:id"
+              element={<PDSingleCard></PDSingleCard>}
             ></Route>
             <Route path="/about-us" element={<PGAboutUs />}></Route>
             <Route path="/contact-us" element={<PGContactUs />}></Route>

@@ -219,7 +219,7 @@ const PDSingle = () => {
                         <div className="col-xl-9">
                             {propertyDoc && <PDSingleCard propertyDocument={propertyDoc} />}
                         </div>
-                        <div className="col-xl-3">
+                        {/* <div className="col-xl-3">
                             <div className="pp_sidebar">
                                 <div className="pp_sidebar_cards">
                                     <div className="pp_sidebarcard_single">
@@ -258,7 +258,7 @@ const PDSingle = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section >
