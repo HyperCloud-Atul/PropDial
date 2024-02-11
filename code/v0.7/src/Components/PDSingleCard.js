@@ -43,9 +43,9 @@ const PDSingleCard = () => {
     // share url code 
     return (
         <>
-            <div className=''>
-                {propertyDocument && <div className="property_card_single">
-                    <div className="pcs_inner pointer" >
+            {propertyDocument && <div className=''>
+                {<div className="property_card_single">
+                    <div className="pcs_inner pointer" to="/pdsingle">
                         <PropertyImageGallery></PropertyImageGallery>
                         <div className="pcs_main_detail">
                             <div className="pmd_top">
@@ -59,11 +59,11 @@ const PDSingleCard = () => {
                             <div className="pmd_section2 row">
                                 <div className="pdms_single col-4">
                                     <h4><span className="currency">₹</span>{propertyDocument.demandprice}<span className="price"></span></h4>
-                                    {propertyDocument.superArea !== '' ? <h6>{propertyDocument.superArea}  {propertyDocument.superAreaUnit}</h6> : <h6>{propertyDocument.carpetArea}  {propertyDocument.superAreaUnit}</h6>}
+                                    {propertyDocument.superArea !== '' ? <h6>{propertyDocument.superArea} {propertyDocument.superAreaUnit}</h6> : <h6>{propertyDocument.superArea} {propertyDocument.superAreaUnit}</h6>}
                                 </div>
                                 <div className="pdms_single col-4">
                                     <h4>{propertyDocument.carpetArea}</h4>
-                                    <h6>Area in {propertyDocument.superAreaUnit}</h6>
+                                    <h6>Area in {propertyDocument.carpetAreaUnit}</h6>
                                 </div>
                                 <div className="pdms_single col-4">
 
@@ -176,7 +176,7 @@ const PDSingleCard = () => {
                     </div>
                 </div>}
 
-                {/* {((user && user.role === "owner") || (user && user.role === "coowner")) && (
+                {((user && user.role === "owner") || (user && user.role === "coowner")) && (
                     <div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <div className="row no-gutters">
@@ -312,8 +312,8 @@ const PDSingleCard = () => {
 
                         </div>
                     </div>
-                )} */}
-                {/* {user && user.role === "owner" && (
+                )}
+                {user && user.role === "owner" && (
                     <div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <div className="row no-gutters">
@@ -406,8 +406,8 @@ const PDSingleCard = () => {
 
                         </div>
                     </div>
-                )} */}
-                {/* <div className="property_card_single">
+                )}
+                <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
                             Property Type
@@ -505,8 +505,8 @@ const PDSingleCard = () => {
                         </div>
                     </div>
 
-                </div> */}
-                {/* <div className="property_card_single">
+                </div>
+                <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
                             Property Size
@@ -539,8 +539,8 @@ const PDSingleCard = () => {
                         </div>
                     </div>
 
-                </div> */}
-                {/* <div className="property_card_single">
+                </div>
+                <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
                             Parking
@@ -561,9 +561,9 @@ const PDSingleCard = () => {
                         </div>
                     </div>
 
-                </div> */}
+                </div>
 
-                {/* {propertyDocument.additionalRooms &&
+                {propertyDocument.additionalRooms &&
                     propertyDocument.additionalRooms !== null &&
                     propertyDocument.additionalRooms !== '' &&
                     propertyDocument.additionalRooms.length > 0 &&
@@ -581,9 +581,9 @@ const PDSingleCard = () => {
                             </div>
                         </div>
                     </div>
-                } */}
+                }
 
-                {/* {propertyDocument.additionalArea &&
+                {propertyDocument.additionalArea &&
                     propertyDocument.additionalArea !== null &&
                     propertyDocument.additionalArea !== '' &&
                     propertyDocument.additionalArea.length > 0 &&
@@ -602,10 +602,10 @@ const PDSingleCard = () => {
                             </div>
                         </div>
                     </div>
-                } */}
+                }
 
 
-                {/* <div className="property_card_single">
+                <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
                             Building
@@ -653,8 +653,8 @@ const PDSingleCard = () => {
                         </div>
                     </div>
 
-                </div> */}
-            </div >
+                </div>
+            </div >}
 
         </>
     )
