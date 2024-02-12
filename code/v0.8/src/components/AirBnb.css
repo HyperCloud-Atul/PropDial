@@ -1,0 +1,124 @@
+section.ari_bnb {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+section.ari_bnb .item.card_single {
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #bad2ff;
+    background: var(--white-color) !important;
+    display: block;
+    color: black;
+}
+section.ari_bnb .card_inner {
+    padding: 25px;
+    position: relative;
+}
+section.ari_bnb .know_detail.learn-more{
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+}
+section.ari_bnb .card_inner h4.location {
+    font-size: 20px;
+    color: var(--theme-blue);
+    font-weight: 500;
+    margin-bottom: 15px !important;
+}
+.p_info_single {
+    display: flex;
+    gap: 7px;
+    align-items: center; 
+}
+.p_info_single img {
+    height: 16px !important;
+    width: auto !important;
+    opacity: 0.7;
+}
+.p_info_single h6 {
+    font-size: 16px;
+    font-weight: 400;
+    color: grey;
+}
+.p_info_single h5 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #303030;
+}
+.p_info {  
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+section.ari_bnb h4.property_price {
+    margin-top: 20px !important;
+    font-weight: 400;
+    font-size: 16px;
+    display: flex;
+    gap: 5px;
+    color: #303030;
+}
+.ari_bnb .owl-carousel .owl-item li img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3/2;
+    object-fit: cover;
+}
+.ab_p_carousel {
+    margin-top: 40px;
+}
+.ab_p_carousel{
+    position: relative;
+}
+.ab_p_carousel .owl-prev span{
+    font-size: 40px;
+}
+.ab_p_carousel .owl-prev {
+    width: 50px;
+    height: 50px;
+    left: -70px;
+    top: -38px;
+}
+.ab_p_carousel .owl-next span{
+    font-size: 40px;
+}
+.ab_p_carousel .owl-next {
+    width: 50px;
+    height: 50px;
+    right: -70px;
+    top: -38px;
+}
+.ab_p_carousel .owl-carousel .owl-item li img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3/2;
+}
+@media (max-width: 767px) {
+section.ari_bnb .card_inner {
+    padding: 15px;
+}
+section.ari_bnb .card_inner h4.location {
+    font-size: 18px;
+
+}
+section.ari_bnb .p_info_single {
+    margin-top: 10px;
+}
+section.ari_bnb .p_info_single img {
+    height: 14px !important;
+    width: auto;
+}
+section.ari_bnb .p_info_single h6 {
+    font-size: 14px;
+}
+section.ari_bnb .p_info_single h5 {
+    font-size: 14px;
+}
+section.ari_bnb h4.property_price {
+    font-size: 16px;
+    margin-top: 15px !important;
+ 
+}
+}
