@@ -1,0 +1,153 @@
+/* common css start  */
+:root {
+    --p-theme-purple: #5A10D5;
+  --p-theme-orange: #FA6304;
+  --p-theme-grey: #888888;
+  --p-theme-green: #00a8a8;
+  --p-theme-green-bg: #e2ffe7;
+  --white-color: #fff;
+  --black-color: #000;
+  --light-black: #303030;
+  --p-theme-purple-bg: #efe5ff;
+  --p-theme-orange-bg: #ffefe5;
+  --page-bg:#f5f5f5;
+}
+
+/* color css start  */
+.light_black{
+    color: var(--light-black);
+}
+.text_grey{
+    color: var(--p-theme-grey);
+}
+.bg_orange{
+    background: #ffd6cb;
+}
+.bg_purple{
+    background: var(--p-theme-purple-bg);
+}
+.bg_green{
+    background: var(--p-theme-green-bg);
+}
+/* font css start  */
+.m18 {
+    font-size: 18px;
+    font-weight: 500;
+    word-break: break-all;
+}
+.m20 {
+    font-size: 20px;
+    font-weight: 500;
+    word-break: break-all;
+}
+.m22{
+    font-size: 22px;
+    font-weight: 500;
+    word-break: break-all;
+}
+.r16{
+    font-size: 16px;
+    font-weight: 400;
+    word-break: break-all;
+}
+.r14{
+    font-size: 14px;
+    font-weight: 400;
+    word-break: break-all;
+}
+.r18{
+    font-size: 18px;
+    font-weight: 400;
+    word-break: break-all;
+}
+.m16{
+    font-size: 16px;
+    font-weight: 500;
+    word-break: break-all;
+}
+.dashboard_number{
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--light-black);
+}
+.dashboard_number_small{
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--light-black);
+}
+/* font css end  */
+.page a{
+    text-decoration: none;
+}
+.page ul li{
+    list-style-type: none;
+}
+.page h1,
+.page h2,
+.page h3,
+.page h4,
+.page h5,
+.page h6,
+.page p {
+    margin: 0px;
+}
+.page_spacing {
+    padding: 22px;
+}
+.navbarhide,
+.page_footer_hide {
+    display: none;
+}
+.pg_bg{
+    background: var(--page-bg);
+}
+.page_inner_logo img {
+    width: 135px;
+    height: auto;
+}
+
+.my_click_text {
+    text-decoration: none;
+    color: var(--theme-green);
+}
+.otp_input div {
+    justify-content: center;
+}
+/* verticall_gap css start  */
+.vg10{
+    height: 10px;
+}
+.vg22{
+    height: 22px;
+}
+.mt10{
+    margin-top: 10px;
+}
+/* common css end*/
+
+@media only screen and (max-width: 1199px) {
+    .vg22_1199{
+        height: 22px;
+    }
+}
+@media only screen and (max-width: 991px) {
+    .propagent_dashboard_inner .all_payments, .self_property_detail {      
+        grid-template-columns: repeat(3,1fr) !important;       
+    }
+}
+@media only screen and (max-width: 767px) {
+    .page_spacing {
+        padding: 15px;
+    }
+    .m22 {
+        font-size: 18px;     
+    }
+    .r18 {
+        font-size: 16px;    
+    }
+    .vg22, .vg22_1199 {
+        height: 15px;
+    }
+}
+
+
