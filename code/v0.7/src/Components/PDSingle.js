@@ -68,8 +68,6 @@ const PDSingle = () => {
 
     return (
         <div className="pg_property aflbg pd_single">
-
-
             {/* 9 dots html  */}
             <div onClick={openMoreAddOptions} className="property-list-add-property">
                 <span className="material-symbols-outlined">apps</span>
@@ -109,8 +107,6 @@ const PDSingle = () => {
                     </Link>
                 </div>
             </div>
-
-
             {!user && (
                 <div className="top_search_bar">
                     <Link to="/search-property" className="back_btn">
@@ -121,9 +117,6 @@ const PDSingle = () => {
                     </Link>
                 </div>
             )}
-
-
-
             <br></br>
             <section className="property_cards">
                 <div className="container-fluid">
@@ -131,7 +124,6 @@ const PDSingle = () => {
                         <div className="col-xl-9">
                             {propertyDoc && <PDSingleCard propertyDocument={propertyDoc} />}
                         </div>
-
                     </div>
                 </div>
             </section >

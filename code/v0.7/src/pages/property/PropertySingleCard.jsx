@@ -14,7 +14,7 @@ const PropertySingleCard = ({ propertydoc }) => {
   // sexpand more expand less end
   return (
 
-    <Link className="pcs_inner pointer" to={`/pdsinglecard/${propertydoc.id}`} key={propertydoc.id}>
+    <Link className="pointer" to={`/pdsinglecard/${propertydoc.id}`} key={propertydoc.id}>
       <div className="property_single_card">
         <div className="top relative">
           <div className="fav">

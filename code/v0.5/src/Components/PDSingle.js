@@ -68,8 +68,6 @@ const PDSingle = () => {
 
     return (
         <div className="pg_property aflbg pd_single">
-
-
             {/* 9 dots html  */}
             <div onClick={openMoreAddOptions} className="property-list-add-property">
                 <span className="material-symbols-outlined">apps</span>
@@ -110,10 +108,7 @@ const PDSingle = () => {
                 </div>
             </div>
             {/* 9 dots html  */}
-
-
             {/* top search bar */}
-
             {!user && (
                 <div className="top_search_bar">
                     <Link to="/search-property" className="back_btn">

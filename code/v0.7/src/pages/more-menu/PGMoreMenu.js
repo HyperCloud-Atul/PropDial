@@ -422,18 +422,29 @@ const PGMoreMenu = () => {
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
-              </Link> */}
-              <Link className="mm_single" to="/pgpropertynew">
-                <span className="material-symbols-outlined mms_icon">help</span>
-                <h5>Property card</h5>
+              </Link> */}             
+              <Link className="mm_single" to="">
+                <span className="material-symbols-outlined mms_icon">report</span>
+                <h5>Privacy Policy</h5>
+                <h6>Lorem ipsum text dummy text</h6>
+                <span className="material-symbols-outlined mms_ra">
+                  chevron_right
+                </span>
+              </Link>            
+              <Link className="mm_single" to="">
+                <span className="material-symbols-outlined mms_icon">gavel</span>
+                <h5>Terms & Condition</h5>
                 <h6>Lorem ipsum text dummy text</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
               </Link>
-              <Link className="mm_single" to="/createticket">
+            </div>
+            <div className="mm_inner">
+              <h6 className="title">Admin</h6>          
+              <Link className="mm_single" to="/pgpropertynew">
                 <span className="material-symbols-outlined mms_icon">help</span>
-                <h5>create ticket</h5>
+                <h5>Property</h5>
                 <h6>Lorem ipsum text dummy text</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
@@ -447,14 +458,15 @@ const PGMoreMenu = () => {
                   chevron_right
                 </span>
               </Link>
-              <Link className="mm_single" to="">
-                <span className="material-symbols-outlined mms_icon">report</span>
-                <h5>Privacy Policy</h5>
+              <Link className="mm_single" to="/createticket">
+                <span className="material-symbols-outlined mms_icon">help</span>
+                <h5>create ticket</h5>
                 <h6>Lorem ipsum text dummy text</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
-              </Link>
+              </Link>       
+            
               <Link className="mm_single" to="/addnotification/new">
                 <span className="material-symbols-outlined mms_icon">report</span>
                 <h5>Add notification</h5>
@@ -462,15 +474,7 @@ const PGMoreMenu = () => {
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
-              </Link>
-              <Link className="mm_single" to="">
-                <span className="material-symbols-outlined mms_icon">gavel</span>
-                <h5>Terms & Condition</h5>
-                <h6>Lorem ipsum text dummy text</h6>
-                <span className="material-symbols-outlined mms_ra">
-                  chevron_right
-                </span>
-              </Link>
+              </Link>            
             </div>
           </div>
         </div>
