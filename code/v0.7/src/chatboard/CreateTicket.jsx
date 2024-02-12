@@ -57,69 +57,13 @@ const CreateTicket = () => {
     };
   return (
     <div className="top_header_pg">
-      <div
-        className={`loginsignpg  ${
+     <div className="page_spacing">
+     <div
+        className={`  ${
           sidebarOpen ? "sidebar-open" : "sidebar-close"
         }`}
       >
-        <div
-          className="ls_sidebar set_bg_img_with_overlay"
-          style={{
-            backgroundImage: "url('/assets/img/contact_img.jpg')",
-          }}
-        >
-          <div className="blur-bg"></div>
-          <div className="open_close_icon" onClick={toggleSidebar}>
-            <span className="material-symbols-outlined">arrow_back_ios</span>
-          </div>
-          <div className="lss_content">
-            <h3>Things you Can Do with PropAgent Account</h3>
-            <ul>
-              <li>
-                Showcase listings
-                <div className="li_icon">
-                  <img src="./assets/img/tickIcon.png" alt="" />
-                </div>
-              </li>
-              <li>
-                Explore properties
-                <div className="li_icon">
-                  <img src="./assets/img/tickIcon.png" alt="" />
-                </div>
-              </li>
-              <li>
-                Connect and collaborate
-                <div className="li_icon">
-                  <img src="./assets/img/tickIcon.png" alt="" />
-                </div>
-              </li>
-              <li>
-                Stay trend-aware
-                <div className="li_icon">
-                  <img src="./assets/img/tickIcon.png" alt="" />
-                </div>
-              </li>
-              <li>
-                Engage in conversations
-                <div className="li_icon">
-                  <img src="./assets/img/tickIcon.png" alt="" />
-                </div>
-              </li>
-              <li>
-                Access efficient tools
-                <div className="li_icon">
-                  <img src="./assets/img/tickIcon.png" alt="" />
-                </div>
-              </li>
-              <li>
-                Receive reliable support
-                <div className="li_icon">
-                  <img src="./assets/img/tickIcon.png" alt="" />
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+       
 
         <div
           className="right_main_form"
@@ -131,8 +75,8 @@ const CreateTicket = () => {
             <form onSubmit={handleSubmit} className="form-w">
               <h4 className="title">Contact Us</h4>
 
-              <div className="fl_form_field st-2 top_margin">
-                <label htmlFor="" className="no-floating">
+              <div className="form_field top_margin">
+                <label htmlFor="" className="">
                   For
                 </label>
                 <select
@@ -176,6 +120,7 @@ const CreateTicket = () => {
           </div>
         </div>
       </div>
+     </div>
     </div>
   );
 };

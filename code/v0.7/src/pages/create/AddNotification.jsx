@@ -95,30 +95,22 @@ const AddNotification = () => {
     }
   };
   return (
-    <div className="top_header_pg">
-      <div className="page_inner">
-        <div className="pg_header">
+    <div className="top_header_pg pg_bg">
+      <div className="page_spacing">
+        {/* <div className="pg_header">
           <h2 className="p_title">Add Notification</h2>
           <h4 className="p_subtitle">
             You can add all types of notification here
           </h4>
-        </div>
+        </div> */}
         <div className="verticall_gap"></div>
         <div className="add_notification_form regular_card">
           <form onSubmit={handleSubmit}>
-            <div className="row">
-              {/* <div className="col-md-6">
-                <div className="fl_form_field">
-                  <label className="no-floating" htmlFor="">
-                    Search user
-                  </label>                  
-                  <input required type="text" />
-                </div>
-              </div> */}
+            <div className="row">         
 
               <div className="col-md-6">
-                <div className="fl_form_field">
-                  <label className="no-floating" htmlFor="">
+                <div className="form_field">
+                  <label className="" htmlFor="">
                     Notification type
                   </label>
                   <select
@@ -169,8 +161,8 @@ const AddNotification = () => {
                 </div>
               </div>
               <div className="col-md-6">
-                <div className="fl_form_field top_margin_767">
-                  <label className="no-floating" htmlFor="">
+                <div className="form_field">
+                  <label className="" htmlFor="">
                     Short Description
                   </label>
                   <input
@@ -192,8 +184,8 @@ const AddNotification = () => {
               </div>
 
               <div className="col-md-12">
-                <div className="fl_form_field top_margin">
-                  <label className="no-floating" htmlFor="">
+                <div className="form_field top_margin">
+                  <label className="" htmlFor="">
                     Description
                   </label>
                   <textarea
