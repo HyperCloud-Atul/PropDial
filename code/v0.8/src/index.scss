@@ -15,6 +15,7 @@
     .col_left_inner {
       text-align: center;
       max-width: 445px;
+      width: 100%;
       margin-left: auto;
       margin-right: auto;
     }
@@ -300,51 +301,96 @@
     position: relative;
     display: flex;
     align-items: center;
-    .title{
+    .title {
       font-size: 16px;
       font-weight: 500;
       word-break: break-all;
     }
-    .sub_title{
+    .sub_title {
       font-size: 14px;
-    color: var(--p-theme-grey);
-    margin-top: 2px !important;
-    font-weight: 400;
-    word-break: break-all;
+      color: var(--p-theme-grey);
+      margin-top: 2px !important;
+      font-weight: 400;
+      word-break: break-all;
     }
     .left {
     }
   }
 }
-.my_big_card{  
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+.my_big_card {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   background: var(--white-color);
   border-radius: 22px;
   padding: 20px;
 }
-
+.form_field {
+  input {
+    border: 1px solid #03468738;
+    border-radius: 12px;
+    color: #000;
+    color: var(--black-color);
+    font-size: 16px;
+    padding: 10px 10px 10px 42px;
+    width: 100%;
+  }
+  select {
+    border: 1px solid #03468738;
+    border-radius: 12px;
+    color: #000;
+    color: var(--black-color);
+    font-size: 16px;
+    padding: 10px 10px 10px 42px;
+    width: 100%;
+  }
+  textarea {
+    border: 1px solid #03468738;
+    border-radius: 12px;
+    color: #000;
+    color: var(--black-color);
+    font-size: 16px;
+    padding: 10px 10px 10px 42px;
+    width: 100%;
+  }
+  .field_icon {
+    left: 12px;
+    position: absolute;
+    top: 10px;
+  }
+}
 
 @media only screen and (max-width: 991px) {
   .property_cards_parent {
     grid-template-columns: repeat(1, 1fr);
-}
+  }
+  .two_col_page {
+    .col_right {
+      display: none;
+    }
+    .col_left {
+      width: 100%;
+      padding: 15px;
+      min-height: calc(100vh - 129px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }
 @media only screen and (max-width: 767px) {
-  .my_big_card {   
+  .my_big_card {
     border-radius: 20px;
     padding: 15px;
   }
-  .page .propagent_dashboard_inner .all_payments {   
-    grid-template-columns: repeat(2,1fr) !important;
+  .page .propagent_dashboard_inner .all_payments {
+    grid-template-columns: repeat(2, 1fr) !important;
     grid-column-gap: 15px;
     grid-row-gap: 15px;
-}
-.r14 {
-  font-size: 12px; 
-}
-.dashboard_number_small {
-  font-size: 18px; 
-}
-
-
+  }
+  .r14 {
+    font-size: 12px;
+  }
+  .dashboard_number_small {
+    font-size: 18px;
+  }
 }

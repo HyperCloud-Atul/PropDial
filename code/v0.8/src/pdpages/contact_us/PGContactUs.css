@@ -130,7 +130,7 @@ section.form_sec .right_form::after {
     top: 0;
     left: 0;
     position: absolute;
-    opacity: 0.5;
+    opacity: 0.7;
     z-index: -1;
 }
 

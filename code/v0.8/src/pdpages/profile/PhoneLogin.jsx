@@ -198,7 +198,7 @@ const PhoneLogin = () => {
   };
 
   return (
-    <div className="phone_login two_col_page">
+    <div className="phone_login two_col_page top_header_pg">
       <div className="right col_right">
         <img src="./assets/img/login_img.jpeg" alt="" />
       </div>

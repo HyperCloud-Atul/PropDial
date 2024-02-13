@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // components
 import Hero from "../../components/Hero";
+import CreateTicket from "../../chatboard/CreateTicket";
 
 // css
 import "./PGContactUs.css";
@@ -137,69 +138,7 @@ const PGContactUs = () => {
             backgroundImage: "url('./assets/img/contact_from_right.jpg')",
           }}
         >
-          <form>
-            <div className="row">
-              <div className="col-sm-12">
-                <div className="section_title mb-4">
-                  <h3>Get In Touch With Us</h3>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="form_field">
-                  <input type="text" placeholder="Name" name="name" />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">Person</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="form_field">
-                  <input type="email" placeholder="Email" name="email" />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">mail</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="form_field">
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    name="phoneNumber"
-                  />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">call</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="form_field">
-                  <input type="text" placeholder="Subject" name="subject" />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">subject</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-12">
-                <div className="form_field">
-                  <textarea type="text" placeholder="Message" name="message" />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">chat</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-sm-12">
-                <div className="submit_btn">
-                  <button type="submit" className=" theme_btn btn_fill">
-                    Send
-                    <span className="material-symbols-outlined btn_arrow ba_animation">
-                      arrow_forward
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
+       <CreateTicket/>
         </div>
 
         <iframe
