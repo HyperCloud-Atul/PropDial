@@ -129,35 +129,45 @@ function App() {
             <Route path="/about-us" element={<PGAboutUs />}></Route>
             <Route path="/contact-us" element={<PGContactUs />}></Route>
             <Route path="/faq" element={<Faq></Faq>}></Route>
+            <Route
+              path="/properties"
+              element={< PGProperties />}
+            ></Route>
+            <Route
+              path="/ticketdetail"
+              element={
+                user && user.status === 'active' && (user.role !== "propagent" || user.role !== "propagentadmin") ?
+                  <TicketDetail /> : <Navigate to="/phonelogin" />
+              }
+            ></Route>
+            <Route
+              path="/tickets"
+              element={
+                user && user.role ? <PGTickets /> : <Navigate to="/login" />
+              }
+            ></Route>
+
+            {/* *********************************** */}
 
             {/* <Route
               path="/search-property"
               element={<PGSearchProperty></PGSearchProperty>}
             ></Route> */}
-            <Route
-              path="/properties"
-              element={< PGProperties />}
-            ></Route>
-
-
-
-            {/* *********************************** */}
-
-
             {/*<Route
               path="/pdsinglecard/:id"
               element={<PDSingleCard></PDSingleCard>}
             ></Route>
- <Route
+             
+            <Route
               path="/pgsearch"
               element={
-                user && user.role === "admin" ? 
-                (
-                  <PGSearch />
-                )
-                : (
-                  <Navigate to="/login" />
-                )
+                user && user.role === "admin" ?
+                  (
+                    <PGSearch />
+                  )
+                  : (
+                    <Navigate to="/login" />
+                  )
               }
             ></Route>
             <Route
@@ -312,7 +322,7 @@ function App() {
                 )
               }
             ></Route>
-            
+
 
             <Route
               path="/propertystatus"
@@ -554,7 +564,7 @@ function App() {
               }
             ></Route>
             <Route path="/error" element={<PGError />}></Route>
-            
+
 
             <Route
               path="/pgsingleproperty"
