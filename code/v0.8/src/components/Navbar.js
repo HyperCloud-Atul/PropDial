@@ -78,12 +78,9 @@ export default function Navbar() {
     }
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/ownerdashboard_new");
+      navigate("/dashboard-owner");
     }
-    if (user && user.role === "propagent") {
-      // console.log('in user', user.role)
-      navigate("/agentdashboard");
-    }
+
   };
   const showThirdPage = () => {
     if (!user) {

@@ -1,7 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import LinearProgressBar from "./LinearProgressBar";
+import LinearProgressBar from "../../../pages/roles/owner/LinearProgressBar";
 import { useLocation } from "react-router-dom";
+import { useAuthContext } from "../../../hooks/useAuthContext";
+import { useCollection } from "../../../hooks/useCollection";
 
 // owl carousel
 import OwlCarousel from "react-owl-carousel";
@@ -10,18 +12,30 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 // owl carousel
 
 // component
-import PropertySingleCard from "../../property/PropertySingleCard";
+import PropertyCardCustomer from "../../../components/property/PropertyCardCustomer";
 
 // css
-import "./PGOwnerDashboardNew.css";
+import "./PGOwnerDashboard.css";
 
-const PGOwnerDashboardNew = () => {
+const PGOwnerDashboard = () => {
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
+
+  const { user } = useAuthContext();
+  // const { documents: properties, error: propertieserror } = useCollection(
+  //     "properties"
+  // );
+  const { documents: properties, error: propertieserror } = useCollection(
+    "properties",
+    ["access", "array-contains", user.uid]
+  );
+
+
+
   // advertisement img option in owl carousel
   const addImgOptions = {
     items: 1,
@@ -196,6 +210,16 @@ const PGOwnerDashboardNew = () => {
               </div>
               <div className="vg22"></div>
               <hr />
+              <div className="vg22"></div>
+              <section className="property_cards_parent">
+                <div className="property_cards_parent">
+                  {properties && properties.map((property) => (
+                    <PropertyCardCustomer propertydoc={property} />
+                  ))}
+                </div>
+              </section>
+              <div className="vg22"></div>
+              <hr />
               <section className="self_property_detail">
                 <div className="spd_single">
                   <div className="left residential">
@@ -253,15 +277,7 @@ const PGOwnerDashboardNew = () => {
                 </div>
               </section>
 
-              <div className="vg22"></div>
-              <hr />
-              <div className="vg22"></div>
-              <section className="property_cards_parent">
-                <PropertySingleCard />
-                <PropertySingleCard />
-              </section>
-              <div className="vg22"></div>
-              <hr />
+
               <div className="vg22"></div>
               <section className="add_section row">
                 <div className="add_single col-lg-6">
@@ -301,153 +317,7 @@ const PGOwnerDashboardNew = () => {
                   </OwlCarousel>
                 </div>
               </section>
-              {/* <div className="verticall_gap"></div>
-            <section className="other_property_details">
-              <div className="row">
-                <div className="col-lg-6">
-                  <div className="properties_map">
-                    <h2 className="p_title">Properties in major cities</h2>
-                    <div className="pi_cities row">
-                      <div className="left col-6">
-                        <div className="pi_cities_single">
-                          <h6>Delhi</h6>
-                          <h5>{delhiProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: delhiPropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Gurugram</h6>
-                          <h5>{gurugramProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: gurugramPropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Noida</h6>
-                          <h5>{noidaProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: noidaPropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Faridabad</h6>
-                          <h5>{faridabadProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: faridabadPropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Ghaziabad</h6>
-                          <h5>{ghaziabadProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: ghaziabadPropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="right col-6">
-                        <div className="pi_cities_single">
-                          <h6>Bangalore</h6>
-                          <h5>{bangaloreProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: bangalorePropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Pune</h6>
-                          <h5>{puneProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: punePropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Mumbai</h6>
-                          <h5>{mumbaiProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: mumbaiPropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Hyderabad</h6>
-                          <h5>{hyderabadProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: hyderabadPropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Goa</h6>
-                          <h5>{goaProperties}</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: goaPropertiesPercentage + '%',
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="verticall_gap_991"></div>
-                <div className="col-lg-6">
-                  <CircularProgressBar
-                    rentProperties={availableForRentProperties}
-                    saleProperties={availableForSaleProperties}
-                    commercialProperties={commercialProperties}
-                    residentialProperties={residentialProperties}
-                    totalProperties={totalProperties}
-                  />
-                </div>
-              </div>
-            </section>
-            <div className="verticall_gap"></div> */}
+
             </div>
           </div>
         </div>
@@ -456,4 +326,4 @@ const PGOwnerDashboardNew = () => {
   );
 };
 
-export default PGOwnerDashboardNew;
+export default PGOwnerDashboard;

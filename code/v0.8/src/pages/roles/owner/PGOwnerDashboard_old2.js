@@ -15,7 +15,7 @@ import PropertyDetail from "../../../components/property/SearchProperty";
 // import './UserDashboard.css'
 const propertyFilter = ["ALL", "RESIDENTIAL", "COMMERCIAL", "INACTIVE"];
 
-export default function PGOwnerDashboard() {
+export default function PGOwnerDashboard_old2() {
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {

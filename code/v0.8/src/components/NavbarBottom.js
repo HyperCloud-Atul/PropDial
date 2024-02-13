@@ -62,12 +62,9 @@ export default function NavbarBottom() {
     }
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
-      navigate("/ownerdashboard_new");
+      navigate("/dashboard-owner");
     }
-    if (user && user.role === "propagent") {
-      // console.log('in user', user.role)
-      navigate("/addproperty_quick");
-    }
+
   };
   const showThirdPage = () => {
     if (!user) {
@@ -77,7 +74,7 @@ export default function NavbarBottom() {
     }
     if (user && user.role === "owner") {
       // console.log('in user', user.role)
-      navigate("/pgpropertynew");
+      navigate("/properties");
     }
     if (user && user.role === "propagent") {
       // console.log('in user', user.role)
@@ -198,7 +195,7 @@ export default function NavbarBottom() {
           </div>
         </Link>
         <div
-          className={`b_menu_single ${location.pathname === "/pgpropertynew" ? "b_menu_active" : ""
+          className={`b_menu_single ${location.pathname === "/properties" ? "b_menu_active" : ""
             }`}
           onClick={showThirdPage}
         >

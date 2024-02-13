@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const PropertySingleCard = ({ propertydoc }) => {
+const PropertyCardCustomer = ({ propertydoc }) => {
   // expand more expand less start
   const [expanded, setExpanded] = useState(true);
 
@@ -173,4 +173,4 @@ const PropertySingleCard = ({ propertydoc }) => {
   );
 };
 
-export default PropertySingleCard;
+export default PropertyCardCustomer;

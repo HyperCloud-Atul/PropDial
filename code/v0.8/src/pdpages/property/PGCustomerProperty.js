@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
-import PropertySingleCard from "../../pages/property/PropertySingleCard";
+import PropertyCardCustomer from "../../components/property/PropertyCardCustomer";
 
 const PGCustomerProperty = () => {
 
@@ -22,7 +22,7 @@ const PGCustomerProperty = () => {
                 {
                     <div className="property_cards_parent">
                         {properties && properties.map((property) => (
-                            <PropertySingleCard propertydoc={property} />
+                            <PropertyCardCustomer propertydoc={property} />
                         ))}
                     </div>
                 }

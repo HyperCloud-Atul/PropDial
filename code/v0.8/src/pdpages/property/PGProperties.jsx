@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import PropertySingleCard from "../../pages/property/PropertySingleCard";
+import PropertySingleCard from "../../components/property/PropertyCardCustomer";
 import { useCollection } from "../../hooks/useCollection";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -19,7 +19,8 @@ const PGProperties = () => {
 
   return (
 
-    user ? <PGCustomerProperty /> : <PGSearchProperty />
+    // user ? <PGCustomerProperty /> : <PGSearchProperty />
+    <PGSearchProperty />
 
   );
 };

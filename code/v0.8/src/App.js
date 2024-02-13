@@ -20,6 +20,7 @@ import Home from "./pdpages/home/Home";
 import PGMoreMenu from "./pdpages/more-menu/PGMoreMenu";
 import PGSearchProperty from "./pdpages/property/PGSearchProperty";
 import PGProperties from "./pdpages/property/PGProperties";
+import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
 
 // ------------------------------------------------------------------------------------
 
@@ -33,8 +34,7 @@ import PGAdminDashboard from "./pages/roles/admin/PGAdminDashboard";
 import PGAdminProperties from "./pages/roles/admin/PGAdminProperties";
 import PGPropertyEdit from "./pages/roles/admin/PGPropertyEdit";
 // owner
-import PGOwnerDashboard from "./pages/roles/owner/PGOwnerDashboard";
-import PGOwnerDashboardOld from "./pages/roles/owner/PGOwnerDashboard_old";
+
 import PGBills from "./pages/roles/owner/PGBills";
 import PGTickets from "./pages/roles/owner/PGTickets";
 // tenant
@@ -87,7 +87,7 @@ import PGSearch from "./pages/search/PGSearch";
 
 // New component import start 
 
-import PGOwnerDashboardNew from "./pages/roles/owner/PGOwnerDashboardNew";
+
 import AddNotification from "./pages/create/AddNotification";
 
 import CreateTicket from "./chatboard/CreateTicket";
@@ -145,6 +145,12 @@ function App() {
               element={
                 user && user.role ? <PGTickets /> : <Navigate to="/login" />
               }
+            ></Route>
+
+            {/* owner & co-owner */}
+            <Route
+              path="/dashboard-owner"
+              element={< PGOwnerDashboard />}
             ></Route>
 
             {/* *********************************** */}
@@ -570,10 +576,7 @@ function App() {
               path="/pgsingleproperty"
               element={< PGSingleProperty />}
             ></Route>
-            <Route
-              path="/ownerdashboard_new"
-              element={< PGOwnerDashboardNew />}
-            ></Route>
+            
 
             <Route
               path="/addnotification/:notificationid"
@@ -585,7 +588,7 @@ function App() {
               element={< PGNotification />}
             ></Route> */}
           </Routes>
-          {user && user.role !== "user" && <NavbarBottom></NavbarBottom>}
+          {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}
           <Footer></Footer>
           <NavbarBottom></NavbarBottom>
         </BrowserRouter>
