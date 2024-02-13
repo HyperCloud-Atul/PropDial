@@ -6,12 +6,12 @@ import Gallery from "react-image-gallery";
 import Switch from "react-switch";
 import { Navigate, Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
-import { useAuthContext } from "../hooks/useAuthContext";
-import { useDocument } from "../hooks/useDocument"
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useDocument } from "../../hooks/useDocument"
 
 // component 
-import PropertyImageGallery from "./PropertyImageGallery";
-const PDSingleCard = () => {
+import PropertyImageGallery from "../PropertyImageGallery";
+const PropertyDetails = () => {
     // get user from useauthcontext
     const { id } = useParams()
     // console.log('property id: ', id)
@@ -660,4 +660,4 @@ const PDSingleCard = () => {
     )
 }
 
-export default PDSingleCard
+export default PropertyDetails
