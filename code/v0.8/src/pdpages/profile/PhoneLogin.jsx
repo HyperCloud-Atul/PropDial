@@ -92,13 +92,17 @@ const PhoneLogin = () => {
       return setError("Please enter valid Phone Number");
     }
     try {
+      let btnSendOTP = document.getElementById("btn_sendotp");
+      btnSendOTP.style.display = "none";
+      // console.log('btnSendOTP:')
       // console.log("in try 1", phone);
       const respons = await setUpRecapcha("+" + phone);
-      // console.log("in try 2", respons);
+      console.log("in try 2", respons);
       setConfirmObj(respons);
       // setFlag(true);
       setotpSliderState(true);
       //   setIsOtpButtonVisible(false); // Hide the OTP button
+
 
       //Set User Name for existing user, else blank
       const existingUser = dbuserdocuments && dbuserdocuments.filter((item) => item.phoneNumber === phone);
@@ -113,10 +117,16 @@ const PhoneLogin = () => {
       } else {
         setIsNewUser(true);
       }
+
+
+
+
     } catch (error) {
       console.log("2 error.message", error.message);
       setError(error.message);
       await resendOTP("+" + phone);
+      let obj_maintenance = document.getElementById("btn_sendotp");
+      obj_maintenance.style.display = "block";
     }
   };
 
@@ -130,9 +140,9 @@ const PhoneLogin = () => {
     try {
       await confirmObj.confirm(otp).then(async (result) => {
         const user = result.user;
-        console.log("user created:", user);
 
         if (isNewUser) {
+          console.log("new user created:", user);
           setUserName(user.displayName);
           // Split the full name by space
           let splitName = userName.split(" ");
@@ -172,6 +182,7 @@ const PhoneLogin = () => {
             });
 
         } else {
+          console.log("existing user:", user);
           await updateDocument(user.uid, {
             online: true,
             lastLoginTimestamp: timestamp.fromDate(new Date()),
@@ -263,7 +274,7 @@ const PhoneLogin = () => {
                 }}
               ></div>
 
-              <div
+              <div id='btn_sendotp'
                 className="p_theme_btn w_full"
                 onClick={getOTP}
               >

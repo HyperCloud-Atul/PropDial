@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import PGSearchProperty from "./PGSearchProperty";
 import PGCustomerProperty from "./PGCustomerProperty";
+import PGAdminProperty from "./PGAdminProperty";
 
 const PGProperties = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -16,12 +17,20 @@ const PGProperties = () => {
   // Scroll to the top of the page whenever the location changes end
 
   const { user } = useAuthContext();
-
+  console.log('user:', user)
   return (
+    <>
+      <div>
+        {!user && <PGSearchProperty />}
+      </div>
+      <div>
+        {user && user.role === 'owner' && <PGCustomerProperty />}
+      </div>
+      <div>
+        {user && user.role === 'admin' && <PGAdminProperty />}
+      </div>
 
-    // user ? <PGCustomerProperty /> : <PGSearchProperty />
-    <PGSearchProperty />
-
+    </>
   );
 };
 

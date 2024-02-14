@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useDocument } from "../../../hooks/useDocument";
-import PGAddProperty from "../../create/PGAddProperty";
+import PGAddProperty from "../../../pdpages/property/PGAddProperty";
 
 // components
 // import PropertyComments from "./PropertyComments"

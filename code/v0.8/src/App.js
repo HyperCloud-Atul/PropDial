@@ -20,6 +20,7 @@ import Home from "./pdpages/home/Home";
 import PGMoreMenu from "./pdpages/more-menu/PGMoreMenu";
 import PGSearchProperty from "./pdpages/property/PGSearchProperty";
 import PGProperties from "./pdpages/property/PGProperties";
+import PGAddProperty from "./pdpages/property/PGAddProperty";
 import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
 
 // ------------------------------------------------------------------------------------
@@ -52,7 +53,7 @@ import UserDashboard from "./pages/dashboard/UserDashboard";
 
 import PGSignup from "./pages/login/PGSignup";
 
-import PGAddProperty from "./pages/create/PGAddProperty";
+
 import PGAddPropertyQuick from "./pages/create/PGAddPropertyQuick";
 import AddBill from "./pages/create/AddBill";
 import AddPhoto from "./pages/create/AddPhoto";
@@ -137,6 +138,27 @@ function App() {
               path="/propertydetails/:id"
               element={<PropertyDetails></PropertyDetails>}
             ></Route>
+            <Route
+              path="/addproperty"
+              element={
+                user && user.role !== "admin" ? (
+                  <PGAddProperty />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
+
+            <Route
+              path="/addproperty_quick"
+              element={
+                user && user.role === "admin" ? (
+                  <PGAddPropertyQuick />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            ></Route>
 
             <Route
               path="/ticketdetail"
@@ -151,7 +173,7 @@ function App() {
                 user && user.role ? <PGTickets /> : <Navigate to="/login" />
               }
             ></Route>
-              <Route
+            <Route
               path="/addnotification/:notificationid"
               element={< AddNotification />}
             ></Route>
@@ -168,9 +190,9 @@ function App() {
               path="/search-property"
               element={<PGSearchProperty></PGSearchProperty>}
             ></Route> */}
-            {/*
-          
-             
+
+
+
             <Route
               path="/pgsearch"
               element={
@@ -192,7 +214,7 @@ function App() {
 
             <Route
               path="/updatepwd"
-              element={user ? <UpdatePassword /> : <PGLogin />}
+              element={user ? <UpdatePassword /> : <PhoneLogin />}
             ></Route>
 
             <Route
@@ -251,16 +273,7 @@ function App() {
                 )
               }
             ></Route>
-            <Route
-              path="/addproperty_quick"
-              element={
-                user && user.role === "admin" ? (
-                  <PGAddPropertyQuick />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            ></Route>
+
 
             <Route
               path="/addproperty/:propertyid"
@@ -417,7 +430,7 @@ function App() {
                 )
               }
             ></Route>
-            <Route
+            {/* <Route
               path="/ownerdashboardold"
               element={
                 user && user.role === "owner" ? (
@@ -426,7 +439,7 @@ function App() {
                   <Navigate to="/login" />
                 )
               }
-            ></Route>
+            ></Route> */}
 
 
             <Route
@@ -515,7 +528,7 @@ function App() {
 
             <Route
               path="/login"
-              element={user ? <Navigate to="/" /> : <PGLogin />}
+              element={user ? <Navigate to="/" /> : <PhoneLogin />}
             ></Route>
             <Route
               path="/signup"
@@ -523,7 +536,7 @@ function App() {
             ></Route>
             <Route
               path="/profile"
-              element={user ? <PGProfile /> : <PGLogin />}
+              element={user ? <PGProfile /> : <PhoneLogin />}
             ></Route>
 
             <Route
@@ -532,7 +545,7 @@ function App() {
                 user && user.role === "admin" ? (
                   <MasterCountryList />
                 ) : (
-                  <PGLogin />
+                  <PhoneLogin />
                 )
               }
             ></Route>
@@ -542,7 +555,7 @@ function App() {
                 user && user.role === "admin" ? (
                   <MasterStateList />
                 ) : (
-                  <PGLogin />
+                  <PhoneLogin />
                 )
               }
             ></Route>
@@ -552,7 +565,7 @@ function App() {
                 user && user.role === "admin" ? (
                   <MasterCityList />
                 ) : (
-                  <PGLogin />
+                  <PhoneLogin />
                 )
               }
             ></Route>
@@ -562,7 +575,7 @@ function App() {
                 user && user.role === "admin" ? (
                   <MasterLocalityList />
                 ) : (
-                  <PGLogin />
+                  <PhoneLogin />
                 )
               }
             ></Route>
@@ -572,7 +585,7 @@ function App() {
                 user && user.role === "admin" ? (
                   <MasterSocietyList />
                 ) : (
-                  <PGLogin />
+                  <PhoneLogin />
                 )
               }
             ></Route>
@@ -583,7 +596,7 @@ function App() {
               path="/pgsingleproperty"
               element={< PGSingleProperty />}
             ></Route>
-            
+
 
             <Route
               path="/addnotification/:notificationid"
@@ -593,7 +606,7 @@ function App() {
             <Route
               path="/notification"
               element={< PGNotification />}
-            ></Route> */}
+            ></Route>
           </Routes>
           {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}
           <Footer></Footer>

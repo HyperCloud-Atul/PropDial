@@ -62,34 +62,25 @@ export default function PGProfile() {
   };
 
   const showDashboard = () => {
-    if (user && user.role === "user") {
-      // console.log('in user', user.role)
-      navigate("/userdashboard");
-    }
-
-    if (user && user === "superadmin") {
-      // console.log('in superadmin', user.role)
-      navigate("/superadmindashboard");
-    }
 
     if (user && user.role === "admin") {
       // console.log('in admin', user.role)
-      navigate("/admindashboard");
+      navigate("/dashboard-admin");
     }
 
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       console.log('in user', user.role)
-      navigate("/ownerdashboard");
+      navigate("/dashboard-owner");
     }
 
     if (user && user.role === "tenant") {
       // console.log('in user', user.role)
-      navigate("/tenantdashboard");
+      navigate("/dashboard-tenant");
     }
 
     if (user && user.role === "propertymanager") {
       // console.log('in user', user.role)
-      navigate("/executivedashboard");
+      navigate("/dashboard-propertymanager");
     }
   };
 
@@ -194,7 +185,7 @@ export default function PGProfile() {
         <div className="container">
           <div className="sn_inner">
             <div className="user_img relative">
-              <img src={user.photoURL} alt=''></img>
+              <img src={user && user.photoURL} alt=''></img>
               <input
                 type="file"
                 onChange={handleFileChange}

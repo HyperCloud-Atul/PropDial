@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import "./PropertyList.css";
 
 export default function PropertyList({ properties }) {
-  // console.log('properties: ', properties)
+  console.log('properties: ', properties)
   const { user } = useAuthContext();
 
   const navigate = useNavigate();
@@ -146,7 +146,7 @@ export default function PropertyList({ properties }) {
                       </div>
                     )}
                     {
-                      property.ownerDetails.role === "propertymanager" ?
+                      user.role === "propertymanager" ?
                         <>
                           <div
                             className="secondary-details-inside-display"

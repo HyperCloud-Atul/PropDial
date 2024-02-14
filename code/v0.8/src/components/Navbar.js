@@ -74,7 +74,7 @@ export default function Navbar() {
     if (user && user.role === "admin") {
       // console.log('in user', user.role)
       // navigate("/adminproperties");
-      navigate("/pgpropertylist");
+      navigate("/properties");
     }
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
@@ -90,17 +90,14 @@ export default function Navbar() {
     }
     if (user && user.role === "admin") {
       // console.log('in user', user.role)
-      // navigate("/adminproperties");
+
       navigate("/users");
     }
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
       navigate("/properties");
     }
-    if (user && user.role === "propagent") {
-      // console.log('in user', user.role)
-      navigate("/agentproperties");
-    }
+
   };
 
   const showFourthPage = () => {

@@ -65,7 +65,7 @@ const PropertyDetails = () => {
       <section className="property_cards">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-xl-9">
+            <div className="col-xl-12">
               {propertyDocument && (
                 <div className="">
                   {
@@ -158,125 +158,125 @@ const PropertyDetails = () => {
                               (user && user.role === "coowner") ||
                               (user && user.role === "admin")
                             ) && (
-                              <div className="right">
-                                <a
-                                  className="theme_btn no_icon btn_fill"
-                                  style={{
-                                    marginRight: "10px",
-                                  }}
-                                >
-                                  {" "}
-                                  Contact Agent
-                                </a>
-                                <a
-                                  className="theme_btn no_icon btn_border"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#exampleModal"
-                                >
-                                  {" "}
-                                  Enquire Now
-                                </a>
-                                <div
-                                  className="modal fade"
-                                  id="exampleModal"
-                                  tabindex="-1"
-                                  aria-labelledby="exampleModalLabel"
-                                  aria-hidden="true"
-                                >
-                                  <div className="modal-dialog">
-                                    <div className="modal-content relative">
-                                      <span
-                                        className="material-symbols-outlined close_modal"
-                                        data-bs-dismiss="modal"
-                                      >
-                                        close
-                                      </span>
-                                      <div className="modal-body">
-                                        <form>
-                                          <div className="row">
-                                            <div className="col-sm-12">
-                                              <div className="section_title mb-4">
-                                                <h3>Enquiry</h3>
-                                                <h6 className="modal_subtitle">
-                                                  Thank you for your interest in
-                                                  reaching out to us. Please use
-                                                  the form below to submit any
-                                                  question.
-                                                </h6>
+                                <div className="right">
+                                  <a
+                                    className="theme_btn no_icon btn_fill"
+                                    style={{
+                                      marginRight: "10px",
+                                    }}
+                                  >
+                                    {" "}
+                                    Contact Agent
+                                  </a>
+                                  <a
+                                    className="theme_btn no_icon btn_border"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal"
+                                  >
+                                    {" "}
+                                    Enquire Now
+                                  </a>
+                                  <div
+                                    className="modal fade"
+                                    id="exampleModal"
+                                    tabindex="-1"
+                                    aria-labelledby="exampleModalLabel"
+                                    aria-hidden="true"
+                                  >
+                                    <div className="modal-dialog">
+                                      <div className="modal-content relative">
+                                        <span
+                                          className="material-symbols-outlined close_modal"
+                                          data-bs-dismiss="modal"
+                                        >
+                                          close
+                                        </span>
+                                        <div className="modal-body">
+                                          <form>
+                                            <div className="row">
+                                              <div className="col-sm-12">
+                                                <div className="section_title mb-4">
+                                                  <h3>Enquiry</h3>
+                                                  <h6 className="modal_subtitle">
+                                                    Thank you for your interest in
+                                                    reaching out to us. Please use
+                                                    the form below to submit any
+                                                    question.
+                                                  </h6>
+                                                </div>
                                               </div>
-                                            </div>
-                                            <div className="col-sm-12">
-                                              <div className="form_field st-2">
-                                                <div className="field_inner select">
-                                                  <select>
-                                                    <option
-                                                      value=""
-                                                      disabled
-                                                      selected
-                                                    >
-                                                      I am
-                                                    </option>
+                                              <div className="col-sm-12">
+                                                <div className="form_field st-2">
+                                                  <div className="field_inner select">
+                                                    <select>
+                                                      <option
+                                                        value=""
+                                                        disabled
+                                                        selected
+                                                      >
+                                                        I am
+                                                      </option>
 
-                                                    <option>Tenant</option>
-                                                    <option>Agent</option>
-                                                  </select>
-                                                  <div className="field_icon">
-                                                    <span className="material-symbols-outlined">
-                                                      person
-                                                    </span>
+                                                      <option>Tenant</option>
+                                                      <option>Agent</option>
+                                                    </select>
+                                                    <div className="field_icon">
+                                                      <span className="material-symbols-outlined">
+                                                        person
+                                                      </span>
+                                                    </div>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                            <div className="col-sm-12">
-                                              <div className="form_field st-2">
-                                                <div className="field_inner">
-                                                  <input
-                                                    type="text"
-                                                    placeholder="Name"
-                                                  />
-                                                  <div className="field_icon">
-                                                    <span className="material-symbols-outlined">
-                                                      person
-                                                    </span>
+                                              <div className="col-sm-12">
+                                                <div className="form_field st-2">
+                                                  <div className="field_inner">
+                                                    <input
+                                                      type="text"
+                                                      placeholder="Name"
+                                                    />
+                                                    <div className="field_icon">
+                                                      <span className="material-symbols-outlined">
+                                                        person
+                                                      </span>
+                                                    </div>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                            <div className="col-sm-12">
-                                              <div className="form_field st-2">
-                                                <div className="field_inner">
-                                                  <input
-                                                    type="text"
-                                                    placeholder="Phone Number"
-                                                  />
-                                                  <div className="field_icon">
-                                                    <span className="material-symbols-outlined">
-                                                      call
-                                                    </span>
+                                              <div className="col-sm-12">
+                                                <div className="form_field st-2">
+                                                  <div className="field_inner">
+                                                    <input
+                                                      type="text"
+                                                      placeholder="Phone Number"
+                                                    />
+                                                    <div className="field_icon">
+                                                      <span className="material-symbols-outlined">
+                                                        call
+                                                      </span>
+                                                    </div>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                            <div className="col-sm-12">
-                                              <div className="submit_btn mt-4">
-                                                <button
-                                                  type="submit"
-                                                  className="modal_btn theme_btn no_icon btn_fill"
-                                                >
-                                                  Submit
-                                                </button>
+                                              <div className="col-sm-12">
+                                                <div className="submit_btn mt-4">
+                                                  <button
+                                                    type="submit"
+                                                    className="modal_btn theme_btn no_icon btn_fill"
+                                                  >
+                                                    Submit
+                                                  </button>
+                                                </div>
                                               </div>
                                             </div>
-                                          </div>
-                                        </form>
+                                          </form>
+                                        </div>
+                                        )
                                       </div>
-                                      )
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
                           </div>
                         </div>
                       </div>
@@ -285,98 +285,126 @@ const PropertyDetails = () => {
 
                   {((user && user.role === "owner") ||
                     (user && user.role === "coowner")) && (
-                    <div className="property_card_single">
-                      <div className="more_detail_card_inner">
-                        <div className="row no-gutters">
-                          <div className="col-md-6">
-                            <div className="property_full_address">
-                              <h2 className="card_title">
-                                {propertyDocument.unitNumber},{" "}
-                                {propertyDocument.society}
-                              </h2>
-                              <h3>
-                                {propertyDocument.locality},{" "}
-                                {propertyDocument.city}{" "}
-                              </h3>
-                              <h3>
-                                {propertyDocument.state},{" "}
-                                {propertyDocument.country},{" "}
-                                {propertyDocument.pinCode}
-                              </h3>
-                            </div>
-                            <div className="property_connected_people userlist">
-                              <div className="item pcp_single">
-                                <div className="property_people_designation">
-                                  Property Manager
+                      <div className="property_card_single">
+                        <div className="more_detail_card_inner">
+                          <div className="row no-gutters">
+                            <div className="col-md-6">
+                              <div className="property_full_address">
+                                <h2 className="card_title">
+                                  {propertyDocument.unitNumber},{" "}
+                                  {propertyDocument.society}
+                                </h2>
+                                <h3>
+                                  {propertyDocument.locality},{" "}
+                                  {propertyDocument.city}{" "}
+                                </h3>
+                                <h3>
+                                  {propertyDocument.state},{" "}
+                                  {propertyDocument.country},{" "}
+                                  {propertyDocument.pinCode}
+                                </h3>
+                              </div>
+                              <div className="property_connected_people userlist">
+                                <div className="item pcp_single">
+                                  <div className="property_people_designation">
+                                    Property Manager
+                                  </div>
+                                  <div className="single_user">
+                                    <div className="left">
+                                      <div className="user_img">
+                                        <img src="/assets/img/user.png" alt="" />
+                                      </div>
+                                    </div>
+                                    <div className="right">
+                                      <h5>Khushi Shrivastav</h5>
+                                      <h6>9698569856</h6>
+                                      <h6>Bhopal, India</h6>
+                                    </div>
+                                  </div>
+
+                                  <div className="contacts">
+                                    <Link
+                                      to="tel:+918770534650"
+                                      className="contacts_single"
+                                    >
+                                      <div className="icon">
+                                        <span className="material-symbols-outlined">
+                                          call
+                                        </span>
+                                      </div>
+                                      <h6>Call</h6>
+                                    </Link>
+                                    <Link
+                                      to="https://wa.me/918770534650"
+                                      className="contacts_single"
+                                    >
+                                      <div className="icon">
+                                        <img
+                                          src="/assets/img/whatsapp.png"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <h6>Whatsapp</h6>
+                                    </Link>
+                                    <Link
+                                      to="mailto:solankisanskar8@gmail.com"
+                                      className="contacts_single"
+                                    >
+                                      <div className="icon">
+                                        <span className="material-symbols-outlined">
+                                          mail
+                                        </span>
+                                      </div>
+                                      <h6>Email</h6>
+                                    </Link>
+                                  </div>
                                 </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="userlist property_owners">
                                 <div className="single_user">
+                                  <div className="property_people_designation">
+                                    Owner
+                                  </div>
                                   <div className="left">
                                     <div className="user_img">
                                       <img src="/assets/img/user.png" alt="" />
                                     </div>
                                   </div>
                                   <div className="right">
-                                    <h5>Khushi Shrivastav</h5>
-                                    <h6>9698569856</h6>
-                                    <h6>Bhopal, India</h6>
+                                    <h5>Sanskar Solanki</h5>
+                                    <h6>8770534650</h6>
+                                    <h6>Ujjain, India</h6>
+                                    {user && user.role !== "owner" && (
+                                      <div className="wc">
+                                        <img
+                                          src="/assets/img/whatsapp.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                        <img
+                                          src="/assets/img/phone-call.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
-
-                                <div className="contacts">
-                                  <Link
-                                    to="tel:+918770534650"
-                                    className="contacts_single"
-                                  >
-                                    <div className="icon">
-                                      <span className="material-symbols-outlined">
-                                        call
-                                      </span>
-                                    </div>
-                                    <h6>Call</h6>
-                                  </Link>
-                                  <Link
-                                    to="https://wa.me/918770534650"
-                                    className="contacts_single"
-                                  >
-                                    <div className="icon">
-                                      <img
-                                        src="/assets/img/whatsapp.png"
-                                        alt=""
-                                      />
-                                    </div>
-                                    <h6>Whatsapp</h6>
-                                  </Link>
-                                  <Link
-                                    to="mailto:solankisanskar8@gmail.com"
-                                    className="contacts_single"
-                                  >
-                                    <div className="icon">
-                                      <span className="material-symbols-outlined">
-                                        mail
-                                      </span>
-                                    </div>
-                                    <h6>Email</h6>
-                                  </Link>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="userlist property_owners">
-                              <div className="single_user">
-                                <div className="property_people_designation">
-                                  Owner
-                                </div>
-                                <div className="left">
-                                  <div className="user_img">
-                                    <img src="/assets/img/user.png" alt="" />
+                                <div className="single_user">
+                                  <div className="property_people_designation">
+                                    Co-Owner
                                   </div>
-                                </div>
-                                <div className="right">
-                                  <h5>Sanskar Solanki</h5>
-                                  <h6>8770534650</h6>
-                                  <h6>Ujjain, India</h6>
-                                  {user && user.role !== "owner" && (
+                                  <div className="left">
+                                    <div className="user_img">
+                                      <img src="/assets/img/user.png" alt="" />
+                                    </div>
+                                  </div>
+                                  <div className="right">
+                                    <h5>Sanskar Solanki</h5>
+                                    <h6>8770534650</h6>
+                                    <h6>Ujjain, India</h6>
                                     <div className="wc">
                                       <img
                                         src="/assets/img/whatsapp.png"
@@ -389,60 +417,33 @@ const PropertyDetails = () => {
                                         alt=""
                                       />
                                     </div>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="single_user">
-                                <div className="property_people_designation">
-                                  Co-Owner
-                                </div>
-                                <div className="left">
-                                  <div className="user_img">
-                                    <img src="/assets/img/user.png" alt="" />
                                   </div>
                                 </div>
-                                <div className="right">
-                                  <h5>Sanskar Solanki</h5>
-                                  <h6>8770534650</h6>
-                                  <h6>Ujjain, India</h6>
-                                  <div className="wc">
-                                    <img
-                                      src="/assets/img/whatsapp.png"
-                                      className="pointer"
-                                      alt=""
-                                    />
-                                    <img
-                                      src="/assets/img/phone-call.png"
-                                      className="pointer"
-                                      alt=""
-                                    />
+                                <div className="single_user">
+                                  <div className="property_people_designation">
+                                    POC
                                   </div>
-                                </div>
-                              </div>
-                              <div className="single_user">
-                                <div className="property_people_designation">
-                                  POC
-                                </div>
-                                <div className="left">
-                                  <div className="user_img">
-                                    <img src="/assets/img/user.png" alt="" />
+                                  <div className="left">
+                                    <div className="user_img">
+                                      <img src="/assets/img/user.png" alt="" />
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="right">
-                                  <h5>Sanskar Solanki</h5>
-                                  <h6>8770534650</h6>
-                                  <h6>Ujjain, India</h6>
-                                  <div className="wc">
-                                    <img
-                                      src="/assets/img/whatsapp.png"
-                                      className="pointer"
-                                      alt=""
-                                    />
-                                    <img
-                                      src="/assets/img/phone-call.png"
-                                      className="pointer"
-                                      alt=""
-                                    />
+                                  <div className="right">
+                                    <h5>Sanskar Solanki</h5>
+                                    <h6>8770534650</h6>
+                                    <h6>Ujjain, India</h6>
+                                    <div className="wc">
+                                      <img
+                                        src="/assets/img/whatsapp.png"
+                                        className="pointer"
+                                        alt=""
+                                      />
+                                      <img
+                                        src="/assets/img/phone-call.png"
+                                        className="pointer"
+                                        alt=""
+                                      />
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -450,8 +451,7 @@ const PropertyDetails = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                   {user && user.role === "owner" && (
                     <div className="property_card_single">
                       <div className="more_detail_card_inner">
@@ -740,7 +740,7 @@ const PropertyDetails = () => {
                 </div>
               )}
             </div>
-            <div className="col-xl-3">
+            {/* <div className="col-xl-3">
               <div className="pp_sidebar">
                 <div className="pp_sidebar_cards">
                   <div className="pp_sidebarcard_single">
@@ -779,7 +779,7 @@ const PropertyDetails = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

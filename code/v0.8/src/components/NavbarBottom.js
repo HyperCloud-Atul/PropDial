@@ -58,7 +58,7 @@ export default function NavbarBottom() {
     }
     if (user && user.role === "admin") {
       // console.log('in user', user.role)
-      navigate("/adminproperties");
+      navigate("/properties");
     }
     if ((user && user.role === "owner") || (user && user.role === "coowner")) {
       // console.log('in user', user.role)
@@ -129,12 +129,7 @@ export default function NavbarBottom() {
     secondMenu = "Bills";
     thirdMenu = "Tickets";
   }
-  if (user && user.role === "propagent") {
-    secondMenuIcon = "add";
-    secondMenu = "Add";
-    thirdMenuIcon = "confirmation_number";
-    thirdMenu = "Properties";
-  }
+
   // more acitve class Array 
   const moreActivePaths = ["/more-menu", "/about-us", "/contact-us", "/faq",
     "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/addproperty"];

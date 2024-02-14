@@ -22,7 +22,7 @@ export default function PGAdminProperties() {
   // Scroll to the top of the page whenever the location changes end
   const { user } = useAuthContext();
   // const { logout, isPending } = useLogout()
-  const { documents, error } = useCollection("properties");
+  const { documents: properties, error } = useCollection("properties");
   const [filter, setFilter] = useState("all");
   // const navigate = useNavigate();
 
@@ -30,30 +30,30 @@ export default function PGAdminProperties() {
     setFilter(newFilter);
   };
 
-  const properties = documents
-    ? documents.filter((document) => {
-      switch (filter) {
-        case "all":
-          return true;
-        case "mine":
-          let assignedToMe = false;
-          document.assignedUsersList.forEach((u) => {
-            if (u.id === user.uid) {
-              assignedToMe = true;
-            }
-          });
-          return assignedToMe;
-        case "residential":
-        case "commercial":
-        case "active":
-        case "inactive":
-          // console.log(document.category, filter)
-          return document.category === filter;
-        default:
-          return true;
-      }
-    })
-    : null;
+  // const properties = documents
+  //   ? documents.filter((document) => {
+  //     switch (filter) {
+  //       case "all":
+  //         return true;
+  //       case "mine":
+  //         let assignedToMe = false;
+  //         document.assignedUsersList.forEach((u) => {
+  //           if (u.id === user.uid) {
+  //             assignedToMe = true;
+  //           }
+  //         });
+  //         return assignedToMe;
+  //       case "residential":
+  //       case "commercial":
+  //       case "active":
+  //       case "inactive":
+  //         // console.log(document.category, filter)
+  //         return document.category === filter;
+  //       default:
+  //         return true;
+  //     }
+  //   })
+  //   : null;
   console.log("Properties:", properties);
   return (
     <div>
@@ -66,7 +66,7 @@ export default function PGAdminProperties() {
       <br />
 
       {error && <p className="error">{error}</p>}
-      {documents && <Filters changeFilter={changeFilter} />}
+      {/* {properties && <Filters changeFilter={changeFilter} />} */}
       {properties && <PropertyList properties={properties} />}
       <PropertyList />
     </div>
