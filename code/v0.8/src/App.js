@@ -94,7 +94,7 @@ import CreateTicket from "./chatboard/CreateTicket";
 import TicketDetail from "./chatboard/TicketDetail";
 
 import PGSingleProperty from "./pages/property/PGSingleProperty";
-import PDSingleCard from "./components/PDSingleCard";
+import PropertyDetails from "./components/property/PropertyDetails";
 
 // New component import start 
 
@@ -134,6 +134,11 @@ function App() {
               element={< PGProperties />}
             ></Route>
             <Route
+              path="/propertydetails/:id"
+              element={<PropertyDetails></PropertyDetails>}
+            ></Route>
+
+            <Route
               path="/ticketdetail"
               element={
                 user && user.status === 'active' && (user.role !== "propagent" || user.role !== "propagentadmin") ?
@@ -159,10 +164,8 @@ function App() {
               path="/search-property"
               element={<PGSearchProperty></PGSearchProperty>}
             ></Route> */}
-            {/*<Route
-              path="/pdsinglecard/:id"
-              element={<PDSingleCard></PDSingleCard>}
-            ></Route>
+            {/*
+          
              
             <Route
               path="/pgsearch"

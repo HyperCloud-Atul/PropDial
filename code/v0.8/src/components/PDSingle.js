@@ -14,7 +14,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import "./PDSingle.css"
 
 // component 
-import PDSingleCard from "./PDSingleCard";
+import PDSingleCard from "./property/PropertyDetails";
 import { Carousel } from "react-bootstrap";
 const PDSingle = () => {
 
