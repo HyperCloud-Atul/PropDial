@@ -1,5 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
+
+import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 // components
 import Hero from "../../components/Hero";
@@ -15,6 +15,14 @@ const PGContactUs = () => {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
+
+  const contactFormRef = useRef(null);
+
+  useEffect(() => {
+    // Scroll to the contact form when the component mounts
+    contactFormRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, []); // Empty dependency array ensures this effect runs only once after the initial render
+
 
   return (
     <div className="pg_contact_us">
@@ -83,7 +91,7 @@ const PGContactUs = () => {
           </div>
         </div>
       </section>
-      <section className="loc_em_ph">
+      <section className="loc_em_ph" >
         <div className="container">
           <div
             className="loc_em_ph_inner"
@@ -127,8 +135,19 @@ const PGContactUs = () => {
             </div>
           </div>
         </div>
+      </section>      
+      <section className="form_sec">      
+
+        <iframe
+          title="Dentamax Clinic Location"
+          src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=propdial managment company&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+          width="100%"
+          height="400"
+          style={{ border: 0 }}
+          allowFullScreen
+        ></iframe>
       </section>
-      <section className="form_sec">
+      <section className="form_sec" ref={contactFormRef}>
         <div className="left_img">
           <img src="./assets/img/contact_from_left.jpg" alt="Left" />
         </div>
@@ -139,16 +158,7 @@ const PGContactUs = () => {
           }}
         >
        <CreateTicket/>
-        </div>
-
-        <iframe
-          title="Dentamax Clinic Location"
-          src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=propdial managment company&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-          width="100%"
-          height="400"
-          style={{ border: 0 }}
-          allowFullScreen
-        ></iframe>
+        </div>      
       </section>
     </div>
   );

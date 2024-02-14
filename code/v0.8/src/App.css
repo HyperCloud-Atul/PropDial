@@ -29,6 +29,12 @@
 .bg_green{
     background: var(--p-theme-green-bg);
 }
+.orange{
+    color: var(--p-theme-orange);
+}
+.white{
+    color: var(--white-color);
+}
 /* font css start  */
 .m18 {
     font-size: 18px;

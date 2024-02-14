@@ -54,13 +54,13 @@ const CreateTicket = () => {
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-12">
-            <h3 className="section_title mb-4">
+            <h3 className="section_title mb-4 orange">
               Create ticket
             </h3>
           </div>
           <div className="col-md-6">
             <div className="form_field">
-              <label htmlFor="user_name">Name</label>
+              <label htmlFor="user_name" className="white">Name</label>
               <div className="form_field_inner">
                 <input type="text" value={user.fullName} id="user_name" />
                 <div className="field_icon">
@@ -72,22 +72,25 @@ const CreateTicket = () => {
           </div>
           <div className="col-md-6">
             <div className="form_field">
-              <label htmlFor="user_number">Phone number</label>
-              <input type="number" value={user.phoneNumber} />
+              <label htmlFor="user_number" className="white">Phone number</label>
+            <div className="form_field_inner">
+            <input type="number" value={user.phoneNumber} id="user_number"/>
               <div className="field_icon">
                 <span className="material-symbols-outlined">call</span>
               </div>
+            </div>
             </div>
             <div className="ff_gap"></div>
           </div>
           <div className="col-12">
             <div className="form_field">
-              <label htmlFor="">For</label>
-              <div className="field_inner">
+              <label htmlFor="ticket_for" className="white">For</label>
+              <div className="form_field_inner">
                 <select
                   onChange={(e) => {
                     setTicketType(e.target.value);
                   }}
+                  id="ticket_for"
                 >
                   <option>General Inquiries</option>
                   <option>Billing and Account Management</option>
@@ -103,8 +106,8 @@ const CreateTicket = () => {
           </div>
           <div className="col-12">
             <div className="form_field">
-              <label htmlFor="">Message</label>
-              <div className="field_inner">
+              <label htmlFor="id_message" className="white">Message</label>
+              <div className="form_field_inner">
                 <textarea
                   id="id_message"
                   required
@@ -118,6 +121,7 @@ const CreateTicket = () => {
                 </div>
               </div>
             </div>
+            
             <div className="ff_gap"></div>
           </div>
           <div className="col-12">

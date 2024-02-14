@@ -8,6 +8,7 @@ import { useLocation, Link } from "react-router-dom";
 import AllTicketsLeft from "./AllTicketsLeft";
 import SingleTicketChat from "./SingleTicketChat";
 import CreateTicket from "./CreateTicket";
+import PGContactUs from "../pdpages/contact_us/PGContactUs";
 import "./chatboard.css";
 
 const TicketDetail = () => {
@@ -88,7 +89,7 @@ const TicketDetail = () => {
   return (
     <div className="">
       <div>
-        {!userTickets && <CreateTicket />}
+        {!userTickets && <PGContactUs />}
         {userTickets && userTickets.length > 0 ? (
           <div className="top_header_pg pa_bg">
             <div className="chat_page">
@@ -118,7 +119,7 @@ const TicketDetail = () => {
                     ))}
 
                   {user.role !== "propagent" && (
-                    <Link to="/createticket" className="new_ticket pointer">
+                    <Link to="/contact-us" className="new_ticket pointer">
                       <span className="material-symbols-outlined">add</span>
                     </Link>
                   )}
@@ -138,7 +139,7 @@ const TicketDetail = () => {
             </div>
           </div>
         ) : (
-          <CreateTicket />
+          <PGContactUs />
         )}
       </div>
     </div>
