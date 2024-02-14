@@ -250,6 +250,16 @@
       gap: 8px;
       justify-content: space-between;
       position: relative;
+      .view_detail{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--theme-green);
+        border-bottom: 1px solid;
+        font-size: 14px;
+        font-weight: 500;
+
+      }
 
       .property_owner_detail {
         align-items: center;
