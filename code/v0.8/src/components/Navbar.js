@@ -12,21 +12,7 @@ export default function Navbar() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location
-  function logoutSetPadding() {
-    // props.setFlag(null);
-    // console.log('in function logoutSetPadding', props.setFlag);
-    logout();
-  }
 
-  // const [expandNavbar, setExpandNavbar] = useState(false);
-
-  // const openNavbarMenu = () => {
-  //   setExpandNavbar(true);
-  // };
-
-  // const closeNavbarMenu = () => {
-  //   setExpandNavbar(false);
-  // };
   const showHome = () => {
     navigate("/");
   };
@@ -36,68 +22,30 @@ export default function Navbar() {
       navigate("/search-property");
       return; // Exit the function to prevent further checks
     }
-    if (user && user.role === "superadmin") {
-      // console.log('in superadmin', user.role)
-      navigate("/superadmindashboard");
-    }
-
-    if (user && user.role === "admin") {
-      // console.log('in admin', user.role)
-      navigate("/admindashboard");
-    }
-
-    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
-      // console.log('in user', user.role)
-      navigate("/ownerdashboard");
-    }
-
-    if (user && user.role === "tenant") {
-      // console.log('in user', user.role)
-      navigate("/tenantdashboard");
-    }
-    if (user && user.role === "propertymanager") {
-      // console.log('in user', user.role)
-      navigate("/executivedashboard");
-    }
-    if (user && user.role === "propagent") {
-      // console.log('in user', user.role)
-      navigate("/agentdashboard");
+    else {
+      navigate("/dashboard");
     }
   };
 
   const showSecondPage = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/about-us");
+      navigate("/properties");
       return; // Exit the function to prevent further checks
     }
-    if (user && user.role === "admin") {
-      // console.log('in user', user.role)
-      // navigate("/adminproperties");
-      navigate("/properties");
+    else {
+      navigate("/dashboard");
     }
-    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
-      // console.log('in user', user.role)
-      navigate("/dashboard-owner");
-    }
-
   };
   const showThirdPage = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/properties");
+      navigate("/about-us");
       return; // Exit the function to prevent further checks
     }
-    if (user && user.role === "admin") {
-      // console.log('in user', user.role)
-
-      navigate("/users");
+    else {
+      navigate("/contact-us");
     }
-    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
-      // console.log('in user', user.role)
-      navigate("/properties");
-    }
-
   };
 
   const showFourthPage = () => {
@@ -114,43 +62,39 @@ export default function Navbar() {
   let secondMenu = "";
   let thirdMenuIcon = "";
   let thirdMenu = "";
-  let fourthMenu = "";
-  let fourthMenuIcon = "";
+
   if (!user) {
     firstMenuIcon = "home";
     firstMenu = "Home";
-    secondMenuIcon = "import_contacts";
-    secondMenu = "About Us";
-    thirdMenuIcon = "real_estate_agent";
-    thirdMenu = "Property";
-  }
-  if (user && user.role !== "user") {
-    // firstMenuIcon = "home";
-    // firstMenu = "Dashboard";
-    fourthMenuIcon = "apps";
-    fourthMenu = "More";
+    secondMenuIcon = "real_estate_agent";
+    secondMenu = "Property";
+    thirdMenuIcon = "import_contacts";
+    thirdMenu = "About Us";
   }
 
   if (user && user.role === "admin") {
-    secondMenuIcon = "analytics";
-    secondMenu = "Properties";
-    thirdMenuIcon = "confirmation_number";
-    thirdMenu = "Users";
+    secondMenuIcon = "dashboard";
+    secondMenu = "Dashboard";
+    thirdMenuIcon = "headset_mic";
+    thirdMenu = "Contact";
   }
   if (user && user.role === "owner") {
     secondMenuIcon = "dashboard";
     secondMenu = "Dashboard";
-    // thirdMenuIcon = "support_agent";
     thirdMenuIcon = "real_estate_agent";
-    thirdMenu = "Property";
+    thirdMenu = "Contact";
   }
   if (user && user.role === "tenant") {
-    secondMenu = "Rent";
-    thirdMenu = "Tickets";
+    secondMenuIcon = "dashboard";
+    secondMenu = "Dashboard";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Contact";
   }
   if (user && user.role === "propertymanager") {
-    secondMenu = "Bills";
-    thirdMenu = "Tickets";
+    secondMenuIcon = "dashboard";
+    secondMenu = "Dashboard";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Contact";
   }
 
 
@@ -177,7 +121,7 @@ export default function Navbar() {
 
 
   // array of more class active on desktop
-  const moreDesktopActivePaths = ["/more-menu", "/contact-us", "/faq",
+  const moreDesktopActivePaths = ["/more-menu", "/faq",
     "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/addproperty"];
   const shouldMoreDesktopActive = moreDesktopActivePaths.includes(location.pathname);
   const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? "active" : ""}`;
@@ -214,12 +158,6 @@ export default function Navbar() {
             <li className="main_menus">
               <div
                 onClick={showHome}
-                // className={`menu_single pointer ${
-                //   location.pathname === "/" ||
-                //   location.pathname === "/ownerdashboard" || location.pathname === "/admindashboard"
-                //     ? "active"
-                //     : ""
-                // }`}
                 className="menu_single pointer"
               >
                 <span className="material-symbols-outlined">{firstMenuIcon}</span>
@@ -228,9 +166,6 @@ export default function Navbar() {
 
               <div
                 onClick={showSecondPage}
-                // className={`menu_single pointer ${
-                //   location.pathname === "/search-property" || location.pathname === "/bills"? "active" : "" || location.pathname === "/pgpropertylist" ? "active" : ""
-                // }`}
                 className="menu_single pointer"
               >
                 <span className="material-symbols-outlined">{secondMenuIcon}</span>
@@ -239,9 +174,6 @@ export default function Navbar() {
 
               <div
                 onClick={showThirdPage}
-                // className={`menu_single pointer ${
-                //   location.pathname === "/about-us" || location.pathname === "/tickets" ? "active" : "" || location.pathname === "/users" ? "active" : ""
-                // }`}
                 className="menu_single pointer"
               >
                 <span className="material-symbols-outlined">{thirdMenuIcon}</span>
@@ -288,22 +220,6 @@ export default function Navbar() {
                 </Link>
               )}
 
-              {/* <div className="menu_single pointer ">
-                <span className="material-symbols-outlined">
-                  settings_applications
-                </span>
-                Services
-              </div>
-              <Link to="/login">
-                <div
-                  className={`menu_single pointer ${
-                    location.pathname === "/login" ? "active" : ""
-                  }`}
-                >
-                  <span className="material-symbols-outlined">login</span>
-                  Login/Signup
-                </div>
-              </Link> */}
             </li>
             <li className="menu_social_media">
               <Link to="/ticketdetail">
@@ -319,147 +235,7 @@ export default function Navbar() {
                   }}
                 />
               </Link>
-
-              {/* <Link
-                className="msm_single pointer"
-                to="https://www.facebook.com/propdial"
-              >
-                <img src="/assets/img/facebook.png"></img>
-              </Link>
-              <Link
-                className="msm_single pointer"
-                to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg"
-              >
-                <img src="/assets/img/youtube.png"></img>
-              </Link>
-              <Link
-                className="msm_single pointer"
-                to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/"
-              >
-                <img src="/assets/img/linkedin.png"></img>
-              </Link>
-              <Link
-                className="msm_single pointer"
-                to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial"
-              >
-                <img src="/assets/img/twitter.png"></img>
-              </Link> */}
             </li>
-
-            {/* {user && (
-          <div className='small'>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div></div>
-              <li>
-                <div className='navbar-notification-div'>
-                  <span className="material-symbols-outlined">
-                    notifications
-                  </span>
-                  <div></div>
-                </div>
-              </li>
-            </div>
-          </div>
-        )} */}
-
-            {/* <div className='large'> */}
-            {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div></div>
-            <div className='navbar-laptop-menu-links-div'>
-
-              <div className='navbar-laptop-menu-links'>
-
-                <div onClick={showDashboard}>
-                  <span className="material-symbols-outlined">
-                    {firstMenuIcon}
-                  </span>
-                  <h1>{firstMenu}</h1>
-                </div>
-
-                <div onClick={showSecondPage}>
-                  <span className="material-symbols-outlined">
-                    {secondMenuIcon}
-                  </span>
-                  <h1>{secondMenu}</h1>
-                </div>
-
-                <div>
-                  <span className="material-symbols-outlined">
-                    {thirdMenuIcon}
-                  </span>
-                  <h1>{thirdMenu}</h1>
-                </div>          
-
-              </div>
-
-              {user && user.role !== 'user' &&
-                <div className='navbar-laptop-menu-icons-div'>
-                  <div className='navbar-user-icon'>
-                    <Link to="/profile">             
-                      {user.photoURL === '' ? <img src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA." alt="" /> : <img src={user.photoURL} alt="" />}
-                    </Link>
-                  </div>
-
-                  <li>
-                    <div className='navbar-notification-div'>
-                      <span className="material-symbols-outlined">
-                        notifications
-                      </span>
-                      <div></div>
-                    </div>
-                  </li>          
-                  <div className='navbar-laptop-menu-icons-div-hamburger-icon' onClick={showFourthPage}>
-                    <span className="material-symbols-outlined">
-                      menu
-                    </span>
-                  </div>
-                </div>
-              }
-
-            </div>
-
-          </div> */}
-
-            {/* <div className={expandNavbar ? 'navbar-menu-expand-div open' : 'navbar-menu-expand-div'}>
-            <div className='navbar-menu-expand-div-content'>
-              <div className='navbar-menu-expand-div-close-btn' onClick={closeNavbarMenu}>
-                <span className="material-symbols-outlined">
-                  close
-                </span>
-              </div>
-
-              <div className='navbar-menu-expand-div-menu'>
-                <h1>Home</h1>
-                <div style={{ width: '53%' }}></div>
-              </div>
-
-              <div className='navbar-menu-expand-div-menu'>
-                <h1>About Us</h1>
-                <div style={{ width: '85%' }}></div>
-              </div>
-
-              <div className='navbar-menu-expand-div-menu'>
-                <h1>Contact Us</h1>
-                <div style={{ width: '100%' }}></div>
-              </div>
-            </div>
-          </div> */}
-
-            {/* </div> */}
-
-            {/* {!user && (
-          <>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/signup">Signup</Link></li>
-          </>
-        )} */}
-
-            {/* {user && (
-          <li>
-            {!isPending && <button className="btn" onClick={logout}>Logout</button>}
-            {isPending && <button className="btn" disabled>Logging out...</button>}
-          </li>
-        )} */}
           </ul>
         </nav>
       </header>

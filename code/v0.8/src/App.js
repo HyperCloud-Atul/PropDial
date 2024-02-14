@@ -96,6 +96,7 @@ import TicketDetail from "./chatboard/TicketDetail";
 
 import PGSingleProperty from "./pages/property/PGSingleProperty";
 import PropertyDetails from "./components/property/PropertyDetails";
+import PGDaashboard from "./pdpages/dashboard/PGDashboard";
 
 // New component import start 
 
@@ -180,8 +181,8 @@ function App() {
 
             {/* owner & co-owner */}
             <Route
-              path="/dashboard-owner"
-              element={< PGOwnerDashboard />}
+              path="/dashboard"
+              element={user ? < PGDaashboard /> : <PhoneLogin />}
             ></Route>
 
             {/* *********************************** */}
