@@ -34,6 +34,22 @@ const PGOwnerDashboard = () => {
     ["access", "array-contains", user.uid]
   );
 
+  const activeProperties =
+    properties && properties.filter((item) => item.status.toUpperCase() === 'ACTIVE');
+
+  const pendingProperties =
+    properties && properties.filter((item) => item.status.toUpperCase() === 'PENDING APPROVAL');
+
+  const inactiveProperties =
+    properties && properties.filter((item) => item.status.toUpperCase() === 'INACTIVE');
+
+  const residentialProperties =
+    properties && properties.filter((item) => item.category.toUpperCase() === 'RESIDENTIAL');
+
+
+  // commercialProperties
+  const commercialProperties =
+    properties && properties.filter((item) => item.category.toUpperCase() === 'COMMERCIAL');
 
 
   // advertisement img option in owl carousel
@@ -90,7 +106,7 @@ const PGOwnerDashboard = () => {
           <div className="pg_header">
             <h2 className="m22 mb-1">Dashboard</h2>
             <h4 className="r18 light_black">
-              Welcome <b> sanskar </b>to Propdial
+              Welcome <b> {user.displayName} </b>to Propdial
             </h4>
           </div>
           <div className="vg22"></div>
@@ -113,11 +129,10 @@ const PGOwnerDashboard = () => {
                         </div>
 
                         <h6>
-                          You have 20 properties out of Total 55 properties in
-                          system
+                          360&deg; Property Management Solutions
                         </h6>
                       </div>
-                      <div className="number">20</div>
+                      <div className="number">{properties && properties.length}</div>
                     </div>
                   </div>
                 </div>
@@ -126,96 +141,22 @@ const PGOwnerDashboard = () => {
                   <div className="vg22_1199"></div>
                   <div className="property_status">
                     <div className="ps_single pending">
-                      <h5>5</h5>
+                      <h5>{pendingProperties && pendingProperties.length}</h5>
                       <h6>Pending Approval</h6>
                     </div>
                     <div className="ps_single active">
-                      <h5>10</h5>
+                      <h5>{activeProperties && activeProperties.length}</h5>
                       <h6>Active</h6>
                     </div>
                     <div className="ps_single inactive">
-                      <h5>10</h5>
+                      <h5>{inactiveProperties && inactiveProperties.length}</h5>
                       <h6>Inactive</h6>
                     </div>
                   </div>
                 </div>
               </section>
               <div className="vg22"></div>
-              <hr />
-              <div className="vg22"></div>
-              <div className="payment_card">
-                {/* <div className="top">
-                  <div className="left">
-                    <h4 className="m20 text_grey">Payments</h4>
-                    <h2 className="dashboard_number mt10">8,052</h2>
-                  </div>
-                  <div className="right"></div>
-                </div> */}
-                <div className="all_payments">
-                  <div className="payment_single my_big_card">
-                    <div className="icon bg_orange">
-                      <img src="./assets/img/brokreage_bill_icon.png" alt="" />
-                    </div>
-                    <div className="right">
-                      <h6 className="r14 text_grey">Brokerage Payment</h6>
-                      <h5 className="dashboard_number_small">₹ 1,000</h5>
-                    </div>
-                  </div>
-                  <div className="payment_single my_big_card">
-                    <div className="icon bg_purple">
-                      <img src="./assets/img/financial.png" alt="" />
-                    </div>
-                    <div className="right">
-                      <h6 className="r14 text_grey">PMS</h6>
-                      <h5 className="dashboard_number_small">₹ 2,500</h5>
-                    </div>
-                  </div>
-                  <div className="payment_single my_big_card">
-                    <div className="icon bg_green">
-                      <img src="./assets/img/electricity-bill.png" alt="" />
-                    </div>
-                    <div className="right">
-                      <h6 className="r14 text_grey">Electricity Bill</h6>
-                      <h5 className="dashboard_number_small">₹ 875</h5>
-                    </div>
-                  </div>
-                  <div className="payment_single my_big_card">
-                    <div className="icon bg_orange">
-                      <img src="./assets/img/brokreage_bill_icon.png" alt="" />
-                    </div>
-                    <div className="right">
-                      <h6 className="r14 text_grey">Society Maintainance</h6>
-                      <h5 className="dashboard_number_small">₹ 2,000</h5>
-                    </div>
-                  </div>
-                  <div className="payment_single my_big_card">
-                    <div className="icon bg_purple">
-                      <img src="./assets/img/financial.png" alt="" />
-                    </div>
-                    <div className="right">
-                      <h6 className="r14 text_grey">Water Bill</h6>
-                      <h5 className="dashboard_number_small">₹ 75</h5>
-                    </div>
-                  </div>
-                  <div className="payment_single my_big_card">
-                    <div className="icon bg_green">
-                      <img src="./assets/img/electricity-bill.png" alt="" />
-                    </div>
-                    <div className="right">
-                      <h6 className="r14 text_grey">Others</h6>
-                      <h5 className="dashboard_number_small">₹ 875</h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="vg22"></div>
-              <hr />
-              <div className="vg22"></div>
-              <section className="property_cards_parent">               
-                  {properties && properties.map((property) => (
-                    <PropertyCardCustomer propertydoc={property} />                  ))}
-               
-              </section>
+
               <div className="vg22"></div>
               <hr />
               <section className="self_property_detail">
@@ -225,7 +166,7 @@ const PGOwnerDashboard = () => {
                   </div>
                   <div className="right">
                     <h6>Residential</h6>
-                    <h5>5</h5>
+                    <h5>{residentialProperties && residentialProperties.length}</h5>
                   </div>
                 </div>
                 <div className="spd_single">
@@ -234,10 +175,10 @@ const PGOwnerDashboard = () => {
                   </div>
                   <div className="right">
                     <h6>Commercial</h6>
-                    <h5>5</h5>
+                    <h5>{commercialProperties && commercialProperties.length}</h5>
                   </div>
                 </div>
-                <div className="spd_single">
+                {/* <div className="spd_single">
                   <div className="left rent">
                     <img src="/assets/img/key.png" alt="" />
                   </div>
@@ -272,10 +213,88 @@ const PGOwnerDashboard = () => {
                     <h6>Sold Out</h6>
                     <h5>6</h5>
                   </div>
+                </div> */}
+              </section>
+              <div className="vg22"></div>
+              <hr />
+              <div className="vg22"></div>
+              <section className="property_cards_parent">
+                {properties && properties.map((property) => (
+                  <PropertyCardCustomer propertydoc={property} />))}
+              </section>
+              <div className="vg22"></div>
+              <hr />
+              <div className="vg22"></div>
+              <section>
+                <div className="payment_card">
+                  {/* <div className="top">
+                  <div className="left">
+                    <h4 className="m20 text_grey">Payments</h4>
+                    <h2 className="dashboard_number mt10">8,052</h2>
+                  </div>
+                  <div className="right"></div>
+                </div> */}
+                  <div className="all_payments">
+                    <div className="payment_single my_big_card">
+                      <div className="icon bg_orange">
+                        <img src="./assets/img/brokreage_bill_icon.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6 className="r14 text_grey">Brokerage Payment</h6>
+                        <h5 className="dashboard_number_small">₹ 1,000</h5>
+                      </div>
+                    </div>
+                    <div className="payment_single my_big_card">
+                      <div className="icon bg_purple">
+                        <img src="./assets/img/financial.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6 className="r14 text_grey">PMS</h6>
+                        <h5 className="dashboard_number_small">₹ 2,500</h5>
+                      </div>
+                    </div>
+                    <div className="payment_single my_big_card">
+                      <div className="icon bg_green">
+                        <img src="./assets/img/electricity-bill.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6 className="r14 text_grey">Electricity Bill</h6>
+                        <h5 className="dashboard_number_small">₹ 875</h5>
+                      </div>
+                    </div>
+                    <div className="payment_single my_big_card">
+                      <div className="icon bg_orange">
+                        <img src="./assets/img/brokreage_bill_icon.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6 className="r14 text_grey">Society Maintainance</h6>
+                        <h5 className="dashboard_number_small">₹ 2,000</h5>
+                      </div>
+                    </div>
+                    <div className="payment_single my_big_card">
+                      <div className="icon bg_purple">
+                        <img src="./assets/img/financial.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6 className="r14 text_grey">Water Bill</h6>
+                        <h5 className="dashboard_number_small">₹ 75</h5>
+                      </div>
+                    </div>
+                    <div className="payment_single my_big_card">
+                      <div className="icon bg_green">
+                        <img src="./assets/img/electricity-bill.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6 className="r14 text_grey">Others</h6>
+                        <h5 className="dashboard_number_small">₹ 875</h5>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </section>
 
-
+              <div className="vg22"></div>
+              <hr />
               <div className="vg22"></div>
               <section className="add_section row">
                 <div className="add_single col-lg-6">
