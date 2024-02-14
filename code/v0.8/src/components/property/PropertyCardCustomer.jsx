@@ -14,9 +14,9 @@ const PropertyCardCustomer = ({ propertydoc }) => {
   // sexpand more expand less end
   return (
 
-    <Link className="pointer" to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id}>
+   
       <div className="property_single_card">
-        <div className="top relative">
+        <Link to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="top relative">
           <div className="fav">
             <span className="material-symbols-outlined">favorite</span>
           </div>
@@ -40,7 +40,7 @@ const PropertyCardCustomer = ({ propertydoc }) => {
               <h6>{propertydoc.city} | {propertydoc.state}</h6>
             </div>
           </div>
-        </div>
+        </Link>
         <div className="middle relative">
           <div className="show_more_arrow" onClick={handleExpand}>
             <span className="material-symbols-outlined">
@@ -166,8 +166,12 @@ const PropertyCardCustomer = ({ propertydoc }) => {
               </h6>
             </div>
           </div>
+          <Link  to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
+            view more
+          </Link>
         </div>
-      </div></Link>
+      </div>
+
 
 
   );
