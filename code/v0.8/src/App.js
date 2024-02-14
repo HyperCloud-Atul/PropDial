@@ -151,6 +151,10 @@ function App() {
                 user && user.role ? <PGTickets /> : <Navigate to="/login" />
               }
             ></Route>
+              <Route
+              path="/addnotification/:notificationid"
+              element={< AddNotification />}
+            ></Route>
 
             {/* owner & co-owner */}
             <Route

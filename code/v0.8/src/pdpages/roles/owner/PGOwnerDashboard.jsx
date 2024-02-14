@@ -211,12 +211,10 @@ const PGOwnerDashboard = () => {
               <div className="vg22"></div>
               <hr />
               <div className="vg22"></div>
-              <section className="property_cards_parent">
-                <div className="property_cards_parent">
+              <section className="property_cards_parent">               
                   {properties && properties.map((property) => (
-                    <PropertyCardCustomer propertydoc={property} />
-                  ))}
-                </div>
+                    <PropertyCardCustomer propertydoc={property} />                  ))}
+               
               </section>
               <div className="vg22"></div>
               <hr />
