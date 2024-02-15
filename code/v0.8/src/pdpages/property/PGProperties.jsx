@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import PropertySingleCard from "../../components/property/PropertyCardCustomer";
+import PropertySingleCard from "../../components/property/PropertyCard";
 import { useCollection } from "../../hooks/useCollection";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";

@@ -13,7 +13,7 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 // owl carousel
 
 // component
-import PropertyCardCustomer from "../../../components/property/PropertyCardCustomer";
+import PropertyCard from "../../../components/property/PropertyCard";
 
 // css
 import "./PGAdminDashboard.css";
@@ -32,26 +32,75 @@ const PGAdminDashboard = () => {
 
   const activeProperties =
     properties &&
-    properties.filter((item) => item.status.toUpperCase() === "ACTIVE");
+    properties.filter((item) => item.status.trim().toUpperCase() === "ACTIVE");
 
   const pendingProperties =
     properties &&
     properties.filter(
-      (item) => item.status.toUpperCase() === "PENDING APPROVAL"
+      (item) => item.status.trim().toUpperCase() === "PENDING APPROVAL"
     );
 
   const inactiveProperties =
     properties &&
-    properties.filter((item) => item.status.toUpperCase() === "INACTIVE");
+    properties.filter((item) => item.status.trim().toUpperCase() === "INACTIVE");
 
   const residentialProperties =
     properties &&
-    properties.filter((item) => item.category.toUpperCase() === "RESIDENTIAL");
+    properties.filter((item) => item.category.trim().toUpperCase() === "RESIDENTIAL");
 
   // commercialProperties
   const commercialProperties =
     properties &&
-    properties.filter((item) => item.category.toUpperCase() === "COMMERCIAL");
+    properties.filter((item) => item.category.trim().toUpperCase() === "COMMERCIAL");
+
+  //State Wise Properties
+  const chandigarhProperties =
+    properties &&
+    properties.filter((item) => item.state.trim().toUpperCase() === "CHANDIGARH");
+
+  const delhiProperties =
+    properties &&
+    properties.filter((item) => item.state.trim().toUpperCase() === "DELHI");
+
+  const goaProperties =
+    properties &&
+    properties.filter((item) => item.state.trim().toUpperCase() === "GOA");
+
+  const gujaratProperties =
+    properties &&
+    properties.filter((item) => (item.state.trim().toUpperCase() === "GUJARAT") || (item.state.trim().toUpperCase() === "GUJRAT"));
+
+  const haryanaProperties =
+    properties &&
+    properties.filter((item) => item.state.trim().toUpperCase() === "HARYANA");
+
+  const karnatakaProperties =
+    properties &&
+    properties.filter((item) => item.state.trim().toUpperCase() === "KARNATAKA");
+
+  const maharashtraProperties =
+    properties &&
+    properties.filter((item) => (item.state.trim().toUpperCase() === "MAHARASHTRA") || (item.state.trim().toUpperCase() === "MAHARASTRA"));
+
+  const rajasthanProperties =
+    properties &&
+    properties.filter((item) => item.state.trim().toUpperCase() === "RAJASTHAN");
+
+  const tamilnaduProperties =
+    properties &&
+    properties.filter((item) => (item.state.trim().toUpperCase() === "TAMILNADU") || (item.state.trim().toUpperCase() === "TAMIL NADU"));
+
+  const telanganaProperties =
+    properties &&
+    properties.filter((item) => item.state.trim().toUpperCase() === "TELANGANA");
+
+  const uttarpradeshProperties =
+    properties &&
+    properties.filter((item) => (item.state.trim().toUpperCase() === "UTTARPRADESH") || (item.state.trim().toUpperCase() === "UTTAR PRADESH"));
+
+  const uttarakhandProperties =
+    properties &&
+    properties.filter((item) => (item.state.trim().toUpperCase() === "UTTARAKHAND") || (item.state.trim().toUpperCase() === "UTTARA KHAND"));
 
   // advertisement img option in owl carousel
   const addImgOptions = {
@@ -217,164 +266,193 @@ const PGAdminDashboard = () => {
                         marginBottom: "6px",
                       }}
                     >
-                      Properties in major cities
+                      Properties in major states
                     </h2>
                     <div className="pi_cities row">
                       <div className="left col-6">
-                        <div className="pi_cities_single">
+                        <div className="pi_cities_single mt-4">
+                          <h6>Chandigarh</h6>
+                          <h5>{chandigarhProperties && chandigarhProperties.length > 0 ? chandigarhProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (chandigarhProperties && chandigarhProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                        <div className="pi_cities_single mt-4">
                           <h6>Delhi</h6>
-                          <h5>5</h5>
+                          <h5>{delhiProperties && delhiProperties.length > 0 ? delhiProperties.length : '0'}</h5>
                           <div className="bar">
                             <div
                               className="bar_fill"
                               style={{
-                                width: "5%",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Gurugram</h6>
-                          <h5>11</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: "5%",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Noida</h6>
-                          <h5>11</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: "5%",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Faridabad</h6>
-                          <h5>41</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: "5%",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Ghaziabad</h6>
-                          <h5>11</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: "5%",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="right col-6">
-                        <div className="pi_cities_single">
-                          <h6>Bangalore</h6>
-                          <h5>44</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: "5%",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Pune</h6>
-                          <h5>22</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: "5%",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Mumbai</h6>
-                          <h5>20</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: "5%",
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Hyderabad</h6>
-                          <h5>12</h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width: "5%",
+                                width: (delhiProperties && delhiProperties.length) / (properties && properties.length) * 100,
                               }}
                             ></div>
                           </div>
                         </div>
                         <div className="pi_cities_single mt-4">
                           <h6>Goa</h6>
-                          <h5>10</h5>
+                          <h5>{goaProperties && goaProperties.length > 0 ? goaProperties.length : '0'}</h5>
                           <div className="bar">
                             <div
                               className="bar_fill"
                               style={{
-                                width: "5%",
+                                width: (goaProperties && goaProperties.length) / (properties && properties.length) * 100,
                               }}
                             ></div>
                           </div>
                         </div>
+                        <div className="pi_cities_single mt-4">
+                          <h6>Gujarat</h6>
+                          <h5>{gujaratProperties && gujaratProperties.length > 0 ? gujaratProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (gujaratProperties && gujaratProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                        <div className="pi_cities_single mt-4">
+                          <h6>Haryana</h6>
+                          <h5>{haryanaProperties && haryanaProperties.length > 0 ? haryanaProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (haryanaProperties && haryanaProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div className="pi_cities_single mt-4">
+                          <h6>Karnataka</h6>
+                          <h5>{karnatakaProperties && karnatakaProperties.length > 0 ? karnatakaProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (karnatakaProperties && karnatakaProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+
+
+                      </div>
+                      <div className="right col-6">
+                        <div className="pi_cities_single mt-4">
+                          <h6>Maharashtra</h6>
+                          <h5>{maharashtraProperties && maharashtraProperties.length > 0 ? maharashtraProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (maharashtraProperties && maharashtraProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div className="pi_cities_single mt-4">
+                          <h6>Rajasthan</h6>
+                          <h5>{rajasthanProperties && rajasthanProperties.length > 0 ? rajasthanProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (rajasthanProperties && rajasthanProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                        <div className="pi_cities_single mt-4">
+                          <h6>Tamilnadu</h6>
+                          <h5>{tamilnaduProperties && tamilnaduProperties.length > 0 ? tamilnaduProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (tamilnaduProperties && tamilnaduProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                        <div className="pi_cities_single mt-4">
+                          <h6>Talangana</h6>
+                          <h5>{telanganaProperties && telanganaProperties.length > 0 ? telanganaProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (telanganaProperties && telanganaProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                        <div className="pi_cities_single mt-4">
+                          <h6>Uttar Pradesh</h6>
+                          <h5>{uttarpradeshProperties && uttarpradeshProperties.length > 0 ? uttarpradeshProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (uttarpradeshProperties && uttarpradeshProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                        <div className="pi_cities_single mt-4">
+                          <h6>Uttrakhand</h6>
+                          <h5>{uttarakhandProperties && uttarakhandProperties.length > 0 ? uttarakhandProperties.length : '0'}</h5>
+                          <div className="bar">
+                            <div
+                              className="bar_fill"
+                              style={{
+                                width: (uttarakhandProperties && uttarakhandProperties.length) / (properties && properties.length) * 100,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="col-lg-6">
-                <section className="self_property_detail">
+                  <section className="self_property_detail">
                     <Link className="theme_btn btn_fill">
-                        Post your property
+                      Post your property
                     </Link>
-                  <div className="spd_single">
-                    <div className="left residential">
-                      <img src="/assets/img/house.png" alt="" />
+                    <div className="spd_single">
+                      <div className="left residential">
+                        <img src="/assets/img/house.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6>Residential</h6>
+                        <h5>
+                          {residentialProperties && residentialProperties.length}
+                        </h5>
+                      </div>
                     </div>
-                    <div className="right">
-                      <h6>Residential</h6>
-                      <h5>
-                        {residentialProperties && residentialProperties.length}
-                      </h5>
+                    <div className="spd_single">
+                      <div className="left commercial">
+                        <img src="/assets/img/buildings.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6>Commercial</h6>
+                        <h5>
+                          {commercialProperties && commercialProperties.length}
+                        </h5>
+                      </div>
                     </div>
-                  </div>
-                  <div className="spd_single">
-                    <div className="left commercial">
-                      <img src="/assets/img/buildings.png" alt="" />
-                    </div>
-                    <div className="right">
-                      <h6>Commercial</h6>
-                      <h5>
-                        {commercialProperties && commercialProperties.length}
-                      </h5>
-                    </div>
-                  </div>
-                  {/* <div className="spd_single">
+                    {/* <div className="spd_single">
                   <div className="left rent">
                     <img src="/assets/img/key.png" alt="" />
                   </div>
@@ -410,10 +488,10 @@ const PGAdminDashboard = () => {
                     <h5>6</h5>
                   </div>
                 </div> */}
-                </section>
+                  </section>
+                </div>
               </div>
-              </div>
-            
+
 
               <div className="vg22"></div>
               <hr />
@@ -421,7 +499,7 @@ const PGAdminDashboard = () => {
               <section className="property_cards_parent">
                 {properties &&
                   properties.map((property) => (
-                    <PropertyCardCustomer propertydoc={property} />
+                    <PropertyCard propertydoc={property} />
                   ))}
               </section>
               <div className="vg22"></div>

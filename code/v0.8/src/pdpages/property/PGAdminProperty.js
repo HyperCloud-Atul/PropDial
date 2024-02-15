@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
-import PropertyCardCustomer from "../../components/property/PropertyCardCustomer";
+import PropertyCard from "../../components/property/PropertyCard";
 
 const PGAdminProperty = () => {
 
@@ -25,7 +25,7 @@ const PGAdminProperty = () => {
                 {
                     <div className="property_cards_parent">
                         {properties && properties.map((property) => (
-                            <PropertyCardCustomer propertydoc={property} />
+                            <PropertyCard propertydoc={property} />
                         ))}
                     </div>
                 }

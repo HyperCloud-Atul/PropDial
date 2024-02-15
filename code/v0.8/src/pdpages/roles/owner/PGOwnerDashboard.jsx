@@ -12,7 +12,7 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 // owl carousel
 
 // component
-import PropertyCardCustomer from "../../../components/property/PropertyCardCustomer";
+import PropertyCard from "../../../components/property/PropertyCard";
 
 // css
 import "./PGOwnerDashboard.css";
@@ -220,7 +220,7 @@ const PGOwnerDashboard = () => {
               <div className="vg22"></div>
               <section className="property_cards_parent">
                 {properties && properties.map((property) => (
-                  <PropertyCardCustomer propertydoc={property} />))}
+                  <PropertyCard propertydoc={property} />))}
               </section>
               <div className="vg22"></div>
               <hr />
