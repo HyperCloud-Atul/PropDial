@@ -18,53 +18,23 @@ export default function NavbarBottom() {
   const showDashboard = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/");
+      navigate("/search-property");
       return; // Exit the function to prevent further checks
     }
-    if (user && user.role === "superadmin") {
-      // console.log('in superadmin', user.role)
-      navigate("/superadmindashboard");
-    }
-
-    if (user && user.role === "admin") {
-      // console.log('in admin', user.role)
-      navigate("/admindashboard");
-    }
-
-    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
-      // console.log('in user', user.role)
-      navigate("/");
-    }
-
-    if (user && user.role === "tenant") {
-      // console.log('in user', user.role)
-      navigate("/tenantdashboard");
-    }
-    if (user && user.role === "propertymanager") {
-      // console.log('in user', user.role)
-      navigate("/executivedashboard");
-    }
-    if (user && user.role === "propagent") {
-      // console.log('in user', user.role)
-      navigate("/agentdashboard");
+    else {
+      navigate("/dashboard");
     }
   };
 
   const showSecondPage = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/search-property");
+      navigate("/properties");
       return; // Exit the function to prevent further checks
     }
-    if (user && user.role === "admin") {
-      // console.log('in user', user.role)
-      navigate("/properties");
+    else {
+      navigate("/dashboard");
     }
-    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
-      // console.log('in user', user.role)
-      navigate("/dashboard-owner");
-    }
-
   };
   const showThirdPage = () => {
     if (!user) {
@@ -72,62 +42,59 @@ export default function NavbarBottom() {
       navigate("/about-us");
       return; // Exit the function to prevent further checks
     }
-    if (user && user.role === "owner") {
-      // console.log('in user', user.role)
-      navigate("/properties");
-    }
-    if (user && user.role === "propagent") {
-      // console.log('in user', user.role)
-      navigate("/agentproperties");
+    else {
+      navigate("/contact-us");
     }
   };
+
   const showFourthPage = () => {
     navigate("/more-menu");
   };
+
+  const logoClick = () => {
+    navigate("/");
+  };
+
   //Menus as per role
-  let firstMenuIcon = "";
-  let firstMenu = ""; //This is for all user type
+  let firstMenuIcon = "home";
+  let firstMenu = "Home"; //This is for all user type
   let secondMenuIcon = "";
   let secondMenu = "";
   let thirdMenuIcon = "";
   let thirdMenu = "";
-  let fourthMenu = "";
-  let fourthMenuIcon = "";
+
   if (!user) {
-    firstMenuIcon = "home";
-    firstMenu = "Home";
-    secondMenuIcon = "import_contacts";
-    secondMenu = "About Us";
-    thirdMenuIcon = "real_estate_agent";
-    thirdMenu = "Property";
-  }
-  if (user && user.role !== "user") {
-    firstMenuIcon = "home";
-    firstMenu = "Home";
-    fourthMenuIcon = "apps";
-    fourthMenu = "More";
+    // firstMenuIcon = "home";
+    // firstMenu = "Home";
+    secondMenuIcon = "real_estate_agent";
+    secondMenu = "Property";
+    thirdMenuIcon = "import_contacts";
+    thirdMenu = "About Us";
   }
 
   if (user && user.role === "admin") {
-    secondMenuIcon = "analytics";
-    secondMenu = "Properties";
-    thirdMenuIcon = "confirmation_number";
-    thirdMenu = "Users";
+    secondMenuIcon = "dashboard";
+    secondMenu = "Dashboard";
+    thirdMenuIcon = "headset_mic";
+    thirdMenu = "Contact";
   }
   if (user && user.role === "owner") {
     secondMenuIcon = "dashboard";
     secondMenu = "Dashboard";
-    // thirdMenuIcon = "support_agent";
     thirdMenuIcon = "real_estate_agent";
-    thirdMenu = "Property";
+    thirdMenu = "Contact";
   }
   if (user && user.role === "tenant") {
-    secondMenu = "Rent";
-    thirdMenu = "Tickets";
+    secondMenuIcon = "dashboard";
+    secondMenu = "Dashboard";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Contact";
   }
   if (user && user.role === "propertymanager") {
-    secondMenu = "Bills";
-    thirdMenu = "Tickets";
+    secondMenuIcon = "dashboard";
+    secondMenu = "Dashboard";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Contact";
   }
 
   // more acitve class Array 

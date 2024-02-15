@@ -9,7 +9,7 @@ import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 
 import { timestamp, projectStorage, projectID } from "../../firebase/config";
-import SearchBarAutoComplete from "../search/SearchBarAutoComplete";
+import SearchBarAutoComplete from "../../pages/search/SearchBarAutoComplete";
 // import { projectID } from 'firebase-functions/params';
 
 //Restrict to Input
@@ -179,7 +179,9 @@ const Stage1 = (props) => {
     "properties",
     propertyid
   );
+  function setRedirectFlag(flag, key) {
 
+  }
   const { user } = useAuthContext();
 
   let statesOptions = useRef([]);
@@ -430,7 +432,7 @@ const Stage1 = (props) => {
           // stageFlag: 'stage2'
         });
         props.setStateFlag("stage2");
-        navigate("/pgaddproperty/" + addDocumentResponse.document.id);
+        navigate("/addproperty/" + addDocumentResponse.document.id);
 
         //add a default property image into storage for newly created propertyid
         // const sourceImagePath = 'gs://your-project-id.appspot.com/images/source.jpg';
@@ -542,7 +544,7 @@ const Stage1 = (props) => {
         carpetArea: "",
         carpetAreaUnit: "",
         imgURL: [],
-        postedBy: "Agent",
+        postedBy: "Propdial",
         status: "pending approval",
         onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
       };
@@ -753,7 +755,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                            "Monthly"
+                              "Monthly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -803,7 +805,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                            "Quarterly"
+                              "Quarterly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -854,7 +856,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                            "Half Yearly"
+                              "Half Yearly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -904,7 +906,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                            "Yearly"
+                              "Yearly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -995,6 +997,7 @@ const Stage1 = (props) => {
                 placeholderText={"Search or add new city"}
                 getQuery={setSearchedCity}
                 queryValue={propertyDetails ? propertyDetails.City : ""}
+                setRedirectFlag={setRedirectFlag}
               ></SearchBarAutoComplete>
             </div>
           </div>
@@ -1009,6 +1012,7 @@ const Stage1 = (props) => {
                 placeholderText={"Search or add new locality"}
                 getQuery={setSearchedLocality}
                 queryValue={propertyDetails ? propertyDetails.Locality : ""}
+                setRedirectFlag={setRedirectFlag}
               ></SearchBarAutoComplete>
             </div>
           </div>
@@ -1025,11 +1029,12 @@ const Stage1 = (props) => {
                 placeholderText={"Search or add new society"}
                 getQuery={setSearchedSociety}
                 queryValue={propertyDetails ? propertyDetails.Society : ""}
+                setRedirectFlag={setRedirectFlag}
               ></SearchBarAutoComplete>
             </div>
           </div>
         </div>
-   
+
       </div>
       <div className="bottom_fixed_button">
         <div className="verticall_gap"></div>
@@ -1062,7 +1067,7 @@ const Stage1 = (props) => {
           </div>
         </div>
       </div>
-     
+
     </form>
   );
 };

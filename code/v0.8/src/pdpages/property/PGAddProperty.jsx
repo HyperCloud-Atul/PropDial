@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
-import Stage1 from '../../pages/create/Stage1'
-import Stage2 from '../../pages/create/Stage2'
-import Stage3 from '../../pages/create/Stage3'
+import Stage1 from './Stage1'
+import Stage2 from './Stage2'
+import Stage3 from './Stage3'
 
 const PGAddProperty = () => {
   const { propertyid } = useParams();

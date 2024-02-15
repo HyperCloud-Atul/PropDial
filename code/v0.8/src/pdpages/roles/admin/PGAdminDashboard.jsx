@@ -180,7 +180,7 @@ const PGAdminDashboard = () => {
             <span className="material-symbols-outlined">close</span>
           </div>
 
-          <Link to="" className="more-add-options-icons">
+          <Link to="/addproperty/new" className="more-add-options-icons">
             <h1>Add property</h1>
             <span className="material-symbols-outlined">location_city</span>
           </Link>

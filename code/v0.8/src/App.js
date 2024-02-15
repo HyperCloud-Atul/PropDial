@@ -264,17 +264,6 @@ function App() {
               }
             ></Route>
 
-            <Route
-              path="/addproperty"
-              element={
-                user && user.role !== "admin" ? (
-                  <PGAddProperty />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            ></Route>
-
 
             <Route
               path="/addproperty/:propertyid"
@@ -282,7 +271,7 @@ function App() {
                 user && user.role === "admin" ? (
                   <PGAddProperty />
                 ) : (
-                  <Navigate to="/login" />
+                  <PhoneLogin />
                 )
               }
             ></Route>
