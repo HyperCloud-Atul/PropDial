@@ -64,8 +64,8 @@ export default function Navbar() {
   let thirdMenu = "";
 
   if (!user) {
-    firstMenuIcon = "home";
-    firstMenu = "Home";
+    // firstMenuIcon = "home";
+    // firstMenu = "Home";
     secondMenuIcon = "real_estate_agent";
     secondMenu = "Property";
     thirdMenuIcon = "import_contacts";
