@@ -158,7 +158,8 @@ export default function Navbar() {
             <li className="main_menus">
               <div
                 onClick={showHome}
-                className="menu_single pointer"
+                className={`menu_single pointer ${location.pathname === "/" ? "active" : ""
+              }`}
               >
                 <span className="material-symbols-outlined">{firstMenuIcon}</span>
                 {firstMenu}
@@ -166,7 +167,8 @@ export default function Navbar() {
 
               <div
                 onClick={showSecondPage}
-                className="menu_single pointer"
+                className={`menu_single pointer ${location.pathname === "/dashboard" ? "active" : ""
+              }`}
               >
                 <span className="material-symbols-outlined">{secondMenuIcon}</span>
                 {secondMenu}
@@ -174,7 +176,8 @@ export default function Navbar() {
 
               <div
                 onClick={showThirdPage}
-                className="menu_single pointer"
+                className={`menu_single pointer ${location.pathname === "/contact-us" ? "active" : ""
+              }`}
               >
                 <span className="material-symbols-outlined">{thirdMenuIcon}</span>
                 {thirdMenu}
