@@ -28,7 +28,7 @@ export default function Footer() {
   //  add class on footer  display none Array 
 
   // hide page_footer array 
-  const pageFooterHidePaths = ["/phonelogin", "/ticketdetail", "/addproperty"];
+  const pageFooterHidePaths = ["/phonelogin", "/ticketdetail", "/addproperty/:propertyid", "/addproperty_quick", "/addproperty", "/addproperty/new"];
   const shouldPageFooerHide = pageFooterHidePaths.includes(location.pathname);
   const pageFooterclassName = `${shouldPageFooerHide ? "page_footer_hide" : ""}`;
   // hide page_footer array 

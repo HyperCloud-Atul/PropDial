@@ -620,10 +620,7 @@ h6.modal_subtitle{
     font-size: 14px;
     margin-top: 12px !important;
 }
-.form_field.st-2 {
-  margin-top: 16px;
-  margin-bottom: 0px;
-}
+
 .form_field.st-2 .field_two {
   display: flex;
   gap: 8px;

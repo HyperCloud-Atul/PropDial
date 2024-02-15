@@ -179,9 +179,7 @@ const Stage1 = (props) => {
     "properties",
     propertyid
   );
-  function setRedirectFlag(flag, key) {
-
-  }
+  function setRedirectFlag(flag, key) {}
   const { user } = useAuthContext();
 
   let statesOptions = useRef([]);
@@ -596,24 +594,25 @@ const Stage1 = (props) => {
       <div className="add_property_fields">
         <div className="row">
           <div className="col-md-6">
-            <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-              <span className="no-floating">
-                Unit Number (Not for public display)
-              </span>
-              <input
-                className="custom-input"
-                type="text"
-                placeholder="Optional"
-                maxLength={12}
-                onChange={(e) =>
-                  setPropertyDetails({
-                    ...propertyDetails,
-                    UnitNumber: e.target.value.trim(),
-                  })
-                }
-                value={propertyDetails && propertyDetails.UnitNumber}
-              />
+            <div className="form_field">
+              <label htmlFor="">Unit Number (Not for public display)</label>
+              <div className="form_field_inner">
+                <input
+                  type="text"
+                  placeholder="Optional"
+                  maxLength={12}
+                  onChange={(e) =>
+                    setPropertyDetails({
+                      ...propertyDetails,
+                      UnitNumber: e.target.value.trim(),
+                    })
+                  }
+                  value={propertyDetails && propertyDetails.UnitNumber}
+                />
+                <div className="field_icon"></div>
+              </div>
             </div>
+            <div className="ff_gap"></div>
           </div>
           <div className="col-md-6">
             <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
@@ -684,37 +683,38 @@ const Stage1 = (props) => {
                 </div>
               </div>
             </div>
+            <div className="ff_gap"></div>
           </div>
           <div className="col-md-6">
-            <div
-              id="id_demand"
-              className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg"
-            >
-              <span className="no-floating">Demand/Price</span>
-              <input
-                id="id_demandprice"
-                className="custom-input"
-                required
-                type="text"
-                placeholder="Demand Amount for Rent or Sale"
-                maxLength={9}
-                onInput={(e) => {
-                  restrictInput(e, 9);
-                }}
-                onChange={(e) => {
-                  setPropertyDetails({
-                    ...propertyDetails,
-                    // DemandPrice: e.target.value,
-                    DemandPrice: e.target.value.trim(),
-                    // DemandPriceInWords: amountToWords(e.target.value)
-                  });
-                }}
-                value={propertyDetails && propertyDetails.DemandPrice}
-              />
-              <div style={{ fontSize: "smaller" }}>
-                {convertToWords(propertyDetails.DemandPrice)}
+            <div id="id_demand" className="form_field">
+              <label htmlFor="">Demand/Price</label>
+              <div className="form_field_inner">
+                <input
+                  id="id_demandprice"
+                  className="custom-input"
+                  required
+                  type="text"
+                  placeholder="Demand Amount for Rent or Sale"
+                  maxLength={9}
+                  onInput={(e) => {
+                    restrictInput(e, 9);
+                  }}
+                  onChange={(e) => {
+                    setPropertyDetails({
+                      ...propertyDetails,
+                      // DemandPrice: e.target.value,
+                      DemandPrice: e.target.value.trim(),
+                      // DemandPriceInWords: amountToWords(e.target.value)
+                    });
+                  }}
+                  value={propertyDetails && propertyDetails.DemandPrice}
+                />
+                <div style={{ fontSize: "smaller" }}>
+                  {convertToWords(propertyDetails.DemandPrice)}
+                </div>
               </div>
             </div>
+            <div className="ff_gap"></div>
           </div>
           {propertyDetails && propertyDetails.Purpose === "Rent" && (
             <div className="col-md-6">
@@ -755,7 +755,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                              "Monthly"
+                            "Monthly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -805,7 +805,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                              "Quarterly"
+                            "Quarterly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -856,7 +856,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                              "Half Yearly"
+                            "Half Yearly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -906,7 +906,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                              "Yearly"
+                            "Yearly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -965,61 +965,74 @@ const Stage1 = (props) => {
             </div>
           )}
           <div className="col-md-6">
-            <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-              <span className="no-floating">State</span>
+            <div className="form_field">
+              <label htmlFor="">State</label>
 
-              <Select
-                className=""
-                onChange={handleStateChange}
-                options={statesOptionsSorted.current}
-                value={state}
-                styles={{
-                  control: (baseStyles, state) => ({
-                    ...baseStyles,
-                    outline: "none",
-                    background: "#efefef",
-                    border: "none",
-                    borderBottom: "none",
-                    paddingLeft: "10px",
-                    textTransform: "capitalize",
-                  }),
-                }}
-              />
+              <div className="form_field_inner">
+                <Select
+                  className=""
+                  onChange={handleStateChange}
+                  options={statesOptionsSorted.current}
+                  value={state}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      outline: "none",
+                      background: "#efefef",
+                      border: "none",
+                      borderBottom: "none",
+                      paddingLeft: "10px",
+                      textTransform: "capitalize",
+                    }),
+                  }}
+                />
+              </div>
             </div>
           </div>
           <div className="col-md-6">
-            <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-              <span className="no-floating">City</span>
-              {/* <span>distinctValuesCity in SearchBarAutoComplete: {distinctValuesCity}</span> */}
-              <SearchBarAutoComplete
-                enabled={state && state.value === "Select State" ? true : false}
-                dataList={distinctValuesCity}
-                placeholderText={"Search or add new city"}
-                getQuery={setSearchedCity}
-                queryValue={propertyDetails ? propertyDetails.City : ""}
-                setRedirectFlag={setRedirectFlag}
-              ></SearchBarAutoComplete>
+            <div className="form_field">
+              <label htmlFor="">City</label>
+              <div className="form_field_inner">
+                {/* <span>distinctValuesCity in SearchBarAutoComplete: {distinctValuesCity}</span> */}
+                <SearchBarAutoComplete
+                  enabled={
+                    state && state.value === "Select State" ? true : false
+                  }
+                  dataList={distinctValuesCity}
+                  placeholderText={"Search or add new city"}
+                  getQuery={setSearchedCity}
+                  queryValue={propertyDetails ? propertyDetails.City : ""}
+                  setRedirectFlag={setRedirectFlag}
+                ></SearchBarAutoComplete>
+              </div>
             </div>
+            <div className="ff_gap"></div>
           </div>
           <div className="col-md-6">
-            <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-              <span className="no-floating">Locality</span>
-              <SearchBarAutoComplete
-                enabled={
-                  propertyDetails && propertyDetails.City === "" ? true : false
-                }
-                dataList={distinctValuesLocality}
-                placeholderText={"Search or add new locality"}
-                getQuery={setSearchedLocality}
-                queryValue={propertyDetails ? propertyDetails.Locality : ""}
-                setRedirectFlag={setRedirectFlag}
-              ></SearchBarAutoComplete>
+            <div className="form_field">
+              <label htmlFor="">Locality</label>
+              <div className="form_field_inner">
+                <SearchBarAutoComplete
+                  enabled={
+                    propertyDetails && propertyDetails.City === ""
+                      ? true
+                      : false
+                  }
+                  dataList={distinctValuesLocality}
+                  placeholderText={"Search or add new locality"}
+                  getQuery={setSearchedLocality}
+                  queryValue={propertyDetails ? propertyDetails.Locality : ""}
+                  setRedirectFlag={setRedirectFlag}
+                ></SearchBarAutoComplete>
+              </div>
             </div>
+            <div className="ff_gap"></div>
           </div>
           <div className="col-md-6 mb-4">
-            <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-              <span className="no-floating">Society</span>
-              <SearchBarAutoComplete
+            <div className="form_field">
+            <label htmlFor="">Society</label>
+            <div className="form_field_inner">
+            <SearchBarAutoComplete
                 enabled={
                   propertyDetails && propertyDetails.Locality === ""
                     ? true
@@ -1032,9 +1045,9 @@ const Stage1 = (props) => {
                 setRedirectFlag={setRedirectFlag}
               ></SearchBarAutoComplete>
             </div>
+            </div>
           </div>
         </div>
-
       </div>
       <div className="bottom_fixed_button">
         <div className="verticall_gap"></div>
@@ -1067,7 +1080,6 @@ const Stage1 = (props) => {
           </div>
         </div>
       </div>
-
     </form>
   );
 };

@@ -12,10 +12,10 @@ const PGAddProperty = () => {
     <div className='top_header_pg pg_bg'>
       <div className="page_spacing">
         <div className="pg_header">
-          <h2 className="p_title">Add Property</h2>
-          <h4 className="p_subtitle">You can add your property here</h4>
+          <h2 className="m22 mb-1">Add Property</h2>
+          <h4 className="r18 light_black">You can add your property here</h4>
         </div>
-        <div className="verticall_gap"></div>
+        <div className="vg22"></div>
         {stageFlag === 'stage1' && <Stage1 setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage1>}
         {stageFlag === 'stage2' && <Stage2 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage2>}
         {stageFlag === 'stage3' && <Stage3 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage3>}
