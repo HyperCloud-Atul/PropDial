@@ -627,12 +627,8 @@ h6.modal_subtitle{
 }
 
 .form_field.st-2 label {
-  margin-top: 0px;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
   font-size: 16px;
-  color: var(--theme-orange);
-  font-weight: 500;
-  text-transform: capitalize;
 }
 .form_field.st-2 select, .form_field.st-2 input {
   outline: none;
@@ -735,6 +731,7 @@ select{
   position: relative;
   margin-bottom: 0px;
   padding-left: 38px;
+  background: white;
 }
 .form_field.st-2 .radio_group_single .radiochecked label {
   background: var(--theme-light-green);
@@ -826,6 +823,7 @@ h2.card_title {
   padding: 22px;
   bottom: 0;
   background: whitesmoke;
+  z-index: 99;
 }
 .add_property_fields {
   margin-bottom: 129px;

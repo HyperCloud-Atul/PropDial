@@ -604,106 +604,291 @@ const Stage2 = (props) => {
             <div className="ff_gap"></div>
           </div>
           <div className="col-md-6">
-            <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-              <span className="no-floating">Rooms</span>
-              <div className="row no-gutters">
-                <div className="col-lg-12 col-md-12 col-sm-12">
-                  <div className="number-input-div">
-                    <h2>#Bedrooms</h2>
-                    <div>
-                      <div
-                        className="left-minus-button"
-                        onClick={() => {
-                          decreamentInput("bedroomNumberInput");
-                        }}
-                      >
-                        <span className="material-symbols-outlined">
-                          remove
-                        </span>
-                      </div>
+            <div className="form_field">
+              <label htmlFor="">Rooms</label>
+              <div className="plus_minus_input_wrapper">
+                <span className="pmi_label">Bedroom</span>
+                <div className="plus_minus_input">
+                  <div
+                    className="left-minus-button pmbutton"
+                    onClick={() => {
+                      decreamentInput("bedroomNumberInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">remove</span>
+                  </div>
 
+                  <input
+                    id="bedroomNumberInput"
+                    type="number"
+                    disabled
+                    value={propertyDetails && propertyDetails.NumberOfBedrooms}
+                  />
+                  <div
+                    className="right-plus-button pmbutton"
+                    onClick={() => {
+                      increamentInput("bedroomNumberInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">add</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="ff_gap"></div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field">
+              <label htmlFor="">Rooms</label>
+              <div className="plus_minus_input_wrapper">
+                <span className="pmi_label">Bathroom</span>
+                <div className="plus_minus_input">
+                  <div
+                    className="left-minus-button pmbutton"
+                    onClick={() => {
+                      decreamentInput("bathroomNumberInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">remove</span>
+                  </div>
+
+                  <input
+                    id="bathroomNumberInput"
+                    type="number"
+                    disabled
+                    value={propertyDetails && propertyDetails.NumberOfBathrooms}
+                  />
+                  <div
+                    className="right-plus-button pmbutton"
+                    onClick={() => {
+                      increamentInput("bathroomNumberInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">add</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="ff_gap"></div>
+          </div>
+          <div className="col-md-12">
+            <div className="form_field st-2">
+              <label htmlFor="">Super area and Carpet area</label>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ width: "100%", padding: "5px 0 " }}>
+                  <input
+                    id="id_superArea"
+                    className="custom-input"
+                    style={{ paddingRight: "10px" }}
+                    type="text"
+                    placeholder="Super Area"
+                    maxLength={6}
+                    onInput={(e) => {
+                      restrictInput(e, 5);
+                    }}
+                    onChange={(e) =>
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        SuperArea: e.target.value,
+                      })
+                    }
+                    value={propertyDetails && propertyDetails.SuperArea}
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    borderLeft: "2px solid #ddd",
+                    padding: "5px 0 5px 10px",
+                    marginLeft: "10px",
+                  }}
+                >
+                  <input
+                    id="id_carpetArea"
+                    className="custom-input"
+                    style={{ paddingRight: "10px" }}
+                    type="text"
+                    placeholder="Carpet Area"
+                    maxLength={6}
+                    onInput={(e) => {
+                      restrictInput(e, 5);
+                    }}
+                    onChange={(e) =>
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        CarpetArea: e.target.value,
+                      })
+                    }
+                    value={propertyDetails && propertyDetails.CarpetArea}
+                  />
+                </div>
+              </div>
+              <div style={{ width: "100%", padding: "5px 0" }}>
+                <div
+                  className="radio_group"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <div
+                    className="radio_group_single"
+                    style={{ padding: "5px 0", width: "100%" }}
+                  >
+                    <div
+                      className={
+                        propertyDetails.SuperAreaUnit === "SqFt"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
+                    >
                       <input
-                        id="bedroomNumberInput"
-                        style={{
-                          background: "#eee",
-                          borderTop: "1px solid #ddd",
-                          height: "35px",
-                          color: "#222",
-                          padding: "0 0 0 4px",
+                        type="checkbox"
+                        id="superareaunit_SqFt"
+                        onClick={(e) => {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            SuperAreaUnit: "SqFt",
+                          });
                         }}
-                        type="number"
-                        disabled
-                        value={
-                          propertyDetails && propertyDetails.NumberOfBedrooms
-                        }
                       />
-                      <div
-                        className="right-plus-button"
-                        onClick={() => {
-                          increamentInput("bedroomNumberInput");
-                        }}
+                      <label
+                        htmlFor="superareaunit_SqFt"
+                        style={{ padding: "6px 0 10px 22px", height: "30px" }}
                       >
-                        <span className="material-symbols-outlined">add</span>
-                      </div>
+                        <div className="radio_icon">
+                          <span
+                            className="material-symbols-outlined add"
+                            style={{
+                              fontSize: "1.2rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            add
+                          </span>
+                          <span
+                            className="material-symbols-outlined check"
+                            style={{
+                              fontSize: "1.2rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            done
+                          </span>
+                        </div>
+                        <h6>SqFt</h6>
+                      </label>
                     </div>
                   </div>
-                  <div
-                    style={{
-                      border: "none",
-                      borderTop: "1px solid #ddd",
-                      padding: "5px 0",
-                      marginTop: "10px",
-                    }}
-                  ></div>
-                </div>
-                {/* <div className="verticall_gap"></div> */}
-                <div className="col-lg-12 col-md-12 col-sm-12">
-                  <div className="number-input-div">
-                    <h2>#Bathroom</h2>
-                    <div>
-                      <div
-                        className="left-minus-button"
-                        onClick={() => {
-                          decreamentInput("bathroomNumberInput");
-                        }}
-                      >
-                        <span className="material-symbols-outlined">
-                          remove
-                        </span>
-                      </div>
 
+                  <div
+                    className="radio_group_single"
+                    style={{ padding: "5px 0", width: "100%" }}
+                  >
+                    <div
+                      className={
+                        propertyDetails.SuperAreaUnit === "SqMtr"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
+                    >
                       <input
-                        id="bathroomNumberInput"
-                        style={{
-                          background: "#eee",
-                          borderTop: "1px solid #ddd",
-                          height: "35px",
-                          color: "#222",
-                          padding: "0 0 0 4px",
+                        type="checkbox"
+                        id="superareaunit_SqMtr"
+                        onClick={(e) => {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            SuperAreaUnit: "SqMtr",
+                          });
                         }}
-                        type="number"
-                        disabled
-                        value={
-                          propertyDetails && propertyDetails.NumberOfBathrooms
-                        }
                       />
-                      <div
-                        className="right-plus-button"
-                        onClick={() => {
-                          increamentInput("bathroomNumberInput");
-                        }}
+                      <label
+                        htmlFor="superareaunit_SqMtr"
+                        style={{ padding: "6px 0 10px 22px", height: "30px" }}
                       >
-                        <span className="material-symbols-outlined">add</span>
-                      </div>
+                        <div className="radio_icon">
+                          <span
+                            className="material-symbols-outlined add"
+                            style={{
+                              fontSize: "1.2rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            add
+                          </span>
+                          <span
+                            className="material-symbols-outlined check"
+                            style={{
+                              fontSize: "1.2rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            done
+                          </span>
+                        </div>
+                        <h6>SqMtr</h6>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div
+                    className="radio_group_single"
+                    style={{ padding: "5px 0", width: "100%" }}
+                  >
+                    <div
+                      className={
+                        propertyDetails.SuperAreaUnit === "SqYd"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
+                    >
+                      <input
+                        type="checkbox"
+                        id="superareaunit_SqYd"
+                        onClick={(e) => {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            SuperAreaUnit: "SqYd",
+                          });
+                        }}
+                      />
+                      <label
+                        htmlFor="superareaunit_SqYd"
+                        style={{ padding: "6px 0 10px 22px", height: "30px" }}
+                      >
+                        <div className="radio_icon">
+                          <span
+                            className="material-symbols-outlined add"
+                            style={{
+                              fontSize: "1.2rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            add
+                          </span>
+                          <span
+                            className="material-symbols-outlined check"
+                            style={{
+                              fontSize: "1.2rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            done
+                          </span>
+                        </div>
+                        <h6>SqYd</h6>
+                      </label>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div className="ff_gap"></div>
           </div>
-          <div className="col-md-6">
-            <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-              <span className="no-floating">Furnishing</span>
+          <div className="col-md-12">
+            <div className="form_field st-2">
+           <label htmlFor="">Furnishing</label>
               <div
                 className="radio_group"
                 style={{ display: "flex", alignItems: "center" }}
@@ -806,12 +991,11 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
+            <div className="ff_gap"></div>
           </div>
-          <div className="col-md-6">
-            <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-              <span className="no-floating">
-                Additional Rooms - ( {propertyDetails.AdditionalRooms.length} )
-              </span>
+          <div className="col-md-12">
+            <div className="form_field st-2">
+           <label htmlFor=""> Additional Rooms - ( {propertyDetails.AdditionalRooms.length} )</label>
               <div className="radio_group">
                 <div className="radio_group_single">
                   <div
@@ -1098,6 +1282,7 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
+            <div className="ff_gap"></div>
           </div>
         </div>
       </div>

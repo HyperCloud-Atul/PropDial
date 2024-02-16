@@ -615,109 +615,87 @@ const Stage1 = (props) => {
             <div className="ff_gap"></div>
           </div>
           <div className="col-md-6">
-            <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-              <span className="no-floating">Purpose</span>
-
-              <div className="radio_group" style={{ paddingTop: "10px" }}>
-                <div className="radio_group_single">
-                  <div
-                    className={
-                      propertyDetails.Purpose === "Rent"
-                        ? "custom_radio_button radiochecked"
-                        : "custom_radio_button"
-                    }
-                  >
-                    <input
-                      type="checkbox"
-                      id="purpose_rent"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Purpose: "Rent",
-                        });
-                      }}
-                    />
-                    <label htmlFor="purpose_rent" style={{ paddingTop: "7px" }}>
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>Rent</h6>
-                    </label>
-                  </div>
-                </div>
-                <div className="radio_group_single">
-                  <div
-                    className={
-                      propertyDetails.Purpose === "Sale"
-                        ? "custom_radio_button radiochecked"
-                        : "custom_radio_button"
-                    }
-                  >
-                    <input
-                      type="checkbox"
-                      id="purpose_sale"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Purpose: "Sale",
-                        });
-                      }}
-                    />
-                    <label htmlFor="purpose_sale" style={{ paddingTop: "7px" }}>
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>Sale</h6>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="ff_gap"></div>
-          </div>
-          <div className="col-md-6">
-            <div id="id_demand" className="form_field">
-              <label htmlFor="">Demand/Price</label>
+            <div className="form_field st-2">
+              <label htmlFor="">Purpose</label>
               <div className="form_field_inner">
-                <input
-                  id="id_demandprice"
-                  className="custom-input"
-                  required
-                  type="text"
-                  placeholder="Demand Amount for Rent or Sale"
-                  maxLength={9}
-                  onInput={(e) => {
-                    restrictInput(e, 9);
-                  }}
-                  onChange={(e) => {
-                    setPropertyDetails({
-                      ...propertyDetails,
-                      // DemandPrice: e.target.value,
-                      DemandPrice: e.target.value.trim(),
-                      // DemandPriceInWords: amountToWords(e.target.value)
-                    });
-                  }}
-                  value={propertyDetails && propertyDetails.DemandPrice}
-                />
-                <div style={{ fontSize: "smaller" }}>
-                  {convertToWords(propertyDetails.DemandPrice)}
+            <div className="form_field_container">
+            <div className="radio_group">
+                  <div className="radio_group_single">
+                    <div
+                      className={
+                        propertyDetails.Purpose === "Rent"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
+                    >
+                      <input
+                        type="checkbox"
+                        id="purpose_rent"
+                        onClick={(e) => {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            Purpose: "Rent",
+                          });
+                        }}
+                      />
+                      <label
+                        htmlFor="purpose_rent"
+                        style={{ paddingTop: "7px" }}
+                      >
+                        <div className="radio_icon">
+                          <span className="material-symbols-outlined add">
+                            add
+                          </span>
+                          <span className="material-symbols-outlined check">
+                            done
+                          </span>
+                        </div>
+                        <h6>Rent</h6>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="radio_group_single">
+                    <div
+                      className={
+                        propertyDetails.Purpose === "Sale"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
+                    >
+                      <input
+                        type="checkbox"
+                        id="purpose_sale"
+                        onClick={(e) => {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            Purpose: "Sale",
+                          });
+                        }}
+                      />
+                      <label
+                        htmlFor="purpose_sale"
+                        style={{ paddingTop: "7px" }}
+                      >
+                        <div className="radio_icon">
+                          <span className="material-symbols-outlined add">
+                            add
+                          </span>
+                          <span className="material-symbols-outlined check">
+                            done
+                          </span>
+                        </div>
+                        <h6>Sale</h6>
+                      </label>
+                    </div>
+                  </div>
                 </div>
+            </div>
               </div>
             </div>
             <div className="ff_gap"></div>
           </div>
           {propertyDetails && propertyDetails.Purpose === "Rent" && (
-            <div className="col-md-6">
+            <div className="col-md-12">
               <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
                 <span className="no-floating">Maintenance fees</span>
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -962,8 +940,41 @@ const Stage1 = (props) => {
                   {convertToWords(propertyDetails.MaintenanceCharges)}
                 </div>
               </div>
+              <div className="ff_gap"></div>
             </div>
           )}
+          <div className="col-md-6">
+            <div id="id_demand" className="form_field">
+              <label htmlFor="">Demand/Price</label>
+              <div className="form_field_inner">
+                <input
+                  id="id_demandprice"
+                  className="custom-input"
+                  required
+                  type="text"
+                  placeholder="Demand Amount for Rent or Sale"
+                  maxLength={9}
+                  onInput={(e) => {
+                    restrictInput(e, 9);
+                  }}
+                  onChange={(e) => {
+                    setPropertyDetails({
+                      ...propertyDetails,
+                      // DemandPrice: e.target.value,
+                      DemandPrice: e.target.value.trim(),
+                      // DemandPriceInWords: amountToWords(e.target.value)
+                    });
+                  }}
+                  value={propertyDetails && propertyDetails.DemandPrice}
+                />
+                <div style={{ fontSize: "smaller" }}>
+                  {convertToWords(propertyDetails.DemandPrice)}
+                </div>
+              </div>
+            </div>
+            <div className="ff_gap"></div>
+          </div>
+
           <div className="col-md-6">
             <div className="form_field">
               <label htmlFor="">State</label>
@@ -1030,21 +1041,21 @@ const Stage1 = (props) => {
           </div>
           <div className="col-md-6 mb-4">
             <div className="form_field">
-            <label htmlFor="">Society</label>
-            <div className="form_field_inner">
-            <SearchBarAutoComplete
-                enabled={
-                  propertyDetails && propertyDetails.Locality === ""
-                    ? true
-                    : false
-                }
-                dataList={distinctValuesSociety}
-                placeholderText={"Search or add new society"}
-                getQuery={setSearchedSociety}
-                queryValue={propertyDetails ? propertyDetails.Society : ""}
-                setRedirectFlag={setRedirectFlag}
-              ></SearchBarAutoComplete>
-            </div>
+              <label htmlFor="">Society</label>
+              <div className="form_field_inner">
+                <SearchBarAutoComplete
+                  enabled={
+                    propertyDetails && propertyDetails.Locality === ""
+                      ? true
+                      : false
+                  }
+                  dataList={distinctValuesSociety}
+                  placeholderText={"Search or add new society"}
+                  getQuery={setSearchedSociety}
+                  queryValue={propertyDetails ? propertyDetails.Society : ""}
+                  setRedirectFlag={setRedirectFlag}
+                ></SearchBarAutoComplete>
+              </div>
             </div>
           </div>
         </div>
