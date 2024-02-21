@@ -1,0 +1,55 @@
+section.footer_before {
+    padding: 100px 0px;
+    text-align: center;
+    z-index: 1;
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--white-color);
+    margin-bottom: -145px;
+    padding-bottom: 235px;
+}
+
+section.footer_before:after {
+    content: '';
+    background: #e85b33;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.6;
+    z-index: -1;
+}
+
+.fb_inner h6 {
+    margin: 30px 0px !important;
+    font-weight: 400;
+}
+
+.fb_inner .btn_group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+
+
+@media (max-width: 767px) {
+    section.footer_before {
+        padding: 35px 0px;
+        padding-bottom: 172px;
+    }
+    .fb_inner h6 {
+        margin: 25px 0px !important;      
+        font-size: 14px;
+    }
+    .fb_inner h3 {
+        font-size: 22px;
+    }
+    .fb_inner .btn_group {
+        display: grid;      
+        gap: 15px;
+    }
+    
+    
+}
