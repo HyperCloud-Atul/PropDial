@@ -226,11 +226,11 @@ export default function Navbar() {
             </li>
             <li className="menu_social_media">
               <Link to="/ticketdetail">
-                <img src="./assets/img/ticketicon_navbar.png" alt=""
+                <img src="./assets/img/home/ticketicon_navbar.png" alt=""
                   className="pointer" />
               </Link>
               <Link to="/notification">
-                <img src="./assets/img/notification.png" alt=""
+                <img src="./assets/img/home/notification.png" alt=""
                   className="pointer"
                   style={{
                     width: "22px",

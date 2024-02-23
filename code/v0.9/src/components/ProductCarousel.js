@@ -41,7 +41,7 @@ const ProductCarousel = () => {
             <div className="section_title">
               <div className="section_title_effect">Our Presence</div>
               <h3>
-                Our Impactful and Extensive Global Reach
+                Our Impactful and Extensive Global Reach
               </h3>
             </div>
           </div>
