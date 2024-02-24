@@ -2,10 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useDocument } from '../hooks/useDocument'
+import { useFirestore } from '../hooks/useFirestore';
 import './More.css'
-
+import DarkModeToggle from "react-dark-mode-toggle";
 export default function More() {
+
     const { user } = useAuthContext()
+
+
 
     return (
         <>
@@ -60,7 +64,9 @@ export default function More() {
                     </div>
                 </div>
                 <br />
-            </div>
+            </div>   
+
+
 
             {/* section for 'admin' user role  */}
             {user && user.role === 'admin' &&

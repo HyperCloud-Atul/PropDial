@@ -1,3 +1,109 @@
+/* for add pwa in project we have to need apply code in three files app.css for css function code in app.js and a file name serviceworker in public
+Need to make a document in firebase setting - > name "PWA" field status equal to active
+*/
+
+/* pwa pop up div installtation code start */
+.install-popup-div {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    width: 100%;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    height: 0;
+    transition: 1.5s ease-in-out;
+}
+
+.install-popup-div.open {
+    opacity: 1;
+    pointer-events: all;
+    height: 100vh;
+    transform: translateY(0%);
+    animation: popupInTransition 2s ease-in-out;
+}
+
+@keyframes popupInTransition {
+    0% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
+}
+
+.install-popup-div div {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px 30px 20px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.install-popup-div div .close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--p-theme-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.install-popup-div div img {
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.install-popup-div div h1 {
+    position: relative;
+    margin-top: 20px;
+    font-size: 0.7rem;
+    color: #444;
+    text-align: justify;
+}
+
+.install-popup-div div button {
+    margin-top: 15px;
+    background: var(--p-theme-purple);
+    border: none;
+    outline: none;
+    padding: 5px 30px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #fff;
+}
+
+/* pop up div installation button end */
+
+
+
+
+
+
+
+
+
+
+
 /* common css start  */
 :root {
     --p-theme-purple: #5A10D5;

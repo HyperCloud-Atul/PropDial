@@ -2,6 +2,9 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useDocument } from "../../hooks/useDocument";
+import { useFirestore } from "../../hooks/useFirestore";
+import DarkModeToggle from "react-dark-mode-toggle";
 
 // css
 import "./PGMoreMenu.css";
@@ -20,6 +23,48 @@ const PGMoreMenu = () => {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
+
+
+
+  const { document: appTypeDocument, error: appTypeDocumentError } =
+  useDocument("settings", "AppType");
+const { document: appDisplayMode, error: appDisplayModeerror } = useDocument(
+  "settings",
+  "mode"
+);
+const { updateDocument, deleteDocument } = useFirestore("settings");
+
+// START CODE FOR LIGHT/DARK MODE
+const toggleDarkMode = async (productId, currentModeStatus) => {
+  // Calculate the new mode based on the current mode status
+  const newDisplayMode = currentModeStatus === "light" ? "dark" : "light";
+
+  // Update the mode in Firestore
+  const updatedDocument = await updateDocument(productId, {
+      displayMode: newDisplayMode,
+  });
+
+  // If the update is successful, update the local state
+  if (updatedDocument && updatedDocument.success) {
+      // setIsDarkMode(newDisplayMode === "dark");
+      console.log("Mode status updated successfully");
+  } else {
+      console.error("Error updating mode status");
+  }
+};
+
+// DARK\LIGHT CODE FOR CUSTOMER LOCAL STAORAGE
+const toggleUserDarkMode = async () => {
+  // Retrieving a value from localStorage
+  const currentModeStatus = localStorage.getItem("mode");
+
+  const newDisplayMode = currentModeStatus === "light" ? "dark" : "light";
+  // Storing a value in localStorage
+  localStorage.setItem("mode", newDisplayMode);
+
+  window.dispatchEvent(new Event("storage"));
+};
+// END CODE FOR LIGHT/DARK MODE
 
   return (
     <div className="pgmoremenu pgls_mobile">
@@ -59,6 +104,37 @@ const PGMoreMenu = () => {
               <h1>Wallet</h1>
             </div>
           </div>
+          <h1>hello world</h1>
+            <div>
+                <>
+                    <div>
+                        <h6>Display Mode</h6>
+                    </div>
+                    <DarkModeToggle
+                        onChange={() =>
+                            toggleDarkMode(
+                                appDisplayMode && appDisplayMode.id,
+                                appDisplayMode &&
+                                appDisplayMode.displayMode
+                            )
+                        }
+                        checked={
+                            appDisplayMode &&
+                            appDisplayMode.displayMode == "dark"
+                        }
+                        size={50}
+                    />
+                </>
+                <>
+                    <DarkModeToggle
+                        onChange={() => toggleUserDarkMode()}
+                        checked={
+                            localStorage.getItem("mode") === "dark"
+                        }
+                        size={50}
+                    />
+                </>
+            </div>
           <div className="more-menus_inner">
             {(
               <div className="mm_inner">
