@@ -1,19 +1,20 @@
 {
-  "short_name": "HYPERCLOUD",
-  "name": "HYPERCLOUD APP",
+  "short_name": "PROPDIAL",
+  "name": "PROPDIAL",
   "icons": [
     {
-      "src": "/img/logo.png",
+      "src": "/img/logo_propdial.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/x-icon",
+      "purpose": "any maskable"
     },
     {
-      "src": "logo192.png",
+      "src": "/img/logo_propdial.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "/img/logo_propdial.png",
       "type": "image/png",
       "sizes": "512x512"
     }
