@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import NavbarBottom from "./components/NavbarBottom";
-import More from "./components/More";
 
 
 import "./App.css";
@@ -630,12 +629,7 @@ function App() {
                       user && user.status === 'active' && (user.role !== "propagent" || user.role !== "propagentadmin") ?
                         <TicketDetail /> : <Navigate to="/phonelogin" />
                     }
-                  ></Route>
-
-                  <Route
-                    path="/more"
-                    element={user ? <More /> : <Navigate to="/login" />}
-                  ></Route>
+                  ></Route>             
 
                   <Route
                     path="/tenantdashboard"

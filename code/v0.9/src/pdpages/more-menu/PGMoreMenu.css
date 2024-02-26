@@ -1,19 +1,58 @@
-.mm_inner {
-    border-radius: 10px;
-    box-shadow: rgb(45 178 175 / 31%) 0px 2px 8px 0px;
+.more_quick_card {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.more_quick_card .mqc_single {
+    display: grid;
+    row-gap: 7px;
+}
+
+.more_quick_card .icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--p-theme-purple-bg);
+    border-radius: 50%;
+    margin: auto;
+}
+.more_quick_card .icon span {
+    font-size: 30px;
+}
+.more_quick_card .mqc_single:hover .icon span {
+    transition: 0.5s;
+    font-variation-settings:
+        'FILL' 1
+}
+
+.mm_inner h6.title {
+    padding: 15px;
+    padding-bottom: 0px;
+    text-transform: capitalize;
 }
 
 a.mm_single {
     display: block;
     padding: 15px 50px;
-    background: #20b2aa0f;
+    background: var(--p-theme-purple-bg-light);
     position: relative;
     margin-top: 15px;
-    color: var(--theme-green);
+    color: var(--p-theme-purple);
 }
-
-.mm_inner a.mm_single:first-child {
-    margin-top: 0px;
+a.mm_single h5{
+    text-transform: capitalize;
+}
+a.mm_single h6 {
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 1px !IMPORTANT;
+    text-transform: lowercase;
+    opacity: 0.7;
 }
 
 a.mm_single span {
@@ -29,42 +68,24 @@ a.mm_single span.mms_icon {
 a.mm_single span.mms_ra {
     right: 15px;
 }
-.mm_inner h6.title {
-    padding: 15px !important;
-    padding-bottom: 0px !important;
-    font-size: 20px;
-}
+
 .more-menus_inner {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
-    grid-column-gap: 50px;
-    grid-row-gap: 50px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 22px;
+    grid-row-gap: 22px;
 }
-.more-menus .more-div-big-icon-div { 
-    border-radius: 10px;
-    box-shadow: rgb(45 178 175 / 31%) 0px 2px 8px 0px;
-    margin-bottom: 50px;
+.mm_inner_full_width .inner{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 15px;
 }
-a.mm_single h6 {
-    font-size: 12px;
-    font-weight: 400;
-    margin-top: 2px !IMPORTANT;
-    text-transform: lowercase;
-}
-.pgmoremenu .more-div-big-icon-div .more-div-big-icon-div-inner { 
-    gap: 7px;
-}
-.pgmoremenu .more-div-big-icon-div .more-div-big-icon-div-inner h1 {
-    font-size: 16px;
-    font-weight: 500;
- 
-}
-a.mm_single h5 {
-    font-size: 16px;
-}
+
+
 @media screen and (max-width: 767px) {
-.more-menus_inner {
-    grid-template-columns: repeat(1,1fr);
-    grid-row-gap: 30px;
-}
+    .more-menus_inner, .mm_inner_full_width .inner {
+        grid-template-columns: repeat(1, 1fr);
+        grid-row-gap: 22px;
+    } 
+
 }

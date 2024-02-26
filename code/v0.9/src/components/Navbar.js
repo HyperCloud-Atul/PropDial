@@ -128,7 +128,7 @@ export default function Navbar() {
   // array of more class active on desktop 
 
   // display navbar on top Array 
-  const excludedPaths = ["/", "/about-us", "/contact-us", "/more-menu", "/faq"];
+  const excludedPaths = ["/", "/about-us", "/contact-us",  "/faq"];
   const shouldOnTop = excludedPaths.includes(location.pathname);
   const navbarClassName = `navbarparent ${shouldOnTop ? "" : "on_top"}`;
   // display navbar on top Array 
