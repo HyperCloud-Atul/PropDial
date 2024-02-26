@@ -77,12 +77,12 @@ const PGMoreMenu = () => {
       <div className="more-menus sect_padding">
         <div className="container">
           <div className="dvg22"></div>
-          {user && user.role === "owner"  && (
+          {user && user.role === "owner" && (
             <section className="more_quick_card card_shadow card_border_radius bg_white">
               <Link className="mqc_single" to="/dashboard">
                 <div className="icon click_icon">
                   <span className="material-symbols-outlined">
-                  dashboard
+                    dashboard
                   </span>
                 </div>
                 <h6 className="dr16 click_text">
@@ -108,12 +108,12 @@ const PGMoreMenu = () => {
 
             </section>
           )}
-             {user && user.role === "admin"  && (
+          {user && user.role === "admin" && (
             <section className="more_quick_card card_shadow card_border_radius bg_white">
               <Link className="mqc_single" to="/dashboard">
                 <div className="icon click_icon">
                   <span className="material-symbols-outlined">
-                  dashboard
+                    dashboard
                   </span>
                 </div>
                 <h6 className="dr16 click_text">
@@ -139,10 +139,10 @@ const PGMoreMenu = () => {
 
             </section>
           )}
-        
+
           {user && user.role === "admin" && (
             <div className="admin_div">
-  <div className="dvg22"></div>
+              <div className="dvg22"></div>
               <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
                 <h6 className="title dm20 light_black">Admin</h6>
                 <div className="inner">
@@ -333,11 +333,11 @@ const PGMoreMenu = () => {
               </section>
             </div>
           )}
-       
+
           {user && user.role === "owner" && (
 
             <div className="owner_div">
-                 <div className="dvg22"></div>
+              <div className="dvg22"></div>
               <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
                 <h6 className="title dm20 light_black">Owner</h6>
                 <div className="inner">
@@ -376,7 +376,7 @@ const PGMoreMenu = () => {
               <Link className="mm_single" to="/">
                 <span className="material-symbols-outlined mms_icon">home</span>
                 <h5 className="dr16">Home </h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>explore limitless possibilities</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
@@ -384,7 +384,7 @@ const PGMoreMenu = () => {
               <Link className="mm_single" to="/notification">
                 <span className="material-symbols-outlined mms_icon">notifications_active</span>
                 <h5 className="dr16">notification</h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>stay updated: important message inside!</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
@@ -392,7 +392,7 @@ const PGMoreMenu = () => {
               <Link className="mm_single" to="/faq">
                 <span className="material-symbols-outlined mms_icon">quiz</span>
                 <h5 className="dr16">FAQ </h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>answer to common queries</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
@@ -402,7 +402,7 @@ const PGMoreMenu = () => {
                   import_contacts
                 </span>
                 <h5 className="dr16">About</h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>discover our vision and mission</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
@@ -412,7 +412,7 @@ const PGMoreMenu = () => {
                   contact_page
                 </span>
                 <h5 className="dr16">Contact Us</h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>let's connect and communicate</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
@@ -423,7 +423,7 @@ const PGMoreMenu = () => {
               <Link className="mm_single" to="/ticketdetail">
                 <span className="material-symbols-outlined mms_icon">help</span>
                 <h5 className="dr16">Help & Support</h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>assistance and support resources</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
@@ -431,7 +431,7 @@ const PGMoreMenu = () => {
               <Link className="mm_single">
                 <span className="material-symbols-outlined mms_icon">help</span>
                 <h5 className="dr16">Display mode</h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>change your app mode to dark & light</h6>
                 <span className="mms_ra">
                   <DarkModeToggle
                     onChange={() => toggleUserDarkMode()}
@@ -445,7 +445,7 @@ const PGMoreMenu = () => {
               <Link className="mm_single" to="">
                 <span className="material-symbols-outlined mms_icon">report</span>
                 <h5 className="dr16">Privacy Policy</h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>understanding our privacy commitments</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
@@ -453,7 +453,7 @@ const PGMoreMenu = () => {
               <Link className="mm_single" to="">
                 <span className="material-symbols-outlined mms_icon">gavel</span>
                 <h5 className="dr16">Terms & Condition</h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>guidelines for usage and conduct</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
@@ -461,7 +461,7 @@ const PGMoreMenu = () => {
               <Link className="mm_single" to="">
                 <span className="material-symbols-outlined mms_icon">gavel</span>
                 <h5 className="dr16">Logout</h5>
-                <h6>Lorem ipsum text dummy text</h6>
+                <h6>sign out to login with other mobile no</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
