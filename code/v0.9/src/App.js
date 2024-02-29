@@ -28,8 +28,6 @@ import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
 
 // pages
 // superadmin
-import SuperAdminDashboard from "./pages/roles/superadmin/PGSuperAdminDashboard";
-import PGUserList from "./pages/roles/superadmin/PGUserList";
 // admin
 import PGAdminDashboard from "./pages/roles/admin/PGAdminDashboard";
 import PGAdminProperties from "./pages/roles/admin/PGAdminProperties";
@@ -87,16 +85,13 @@ import PGSearch from "./pages/search/PGSearch";
 // import BillList from './components/BillList'
 
 // New component import start 
-
-
 import AddNotification from "./pages/create/AddNotification";
-
 import CreateTicket from "./chatboard/CreateTicket";
 import TicketDetail from "./chatboard/TicketDetail";
-
 import PGSingleProperty from "./pages/property/PGSingleProperty";
 import PropertyDetails from "./components/property/PropertyDetails";
 import PGDaashboard from "./pdpages/dashboard/PGDashboard";
+import AdminUser from "./pdpages/roles/admin/AdminUser";
 
 // New component import start 
 
@@ -321,6 +316,12 @@ function App() {
                     element={< AddNotification />}
                   ></Route>
 
+<Route
+                    path="/adminuser"
+                    element={< AdminUser />}
+                  ></Route>
+
+
                   {/* owner & co-owner */}
                   <Route
                     path="/dashboard"
@@ -360,29 +361,9 @@ function App() {
                     element={user ? <UpdatePassword /> : <PhoneLogin />}
                   ></Route>
 
-                  <Route
-                    exact
-                    path="/superadmindashboard"
-                    element={
-                      user && user.role === "superadmin" ? (
-                        <SuperAdminDashboard />
-                      ) : (
-                        <Navigate to="/login" />
-                      )
-                    }
-                  ></Route>
+                  
 
-                  <Route
-                    exact
-                    path="/userlist"
-                    element={
-                      user && user.role === "superadmin" ? (
-                        <PGUserList />
-                      ) : (
-                        <Navigate to="/login" />
-                      )
-                    }
-                  ></Route>
+                 
 
                   <Route
                     path="/admindashboard"
@@ -462,12 +443,12 @@ function App() {
                   ></Route>
                   <Route
                     path="/users"
-                    element={
-                      user && user.role === "admin" ? (
-                        <UserList />
-                      ) : (
-                        <Navigate to="/login" />
-                      )
+                    element={ <UserList />
+                      // user && user.role === "admin" ? (
+                       
+                      // ) : (
+                      //   <Navigate to="/login" />
+                      // )
                     }
                   ></Route>
                   <Route

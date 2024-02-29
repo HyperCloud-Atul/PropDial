@@ -33,7 +33,11 @@ export default function Filters({ changeFilter, filterList, filterLength }) {
                         onClick={() => handleClick(f)}
                         className={currentFilter === f ? 'active' : ''}                    >
                         <span>{f}</span>
-                        {currentFilter === f ? <small>{filterLength}</small> : ''}
+                        {/* {currentFilter === f ? <small>{filterLength}</small> : ''} */}
+                        {/* {currentFilter === f &&
+                        <div style={{
+                            display:"none"
+                        }} className='length_top'>{filterLength}</div> } */}
                         {/* {currentFilter === f ? <badge>3</badge> : ''} */}
                         {/* {console.log('current filter:', currentFilter, ' f:', f, ' filterLength:', filterLength)} */}
                     </button>

@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--p-theme-purple-bg);
+    background: var(--theme-purple-bg);
     border-radius: 50%;
     margin: auto;
 }
@@ -39,10 +39,10 @@
 a.mm_single {
     display: block;
     padding: 15px 50px;
-    background: var(--p-theme-purple-bg-light);
+    background: var(--theme-purple-bg-light);
     position: relative;
     margin-top: 15px;
-    color: var(--p-theme-purple);
+    color: var(--theme-purple);
 }
 a.mm_single h5{
     text-transform: capitalize;

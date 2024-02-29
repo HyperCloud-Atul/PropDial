@@ -1,5 +1,5 @@
 .total_prop_card {
-    background: var(--p-theme-orange);
+    background: var(--theme-orange);
     border-radius: 22px;
     padding: 30px;
     color: var(--white-color);
@@ -78,20 +78,20 @@
 
 .propagent_dashboard_inner .ps_single h6 {
     font-weight: 400;
-    color: var(--p-theme-grey);
+    color: var(--theme-grey);
     font-size: 16px;
 }
 
 .propagent_dashboard_inner .ps_single.pending {
-    border-color: var(--p-theme-purple);
+    border-color: var(--theme-purple);
 }
 
 .propagent_dashboard_inner .ps_single.active {
-    border-color: var(--p-theme-green);
+    border-color: var(--theme-green);
 }
 
 .propagent_dashboard_inner .ps_single.inactive {
-    border-color: var(--p-theme-grey);
+    border-color: var(--theme-grey);
 }
 
 .propagent_dashboard_inner .property_details {
@@ -114,7 +114,7 @@
 
 
 .property_detail_single .left h6 {
-    color: var(--p-theme-grey);
+    color: var(--theme-grey);
     font-size: 16px;
     max-width: 100px;
 }
@@ -149,7 +149,7 @@
 }
 
 .self_property_detail .spd_single .right h6 {
-    color: var(--p-theme-grey);
+    color: var(--theme-grey);
     font-size: 16px;
     font-weight: 400;
 }
@@ -173,19 +173,19 @@
 }
 
 .self_property_detail .spd_single .left.rent {
-    background: var(--p-theme-purple);
+    background: var(--theme-purple);
 }
 
 .self_property_detail .spd_single .left.sale {
-    background: var(--p-theme-orange);
+    background: var(--theme-orange);
 }
 
 .self_property_detail .spd_single .left.residential {
-    background: var(--p-theme-green);
+    background: var(--theme-green);
 }
 
 .self_property_detail .spd_single .left.commercial {
-    background: var(--p-theme-grey);
+    background: var(--theme-grey);
 }
 
 .self_property_detail .spd_single .left img {
@@ -215,7 +215,7 @@
 }
 
 .pi_cities_single h6 {
-    color: var(--p-theme-grey);
+    color: var(--theme-grey);
     font-size: 16px;
 }
 
@@ -239,7 +239,7 @@
     height: 100%;
     top: 0;
     left: 0;
-    background: var(--p-theme-purple);
+    background: var(--theme-purple);
 }
 
 .propagent_dashboard_inner .all_payments {

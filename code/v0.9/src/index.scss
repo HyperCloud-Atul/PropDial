@@ -94,8 +94,8 @@
 .p_theme_btn {
   background: linear-gradient(
     90deg,
-    var(--p-theme-purple),
-    var(--p-theme-orange)
+    var(--theme-purple),
+    var(--theme-orange)
   );
   border: 1px solid #ffffff;
   padding: 10px 30px;
@@ -327,7 +327,7 @@
       }
     }
     .top_right_content {
-      color: var(--p-theme-grey);
+      color: var(--theme-grey);
       font-size: 12px;
       font-weight: 400;
       position: absolute;
@@ -342,7 +342,7 @@
     }
     .sub_title {
       font-size: 14px;
-      color: var(--p-theme-grey);
+      color: var(--theme-grey);
       margin-top: 2px !important;
       font-weight: 400;
       word-break: break-all;

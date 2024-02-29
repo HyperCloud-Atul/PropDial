@@ -56,7 +56,7 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     position: absolute;
     top: 5px;
     right: 5px;
-    background: var(--p-theme-orange);
+    background: var(--theme-orange);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,7 +83,7 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 
 .install-popup-div div button {
     margin-top: 15px;
-    background: var(--p-theme-purple);
+    background: var(--theme-purple);
     border: none;
     outline: none;
     padding: 5px 30px;
@@ -96,52 +96,37 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 
 
 /* common css start  */
-:root {
-    --p-theme-purple: #5A10D5;
-  --p-theme-orange: #FA6304;
-  --p-theme-grey: #888888;
-  --p-theme-green: #00a8a8;
-  --p-theme-green-bg: #e2ffe7;
-  --white-color: #fff;
-  --black-color: #000;
-  --light-black: #303030;
-  --p-theme-purple-bg: #efe5ff;
-  --p-theme-purple-bg-light:  #f9f5ff80;
- 
-  --p-theme-orange-bg: #ffefe5;
-  --page-bg:#f5f5f5;
-}
 
 /* color css start  */
 .light_black{
     color: var(--light-black);
 }
 .text_grey{
-    color: var(--p-theme-grey);
+    color: var(--theme-grey);
 }
 .orange{
-    color: var(--p-theme-orange);
+    color: var(--theme-orange);
 }
 .white{
     color: var(--white-color);
 }
 .click_text{
-    color: var(--p-theme-purple);
+    color: var(--theme-purple);
 }
 .bg_orange{
     background: #ffd6cb;
 }
 .bg_purple{
-    background: var(--p-theme-purple-bg);
+    background: var(--theme-purple-bg);
 }
 .bg_green{
-    background: var(--p-theme-green-bg);
+    background: var(--theme-green-bg);
 }
 .bg_white{
     background: var(--white-color);
 }
 .click_icon, .click_icon span{
-    color: var(--p-theme-purple);  
+    color: var(--theme-purple);  
     transition: 0.5s;
     font-variation-settings:
         'FILL' 0
@@ -269,6 +254,79 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 .mt10{
     margin-top: 10px;
 }
+/* modal css start  */
+.modal-backdrop.show {
+    opacity: 0.3 !important;
+}
+.my_modal .modal-body{
+    padding: 0px;
+}
+.my_modal .modal-content {
+    border-radius: 22px;
+    padding: 22px;
+    background: var(--white-color);
+}
+
+
+/* custom radio button css start  */
+.form_field.st-2 .radio_group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+  }
+  
+  .form_field.st-2 .radio_group_single label {
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    height: 35px;
+    border-radius: 20px;
+    padding: 6px 7px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgb(0 0 0);
+    transition: 0.3s;
+    display: flex;
+    gap: 8px;
+    position: relative;
+    margin-bottom: 0px;
+    padding-left: 38px;
+    background: #efefef;
+  }
+  
+  .form_field.st-2 .radio_group_single .radiochecked label {
+    background: var(--theme-green);
+    color: white;
+    border-color: var(--theme-green);
+  }
+  
+  .form_field.st-2 .radio_group_single label .radio_icon {
+    position: absolute;
+    line-height: 0px;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-41%);
+  }
+  
+  .form_field.st-2 .radio_group_single label .radio_icon .check {
+    display: none;
+  }
+  
+  .form_field.st-2 .radio_group_single .radiochecked label .radio_icon .check {
+    display: block;
+  }
+  
+  .form_field.st-2 .radio_group_single .radiochecked label .radio_icon .add {
+    display: none;
+  }
+  
+  .form_field.st-2 .radio_group_single .custom_radio_button {
+    position: relative;
+  }
+
+
+
+
 /* common css end*/
 
 @media only screen and (max-width: 1199px) {

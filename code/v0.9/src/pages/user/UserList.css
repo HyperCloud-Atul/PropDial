@@ -1,10 +1,107 @@
 .userlist .single_user {
     background: white;
-    padding: 8px;
+        padding: 8px;  
+    border-radius: 12px;
+    box-shadow: 0px 2px 10px 0px rgba(58, 53, 65, 0.1);
+}
+.userlist .single_user .us_top .edituser {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 20px;
+}
+.user_single_inner{
     display: flex;
     gap: 8px;
-    align-items: center;    
+    align-items: center;
 }
+.single_user .dates {
+    font-size: 12px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.single_user .dates h6{
+    font-size: 12px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.single_user .dates h6 img{
+    width: 12px;
+}
+.userlist .single_user .us_top {
+    margin-bottom: 6px;
+}
+.single_user .dates h6 .activeicon{
+    width: 8px;
+    height: 8px;
+    background: green;
+    border-radius: 50%;
+}
+.search_filter {
+    background: white;
+    padding: 12px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0px 2px 10px 0px rgba(58, 53, 65, 0.1);
+}
+.search_filter .project-filter nav {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding:  0px !important;
+    margin-bottom: 0px;
+    gap: 18px;
+}
+
+
+.search_filter .project-filter nav button {    
+    height: inherit;    
+    border: 1px solid rgba(3, 70, 135, 0.2196078431);
+    border-radius: 12px;
+    color: #000;
+    color: var(--black-color);
+    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+}
+.search_filter .project-filter nav button:nth-child(1), .search_filter .project-filter nav button:nth-last-child(1) {
+    border-radius: 15px;
+}
+.search_filter .project-filter nav button span {
+    font-size: 16px; 
+    text-transform: capitalize;   
+}
+.search_filter .project-filter nav button.active {
+  border-bottom: none !important;
+    background: var(--theme-green);
+}
+.search_filter .project-filter nav button.active span {
+    font-size: 16px;
+    color: white;
+    font-weight: 500;
+    position: inherit;  
+}
+.user_filters .length_top {
+    display: flex !important;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: -8px;
+    right: 5px;
+    background: var(--theme-orange);
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .single_user .left {
     border-right: 1px solid #e7e7e7;
     padding-right: 8px;

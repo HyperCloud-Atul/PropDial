@@ -17,7 +17,7 @@
 }
 .quote {
     position: absolute;  
-    background: #e95733;
+    background: var(--theme-orange);
     
 }
 .quote_down.quote {
