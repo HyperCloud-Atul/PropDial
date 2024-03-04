@@ -55,7 +55,7 @@ export default function Footer() {
               <div
                 className="loc_em_ph_inner"
                 style={{
-                  backgroundImage: "url('./assets/img/home/contact_info_belt.jpg')",
+                  backgroundImage: "url('./assets/img/contact_info_belt.jpg')",
                 }}
               >
                 <div className="lep_single">

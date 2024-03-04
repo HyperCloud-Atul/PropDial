@@ -50,8 +50,6 @@ import PropAgentHome from "./pages/roles/agent/PropAgentHome";
 import UserDashboard from "./pages/dashboard/UserDashboard";
 
 import PGSignup from "./pages/login/PGSignup";
-
-
 import PGAddPropertyQuick from "./pages/create/PGAddPropertyQuick";
 import AddBill from "./pages/create/AddBill";
 import AddPhoto from "./pages/create/AddPhoto";
@@ -62,9 +60,6 @@ import PropertyStatus from "./components/PropertyStatus";
 
 import PGPropertyBills from "./pages/property/PGPropertyBills";
 import PGPropertyDetails from "./pages/property/PGPropertyDetails";
-
-import UserList from "./pages/user/UserList";
-
 import PDSingle from "./components/PDSingle";
 // import OnlineUsers from './components/OnlineUsers'
 
@@ -92,6 +87,7 @@ import PGSingleProperty from "./pages/property/PGSingleProperty";
 import PropertyDetails from "./components/property/PropertyDetails";
 import PGDaashboard from "./pdpages/dashboard/PGDashboard";
 import AdminUser from "./pdpages/roles/admin/AdminUser";
+import PropdialAllProperties from "./components/property/PropdialAllProperties";
 
 // New component import start 
 
@@ -252,30 +248,40 @@ function App() {
                     path="/login"
                     element={<PhoneLogin />}
                   ></Route>
+
                   <Route path="/" element={<Home></Home>}></Route>
+
                   <Route
                     path="/more-menu"
                     element={<PGMoreMenu></PGMoreMenu>}
                   ></Route>
+
                   <Route
                     path="/profile"
                     element={user ? <PGProfile /> : <PhoneLogin />}
                   ></Route>
+
                   <Route
                     path="/notification"
                     element={< PGNotification />}
                   ></Route>
+
                   <Route path="/about-us" element={<PGAboutUs />}></Route>
+
                   <Route path="/contact-us" element={<PGContactUs />}></Route>
+
                   <Route path="/faq" element={<Faq></Faq>}></Route>
+
                   <Route
                     path="/properties"
                     element={< PGProperties />}
                   ></Route>
+
                   <Route
                     path="/propertydetails/:id"
                     element={<PropertyDetails></PropertyDetails>}
                   ></Route>
+
                   <Route
                     path="/addproperty"
                     element={
@@ -286,6 +292,15 @@ function App() {
                       )
                     }
                   ></Route>
+
+                  <Route
+                    path="/allproperties"
+                    element={
+                      <PropdialAllProperties />
+                    }
+                  ></Route>
+
+
 
                   <Route
                     path="/addproperty_quick"
@@ -316,7 +331,7 @@ function App() {
                     element={< AddNotification />}
                   ></Route>
 
-<Route
+                  <Route
                     path="/adminuser"
                     element={< AdminUser />}
                   ></Route>
@@ -361,9 +376,9 @@ function App() {
                     element={user ? <UpdatePassword /> : <PhoneLogin />}
                   ></Route>
 
-                  
 
-                 
+
+
 
                   <Route
                     path="/admindashboard"
@@ -439,16 +454,6 @@ function App() {
                       ) : (
                         <Navigate to="/login" />
                       )
-                    }
-                  ></Route>
-                  <Route
-                    path="/users"
-                    element={ <UserList />
-                      // user && user.role === "admin" ? (
-                       
-                      // ) : (
-                      //   <Navigate to="/login" />
-                      // )
                     }
                   ></Route>
                   <Route
@@ -610,7 +615,7 @@ function App() {
                       user && user.status === 'active' && (user.role !== "propagent" || user.role !== "propagentadmin") ?
                         <TicketDetail /> : <Navigate to="/phonelogin" />
                     }
-                  ></Route>             
+                  ></Route>
 
                   <Route
                     path="/tenantdashboard"

@@ -266,7 +266,9 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     padding: 22px;
     background: var(--white-color);
 }
-
+.row_gap{
+    row-gap: 30px;
+}
 
 /* custom radio button css start  */
 .form_field.st-2 .radio_group {

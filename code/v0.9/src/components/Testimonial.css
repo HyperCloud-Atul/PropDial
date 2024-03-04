@@ -1,6 +1,6 @@
 .testimonial_single {
     padding: 50px;
-    border: 6px solid white;
+    border: 6px solid var(--white-color);
     border-radius: 40px;
     margin: 25px;
     text-align: center  ;

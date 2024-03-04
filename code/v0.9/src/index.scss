@@ -1,26 +1,4 @@
-.two_col_page {
-  display: flex;
-  align-items: center;
-  .col_right {
-    width: 50%;
-    img {
-      width: 100%;
-      height: 100vh;
-      object-fit: cover;
-    }
-  }
-  .col_left {
-    width: 50%;
-    padding: 15px 30px;
-    .col_left_inner {
-      text-align: center;
-      max-width: 445px;
-      width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-}
+// forms field css start 
 .new_form_field {
   label {
     font-size: 18px;
@@ -91,6 +69,127 @@
     }
   }
 }
+.form_field.label_top {
+  background: #fff;
+  border: 1px solid #d7d7d7;
+  border-radius: 7px; 
+  padding: 20px 12px 6px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  label {
+    background: #fff;
+    border: none;
+    border-radius: 5px 5px 5px 0;
+    box-shadow: 0 -5px 5px 0 #0000001a;
+    color: #aaa;
+    font-size: .9rem;
+    font-weight: 400;
+    left: 20px;
+    margin: 0;
+    padding: 3px 12px;
+    position: absolute;
+    top: -10px;
+  }
+  input{
+    border: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    color: #666;
+    font-size: 1rem;
+    font-weight: 500;
+    height: 40px;
+    letter-spacing: .1rem;
+    outline: none;
+    padding: 0 10px 0 10px;
+    position: relative;
+  }
+  select{
+    border: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    color: #666;
+    font-size: 1rem;
+    font-weight: 500;
+    height: 40px;
+    letter-spacing: .1rem;
+    outline: none;
+    padding: 0 10px 0 10px;
+    position: relative;
+    background: #eeeeee;
+  }
+  ::placeholder{
+    font-size: 0.8rem;
+  font-weight: 400;    
+    color: #888;
+  }
+  .radio_group{
+    padding-top: 10px;
+  }
+.radio_group_single label {
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.2);  
+    border-radius: 20px;
+    padding: 6px 7px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgb(0 0 0);
+    transition: 0.3s;
+    display: flex;
+    gap: 8px;
+    position: relative;
+    margin-bottom: 0px;
+    padding-left: 38px;
+    background: #efefef;
+    left: 0px;
+    top: 0px;
+    box-shadow: none;
+}
+.plus_minus_input_wrapper {
+  border: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    color: #666;
+    font-size: 1rem;
+    font-weight: 500;
+    height: 40px;
+    letter-spacing: .1rem;
+    outline: none;      
+  position: relative;
+}
+.increase_input_parent {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+}
+// forms field css end 
+
+
+.two_col_page {
+  display: flex;
+  align-items: center;
+  .col_right {
+    width: 50%;
+    img {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+    }
+  }
+  .col_left {
+    width: 50%;
+    padding: 15px 30px;
+    .col_left_inner {
+      text-align: center;
+      max-width: 445px;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
 .p_theme_btn {
   background: linear-gradient(
     90deg,

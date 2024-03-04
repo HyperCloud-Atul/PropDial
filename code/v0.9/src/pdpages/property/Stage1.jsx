@@ -179,7 +179,7 @@ const Stage1 = (props) => {
     "properties",
     propertyid
   );
-  function setRedirectFlag(flag, key) {}
+  function setRedirectFlag(flag, key) { }
   const { user } = useAuthContext();
 
   let statesOptions = useRef([]);
@@ -592,9 +592,9 @@ const Stage1 = (props) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="add_property_fields">
-        <div className="row">
+        <div className="row row_gap">
           <div className="col-md-6">
-            <div className="form_field">
+            <div className="form_field label_top">
               <label htmlFor="">Unit Number (Not for public display)</label>
               <div className="form_field_inner">
                 <input
@@ -612,92 +612,245 @@ const Stage1 = (props) => {
                 <div className="field_icon"></div>
               </div>
             </div>
-            <div className="ff_gap"></div>
           </div>
           <div className="col-md-6">
-            <div className="form_field st-2">
-              <label htmlFor="">Purpose</label>
+            <div className="form_field label_top">
+              <label htmlFor="">Property Added Date</label>
               <div className="form_field_inner">
-            <div className="form_field_container">
-            <div className="radio_group">
-                  <div className="radio_group_single">
-                    <div
-                      className={
-                        propertyDetails.Purpose === "Rent"
-                          ? "custom_radio_button radiochecked"
-                          : "custom_radio_button"
-                      }
-                    >
-                      <input
-                        type="checkbox"
-                        id="purpose_rent"
-                        onClick={(e) => {
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            Purpose: "Rent",
-                          });
-                        }}
-                      />
-                      <label
-                        htmlFor="purpose_rent"
-                        style={{ paddingTop: "7px" }}
+                <input
+                  type="text"
+                  value="20/jan/2024"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">
+                Property Status</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Rent"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
                       >
-                        <div className="radio_icon">
-                          <span className="material-symbols-outlined add">
-                            add
-                          </span>
-                          <span className="material-symbols-outlined check">
-                            done
-                          </span>
-                        </div>
-                        <h6>Rent</h6>
-                      </label>
+                        <input
+                          type="checkbox"
+                          id="property_active"
+                        />
+                        <label
+                          htmlFor="property_active"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Active</h6>
+                        </label>
+                      </div>
                     </div>
-                  </div>
-                  <div className="radio_group_single">
-                    <div
-                      className={
-                        propertyDetails.Purpose === "Sale"
-                          ? "custom_radio_button radiochecked"
-                          : "custom_radio_button"
-                      }
-                    >
-                      <input
-                        type="checkbox"
-                        id="purpose_sale"
-                        onClick={(e) => {
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            Purpose: "Sale",
-                          });
-                        }}
-                      />
-                      <label
-                        htmlFor="purpose_sale"
-                        style={{ paddingTop: "7px" }}
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
                       >
-                        <div className="radio_icon">
-                          <span className="material-symbols-outlined add">
-                            add
-                          </span>
-                          <span className="material-symbols-outlined check">
-                            done
-                          </span>
-                        </div>
-                        <h6>Sale</h6>
-                      </label>
+                        <input
+                          type="checkbox"
+                          id="property_inactive"
+
+                        />
+                        <label
+                          htmlFor="property_inactive"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Inactive</h6>
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
-            </div>
               </div>
             </div>
-            <div className="ff_gap"></div>
+          
+          </div>
+          <div className="col-md-6">
+            <div className="form_field label_top">
+              <label>Select Owner Name</label>
+              <div className="form_field_inner">
+                <select>
+                  <option value="">Select</option>
+                  <option selected>Sanskar solanki</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field label_top">
+              <label>Co Owner Name</label>
+              <div className="form_field_inner">
+                <select>
+                  <option value="">Select</option>
+                  <option selected>Naman gaur</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field label_top">
+              <label>Select Employee</label>
+              <div className="form_field_inner">
+                <select>
+                  <option value="">Select</option>
+                  <option selected>Khushi shrivastav</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field label_top">
+              <label>Select Supplementary Employee</label>
+              <div className="form_field_inner">
+                <select>
+                  <option value="">Select</option>
+                  <option selected>Sugandha sahu</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field label_top">
+              <label>Select Sales Employee</label>
+              <div className="form_field_inner">
+                <select>
+                  <option value="">Select</option>
+                  <option selected>Rajesh soni</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field label_top">
+              <label>Property Source</label>
+              <div className="form_field_inner">
+                <select>
+                  <option>Select</option>
+                  <option >Propdial</option>
+                  <option >Broker</option>
+                  <option >ICICI</option>
+                  <option >MyGate</option>
+                  <option >Housing</option>
+                  <option >Google</option>
+                  <option >Reference</option>
+                  <option selected>Exisiting Owner</option>
+
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Purpose</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Rent"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_rent"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Rent",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_rent"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Rent</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_sale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Sale",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_sale"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Sale</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>            
           </div>
           {propertyDetails && propertyDetails.Purpose === "Rent" && (
-            <div className="col-md-12">
-              <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-                <span className="no-floating">Maintenance fees</span>
+            <div className="col-md-6">
+              <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
+                <label>Maintenance fees</label>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <input
                     className="custom-input"
@@ -733,7 +886,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                            "Monthly"
+                              "Monthly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -783,7 +936,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                            "Quarterly"
+                              "Quarterly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -834,7 +987,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                            "Half Yearly"
+                              "Half Yearly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -884,7 +1037,7 @@ const Stage1 = (props) => {
                         <div
                           className={
                             propertyDetails.MaintenanceChargesFrequency ===
-                            "Yearly"
+                              "Yearly"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -940,11 +1093,11 @@ const Stage1 = (props) => {
                   {convertToWords(propertyDetails.MaintenanceCharges)}
                 </div>
               </div>
-              <div className="ff_gap"></div>
+              
             </div>
           )}
           <div className="col-md-6">
-            <div id="id_demand" className="form_field">
+            <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Demand/Price</label>
               <div className="form_field_inner">
                 <input
@@ -972,11 +1125,67 @@ const Stage1 = (props) => {
                 </div>
               </div>
             </div>
-            <div className="ff_gap"></div>
+           
+          </div>
+          <div className="col-md-6">
+            <div id="id_demand" className="form_field label_top">
+              <label htmlFor="">Security Deposit (ZERO)</label>
+              <div className="form_field_inner">
+                <input
+                  id="security_deposite"
+                  className="custom-input"
+                  required
+                  type="number"
+                  placeholder="Security amount"                 
+                />
+                <div style={{ fontSize: "smaller" }}>
+                  {/* {convertToWords(propertyDetails.DemandPrice)} */}
+                </div>
+              </div>
+            </div>
+          
+          </div>
+          <div className="col-md-6">
+            <div className="form_field label_top">
+              <label>Package</label>
+              <div className="form_field_inner">
+                <select>
+                  <option > Please Select </option>
+                  <option selected="selected">PMS Premium</option>
+                  <option>PMS Light</option>
+                  <option>PMS Sale</option>
+                  <option>Pre PMS</option>
+                  <option>Rent Only</option>
+                  <option>NA</option>
+                  <option>InActive</option>
+                  <option>Broker</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field label_top">
+              <label>Select Property Flag</label>
+              <div className="form_field_inner">
+                <select>
+                  <option value="">Select Property Flags</option>
+                  <option>For Rent Sale</option>
+                  <option>For Sale</option>
+                  <option>In Maintenance</option>
+                  <option>NA</option>
+                  <option>On Notice</option>
+                  <option>PMS Only</option>
+                  <option>Rented But Sale</option>
+                  <option>Rented Out</option>
+                  <option>Sold Out</option>
+                </select>
+              </div>
+            </div>
           </div>
 
+
           <div className="col-md-6">
-            <div className="form_field">
+            <div className="form_field label_top">
               <label htmlFor="">State</label>
 
               <div className="form_field_inner">
@@ -1001,7 +1210,7 @@ const Stage1 = (props) => {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="form_field">
+            <div className="form_field label_top">
               <label htmlFor="">City</label>
               <div className="form_field_inner">
                 {/* <span>distinctValuesCity in SearchBarAutoComplete: {distinctValuesCity}</span> */}
@@ -1017,10 +1226,10 @@ const Stage1 = (props) => {
                 ></SearchBarAutoComplete>
               </div>
             </div>
-            <div className="ff_gap"></div>
+        
           </div>
           <div className="col-md-6">
-            <div className="form_field">
+            <div className="form_field label_top">
               <label htmlFor="">Locality</label>
               <div className="form_field_inner">
                 <SearchBarAutoComplete
@@ -1037,10 +1246,10 @@ const Stage1 = (props) => {
                 ></SearchBarAutoComplete>
               </div>
             </div>
-            <div className="ff_gap"></div>
+          
           </div>
-          <div className="col-md-6 mb-4">
-            <div className="form_field">
+          <div className="col-md-6">
+            <div className="form_field label_top">
               <label htmlFor="">Society</label>
               <div className="form_field_inner">
                 <SearchBarAutoComplete

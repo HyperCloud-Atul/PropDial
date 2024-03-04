@@ -118,7 +118,7 @@ const PropertyCard = ({ propertydoc }) => {
                 <img src="/assets/img/new_room.png" alt="" />
               </div>
               <div className="left">
-                <h6>Additional rooms</h6>
+                <h6>{propertydoc.displayName}</h6>
                 <h5>
                   {propertydoc.additionalRooms.length > 0 ?
                     (propertydoc.additionalRooms.map((additionalroom) => (
