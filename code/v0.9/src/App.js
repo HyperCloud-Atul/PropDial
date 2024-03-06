@@ -88,8 +88,9 @@ import PropertyDetails from "./components/property/PropertyDetails";
 import PGDaashboard from "./pdpages/dashboard/PGDashboard";
 import AdminUser from "./pdpages/roles/admin/AdminUser";
 import PropdialAllProperties from "./components/property/PropdialAllProperties";
+import Stage4 from "./pdpages/property/Stage4";
 
-// New component import start 
+// New component import end
 
 function App() {
   const { authIsReady, user } = useAuthContext();
@@ -254,6 +255,11 @@ function App() {
                   <Route
                     path="/more-menu"
                     element={<PGMoreMenu></PGMoreMenu>}
+                  ></Route>
+
+<Route
+                    path="/stage4"
+                    element={<Stage4/>}
                   ></Route>
 
                   <Route

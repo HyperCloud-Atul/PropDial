@@ -292,7 +292,7 @@ const Stage2 = (props) => {
     <form>
       <div className="add_property_fields">
         <div className="row row_gap">
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Property Type</label>
               <div className="form_field_inner">
@@ -425,7 +425,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">BHK</label>
               <div className="form_field_inner">
@@ -600,7 +600,110 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-12">
+          <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Furnishing</label>
+              <div
+                className="radio_group"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id="semi_furnished"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Furnishing: "Semi",
+                        });
+                      }}
+                    />
+                    <label htmlFor="semi_furnished">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined a">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Semi</h6>
+                    </label>
+                  </div>
+                </div>
+                <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id="fully_furnished"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Furnishing: "Fully",
+                        });
+                      }}
+                    />
+                    <label htmlFor="fully_furnished">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Fully</h6>
+                    </label>
+                  </div>
+                </div>
+                <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id="raw_furnished"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Furnishing: "Raw",
+                        });
+                      }}
+                    />
+                    <label htmlFor="raw_furnished">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Raw</h6>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>               
+          <div className="col-md-6">
             <div className="form_field label_top">
               <label htmlFor="">Rooms</label>
               <div className="increase_input_parent">
@@ -769,324 +872,6 @@ const Stage2 = (props) => {
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Dining Area</label>
-              <div className="form_field_inner">
-                <div className="form_field_container">
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Rent"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_rent"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Rent",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_rent"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Yes</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Sale"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_sale"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Sale",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_sale"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>No</h6>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-           
-          </div>
-          <div className="col-md-6">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Living & Dining</label>
-              <div className="form_field_inner">
-                <div className="form_field_container">
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Rent"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_rent"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Rent",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_rent"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Yes</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Sale"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_sale"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Sale",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_sale"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>No</h6>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-           
-          </div>
-          <div className="col-md-6">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Passages</label>
-              <div className="form_field_inner">
-                <div className="form_field_container">
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Rent"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_rent"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Rent",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_rent"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Yes</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Sale"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_sale"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Sale",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_sale"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>No</h6>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Entrance Gallery</label>
-              <div className="form_field_inner">
-                <div className="form_field_container">
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Rent"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_rent"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Rent",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_rent"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Yes</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Sale"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_sale"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Sale",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_sale"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>No</h6>
-                        </label>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -1383,7 +1168,397 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Dining Area</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Rent"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_rent"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Rent",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_rent"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_sale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Sale",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_sale"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Living & Dining</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Rent"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_rent"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Rent",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_rent"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_sale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Sale",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_sale"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Passages</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Rent"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_rent"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Rent",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_rent"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_sale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Sale",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_sale"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Entrance Gallery</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Rent"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_rent"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Rent",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_rent"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_sale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Sale",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_sale"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="form_field label_top">
+              <label htmlFor="">Year of Constuction</label>
+              <div className="form_field_inner">
+                <select>
+                  <option value="" disabled="">Year of Constuction</option>
+                  <option value="">1990</option>
+                  <option value="">1991</option>
+                  <option value="">1992</option>
+                  <option value="">1993</option>
+                  <option value="">1994</option>
+                  <option value="">1995</option>
+                  <option value="">1996</option>
+                  <option value="">1997</option>
+                  <option value="">1998</option>
+                  <option value="">1999</option>
+                  <option value="">2000</option>
+                  <option value="">2001</option>
+                  <option value="">2002</option>
+                  <option value="">2003</option>
+                  <option value="">2004</option>
+                  <option value="">2005</option>
+                  <option value="">2006</option>
+                  <option value="">2007</option>
+                  <option value="">2008</option>
+                  <option value="">2009</option>
+                  <option value="" selected="">2010</option>
+                  <option value="">2011</option>
+                  <option value="">2012</option>
+                  <option value="">2013</option>
+                  <option value="">2014</option>
+                  <option value="">2015</option>
+                  <option value="">2016</option>
+                  <option value="">2017</option>
+                  <option value="">2018</option>
+                  <option value="">2019</option>
+                  <option value="">2020</option>
+                  <option value="">2021</option>
+                  <option value="">2022</option>
+                </select>
+
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div id="id_demand" className="form_field label_top">
+              <label htmlFor="">Age Of Property</label>
+              <div className="form_field_inner">
+                <input
+                  id="id_demandprice"
+                  className="custom-input"
+                  required
+                  type="text"
+                  placeholder="Enter Here"
+                  maxLength={9}
+                  onInput={(e) => {
+                    restrictInput(e, 9);
+                  }}
+                  onChange={(e) => {
+                    setPropertyDetails({
+                      ...propertyDetails,
+                      // DemandPrice: e.target.value,
+                      DemandPrice: e.target.value.trim(),
+                      // DemandPriceInWords: amountToWords(e.target.value)
+                    });
+                  }}
+                  value="18 year"
+                />
+              </div>
+            </div>
+
+          </div>
+          <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor=""> Additional Area  - ( {propertyDetails.AdditionalRooms.length} )</label>
               <div className="radio_group">
@@ -1626,7 +1801,172 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Power Backup</label>
+              <div
+                className="radio_group"
+                style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
+              >
+                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id="semi_furnished"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Furnishing: "Semi",
+                        });
+                      }}
+                    />
+                    <label htmlFor="semi_furnished">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>No Backup</h6>
+                    </label>
+                  </div>
+                </div>
+                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id="fully_furnished"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Furnishing: "Fully",
+                        });
+                      }}
+                    />
+                    <label htmlFor="fully_furnished">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6> Full Backup</h6>
+                    </label>
+                  </div>
+                </div>
+                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id="raw_furnished"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Furnishing: "Raw",
+                        });
+                      }}
+                    />
+                    <label htmlFor="raw_furnished">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Partial Backup</h6>
+                    </label>
+                  </div>
+                </div>
+                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id="raw_furnished"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Furnishing: "Raw",
+                        });
+                      }}
+                    />
+                    <label htmlFor="raw_furnished">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6> Lift Only</h6>
+                    </label>
+                  </div>
+                </div>
+                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id="raw_furnished"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Furnishing: "Raw",
+                        });
+                      }}
+                    />
+                    <label htmlFor="raw_furnished">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Inverter</h6>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Super area and Carpet area</label>
               <div style={{ display: "flex", alignItems: "center" }}>
@@ -1838,112 +2178,10 @@ const Stage2 = (props) => {
                   </div>
                 </div>
               </div>
-            </div>         
-          </div>
-          <div className="col-md-6">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Furnishing</label>
-              <div
-                className="radio_group"
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                <div className="radio_group_single" style={{ width: "100%" }}>
-                  <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi"
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id="semi_furnished"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Furnishing: "Semi",
-                        });
-                      }}
-                    />
-                    <label htmlFor="semi_furnished">
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>Semi</h6>
-                    </label>
-                  </div>
-                </div>
-                <div className="radio_group_single" style={{ width: "100%" }}>
-                  <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully"
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id="fully_furnished"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Furnishing: "Fully",
-                        });
-                      }}
-                    />
-                    <label htmlFor="fully_furnished">
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>Fully</h6>
-                    </label>
-                  </div>
-                </div>
-                <div className="radio_group_single" style={{ width: "100%" }}>
-                  <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id="raw_furnished"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Furnishing: "Raw",
-                        });
-                      }}
-                    />
-                    <label htmlFor="raw_furnished">
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>Raw</h6>
-                    </label>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
-          <div className="col-md-6">
+
+          <div className="col-md-4">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Total Floor</label>
               <div className="form_field_inner">
@@ -1971,7 +2209,7 @@ const Stage2 = (props) => {
             </div>
 
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Floor Number</label>
               <div className="form_field_inner">
@@ -1999,7 +2237,7 @@ const Stage2 = (props) => {
             </div>
 
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Apt On Floor</label>
               <div className="plus_minus_input_wrapper">
@@ -2029,11 +2267,11 @@ const Stage2 = (props) => {
                     <span className="material-symbols-outlined">add</span>
                   </div>
                 </div>
-              </div>           
+              </div>
             </div>
 
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Lifts</label>
               <div className="plus_minus_input_wrapper">
@@ -2063,176 +2301,12 @@ const Stage2 = (props) => {
                     <span className="material-symbols-outlined">add</span>
                   </div>
                 </div>
-              </div>           
+              </div>
             </div>
 
           </div>
-          <div className="col-md-6">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Power Backup</label>
-              <div
-                className="radio_group"
-                style={{ display: "flex", alignItems: "center", flexWrap:"wrap" }}
-              >
-                <div className="radio_group_single" style={{ minWidth: "30%", width:"fit-content" }}>
-                  <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi"
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id="semi_furnished"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Furnishing: "Semi",
-                        });
-                      }}
-                    />
-                    <label htmlFor="semi_furnished">
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>No Backup</h6>
-                    </label>
-                  </div>
-                </div>
-                <div className="radio_group_single" style={{ minWidth: "30%", width:"fit-content" }}>
-                  <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully"
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id="fully_furnished"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Furnishing: "Fully",
-                        });
-                      }}
-                    />
-                    <label htmlFor="fully_furnished">
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6> Full Backup</h6>
-                    </label>
-                  </div>
-                </div>
-                <div className="radio_group_single" style={{ minWidth: "30%", width:"fit-content" }}>
-                  <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id="raw_furnished"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Furnishing: "Raw",
-                        });
-                      }}
-                    />
-                    <label htmlFor="raw_furnished">
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>Partial Backup</h6>
-                    </label>
-                  </div>
-                </div>
-                <div className="radio_group_single" style={{ minWidth: "30%", width:"fit-content" }}>
-                  <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id="raw_furnished"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Furnishing: "Raw",
-                        });
-                      }}
-                    />
-                    <label htmlFor="raw_furnished">
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6> Lift Only</h6>
-                    </label>
-                  </div>
-                </div>
-                <div className="radio_group_single" style={{ minWidth: "30%", width:"fit-content" }}>
-                  <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id="raw_furnished"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Furnishing: "Raw",
-                        });
-                      }}
-                    />
-                    <label htmlFor="raw_furnished">
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>Inverter</h6>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6">
+
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Car Parking</label>
               <div className="plus_minus_input_wrapper">
@@ -2262,11 +2336,11 @@ const Stage2 = (props) => {
                     <span className="material-symbols-outlined">add</span>
                   </div>
                 </div>
-              </div>           
+              </div>
             </div>
 
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Car Parking</label>
               <div className="form_field_inner">
@@ -2344,9 +2418,9 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-       
+
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">2-Wheeler Parking</label>
               <div className="form_field_inner">
@@ -2424,7 +2498,7 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-         
+
           </div>
         </div>
       </div>

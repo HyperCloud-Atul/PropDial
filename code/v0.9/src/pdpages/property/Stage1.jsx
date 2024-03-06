@@ -593,7 +593,7 @@ const Stage1 = (props) => {
     <form onSubmit={handleSubmit}>
       <div className="add_property_fields">
         <div className="row row_gap">
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Unit Number (Not for public display)</label>
               <div className="form_field_inner">
@@ -613,7 +613,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Property Added Date</label>
               <div className="form_field_inner">
@@ -624,7 +624,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">
                 Property Status</label>
@@ -692,9 +692,21 @@ const Stage1 = (props) => {
                 </div>
               </div>
             </div>
-          
+
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
+            <div className="form_field label_top">
+              <label>Ownership</label>
+              <div className="form_field_inner">
+                <select>
+                  <option selected>Free Hold</option>
+                  <option >Lease Hold</option>
+                  <option >Power Attorney</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Owner Name</label>
               <div className="form_field_inner">
@@ -705,7 +717,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label>Co Owner Name</label>
               <div className="form_field_inner">
@@ -716,7 +728,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Employee</label>
               <div className="form_field_inner">
@@ -727,7 +739,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Supplementary Employee</label>
               <div className="form_field_inner">
@@ -738,7 +750,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Sales Employee</label>
               <div className="form_field_inner">
@@ -749,7 +761,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label>Property Source</label>
               <div className="form_field_inner">
@@ -768,7 +780,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Purpose</label>
               <div className="form_field_inner">
@@ -845,10 +857,10 @@ const Stage1 = (props) => {
                   </div>
                 </div>
               </div>
-            </div>            
+            </div>
           </div>
           {propertyDetails && propertyDetails.Purpose === "Rent" && (
-            <div className="col-md-6">
+            <div className="col-md-4">
               <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                 <label>Maintenance fees</label>
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -1093,10 +1105,10 @@ const Stage1 = (props) => {
                   {convertToWords(propertyDetails.MaintenanceCharges)}
                 </div>
               </div>
-              
+
             </div>
           )}
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Demand/Price</label>
               <div className="form_field_inner">
@@ -1125,9 +1137,9 @@ const Stage1 = (props) => {
                 </div>
               </div>
             </div>
-           
+
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Security Deposit (ZERO)</label>
               <div className="form_field_inner">
@@ -1136,16 +1148,16 @@ const Stage1 = (props) => {
                   className="custom-input"
                   required
                   type="number"
-                  placeholder="Security amount"                 
+                  placeholder="Security amount"
                 />
                 <div style={{ fontSize: "smaller" }}>
                   {/* {convertToWords(propertyDetails.DemandPrice)} */}
                 </div>
               </div>
             </div>
-          
+
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label>Package</label>
               <div className="form_field_inner">
@@ -1163,7 +1175,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Property Flag</label>
               <div className="form_field_inner">
@@ -1184,7 +1196,7 @@ const Stage1 = (props) => {
           </div>
 
 
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">State</label>
 
@@ -1209,7 +1221,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">City</label>
               <div className="form_field_inner">
@@ -1226,9 +1238,9 @@ const Stage1 = (props) => {
                 ></SearchBarAutoComplete>
               </div>
             </div>
-        
+
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Locality</label>
               <div className="form_field_inner">
@@ -1246,9 +1258,9 @@ const Stage1 = (props) => {
                 ></SearchBarAutoComplete>
               </div>
             </div>
-          
+
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Society</label>
               <div className="form_field_inner">
@@ -1264,6 +1276,26 @@ const Stage1 = (props) => {
                   queryValue={propertyDetails ? propertyDetails.Society : ""}
                   setRedirectFlag={setRedirectFlag}
                 ></SearchBarAutoComplete>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="form_field label_top">
+              <label htmlFor="">Pincode number</label>
+              <div className="form_field_inner">
+                <input
+                  type="number"
+                  placeholder="Enter here"
+                  maxLength={12}
+                  onChange={(e) =>
+                    setPropertyDetails({
+                      ...propertyDetails,
+                      UnitNumber: e.target.value.trim(),
+                    })
+                  }
+                  value={propertyDetails && propertyDetails.UnitNumber}
+                />
+                <div className="field_icon"></div>
               </div>
             </div>
           </div>

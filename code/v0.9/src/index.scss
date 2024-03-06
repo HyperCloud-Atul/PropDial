@@ -1,4 +1,4 @@
-// forms field css start 
+// forms field css start
 .new_form_field {
   label {
     font-size: 18px;
@@ -72,7 +72,7 @@
 .form_field.label_top {
   background: #fff;
   border: 1px solid #d7d7d7;
-  border-radius: 7px; 
+  border-radius: 7px;
   padding: 20px 12px 6px;
   width: 100%;
   height: 100%;
@@ -83,7 +83,7 @@
     border-radius: 5px 5px 5px 0;
     box-shadow: 0 -5px 5px 0 #0000001a;
     color: #aaa;
-    font-size: .9rem;
+    font-size: 0.9rem;
     font-weight: 400;
     left: 20px;
     margin: 0;
@@ -91,7 +91,7 @@
     position: absolute;
     top: -10px;
   }
-  input{
+  input {
     border: none;
     border-bottom: 1px solid #ddd;
     border-radius: 0;
@@ -99,12 +99,12 @@
     font-size: 1rem;
     font-weight: 500;
     height: 40px;
-    letter-spacing: .1rem;
+    letter-spacing: 0.1rem;
     outline: none;
     padding: 0 10px 0 10px;
     position: relative;
   }
-  select{
+  select {
     border: none;
     border-bottom: 1px solid #ddd;
     border-radius: 0;
@@ -112,23 +112,23 @@
     font-size: 1rem;
     font-weight: 500;
     height: 40px;
-    letter-spacing: .1rem;
+    letter-spacing: 0.1rem;
     outline: none;
     padding: 0 10px 0 10px;
     position: relative;
     background: #eeeeee;
   }
-  ::placeholder{
+  ::placeholder {
     font-size: 0.8rem;
-  font-weight: 400;    
+    font-weight: 400;
     color: #888;
   }
-  .radio_group{
+  .radio_group {
     padding-top: 10px;
   }
-.radio_group_single label {
+  .radio_group_single label {
     width: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.2);  
+    border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     padding: 6px 7px;
     font-size: 0.9rem;
@@ -144,28 +144,68 @@
     left: 0px;
     top: 0px;
     box-shadow: none;
-}
-.plus_minus_input_wrapper {
-  border: none;
+  }
+  .plus_minus_input_wrapper {
+    border: none;
     border-bottom: 1px solid #ddd;
     border-radius: 0;
     color: #666;
     font-size: 1rem;
     font-weight: 500;
     height: 40px;
-    letter-spacing: .1rem;
-    outline: none;      
-  position: relative;
+    letter-spacing: 0.1rem;
+    outline: none;
+    position: relative;
+  }
+  .increase_input_parent {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
 }
-.increase_input_parent {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-}
-}
-// forms field css end 
+// forms field css end
 
+.my_accordion {
+  .accordion .accordion-button:not(.collapsed) {
+    background: var(--theme-green);
+    background: var(--theme-green);
+    color: white;
+    font-size: 18px;
+  }
+  .accordion-button.collapsed {
+    background: var(--theme-green-bg);
+    border-bottom: 1px solid var(--theme-green) !important;
+    color: var(--theme-green);
+  }
 
+  .accordion-item .accordion-button:focus {
+    border-color: var(--theme-green);
+  }
+  .accordion-body {
+    border: 2px solid var(--theme-green);
+    border-top: none;
+    background: var(--page-bg);
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .accordion {
+    max-width: 100%;
+    margin: 0 0 0 auto !important;
+    display: grid;
+    row-gap: 10px;
+  }
+  .total_group .row_gap{
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--theme-green);
+  }
+  .total_group .row_gap:first-child{
+    margin-top: 0px;
+    padding-top: 0px;
+    border-top: none;
+  }
+  
+}
 .two_col_page {
   display: flex;
   align-items: center;
@@ -191,11 +231,7 @@
 }
 
 .p_theme_btn {
-  background: linear-gradient(
-    90deg,
-    var(--theme-purple),
-    var(--theme-orange)
-  );
+  background: linear-gradient(90deg, var(--theme-purple), var(--theme-orange));
   border: 1px solid #ffffff;
   padding: 10px 30px;
   display: block;
@@ -499,7 +535,7 @@
   }
   .plus_minus_input_wrapper {
     border: 1px solid rgba(3, 70, 135, 0.2196078431);
-    border-radius: 12px;    
+    border-radius: 12px;
     color: var(--black-color);
     font-size: 16px;
     width: 100%;
@@ -511,23 +547,20 @@
       top: 50%;
       left: 10px;
       transform: translateY(-50%);
+    }
   }
-  
-  
-   
-}
   .plus_minus_input {
     position: relative;
     width: 130px;
     margin-left: auto;
-    input{
+    input {
       text-align: center;
       padding-left: 0px;
       padding-right: 0px;
     }
   }
   .pmbutton {
-    position: absolute;  
+    position: absolute;
     background: var(--theme-green);
     height: 100%;
     display: flex;
@@ -537,13 +570,11 @@
     top: 0;
     color: var(--white-color);
   }
-  .left-minus-button{
+  .left-minus-button {
     border-radius: 12px 0px 0px 12px;
     left: 0;
-
   }
-  .right-plus-button{
-   
+  .right-plus-button {
     border-radius: 0px 12px 12px 0px;
     right: 0;
   }

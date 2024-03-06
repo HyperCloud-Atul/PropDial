@@ -11,10 +11,58 @@ const PGAddProperty = () => {
   return (
     <div className='top_header_pg pg_bg'>
       <div className="page_spacing">
-        <div className="pg_header">
+        <div className="row">
+          <div className="col-md-4">
+          <div className="pg_header">
           <h2 className="m22 mb-1">Add Property</h2>
           <h4 className="r18 light_black">You can add your property here</h4>
         </div>
+          </div>
+          <div className="col-md-8">
+          <div className="multi_steps">
+          <div className="progress_bar">
+            <div className="fill" style={{
+              width:"25%"
+            }}></div>
+          </div>
+          <div className="step_single">
+            <div className="number">
+              1
+            </div>
+            <h6>
+              Basic
+            </h6>
+          </div>
+          <div className="step_single wait">
+            <div className="number">
+              2
+            </div>
+            <h6>
+             Detail
+            </h6>
+          </div>
+          <div className="step_single wait">
+            <div className="number">
+              3
+            </div>
+            <h6>
+              More
+            </h6>
+          </div>
+          <div className="step_single wait">
+            <div className="number">
+              4
+            </div>
+            <h6>
+            Image
+            </h6>
+          </div>
+        </div>
+          </div>
+        </div>
+     
+      
+        <div className="vg22"></div>
         <div className="vg22"></div>
         {stageFlag === 'stage1' && <Stage1 setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage1>}
         {stageFlag === 'stage2' && <Stage2 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage2>}
