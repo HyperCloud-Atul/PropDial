@@ -7,12 +7,14 @@ import OtpInput from "react-otp-input";
 import { useSignupPhone } from "../../hooks/useSignupPhone";
 import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
-import { projectFirestore, timestamp } from "../../firebase/config";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { projectAuth, projectAuthObj, projectFirestore, timestamp } from "../../firebase/config";
 
 // css
 import "./PhoneLogin.scss";
 const PhoneLogin = () => {
   const [showOtpInput, setShowOtpInput] = useState(false);
+  const { user1 } = useAuthContext();
 
   const handleSendOtpClick = () => {
     // Add logic to send OTP or perform any other action
@@ -44,15 +46,16 @@ const PhoneLogin = () => {
   //   ["status", "==", "active"]
   // );
 
-  const { documents: dbuserdocuments, error: dbuserserror } = useCollection("users", [
-    "rolePropDial",
-    "in",
-    ["admin", "owner", "coowner", 'tenant', 'frontdesk', 'propertymanager']
-  ]);
+  // const { documents: dbuserdocuments, error: dbuserserror } = useCollection("users", [
+  //   "rolePropDial",
+  //   "in",
+  //   ["admin", "owner", "coowner", 'tenant', 'frontdesk', 'propertymanager']
+  // ]);
+  const { documents: dbUsers, error: dbuserserror } = useCollection("users");
   // console.log('dbuserdocuments:', dbuserdocuments)
 
-  const dbUsers =
-    dbuserdocuments && dbuserdocuments.filter((item) => item.status === 'active');
+  // const dbUsers =
+  //   dbuserdocuments && dbuserdocuments.filter((item) => item.status === 'active');
 
   // console.log('dbuser:', dbUsers)
 
@@ -103,9 +106,11 @@ const PhoneLogin = () => {
       setotpSliderState(true);
       //   setIsOtpButtonVisible(false); // Hide the OTP button
 
-
       //Set User Name for existing user, else blank
-      const existingUser = dbuserdocuments && dbuserdocuments.filter((item) => item.phoneNumber === phone);
+      const existingUser = dbUsers && dbUsers.filter((item) => item.phoneNumber === phone);
+
+      console.log('existingUser: ', existingUser)
+      console.log("phone: ", phone)
 
       if (existingUser && existingUser.length > 0) {
         setUserName(existingUser[0].fullName);
@@ -113,13 +118,12 @@ const PhoneLogin = () => {
           navigate("/inactiveuser");
           return;
         }
+        console.log('existing user')
         setIsNewUser(false);
       } else {
+        console.log('new user')
         setIsNewUser(true);
       }
-
-
-
 
     } catch (error) {
       console.log("2 error.message", error.message);
@@ -172,7 +176,7 @@ const PhoneLogin = () => {
               city: "",
               address: "",
               photoURL: imgUrl,
-              rolePropAgent: "propagent",
+              rolePropAgent: "na",
               rolePropDial: "owner",
               rolesPropAgent: ["propagent"],
               rolesPropDial: ['owner'],
@@ -183,6 +187,27 @@ const PhoneLogin = () => {
 
         } else {
           console.log("existing user:", user);
+          let role = 'owner';
+          const docRef = projectFirestore.collection("users").doc(user.uid)
+          // Get the document snapshot
+          const docSnapshot = await docRef.get();
+          // Check if the document exists
+          if (docSnapshot.exists) {
+            // Extract the data from the document snapshot
+            // const data = docSnapshot.data();
+            if (docSnapshot.data().rolePropDial === 'na')
+              role = 'owner'
+            else
+              role = docSnapshot.data().rolePropDial
+          }
+
+          // console.log('role: ', role)
+          await updateDocument(user.uid, {
+            rolePropDial: role,
+            online: true,
+            lastLoginTimestamp: timestamp.fromDate(new Date()),
+          });
+
           await updateDocument(user.uid, {
             online: true,
             lastLoginTimestamp: timestamp.fromDate(new Date()),

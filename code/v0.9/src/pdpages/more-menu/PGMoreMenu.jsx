@@ -344,7 +344,7 @@ const PGMoreMenu = () => {
                   <Link className="mm_single" to="/addproperty">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16">Properties</h5>
-                    <h6>set your current location</h6>
+                    <h6>check your all properties</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -352,7 +352,7 @@ const PGMoreMenu = () => {
                   <Link className="mm_single" to="/addnotification/new">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16"> Bills</h5>
-                    <h6>set your current location</h6>
+                    <h6>check your all bills</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -360,7 +360,7 @@ const PGMoreMenu = () => {
                   <Link className="mm_single" to="">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16">Tickets </h5>
-                    <h6>set your current location</h6>
+                    <h6>check your all communications</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
