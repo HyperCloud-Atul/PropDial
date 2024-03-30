@@ -8,7 +8,7 @@ import { Navigate, Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
-
+import "./UserList.css"
 // component
 import PropertyImageGallery from "../PropertyImageGallery";
 const PropertyDetails = () => {

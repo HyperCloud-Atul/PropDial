@@ -322,8 +322,8 @@ function App() {
                   <Route
                     path="/ticketdetail"
                     element={
-                      user && user.status === 'active' && (user.role !== "propagent" || user.role !== "propagentadmin") ?
-                        <TicketDetail /> : <Navigate to="/phonelogin" />
+                      user && user.status === 'active' && (user.role === "owner" || user.role !== "admin") ?
+                        <TicketDetail /> : <Navigate to="/login" />
                     }
                   ></Route>
                   <Route

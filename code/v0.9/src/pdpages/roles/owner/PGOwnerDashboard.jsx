@@ -26,13 +26,13 @@ const PGOwnerDashboard = () => {
   // Scroll to the top of the page whenever the location changes end
 
   const { user } = useAuthContext();
-  // const { documents: properties, error: propertieserror } = useCollection(
-  //     "properties"
-  // );
   const { documents: properties, error: propertieserror } = useCollection(
-    "properties",
-    ["access", "array-contains", user.uid]
+      "properties"
   );
+  // const { documents: properties, error: propertieserror } = useCollection(
+  //   "properties",
+  //   ["access", "array-contains", user.uid]
+  // );
 
   const activeProperties =
     properties && properties.filter((item) => item.status.toUpperCase() === 'ACTIVE');
@@ -178,6 +178,7 @@ const PGOwnerDashboard = () => {
                     <h5>{commercialProperties && commercialProperties.length}</h5>
                   </div>
                 </div>
+
                 {/* <div className="spd_single">
                   <div className="left rent">
                     <img src="/assets/img/key.png" alt="" />
@@ -187,6 +188,7 @@ const PGOwnerDashboard = () => {
                     <h5>5</h5>
                   </div>
                 </div>
+
                 <div className="spd_single">
                   <div className="left sale">
                     <img src="/assets/img/growth.png  " alt="" />

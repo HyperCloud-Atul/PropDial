@@ -95,7 +95,7 @@ const PDSingleCard = ({ propertyDocument }) => {
                                         share
                                     </span>
                                 </div>
-                                {!((user && user.role === "owner") || (user && user.role === "coowner") || (user && user.role === "admin")) && (
+                               
                                     <div className="right">
                                         <a className="theme_btn no_icon btn_fill" style={{
                                             marginRight: "10px"
@@ -169,13 +169,13 @@ const PDSingleCard = ({ propertyDocument }) => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>)}
+                                    </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {((user && user.role === "owner") || (user && user.role === "coowner")) && (
+             
                     <div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <div className="row no-gutters">
@@ -311,8 +311,8 @@ const PDSingleCard = ({ propertyDocument }) => {
 
                         </div>
                     </div>
-                )}
-                {user && user.role === "owner" && (
+           
+              
                     <div className="property_card_single">
                         <div className="more_detail_card_inner">
                             <div className="row no-gutters">
@@ -421,7 +421,7 @@ const PDSingleCard = ({ propertyDocument }) => {
 
                         </div>
                     </div>
-                )}
+             
                 <div className="property_card_single">
                     <div className="more_detail_card_inner">
                         <h2 className="card_title">
