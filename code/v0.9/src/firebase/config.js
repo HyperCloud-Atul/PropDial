@@ -6,7 +6,6 @@ import 'firebase/functions'
 // import { getFunctions, httpsCallable } from 'firebase/functions'
 
 // development keys 
-
 const firebaseConfig = {
     apiKey: "AIzaSyBQ1dlizv-nwe6vtOH-Z2acQX7paKwHykw",
     authDomain: "propdial-dev-aa266.firebaseapp.com",

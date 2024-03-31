@@ -8,8 +8,10 @@ import Avatar from "../../components/Avatar";
 import { useLogout } from "../../hooks/useLogout";
 import Popup from "../../components/Popup";
 import { useImageUpload } from "../../hooks/useImageUpload";
-import { projectStorage } from "../../firebase/config";
-import { useLocation } from "react-router-dom";
+import { projectStorage, projectAuth, projectAuthObj } from "../../firebase/config";
+import { useLocation, Link } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import { Form, Button, Alert } from "react-bootstrap";
 
 
 // styles
@@ -17,6 +19,7 @@ import "./PGProfile.css";
 
 export default function PGProfile() {
   // Scroll to the top of the page whenever the location changes start
+
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -25,14 +28,22 @@ export default function PGProfile() {
 
   const { user } = useAuthContext();
   // console.log('user:', user)
-  // const [email, setEmail] = useState('')
-  const [userFullName, setUserFullName] = useState(user.fullName);
-  const [userPhoneNumber, setUserPhoneNumber] = useState(user.phoneNumber);
+
   const { updateDocument, response } = useFirestore("users");
   // const { document: userDocument, error: userDocumentError } = useDocument(
   //   "users",
   //   user.uid
   // );
+
+  // console.log('user details:', user.uid)
+  // const [userFullName, setUserFullName] = useState(user.displayName);
+
+  const [userPhoneNumber, setUserPhoneNumber] = useState(user.phoneNumber);
+
+  const [userDetails, setUserDetails] = useState({
+    FullName: '',
+  })
+
   const [formError, setFormError] = useState(null);
   const { logout, isPending } = useLogout();
   //Popup Flags
@@ -52,6 +63,19 @@ export default function PGProfile() {
       //Logout
       logout();
     }
+
+    var formattedNumber = userPhoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
+    // console.log('userPhoneNumber formatted: ', formattedNumber)
+    setUserPhoneNumber(formattedNumber)
+
+    setUserDetails({
+      FullName: user && user.fullName ? user.fullName : user.displayName,
+      PhoneNumber: user && user.phoneNumber ? user.phoneNumber : user.phoneNumber,
+      Role: user && user.role ? user.role : 'propagent',
+      Roles: user && user.roles ? user.roles : ['propagent']
+    })
+
+
   }, [popupReturn]);
 
   //Popup Flags
@@ -62,26 +86,15 @@ export default function PGProfile() {
   };
 
   const showDashboard = () => {
+    // if (user && user.role === "propagent") {
+    //   // console.log('in user', user.role)
 
-    if (user && user.role === "admin") {
-      // console.log('in admin', user.role)
-      navigate("/dashboard-admin");
-    }
-
-    if ((user && user.role === "owner") || (user && user.role === "coowner")) {
-      console.log('in user', user.role)
-      navigate("/dashboard-owner");
-    }
-
-    if (user && user.role === "tenant") {
-      // console.log('in user', user.role)
-      navigate("/dashboard-tenant");
-    }
-
-    if (user && user.role === "propertymanager") {
-      // console.log('in user', user.role)
-      navigate("/dashboard-propertymanager");
-    }
+    // }
+    navigate("/agentdashboard");
+    // if (user && user.role === "admin") {
+    //   // console.log('in admin', user.role)
+    //   navigate("/admindashboard");
+    // }
   };
 
   const handleFileChange = async (e) => {
@@ -135,17 +148,17 @@ export default function PGProfile() {
   };
   const handleProfileSave = async (e) => {
     setisProfileEdit(false);
-    // setUserFullName(e.target.value)
-    // console.log('e.target.value:', e)
-    let splitName = userFullName.split(" ");
 
+    let splitName = userDetails.FullName.split(" ");
     // Extract the first name
     let firstName = splitName[0];
+
     await updateDocument(user.uid, {
-      displayName: firstName,
-      fullName: userFullName,
-      phoneNumber: userPhoneNumber,
+      displayName: camelCase(firstName.toLowerCase()),
+      fullName: camelCase(userDetails.FullName.toLowerCase())
     });
+    // console.log('camelCase(firstName):', camelCase(firstName))
+    // console.log('camelCase(userDetails.FullName):', camelCase(userDetails.FullName))
   };
 
   const handleSubmit = async (e) => {
@@ -155,21 +168,121 @@ export default function PGProfile() {
     setFormError(null);
   };
 
-  const changePwd = (e) => {
-    navigate("/updatepwd");
+  const FAQ = (e) => {
+    navigate("/faq");
   };
+
+  function camelCase(str) {
+    return (
+      str
+        .replace(/\s(.)/g, function (a) {
+          return a.toUpperCase();
+        })
+        // .replace(/\s/g, '')
+        .replace(/^(.)/, function (b) {
+          return b.toUpperCase();
+        })
+    );
+  }
 
   const changeRole = async (changedRole) => {
     // console.log('userid:', user.uid)
     // console.log('changedRole:', changedRole)
-    await updateDocument(user.uid, {
-      rolePropDial: changedRole,
-    });
+    try {
+      await updateDocument(user.uid, {
+        rolePropAgent: changedRole,
+      });
+    }
+    catch (err) {
+      console.log('Change Role:', err)
+    }
   };
+  // console.log('userDetails:', userDetails)
+  const [newPhoneNumber, setNewPhoneNumber] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [verificationId, setVerificationId] = useState(null);
+  const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
+  const [error, setError] = useState("");
+
+  const handleSendVerificationCode = async (e) => {
+    e.preventDefault();
+    setError("");
+    // console.log("phone:", phone);
+    if (newPhoneNumber === "" || newPhoneNumber === undefined || newPhoneNumber.length < 10) {
+      return setError("Please enter valid Phone Number");
+    }
+    try {
+      // console.log('newPhoneNumber: ', newPhoneNumber)
+
+      // hide buttons
+      // id_sendotpButton
+      document.getElementById('id_sendotpButton').style.display = 'none';
+
+      const phoneProvider = new projectAuthObj.PhoneAuthProvider();
+      // console.log('phoneProvider: ', phoneProvider)
+      const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container');
+      // console.log('recaptchaVerifier: ', recaptchaVerifier)
+      var newPhoneNumberWithPlus = "+" + newPhoneNumber;
+      const id = await phoneProvider.verifyPhoneNumber(
+        newPhoneNumberWithPlus,
+        recaptchaVerifier
+      );
+      // console.log('id: ', id)
+      setVerificationId(id);
+
+      setchangeNumberScroller(true);
+      // alert('Verification code sent!');
+    } catch (error) {
+      console.error('Error sending verification code:', error.message);
+      setError("Error sending verification code");
+    }
+  };
+
+
+  const handleChangePhoneNumber = async () => {
+    // console.log('In handleChangePhoneNumber')
+    try {
+
+      const credential = projectAuthObj.PhoneAuthProvider.credential(
+        verificationId,
+        verificationCode
+      );
+
+      const currentUser = projectAuth.currentUser;
+      await currentUser.updatePhoneNumber(credential);
+
+      // console.log('Phone number updated successfully!')
+
+      //Logout and redirect to login page
+      logout();
+
+    } catch (error) {
+      // Handle any errors
+      console.error('Error changing phone number:', error.message);
+      setError("Error changing phone number");
+    }
+  }
+
+  const [changeNumberScroller, setchangeNumberScroller] = useState(false);
+  const [changeNumberDisplay, setchangeNumberDisplay] = useState(false);
+
+  const changeNumberBack = () => {
+    // id_sendotpButton
+    document.getElementById('id_sendotpButton').style.display = 'block';
+    setchangeNumberScroller(false);
+  }
+
+  const openChangeNumber = () => {
+    setchangeNumberDisplay(true);
+  }
+
+  const closeChangeNumber = () => {
+    setchangeNumberDisplay(false);
+  }
 
   // --------------------HTML UI Codebase------------------
   return (
-    <div className="profile_pg">
+    <div className="profile_pg pa_bg">
 
       {/* Popup Component */}
       <Popup
@@ -185,7 +298,7 @@ export default function PGProfile() {
         <div className="container">
           <div className="sn_inner">
             <div className="user_img relative">
-              <img src={user && user.photoURL} alt=''></img>
+              <img src={user.photoURL} alt=''></img>
               <input
                 type="file"
                 onChange={handleFileChange}
@@ -196,31 +309,126 @@ export default function PGProfile() {
                 htmlFor="profile-upload-input"
                 className="profile-upload-label pointer"
               >
-                <span className="material-symbols-outlined">upload</span>
+                <span className="material-symbols-outlined">
+                  photo_camera
+                </span>
               </label>
             </div>
+            <br></br>
             <h4 className="user_name">
               <input
                 type="text"
                 className="profile-change-name"
                 readOnly={isProfileEdit ? false : true}
-                onChange={(e) => setUserFullName(e.target.value)}
-                value={userFullName}
+                // onChange={(e) => setUserFullName(e.target.value)}
+                // value={userFullName}
+                onChange={(e) => setUserDetails({
+                  ...userDetails,
+                  FullName: e.target.value
+                })}
+                value={userDetails && userDetails.FullName}
               ></input>
             </h4>
+            <br />
             <h5>
               <input
-                type="number"
+                type="text"
                 maxLength={10}
-                readOnly={isProfileEdit ? false : true}
+                readOnly={true}
+                // readOnly={isProfileEdit ? false : true}
                 className="profile-change-phone"
-                onChange={(e) => setUserPhoneNumber(e.target.value)}
+                // onChange={(e) => setUserPhoneNumber(e.target.value)}
                 value={userPhoneNumber}
               ></input>
             </h5>
+            <div className='edit-number'>
+              <span
+                className="material-symbols-outlined"
+                onClick={openChangeNumber}
+              >
+                edit
+              </span>
+            </div>
+
+            <div className={changeNumberDisplay ? 'pop-up-change-number-div open' : 'pop-up-change-number-div'} >
+              <div className="direct-div">
+                <span onClick={closeChangeNumber} className="material-symbols-outlined close-button">
+                  close
+                </span>
+                <span style={{ fontSize: '0.8rem' }} >Existing no: {userPhoneNumber} </span>
+                <h1>Enter New Number</h1>
+
+                <div className="sroll-outter-div">
+                  <div className="sroll-inner-div">
+
+                    <div className="scroll-div" style={{ transform: changeNumberScroller ? "translateX(-100%)" : "translateX(0%)" }}>
+                      {error && <Alert variant="danger">{error}</Alert>}
+
+                      <form
+                        action=""
+                        onSubmit={handleSendVerificationCode}
+                        className="form-w"
+                      >
+                        <div className="fl_form_field change-number-input">
+                          <PhoneInput
+                            country={"in"}
+                            // onlyCountries={['in', 'us']}
+                            value={newPhoneNumber}
+                            onChange={setNewPhoneNumber}
+                            international
+                            keyboardType="phone-pad"
+                            // countryCallingCodeEditable={false}
+                            // countryCodeEditable={false}
+                            // disableCountryCode={true}
+                            placeholder="Enter New Mobile Number"
+                            inputProps={{
+                              name: "newPhoneNumber",
+                              required: true,
+                              autoFocus: true,
+                            }}
+                          ></PhoneInput>
+                        </div>
+
+                        {/* new code */}
+                        <div id="id_sendotpButton" className="change-number-button-div">
+                          <button onClick={closeChangeNumber} className="mybutton button5" style={{ background: "#afafaf" }}>Cancel</button>
+                          <button className="mybutton button5">Send OTP</button>
+                        </div>
+                      </form>
+
+                    </div>
+
+                    <div className="scroll-div" style={{ transform: changeNumberScroller ? "translateX(-100%)" : "translateX(0%)" }}>
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="Enter verification code"
+                          value={verificationCode}
+                          onChange={(e) => setVerificationCode(e.target.value)}
+                        />
+
+
+                        {/* new code */}
+                        <div className="change-number-button-div">
+                          <button onClick={changeNumberBack} className="mybutton button5" style={{ background: "#afafaf" }}>Back</button>
+                          <button onClick={handleChangePhoneNumber} className="mybutton button5">Confirm</button>
+                        </div>
+                        {/* new code */}
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: changeNumberScroller ? "none" : "block", position: 'absolute', left: '50%', transform: 'translateX(-50%)' }} id="recaptcha-container"></div>
+                <div style={{ display: changeNumberScroller ? "none" : "block", height: '80px' }}></div>
+
+              </div>
+            </div>
+
             <h5>
               {user.email}
             </h5>
+
             <div className={`edit pointer ${isProfileEdit ? "edit_done" : ""}`}>
               <span
                 className="material-symbols-outlined"
@@ -241,46 +449,45 @@ export default function PGProfile() {
           </div>
         </div>
       </section>
-      {user && user.rolesPropDial && user.rolesPropDial.length > 1 && <div className="container">
+      <div className="verticall_gap"></div>
+      {user && user.roles && user.roles.length > 1 && <div>
         <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-          <div className="visit_dashboard">
-            <span className="no-floating">Role</span>
-            <div
-              className="radio_group"
-              style={{ display: "flex", alignItems: "center" }}
-            >
-
-              {user.rolesPropDial.map((userrole) => (
-                <div className="radio_group_single" style={{ width: "100%" }}>
-                  <div
-                    className={`custom_radio_button ${user && user.rolePropDial === userrole
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id={userrole}
-                      onClick={(e) => changeRole(userrole)}
-                    />
-                    <label htmlFor={userrole}>
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>{userrole}</h6>
-                    </label>
-                  </div>
-                </div>))}
-            </div>
+          <span className="no-floating">Role</span>
+          <div
+            className="radio_group"
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            {user.roles.map((userrole) => (
+              <div className="radio_group_single" style={{ width: "100%" }}>
+                <div
+                  className={`custom_radio_button ${user && user.role === userrole
+                    ? "radiochecked"
+                    : ""
+                    }`}
+                >
+                  <input
+                    type="radio"
+                    name="group_furnishing"
+                    id={userrole}
+                    onClick={(e) => changeRole(userrole)}
+                  />
+                  <label htmlFor={userrole}>
+                    <div className="radio_icon">
+                      <span className="material-symbols-outlined add">
+                        add
+                      </span>
+                      <span className="material-symbols-outlined check">
+                        done
+                      </span>
+                    </div>
+                    <h6>{userrole === 'propagentadmin' ? 'Admin' : 'Agent'}</h6>
+                  </label>
+                </div>
+              </div>))}
           </div>
         </div>
       </div>}
+      <div className="verticall_gap"></div>
       <div className="container">
         <div className="visit_dashboard">
           <span>Visit Dashboard for more deatils</span>
@@ -291,6 +498,7 @@ export default function PGProfile() {
 
         </div>
       </div>
+      <div className="verticall_gap"></div>
       <div className="container">
         <div className="row no-gutters">
           <div className="col-lg-6 col-md-12 col-sm-12">
@@ -299,67 +507,68 @@ export default function PGProfile() {
                 <div className="address-div">
                   <div
                     className="icon"
-                    style={{ background: "rgba(84,204,203,0.3)" }}
+
                   >
                     <span className="material-symbols-outlined">security</span>
                   </div>
 
-                  <div className="address-text">
-                    <h5>Contact us</h5>
+                  <Link to='/how-use' className="address-text">
+                    <h5>How to use this app</h5>
                     <div className="">
                       <span className="material-symbols-outlined">
                         chevron_right
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 </div>
                 <hr
                   style={{
                     margin: "0",
                     border: "none",
-                    borderBottom: "1px solid #eee",
+                    borderBottom: "15px solid white",
                   }}
                 />
 
                 <div className="address-div" style={{ cursor: "pointer" }}>
                   <div
-                    className="icon"
-                    style={{ background: "rgba(84,204,203,0.3)" }}
-                  >
+                    className="icon">
                     <span className="material-symbols-outlined">sms</span>
                   </div>
 
-                  <div className="address-text">
-                    {/* {!isPending && <button className="btn" onClick={sendEmail} >Send Email</button>}
-                                        {isPending && <button className="btn" disabled>Processing...</button>} */}
+                  <Link to="/createticket" className="address-text" >
                     <h5>Help & Support</h5>
                     <div className="">
                       <span className="material-symbols-outlined">
                         chevron_right
                       </span>
                     </div>
-                  </div>
+                  </Link>
+
                 </div>
               </div>
             </div>
           </div>
+          <div className="verticall_gap_991"></div>
           <div className="col-lg-6 col-md-12 col-sm-12">
             <div className="property-status-padding-div">
               <div className="profile-card-div">
                 <div
                   className="address-div"
                   style={{ cursor: "pointer" }}
-                  onClick={changePwd}
+                  onClick={FAQ}
                 >
+
                   <div
                     className="icon"
-                    style={{ background: "rgba(84,204,203,0.3)" }}
+
                   >
-                    <span className="material-symbols-outlined">lock_open</span>
+                    <span className="material-symbols-outlined">quiz</span>
                   </div>
 
-                  {
+                  {user && (
                     <div className="address-text">
+                      {/* {!isPending && <button className="btn" onClick={changePwd} >Change Password</button>}
+                                        {isPending && <button className="btn" disabled>Processing...</button>} */}
                       <h5>FAQ</h5>
                       <div className="">
                         <span className="material-symbols-outlined">
@@ -367,13 +576,13 @@ export default function PGProfile() {
                         </span>
                       </div>
                     </div>
-                  }
+                  )}
                 </div>
                 <hr
                   style={{
                     margin: "0",
                     border: "none",
-                    borderBottom: "1px solid #aaa",
+                    borderBottom: "15px solid white",
                   }}
                 />
 
@@ -384,15 +593,13 @@ export default function PGProfile() {
                 >
                   <div
                     className="icon"
-                    style={{ background: "rgba(84,204,203,0.3)" }}
+
                   >
                     <span className="material-symbols-outlined">logout</span>
                   </div>
 
                   {user && (
                     <div className="address-text">
-                      {/* {!isPending && <button className="btn" onClick={logout}>Logout</button>}
-                                        {isPending && <button className="btn" disabled>Logging out...</button>} */}
                       <h5>Logout</h5>
                       <div className="">
                         <span className="material-symbols-outlined">
@@ -406,33 +613,11 @@ export default function PGProfile() {
             </div>
           </div>
         </div>
-      </div>
-      <br></br>
-      <br></br>
-      {/* <form onSubmit={handleSubmit}>
-                <label>
-                    <span>Full Name:</span>
-                    <input
-                        required
-                        type="text"
-                        placeholder={user.displayName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        value={fullName}
-                    />
-                </label>
-                <label>
-                    <span>Phone:</span>
-                    <input
-                        required
-                        type="text"
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        value={phoneNumber}
-                    />
-                </label>
+      </div >
+      <div className="verticall_gap"></div>
+      <div className="verticall_gap"></div>
 
-                <button className="btn">Save</button>
 
-            </form> */}
-    </div>
+    </div >
   );
 }
