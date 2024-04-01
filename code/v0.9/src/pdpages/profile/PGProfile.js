@@ -71,8 +71,8 @@ export default function PGProfile() {
     setUserDetails({
       FullName: user && user.fullName ? user.fullName : user.displayName,
       PhoneNumber: user && user.phoneNumber ? user.phoneNumber : user.phoneNumber,
-      Role: user && user.role ? user.role : 'propagent',
-      Roles: user && user.roles ? user.roles : ['propagent']
+      Role: user && user.role ? user.role : 'owner',
+      Roles: user && user.roles ? user.roles : ['owner']
     })
 
 
@@ -86,15 +86,7 @@ export default function PGProfile() {
   };
 
   const showDashboard = () => {
-    // if (user && user.role === "propagent") {
-    //   // console.log('in user', user.role)
-
-    // }
-    navigate("/agentdashboard");
-    // if (user && user.role === "admin") {
-    //   // console.log('in admin', user.role)
-    //   navigate("/admindashboard");
-    // }
+    navigate("/dashboard");
   };
 
   const handleFileChange = async (e) => {
@@ -186,11 +178,11 @@ export default function PGProfile() {
   }
 
   const changeRole = async (changedRole) => {
-    // console.log('userid:', user.uid)
-    // console.log('changedRole:', changedRole)
+    console.log('userid:', user.uid)
+    console.log('changedRole:', changedRole)
     try {
       await updateDocument(user.uid, {
-        rolePropAgent: changedRole,
+        rolePropDial: changedRole,
       });
     }
     catch (err) {
@@ -480,7 +472,7 @@ export default function PGProfile() {
                         done
                       </span>
                     </div>
-                    <h6>{userrole === 'propagentadmin' ? 'Admin' : 'Agent'}</h6>
+                    <h6>{userrole === 'admin' ? 'Admin' : camelCase(userrole.toLowerCase())}</h6>
                   </label>
                 </div>
               </div>))}

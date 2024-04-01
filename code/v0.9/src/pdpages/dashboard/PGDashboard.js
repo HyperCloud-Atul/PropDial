@@ -25,6 +25,9 @@ const PGDaashboard = () => {
             <div>
                 {user && (user.role === 'owner' || user.role === 'coowner') && <PGOwnerDashboard />}
             </div>
+            {/* <div>
+                {user && user.role === 'tenant' && <PGTenantDashboard />}
+            </div> */}
             <div>
                 {user && user.role === 'admin' && <PGAdminDashboard />}
             </div>
