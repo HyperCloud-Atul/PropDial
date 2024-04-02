@@ -274,8 +274,7 @@ export default function PGProfile() {
 
   // --------------------HTML UI Codebase------------------
   return (
-    <div className="profile_pg pa_bg">
-
+    <div className="profile_pg pg_bg ">
       {/* Popup Component */}
       <Popup
         showPopupFlag={showPopupFlag}
@@ -319,6 +318,9 @@ export default function PGProfile() {
                   FullName: e.target.value
                 })}
                 value={userDetails && userDetails.FullName}
+                style={{
+                  width:"100%"
+                }}
               ></input>
             </h4>
             <br />
@@ -441,11 +443,17 @@ export default function PGProfile() {
           </div>
         </div>
       </section>
-      <div className="verticall_gap"></div>
-      {user && user.roles && user.roles.length > 1 && <div>
-        <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-          <span className="no-floating">Role</span>
-          <div
+         
+      {user && user.roles && user.roles.length > 1 &&
+       <div className="container">    
+        <div className="vg22"></div>
+    
+        <div className="form_field st-2 label_top">         
+          <label htmlFor="">Role</label>
+          <div className="form_field_inner">
+
+            <div className="form_field_container">
+            <div
             className="radio_group"
             style={{ display: "flex", alignItems: "center" }}
           >
@@ -477,9 +485,12 @@ export default function PGProfile() {
                 </div>
               </div>))}
           </div>
+            </div>
+          </div>
+        
         </div>
       </div>}
-      <div className="verticall_gap"></div>
+      <div className="vg22"></div>
       <div className="container">
         <div className="visit_dashboard">
           <span>Visit Dashboard for more deatils</span>
@@ -490,7 +501,7 @@ export default function PGProfile() {
 
         </div>
       </div>
-      <div className="verticall_gap"></div>
+      <div className="vg22"></div>
       <div className="container">
         <div className="row no-gutters">
           <div className="col-lg-6 col-md-12 col-sm-12">
@@ -540,8 +551,9 @@ export default function PGProfile() {
               </div>
             </div>
           </div>
-          <div className="verticall_gap_991"></div>
+         
           <div className="col-lg-6 col-md-12 col-sm-12">
+          <div className="vg22_991"></div>
             <div className="property-status-padding-div">
               <div className="profile-card-div">
                 <div
@@ -606,8 +618,8 @@ export default function PGProfile() {
           </div>
         </div>
       </div >
-      <div className="verticall_gap"></div>
-      <div className="verticall_gap"></div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
 
 
     </div >

@@ -217,7 +217,7 @@ const PhoneLogin = () => {
         navigate("/profile");
       });
 
-      navigate("/agentdashboard");
+      navigate("/profile");
     } catch (error) {
       console.log("error.message", error.message);
 

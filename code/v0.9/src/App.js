@@ -10,7 +10,7 @@ import NavbarBottom from "./components/NavbarBottom";
 
 
 import "./App.css";
-import PhoneLogin from "./pdpages/profile/PhoneLogin";
+import PhoneLogin from "./pdpages/phonelogin/PhoneLogin";
 import PGProfile from "./pdpages/profile/PGProfile";
 import PGNotification from "./pdpages/notification/PGNotification";
 import PGAboutUs from "./pdpages/about_us/PGAboutUs";
@@ -611,7 +611,7 @@ function App() {
                           <CreateTicket />
                         ) : (
 
-                          <Navigate to="/phonelogin" />
+                          <Navigate to="/login" />
                         )
                     }
                   ></Route>
@@ -619,7 +619,7 @@ function App() {
                     path="/ticketdetail"
                     element={
                       user && user.status === 'active' && (user.role !== "propagent" || user.role !== "propagentadmin") ?
-                        <TicketDetail /> : <Navigate to="/phonelogin" />
+                        <TicketDetail /> : <Navigate to="/login" />
                     }
                   ></Route>
 

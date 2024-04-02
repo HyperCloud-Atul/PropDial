@@ -115,27 +115,51 @@ const PropertyDetails = () => {
                           <div className="pmd_section2 pmd_section3 row">
                             <div className="pdms_single col-4">
                               <h4>
-                                <img src="/assets/img/home-black.png"></img>
-                                {propertyDocument.bhk}
+                                <img src="/assets/img/new_carpet.png"></img>
+
+                                252sq/ft
                               </h4>
-                              <h6>BHK</h6>
+                              <h6>Super Area</h6>
                             </div>
                             <div className="pdms_single col-4">
                               <h4>
-                                <img src="/assets/img/double-bed-black.png"></img>
+                                <img src="/assets/img/new_bedroom.png"></img>
                                 {propertyDocument.numberOfBedrooms}
                               </h4>
                               <h6>Bedrooms</h6>
                             </div>
                             <div className="pdms_single col-4">
                               <h4>
-                                <img src="/assets/img/bathtub-black.png"></img>
+                                <img src="/assets/img/new_bathroom.png"></img>
                                 {propertyDocument.numberOfBathrooms}
                               </h4>
                               <h6>Bathroom</h6>
                             </div>
                           </div>
                           <div className="divider"></div>
+                          <div className="pmd_section2 pmd_section3 row">
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <img src="/assets/img/new_super_area.png"></img>
+                                222 sq/ft
+                              </h4>
+                              <h6>Carpet Area</h6>
+                            </div>
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <img src="/assets/img/new_bhk.png"></img>
+                                3
+                              </h4>
+                              <h6>BHK</h6>
+                            </div>
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <img src="/assets/img/new_furniture.png"></img>
+                                Furnished
+                              </h4>
+                              <h6>Furnishing</h6>
+                            </div>
+                          </div>
                           <div className="pmd_section4">
                             <div className="left">
                               <span
@@ -284,7 +308,10 @@ const PropertyDetails = () => {
                   }
 
                   {((user && user.role === "owner") ||
-                    (user && user.role === "coowner")) && (
+                    (user && user.role === "coowner")
+                    ||
+                    (user && user.role === "admin")
+                  ) && (
                       <div className="property_card_single">
                         <div className="more_detail_card_inner">
                           <div className="row no-gutters">
@@ -452,99 +479,139 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                     )}
-                  {user && user.role === "owner" && (
-                    <div className="property_card_single">
-                      <div className="more_detail_card_inner">
-                        <div className="row no-gutters">
-                          <div className="col-md-6">
-                            <div className="property_full_address">
-                              <h2 className="card_title">escalation matrix</h2>
-                            </div>
-                            <div className="property_connected_people userlist">
-                              <div className="item pcp_single">
-                                <div className="property_people_designation">
-                                  Indian contact number
-                                </div>
-                                <div className="single_user">
-                                  <div className="right">
-                                    <h5>+91 9698569856</h5>
-                                    <h6>indiacontactnumber@gmail.com</h6>
+                  {user && user.role === "owner" ||
+                    (user && user.role === "admin") && (
+                      <div className="property_card_single">
+                        <div className="more_detail_card_inner">
+                          <div className="row no-gutters">
+                            <div className="col-md-6">
+                              <div className="property_full_address">
+                                <h2 className="card_title">escalation matrix</h2>
+                              </div>
+                              <div className="property_connected_people userlist">
+                                <div className="item pcp_single">
+                                  <div className="property_people_designation">
+                                    Indian contact number
+                                  </div>
+                                  <div className="single_user">
+                                    <div className="right">
+                                      <h5>+91 9698569856</h5>
+                                      <h6>indiacontactnumber@gmail.com</h6>
+                                    </div>
+                                  </div>
+                                  <div className="contacts">
+                                    <Link
+                                      to="tel:+918770534650"
+                                      className="contacts_single"
+                                    >
+                                      <div className="icon">
+                                        <span className="material-symbols-outlined">
+                                          call
+                                        </span>
+                                      </div>
+                                      <h6>Call</h6>
+                                    </Link>
+                                    <Link
+                                      to="https://wa.me/918770534650"
+                                      className="contacts_single"
+                                    >
+                                      <div className="icon">
+                                        <img
+                                          src="/assets/img/whatsapp.png"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <h6>Whatsapp</h6>
+                                    </Link>
+                                    <Link
+                                      to="mailto:solankisanskar8@gmail.com"
+                                      className="contacts_single"
+                                    >
+                                      <div className="icon">
+                                        <span className="material-symbols-outlined">
+                                          mail
+                                        </span>
+                                      </div>
+                                      <h6>Email</h6>
+                                    </Link>
                                   </div>
                                 </div>
-                                <div className="contacts">
-                                  <Link
-                                    to="tel:+918770534650"
-                                    className="contacts_single"
-                                  >
-                                    <div className="icon">
-                                      <span className="material-symbols-outlined">
-                                        call
-                                      </span>
-                                    </div>
-                                    <h6>Call</h6>
-                                  </Link>
-                                  <Link
-                                    to="https://wa.me/918770534650"
-                                    className="contacts_single"
-                                  >
-                                    <div className="icon">
-                                      <img
-                                        src="/assets/img/whatsapp.png"
-                                        alt=""
-                                      />
-                                    </div>
-                                    <h6>Whatsapp</h6>
-                                  </Link>
-                                  <Link
-                                    to="mailto:solankisanskar8@gmail.com"
-                                    className="contacts_single"
-                                  >
-                                    <div className="icon">
-                                      <span className="material-symbols-outlined">
-                                        mail
-                                      </span>
-                                    </div>
-                                    <h6>Email</h6>
-                                  </Link>
-                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="userlist property_owners">
-                              <div className="single_user">
-                                <div className="property_people_designation">
-                                  Level 1
+                            <div className="col-md-6">
+                              <div className="userlist property_owners">
+                                <div className="single_user">
+                                  <div className="property_people_designation">
+                                    Level 1
+                                  </div>
+                                  <div className="right">
+                                    <h5>8770534650</h5>
+                                    <h6>level1@gmail.com</h6>
+                                  </div>
                                 </div>
-                                <div className="right">
-                                  <h5>8770534650</h5>
-                                  <h6>level1@gmail.com</h6>
+                                <div className="single_user">
+                                  <div className="property_people_designation">
+                                    Level 2
+                                  </div>
+                                  <div className="right">
+                                    <h5>8770534650</h5>
+                                    <h6>level2@gmail.com</h6>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="single_user">
-                                <div className="property_people_designation">
-                                  Level 2
-                                </div>
-                                <div className="right">
-                                  <h5>8770534650</h5>
-                                  <h6>level2@gmail.com</h6>
-                                </div>
-                              </div>
-                              <div className="single_user">
-                                <div className="property_people_designation">
-                                  Level 3
-                                </div>
-                                <div className="right">
-                                  <h5>8770534650</h5>
-                                  <h6>level3@gmail.com</h6>
+                                <div className="single_user">
+                                  <div className="property_people_designation">
+                                    Level 3
+                                  </div>
+                                  <div className="right">
+                                    <h5>8770534650</h5>
+                                    <h6>level3@gmail.com</h6>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
+                    )}
+                  <div className="property_card_single">
+                    <div className="more_detail_card_inner">
+                      <h2 className="card_title">Basic About Property</h2>
+                      <div className="p_info">
+                        <div className="p_info_single">
+                          <h6>Unit Number:</h6>
+                          <h5>252</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Property Added Date:</h6>
+                          <h5>20/jan/2024</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Property Status:</h6>
+                          <h5> Active</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Ownership:</h6>
+                          <h5>Free Hold</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Property Source:</h6>
+                          <h5>ICICI</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Purpose:</h6>
+                          <h5>Rent</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Package:</h6>
+                          <h5>Broker</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Property Flag:</h6>
+                          <h5>In Maintainance</h5>
+                        </div>
+                      </div>
                     </div>
-                  )}
+                  </div>
                   <div className="property_card_single">
                     <div className="more_detail_card_inner">
                       <h2 className="card_title">Property Type</h2>
@@ -557,10 +624,7 @@ const PropertyDetails = () => {
                           <h6>Floor no:</h6>
                           <h5>{propertyDocument.floorNumber}</h5>
                         </div>
-                        <div className="p_info_single">
-                          <h6>Age of Property:</h6>
-                          <h5> {ageOfProperty} year</h5>
-                        </div>
+
                         <div className="p_info_single">
                           <h6>Furnishing:</h6>
                           <h5>{propertyDocument.furnishing}</h5>
@@ -601,6 +665,15 @@ const PropertyDetails = () => {
                           <h6>Entrance Gallery:</h6>
                           <h5>{propertyDocument.entrancegallery}</h5>
                         </div>
+                        <div className="p_info_single">
+                          <h6>Year of Constuction:</h6>
+                          <h5>2018</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Age of Property:</h6>
+                          <h5> {ageOfProperty} year</h5>
+                        </div>
+
                         {propertyDocument.numberOfBasement &&
                           propertyDocument.numberOfBasement !== "0" && (
                             <div className="p_info_single">
@@ -608,6 +681,68 @@ const PropertyDetails = () => {
                               <h5>{propertyDocument.numberOfBasement}</h5>
                             </div>
                           )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="property_card_single">
+                    <div className="more_detail_card_inner">
+                      <h2 className="card_title">Additional Rooms</h2>
+                      <div className="p_info">
+                        <div className="p_info_single">
+                          <h6>1</h6>
+                          <h5>Servent Room</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>2</h6>
+                          <h5>Office Room</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>3</h6>
+                          <h5> Store Room</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>4</h6>
+                          <h5>Pooja Room</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>5</h6>
+                          <h5>Study Room</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>6</h6>
+                          <h5>
+                            Power Room</h5>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div className="property_card_single">
+                    <div className="more_detail_card_inner">
+                      <h2 className="card_title">Additional Area</h2>
+                      <div className="p_info">
+                        <div className="p_info_single">
+                          <h6>1</h6>
+                          <h5>Front Yard</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>2</h6>
+                          <h5>Back Yard</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>3</h6>
+                          <h5> Terrace</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>4</h6>
+                          <h5>
+                            Private Garden</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>5</h6>
+                          <h5>Garage</h5>
+                        </div>
+
                       </div>
                     </div>
                   </div>
@@ -659,7 +794,11 @@ const PropertyDetails = () => {
                       <h2 className="card_title">Parking</h2>
                       <div className="p_info">
                         <div className="p_info_single">
-                          <h6>Car Parking:</h6>
+                          <h6>Car Parking Mode:</h6>
+                          <h5>Open</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>No. Car Parking:</h6>
                           <h5>{propertyDocument.numberOfCarParking}</h5>
                         </div>
                         <div className="p_info_single">
@@ -735,6 +874,81 @@ const PropertyDetails = () => {
                           <h5>{propertyDocument.powerbackup}</h5>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                  <div className="property_card_single">
+                    <div className="more_detail_card_inner">
+                      <h2 className="card_title">Additional Info</h2>
+                      <div className="p_info">
+                        <div className="p_info_single">
+                          <h6>Main Door Facing :</h6>
+                          <h5>East</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Overlooking :</h6>
+                          <h5>East</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Balcony/Window Facing :</h6>
+                          <h5>East</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Visiting Hours From :</h6>
+                          <h5></h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Visiting Hours To :</h6>
+                          <h5></h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Visiting Days</h6>
+                          <h5>Monday</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Bachelor Boys Allowed :</h6>
+                          <h5>Yes</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Bachelor Girls Allowed :</h6>
+                          <h5>Yes</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>Pets Allowed :</h6>
+                          <h5>Yes</h5>
+                        </div>
+                        <div className="p_info_single">
+                          <h6>:</h6>
+                          <h5>No choice</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-lg-6">
+                      <div className="property_card_single">
+                        <div className="more_detail_card_inner">
+                          <h2 className="card_title">Property Description</h2>
+                          <div className="p_info_single" style={{
+                            width: "100%"
+                          }}>
+                            <h5>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error nisi eaque fuga cum laudantium accusantium. Ipsam, rerum. Placeat minima quia voluptatum facere animi fuga, totam aut, earum accusamus, odit sed!</h5>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div className="col-lg-6">
+                    <div className="property_card_single">
+                    <div className="more_detail_card_inner">
+                      <h2 className="card_title">Owner Instruction</h2>
+                      <div className="p_info_single"
+                      style={{
+                        width:"100%"
+                      }}>                          
+                          <h5>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error nisi eaque fuga cum laudantium accusantium. Ipsam, rerum. Placeat minima quia voluptatum facere animi fuga, totam aut, earum accusamus, odit sed!</h5>
+                        </div>   
+                    </div>
+                  </div>
                     </div>
                   </div>
                 </div>

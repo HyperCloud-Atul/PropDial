@@ -25,7 +25,7 @@ export default function Footer() {
   const footerClassName = `footer-section ${shouldClassAdd ? "" : "margin-padding"}`;
   // hide page_footer array
   const pageFooterHidePaths = [
-    "/phonelogin",
+    "/login",
     "/ticketdetail",
     "/addproperty/:propertyid",
     "/addproperty_quick",

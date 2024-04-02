@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
-import PhoneLogin from "../profile/PhoneLogin";
+import PhoneLogin from "../phonelogin/PhoneLogin";
 import PGOwnerDashboard from "../roles/owner/PGOwnerDashboard";
 import PGAdminDashboard from "../roles/admin/PGAdminDashboard";
 
