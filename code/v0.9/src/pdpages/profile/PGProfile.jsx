@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+// styles
+import "./PGProfile.css";
 // import { useDocument } from '../../hooks/useDocument'
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEffect, useState } from "react";
@@ -14,8 +16,7 @@ import PhoneInput from "react-phone-input-2";
 import { Form, Button, Alert } from "react-bootstrap";
 
 
-// styles
-import "./PGProfile.css";
+
 
 export default function PGProfile() {
   // Scroll to the top of the page whenever the location changes start
