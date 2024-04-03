@@ -578,13 +578,20 @@ const PropertyDetails = () => {
                       <h2 className="card_title">Basic About Property</h2>
                       <div className="p_info">
                         <div className="p_info_single">
-                          <h6>Unit Number:</h6>
+                          <div className="pd_icon">
+                            <img src="/assets/img/property-detail-icon/number-one.png" alt="" />
+                          </div>
+                          <h6>Unit Number</h6>
                           <h5>252</h5>
                         </div>
                         <div className="p_info_single">
+                        <div className="pd_icon">
+                            <img src="/assets/img/property-detail-icon/calendar.png" alt="" />
+                          </div>
                           <h6>Property Added Date:</h6>
                           <h5>20/jan/2024</h5>
-                        </div>
+                        </div>                    
+                        
                         <div className="p_info_single">
                           <h6>Property Status:</h6>
                           <h5> Active</h5>
@@ -931,7 +938,7 @@ const PropertyDetails = () => {
                           <div className="p_info_single" style={{
                             width: "100%"
                           }}>
-                            <h5>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error nisi eaque fuga cum laudantium accusantium. Ipsam, rerum. Placeat minima quia voluptatum facere animi fuga, totam aut, earum accusamus, odit sed!</h5>
+                            <h6>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error nisi eaque fuga cum laudantium accusantium. Ipsam, rerum. Placeat minima quia voluptatum facere animi fuga, totam aut, earum accusamus, odit sed!</h6>
                           </div>
                         </div>
                       </div>
@@ -945,7 +952,7 @@ const PropertyDetails = () => {
                       style={{
                         width:"100%"
                       }}>                          
-                          <h5>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error nisi eaque fuga cum laudantium accusantium. Ipsam, rerum. Placeat minima quia voluptatum facere animi fuga, totam aut, earum accusamus, odit sed!</h5>
+                          <h6>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error nisi eaque fuga cum laudantium accusantium. Ipsam, rerum. Placeat minima quia voluptatum facere animi fuga, totam aut, earum accusamus, odit sed!</h6>
                         </div>   
                     </div>
                   </div>

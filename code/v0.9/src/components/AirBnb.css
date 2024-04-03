@@ -39,12 +39,12 @@ section.ari_bnb .card_inner h4.location {
 .p_info_single h6 {
     font-size: 16px;
     font-weight: 400;
-    color: grey;
+    color: var(--theme-grey);
 }
 .p_info_single h5 {
     font-size: 16px;
     font-weight: 500;
-    color: #303030;
+    color:var(--light-black);
 }
 .p_info {  
     display: flex;

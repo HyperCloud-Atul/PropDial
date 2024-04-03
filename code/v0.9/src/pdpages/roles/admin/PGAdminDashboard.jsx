@@ -528,7 +528,7 @@ const PGAdminDashboard = () => {
                       </div>
                     </div>
                     <div className="payment_single my_big_card">
-                      <div className="icon bg_purple">
+                      <div className="icon bg_blue">
                         <img src="./assets/img/financial.png" alt="" />
                       </div>
                       <div className="right">
@@ -558,7 +558,7 @@ const PGAdminDashboard = () => {
                       </div>
                     </div>
                     <div className="payment_single my_big_card">
-                      <div className="icon bg_purple">
+                      <div className="icon bg_blue">
                         <img src="./assets/img/financial.png" alt="" />
                       </div>
                       <div className="right">

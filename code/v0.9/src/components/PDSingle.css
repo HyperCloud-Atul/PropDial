@@ -43,16 +43,21 @@
 .pd_single .more_detail_card_inner{
     padding: 16px;
 }
+.p_info_single .pd_icon img {
+    height: 32px !important;
+    width: auto !important;
+    opacity: 1 !important;
+}
 .pd_single  .property_card_single{
     display: inherit;
 }
-.pd_single  .p_info {   
-    column-gap: 60px;   
+.pd_single .p_info {
+    column-gap: 0px;
     row-gap: 16px;
-    justify-content: inherit;
+    justify-content: left;
 }
 .pd_single .p_info_single {  
-    width: 25%;
+    width: 20%;
     padding: 0px 15px;
 }
 .pdms_single h4 span.currency {
@@ -209,3 +214,17 @@
     overflow: hidden;
     cursor: -webkit-grab;
 }
+.pd_single .p_info_single h6 {
+    font-size: 14px; 
+    line-height: 22px;  
+    margin-top: 2px;
+}
+.pd_single .p_info_single h5 {  
+    line-height: 22px;
+}
+.pd_single .p_info_single {
+    flex-direction: column;
+    align-items: baseline;
+    gap: 0px;  
+}
+
