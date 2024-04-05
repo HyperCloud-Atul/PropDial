@@ -53,7 +53,7 @@
 }
 .pd_single .p_info {
     column-gap: 0px;
-    row-gap: 16px;
+    row-gap: 35px;
     justify-content: left;
 }
 .pd_single .p_info_single {  
@@ -215,16 +215,17 @@
     cursor: -webkit-grab;
 }
 .pd_single .p_info_single h6 {
-    font-size: 14px; 
-    line-height: 22px;  
-    margin-top: 2px;
+    font-size: 12px; 
+    line-height: normal;  
+    margin-top: 0px;
 }
-.pd_single .p_info_single h5 {  
-    line-height: 22px;
+.pd_single .p_info_single h5 {
+    line-height: normal;
+    font-size: 14px;
 }
-.pd_single .p_info_single {
-    flex-direction: column;
-    align-items: baseline;
-    gap: 0px;  
+
+
+.pd_single .p_info_single { 
+    gap: 8px;  
 }
 

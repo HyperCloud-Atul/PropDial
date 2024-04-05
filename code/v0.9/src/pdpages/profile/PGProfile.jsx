@@ -306,8 +306,9 @@ export default function PGProfile() {
                 </span>
               </label>
             </div>
-            <br></br>
-            <h4 className="user_name">
+            <div className="vg22"></div>
+
+            <h4 className="user_name field_with_edit_icon">
               <input
                 type="text"
                 className="profile-change-name"
@@ -320,12 +321,28 @@ export default function PGProfile() {
                 })}
                 value={userDetails && userDetails.FullName}
                 style={{
-                  width:"100%"
+                  width: "100%"
                 }}
               ></input>
+              <div className={`pp_edit_icon pointer ${isProfileEdit ? "edit_done" : ""}`}>
+                <span
+                  className="material-symbols-outlined"
+                  style={{ display: isProfileEdit ? "none" : "" }}
+                  onClick={handleProfileEdit}
+                >
+                  edit
+                </span>
+                <span
+                  className="material-symbols-outlined done"
+                  style={{ display: isProfileEdit ? "" : "none" }}
+                  onClick={handleProfileSave}
+                >
+                  done
+                </span>
+              </div>
             </h4>
-            <br />
-            <h5>
+            <div className="vg12"></div>
+            <h5 className="field_with_edit_icon">
               <input
                 type="text"
                 maxLength={10}
@@ -335,36 +352,36 @@ export default function PGProfile() {
                 // onChange={(e) => setUserPhoneNumber(e.target.value)}
                 value={userPhoneNumber}
               ></input>
+              <div className='pp_edit_icon'>
+                <span
+                  className="material-symbols-outlined"
+                  onClick={openChangeNumber}
+                >
+                  edit
+                </span>
+              </div>
             </h5>
-            <div className='edit-number'>
-              <span
-                className="material-symbols-outlined"
-                onClick={openChangeNumber}
-              >
-                edit
-              </span>
-            </div>
-
             <div className={changeNumberDisplay ? 'pop-up-change-number-div open' : 'pop-up-change-number-div'} >
               <div className="direct-div">
                 <span onClick={closeChangeNumber} className="material-symbols-outlined close-button">
                   close
                 </span>
-                <span style={{ fontSize: '0.8rem' }} >Existing no: {userPhoneNumber} </span>
-                <h1>Enter New Number</h1>
+                <span className="r14" >Existing no : {userPhoneNumber} </span>
+                <div className="vg12"></div>
+                <div className="m22">
+                Enter New Number
+                </div>              
 
                 <div className="sroll-outter-div">
                   <div className="sroll-inner-div">
-
                     <div className="scroll-div" style={{ transform: changeNumberScroller ? "translateX(-100%)" : "translateX(0%)" }}>
                       {error && <Alert variant="danger">{error}</Alert>}
 
                       <form
                         action=""
-                        onSubmit={handleSendVerificationCode}
-                        className="form-w"
+                        onSubmit={handleSendVerificationCode}                        
                       >
-                        <div className="fl_form_field change-number-input">
+                        <div className="form_field label_top">
                           <PhoneInput
                             country={"in"}
                             // onlyCountries={['in', 'us']}
@@ -382,31 +399,32 @@ export default function PGProfile() {
                               autoFocus: true,
                             }}
                           ></PhoneInput>
+                             <div id="id_sendotpButton" className="change-number-button-div">
+                          <button onClick={closeChangeNumber} className="theme_btn no_icon btn_red" > Cancel</button>
+                          <button className="theme_btn btn_fill no_icon">Send OTP</button>
                         </div>
-
-                        {/* new code */}
-                        <div id="id_sendotpButton" className="change-number-button-div">
-                          <button onClick={closeChangeNumber} className="mybutton button5" style={{ background: "#afafaf" }}>Cancel</button>
-                          <button className="mybutton button5">Send OTP</button>
-                        </div>
+                        </div>                    
+                     
                       </form>
 
                     </div>
 
                     <div className="scroll-div" style={{ transform: changeNumberScroller ? "translateX(-100%)" : "translateX(0%)" }}>
-                      <div>
+                      <div className="form_field label_top">
+                        <label>OTP</label>
                         <input
                           type="text"
                           placeholder="Enter verification code"
                           value={verificationCode}
                           onChange={(e) => setVerificationCode(e.target.value)}
+                          style={{
+                            background:"none"
+                          }}
                         />
-
-
                         {/* new code */}
                         <div className="change-number-button-div">
-                          <button onClick={changeNumberBack} className="mybutton button5" style={{ background: "#afafaf" }}>Back</button>
-                          <button onClick={handleChangePhoneNumber} className="mybutton button5">Confirm</button>
+                          <button onClick={changeNumberBack} className="theme_btn no_icon" >Back</button>
+                          <button onClick={handleChangePhoneNumber} className="theme_btn btn_fill no_icon">Confirm</button>
                         </div>
                         {/* new code */}
 
@@ -420,77 +438,9 @@ export default function PGProfile() {
               </div>
             </div>
 
-            <h5>
-              {user.email}
-            </h5>
-
-            <div className={`edit pointer ${isProfileEdit ? "edit_done" : ""}`}>
-              <span
-                className="material-symbols-outlined"
-                style={{ display: isProfileEdit ? "none" : "block" }}
-                onClick={handleProfileEdit}
-              >
-                edit
-              </span>
-              <span
-                className="material-symbols-outlined done"
-                style={{ display: isProfileEdit ? "block" : "none" }}
-                onClick={handleProfileSave}
-              >
-                done
-              </span>
-            </div>
-
           </div>
         </div>
-      </section>
-         
-      {user && user.roles && user.roles.length > 1 &&
-       <div className="container">    
-        <div className="vg22"></div>
-    
-        <div className="form_field st-2 label_top">         
-          <label htmlFor="">Role</label>
-          <div className="form_field_inner">
-
-            <div className="form_field_container">
-            <div
-            className="radio_group"
-            style={{ display: "flex", alignItems: "center" }}
-          >
-            {user.roles.map((userrole) => (
-              <div className="radio_group_single" style={{ width: "100%" }}>
-                <div
-                  className={`custom_radio_button ${user && user.role === userrole
-                    ? "radiochecked"
-                    : ""
-                    }`}
-                >
-                  <input
-                    type="radio"
-                    name="group_furnishing"
-                    id={userrole}
-                    onClick={(e) => changeRole(userrole)}
-                  />
-                  <label htmlFor={userrole}>
-                    <div className="radio_icon">
-                      <span className="material-symbols-outlined add">
-                        add
-                      </span>
-                      <span className="material-symbols-outlined check">
-                        done
-                      </span>
-                    </div>
-                    <h6>{userrole === 'admin' ? 'Admin' : camelCase(userrole.toLowerCase())}</h6>
-                  </label>
-                </div>
-              </div>))}
-          </div>
-            </div>
-          </div>
-        
-        </div>
-      </div>}
+      </section>    
       <div className="vg22"></div>
       <div className="container">
         <div className="visit_dashboard">
@@ -502,6 +452,53 @@ export default function PGProfile() {
 
         </div>
       </div>
+      {user && user.roles && user.roles.length > 1 &&
+        <div className="container">
+          <div className="vg22"></div>
+          <div className="vg22_991"></div>
+
+          <div className="form_field st-2 label_top">
+            <label htmlFor="">Role</label>
+            <div className="form_field_inner">
+
+              <div className="form_field_container">
+                <div
+                  className="radio_group"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  {user.roles.map((userrole) => (
+                    <div className="radio_group_single" style={{ width: "100%" }}>
+                      <div
+                        className={`custom_radio_button ${user && user.role === userrole
+                          ? "radiochecked"
+                          : ""
+                          }`}
+                      >
+                        <input
+                          type="radio"
+                          name="group_furnishing"
+                          id={userrole}
+                          onClick={(e) => changeRole(userrole)}
+                        />
+                        <label htmlFor={userrole}>
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>{userrole === 'admin' ? 'Admin' : camelCase(userrole.toLowerCase())}</h6>
+                        </label>
+                      </div>
+                    </div>))}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>}
       <div className="vg22"></div>
       <div className="container">
         <div className="row no-gutters">
@@ -552,9 +549,9 @@ export default function PGProfile() {
               </div>
             </div>
           </div>
-         
+
           <div className="col-lg-6 col-md-12 col-sm-12">
-          <div className="vg22_991"></div>
+            <div className="vg22_991"></div>
             <div className="property-status-padding-div">
               <div className="profile-card-div">
                 <div

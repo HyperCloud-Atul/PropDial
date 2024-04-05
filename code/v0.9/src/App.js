@@ -108,47 +108,49 @@ function App() {
 
   const [deferredPrompt, setDeferredPrompt] = useState(null);
 
-  useEffect(() => {
-    // index.js or App.js
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", function () {
-        navigator.serviceWorker.register("/serviceworker.js").then(
-          function (registration) {
-            console.log(
-              "ServiceWorker registration successful with scope: ",
-              registration.scope
-            );
-          },
-          function (err) {
-            console.error("ServiceWorker registration failed: ", err);
-          }
-        );
-      });
+//  service worker 
 
-      //listen for appinstalled event
-      window.addEventListener("appinstalled", (evt) => {
-        //deprecated but still runs in Chrome-based browsers.
-        //Not very useful event.
-        // console.log('Is app already installed: ')
-      });
+// useEffect(() => {
+//   // index.js or App.js
+//   if ("serviceWorker" in navigator) {
+//     window.addEventListener("load", function () {
+//       navigator.serviceWorker.register("/serviceworker.js").then(
+//         function (registration) {
+//           console.log(
+//             "ServiceWorker registration successful with scope: ",
+//             registration.scope
+//           );
+//         },
+//         function (err) {
+//           console.error("ServiceWorker registration failed: ", err);
+//         }
+//       );
+//     });
 
-      window.addEventListener("beforeinstallprompt", (e) => {
-        console.log("handleBeforeInstallPrompt Listner in app.js: ", e);
-        // Prevent the default browser behavior
-        e.preventDefault();
-        // Store the event for later use
-        setDeferredPrompt(e);
-      });
+//     //listen for appinstalled event
+//     window.addEventListener("appinstalled", (evt) => {
+//       //deprecated but still runs in Chrome-based browsers.
+//       //Not very useful event.
+//       // console.log('Is app already installed: ')
+//     });
 
-      //Push Notification - Client Enablement
-      // const msg = firebase.messaging();
-      // projectMsg.requestPermission().then(() => {
-      //   return projectMsg.getToken()
-      // }).then((data) => {
-      //   console.warn("token", data)
-      // })
-    }
-  }, [user]);
+//     window.addEventListener("beforeinstallprompt", (e) => {
+//       console.log("handleBeforeInstallPrompt Listner in app.js: ", e);
+//       // Prevent the default browser behavior
+//       e.preventDefault();
+//       // Store the event for later use
+//       setDeferredPrompt(e);
+//     });
+
+//     //Push Notification - Client Enablement
+//     // const msg = firebase.messaging();
+//     // projectMsg.requestPermission().then(() => {
+//     //   return projectMsg.getToken()
+//     // }).then((data) => {
+//     //   console.warn("token", data)
+//     // })
+//   }
+// }, [user]);
 
   function startChromeInstall() {
     // console.log('deferredPrompt: ', deferredPrompt)

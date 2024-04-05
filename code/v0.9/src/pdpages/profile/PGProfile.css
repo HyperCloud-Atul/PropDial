@@ -1,81 +1,53 @@
-
-/* change number pop up */
-
-.pop-up-change-number-div {
-    opacity: 0;
-    pointer-events: none;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 9999;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    transition: 1s;
-}
-
-.pop-up-change-number-div.open {
-    opacity: 1;
-    pointer-events: all;
-}
-
-.pop-up-change-number-div .direct-div {
-    position: relative;
+.profile-card-div {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     background: var(--white-color);
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 380px;
-    width: 100%;
-    text-align: center;
+    border-radius: 22px;
 }
-.change-number-input .react-tel-input input.form-control {
-    border: 1px solid #d7d7d7;
-    border-radius: 0px;
-    padding: 25px 12px 6px 12px;
-    border-radius: 7px;
-}
-
-.change-number-input .react-tel-input .special-label {
-    position: absolute;
-    margin: 0px;
-    font-size: 14px;
-    color: #909090;
-    top: 5px;
-    left: 12px;
-}
-
-.edit-number {
-    position: absolute;
-    left: 65%;
-    transform: translate(0, -27px);
-}
-
-.edit-number span {
+.pp_edit_icon span {
     font-size: 1rem;
-    color: var(--theme-purple);
-    width: 20px;
-    height: 20px;
-    background: #ccc;
+    color: var(--white-color);
+    width: 22px;
+    height: 22px;
+    background: var(--theme-green);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 5px;
     cursor: pointer;
 }
-/* change number pop up */
+.profile-upload-input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
 
-
-
-
-
-
-
-
-/* sanskar profile css start  */
+.profile-upload-label {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--theme-green);
+    color: var(--white-color);
+}
+.profile-upload-label span {
+    font-size: 17px;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.field_with_edit_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-left: 12px !important;
+}
 .profile_card .sn_inner {
     padding: 25px;
     max-width: 500px;
@@ -98,17 +70,230 @@
     border-radius: 22px;
     object-position: top;
 }
+.profile_card .sn_inner input:focus{
+    outline: none;
+}
 
-.profile_card .profile-upload-label {
-    bottom: -30px;
-    right: -6px;
-    background: var(--theme-purple);
+/* change number pop up */
+.pop-up-change-number-div .direct-div {
+    position: relative;
+    background: var(--white-color);
+    padding: 15px;
+    border-radius: 22px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+}
+.pop-up-change-number-div {
+    opacity: 0;
+    pointer-events: none;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    transition: 1s;
+}
+.pop-up-change-number-div.open {
+    opacity: 1;
+    pointer-events: all;
+}
+.pop-up-change-number-div .direct-div .close-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--theme-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+.profile_card .sn_inner .react-tel-input input {
+    padding: 0px;  
+    background: none;
+}
+.change-number-button-div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+    gap: 15px;
+    justify-content: center;
+}
+.sroll-outter-div {
+    width: 100%;
+    overflow: hidden;
+}
+
+.sroll-outter-div .sroll-inner-div {
+    width: 200%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sroll-outter-div .sroll-inner-div .scroll-div {
+    width: 100%;
+    padding: 20px 10px 10px 10px;
+    transform: translateX(0%);
+    transition: 1s;
+}
+/* change number pop up */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.user-name .edit {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.user-name .edit span {
+    color: #666;
+    font-size: 1.3rem;
+}
+
+.user-name .edit span.done {
+    font-size: 1.5rem;
+    width: 25px;
+    height: 25px;
+    background: var(--theme-blue);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-profile-div {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background: var(--yellow-color);
+    border-radius: 0 0 4px 4px;
+}
+
+.edit-profile-div small {
+    margin: 0;
+    width: 70%;
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
 
 }
 
-h4.user_name {
-    margin: 20px 0px 2px 0px !important;
+.edit-profile-div div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 40%;
 }
+
+.address-div {
+    display: grid;
+    grid-template-columns: 10% 90%;
+    padding: 15px;
+    border-bottom: 1px solid var(--theme-grey);
+}
+.profile-card-div .address-div:last-child {
+    border-radius: 22px;
+}
+.address-div .icon {
+    position: relative;
+    top: 3px;
+    width: 33px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--theme-green-bg);
+    color: var(--theme-green);
+}
+
+.address-div .icon span {
+    font-size: 1.2rem;
+}
+
+.address-div .address-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0px 0px 20px;
+}
+
+.address-div .address-text h5 {
+    position: relative;
+    top: -5px;
+    font-size: 16px;
+    color: var(--theme-green);
+    margin-bottom: 0;
+}
+
+.address-div .address-text small {
+    position: relative;
+    top: -4px;
+    margin-top: 0;
+    font-size: 0.7rem;
+    color: #aaa;
+}
+
+.address-div .address-text div {
+    text-align: right;
+    position: relative;
+    top: -3px;
+}
+
+.address-div .address-text div span {
+    color: var(--theme-green);
+}
+
+
+
+
+
+
+
+
+
+
+
+/* sanskar profile css start  */
+
+
 
 
 h4.user_name input {
@@ -117,7 +302,7 @@ h4.user_name input {
     text-align: center;
     border-bottom: none;
     padding: 0px;
-    border: 1px solid var(--theme-purple);
+    border: 1px solid var(--theme-green);
 }
 
 .profile_card .sn_inner h5 {
@@ -141,7 +326,7 @@ h4.user_name input {
 }
 
 .profile_card .sn_inner input.profile-change-name:read-only {
-    border: 1px solid var(--theme-grey);
+    border: 1px solid var(--lightgrey-color);
 }
 
 .profile_card .sn_inner input {
@@ -153,26 +338,6 @@ h4.user_name input {
 .profile_card .sn_inner h5 input {
     max-width: fit-content;
 }
-
-.profile_card .sn_inner .edit {
-    position: absolute;
-    background: var(--theme-purple);
-    padding: 8px;
-    border-radius: 50%;
-    top: 50px;
-    right: 35px;
-    transform: translateY(45px) translateX(-50px);
-}
-
-.profile_card .sn_inner .edit.edit_done {
-    background: var(--theme-green);
-}
-
-.profile_card .sn_inner .edit span {
-    color: var(--white-color);
-    font-size: 20px;
-}
-
 .visit_dashboard {
     padding: 22px;
     display: flex;

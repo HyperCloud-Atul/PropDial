@@ -91,6 +91,23 @@
     position: absolute;
     top: -10px;
   }
+  .form-control:focus {   
+    box-shadow: none;
+}
+  .special-label {
+    background: #fff;
+    border: none;
+    border-radius: 5px 5px 5px 0;
+    box-shadow: 0 -5px 5px 0 rgba(0, 0, 0, 0.1019607843);
+    color: var(--theme-orange);
+    font-size: 0.9rem;
+    font-weight: 400;
+    left: 20px;
+    margin: 0;
+    padding: 3px 12px;
+    position: absolute;
+    top: -10px;
+}
   input {
     border: none;
     border-bottom: 1px solid #ddd;

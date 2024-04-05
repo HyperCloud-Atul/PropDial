@@ -333,6 +333,9 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     .propagent_dashboard_inner .all_payments, .self_property_detail {      
         grid-template-columns: repeat(3,1fr) !important;       
     }
+    .vg22_991{
+        height: 22px;
+    }
 }
 @media only screen and (max-width: 767px) {
     .page_spacing {
@@ -343,10 +346,7 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     }
     .r18 {
         font-size: 16px;    
-    }
-    .vg22, .vg22_1199 {
-        height: 15px;
-    }
+    }  
 }
 
 
