@@ -426,7 +426,9 @@ const PGAdminDashboard = () => {
                   </div>
                 </div>
                 <div className="col-lg-6">
-                  <section className="self_property_detail">
+                  <section className="self_property_detail" style={{
+                    gridTemplateColumns:"repeat(1,1fr)"
+                  }}>
                     <Link className="theme_btn btn_fill">
                       Post your property
                     </Link>
