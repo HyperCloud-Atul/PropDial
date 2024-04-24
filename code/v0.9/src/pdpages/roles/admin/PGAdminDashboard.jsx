@@ -501,6 +501,7 @@ const PGAdminDashboard = () => {
               <div className="vg22"></div>
               <hr />
               <div className="vg22"></div>
+           
               <section className="property_cards_parent">
                 {properties &&
                   properties.map((property) => (
@@ -509,6 +510,38 @@ const PGAdminDashboard = () => {
               </section>
               <div className="vg22"></div>
               <hr />
+              <div className="vg22"></div>
+              <div className="filters">
+                <div className="button_filter">
+                  <div className="bf_single active">
+                    April
+                  </div>
+                  <div className="bf_single ">
+                    March
+                  </div>
+                  <div className="bf_single ">
+                    February
+                  </div>
+                </div>
+                <div className="icon_dropdown">
+                  <select name="months" id="months">
+                    <option value="" selected disabled>Select Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                  </select>
+
+                </div>
+              </div>
               <div className="vg22"></div>
               <section>
                 <div className="payment_card">
@@ -589,13 +622,13 @@ const PGAdminDashboard = () => {
                   <MyLineGraph />
                 </div>
                 <div className="graph_single">
-                <MyColumnChart/>
+                  <MyColumnChart />
                 </div>
                 <div className="graph_single">
-                <MyPieChart/>
+                  <MyPieChart />
                 </div>
 
-              
+
               </section>
 
               <div className="vg22"></div>
