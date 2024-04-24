@@ -14,6 +14,7 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 // component
 import PropertyCard from "../../../components/property/PropertyCard";
 
+
 // css
 import "./PGOwnerDashboard.css";
 
@@ -293,8 +294,7 @@ const PGOwnerDashboard = () => {
                     </div>
                   </div>
                 </div>
-              </section>
-
+              </section>            
               <div className="vg22"></div>
               <hr />
               <div className="vg22"></div>

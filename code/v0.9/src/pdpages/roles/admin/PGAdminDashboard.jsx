@@ -14,6 +14,9 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 
 // component
 import PropertyCard from "../../../components/property/PropertyCard";
+import MyLineGraph from "../../graphs/MyLineGraph";
+import MyColumnChart from "../../graphs/MyColumnChart";
+import MyPieChart from "../../graphs/MyPieChart";
 
 // css
 import "./PGAdminDashboard.css";
@@ -579,6 +582,20 @@ const PGAdminDashboard = () => {
                     </div>
                   </div>
                 </div>
+              </section>
+              <div className="vg22"></div>
+              <section className="graphs">
+                <div className="graph_single">
+                  <MyLineGraph />
+                </div>
+                <div className="graph_single">
+                <MyColumnChart/>
+                </div>
+                <div className="graph_single">
+                <MyPieChart/>
+                </div>
+
+              
               </section>
 
               <div className="vg22"></div>
