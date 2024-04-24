@@ -242,6 +242,8 @@ const Stage2 = (props) => {
     if (errorFlag) setFormError(errorMsg);
     else setFormError("");
 
+    errorFlag = false;
+
     const property = {
       propertyType: propertyDetails.PropertyType,
       bhk: propertyDetails.Bhk,
@@ -702,7 +704,7 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>               
+          </div>
           <div className="col-md-6">
             <div className="form_field label_top">
               <label htmlFor="">Rooms</label>

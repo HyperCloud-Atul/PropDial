@@ -27,7 +27,7 @@ const PGOwnerDashboard = () => {
 
   const { user } = useAuthContext();
   const { documents: properties, error: propertieserror } = useCollection(
-      "properties"
+    "properties"
   );
   // const { documents: properties, error: propertieserror } = useCollection(
   //   "properties",
@@ -142,7 +142,7 @@ const PGOwnerDashboard = () => {
                   <div className="property_status">
                     <div className="ps_single pending">
                       <h5>{pendingProperties && pendingProperties.length}</h5>
-                      <h6>Pending Approval</h6>
+                      <h6>In-Review</h6>
                     </div>
                     <div className="ps_single active">
                       <h5>{activeProperties && activeProperties.length}</h5>

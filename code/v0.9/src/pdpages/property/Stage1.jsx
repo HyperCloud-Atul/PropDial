@@ -2,13 +2,13 @@ import React from "react";
 import Select from "react-select";
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useCommon } from "../../hooks/useCommon";
+// import { useCommon } from "../../hooks/useCommon";
 import { useDocument } from "../../hooks/useDocument";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 
-import { timestamp, projectStorage, projectID } from "../../firebase/config";
+import { timestamp } from "../../firebase/config";
 import SearchBarAutoComplete from "../../pages/search/SearchBarAutoComplete";
 // import { projectID } from 'firebase-functions/params';
 
@@ -191,6 +191,7 @@ const Stage1 = (props) => {
   const [distinctValuesLocality, setdistinctValuesLocality] = useState([]);
   const [distinctValuesSociety, setdistinctValuesSociety] = useState([]);
   const [formError, setFormError] = useState(null);
+  const [formSuccess, setFormSuccess] = useState(null);
   // const { amountToWords, response: amountToWordsResponse } = useCommon();
   // const { camelCase } = useCommon();
   // const { formatAmount, response: formatAmountResponse } = useCommon();
@@ -445,61 +446,81 @@ const Stage1 = (props) => {
     }
   }, [addDocumentResponse]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, option) => {
+    console.log("In handleSubmit")
     e.preventDefault();
+    // console.log('e: ', e)
+    // console.log('option: ', option)
+
     setFormError(null);
+    setFormSuccess(null);
+
     let errorFlag = false;
     let errorMsg = "Please select ";
 
-    if (propertyDetails.Purpose === "") {
-      if (errorMsg === "Please select ") errorMsg = errorMsg + "Purpose";
-      else errorMsg = errorMsg + ", Purpose";
-      errorFlag = true;
-    }
-    if (
-      propertyDetails.DemandPrice === "" ||
-      propertyDetails.DemandPrice === "0"
-    ) {
-      if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price";
-      else errorMsg = errorMsg + ", Demand Price";
-      errorFlag = true;
-    }
+    // if (propertyDetails.Purpose === "") {
+    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "Purpose";
+    //   else errorMsg = errorMsg + ", Purpose";
+    //   errorFlag = true;
+    // }
+    // if (propertyDetails.DemandPrice === "" || propertyDetails.DemandPrice === "0") {
+    //   if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price";
+    //   else errorMsg = errorMsg + ", Demand Price";
+    //   errorFlag = true;
+    // }
 
-    if (
-      propertyDetails.MaintenanceCharges !== "" &&
-      propertyDetails.MaintenanceChargesFrequency === ""
-    ) {
-      if (errorMsg === "Please select ") errorMsg = errorMsg + "Frequency";
-      else errorMsg = errorMsg + ", Frequency";
-      errorFlag = true;
-    }
+    // if (propertyDetails.MaintenanceCharges === "") {
+    //   propertyDetails.MaintenanceChargesFrequency = "NA"
+    // } else {
+    //   if (
+    //     (propertyDetails.MaintenanceCharges !== "") &&
+    //     propertyDetails.MaintenanceChargesFrequency === ""
+    //   ) {
+    //     if (errorMsg === "Please select ")
+    //       errorMsg = errorMsg + "Frequency";
+    //     else errorMsg = errorMsg + ", Frequency";
+    //     errorFlag = true;
+    //   }
+    //   else {
+    //     if (propertyDetails.MaintenanceCharges !== "" &&
+    //       propertyDetails.MaintenanceChargesFrequency === "NA") {
+    //       if (errorMsg === "Please select ")
+    //         errorMsg = errorMsg + "Frequency";
+    //       else errorMsg = errorMsg + ", Frequency";
+    //       errorFlag = true;
+    //     }
+    //   }
+    // }
 
     // console.log('state:', state)
-    if (state === "" || state === undefined || state === "Select State") {
-      if (errorMsg === "Please select ") errorMsg = errorMsg + "State";
-      else errorMsg = errorMsg + ", State";
-      errorFlag = true;
-    }
+    // if (state === "" || state === undefined || state === "Select State") {
+    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "State";
+    //   else errorMsg = errorMsg + ", State";
+    //   errorFlag = true;
+    // }
 
-    if (propertyDetails.City === "") {
-      if (errorMsg === "Please select ") errorMsg = errorMsg + "City";
-      else errorMsg = errorMsg + ", City";
-      errorFlag = true;
-    }
-    if (propertyDetails.Locality === "") {
-      if (errorMsg === "Please select ") errorMsg = errorMsg + "Locality";
-      else errorMsg = errorMsg + ", Locality";
-      errorFlag = true;
-    }
-    if (propertyDetails.Society === "") {
-      if (errorMsg === "Please select ") errorMsg = errorMsg + "Society";
-      else errorMsg = errorMsg + ", Society";
+    // if (propertyDetails.City === "") {
+    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "City";
+    //   else errorMsg = errorMsg + ", City";
+    //   errorFlag = true;
+    // }
+    // if (propertyDetails.Locality === "") {
+    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "Locality";
+    //   else errorMsg = errorMsg + ", Locality";
+    //   errorFlag = true;
+    // }
+    // if (propertyDetails.Society === "") {
+    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "Society";
+    //   else errorMsg = errorMsg + ", Society";
 
-      errorFlag = true;
-    }
+    //   errorFlag = true;
+    // }
 
     if (errorFlag) setFormError(errorMsg);
     else setFormError("");
+
+    errorFlag = false;
+
 
     // console.log('propertyDetails.City:', propertyDetails.City)
 
@@ -517,20 +538,25 @@ const Stage1 = (props) => {
         : "",
       maintenancechargesfrequency: propertyDetails.MaintenanceChargesFrequency
         ? propertyDetails.MaintenanceChargesFrequency
-        : "",
+        : "NA",
       state: state.label,
       city: camelCase(propertyDetails.City.toLowerCase().trim()),
       locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
       society: camelCase(propertyDetails.Society.toLowerCase().trim()),
+      pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
     };
 
     if (propertyid === "new") {
-      // console.log('Property id while newly added : ', propertyid)
+      console.log('Property id while newly added : ', propertyid)
       // console.log("Property: ", property)
 
       const newProperty = {
         ...property,
         //Stage 2 fields-createhere
+        source: "",
+        ownership: "",
+        package: "",
+        flag: "",
         propertyType: "",
         bhk: "",
         numberOfBedrooms: "0",
@@ -542,11 +568,19 @@ const Stage1 = (props) => {
         carpetArea: "",
         carpetAreaUnit: "",
         imgURL: [],
+        propertyManager: user.uid,
+        propertyCoManager: user.uid,
+        propertySalesManager: user.uid,
+        propertyOwner: user.uid,
+        propertyCoOwner: "",
+        propertyPOC: "",
+        tenantList: [],
         postedBy: "Propdial",
-        status: "pending approval",
+        status: "In-Review",
         onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
       };
       if (!errorFlag) {
+        console.log("new property needs to be created")
         await addDocument(newProperty);
         if (addDocumentResponse.error) {
           navigate("/");
@@ -555,19 +589,11 @@ const Stage1 = (props) => {
         }
       }
     } else if (propertyid !== "new") {
-      const updatedBy = {
-        id: user.uid,
-        displayName: user.displayName + "(" + user.role + ")",
-        fullName: user.fullName,
-        phoneNumber: user.phoneNumber,
-        emailID: user.email,
-        photoURL: user.photoURL,
-      };
-
       const updatedProperty = {
         ...property,
+
         updatedAt: timestamp.fromDate(new Date()),
-        updatedBy,
+        updatedBy: user.uid,
       };
 
       if (!errorFlag) {
@@ -576,31 +602,41 @@ const Stage1 = (props) => {
         if (updateDocumentResponse.error) {
           navigate("/");
         } else {
-          props.setStateFlag("stage2");
+          if (option === "Save") {
+            console.log("option: ", option)
+            //Do nothing
+            setFormSuccess("Data Saved Successfully");
+          }
+          else {
+            console.log("option: ", option)
+            props.setStateFlag("stage2");
+          }
         }
       }
     }
   };
+
   const handleBackSubmit = (e) => {
     // console.log('handleBackSubmit')
-    navigate("/agentproperties", {
-      state: {
-        propSearchFilter: "ACTIVE",
-      },
-    });
+    navigate("/dashboard");
+    // navigate("/agentproperties", {
+    //   state: {
+    //     propSearchFilter: "ACTIVE",
+    //   },
+    // });
   };
   return (
-    <form onSubmit={handleSubmit}>
+    <>
       <div className="add_property_fields">
         <div className="row row_gap">
           <div className="col-md-4">
             <div className="form_field label_top">
-              <label htmlFor="">Unit Number (Not for public display)</label>
+              <label htmlFor="">Unit Number</label>
               <div className="form_field_inner">
                 <input
                   type="text"
-                  placeholder="Optional"
-                  maxLength={12}
+                  placeholder="Enter House/Flat/Shop no"
+                  maxLength={100}
                   onChange={(e) =>
                     setPropertyDetails({
                       ...propertyDetails,
@@ -613,21 +649,92 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-4">
-            <div className="form_field label_top">
-              <label htmlFor="">Property Added Date</label>
-              <div className="form_field_inner">
-                <input
-                  type="text"
-                  value="20/jan/2024"
-                />
-              </div>
-            </div>
-          </div>
+
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">
-                Property Status</label>
+                Category</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Category === "Residential"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="category_residential"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Category: "Residential",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="category_residential"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Residential</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Category === "Commercial"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="category_commercial"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Category: "Commercial",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="category_commercial"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Commercial</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">
+                Purpose</label>
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
@@ -641,10 +748,16 @@ const Stage1 = (props) => {
                       >
                         <input
                           type="checkbox"
-                          id="property_active"
+                          id="purpose_rent"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Rent",
+                            });
+                          }}
                         />
                         <label
-                          htmlFor="property_active"
+                          htmlFor="purpose_rent"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -655,7 +768,7 @@ const Stage1 = (props) => {
                               done
                             </span>
                           </div>
-                          <h6>Active</h6>
+                          <h6>Rent</h6>
                         </label>
                       </div>
                     </div>
@@ -669,11 +782,17 @@ const Stage1 = (props) => {
                       >
                         <input
                           type="checkbox"
-                          id="property_inactive"
+                          id="purpose_sale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "Sale",
+                            });
+                          }}
 
                         />
                         <label
-                          htmlFor="property_inactive"
+                          htmlFor="purpose_sale"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -684,7 +803,7 @@ const Stage1 = (props) => {
                               done
                             </span>
                           </div>
-                          <h6>Inactive</h6>
+                          <h6>Sale</h6>
                         </label>
                       </div>
                     </div>
@@ -692,9 +811,9 @@ const Stage1 = (props) => {
                 </div>
               </div>
             </div>
+          </div> */}
 
-          </div>
-          <div className="col-md-4">
+          {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Ownership</label>
               <div className="form_field_inner">
@@ -705,8 +824,8 @@ const Stage1 = (props) => {
                 </select>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
+          </div> */}
+          {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Owner Name</label>
               <div className="form_field_inner">
@@ -716,8 +835,8 @@ const Stage1 = (props) => {
                 </select>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
+          </div> */}
+          {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Co Owner Name</label>
               <div className="form_field_inner">
@@ -727,8 +846,8 @@ const Stage1 = (props) => {
                 </select>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
+          </div> */}
+          {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Employee</label>
               <div className="form_field_inner">
@@ -738,8 +857,8 @@ const Stage1 = (props) => {
                 </select>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
+          </div> */}
+          {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Supplementary Employee</label>
               <div className="form_field_inner">
@@ -749,8 +868,8 @@ const Stage1 = (props) => {
                 </select>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
+          </div> */}
+          {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Sales Employee</label>
               <div className="form_field_inner">
@@ -760,8 +879,8 @@ const Stage1 = (props) => {
                 </select>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
+          </div> */}
+          {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Property Source</label>
               <div className="form_field_inner">
@@ -779,7 +898,7 @@ const Stage1 = (props) => {
                 </select>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Purpose</label>
@@ -859,6 +978,118 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
+
+          <div className="col-md-4">
+            <div id="id_demand" className="form_field label_top">
+              <label htmlFor="">Demand/Price</label>
+              <div className="form_field_inner">
+                <input
+                  id="id_demandprice"
+                  className="custom-input"
+                  required
+                  type="text"
+                  placeholder="Demand Amount for Rent or Sale"
+                  maxLength={9}
+                  onInput={(e) => {
+                    restrictInput(e, 9);
+                  }}
+                  onChange={(e) => {
+                    setPropertyDetails({
+                      ...propertyDetails,
+                      // DemandPrice: e.target.value,
+                      DemandPrice: e.target.value.trim(),
+                      // DemandPriceInWords: amountToWords(e.target.value)
+                    });
+                  }}
+                  value={propertyDetails && propertyDetails.DemandPrice}
+                />
+                <div style={{ fontSize: "smaller" }}>
+                  {convertToWords(propertyDetails.DemandPrice)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Maintenance Status</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.MaintenanceFlag === "Included"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="maintenanceflag_included"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              MaintenanceFlag: "Included",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="maintenanceflag_included"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Included</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.MaintenanceFlag === "Excluded"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="maintenanceflag_excluded"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              MaintenanceFlag: "Excluded",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="maintenanceflag_excluded"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Excluded</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>}
+
           {propertyDetails && propertyDetails.Purpose === "Rent" && (
             <div className="col-md-4">
               <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
@@ -1108,16 +1339,17 @@ const Stage1 = (props) => {
 
             </div>
           )}
-          <div className="col-md-4">
+
+          {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-md-4">
             <div id="id_demand" className="form_field label_top">
-              <label htmlFor="">Demand/Price</label>
+              <label htmlFor="">Security Deposit</label>
               <div className="form_field_inner">
                 <input
-                  id="id_demandprice"
+                  id="id_securitydeposit"
                   className="custom-input"
                   required
                   type="text"
-                  placeholder="Demand Amount for Rent or Sale"
+                  placeholder="Security Deposit Amount"
                   maxLength={9}
                   onInput={(e) => {
                     restrictInput(e, 9);
@@ -1126,38 +1358,20 @@ const Stage1 = (props) => {
                     setPropertyDetails({
                       ...propertyDetails,
                       // DemandPrice: e.target.value,
-                      DemandPrice: e.target.value.trim(),
+                      SecurityDeposit: e.target.value.trim(),
                       // DemandPriceInWords: amountToWords(e.target.value)
                     });
                   }}
-                  value={propertyDetails && propertyDetails.DemandPrice}
+                  value={propertyDetails && propertyDetails.SecurityDeposit}
                 />
                 <div style={{ fontSize: "smaller" }}>
-                  {convertToWords(propertyDetails.DemandPrice)}
+                  {convertToWords(propertyDetails.SecurityDeposit)}
                 </div>
               </div>
             </div>
+          </div>}
 
-          </div>
-          <div className="col-md-4">
-            <div id="id_demand" className="form_field label_top">
-              <label htmlFor="">Security Deposit (ZERO)</label>
-              <div className="form_field_inner">
-                <input
-                  id="security_deposite"
-                  className="custom-input"
-                  required
-                  type="number"
-                  placeholder="Security amount"
-                />
-                <div style={{ fontSize: "smaller" }}>
-                  {/* {convertToWords(propertyDetails.DemandPrice)} */}
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <div className="col-md-4">
+          {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Package</label>
               <div className="form_field_inner">
@@ -1174,8 +1388,9 @@ const Stage1 = (props) => {
                 </select>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
+          </div> */}
+
+          {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Select Property Flag</label>
               <div className="form_field_inner">
@@ -1193,7 +1408,7 @@ const Stage1 = (props) => {
                 </select>
               </div>
             </div>
-          </div>
+          </div> */}
 
 
           <div className="col-md-4">
@@ -1318,10 +1533,18 @@ const Stage1 = (props) => {
                 {"<< Back"}
               </button>
             </div>
+            {propertyid !== "new" && <div className="" style={{ width: "100%", padding: '0 0 0 0' }}>
+              <button
+                className="theme_btn full_width btn_border"
+                onClick={(e) => handleSubmit(e, 'Save')}
+              >
+                Save
+              </button>
+            </div>}
             <div className="" style={{ width: "100%", padding: "0 0 0 20px" }}>
               <button
                 className="theme_btn btn_fill"
-                onClick={handleSubmit}
+                onClick={(e) => handleSubmit(e, 'Next')}
                 style={{
                   width: "100%",
                 }}
@@ -1332,7 +1555,7 @@ const Stage1 = (props) => {
           </div>
         </div>
       </div>
-    </form>
+    </>
   );
 };
 

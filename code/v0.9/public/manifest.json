@@ -3,24 +3,46 @@
   "name": "PROPDIAL",
   "icons": [
     {
-      "src": "/img/logo_propdial.png",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "src": "/assets/img/Logo196x196.png",
+      "sizes": "196x196",
       "type": "image/x-icon",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     },
     {
-      "src": "/img/logo_propdial.png",
+      "src": "/assets/img/Logo64x64.png",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/assets/img/Logo32x32.png",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/assets/img/Logo24x24.png",
+      "sizes": "24x24",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/assets/img/Logo16x16.png",
+      "sizes": "16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/assets/img/Logo192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/img/logo_propdial.png",
+      "src": "/assets/img/Logo512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
+  "scope": "/",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#F4F2EB"
+  "background_color": "#F4F2EB",
+  "orientation": "portrait"
 }

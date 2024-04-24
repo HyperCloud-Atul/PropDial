@@ -108,50 +108,6 @@ function App() {
 
   const [deferredPrompt, setDeferredPrompt] = useState(null);
 
-//  service worker 
-
-// useEffect(() => {
-//   // index.js or App.js
-//   if ("serviceWorker" in navigator) {
-//     window.addEventListener("load", function () {
-//       navigator.serviceWorker.register("/serviceworker.js").then(
-//         function (registration) {
-//           console.log(
-//             "ServiceWorker registration successful with scope: ",
-//             registration.scope
-//           );
-//         },
-//         function (err) {
-//           console.error("ServiceWorker registration failed: ", err);
-//         }
-//       );
-//     });
-
-//     //listen for appinstalled event
-//     window.addEventListener("appinstalled", (evt) => {
-//       //deprecated but still runs in Chrome-based browsers.
-//       //Not very useful event.
-//       // console.log('Is app already installed: ')
-//     });
-
-//     window.addEventListener("beforeinstallprompt", (e) => {
-//       console.log("handleBeforeInstallPrompt Listner in app.js: ", e);
-//       // Prevent the default browser behavior
-//       e.preventDefault();
-//       // Store the event for later use
-//       setDeferredPrompt(e);
-//     });
-
-//     //Push Notification - Client Enablement
-//     // const msg = firebase.messaging();
-//     // projectMsg.requestPermission().then(() => {
-//     //   return projectMsg.getToken()
-//     // }).then((data) => {
-//     //   console.warn("token", data)
-//     // })
-//   }
-// }, [user]);
-
   function startChromeInstall() {
     // console.log('deferredPrompt: ', deferredPrompt)
     if (deferredPrompt) {
@@ -259,9 +215,9 @@ function App() {
                     element={<PGMoreMenu></PGMoreMenu>}
                   ></Route>
 
-<Route
+                  <Route
                     path="/stage4"
-                    element={<Stage4/>}
+                    element={<Stage4 />}
                   ></Route>
 
                   <Route
@@ -290,7 +246,7 @@ function App() {
                     element={<PropertyDetails></PropertyDetails>}
                   ></Route>
 
-                  <Route
+                  {/* <Route
                     path="/addproperty"
                     element={
                       user && user.role !== "admin" ? (
@@ -299,7 +255,7 @@ function App() {
                         <Navigate to="/login" />
                       )
                     }
-                  ></Route>
+                  ></Route> */}
 
                   <Route
                     path="/allproperties"
@@ -310,7 +266,7 @@ function App() {
 
 
 
-                  <Route
+                  {/* <Route
                     path="/addproperty_quick"
                     element={
                       user && user.role === "admin" ? (
@@ -319,7 +275,7 @@ function App() {
                         <Navigate to="/login" />
                       )
                     }
-                  ></Route>
+                  ></Route> */}
 
                   <Route
                     path="/ticketdetail"

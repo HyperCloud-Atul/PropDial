@@ -48,14 +48,15 @@ export const useFirestore = (collection) => {
 
     try {
 
-      const createdBy = {
-        id: user.uid,
-        displayName: user.displayName + '(' + user.role + ')',
-        fullName: user.fullName,
-        phoneNumber: user.phoneNumber,
-        emailID: user.email,
-        photoURL: user.photoURL
-      }
+      // const createdBy = {
+      //   id: user.uid,
+      //   displayName: user.displayName + '(' + user.role + ')',
+      //   fullName: user.fullName,
+      //   phoneNumber: user.phoneNumber,
+      //   emailID: user.email,
+      //   photoURL: user.photoURL
+      // }
+      const createdBy = user.uid
       const createdAt = timestamp.fromDate(new Date())
       const addedDocument = await ref.add({ ...doc, createdAt, createdBy })
 

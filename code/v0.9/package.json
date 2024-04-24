@@ -1,6 +1,6 @@
 {
-  "name": "propdial",
-  "version": "0.0.2",
+  "name": "Propdial",
+  "version": "0.0.9",
   "private": true,
   "dependencies": {
     "@emotion/styled": "^11.11.0",

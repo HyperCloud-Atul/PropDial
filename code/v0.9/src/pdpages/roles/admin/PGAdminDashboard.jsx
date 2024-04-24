@@ -238,7 +238,7 @@ const PGAdminDashboard = () => {
                   <div className="property_status">
                     <div className="ps_single pending">
                       <h5>{pendingProperties && pendingProperties.length}</h5>
-                      <h6>Pending Approval</h6>
+                      <h6>In-Review</h6>
                     </div>
                     <div className="ps_single active">
                       <h5>{activeProperties && activeProperties.length}</h5>
@@ -427,7 +427,7 @@ const PGAdminDashboard = () => {
                 </div>
                 <div className="col-lg-6">
                   <section className="self_property_detail" style={{
-                    gridTemplateColumns:"repeat(1,1fr)"
+                    gridTemplateColumns: "repeat(1,1fr)"
                   }}>
                     <Link className="theme_btn btn_fill">
                       Post your property

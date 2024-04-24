@@ -4,7 +4,7 @@ import "./index.css";
 import "./index.scss"
 import App from "./App";
 import { AuthContextProvider } from "./context/AuthContext";
-
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
@@ -15,11 +15,6 @@ root.render(
     </AuthContextProvider>
   </React.StrictMode>
 );
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <AuthContextProvider>
-//       <App />
-//     </AuthContextProvider>
-//   </React.StrictMode>,
-//   document.getElementById('root')
-// );
+
+// Register service worker
+serviceWorkerRegistration.register();

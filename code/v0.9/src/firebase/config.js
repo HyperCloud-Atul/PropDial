@@ -3,6 +3,7 @@ import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/storage'
 import 'firebase/functions'
+import 'firebase/messaging'
 // import { getFunctions, httpsCallable } from 'firebase/functions'
 
 // development keys 
@@ -35,9 +36,11 @@ const projectAuth = firebase.auth();
 const projectAuthObj = firebase.auth;
 const projectStorage = firebase.storage()
 const projectFunctions = firebase.functions()
+const projectMsg = firebase.messaging()
+const projectID = app.options.projectId
 
 
 // timestamp
 const timestamp = firebase.firestore.Timestamp;
 
-export { projectFirestore, FieldValue, projectAuth, projectAuthObj, projectStorage, projectFunctions, timestamp }
+export { projectFirestore, FieldValue, projectAuth, projectAuthObj, projectStorage, projectFunctions, projectMsg, timestamp, projectID }
