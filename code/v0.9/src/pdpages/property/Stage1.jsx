@@ -184,10 +184,13 @@ const Stage1 = (props) => {
 
   let statesOptions = useRef([]);
   let statesOptionsSorted = useRef([]);
+  let citiesOptions = useRef([]);
+  let citiesOptionsSorted = useRef([]);
   var distinctCityList = [];
   var distinctLocalityList = [];
   var distinctSocietyList = [];
   const [state, setState] = useState();
+  const [city, setCity] = useState({ label: "Select City", value: "Select City" });
   const [distinctValuesLocality, setdistinctValuesLocality] = useState([]);
   const [distinctValuesSociety, setdistinctValuesSociety] = useState([]);
   const [formError, setFormError] = useState(null);
@@ -220,6 +223,23 @@ const Stage1 = (props) => {
     "m_states",
     ["country", "==", "INDIA"]
   );
+
+  const { documents: dbcitiesdocuments, error: dbcitieserror } = useCollection(
+    "m_cities",
+    ["status", "==", "active"]
+  );
+
+  //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active 
+  dbcitiesdocuments &&
+    dbcitiesdocuments.map((doc) => {
+      // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
+      if (!distinctCityList.find((e) => e.city === doc.city)) {
+        distinctCityList.push({
+          state: doc.state,
+          city: doc.city,
+        });
+      }
+    });
 
   dbpropertiesdocuments &&
     dbpropertiesdocuments.map((doc) => {
@@ -254,7 +274,7 @@ const Stage1 = (props) => {
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
-    Category: "RESIDENTIAL",
+    Category: "Residential",
     UnitNumber: "",
     DemandPrice: "",
     MaintenanceCharges: "",
@@ -302,12 +322,29 @@ const Stage1 = (props) => {
       });
     }
 
+    if (propertyDocument && propertyDocument.city) {
+      setCity({
+        label: propertyDocument.city,
+        value: propertyDocument.city,
+      });
+      handleCityChange({
+        label: propertyDocument.city,
+        value: propertyDocument.city,
+      });
+    } else {
+      setCity({ label: "Select City", value: "Select City" });
+      handleCityChange({
+        label: "Select City",
+        value: "Select City",
+      });
+    }
+
     if (propertyDocument) {
       setPropertyDetails({
         // All select type
         Category: propertyDocument.category
           ? propertyDocument.category
-          : "RESIDENTIAL",
+          : "Residential",
         UnitNumber: propertyDocument.unitNumber
           ? propertyDocument.unitNumber
           : "",
@@ -344,7 +381,23 @@ const Stage1 = (props) => {
       : (obj_maintenance.style.display = "flex");
   };
 
+  // const handleStateChange = async (option) => {
+  //   setState(option);
+  //   let statename = option.label;
+  //   // console.log('state name:  ', statename)
+  //   let cityListStateWise = [];
+  //   cityListStateWise = distinctCityList.filter((e) => e.state === statename);
+  //   // console.log('cityListStateWise:', cityListStateWise)
+
+  //   const dataList =
+  //     cityListStateWise && cityListStateWise.map((doc) => doc.city);
+  //   // distinctValuesCity = [...new Set(dataCity)];
+  //   setdistinctValuesCity([...new Set(dataList)]);
+  //   // console.log('distinctValuesCity:', distinctValuesCity)
+  // };
+
   const handleStateChange = async (option) => {
+
     setState(option);
     let statename = option.label;
     // console.log('state name:  ', statename)
@@ -357,7 +410,36 @@ const Stage1 = (props) => {
     // distinctValuesCity = [...new Set(dataCity)];
     setdistinctValuesCity([...new Set(dataList)]);
     // console.log('distinctValuesCity:', distinctValuesCity)
+
+    //City Dropdown List as per state
+    citiesOptions.current =
+      cityListStateWise &&
+      cityListStateWise.map((cityData) => ({
+        label: cityData.city,
+        value: cityData.city,
+      }));
+    // // console.log('statesOptions:', statesOptions)
+    // citiesOptionsSorted = null;
+
+    citiesOptionsSorted.current =
+      citiesOptions.current &&
+      citiesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
+
+    // citiesOptionsSorted.current &&
+    //   citiesOptionsSorted.current.unshift({
+    //     label: "Select City",
+    //     value: "Select City",
+    //   })
+    setCity({ label: "Select City", value: "Select City" });
   };
+
+  const handleCityChange = async (option) => {
+    setCity(option);
+
+    // console.log('City option: ', option)
+
+    setSearchedCity(option.value)
+  }
 
   function setSearchedCity(cityname) {
     // console.log('cityname', cityname);
@@ -375,6 +457,9 @@ const Stage1 = (props) => {
     const dataList =
       localityListStateWise && localityListStateWise.map((doc) => doc.locality);
     setdistinctValuesLocality([...new Set(dataList)]);
+
+    console.log('Locality dataList: ', dataList)
+
   }
 
   function setSearchedLocality(localityname) {
@@ -430,6 +515,7 @@ const Stage1 = (props) => {
           id: addDocumentResponse.document && addDocumentResponse.document.id,
           // stageFlag: 'stage2'
         });
+
         props.setStateFlag("stage2");
         navigate("/addproperty/" + addDocumentResponse.document.id);
 
@@ -527,12 +613,15 @@ const Stage1 = (props) => {
     const property = {
       category: propertyDetails.Category
         ? propertyDetails.Category
-        : "RESIDENTIAL",
+        : "Residential",
       unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : "",
       purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
       demandprice: propertyDetails.DemandPrice
         ? propertyDetails.DemandPrice
         : "",
+      maintenanceflag: propertyDetails.MaintenanceFlag
+        ? propertyDetails.MaintenanceFlag
+        : "Excluded",
       maintenancecharges: propertyDetails.MaintenanceCharges
         ? propertyDetails.MaintenanceCharges
         : "",
@@ -540,7 +629,8 @@ const Stage1 = (props) => {
         ? propertyDetails.MaintenanceChargesFrequency
         : "NA",
       state: state.label,
-      city: camelCase(propertyDetails.City.toLowerCase().trim()),
+      city: city.label,
+      // city: camelCase(propertyDetails.City.toLowerCase().trim()),
       locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
       society: camelCase(propertyDetails.Society.toLowerCase().trim()),
       pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
@@ -580,8 +670,9 @@ const Stage1 = (props) => {
         onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
       };
       if (!errorFlag) {
-        console.log("new property needs to be created")
-        await addDocument(newProperty);
+        console.log("new property created: ")
+        console.log(newProperty)
+        // await addDocument(newProperty);
         if (addDocumentResponse.error) {
           navigate("/");
         } else {
@@ -1436,25 +1527,34 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
+
           <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">City</label>
+
               <div className="form_field_inner">
-                {/* <span>distinctValuesCity in SearchBarAutoComplete: {distinctValuesCity}</span> */}
-                <SearchBarAutoComplete
-                  enabled={
-                    state && state.value === "Select State" ? true : false
-                  }
-                  dataList={distinctValuesCity}
-                  placeholderText={"Search or add new city"}
-                  getQuery={setSearchedCity}
-                  queryValue={propertyDetails ? propertyDetails.City : ""}
-                  setRedirectFlag={setRedirectFlag}
-                ></SearchBarAutoComplete>
+                <Select
+                  className=""
+                  onChange={handleCityChange}
+                  options={citiesOptionsSorted.current}
+                  value={city}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      outline: "none",
+                      background: "#efefef",
+                      border: "none",
+                      borderBottom: "none",
+                      paddingLeft: "10px",
+                      textTransform: "capitalize",
+                    }),
+                  }}
+                />
               </div>
             </div>
-
           </div>
+
+
           <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Locality</label>
@@ -1501,14 +1601,14 @@ const Stage1 = (props) => {
                 <input
                   type="number"
                   placeholder="Enter here"
-                  maxLength={12}
+                  maxLength={6}
                   onChange={(e) =>
                     setPropertyDetails({
                       ...propertyDetails,
-                      UnitNumber: e.target.value.trim(),
+                      Pincode: e.target.value.trim(),
                     })
                   }
-                  value={propertyDetails && propertyDetails.UnitNumber}
+                  value={propertyDetails && propertyDetails.Pincode}
                 />
                 <div className="field_icon"></div>
               </div>
