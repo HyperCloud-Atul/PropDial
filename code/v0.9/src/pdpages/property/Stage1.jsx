@@ -672,7 +672,7 @@ const Stage1 = (props) => {
       if (!errorFlag) {
         console.log("new property created: ")
         console.log(newProperty)
-        // await addDocument(newProperty);
+        await addDocument(newProperty);
         if (addDocumentResponse.error) {
           navigate("/");
         } else {
