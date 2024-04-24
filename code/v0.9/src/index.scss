@@ -672,4 +672,11 @@
     }
   }
 }
+@media only screen and (max-width: 991px) {
+  section.graphs {    
+    grid-template-columns: repeat(1, 1fr) !important;
+    grid-row-gap: 22px;
+  }
+}
+
 
