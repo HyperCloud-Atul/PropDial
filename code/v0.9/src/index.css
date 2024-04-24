@@ -647,7 +647,7 @@ h2.card_title {
   padding: 22px;
   bottom: 0;
   background: whitesmoke;
-  z-index: 99;
+  z-index: 9999;
 }
 
 .add_property_fields {
