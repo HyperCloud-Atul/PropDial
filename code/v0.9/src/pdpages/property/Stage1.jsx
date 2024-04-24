@@ -1620,6 +1620,7 @@ const Stage1 = (props) => {
         <div className="verticall_gap"></div>
         <div className="next_btn_back">
           {formError && <p className="error">{formError}</p>}
+          {formSuccess && <p className="success">{formSuccess}</p>}
 
           <div style={{ display: "flex", alignItems: "center" }}>
             <div className="" style={{ width: "100%", padding: "0 20px 0 0" }}>
