@@ -598,7 +598,11 @@
 .ff_gap {
   height: 12px;
 }
-
+.back_with_title{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 @media only screen and (max-width: 991px) {
   .property_cards_parent {
     grid-template-columns: repeat(1, 1fr);

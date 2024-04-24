@@ -330,6 +330,9 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     }
 }
 @media only screen and (max-width: 991px) {
+    .row_reverse_991{
+        flex-direction: column-reverse;
+    }
     .propagent_dashboard_inner .all_payments, .self_property_detail {      
         grid-template-columns: repeat(3,1fr) !important;       
     }

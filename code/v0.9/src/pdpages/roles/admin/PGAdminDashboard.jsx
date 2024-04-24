@@ -253,13 +253,14 @@ const PGAdminDashboard = () => {
                     </div>
                   </div>
                 </div>
-              </section>
-              <div className="vg22"></div>
+              </section>     
 
               <div className="vg22"></div>
               <hr />
-              <div className="row">
+              <div className="vg22"></div>
+              <div className="row row_reverse_991">
                 <div className="col-lg-6">
+                  <div className="vg22_991"></div>
                   <div className="properties_map">
                     <h2
                       className="p_title"

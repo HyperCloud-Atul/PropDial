@@ -690,6 +690,7 @@ h2.card_title {
 
 .add_property_fields {
   margin-bottom: 129px;
+  min-height: calc(100vh - 350px);
 }
 
 

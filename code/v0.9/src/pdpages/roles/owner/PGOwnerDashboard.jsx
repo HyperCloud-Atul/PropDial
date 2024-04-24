@@ -157,9 +157,8 @@ const PGOwnerDashboard = () => {
                 </div>
               </section>
               <div className="vg22"></div>
-
-              <div className="vg22"></div>
               <hr />
+              <div className="vg22"></div>
               <section className="self_property_detail">
                 <div className="spd_single">
                   <div className="left residential">
