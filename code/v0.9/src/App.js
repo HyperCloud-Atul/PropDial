@@ -20,7 +20,8 @@ import Home from "./pdpages/home/Home";
 import PGMoreMenu from "./pdpages/more-menu/PGMoreMenu";
 import PGSearchProperty from "./pdpages/property/PGSearchProperty";
 import PGProperties from "./pdpages/property/PGProperties";
-import PGAddProperty from "./pdpages/property/PGAddProperty";
+import PGCreateProperty from "./pdpages/property/PGCreateProperty";
+import PGUpdateProperty from "./pdpages/property/PGUpdateProperty";
 import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
 
 // ------------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ import PropAgentHome from "./pages/roles/agent/PropAgentHome";
 import UserDashboard from "./pages/dashboard/UserDashboard";
 
 import PGSignup from "./pages/login/PGSignup";
-import PGAddPropertyQuick from "./pages/create/PGAddPropertyQuick";
+// import PGAddPropertyQuick from "./pages/create/PGAddPropertyQuick";
 import AddBill from "./pages/create/AddBill";
 import AddPhoto from "./pages/create/AddPhoto";
 import AddDocument from "./pages/create/AddDocument";
@@ -250,7 +251,7 @@ function App() {
                     path="/addproperty"
                     element={
                       user && user.role !== "admin" ? (
-                        <PGAddProperty />
+                        <PGUpdateProperty />
                       ) : (
                         <Navigate to="/login" />
                       )
@@ -366,12 +367,22 @@ function App() {
                     }
                   ></Route>
 
-
                   <Route
-                    path="/addproperty/:propertyid"
+                    path="/newproperty"
                     element={
                       user && user.role === "admin" ? (
-                        <PGAddProperty />
+                        <PGCreateProperty />
+                      ) : (
+                        <PhoneLogin />
+                      )
+                    }
+                  ></Route>
+
+                  <Route
+                    path="/updateproperty/:propertyid"
+                    element={
+                      user && user.role === "admin" ? (
+                        <PGUpdateProperty />
                       ) : (
                         <PhoneLogin />
                       )

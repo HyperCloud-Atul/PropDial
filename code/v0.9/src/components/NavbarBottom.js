@@ -99,13 +99,13 @@ export default function NavbarBottom() {
 
   // more acitve class Array 
   const moreActivePaths = ["/more-menu", "/about-us", "/contact-us", "/faq",
-    "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/addproperty"];
+    "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/newproperty"];
   const shouldMoreActive = moreActivePaths.includes(location.pathname);
   const moreActiveClass = `b_menu_single ${shouldMoreActive ? "b_menu_active" : ""}`;
   // more acitve class Array 
 
   // hide page_footer array 
-  const pageBottomMenuHidePaths = ["/addproperty"];
+  const pageBottomMenuHidePaths = ["/newproperty"];
   const shouldPageFooerHide = pageBottomMenuHidePaths.includes(location.pathname);
   const pageBottomMenuClass = `${shouldPageFooerHide ? "page_footer_hide" : ""}`;
   // hide page_footer array 

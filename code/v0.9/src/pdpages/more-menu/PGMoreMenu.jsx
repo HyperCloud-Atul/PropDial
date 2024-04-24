@@ -146,7 +146,7 @@ const PGMoreMenu = () => {
               <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
                 <h6 className="title dm20 light_black">Admin</h6>
                 <div className="inner">
-                  <Link className="mm_single" to="/addproperty">
+                  <Link className="mm_single" to="/newproperty">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16">add property</h5>
                     <h6>set your current location</h6>
@@ -341,7 +341,7 @@ const PGMoreMenu = () => {
               <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
                 <h6 className="title dm20 light_black">Owner</h6>
                 <div className="inner">
-                  <Link className="mm_single" to="/addproperty">
+                  <Link className="mm_single" to="/newproperty">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16">Properties</h5>
                     <h6>check your all properties</h6>

@@ -56,7 +56,7 @@ export default function Sidebar(props) {
 
               {user && user.role === 'admin' &&
                 <li>
-                  <NavLink to="/addproperty">
+                  <NavLink to="/newproperty">
                     <img src={AddIcon} alt="add property icon" />
                     <span>Add Property</span>
                   </NavLink>

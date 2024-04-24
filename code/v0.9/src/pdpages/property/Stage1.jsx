@@ -217,7 +217,7 @@ const Stage1 = (props) => {
   const navigate = useNavigate();
 
   const { documents: dbpropertiesdocuments, error: propertieserror } =
-    useCollection("properties", ["postedBy", "==", "Agent"]);
+    useCollection("properties", ["postedBy", "==", "Propdial"]);
 
   const { documents: dbstatesdocuments, error: dbstateserror } = useCollection(
     "m_states",
@@ -517,7 +517,7 @@ const Stage1 = (props) => {
         });
 
         props.setStateFlag("stage2");
-        navigate("/addproperty/" + addDocumentResponse.document.id);
+        navigate("/updateproperty/" + addDocumentResponse.document.id);
 
         //add a default property image into storage for newly created propertyid
         // const sourceImagePath = 'gs://your-project-id.appspot.com/images/source.jpg';

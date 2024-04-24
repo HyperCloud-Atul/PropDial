@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useDocument } from "../../../hooks/useDocument";
-import PGAddProperty from "../../../pdpages/property/PGAddProperty";
+import PGUpdateProperty from "../../../pdpages/property/PGUpdateProperty";
 
 // components
 // import PropertyComments from "./PropertyComments"
@@ -23,7 +23,7 @@ export default function PGPropertyEdit() {
   return (
     <>
       <div className="property-details">
-        {<PGAddProperty propertyid={id}></PGAddProperty>}
+        {<PGUpdateProperty propertyid={id}></PGUpdateProperty>}
         {/* <PGPropertyDetails property={document} /> */}
         {/* <PropertyComments property={document} /> */}
       </div>

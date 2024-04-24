@@ -12,7 +12,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Select from 'react-select'
 
 // styles
-import "./PGAddProperty.css";
+import "./PGUpdateProperty.css";
 
 // component
 import PropertySidebar from "../../Components/PropertySidebar";

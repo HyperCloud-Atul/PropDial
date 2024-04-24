@@ -122,13 +122,13 @@ export default function Navbar() {
 
   // array of more class active on desktop
   const moreDesktopActivePaths = ["/more-menu", "/faq",
-    "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/addproperty"];
+    "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/newproperty"];
   const shouldMoreDesktopActive = moreDesktopActivePaths.includes(location.pathname);
   const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? "active" : ""}`;
   // array of more class active on desktop 
 
   // display navbar on top Array 
-  const excludedPaths = ["/", "/about-us", "/contact-us",  "/faq"];
+  const excludedPaths = ["/", "/about-us", "/contact-us", "/faq"];
   const shouldOnTop = excludedPaths.includes(location.pathname);
   const navbarClassName = `navbarparent ${shouldOnTop ? "" : "on_top"}`;
   // display navbar on top Array 
@@ -159,7 +159,7 @@ export default function Navbar() {
               <div
                 onClick={showHome}
                 className={`menu_single pointer ${location.pathname === "/" ? "active" : ""
-              }`}
+                  }`}
               >
                 <span className="material-symbols-outlined">{firstMenuIcon}</span>
                 {firstMenu}
@@ -168,7 +168,7 @@ export default function Navbar() {
               <div
                 onClick={showSecondPage}
                 className={`menu_single pointer ${location.pathname === "/dashboard" ? "active" : ""
-              }`}
+                  }`}
               >
                 <span className="material-symbols-outlined">{secondMenuIcon}</span>
                 {secondMenu}
@@ -177,7 +177,7 @@ export default function Navbar() {
               <div
                 onClick={showThirdPage}
                 className={`menu_single pointer ${location.pathname === "/contact-us" ? "active" : ""
-              }`}
+                  }`}
               >
                 <span className="material-symbols-outlined">{thirdMenuIcon}</span>
                 {thirdMenu}

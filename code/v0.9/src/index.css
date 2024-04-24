@@ -14,17 +14,20 @@
   --black-color: #000;
   --theme-grey: #888888;
   --light-black: #3f3f3f;
-  --theme-red:#FA6262;
+  --theme-red: #FA6262;
   /* main color variable  end */
 
   /* background color variables start */
   --theme-green-bg: #e2ffe7;
   --theme-purple-bg: #efe5ff;
-  --theme-blue-bg:#dae7ff;
+  --theme-blue-bg: #dae7ff;
   --theme-purple-bg-light: #f9f5ff80;
   --theme-orange-bg: #ffefe5;
   --page-bg: #f5f5f5;
-   /* background color variables end */
+  --error-color: #FA6304;
+  --warning-color: #FEEBA0;
+  --success-color: #00a8a8;
+  /* background color variables end */
 
 }
 
@@ -49,6 +52,7 @@ body {
 .page p {
   margin: 0px;
 }
+
 .aflbg {
   background: var(--page-bg);
 }
@@ -106,6 +110,7 @@ a.theme_btn.btn_white {
   background: var(--theme-green);
   color: var(--white-color);
 }
+
 .theme_btn.btn_red {
   border: none;
   background: var(--theme-red);
@@ -138,6 +143,7 @@ a.theme_btn.btn_white {
     transform: translateX(-5px);
   }
 }
+
 .section_title h3 {
   font-size: 26px;
   color: var(--theme-orange);
@@ -158,18 +164,50 @@ a.theme_btn.btn_white {
 }
 
 .error {
-  color: var(--red-color);
-  border: 1px solid var(--red-color);
+  /* color: var(--red-color); */
+  color: #fff;
+  /* border: 1px solid var(--error-color); */
   border-radius: 4px;
-  padding: 8px;
-  margin-bottom: 15px;
-  margin-top: 25px;
-  font-size: 16px;
-  font-weight: 500;
-  background: black;
-  max-width: 430px;
+  padding: 8px !important;
+  /* margin-bottom: 15px;
+  margin-top: 250px;
   margin-left: auto;
-  margin-right: auto;
+  margin-right: auto; */
+  font-size: 0.9rem;
+  font-weight: 500;
+  /* background: black; */
+  background: var(--error-color);
+  width: auto;
+
+}
+
+.warning {
+  /* color: var(--red-color); */
+  color: #fff;
+  /* border: 1px solid var(--warning-color); */
+  border-radius: 4px;
+  padding: 8px !important;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  /* background: black; */
+  background: var(--warning-color);
+  width: auto;
+
+}
+
+.success {
+  /* color: var(--red-color); */
+  color: #fff;
+  /* border: 1px solid var(--success-color); */
+  border-radius: 4px;
+  padding: 8px !important;
+  font-size: 0.9rem;
+  font-weight: 200;
+  /* background: black; */
+  background: var(--success-color);
+  width: auto;
+
 }
 
 /* popup  */

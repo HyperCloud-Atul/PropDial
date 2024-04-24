@@ -12,7 +12,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 // styles
-import './PGAddProperty.css'
+import './PGUpdateProperty.css'
 import { el } from 'date-fns/locale'
 
 // component 

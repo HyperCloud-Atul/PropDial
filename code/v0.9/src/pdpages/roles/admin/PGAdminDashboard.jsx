@@ -183,7 +183,7 @@ const PGAdminDashboard = () => {
             <span className="material-symbols-outlined">close</span>
           </div>
 
-          <Link to="/addproperty/new" className="more-add-options-icons">
+          <Link to="/newproperty" className="more-add-options-icons">
             <h1>Add property</h1>
             <span className="material-symbols-outlined">location_city</span>
           </Link>
@@ -432,8 +432,8 @@ const PGAdminDashboard = () => {
                   <section className="self_property_detail" style={{
                     gridTemplateColumns: "repeat(1,1fr)"
                   }}>
-                    <Link className="theme_btn btn_fill">
-                      Post your property
+                    <Link className="theme_btn btn_fill" to="/newproperty" >
+                      Add New Property
                     </Link>
                     <div className="spd_single">
                       <div className="left residential">
@@ -501,7 +501,7 @@ const PGAdminDashboard = () => {
               <div className="vg22"></div>
               <hr />
               <div className="vg22"></div>
-           
+
               <section className="property_cards_parent">
                 {properties &&
                   properties.map((property) => (

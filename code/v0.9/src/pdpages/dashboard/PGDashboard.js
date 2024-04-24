@@ -16,7 +16,7 @@ const PGDaashboard = () => {
     // Scroll to the top of the page whenever the location changes end
 
     const { user } = useAuthContext();
-    console.log('user:', user)
+    // console.log('user:', user)
     return (
         <>
             <div>

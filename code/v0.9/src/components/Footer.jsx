@@ -27,10 +27,10 @@ export default function Footer() {
   const pageFooterHidePaths = [
     "/login",
     "/ticketdetail",
-    "/addproperty/:propertyid",
+    "/updateproperty/:propertyid",
     "/addproperty_quick",
-    "/addproperty",
-    "/addproperty/new",
+    "/updateproperty",
+    "/newproperty",
   ];
   const shouldPageFooterHide = pageFooterHidePaths.includes(location.pathname);
   const pageFooterClassName = `${shouldPageFooterHide ? "page_footer_hide" : ""}`;
