@@ -429,143 +429,159 @@ const CreateProperty = () => {
         setFormError(null);
         setFormSuccess(null);
 
-        let errorFlag = false;
-        let errorMsg = "Error: Please select ";
-
-        if (propertyDetails.Purpose === "") {
-            if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "Purpose";
-            else errorMsg = errorMsg + ", Purpose";
-            errorFlag = true;
+        var btnProperties = document.getElementById("btn_create").innerHTML;
+        console.log("btnName: ", btnProperties)
+        if (btnProperties === "Properties") {
+            // console.log("btnName: ", btnProperties)
+            navigate("/dashboard");
         }
-        // if (propertyDetails.DemandPrice === "" || propertyDetails.DemandPrice === "0") {
-        //   if (errorMsg === "Error: Please select ") errorMsg = "Please Enter Demand Price";
-        //   else errorMsg = errorMsg + ", Demand Price";
-        //   errorFlag = true;
-        // }
+        else {
 
-        // if (propertyDetails.MaintenanceCharges === "") {
-        //   propertyDetails.MaintenanceChargesFrequency = "NA"
-        // } else {
-        //   if (
-        //     (propertyDetails.MaintenanceCharges !== "") &&
-        //     propertyDetails.MaintenanceChargesFrequency === ""
-        //   ) {
-        //     if (errorMsg === "Please select ")
-        //       errorMsg = errorMsg + "Frequency";
-        //     else errorMsg = errorMsg + ", Frequency";
-        //     errorFlag = true;
-        //   }
-        //   else {
-        //     if (propertyDetails.MaintenanceCharges !== "" &&
-        //       propertyDetails.MaintenanceChargesFrequency === "NA") {
-        //       if (errorMsg === "Please select ")
-        //         errorMsg = errorMsg + "Frequency";
-        //       else errorMsg = errorMsg + ", Frequency";
-        //       errorFlag = true;
-        //     }
-        //   }
-        // }
+            let errorFlag = false;
+            let errorMsg = "Error: Please select ";
 
-        // console.log('state:', state)
-        // if (state === "" || state === undefined || state === "Select State") {
-        //   if (errorMsg === "Please select ") errorMsg = errorMsg + "State";
-        //   else errorMsg = errorMsg + ", State";
-        //   errorFlag = true;
-        // }
-
-        // if (propertyDetails.City === "") {
-        //   if (errorMsg === "Please select ") errorMsg = errorMsg + "City";
-        //   else errorMsg = errorMsg + ", City";
-        //   errorFlag = true;
-        // }
-        // if (propertyDetails.Locality === "") {
-        //   if (errorMsg === "Please select ") errorMsg = errorMsg + "Locality";
-        //   else errorMsg = errorMsg + ", Locality";
-        //   errorFlag = true;
-        // }
-        // if (propertyDetails.Society === "") {
-        //   if (errorMsg === "Please select ") errorMsg = errorMsg + "Society";
-        //   else errorMsg = errorMsg + ", Society";
-
-        //   errorFlag = true;
-        // }
-
-        if (errorFlag) setFormError(errorMsg);
-        else setFormError(null);
-
-
-        // console.log('propertyDetails.City:', propertyDetails.City)
-
-        const property = {
-            category: propertyDetails.Category
-                ? propertyDetails.Category
-                : "Residential",
-            unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : "",
-            purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
-            demandprice: propertyDetails.DemandPrice
-                ? propertyDetails.DemandPrice
-                : "",
-            maintenanceflag: propertyDetails.MaintenanceFlag
-                ? propertyDetails.MaintenanceFlag
-                : "Excluded",
-            maintenancecharges: propertyDetails.MaintenanceCharges
-                ? propertyDetails.MaintenanceCharges
-                : "",
-            maintenancechargesfrequency: propertyDetails.MaintenanceChargesFrequency
-                ? propertyDetails.MaintenanceChargesFrequency
-                : "NA",
-            state: state.label,
-            city: city.label,
-            // city: camelCase(propertyDetails.City.toLowerCase().trim()),
-            locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
-            society: camelCase(propertyDetails.Society.toLowerCase().trim()),
-            pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
-        };
-
-
-
-
-        const newProperty = {
-            ...property,
-            //other property fields
-            source: "",
-            ownership: "",
-            package: "",
-            flag: "",
-            propertyType: "",
-            bhk: "",
-            numberOfBedrooms: "0",
-            numberOfBathrooms: "0",
-            furnishing: "",
-            additionalRooms: [],
-            superArea: "",
-            superAreaUnit: "",
-            carpetArea: "",
-            carpetAreaUnit: "",
-            imgURL: [],
-            propertyManager: user.uid,
-            propertyCoManager: "",
-            propertySalesManager: "",
-            propertyOwner: user.uid,
-            propertyCoOwner: "",
-            propertyPOC: "",
-            tenantList: [],
-            postedBy: "Propdial",
-            status: "In-Review",
-            onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
-        };
-        if (!errorFlag) {
-            console.log("new property created: ")
-            console.log(newProperty)
-            setFormSuccess("Data Saved Successfully");
-            setFormError(null)
-            // await addDocument(newProperty);
-            if (addDocumentResponse.error) {
-                navigate("/");
-            } else {
-                // navigate("/dashboard");
-                // setNewProperty(newProperty);
+            if (propertyDetails.Purpose === "" || propertyDetails.Purpose === "undefined" || propertyDetails.Purpose === null) {
+                if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "Purpose";
+                else errorMsg = errorMsg + ", Purpose";
+                errorFlag = true;
             }
+            else {
+                if ((propertyDetails.Purpose === "Rent") && (propertyDetails.MaintenanceFlag === "" || propertyDetails.MaintenanceFlag === "undefined" || propertyDetails.MaintenanceFlag == null)) {
+                    if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "Maintenance Status";
+                    else errorMsg = errorMsg + ", Maintenance Status";
+                    errorFlag = true;
+                }
+            }
+
+            if (propertyDetails.DemandPrice === "" || propertyDetails.DemandPrice === "0") {
+                if (errorMsg === "Error: Please select ") errorMsg = "Please Enter Demand Price";
+                else errorMsg = errorMsg + ", Demand Price";
+                errorFlag = true;
+            }
+
+
+            if (propertyDetails.MaintenanceCharges === "") {
+                propertyDetails.MaintenanceChargesFrequency = "NA"
+            } else {
+                if (
+                    (propertyDetails.MaintenanceCharges !== "") &&
+                    propertyDetails.MaintenanceChargesFrequency === ""
+                ) {
+                    if (errorMsg === "Error: Please select ")
+                        errorMsg = errorMsg + "Frequency";
+                    else errorMsg = errorMsg + ", Frequency";
+                    errorFlag = true;
+                }
+                else {
+                    if (propertyDetails.MaintenanceCharges !== "" &&
+                        propertyDetails.MaintenanceChargesFrequency === "NA") {
+                        if (errorMsg === "Error: Please select ")
+                            errorMsg = errorMsg + "Frequency";
+                        else errorMsg = errorMsg + ", Frequency";
+                        errorFlag = true;
+                    }
+                }
+            }
+
+            console.log('state:', state)
+            if (state.label === "" || state === undefined || state.label === "Select State") {
+                if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "State";
+                else errorMsg = errorMsg + ", State";
+                errorFlag = true;
+            }
+
+            if (city.label === "" || city === undefined || city.label === "Select City") {
+                if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "City";
+                else errorMsg = errorMsg + ", City";
+                errorFlag = true;
+            }
+
+            if (propertyDetails.Locality === "") {
+                if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "Locality";
+                else errorMsg = errorMsg + ", Locality";
+                errorFlag = true;
+            }
+            if (propertyDetails.Society === "") {
+                if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "Society";
+                else errorMsg = errorMsg + ", Society";
+                errorFlag = true;
+            }
+
+            if (errorFlag) setFormError(errorMsg);
+            else setFormError(null);
+
+            const property = {
+                category: propertyDetails.Category
+                    ? propertyDetails.Category
+                    : "Residential",
+                unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : "",
+                purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
+                status: propertyDetails.Purpose === "Rent" ? "Available for Rent" : "Available for Sale",
+                demandprice: propertyDetails.DemandPrice
+                    ? propertyDetails.DemandPrice
+                    : "",
+                maintenanceflag: propertyDetails.MaintenanceFlag
+                    ? propertyDetails.MaintenanceFlag
+                    : "",
+                maintenancecharges: propertyDetails.MaintenanceCharges
+                    ? propertyDetails.MaintenanceCharges
+                    : "",
+                maintenancechargesfrequency: propertyDetails.MaintenanceChargesFrequency
+                    ? propertyDetails.MaintenanceChargesFrequency
+                    : "NA",
+                state: state.label,
+                city: city.label,
+                // city: camelCase(propertyDetails.City.toLowerCase().trim()),
+                locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
+                society: camelCase(propertyDetails.Society.toLowerCase().trim()),
+                pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
+            };
+
+            const newProperty = {
+                ...property,
+                //other property fields
+                source: "",
+                ownership: "",
+                package: "",
+                flag: "",
+                propertyType: "",
+                bhk: "",
+                numberOfBedrooms: "0",
+                numberOfBathrooms: "0",
+                furnishing: "",
+                additionalRooms: [],
+                superArea: "",
+                superAreaUnit: "",
+                carpetArea: "",
+                carpetAreaUnit: "",
+                imgURL: [],
+                propertyManager: user.uid,
+                propertyCoManager: "",
+                propertySalesManager: "",
+                propertyOwner: user.uid,
+                propertyCoOwner: "",
+                propertyPOC: "",
+                tenantList: [],
+                postedBy: "Propdial",
+                isActiveInactiveReview: "In-Review",
+                onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
+            };
+            if (!errorFlag) {
+                console.log("new property created: ")
+                console.log(newProperty)
+                setFormSuccess("Property Created Successfully");
+                setFormError(null)
+                await addDocument(newProperty);
+                if (addDocumentResponse.error) {
+                    navigate("/");
+                } else {
+                    // var x = document.getElementById("btn_create").name;
+                    document.getElementById("btn_create").innerHTML = "Properties";
+                    // navigate("/dashboard");
+                    // setNewProperty(newProperty);
+                }
+            }
+
         }
 
     };
@@ -690,155 +706,9 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="col-md-4">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">
-                Purpose</label>
-              <div className="form_field_inner">
-                <div className="form_field_container">
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Rent"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_rent"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Rent",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_rent"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Rent</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Sale"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_sale"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Sale",
-                            });
-                          }}
 
-                        />
-                        <label
-                          htmlFor="purpose_sale"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Sale</h6>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
 
-                        {/* <div className="col-md-4">
-            <div className="form_field label_top">
-              <label>Ownership</label>
-              <div className="form_field_inner">
-                <select>
-                  <option selected>Free Hold</option>
-                  <option >Lease Hold</option>
-                  <option >Power Attorney</option>
-                </select>
-              </div>
-            </div>
-          </div> */}
-                        {/* <div className="col-md-4">
-            <div className="form_field label_top">
-              <label>Select Owner Name</label>
-              <div className="form_field_inner">
-                <select>
-                  <option value="">Select</option>
-                  <option selected>Sanskar solanki</option>
-                </select>
-              </div>
-            </div>
-          </div> */}
-                        {/* <div className="col-md-4">
-            <div className="form_field label_top">
-              <label>Co Owner Name</label>
-              <div className="form_field_inner">
-                <select>
-                  <option value="">Select</option>
-                  <option selected>Naman gaur</option>
-                </select>
-              </div>
-            </div>
-          </div> */}
-                        {/* <div className="col-md-4">
-            <div className="form_field label_top">
-              <label>Select Employee</label>
-              <div className="form_field_inner">
-                <select>
-                  <option value="">Select</option>
-                  <option selected>Khushi shrivastav</option>
-                </select>
-              </div>
-            </div>
-          </div> */}
-                        {/* <div className="col-md-4">
-            <div className="form_field label_top">
-              <label>Select Supplementary Employee</label>
-              <div className="form_field_inner">
-                <select>
-                  <option value="">Select</option>
-                  <option selected>Sugandha sahu</option>
-                </select>
-              </div>
-            </div>
-          </div> */}
-                        {/* <div className="col-md-4">
-            <div className="form_field label_top">
-              <label>Select Sales Employee</label>
-              <div className="form_field_inner">
-                <select>
-                  <option value="">Select</option>
-                  <option selected>Rajesh soni</option>
-                </select>
-              </div>
-            </div>
-          </div> */}
+
                         {/* <div className="col-md-4">
             <div className="form_field label_top">
               <label>Property Source</label>
@@ -937,6 +807,8 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
+
+
 
                         <div className="col-md-4">
                             <div id="id_demand" className="form_field label_top">
@@ -1349,25 +1221,29 @@ const CreateProperty = () => {
             </div>
           </div> */}
 
+
+
                         {/* <div className="col-md-4">
-            <div className="form_field label_top">
-              <label>Select Property Flag</label>
-              <div className="form_field_inner">
-                <select>
-                  <option value="">Select Property Flags</option>
-                  <option>For Rent Sale</option>
-                  <option>For Sale</option>
-                  <option>In Maintenance</option>
-                  <option>NA</option>
-                  <option>On Notice</option>
-                  <option>PMS Only</option>
-                  <option>Rented But Sale</option>
-                  <option>Rented Out</option>
-                  <option>Sold Out</option>
-                </select>
-              </div>
-            </div>
-          </div> */}
+                            <div className="form_field label_top">
+                                <label>Property Status - Rent</label>
+                                <div className="form_field_inner">
+                                    <select>
+                                        <option value="">Select Flag</option>
+                                        <option>For Rent Sale</option>
+                                        <option>For Sale</option>
+                                        <option>In Maintenance</option>
+                                        <option>NA</option>
+                                        <option>On Notice</option>
+                                        <option>PMS Only</option>
+                                        <option>Rented But Sale</option>
+                                        <option>Rented Out</option>
+                                        <option>Sold Out</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div> */}
+
+
 
 
                         <div className="col-md-4">
@@ -1499,19 +1375,20 @@ const CreateProperty = () => {
                                         width: "100%",
                                     }}
                                 >
-                                    {"<< Back"}
+                                    {"<< Dashboard"}
                                 </button>
                             </div>
 
                             <div className="" style={{ width: "100%", padding: "0 0 0 20px" }}>
                                 <button
+                                    id="btn_create"
                                     className="theme_btn btn_fill"
                                     onClick={(e) => handleSubmit(e, 'Next')}
                                     style={{
                                         width: "100%",
                                     }}
                                 >
-                                    {"Create"}
+                                    Create
                                 </button>
                             </div>
                         </div>

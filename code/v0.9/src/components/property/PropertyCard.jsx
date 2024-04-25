@@ -31,11 +31,14 @@ const PropertyCard = ({ propertydoc }) => {
                 fontSize: "10px",
               }}
             >
-              + Maintenance ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
+              + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
             </span>}
           </h5>
           <div className="full_address">
-            <h6>{propertydoc.bhk} {propertydoc.propertyType} for {propertydoc.purpose}</h6>
+            <h6>
+              {((propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT') || (propertydoc.status.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertydoc.status}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertydoc.status}</span>}
+            </h6>
+            <h6>{propertydoc.bhk} {propertydoc.propertyType}</h6>
             <h6>{propertydoc.society} | {propertydoc.locality}</h6>
             <h6>{propertydoc.city} | {propertydoc.state}</h6>
           </div>
