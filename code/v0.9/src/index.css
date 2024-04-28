@@ -84,12 +84,11 @@ body {
   font-size: 16px;
   font-weight: 500;
   position: relative;
-  padding-right: 35px;
   border: none;
 }
 
 .theme_btn.no_icon {
-  padding-right: 0px;
+  /* padding-right: 0px; */
   padding: 10px 20px;
 }
 
@@ -128,7 +127,7 @@ a.theme_btn.btn_white {
 .theme_btn .btn_arrow {
   position: absolute;
   top: 14px;
-  right: 5px;
+  right: 0px;
   font-size: 18px;
 }
 
@@ -237,7 +236,8 @@ a.theme_btn.btn_white {
 
 .pop-up-div div {
   position: relative;
-  background: var(--bg-color);
+  background: var(--warning-color);
+  ;
   padding: 20px 10px;
   border-radius: 10px;
   max-width: 500px;

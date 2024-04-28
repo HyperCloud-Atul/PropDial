@@ -174,6 +174,7 @@ const PhoneLogin = () => {
               phoneNumber: phone,
               email: "",
               city: "",
+              country: "",
               address: "",
               photoURL: imgUrl,
               rolePropAgent: "na",

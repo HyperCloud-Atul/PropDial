@@ -11,7 +11,6 @@ const PropertyCard = ({ propertydoc }) => {
 
   const { user } = useAuthContext();
   const { document: userDoc, error: userDocError } = useDocument('users', propertydoc.propertyManager)
-  const { updateDocument, response: updateDocumentResponse } = useFirestore("properties");
   const [toggleFlag, setToggleFlag] = useState(false);
 
   // expand more expand less start
@@ -31,7 +30,8 @@ const PropertyCard = ({ propertydoc }) => {
 
   }, [propertydoc]);
 
-  //---------------- Change Property Manager ----------------------
+  //---------------- Start of Change User ----------------------
+  const { updateDocument, response: updateDocumentResponse } = useFirestore("properties");
   const { documents: dbUsers, error: dbuserserror } = useCollection("users", ["status", "==", "active"]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState(dbUsers);
@@ -78,6 +78,12 @@ const PropertyCard = ({ propertydoc }) => {
     setFilteredUsers(filtered);
   };
 
+  const handleUserSelect = (userId) => {
+    setSelectedUser(userId);
+  };
+
+  //------------ End of Change User ---------
+
   const toggleBtnClick_Active_Inactive = async () => {
     let userSwitch = "";
     // e.preventDefault()
@@ -103,9 +109,7 @@ const PropertyCard = ({ propertydoc }) => {
     // await updateDocument(propertydoc.id, updatedProperty);
   };
 
-  const handleUserSelect = (userId) => {
-    setSelectedUser(userId);
-  };
+
 
   //Manage In-Review | Active |Inactive
   const handleIsActiveInactiveReview = async (e, option) => {
@@ -126,7 +130,7 @@ const PropertyCard = ({ propertydoc }) => {
 
   return (
     <>
-      {/* Change Manager Popup */}
+      {/* Change User Popup - Start */}
       <div className={changeManagerPopup ? 'pop-up-change-number-div open' : 'pop-up-change-number-div'}>
         <div className="direct-div">
           <span onClick={closeChangeManager} className="material-symbols-outlined close-button">
@@ -134,16 +138,6 @@ const PropertyCard = ({ propertydoc }) => {
           </span>
           <h1 style={{ color: 'var(--theme-orange)', fontSize: '1.4rem' }}>Change Property Manager</h1>
           <br></br>
-          {/* <div>          
-            <SearchBarAutoComplete              
-              enabled={false}
-              dataList={userList ? userList : []}
-              placeholderText={"Search mobile or name"}
-              getQuery={setSearchedUser}
-              queryValue={"atul"}
-              setRedirectFlag={setRedirectFlag}
-            ></SearchBarAutoComplete>
-          </div> */}
           <div>
             <input style={{ background: '#efefef', height: '60px' }}
               type="text"
@@ -182,6 +176,7 @@ const PropertyCard = ({ propertydoc }) => {
           </div>
         </div>
       </div >
+      {/* Change User Popup - End */}
 
 
       <div className="psc_parent relative">
@@ -319,65 +314,63 @@ const PropertyCard = ({ propertydoc }) => {
             </div>} */}
             {/* Details: {property && (property.createdBy.fullName) && (property.createdBy.phoneNumber)} */}
 
-            {user && user.role === "admin" ? (
-              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <div className="property_owner_detail">
-                  <div className="img_container">
-                    {userDoc && <img src={userDoc && userDoc.photoURL} alt="" />}
-                  </div>
-                  <div className="pod_right">
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      {userDoc && <h5>{userDoc && userDoc.fullName}</h5>}
-                      {
-                        user && user.role === "admin" &&
-                        <div>
-                          <small onClick={openChangeManager} style={{ paddingLeft: '10px', fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}>change</small>
-                          <span
-                            className="material-symbols-outlined"
-                            onClick={openChangeManager}
-                            style={{ fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}
-                          >
-                            edit
-                          </span>
-                        </div>}
 
-                    </div>
-
-                    <h6>
-                      {userDoc && <a href={"tel:" + userDoc && userDoc.phoneNumber} className="phone">
-                        {userDoc && userDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}
-                      </a>}
-
-                      {userDoc && <a href={"tel:" + userDoc && userDoc.phoneNumber} className="call whatsapp">
-                        <img
-                          src="/assets/img/phone-call.png"
-                          style={{ width: "25px", height: "25px", marginLeft: "6px" }}
-                          alt=""
-                        />
-                      </a>}
-                      {userDoc && <a href={"https://wa.me/" + userDoc && userDoc.phoneNumber} className="whatsapp">
-                        <img
-                          src="/assets/img/whatsapp.png"
-                          style={{ width: "25px", height: "25px", marginLeft: "6px" }}
-                          alt=""
-                        />
-                      </a>}
-                    </h6>
-
-                  </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <div className="property_owner_detail">
+                <div className="img_container">
+                  {userDoc && <img src={userDoc && userDoc.photoURL} alt="" />}
                 </div>
+                <div className="pod_right">
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {userDoc && <h5>{userDoc && userDoc.fullName}</h5>}
+                    {
+                      user && user.role === "admin" &&
+                      <div>
+                        <small onClick={openChangeManager} style={{ paddingLeft: '10px', fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}>change</small>
+                        <span
+                          className="material-symbols-outlined"
+                          onClick={openChangeManager}
+                          style={{ fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}
+                        >
+                          edit
+                        </span>
+                      </div>}
 
-                <Link style={{ height: '25px', position: 'relative', top: '20px' }} to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
-                  view more
-                </Link>
+                  </div>
 
+                  <h6>
+                    {userDoc && <a href={"tel:" + userDoc && userDoc.phoneNumber} className="phone">
+                      {userDoc && userDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}
+                    </a>}
+
+                    {userDoc && <a href={"tel:" + userDoc && userDoc.phoneNumber} className="call whatsapp">
+                      <img
+                        src="/assets/img/phone-call.png"
+                        style={{ width: "25px", height: "25px", marginLeft: "6px" }}
+                        alt=""
+                      />
+                    </a>}
+                    {userDoc && <a href={"https://wa.me/" + userDoc && userDoc.phoneNumber} className="whatsapp">
+                      <img
+                        src="/assets/img/whatsapp.png"
+                        style={{ width: "25px", height: "25px", marginLeft: "6px" }}
+                        alt=""
+                      />
+                    </a>}
+                  </h6>
+
+                </div>
               </div>
-            ) : (
-              ""
-            )}
+
+              <Link style={{ height: '25px', position: 'relative', top: '20px' }} to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
+                view more
+              </Link>
+
+            </div>
 
 
-            <div className="form_field st-2 outline">
+
+            {user && user.role === "admin" && <div className="form_field st-2 outline">
               {/* <label htmlFor="">
                 Status</label> */}
               {/* <div className="form_field_inner"> */}
@@ -474,6 +467,7 @@ const PropertyCard = ({ propertydoc }) => {
               {/* </div> */}
               {/* </div> */}
             </div>
+            }
           </div>
         </div>
       </div>
