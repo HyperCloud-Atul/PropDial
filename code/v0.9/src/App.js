@@ -476,7 +476,7 @@ function App() {
                     }
                   ></Route>
 
-                  <Route
+                  {/* <Route
                     path="/propertydetails"
                     element={
                       user && user.role ? (
@@ -485,7 +485,7 @@ function App() {
                         <Navigate to="/login" />
                       )
                     }
-                  ></Route>
+                  ></Route> */}
 
                   <Route
                     path="/bills"
