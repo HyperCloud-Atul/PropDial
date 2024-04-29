@@ -43,9 +43,11 @@ const PropertyDetails = () => {
   const [propertyManagerDoc, setpropertyManagerDoc] = useState(null)
   const [propertyOwnerDoc, setpropertyOwnerDoc] = useState(null)
   const [propertyCoOwnerDoc, setpropertyCoOwnerDoc] = useState(null)
+  const [propertyPOCDoc, setpropertyPOCDoc] = useState(null)
 
   useEffect(() => {
-    if (propertyDocument) {
+
+    if (propertyDocument && propertyDocument.propertyManager) {
       const propertyManagerRef = projectFirestore.collection('users').doc(propertyDocument.propertyManager)
 
       const unsubscribe = propertyManagerRef.onSnapshot(snapshot => {
@@ -62,7 +64,7 @@ const PropertyDetails = () => {
     }
 
     //Property Owner Document
-    if (propertyDocument) {
+    if (propertyDocument && propertyDocument.propertyOwner) {
       const propertyOwnerRef = projectFirestore.collection('users').doc(propertyDocument.propertyOwner)
 
       const unsubscribe = propertyOwnerRef.onSnapshot(snapshot => {
@@ -86,6 +88,23 @@ const PropertyDetails = () => {
         // need to make sure the doc exists & has data
         if (snapshot.data()) {
           setpropertyCoOwnerDoc({ ...snapshot.data(), id: snapshot.id })
+        }
+        else {
+          console.log('No such document exists')
+        }
+      }, err => {
+        console.log(err.message)
+      })
+    }
+
+    //Property Owner POC Document
+    if (propertyDocument && propertyDocument.propertyPOC) {
+      const propertyPOCRef = projectFirestore.collection('users').doc(propertyDocument.propertyPOC)
+
+      const unsubscribe = propertyPOCRef.onSnapshot(snapshot => {
+        // need to make sure the doc exists & has data
+        if (snapshot.data()) {
+          setpropertyPOCDoc({ ...snapshot.data(), id: snapshot.id })
         }
         else {
           console.log('No such document exists')
@@ -181,6 +200,12 @@ const PropertyDetails = () => {
     if (userdbFieldName === 'propertyCoOwner') {
       updatedProperty = {
         propertyCoOwner: selectedUser
+      };
+    }
+
+    if (userdbFieldName === 'propertyPOC') {
+      updatedProperty = {
+        propertyPOC: selectedUser
       };
     }
 
@@ -650,13 +675,29 @@ const PropertyDetails = () => {
                                     </div>
                                     <div className="left">
                                       <div className="user_img">
-                                        <img src="/assets/img/user.png" alt="" />
+                                        {propertyPOCDoc && <img src={propertyPOCDoc && propertyPOCDoc.photoURL} alt="" />}
                                       </div>
                                     </div>
                                     <div className="right">
-                                      <h5>Sanskar Solanki</h5>
-                                      <h6>8770534650</h6>
-                                      <h6>Ujjain, India</h6>
+                                      {
+                                        user && user.role === "admin" &&
+                                        <div>
+                                          <small
+                                            // onClick={openChangeManager} 
+                                            onClick={() => openChangeUser("propertyPOC")}
+                                            style={{ paddingLeft: '10px', fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}>change</small>
+                                          <span
+                                            className="material-symbols-outlined"
+                                            onClick={() => openChangeUser("propertyPOC")}
+                                            style={{ fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}
+                                          >
+                                            edit
+                                          </span>
+                                        </div>}
+                                      <h5>{propertyPOCDoc && propertyPOCDoc.fullName}</h5>
+                                      <h6>{propertyPOCDoc && propertyPOCDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}</h6>
+                                      <h6>{propertyPOCDoc && propertyPOCDoc.city}, {propertyPOCDoc && propertyPOCDoc.country}</h6>
+
                                       <div className="wc">
                                         <img
                                           src="/assets/img/whatsapp.png"
