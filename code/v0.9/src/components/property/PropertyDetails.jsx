@@ -610,20 +610,33 @@ const PropertyDetails = () => {
                                       <h5>{propertyOwnerDoc && propertyOwnerDoc.fullName}</h5>
                                       <h6>{propertyOwnerDoc && propertyOwnerDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}</h6>
                                       <h6>{propertyOwnerDoc && propertyOwnerDoc.city}, {propertyOwnerDoc && propertyOwnerDoc.country}</h6>
-                                      {user && user.role !== "owner" && (
-                                        <div className="wc">
-                                          <img
-                                            src="/assets/img/whatsapp.png"
-                                            className="pointer"
-                                            alt=""
-                                          />
-                                          <img
-                                            src="/assets/img/phone-call.png"
-                                            className="pointer"
-                                            alt=""
-                                          />
-                                        </div>
-                                      )}
+
+                                      {propertyOwnerDoc &&
+                                        <Link
+                                          to={"https://wa.me/" + propertyOwnerDoc.phoneNumber}
+                                          className="contacts_single"
+                                        >
+                                          <div className="icon">
+                                            <img
+                                              src="/assets/img/whatsapp.png"
+                                              alt=""
+                                            />
+                                          </div>
+                                          <h6>Whatsapp</h6>
+                                        </Link>}
+                                      <div className="wc">
+                                        <img
+                                          src="/assets/img/whatsapp.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                        <img
+                                          src="/assets/img/phone-call.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                      </div>
+
                                     </div>
                                   </div>
                                   <div className="single_user">
