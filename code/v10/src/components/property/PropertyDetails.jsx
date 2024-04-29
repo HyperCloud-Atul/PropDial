@@ -6,6 +6,8 @@ import Gallery from "react-image-gallery";
 import Switch from "react-switch";
 import { Navigate, Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
+import "owl.carousel/dist/assets/owl.carousel.css";
+import "owl.carousel/dist/assets/owl.theme.default.css";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
 import { projectFirestore } from "../../firebase/config";
@@ -242,6 +244,43 @@ const PropertyDetails = () => {
   };
 
   //------------ End of Change Property Manager ---------
+
+
+  // owl carousel option start 
+  const options = {
+    items: 6,
+    dots: false,
+    loop: true,
+    margin: 30,
+    nav: true,
+    smartSpeed: 1500,
+    // autoplay: true,
+    autoplayTimeout: 10000,
+    responsive: {
+      // Define breakpoints and the number of items to show at each breakpoint
+      0: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+      992: {
+        items: 6,
+      },
+    },
+  };
+  // owl carousel option end
+
+
+      // 9 dots controls 
+      const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+      const openMoreAddOptions = () => {
+          setHandleMoreOptionsClick(true);
+      };
+      const closeMoreAddOptions = () => {
+          setHandleMoreOptionsClick(false);
+      };
+      // 9 dots controls 
   return (
     <>
       {/* Change User Popup - Start */}
@@ -291,6 +330,47 @@ const PropertyDetails = () => {
         </div>
       </div >
       {/* Change User Popup - End */}
+
+
+  {/* 9 dots html  */}
+  <div onClick={openMoreAddOptions} className="property-list-add-property">
+                <span className="material-symbols-outlined">apps</span>
+            </div>
+            <div
+                className={
+                    handleMoreOptionsClick
+                        ? "more-add-options-div open"
+                        : "more-add-options-div"
+                }
+                onClick={closeMoreAddOptions}
+                id="moreAddOptions"
+            >
+                <div className="more-add-options-inner-div">
+                    <div className="more-add-options-icons">
+                        <h1>Close</h1>
+                        <span className="material-symbols-outlined">close</span>
+                    </div>
+
+                    <Link to="" className="more-add-options-icons">
+                        <h1>Property Image</h1>
+                        <span className="material-symbols-outlined">location_city</span>
+                    </Link>
+
+                    <Link to="" className="more-add-options-icons">
+                        <h1>Property Document</h1>
+                        <span className="material-symbols-outlined">holiday_village</span>
+                    </Link>
+
+                    <Link to="" className="more-add-options-icons">
+                        <h1>Property Report</h1>
+                        <span className="material-symbols-outlined">home</span>
+                    </Link>
+                    <Link to="" className="more-add-options-icons">
+                        <h1>Property Bills</h1>
+                        <span className="material-symbols-outlined">home</span>
+                    </Link>
+                </div>
+            </div>
 
       <div div className="pg_property aflbg pd_single" >
         {/* top search bar */}
@@ -570,7 +650,153 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                     }
+                    <div className="extra_info_card_property">
+                      <OwlCarousel className="owl-theme" {...options}>
+                        <div className="item eicp_single">
+                          <div className="icon">
+                            <span class="material-symbols-outlined">
+                              description
+                            </span>
+                            <div className="text">
+                              <h6>
+                                5
+                              </h6>
+                              <h5>
+                                Document
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="item eicp_single">
+                          <div className="icon">
+                            <span class="material-symbols-outlined">
+                              description
+                            </span>
+                            <div className="text">
+                              <h6>
+                                5
+                              </h6>
+                              <h5>
+                                Document
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="item eicp_single">
+                          <div className="icon">
+                            <span class="material-symbols-outlined">
+                              description
+                            </span>
+                            <div className="text">
+                              <h6>
+                                5
+                              </h6>
+                              <h5>
+                                Document
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="item eicp_single">
+                          <div className="icon">
+                            <span class="material-symbols-outlined">
+                              description
+                            </span>
+                            <div className="text">
+                              <h6>
+                                5
+                              </h6>
+                              <h5>
+                                Document
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="item eicp_single">
+                          <div className="icon">
+                            <span class="material-symbols-outlined">
+                              description
+                            </span>
+                            <div className="text">
+                              <h6>
+                                5
+                              </h6>
+                              <h5>
+                                Document
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="item eicp_single">
+                          <div className="icon">
+                            <span class="material-symbols-outlined">
+                              description
+                            </span>
+                            <div className="text">
+                              <h6>
+                                5
+                              </h6>
+                              <h5>
+                                Document
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="item eicp_single">
+                          <div className="icon">
+                            <span class="material-symbols-outlined">
+                              description
+                            </span>
+                            <div className="text">
+                              <h6>
+                                5
+                              </h6>
+                              <h5>
+                                Document
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="item eicp_single">
+                          <div className="icon">
+                            <span class="material-symbols-outlined">
+                              description
+                            </span>
+                            <div className="text">
+                              <h6>
+                                5
+                              </h6>
+                              <h5>
+                                Document
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="item eicp_single">
+                          <div className="icon">
+                            <span class="material-symbols-outlined">
+                              description
+                            </span>
+                            <div className="text">
+                              <h6>
+                                5
+                              </h6>
+                              <h5>
+                                Document
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
 
+             
+
+
+
+
+
+
+                      </OwlCarousel>
+                    </div>
                     {((user && user.role === "owner") ||
                       (user && user.role === "coowner")
                       ||
