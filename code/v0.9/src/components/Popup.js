@@ -20,8 +20,8 @@ export default function Popup(props) {
                 <p>
                     {props.msg}
                 </p><br />
-                <button onClick={() => handlePopup('CANCEL')} className="theme_btn btn_fill pointer" style={{ margin: '0 20px' }}>CANCEL</button>
-                <button onClick={() => handlePopup('CONFIRM')} className="theme_btn btn_red pointer" style={{ margin: '0 20px' }}>CONFIRM</button>
+                <button onClick={() => handlePopup('CANCEL')} className='btn cancel' style={{ margin: '0 20px' }}>CANCEL</button>
+                <button onClick={() => handlePopup('CONFIRM')} className='btn' style={{ margin: '0 20px' }}>CONFIRM</button>
             </div>
         </div>
     )

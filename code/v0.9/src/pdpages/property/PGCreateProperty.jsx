@@ -269,7 +269,6 @@ const CreateProperty = () => {
         DemandPrice: "",
         MaintenanceCharges: "",
         MaintenanceChargesFrequency: "",
-        SecurityDeposit: "",
         Purpose: "",
         Country: "",
         State: "",
@@ -530,9 +529,6 @@ const CreateProperty = () => {
                 maintenancechargesfrequency: propertyDetails.MaintenanceChargesFrequency
                     ? propertyDetails.MaintenanceChargesFrequency
                     : "NA",
-                securitydeposit: propertyDetails.SecurityDeposit
-                    ? propertyDetails.SecurityDeposit
-                    : "",
                 state: state.label,
                 city: city.label,
                 // city: camelCase(propertyDetails.City.toLowerCase().trim()),
@@ -560,11 +556,11 @@ const CreateProperty = () => {
                 carpetAreaUnit: "",
                 imgURL: [],
                 propertyManager: user.uid,
-                propertyCoManager: user.uid,
-                propertySalesManager: user.uid,
+                propertyCoManager: "",
+                propertySalesManager: "",
                 propertyOwner: user.uid,
-                propertyCoOwner: user.uid,
-                propertyPOC: user.uid,
+                propertyCoOwner: "",
+                propertyPOC: "",
                 tenantList: [],
                 postedBy: "Propdial",
                 isActiveInactiveReview: "In-Review",
@@ -666,7 +662,7 @@ const CreateProperty = () => {
                                                                 done
                                                             </span>
                                                         </div>
-                                                        Residential
+                                                        <h6>Residential</h6>
                                                     </label>
                                                 </div>
                                             </div>
@@ -701,7 +697,7 @@ const CreateProperty = () => {
                                                                 done
                                                             </span>
                                                         </div>
-                                                        Commercial
+                                                        <h6>Commercial</h6>
                                                     </label>
                                                 </div>
                                             </div>
@@ -768,7 +764,7 @@ const CreateProperty = () => {
                                                                 done
                                                             </span>
                                                         </div>
-                                                        Rent
+                                                        <h6>Rent</h6>
                                                     </label>
                                                 </div>
                                             </div>
@@ -802,7 +798,7 @@ const CreateProperty = () => {
                                                                 done
                                                             </span>
                                                         </div>
-                                                        Sale
+                                                        <h6>Sale</h6>
                                                     </label>
                                                 </div>
                                             </div>

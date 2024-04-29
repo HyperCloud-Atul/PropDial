@@ -91,156 +91,126 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     font-size: 0.8rem;
     color: #fff;
 }
-
 /* pop up div installation button end */
 
 
 /* common css start  */
 
 /* color css start  */
-.text_light_black {
+.text_light_black{
     color: var(--light-black);
 }
-
-.text_grey {
+.text_grey{
     color: var(--theme-grey);
 }
-
-.text_orange {
+.text_orange{
     color: var(--theme-orange);
 }
 
-.text_white {
+.text_white{
     color: var(--white-color);
 }
-
-.click_text {
+.click_text{
     color: var(--theme-purple);
 }
-
-.bg_orange {
+.bg_orange{
     background: #ffd6cb;
 }
-
-.bg_blue {
+.bg_blue{
     background: var(--theme-blue-bg);
 }
-
-.bg_green {
+.bg_green{
     background: var(--theme-green-bg);
 }
-
-.bg_white {
+.bg_white{
     background: var(--white-color);
 }
-
-.click_icon,
-.click_icon span {
-    color: var(--theme-purple);
+.click_icon, .click_icon span{
+    color: var(--theme-purple);  
     transition: 0.5s;
     font-variation-settings:
         'FILL' 0
 }
-
-.click_icon:hover,
-.click_icon span:hover {
+.click_icon:hover, .click_icon span:hover{
     transition: 0.5s;
     font-variation-settings:
-        'FILL' 1
+        'FILL' 1     
 }
-
 /* color css end  */
 
 /* font css start  */
 .m18 {
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 500;    
 }
-
 .m20 {
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 500;    
 }
-
-.m22 {
+.m22{
     font-size: 22px;
     font-weight: 500;
-
+    
 }
-
-.r16 {
+.r16{
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 400;    
 }
-
-.r14 {
+.r14{
     font-size: 14px;
     font-weight: 400;
-
+    
 }
-
-.r18 {
+.r18{
     font-size: 18px;
     font-weight: 400;
-
+    
 }
-
-.m16 {
+.m16{
     font-size: 16px;
     font-weight: 500;
-
+    
 }
-
-.dm16 {
+.dm16{
     font-size: 16px;
     font-weight: 500;
 }
-
-.dr16 {
+.dr16{
     font-size: 16px;
     font-weight: 400;
 }
-
-.dr20 {
+.dr20{
     font-size: 20px;
     font-weight: 400;
 }
-
-.dm20 {
+.dm20{
     font-size: 20px;
     font-weight: 500;
 }
-
 /* font css start  */
 
-.card_shadow {
+.card_shadow{    
     box-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -1px #0000000f;
 }
-
-.card_border_radius {
+.card_border_radius{
     border-radius: 22px;
 }
-
-.dashboard_number {
+.dashboard_number{
     font-size: 30px;
     font-weight: 500;
     color: var(--light-black);
 }
-
-.dashboard_number_small {
+.dashboard_number_small{
     font-size: 22px;
     font-weight: 500;
     color: var(--light-black);
 }
-
-.page a {
+.page a{
     text-decoration: none;
 }
-
-.page ul li {
+.page ul li{
     list-style-type: none;
 }
-
 .page h1,
 .page h2,
 .page h3,
@@ -250,98 +220,136 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 .page p {
     margin: 0px;
 }
-
 .page_spacing {
     padding: 22px;
 }
-
 .navbarhide,
 .page_footer_hide {
     display: none;
 }
-
-.pg_bg {
+.pg_bg{
     background: var(--page-bg);
 }
-
 .page_inner_logo img {
     width: 135px;
     height: auto;
 }
-
 .otp_input div {
     justify-content: center;
 }
-
 /* verticall_gap css start  */
-.dvg22 {
+.dvg22{
     height: 22px;
 }
-
-.vg10 {
+.vg10{
     height: 10px;
 }
-
-.vg22 {
+.vg22{
     height: 22px;
 }
-
-.mt10 {
+.mt10{
     margin-top: 10px;
 }
-
 /* modal css start  */
 .modal-backdrop.show {
     opacity: 0.3 !important;
 }
-
-.my_modal .modal-body {
+.my_modal .modal-body{
     padding: 0px;
 }
-
 .my_modal .modal-content {
     border-radius: 22px;
     padding: 22px;
     background: var(--white-color);
 }
-
-.row_gap {
+.row_gap{
     row-gap: 30px;
 }
+
+/* custom radio button css start  */
+.form_field.st-2 .radio_group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+  }
+  
+  .form_field.st-2 .radio_group_single label {
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    height: 35px;
+    border-radius: 20px;
+    padding: 6px 7px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgb(0 0 0);
+    transition: 0.3s;
+    display: flex;
+    gap: 8px;
+    position: relative;
+    margin-bottom: 0px;
+    padding-left: 38px;
+    background: #efefef;
+  }
+  
+  .form_field.st-2 .radio_group_single .radiochecked label {
+    background: var(--theme-green);
+    color: white;
+    border-color: var(--theme-green);
+  }
+  
+  .form_field.st-2 .radio_group_single label .radio_icon {
+    position: absolute;
+    line-height: 0px;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-41%);
+  }
+  
+  .form_field.st-2 .radio_group_single label .radio_icon .check {
+    display: none;
+  }
+  
+  .form_field.st-2 .radio_group_single .radiochecked label .radio_icon .check {
+    display: block;
+  }
+  
+  .form_field.st-2 .radio_group_single .radiochecked label .radio_icon .add {
+    display: none;
+  }
+  
+  .form_field.st-2 .radio_group_single .custom_radio_button {
+    position: relative;
+  }
 
 /* common css end*/
 
 @media only screen and (max-width: 1199px) {
-    .vg22_1199 {
+    .vg22_1199{
         height: 22px;
     }
 }
-
 @media only screen and (max-width: 991px) {
-    .row_reverse_991 {
+    .row_reverse_991{
         flex-direction: column-reverse;
     }
-
-    .propagent_dashboard_inner .all_payments,
-    .self_property_detail {
-        grid-template-columns: repeat(3, 1fr) !important;
+    .propagent_dashboard_inner .all_payments, .self_property_detail {      
+        grid-template-columns: repeat(3,1fr) !important;       
     }
-
-    .vg22_991 {
+    .vg22_991{
         height: 22px;
     }
 }
-
 @media only screen and (max-width: 767px) {
     .page_spacing {
         padding: 15px;
     }
-
     .m22 {
-        font-size: 18px;
+        font-size: 18px;     
     }
-
     .r18 {
-        font-size: 16px;
-    }
+        font-size: 16px;    
+    }  
 }
+
+
