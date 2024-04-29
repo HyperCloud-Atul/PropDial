@@ -210,9 +210,9 @@ const PropertyCard = ({ propertydoc }) => {
                 <h6>
                   {((propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT') || (propertydoc.status.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertydoc.status}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertydoc.status}</span>}
                 </h6>
-                <h6>{propertydoc.bhk} {propertydoc.propertyType}</h6>
-                <h6>{propertydoc.society} | {propertydoc.locality}</h6>
-                <h6>{propertydoc.city} | {propertydoc.state}</h6>
+                <h6>{propertydoc.unitNumber}, {propertydoc.society}  {propertydoc.propertyType}</h6>
+                <h6>{propertydoc.bhk} {propertydoc.furnishing} Furnished for {propertydoc.purpose}</h6>
+                <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
               </div>
             </div>
           </Link>

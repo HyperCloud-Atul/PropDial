@@ -14,6 +14,8 @@ import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
+import { format } from "date-fns";
+
 import "./UserList.css"
 
 // component
@@ -34,20 +36,23 @@ const PropertyDetails = () => {
     "properties",
     id
   );
-  console.log("propertiesdocument:", propertyDocument);
-  // const { document: propertyManagerDoc, error: propertyManagerDocError } = useDocument('users', propertyDocument.propertyManager)
-  // const { document: propertyCoManagerDoc, error: propertyCoManagerDocError } = useDocument('users', propertyDocument && propertyDocument.propertyCoManager)
-  // const { document: propertyOwnerDoc, error: propertyOwnerError } = useDocument('users', propertyDocument && propertyDocument.propertyOwner)
-  // const { document: propertyCoOwnerDoc, error: propertyCoOwnerError } = useDocument('users', propertyDocument && propertyDocument.propertyCoOwner)
-  // const { document: propertyPOCDoc, error: propertyPOCError } = useDocument('users', propertyDocument && propertyDocument.propertyPOC)
-  // const { document: propertySalesManagerDoc, error: propertySalesManagerError } = useDocument('users', propertyDocument && propertyDocument.propertySalesManager)
+  // console.log("propertiesdocument:", propertyDocument);
 
   const [propertyManagerDoc, setpropertyManagerDoc] = useState(null)
   const [propertyOwnerDoc, setpropertyOwnerDoc] = useState(null)
   const [propertyCoOwnerDoc, setpropertyCoOwnerDoc] = useState(null)
   const [propertyPOCDoc, setpropertyPOCDoc] = useState(null)
+  const [propertyOnboardingDateFormatted, setPropertyOnboardingDateFormatted] = useState()
 
+  // let propertyOnboardingDateFormatted = "date";
   useEffect(() => {
+
+    if (propertyDocument) {
+      const propertyOnboardingDate = new Date(propertyDocument.onboardingDate.seconds * 1000)
+      // console.log('Property Onboarding Date after:', propertyOnboardingDate)
+      setPropertyOnboardingDateFormatted(format(propertyOnboardingDate, 'dd MMMM, yyyy'));
+      // console.log('Property Onboarding Date formatted:', propertyOnboardingDateFormatted)
+    }
 
     if (propertyDocument && propertyDocument.propertyManager) {
       const propertyManagerRef = projectFirestore.collection('users').doc(propertyDocument.propertyManager)
@@ -272,15 +277,15 @@ const PropertyDetails = () => {
   // owl carousel option end
 
 
-      // 9 dots controls 
-      const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
-      const openMoreAddOptions = () => {
-          setHandleMoreOptionsClick(true);
-      };
-      const closeMoreAddOptions = () => {
-          setHandleMoreOptionsClick(false);
-      };
-      // 9 dots controls 
+  // 9 dots controls 
+  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+  const openMoreAddOptions = () => {
+    setHandleMoreOptionsClick(true);
+  };
+  const closeMoreAddOptions = () => {
+    setHandleMoreOptionsClick(false);
+  };
+  // 9 dots controls 
   return (
     <>
       {/* Change User Popup - Start */}
@@ -332,45 +337,45 @@ const PropertyDetails = () => {
       {/* Change User Popup - End */}
 
 
-  {/* 9 dots html  */}
-  <div onClick={openMoreAddOptions} className="property-list-add-property">
-                <span className="material-symbols-outlined">apps</span>
-            </div>
-            <div
-                className={
-                    handleMoreOptionsClick
-                        ? "more-add-options-div open"
-                        : "more-add-options-div"
-                }
-                onClick={closeMoreAddOptions}
-                id="moreAddOptions"
-            >
-                <div className="more-add-options-inner-div">
-                    <div className="more-add-options-icons">
-                        <h1>Close</h1>
-                        <span className="material-symbols-outlined">close</span>
-                    </div>
+      {/* 9 dots html  */}
+      <div onClick={openMoreAddOptions} className="property-list-add-property">
+        <span className="material-symbols-outlined">apps</span>
+      </div>
+      <div
+        className={
+          handleMoreOptionsClick
+            ? "more-add-options-div open"
+            : "more-add-options-div"
+        }
+        onClick={closeMoreAddOptions}
+        id="moreAddOptions"
+      >
+        <div className="more-add-options-inner-div">
+          <div className="more-add-options-icons">
+            <h1>Close</h1>
+            <span className="material-symbols-outlined">close</span>
+          </div>
 
-                    <Link to="" className="more-add-options-icons">
-                        <h1>Property Image</h1>
-                        <span className="material-symbols-outlined">location_city</span>
-                    </Link>
+          <Link to="" className="more-add-options-icons">
+            <h1>Property Image</h1>
+            <span className="material-symbols-outlined">location_city</span>
+          </Link>
 
-                    <Link to="" className="more-add-options-icons">
-                        <h1>Property Document</h1>
-                        <span className="material-symbols-outlined">holiday_village</span>
-                    </Link>
+          <Link to="" className="more-add-options-icons">
+            <h1>Property Document</h1>
+            <span className="material-symbols-outlined">holiday_village</span>
+          </Link>
 
-                    <Link to="" className="more-add-options-icons">
-                        <h1>Property Report</h1>
-                        <span className="material-symbols-outlined">home</span>
-                    </Link>
-                    <Link to="" className="more-add-options-icons">
-                        <h1>Property Bills</h1>
-                        <span className="material-symbols-outlined">home</span>
-                    </Link>
-                </div>
-            </div>
+          <Link to="" className="more-add-options-icons">
+            <h1>Property Report</h1>
+            <span className="material-symbols-outlined">home</span>
+          </Link>
+          <Link to="" className="more-add-options-icons">
+            <h1>Property Bills</h1>
+            <span className="material-symbols-outlined">home</span>
+          </Link>
+        </div>
+      </div>
 
       <div div className="pg_property aflbg pd_single" >
         {/* top search bar */}
@@ -400,6 +405,9 @@ const PropertyDetails = () => {
                               <h4>
                                 {propertyDocument.unitNumber}, {propertyDocument.society}
                               </h4>
+                              <h6>
+                                {((propertyDocument.status.toUpperCase() === 'AVAILABLE FOR RENT') || (propertyDocument.status.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertyDocument.status}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertyDocument.status}</span>}
+                              </h6>
                               <h4 className="property_name">
                                 {propertyDocument.bhk} |{" "}
                                 {propertyDocument.furnishing === "" ? "" : propertyDocument.furnishing + " Furnished | "} for{" "}
@@ -438,7 +446,7 @@ const PropertyDetails = () => {
                                     <span className="currency">₹</span>
                                     {propertyDocument.maintenancecharges}/- <span style={{ fontSize: '0.8rem' }}> {propertyDocument.maintenanceflag}</span>
                                   </h4>
-                                  <h6>{propertyDocument.maintenancechargesfrequency} Maintenance Charges</h6>
+                                  <h6>{propertyDocument.maintenancechargesfrequency} Maintenance</h6>
                                 </div>}
                               {
                                 propertyDocument.purpose.toUpperCase() === "RENT" && <div className="pdms_single col-4">
@@ -662,7 +670,7 @@ const PropertyDetails = () => {
                                 5
                               </h6>
                               <h5>
-                                Document
+                                Documents
                               </h5>
                             </div>
                           </div>
@@ -674,10 +682,10 @@ const PropertyDetails = () => {
                             </span>
                             <div className="text">
                               <h6>
-                                5
+                                10
                               </h6>
                               <h5>
-                                Document
+                                Enquiries
                               </h5>
                             </div>
                           </div>
@@ -689,10 +697,10 @@ const PropertyDetails = () => {
                             </span>
                             <div className="text">
                               <h6>
-                                5
+                                2
                               </h6>
                               <h5>
-                                Document
+                                Bills
                               </h5>
                             </div>
                           </div>
@@ -788,7 +796,7 @@ const PropertyDetails = () => {
                           </div>
                         </div>
 
-             
+
 
 
 
@@ -954,21 +962,6 @@ const PropertyDetails = () => {
                                 </div>
                               </div>
                               <div className="col-md-6">
-                                {/* <div className="property_full_address">
-                                <h2 className="card_title">
-                                  {propertyDocument.unitNumber},{" "}
-                                  {propertyDocument.society}
-                                </h2>
-                                <h3>
-                                  {propertyDocument.locality},{" "}
-                                  {propertyDocument.city}{" "}
-                                </h3>
-                                <h3>
-                                  {propertyDocument.state},{" "}
-                                  {propertyDocument.country},{" "}
-                                  {propertyDocument.pinCode}
-                                </h3>
-                              </div> */}
                                 <div className="property_connected_people userlist">
                                   <div className="item pcp_single">
                                     <div className="property_people_designation">
@@ -1143,7 +1136,7 @@ const PropertyDetails = () => {
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Basic About Property</h2>
                         <div className="p_info">
-                          <div className="p_info_single">
+                          {/* <div className="p_info_single">
                             <div className="pd_icon">
                               <img src="/assets/img/property-detail-icon/unitNo.png" alt="" />
                             </div>
@@ -1151,19 +1144,21 @@ const PropertyDetails = () => {
                               <h6>Unit Number</h6>
                               <h5>252</h5>
                             </div>
-                          </div>
+                          </div> */}
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img src="/assets/img/property-detail-icon/calendar.png" alt="" />
                             </div>
                             <div className="pis_content">
                               <h6>Property Added Date</h6>
-                              <h5>20/jan/2024</h5>
+                              <h5>{propertyDocument && propertyOnboardingDateFormatted}</h5>
+                              {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}
+
                             </div>
 
                           </div>
 
-                          <div className="p_info_single">
+                          {/* <div className="p_info_single">
                             <div className="pd_icon">
                               <img src="/assets/img/property-detail-icon/Property_status.png" alt="" />
                             </div>
@@ -1172,14 +1167,14 @@ const PropertyDetails = () => {
                               <h5> Active</h5>
                             </div>
 
-                          </div>
+                          </div> */}
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img src="/assets/img/property-detail-icon/ownership.png" alt="" />
                             </div>
                             <div className="pis_content">
                               <h6>Ownership</h6>
-                              <h5>Free Hold</h5>
+                              <h5>{propertyDocument && propertyDocument.ownership}</h5>
                             </div>
 
                           </div>
@@ -1189,12 +1184,12 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Property Source</h6>
-                              <h5>ICICI</h5>
+                              <h5>{propertyDocument && propertyDocument.source}</h5>
                             </div>
 
                           </div>
 
-                          <div className="p_info_single">
+                          {/* <div className="p_info_single">
                             <div className="pd_icon">
                               <img src="/assets/img/property-detail-icon/Purpose.png" alt="" />
                             </div>
@@ -1202,15 +1197,14 @@ const PropertyDetails = () => {
                               <h6>Purpose</h6>
                               <h5>Rent</h5>
                             </div>
-
-                          </div>
+                          </div> */}
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img src="/assets/img/property-detail-icon/package.png" alt="" />
                             </div>
                             <div className="pis_content">
                               <h6>Package</h6>
-                              <h5>Broker</h5>
+                              <h5>{propertyDocument && propertyDocument.package}</h5>
                             </div>
 
                           </div>
@@ -1220,7 +1214,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Property Flag</h6>
-                              <h5>In Maintainance</h5>
+                              <h5>{propertyDocument && propertyDocument.flag}</h5>
                             </div>
 
                           </div>
@@ -1237,7 +1231,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Type</h6>
-                              <h5>{propertyDocument.bhk} BHK</h5>
+                              <h5>{propertyDocument.bhk}</h5>
                             </div>
 
                           </div>
