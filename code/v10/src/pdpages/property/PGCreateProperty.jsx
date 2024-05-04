@@ -548,6 +548,7 @@ const CreateProperty = () => {
                 ownership: "",
                 package: "",
                 flag: "",
+                floorNo: "",
                 propertyType: "",
                 bhk: "",
                 numberOfBedrooms: "0",

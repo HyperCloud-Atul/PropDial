@@ -5,6 +5,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 
 
 const SearchProperty = ({ propertiesdocuments }) => {
+  // console.log('properties: ', propertiesdocuments)
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
@@ -26,7 +27,7 @@ const SearchProperty = ({ propertiesdocuments }) => {
 
   return (
     <>
-      {propertiesdocuments.map((property) => (
+      {propertiesdocuments && propertiesdocuments.map((property) => (
         <div className="property_card_single">
           <Link className="pcs_inner pointer" to={`/pdsingle/${property.id}`} key={property.id}>
             <div className="pcs_image_area">
@@ -36,9 +37,9 @@ const SearchProperty = ({ propertiesdocuments }) => {
               <div className="pmd_top relative" >
                 <h4 className="property_name">
                   {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.unitNumber : ''} - {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.society : ''}<br></br>
-                  {property.bhk} | {property.furnishing} Furnished for {property.purpose} | {property.locality}
+                  {property.bhk} | {property.furnishing} Furnished for {property.purpose}
                 </h4>
-                <h6 className="property_location">{property.city}, {property.state}</h6>
+                <h6 className="property_location">{property.locality}, {property.city} |  {property.state}</h6>
                 <div className="fav_and_share">
                   <span className="material-symbols-outlined mr-2 fav" style={{
                     marginRight: "3px"
@@ -53,29 +54,32 @@ const SearchProperty = ({ propertiesdocuments }) => {
               <div className="pmd_body">
                 <div className="property_information">
                   <div className="pi_single">
-                    <h6>Carpet area</h6>
-                    <h5>{property.carpetArea}</h5>
+                    <h6>Bedrooms</h6>
+                    <h5>{property.numberOfBedrooms}</h5>
                   </div>
+                  <div className="pi_single">
+                    <h6>Bathroom</h6>
+                    <h5>{property.numberOfBathrooms}</h5>
+                  </div>
+                  <div className="pi_single">
+                    <h6>Balcony</h6>
+                    <h5>{property.balcony}</h5>
+                  </div>
+
                   <div className="pi_single">
                     <h6>Floor number</h6>
                     <h5>{property.floorNumber}</h5>
                   </div>
                   <div className="pi_single">
-                    <h6>TRANSACTION</h6>
-                    <h5>New Property</h5>
+                    <h6>Lift</h6>
+                    <h5>{property.lift}</h5>
                   </div>
                   <div className="pi_single">
-                    <h6>BHK</h6>
-                    <h5>{property.bhk}</h5>
+                    <h6>Carpet area</h6>
+                    <h5>{property.carpetArea}</h5>
                   </div>
-                  <div className="pi_single">
-                    <h6>Bedrooms</h6>
-                    <h5>{property.numberOfBedrooms}</h5>
-                  </div>
-                  <div className="pi_single">
-                    <h6>Kitchen</h6>
-                    <h5>{property.numberOfKitchen}</h5>
-                  </div>
+
+
                 </div>
               </div>
               {/* <div className="pmd_bottom">
@@ -97,10 +101,10 @@ const SearchProperty = ({ propertiesdocuments }) => {
           <div className="pcs_other_info">
             <div className="poi_inner">
               <h6 className="property_value">
-                <span>₹ </span> 2 cr
+                <span>₹ </span> {property.demandprice}
               </h6>
               <h6 className="value_per_sqf">
-                <span>₹ </span> 9000 per sqf
+                {property.carpetArea}  {property.carpetAreaUnit}
               </h6>
               {/* <Link to="/contact-us" className="theme_btn no_icon btn_fill"
                 style={{ padding: "5px 20px" }}>Contact Agent</Link> */}

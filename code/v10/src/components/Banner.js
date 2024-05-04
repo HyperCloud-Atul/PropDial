@@ -26,7 +26,7 @@ function Banner() {
     <div className="home_banner">
       <div className="swipercomp">
         <div className="swipercomp_inner relative">
-          <Carousel>         
+          <Carousel>
             <Carousel.Item>
               <div className="ad_container">
                 <img src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/assets%2Fimg%2Fhomebanner2.webp?alt=media&token=93f3b3d7-23b3-4027-90b9-73275ff37278" alt="propdial" />
@@ -47,7 +47,7 @@ function Banner() {
                 </h1>
                 <h6>We Have Million Properties For You</h6>
 
-                <div className="search_area">
+                {/* <div className="search_area">
                   <div className="search_area_header">
                     <div className="for_buy_rent">
                       <div
@@ -125,11 +125,18 @@ function Banner() {
                       </Link>
                     </div>
                   </div>
-
-
-
+                </div> */}
+                <br></br>
+                <div className="search_property pointer">
+                  <Link to="/properties">
+                    <button className="theme_btn btn_fill">
+                      Search Properties
+                      <span className="material-symbols-outlined btn_arrow ba_animation">
+                        arrow_forward
+                      </span>
+                    </button>
+                  </Link>
                 </div>
-
               </div>
             </div>
           </div>

@@ -9,11 +9,19 @@ import { Navigate, Link } from "react-router-dom";
 // component
 import Banner from "../../components/Banner";
 import BottomRightFixedIcon from "../../components/BottomRightFixedIcon";
-import PropertyDetail from "../../components/property/SearchProperty";
+import PropdialPropertyCard from "../../components/property/SearchProperty";
+import PropAgentPropertyCard from "../../components/property/SearchPropAgentProperty";
 
 const PGSearchProperty = () => {
-  const { documents: propertiesdocuments, error: propertieserror } =
-    useCollection("properties");
+  const { documents: propdialProperties, error: propdialPropertieserror } = useCollection("properties", ["postedBy", "==", "Propdial"]);
+  const { documents: propagentProperties, error: propagentPropertieserror } = useCollection("properties", ["postedBy", "==", "Agent"]);
+
+  // const { documents: dbticketdocuments, error: dbticketerror } = useCollection(
+  //   "tickets",
+  //   ["postedBy", "==", "Propdial"],
+  //   ["updatedAt", "desc"]
+  // );
+
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
@@ -47,13 +55,13 @@ const PGSearchProperty = () => {
               className={`pointer ${activeOption === 'Buy' ? 'active' : ''}`}
               onClick={() => handleOptionClick('Buy')}
             >
-              Buy
+              Rent
             </div>
             <div
               className={`pointer ${activeOption === 'Rent' ? 'active' : ''}`}
               onClick={() => handleOptionClick('Rent')}
             >
-              Rent
+              Sale
             </div>
           </div>
           <div className="residentail_commercial">
@@ -78,7 +86,7 @@ const PGSearchProperty = () => {
             </label>
           </div>
         </div>
-        <div className="search_area_body">
+        {/* <div className="search_area_body">
           <div className="search_by">
             <div className="search_by_single">
               <select name="" id="" className="pointer">
@@ -117,7 +125,7 @@ const PGSearchProperty = () => {
               </button>
             </Link>
           </div>
-        </div>
+        </div> */}
       </div>
       <Tabs>
         <div className="container-fluid"></div>
@@ -127,13 +135,13 @@ const PGSearchProperty = () => {
             <div className="row">
               <div className="col-xl-9">
                 <TabList className="tabs">
-                  <Tab className="pointer">Properties (3,212)</Tab>
+                  <Tab className="pointer">Properties ({propdialProperties && propdialProperties.length})</Tab>
                   <Tab className="pointer">New Projects</Tab>
                   <Tab className="pointer">Top Agents</Tab>
                 </TabList>
                 <TabPanel>
                   <div className="property_card_left">
-                    {propertiesdocuments && <PropertyDetail propertiesdocuments={propertiesdocuments} />}
+                    {propdialProperties && <PropdialPropertyCard propertiesdocuments={propdialProperties} />}
                   </div>
                 </TabPanel>
                 <TabPanel>
@@ -144,10 +152,16 @@ const PGSearchProperty = () => {
                 </TabPanel>
               </div>
 
+              {/* PropAgent Properties */}
+
               <div className="col-xl-3">
                 <div className="pp_sidebar">
                   <div className="pp_sidebar_cards">
                     <div className="pp_sidebarcard_single">
+                      {propagentProperties && <PropAgentPropertyCard propagentProperties={propagentProperties} />}
+                    </div>
+
+                    {/* <div className="pp_sidebarcard_single">
                       <div className="ppss_img">
                         <img src="./assets/img/property/p2.jpg" alt="" />
                       </div>
@@ -163,8 +177,8 @@ const PGSearchProperty = () => {
                         </h6>
                         <h6>Marketed by D2R</h6>
                       </div>
-                    </div>
-                    <div className="pp_sidebarcard_single">
+                    </div> */}
+                    {/* <div className="pp_sidebarcard_single">
                       <div className="ppss_img">
                         <img src="./assets/img/property/p2.jpg" alt="" />
                       </div>
@@ -180,8 +194,8 @@ const PGSearchProperty = () => {
                         </h6>
                         <h6>Marketed by D2R</h6>
                       </div>
-                    </div>
-                    <div className="pp_sidebarcard_single">
+                    </div> */}
+                    {/* <div className="pp_sidebarcard_single">
                       <div className="ppss_img">
                         <img src="./assets/img/property/p2.jpg" alt="" />
                       </div>
@@ -197,8 +211,8 @@ const PGSearchProperty = () => {
                         </h6>
                         <h6>Marketed by D2R</h6>
                       </div>
-                    </div>
-                    <div className="pp_sidebarcard_single">
+                    </div> */}
+                    {/* <div className="pp_sidebarcard_single">
                       <div className="ppss_img">
                         <img src="./assets/img/property/p2.jpg" alt="" />
                       </div>
@@ -214,8 +228,8 @@ const PGSearchProperty = () => {
                         </h6>
                         <h6>Marketed by D2R</h6>
                       </div>
-                    </div>
-                    <div className="pp_sidebarcard_single">
+                    </div> */}
+                    {/* <div className="pp_sidebarcard_single">
                       <div className="ppss_img">
                         <img src="./assets/img/property/p2.jpg" alt="" />
                       </div>
@@ -231,8 +245,8 @@ const PGSearchProperty = () => {
                         </h6>
                         <h6>Marketed by D2R</h6>
                       </div>
-                    </div>
-                    <div className="pp_sidebarcard_single">
+                    </div> */}
+                    {/* <div className="pp_sidebarcard_single">
                       <div className="ppss_img">
                         <img src="./assets/img/property/p2.jpg" alt="" />
                       </div>
@@ -248,7 +262,7 @@ const PGSearchProperty = () => {
                         </h6>
                         <h6>Marketed by D2R</h6>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

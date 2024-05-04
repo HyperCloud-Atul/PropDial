@@ -66,7 +66,7 @@ export const useSignup = () => {
         city: '',
         address: '',
         photoURL: imgUrl,
-        role: 'propagent',
+        role: 'owner',
         status: 'active',
         createdAt: timestamp.fromDate(new Date()),
         lastLoginTimestamp: timestamp.fromDate(new Date())

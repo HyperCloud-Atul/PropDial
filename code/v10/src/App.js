@@ -41,11 +41,6 @@ import PGTickets from "./pages/roles/owner/PGTickets";
 import TenantDashboard from "./pages/roles/tenant/TenantDashboard";
 // executive
 import ExecutiveDashboard from "./pages/roles/executive/ExecutiveDashboard";
-// prop agent
-import PGAgentDashboard from "./pages/roles/agent/PGAgentDashboard";
-import PGAgentProperties from "./pages/roles/agent/PGAgentProperties";
-import PGAgentAddProperties from "./pages/roles/agent/PGAgentAddProperties";
-import PropAgentHome from "./pages/roles/agent/PropAgentHome";
 
 // other pages
 import UserDashboard from "./pages/dashboard/UserDashboard";
@@ -535,62 +530,7 @@ function App() {
             ></Route> */}
 
 
-                  <Route
-                    path="/agentdashboard"
-                    element={
-                      user && user.role === "propagent" ? (
-                        <PGAgentDashboard></PGAgentDashboard>
-                      ) : (
-                        <Navigate to="/login" />
-                      )
-                    }
-                  ></Route>
-                  <Route
-                    path="/agentproperties"
-                    element={
-                      user && user.role === "propagent" ? (
-                        <PGAgentProperties></PGAgentProperties>
-                      ) : (
-                        <Navigate to="/login" />
-                      )
-                    }
-                  ></Route>
-                  <Route
-                    path="/agentaddproperties"
-                    element={
-                      user && user.role === "propagent" ? (
-                        <PGAgentAddProperties></PGAgentAddProperties>
-                      ) : (
-                        <Navigate to="/login" />
-                      )
-                    }
-                  ></Route>
-                  <Route
-                    path="/agenthome"
-                    element={
-                      <PropAgentHome></PropAgentHome>
-                    }
-                  ></Route>
-                  <Route
-                    path="/createticket"
-                    element={
-                      user && user.status === 'active' &&
-                        ((user.role !== "propagent") || user.role !== 'propagentadmin')
-                        ? (
-                          <CreateTicket />
-                        ) : (
 
-                          <Navigate to="/login" />
-                        )
-                    }
-                  ></Route>
-                  <Route
-                    path="/ticketdetail"
-                    element={
-                      user && user.status === 'active' && (user.role !== "propagent" || user.role !== "propagentadmin") ?
-                        <TicketDetail /> : <Navigate to="/login" />
-                    }
-                  ></Route>
 
                   <Route
                     path="/tenantdashboard"

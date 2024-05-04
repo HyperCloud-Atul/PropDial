@@ -47,17 +47,8 @@ const PropdialAllProperties = () => {
         soldOutFilteredCount: 0
     })
 
-    // useEffect(() => {
-    //   let flag = user && user.role === "propagent";
-
-    //   if (!flag) {
-    //     logout();
-    //   }
-    // }, [user, logout]);
-
-    // console.log('user:', user)
     const { documents: dbpropertiesdocuments, error: dbpropertieserror } =
-        useCollection("properties", ["postedBy", "==", "Agent"]);
+        useCollection("properties", ["postedBy", "==", "Propdial"]);
 
     useEffect(() => {
         let propList = [];
@@ -195,35 +186,35 @@ const PropdialAllProperties = () => {
 
     return (
         <div className="top_header_pg pg_bg">
-           <div className="page_spacing">
-            <div className="allproperites">
-            <div className="pg_header">
-                {searchKey !== "" ? (
-                    <h4 className="p_subtitle">
-                        <span style={{ color: "var(--p-theme-orange)" }}>
-                            {filteredProperty && filteredProperty.length} properties
-                        </span>{" "}
-                        found in{" "}
-                        <span style={{ color: "var(--p-theme-orange)" }}>{searchKey}</span>
-                    </h4>
-                ) : propertyCopy && propertyCopy.length !== 0 ? (
-                    <h4 className="p_subtitle">
-                        You can explore{" "}
-                        <span
-                            style={{
-                                padding: "0px 3px",
-                                color: "var(--p-theme-orange)",
-                            }}
-                        >
-                            {" "}
-                            {propertyCopy && propertyCopy.length} Properties Here
-                        </span>{" "}
-                    </h4>
-                ) : (
-                    ""
-                )}
-            </div>
-            {/* <div className="fl_form_field with_icon">
+            <div className="page_spacing">
+                <div className="allproperites">
+                    <div className="pg_header">
+                        {searchKey !== "" ? (
+                            <h4 className="p_subtitle">
+                                <span style={{ color: "var(--p-theme-orange)" }}>
+                                    {filteredProperty && filteredProperty.length} properties
+                                </span>{" "}
+                                found in{" "}
+                                <span style={{ color: "var(--p-theme-orange)" }}>{searchKey}</span>
+                            </h4>
+                        ) : propertyCopy && propertyCopy.length !== 0 ? (
+                            <h4 className="p_subtitle">
+                                You can explore{" "}
+                                <span
+                                    style={{
+                                        padding: "0px 3px",
+                                        color: "var(--p-theme-orange)",
+                                    }}
+                                >
+                                    {" "}
+                                    {propertyCopy && propertyCopy.length} Properties Here
+                                </span>{" "}
+                            </h4>
+                        ) : (
+                            ""
+                        )}
+                    </div>
+                    {/* <div className="fl_form_field with_icon">
         <label htmlFor="" className="no-floating">
           Search
         </label>
@@ -238,18 +229,18 @@ const PropdialAllProperties = () => {
         <div className="field_icon"></div>
       </div> */}
 
-            <SearchBarAutoComplete
-                enabled={false}
-                dataList={distinctCityList ? distinctCityList : []}
-                placeholderText={"Type city, locality or society new ...."}
-                getQuery={searchProperties}
-                queryValue={propSearch}
-                setRedirectFlag={setRedirectFlag}
-            ></SearchBarAutoComplete>
-            <div className="verticall_gap"></div>
+                    <SearchBarAutoComplete
+                        enabled={false}
+                        dataList={distinctCityList ? distinctCityList : []}
+                        placeholderText={"Type city, locality or society new ...."}
+                        getQuery={searchProperties}
+                        queryValue={propSearch}
+                        setRedirectFlag={setRedirectFlag}
+                    ></SearchBarAutoComplete>
+                    <div className="verticall_gap"></div>
 
 
-            {/* {searchKey !== "" &&
+                    {/* {searchKey !== "" &&
         <div className="pg_header">
           <div
             className="row no-gutters"
@@ -274,155 +265,155 @@ const PropdialAllProperties = () => {
         </div>
       } */}
 
-            {searchKey !== "" && filteredProperty.length > 0 && <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
-                <span className="no-floating">Filter</span>
+                    {searchKey !== "" && filteredProperty.length > 0 && <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg">
+                        <span className="no-floating">Filter</span>
 
-                <div className="radio_group" style={{ paddingTop: "10px" }}>
-                    {propertyPurposeFilteredCount.availableForRentFilteredCount > 0 && <div className="radio_group_single" style={{ position: 'relative', paddingTop: '5px', paddingBottom: '5px' }}>
+                        <div className="radio_group" style={{ paddingTop: "10px" }}>
+                            {propertyPurposeFilteredCount.availableForRentFilteredCount > 0 && <div className="radio_group_single" style={{ position: 'relative', paddingTop: '5px', paddingBottom: '5px' }}>
 
-                        <div className="purpose-filter-count-tag">
-                            <small>{propertyPurposeFilteredCount.availableForRentFilteredCount}</small>
-                        </div>
-
-                        <div
-                            className={
-                                propertyPurposeFilter === "Available for Rent"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                            }
-                        >
-                            <input
-                                type="checkbox"
-                                id="purpose_availableforrent"
-                                onClick={(e) => propertyPurposeFilterClick('Available for Rent')}
-
-                            />
-                            <label htmlFor="purpose_availableforrent" style={{ paddingTop: "7px" }}>
-                                <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">add</span>
-                                    <span className="material-symbols-outlined check">
-                                        done
-                                    </span>
+                                <div className="purpose-filter-count-tag">
+                                    <small>{propertyPurposeFilteredCount.availableForRentFilteredCount}</small>
                                 </div>
-                                <span style={{ fontSize: '0.8rem' }}>Available for Rent</span>
-                            </label>
+
+                                <div
+                                    className={
+                                        propertyPurposeFilter === "Available for Rent"
+                                            ? "custom_radio_button radiochecked"
+                                            : "custom_radio_button"
+                                    }
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id="purpose_availableforrent"
+                                        onClick={(e) => propertyPurposeFilterClick('Available for Rent')}
+
+                                    />
+                                    <label htmlFor="purpose_availableforrent" style={{ paddingTop: "7px" }}>
+                                        <div className="radio_icon">
+                                            <span className="material-symbols-outlined add">add</span>
+                                            <span className="material-symbols-outlined check">
+                                                done
+                                            </span>
+                                        </div>
+                                        <span style={{ fontSize: '0.8rem' }}>Available for Rent</span>
+                                    </label>
+                                </div>
+                            </div>}
+                            {propertyPurposeFilteredCount.rentedOutFilteredCount > 0 && <div className="radio_group_single" style={{ position: 'relative', paddingTop: '5px', paddingBottom: '5px' }}>
+
+                                <div className="purpose-filter-count-tag">
+                                    <small>{propertyPurposeFilteredCount.rentedOutFilteredCount}</small>
+                                </div>
+
+                                <div
+                                    className={
+                                        propertyPurposeFilter === "Rented Out"
+                                            ? "custom_radio_button radiochecked"
+                                            : "custom_radio_button"
+                                    }
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id="purpose_rentedout"
+                                        onClick={(e) => propertyPurposeFilterClick('Rented Out')}
+                                    />
+                                    <label htmlFor="purpose_rentedout" style={{ paddingTop: "7px" }}>
+                                        <div className="radio_icon">
+                                            <span className="material-symbols-outlined add">add</span>
+                                            <span className="material-symbols-outlined check">
+                                                done
+                                            </span>
+                                        </div>
+                                        <span style={{ fontSize: '0.8rem' }}>Rented Out</span>
+                                    </label>
+                                </div>
+                            </div>}
+                            {propertyPurposeFilteredCount.availableForSaleFilteredCount > 0 && <div className="radio_group_single" style={{ position: 'relative', paddingTop: '5px', paddingBottom: '5px' }}>
+
+                                <div className="purpose-filter-count-tag">
+                                    <small>{propertyPurposeFilteredCount.availableForSaleFilteredCount}</small>
+                                </div>
+
+                                <div
+                                    className={
+                                        propertyPurposeFilter === "Available for Sale"
+                                            ? "custom_radio_button radiochecked"
+                                            : "custom_radio_button"
+                                    }
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id="purpose_availableforsale"
+                                        onClick={(e) => propertyPurposeFilterClick('Available for Sale')}
+                                    />
+                                    <label htmlFor="purpose_availableforsale" style={{ paddingTop: "7px" }}>
+                                        <div className="radio_icon">
+                                            <span className="material-symbols-outlined add">add</span>
+                                            <span className="material-symbols-outlined check">
+                                                done
+                                            </span>
+                                        </div>
+                                        <span style={{ fontSize: '0.8rem' }}>Available for Sale</span>
+                                    </label>
+                                </div>
+                            </div>}
+                            {propertyPurposeFilteredCount.soldOutFilteredCount > 0 && <div className="radio_group_single" style={{ position: 'relative', paddingTop: '5px', paddingBottom: '5px' }}>
+
+                                <div className="purpose-filter-count-tag">
+                                    <small>{propertyPurposeFilteredCount.soldOutFilteredCount}</small>
+                                </div>
+
+                                <div
+                                    className={
+                                        propertyPurposeFilter === "Sold Out"
+                                            ? "custom_radio_button radiochecked"
+                                            : "custom_radio_button"
+                                    }
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id="purpose_soldout"
+                                        onClick={(e) => propertyPurposeFilterClick('Sold Out')}
+                                    />
+                                    <label htmlFor="purpose_soldout" style={{ paddingTop: "7px" }}>
+                                        <div className="radio_icon">
+                                            <span className="material-symbols-outlined add">add</span>
+                                            <span className="material-symbols-outlined check">
+                                                done
+                                            </span>
+                                        </div>
+                                        <span style={{ fontSize: '0.8rem' }}>Sold Out</span>
+                                    </label>
+                                </div>
+                            </div>}
                         </div>
                     </div>}
-                    {propertyPurposeFilteredCount.rentedOutFilteredCount > 0 && <div className="radio_group_single" style={{ position: 'relative', paddingTop: '5px', paddingBottom: '5px' }}>
-
-                        <div className="purpose-filter-count-tag">
-                            <small>{propertyPurposeFilteredCount.rentedOutFilteredCount}</small>
-                        </div>
-
-                        <div
-                            className={
-                                propertyPurposeFilter === "Rented Out"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                            }
-                        >
-                            <input
-                                type="checkbox"
-                                id="purpose_rentedout"
-                                onClick={(e) => propertyPurposeFilterClick('Rented Out')}
-                            />
-                            <label htmlFor="purpose_rentedout" style={{ paddingTop: "7px" }}>
-                                <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">add</span>
-                                    <span className="material-symbols-outlined check">
-                                        done
-                                    </span>
-                                </div>
-                                <span style={{ fontSize: '0.8rem' }}>Rented Out</span>
-                            </label>
-                        </div>
-                    </div>}
-                    {propertyPurposeFilteredCount.availableForSaleFilteredCount > 0 && <div className="radio_group_single" style={{ position: 'relative', paddingTop: '5px', paddingBottom: '5px' }}>
-
-                        <div className="purpose-filter-count-tag">
-                            <small>{propertyPurposeFilteredCount.availableForSaleFilteredCount}</small>
-                        </div>
-
-                        <div
-                            className={
-                                propertyPurposeFilter === "Available for Sale"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                            }
-                        >
-                            <input
-                                type="checkbox"
-                                id="purpose_availableforsale"
-                                onClick={(e) => propertyPurposeFilterClick('Available for Sale')}
-                            />
-                            <label htmlFor="purpose_availableforsale" style={{ paddingTop: "7px" }}>
-                                <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">add</span>
-                                    <span className="material-symbols-outlined check">
-                                        done
-                                    </span>
-                                </div>
-                                <span style={{ fontSize: '0.8rem' }}>Available for Sale</span>
-                            </label>
-                        </div>
-                    </div>}
-                    {propertyPurposeFilteredCount.soldOutFilteredCount > 0 && <div className="radio_group_single" style={{ position: 'relative', paddingTop: '5px', paddingBottom: '5px' }}>
-
-                        <div className="purpose-filter-count-tag">
-                            <small>{propertyPurposeFilteredCount.soldOutFilteredCount}</small>
-                        </div>
-
-                        <div
-                            className={
-                                propertyPurposeFilter === "Sold Out"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                            }
-                        >
-                            <input
-                                type="checkbox"
-                                id="purpose_soldout"
-                                onClick={(e) => propertyPurposeFilterClick('Sold Out')}
-                            />
-                            <label htmlFor="purpose_soldout" style={{ paddingTop: "7px" }}>
-                                <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">add</span>
-                                    <span className="material-symbols-outlined check">
-                                        done
-                                    </span>
-                                </div>
-                                <span style={{ fontSize: '0.8rem' }}>Sold Out</span>
-                            </label>
-                        </div>
-                    </div>}
-                </div>
-            </div>}
 
 
 
-            {/* <Filters
+                    {/* <Filters
                     changeFilter={changeFilter}
                     filterList={propertyFilter}
                     activeFilter={filter}
                     filterLength={properties && properties.length}
                 /> */}
 
-            {filteredProperty && filteredProperty.length === 0 && (
-                <h2 className="p_title">No property available</h2>
-            )}
+                    {filteredProperty && filteredProperty.length === 0 && (
+                        <h2 className="p_title">No property available</h2>
+                    )}
 
-            {searchKey !== "" && (
-                <div className="property_cards_parent">
-                    {filteredProperty &&
-                        filteredProperty.map((property) => (
-                            <PropertyCard key={property.id} propertydoc={property} />
-                        ))}
+                    {searchKey !== "" && (
+                        <div className="property_cards_parent">
+                            {filteredProperty &&
+                                filteredProperty.map((property) => (
+                                    <PropertyCard key={property.id} propertydoc={property} />
+                                ))}
+                        </div>
+                    )}
+                    <div className="verticall_gap"></div>
+                    <div className="verticall_gap_991"></div>
                 </div>
-            )}
-            <div className="verticall_gap"></div>
-            <div className="verticall_gap_991"></div>
             </div>
-           </div>
         </div>
     );
 };

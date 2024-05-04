@@ -17,18 +17,18 @@ const PGProperties = () => {
   // Scroll to the top of the page whenever the location changes end
 
   const { user } = useAuthContext();
-  console.log('user:', user)
+  // console.log('user:', user)
   return (
     <>
       <div>
-        {!user && <PGSearchProperty />}
+        {<PGSearchProperty />}
       </div>
-      <div>
+      {/* <div>
         {user && user.role === 'owner' && <PGCustomerProperty />}
       </div>
       <div>
         {user && user.role === 'admin' && <PGAdminProperty />}
-      </div>
+      </div> */}
 
     </>
   );
