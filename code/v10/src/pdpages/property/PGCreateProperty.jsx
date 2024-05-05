@@ -271,6 +271,9 @@ const CreateProperty = () => {
         MaintenanceChargesFrequency: "",
         SecurityDeposit: "",
         Purpose: "",
+        PropertyType: "",
+        Bhk: "",
+        FloorNo: "",
         Country: "",
         State: "",
         City: "",
@@ -454,6 +457,24 @@ const CreateProperty = () => {
                 }
             }
 
+            if (propertyDetails.PropertyType === "") {
+                if (errorMsg === "Error: Please select ") errorMsg = "Please Enter Property Type";
+                else errorMsg = errorMsg + ", Property Type";
+                errorFlag = true;
+            }
+
+            if (propertyDetails.Bhk === "") {
+                if (errorMsg === "Error: Please select ") errorMsg = "Please Enter BHK";
+                else errorMsg = errorMsg + ", BHK";
+                errorFlag = true;
+            }
+
+            if (propertyDetails.FloorNo === "") {
+                if (errorMsg === "Error: Please select ") errorMsg = "Please Enter Floor No";
+                else errorMsg = errorMsg + ", Floor No";
+                errorFlag = true;
+            }
+
             if (propertyDetails.DemandPrice === "" || propertyDetails.DemandPrice === "0") {
                 if (errorMsg === "Error: Please select ") errorMsg = "Please Enter Demand Price";
                 else errorMsg = errorMsg + ", Demand Price";
@@ -517,6 +538,9 @@ const CreateProperty = () => {
                     : "Residential",
                 unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : "",
                 purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
+                propertyType: propertyDetails.PropertyType ? propertyDetails.PropertyType : "",
+                bhk: propertyDetails.Bhk ? propertyDetails.Bhk : "",
+                floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "",
                 status: propertyDetails.Purpose === "Rent" ? "Available for Rent" : "Available for Sale",
                 demandprice: propertyDetails.DemandPrice
                     ? propertyDetails.DemandPrice
@@ -548,9 +572,6 @@ const CreateProperty = () => {
                 ownership: "",
                 package: "",
                 flag: "",
-                floorNo: "",
-                propertyType: "",
-                bhk: "",
                 numberOfBedrooms: "0",
                 numberOfBathrooms: "0",
                 furnishing: "",
@@ -813,8 +834,822 @@ const CreateProperty = () => {
                             </div>
                         </div>
 
-
-
+                        <div className="col-md-4">
+                            <div className="form_field label_top">
+                                <label htmlFor="">Property Type</label>
+                                <div className="form_field_inner">
+                                    <select
+                                        value={propertyDetails && propertyDetails.PropertyType}
+                                        onChange={(e) => {
+                                            setPropertyDetails({
+                                                ...propertyDetails,
+                                                PropertyType: e.target.value,
+                                            });
+                                        }}
+                                    >
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType.toUpperCase ===
+                                                    "SELECT PROPERTY TYPE"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Select Property Type
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "High Rise Apt"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            High Rise Apt (10+ floor)
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "Low Rise Apt"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Low Rise Apt (5-10 floor)
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "Builder Floor"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Builder Floor (Upto 4 floor)
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "Kothi"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Kothi/Independent house{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "Villa - Simplex"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Villa - Simplex
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "Villa - Duplex"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Villa - Duplex
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "Row House - Simplex"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Row House - Simplex
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "Row House - Duplex"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Row House - Duplex
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "Pent House - Simplex"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Pent House - Simplex
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails &&
+                                                    propertyDetails.PropertyType === "Pent House - Duplex"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Pent House - Duplex
+                                        </option>
+                                    </select>
+                                    {/* <div className="field_icon">
+                  <span className="material-symbols-outlined">
+                    format_list_bulleted
+                  </span>
+                </div> */}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="form_field label_top">
+                                <label htmlFor="">BHK</label>
+                                <div className="form_field_inner">
+                                    <select
+                                        value={propertyDetails && propertyDetails.Bhk}
+                                        onChange={(e) => {
+                                            setPropertyDetails({
+                                                ...propertyDetails,
+                                                Bhk: e.target.value,
+                                            });
+                                        }}
+                                    >
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "Select BHK"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Select BHK
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "EWS"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            EWS
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "1 RK"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            1 RK
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "Studio"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Studio
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "1"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            1 BHK
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "1.5"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            1.5 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "2"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            2 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "2.5"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            2.5 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "3"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            3 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "3.5 "
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            3.5 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "4"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            4 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "5"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            5 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "6"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            6 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "7"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            7 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "8"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            8 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "9"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            9 BHK{" "}
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.Bhk === "9+"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            9+ BHK{" "}
+                                        </option>
+                                    </select>
+                                    {/* <div className="field_icon">
+                  <span className="material-symbols-outlined">
+                    bedroom_parent
+                  </span>
+                </div> */}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="form_field label_top">
+                                <label htmlFor="">Floor No</label>
+                                <div className="form_field_inner">
+                                    <select
+                                        value={propertyDetails && propertyDetails.FloorNo}
+                                        onChange={(e) => {
+                                            setPropertyDetails({
+                                                ...propertyDetails,
+                                                FloorNo: e.target.value,
+                                            });
+                                        }}
+                                    >
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "Select Floor No"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Select Floor No
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "Basement"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Basement
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "Ground"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Ground
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "Stilt"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            Stilt
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "1"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            1
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "2"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            2
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "3"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            3
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "4"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            4
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "5"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            5
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "6"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            6
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "7"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            7
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "8"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            8
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "9"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            9
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "10"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            10
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "11"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            11
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "12"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            12
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "13"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            13
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "14"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            14
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "15"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            15
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "16"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            16
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "17"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            17
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "18"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            18
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "19"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            19
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "20"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            20
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "21"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            21
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "22"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            22
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "23"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            23
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "24"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            24
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "25"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            25
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "26"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            26
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "27"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            27
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "28"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            28
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "29"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            29
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "30"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            30
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "31"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            31
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "32"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            32
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "33"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            33
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "34"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            34
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "35"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            35
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "36"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            36
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "37"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            37
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "38"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            38
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "39"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            39
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "40"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            40
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "41"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            41
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "42"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            42
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "43"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            43
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "44"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            44
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "45"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            45
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "46"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            46
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "47"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            47
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "48"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            48
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "49"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            49
+                                        </option>
+                                        <option
+                                            defaultValue={
+                                                propertyDetails && propertyDetails.FloorNo === "50+"
+                                                    ? true
+                                                    : false
+                                            }
+                                        >
+                                            50+
+                                        </option>
+                                    </select>
+                                    {/* <div className="field_icon">
+                  <span className="material-symbols-outlined">
+                    bedroom_parent
+                  </span>
+                </div> */}
+                                </div>
+                            </div>
+                        </div>
                         <div className="col-md-4">
                             <div id="id_demand" className="form_field label_top">
                                 <label htmlFor="">Demand/Price</label>

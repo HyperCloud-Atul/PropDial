@@ -5,7 +5,9 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 
 
 const SearchProperty = ({ propertiesdocuments }) => {
+
   // console.log('properties: ', propertiesdocuments)
+
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
@@ -100,6 +102,7 @@ const SearchProperty = ({ propertiesdocuments }) => {
           </Link>
           <div className="pcs_other_info">
             <div className="poi_inner">
+              <h6 className="value_per_sqf">Onwards</h6>
               <h6 className="property_value">
                 <span>₹ </span> {property.demandprice}
               </h6>

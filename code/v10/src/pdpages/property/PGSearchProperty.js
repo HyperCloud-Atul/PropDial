@@ -13,6 +13,10 @@ import PropdialPropertyCard from "../../components/property/SearchProperty";
 import PropAgentPropertyCard from "../../components/property/SearchPropAgentProperty";
 
 const PGSearchProperty = () => {
+  const [activeOption, setActiveOption] = useState('Rent');
+  const [checked, setChecked] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('Residential');
+
   const { documents: propdialProperties, error: propdialPropertieserror } = useCollection("properties", ["postedBy", "==", "Propdial"]);
   const { documents: propagentProperties, error: propagentPropertieserror } = useCollection("properties", ["postedBy", "==", "Agent"]);
 
@@ -22,6 +26,10 @@ const PGSearchProperty = () => {
   //   ["updatedAt", "desc"]
   // );
 
+  const filteredProperties = propdialProperties && propdialProperties.filter(function (property) {
+    return ((property.purpose === activeOption) && (property.category === activeCategory));
+  });
+
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
@@ -30,14 +38,16 @@ const PGSearchProperty = () => {
   // Scroll to the top of the page whenever the location changes end
 
   // switch 
-  const [checked, setChecked] = useState(false);
+
   const handleChange = (checked) => {
+    console.log('checked:', checked)
+
+    checked === false ? setActiveCategory('Residential') : setActiveCategory('Commercial')
     setChecked(checked);
   };
   // switch
 
-  // rent and buy acitve 
-  const [activeOption, setActiveOption] = useState('Buy');
+  // rent and sale acitve 
   const handleOptionClick = (option) => {
     setActiveOption(option);
   };
@@ -52,14 +62,14 @@ const PGSearchProperty = () => {
         <div className="search_area_header">
           <div className="for_buy_rent">
             <div
-              className={`pointer ${activeOption === 'Buy' ? 'active' : ''}`}
-              onClick={() => handleOptionClick('Buy')}
+              className={`pointer ${activeOption === 'Rent' ? 'active' : ''}`}
+              onClick={() => handleOptionClick('Rent')}
             >
               Rent
             </div>
             <div
-              className={`pointer ${activeOption === 'Rent' ? 'active' : ''}`}
-              onClick={() => handleOptionClick('Rent')}
+              className={`pointer ${activeOption === 'Sale' ? 'active' : ''}`}
+              onClick={() => handleOptionClick('Sale')}
             >
               Sale
             </div>
@@ -135,13 +145,13 @@ const PGSearchProperty = () => {
             <div className="row">
               <div className="col-xl-9">
                 <TabList className="tabs">
-                  <Tab className="pointer">Properties ({propdialProperties && propdialProperties.length})</Tab>
+                  <Tab className="pointer">Properties ({filteredProperties && filteredProperties.length})</Tab>
                   <Tab className="pointer">New Projects</Tab>
                   <Tab className="pointer">Top Agents</Tab>
                 </TabList>
                 <TabPanel>
                   <div className="property_card_left">
-                    {propdialProperties && <PropdialPropertyCard propertiesdocuments={propdialProperties} />}
+                    {filteredProperties && <PropdialPropertyCard propertiesdocuments={filteredProperties} />}
                   </div>
                 </TabPanel>
                 <TabPanel>
