@@ -33,12 +33,12 @@ const SearchPropAgentProperty = ({ propagentProperties }) => {
                         <img src="./assets/img/property/p2.jpg" alt="" />
                     </div>
                     <div className="ppss_header">
-                        <h5>{property.bhk} for {property.purpose}</h5>
+                        <h5>{property.bhk} | {property.purpose}</h5>
                         <h5>{property.locality}</h5>
                         <h6 className="location">{property.city}, {property.state}</h6>
                     </div>
                     <div className="ppss_footer">
-                        <h6>{property.furnishing} Furnished</h6>
+                        <h6>{property.furnishing === "" ? "" : property.furnishing + "Furnished"} </h6>
                         <h6>
                             <span>₹ {property.demandprice}</span> onwards
                         </h6>

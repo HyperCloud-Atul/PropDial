@@ -13,7 +13,7 @@ import PropdialPropertyCard from "../../components/property/SearchProperty";
 import PropAgentPropertyCard from "../../components/property/SearchPropAgentProperty";
 
 const PGSearchProperty = () => {
-  const [activeOption, setActiveOption] = useState('Rent');
+  const [activeOption, setActiveOption] = useState('Available for Rent');
   const [checked, setChecked] = useState(false);
   const [activeCategory, setActiveCategory] = useState('Residential');
 
@@ -26,8 +26,12 @@ const PGSearchProperty = () => {
   //   ["updatedAt", "desc"]
   // );
 
-  const filteredProperties = propdialProperties && propdialProperties.filter(function (property) {
+  const filteredPropdialProperties = propdialProperties && propdialProperties.filter(function (property) {
     return ((property.purpose === activeOption) && (property.category === activeCategory));
+  });
+
+  const filteredPropAgentProperties = propagentProperties && propagentProperties.filter(function (property) {
+    return ((property.purpose === 'Available for Rent') || (property.purpose === 'Available for Sale'));
   });
 
   // Scroll to the top of the page whenever the location changes start
@@ -62,14 +66,14 @@ const PGSearchProperty = () => {
         <div className="search_area_header">
           <div className="for_buy_rent">
             <div
-              className={`pointer ${activeOption === 'Rent' ? 'active' : ''}`}
-              onClick={() => handleOptionClick('Rent')}
+              className={`pointer ${activeOption === 'Available for Rent' ? 'active' : ''}`}
+              onClick={() => handleOptionClick('Available for Rent')}
             >
               Rent
             </div>
             <div
-              className={`pointer ${activeOption === 'Sale' ? 'active' : ''}`}
-              onClick={() => handleOptionClick('Sale')}
+              className={`pointer ${activeOption === 'Available for Sale' ? 'active' : ''}`}
+              onClick={() => handleOptionClick('Available for Sale')}
             >
               Sale
             </div>
@@ -145,13 +149,13 @@ const PGSearchProperty = () => {
             <div className="row">
               <div className="col-xl-9">
                 <TabList className="tabs">
-                  <Tab className="pointer">Properties ({filteredProperties && filteredProperties.length})</Tab>
+                  <Tab className="pointer">Properties ({filteredPropdialProperties && filteredPropdialProperties.length})</Tab>
                   <Tab className="pointer">New Projects</Tab>
                   <Tab className="pointer">Top Agents</Tab>
                 </TabList>
                 <TabPanel>
                   <div className="property_card_left">
-                    {filteredProperties && <PropdialPropertyCard propertiesdocuments={filteredProperties} />}
+                    {filteredPropdialProperties && <PropdialPropertyCard propertiesdocuments={filteredPropdialProperties} />}
                   </div>
                 </TabPanel>
                 <TabPanel>
@@ -168,7 +172,7 @@ const PGSearchProperty = () => {
                 <div className="pp_sidebar">
                   <div className="pp_sidebar_cards">
                     <div className="pp_sidebarcard_single">
-                      {propagentProperties && <PropAgentPropertyCard propagentProperties={propagentProperties} />}
+                      {filteredPropAgentProperties && <PropAgentPropertyCard propagentProperties={filteredPropAgentProperties} />}
                     </div>
 
                     {/* <div className="pp_sidebarcard_single">

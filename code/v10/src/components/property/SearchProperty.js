@@ -31,7 +31,7 @@ const SearchProperty = ({ propertiesdocuments }) => {
     <>
       {propertiesdocuments && propertiesdocuments.map((property) => (
         <div className="property_card_single">
-          <Link className="pcs_inner pointer" to={`/pdsingle/${property.id}`} key={property.id}>
+          <Link className="pcs_inner pointer" to={`/propertydetails/${property.id}`} key={property.id}>
             <div className="pcs_image_area">
               <img src="/assets/img/property/p1.jpg" className="bigimage"></img>
             </div>
@@ -39,7 +39,7 @@ const SearchProperty = ({ propertiesdocuments }) => {
               <div className="pmd_top relative" >
                 <h4 className="property_name">
                   {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.unitNumber : ''} - {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.society : ''}<br></br>
-                  {property.bhk} | {property.furnishing} Furnished for {property.purpose}
+                  {property.bhk} | {property.furnishing === "" ? "" : property.furnishing + "Furnished | "} {property.purpose}
                 </h4>
                 <h6 className="property_location">{property.locality}, {property.city} |  {property.state}</h6>
                 <div className="fav_and_share">
