@@ -185,7 +185,7 @@ const PropertyCard = ({ propertydoc }) => {
         </div>
         <div className="property_single_card relative">
           <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
-            {propertydoc.purpose}
+            {propertydoc.purpose === 'Available for Rent' || propertydoc.purpose === 'Rented Out' ? 'Rent' : 'Sale'}
           </div>
           <Link to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="top relative">
             {/* <div className="fav">
@@ -208,7 +208,7 @@ const PropertyCard = ({ propertydoc }) => {
               </h5>
               <div className="full_address">
                 <h6>
-                  {((propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT') || (propertydoc.status.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertydoc.status}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertydoc.status}</span>}
+                  {((propertydoc.purpose.toUpperCase() === 'AVAILABLE FOR RENT') || (propertydoc.purpose.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertydoc.purpose}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertydoc.purpose}</span>}
                 </h6>
                 <h6>{propertydoc.unitNumber}, {propertydoc.society}  {propertydoc.propertyType}</h6>
                 <h6>{propertydoc.bhk} {propertydoc.furnishing} Furnished for {propertydoc.purpose}</h6>
