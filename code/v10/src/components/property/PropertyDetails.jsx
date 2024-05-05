@@ -382,7 +382,7 @@ const PropertyDetails = () => {
         {
           !user && (
             <div className="top_search_bar">
-              <Link to="/search-property" className="back_btn">
+              <Link to="/properties" className="back_btn">
                 <span class="material-symbols-outlined">arrow_back</span>
                 <span>Back</span>
               </Link>
@@ -406,7 +406,7 @@ const PropertyDetails = () => {
                                 {propertyDocument.unitNumber}, {propertyDocument.society}
                               </h4>
                               <h6>
-                                {((propertyDocument.status.toUpperCase() === 'AVAILABLE FOR RENT') || (propertyDocument.status.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertyDocument.status}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertyDocument.status}</span>}
+                                {((propertyDocument.purpose.toUpperCase() === 'AVAILABLE FOR RENT') || (propertyDocument.purpose.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertyDocument.purpose}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertyDocument.purpose}</span>}
                               </h6>
                               <h4 className="property_name">
                                 {propertyDocument.bhk} |{" "}
@@ -658,143 +658,144 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                     }
-                    <div className="extra_info_card_property">
-                      <OwlCarousel className="owl-theme" {...options}>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>
-                                5
-                              </h6>
-                              <h5>
-                                Documents
-                              </h5>
+                    {(user && (user.role === 'owner' || user.role === 'coowner' || user.role === 'admin')) &&
+                      <div className="extra_info_card_property">
+                        <OwlCarousel className="owl-theme" {...options}>
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>
+                                  5
+                                </h6>
+                                <h5>
+                                  Documents
+                                </h5>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>
-                                10
-                              </h6>
-                              <h5>
-                                Enquiries
-                              </h5>
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>
+                                  10
+                                </h6>
+                                <h5>
+                                  Enquiries
+                                </h5>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>
-                                2
-                              </h6>
-                              <h5>
-                                Bills
-                              </h5>
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>
+                                  2
+                                </h6>
+                                <h5>
+                                  Bills
+                                </h5>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>
-                                5
-                              </h6>
-                              <h5>
-                                Document
-                              </h5>
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>
+                                  5
+                                </h6>
+                                <h5>
+                                  Document
+                                </h5>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>
-                                5
-                              </h6>
-                              <h5>
-                                Document
-                              </h5>
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>
+                                  5
+                                </h6>
+                                <h5>
+                                  Document
+                                </h5>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>
-                                5
-                              </h6>
-                              <h5>
-                                Document
-                              </h5>
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>
+                                  5
+                                </h6>
+                                <h5>
+                                  Document
+                                </h5>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>
-                                5
-                              </h6>
-                              <h5>
-                                Document
-                              </h5>
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>
+                                  5
+                                </h6>
+                                <h5>
+                                  Document
+                                </h5>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>
-                                5
-                              </h6>
-                              <h5>
-                                Document
-                              </h5>
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>
+                                  5
+                                </h6>
+                                <h5>
+                                  Document
+                                </h5>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>
-                                5
-                              </h6>
-                              <h5>
-                                Document
-                              </h5>
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>
+                                  5
+                                </h6>
+                                <h5>
+                                  Document
+                                </h5>
+                              </div>
                             </div>
                           </div>
-                        </div>
 
 
 
@@ -803,8 +804,10 @@ const PropertyDetails = () => {
 
 
 
-                      </OwlCarousel>
-                    </div>
+                        </OwlCarousel>
+                      </div>
+                    }
+
                     {((user && user.role === "owner") ||
                       (user && user.role === "coowner")
                       ||
