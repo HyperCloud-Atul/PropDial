@@ -424,7 +424,7 @@ const PropertyDetails = () => {
                               <div className="pdms_single col-4">
                                 <h4>
                                   <span className="currency">₹</span>
-                                  {propertyDocument.demandprice}/-
+                                  {propertyDocument.demandPrice}/-
                                   <span className="price"></span>
                                 </h4>
                                 <h6>Demand Price</h6>
@@ -444,22 +444,19 @@ const PropertyDetails = () => {
                                 propertyDocument.purpose.toUpperCase() === "RENT" && <div className="pdms_single col-4">
                                   <h4>
                                     <span className="currency">₹</span>
-                                    {propertyDocument.maintenancecharges}/- <span style={{ fontSize: '0.8rem' }}> {propertyDocument.maintenanceflag}</span>
+                                    {propertyDocument.maintenanceCharges}/- <span style={{ fontSize: '0.8rem' }}> {propertyDocument.maintenanceFlag}</span>
                                   </h4>
-                                  <h6>{propertyDocument.maintenancechargesfrequency} Maintenance</h6>
+                                  <h6>{propertyDocument.maintenanceChargesFrequency} Maintenance</h6>
                                 </div>}
                               {
                                 propertyDocument.purpose.toUpperCase() === "RENT" && <div className="pdms_single col-4">
                                   <h4>
                                     <span className="currency">₹</span>
-                                    {propertyDocument.securitydeposit}/-
+                                    {propertyDocument.securityDeposit}/-
                                   </h4>
                                   <h6>Security Deposit</h6>
                                 </div>}
-                              {/* <div className="pdms_single col-4">
-                              <h4>{propertyDocument.purpose.toUpperCase() === "SALE" ? propertyDocument.demandprice : propertyDocument.demandprice + " " + propertyDocument.maintenancecharges + propertyDocument.maintenancechargesfrequency + propertyDocument.maintenanceflag + propertyDocument.securitydeposit}</h4>
-                              <h6>{propertyDocument.carpetAreaUnit}</h6>
-                            </div> */}
+
                               <div className="pdms_single col-4"></div>
                             </div>
                             <div className="divider"></div>

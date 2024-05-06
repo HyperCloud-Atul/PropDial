@@ -105,7 +105,7 @@ const SearchProperty = ({ propertiesdocuments }) => {
             <div className="poi_inner">
               <h6 className="value_per_sqf">Onwards</h6>
               <h6 className="property_value">
-                <span>₹ </span> {property.demandprice}
+                <span>₹ </span> {property.demandPrice}
               </h6>
               <h6 className="value_per_sqf">
                 {property.carpetArea}  {property.carpetAreaUnit}

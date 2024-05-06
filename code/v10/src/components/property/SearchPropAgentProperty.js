@@ -40,7 +40,7 @@ const SearchPropAgentProperty = ({ propagentProperties }) => {
                     <div className="ppss_footer">
                         <h6>{property.furnishing === "" ? "" : property.furnishing + "Furnished"} </h6>
                         <h6>
-                            <span>₹ {property.demandprice}</span> onwards
+                            <span>₹ {property.demandPrice}</span> onwards
                         </h6>
                         <h6>Marketed by {property.postedBy}</h6>
                     </div>

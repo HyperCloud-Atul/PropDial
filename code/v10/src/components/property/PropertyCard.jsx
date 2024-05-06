@@ -207,7 +207,7 @@ const PropertyCard = ({ propertydoc }) => {
             </div>
             <div className="left_side relative">
               <h5 className="demand">
-                <span>₹</span> {propertydoc.demandprice}
+                <span>₹</span> {propertydoc.demandPrice}
                 {propertydoc.maintenancecharges !== '' && <span
                   style={{
                     fontSize: "10px",

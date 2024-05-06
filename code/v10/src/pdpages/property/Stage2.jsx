@@ -66,7 +66,7 @@ const Stage2 = (props) => {
 
   useEffect(() => {
     if (propertyDocument) {
-      console.log("propertyDocument:", propertyDocument);
+      // console.log("propertyDocument:", propertyDocument);
 
       setPropertyDetails({
         // All select type
@@ -152,9 +152,12 @@ const Stage2 = (props) => {
     props.setStateFlag("stage1");
   };
 
-  const [bedroomInput, setbedroomInput] = useState(1);
-  const [bathroomInput, setbathroomInput] = useState(1);
-  const [balconyInput, setbalconyInput] = useState(1);
+  const [bedroomInput, setBedroomInput] = useState(1);
+  const [bathroomInput, setBathroomInput] = useState(1);
+  const [balconyInput, setBalconyInput] = useState(1);
+  const [kitchenInput, setKitchenInput] = useState(1);
+  const [livingAreaInput, setLivingAreaInput] = useState(1);
+  const [basementInput, setBasementInput] = useState(1);
 
 
   function increamentInput(input) {
@@ -164,22 +167,43 @@ const Stage2 = (props) => {
     } else {
       inputValue++;
       if (input === "bedroomNumberInput") {
-        setbedroomInput(inputValue);
+        setBedroomInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBedrooms: inputValue,
         });
       } else if (input === "bathroomNumberInput") {
-        setbathroomInput(inputValue);
+        setBathroomInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBathrooms: inputValue,
         });
       } else if (input === "balconyNumberInput") {
-        setbalconyInput(inputValue);
+        setBalconyInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBalcony: inputValue,
+        });
+      }
+      else if (input === "kitchenNumberInput") {
+        setKitchenInput(inputValue);
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfKitchen: inputValue,
+        });
+      }
+      else if (input === "livingAreaNumberInput") {
+        setLivingAreaInput(inputValue);
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfLivingArea: inputValue,
+        });
+      }
+      else if (input === "basementNumberInput") {
+        setBasementInput(inputValue);
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBasement: inputValue,
         });
       }
     }
@@ -187,21 +211,49 @@ const Stage2 = (props) => {
 
   function decreamentInput(input) {
     var inputValue = document.getElementById(input).value;
+    console.log("input value in decreamentInput:", inputValue)
     if (inputValue === "0") {
       //Don't do anything
     } else {
-      inputValue--;
+      --inputValue;
       if (input === "bedroomNumberInput") {
-        setbedroomInput(inputValue);
+        setBedroomInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBedrooms: inputValue,
         });
       } else if (input === "bathroomNumberInput") {
-        setbathroomInput(inputValue);
+        setBathroomInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBathrooms: inputValue,
+        });
+      } else if (input === "balconyNumberInput") {
+        setBalconyInput(inputValue);
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBalcony: inputValue,
+        });
+      }
+      else if (input === "kitchenNumberInput") {
+        setKitchenInput(inputValue);
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfKitchen: inputValue,
+        });
+      }
+      else if (input === "livingAreaNumberInput") {
+        setLivingAreaInput(inputValue);
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfLivingArea: inputValue,
+        });
+      }
+      else if (input === "basementNumberInput") {
+        setBasementInput(inputValue);
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBasement: inputValue,
         });
       }
     }
@@ -229,10 +281,10 @@ const Stage2 = (props) => {
       else errorMsg = errorMsg + ", BHK";
       errorFlag = true;
     }
-    console.log(
-      "propertyDetails.NumberOfBedrooms:",
-      propertyDetails.NumberOfBedrooms
-    );
+    // console.log(
+    //   "propertyDetails.NumberOfBedrooms:",
+    //   propertyDetails.NumberOfBedrooms
+    // );
     if (
       // propertyDetails && propertyDetails.NumberOfBedrooms.toUpperCase() === "SELECT BEDROOM" ||
       Number(propertyDetails.NumberOfBedrooms) === 0
@@ -279,6 +331,10 @@ const Stage2 = (props) => {
       bhk: propertyDetails.Bhk,
       numberOfBedrooms: propertyDetails.NumberOfBedrooms,
       numberOfBathrooms: propertyDetails.NumberOfBathrooms,
+      numberOfBalcony: propertyDetails.NumberOfBalcony,
+      numberOfKitchen: propertyDetails.NumberOfKitchen,
+      numberOfLivingArea: propertyDetails.NumberOfLivingArea,
+      numberOfBasement: propertyDetails.NumberOfBasement,
       furnishing: propertyDetails.Furnishing,
       additionalRooms: propertyDetails.AdditionalRooms
         ? propertyDetails.AdditionalRooms
@@ -839,7 +895,7 @@ const Stage2 = (props) => {
                       id="kitchenNumberInput"
                       type="number"
                       disabled
-                      value={propertyDetails && propertyDetails.NumberOfKitchens}
+                      value={propertyDetails && propertyDetails.NumberOfKitchen}
                     />
                     <div
                       className="right-plus-button pmbutton"
@@ -857,22 +913,22 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("bathroomNumberInput");
+                        decreamentInput("livingAreaNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
                     </div>
 
                     <input
-                      id="bathroomNumberInput"
+                      id="livingAreaNumberInput"
                       type="number"
                       disabled
-                      value={propertyDetails && propertyDetails.NumberOfBathrooms}
+                      value={propertyDetails && propertyDetails.NumberOfLivingArea}
                     />
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("bathroomNumberInput");
+                        increamentInput("livingAreaNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
@@ -885,22 +941,22 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("bathroomNumberInput");
+                        decreamentInput("basementNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
                     </div>
 
                     <input
-                      id="bathroomNumberInput"
+                      id="basementNumberInput"
                       type="number"
                       disabled
-                      value={propertyDetails && propertyDetails.NumberOfBathrooms}
+                      value={propertyDetails && propertyDetails.NumberOfBasement}
                     />
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("bathroomNumberInput");
+                        increamentInput("basementNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
