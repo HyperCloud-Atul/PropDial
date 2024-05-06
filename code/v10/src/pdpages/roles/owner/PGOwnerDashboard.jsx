@@ -36,13 +36,13 @@ const PGOwnerDashboard = () => {
   // );
 
   const activeProperties =
-    properties && properties.filter((item) => item.status.toUpperCase() === 'ACTIVE');
+    properties && properties.filter((item) => item.isActiveInactiveReview.toUpperCase() === 'ACTIVE');
 
   const pendingProperties =
-    properties && properties.filter((item) => item.status.toUpperCase() === 'PENDING APPROVAL');
+    properties && properties.filter((item) => item.isActiveInactiveReview.toUpperCase() === 'IN-REVIEW');
 
   const inactiveProperties =
-    properties && properties.filter((item) => item.status.toUpperCase() === 'INACTIVE');
+    properties && properties.filter((item) => item.isActiveInactiveReview.toUpperCase() === 'INACTIVE');
 
   const residentialProperties =
     properties && properties.filter((item) => item.category.toUpperCase() === 'RESIDENTIAL');
@@ -293,7 +293,7 @@ const PGOwnerDashboard = () => {
                     </div>
                   </div>
                 </div>
-              </section>            
+              </section>
               <div className="vg22"></div>
               <hr />
               <div className="vg22"></div>

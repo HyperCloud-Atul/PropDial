@@ -348,16 +348,18 @@ const Stage1 = (props) => {
         UnitNumber: propertyDocument.unitNumber
           ? propertyDocument.unitNumber
           : "",
-        DemandPrice: propertyDocument.demandprice
-          ? propertyDocument.demandprice
+        DemandPrice: propertyDocument.demandPrice
+          ? propertyDocument.demandPrice
           : "",
-        MaintenanceCharges: propertyDocument.maintenancecharges
-          ? propertyDocument.maintenancecharges
+        MaintenanceFlag: propertyDocument.maintenanceFlag ? propertyDocument.maintenanceFlag : "",
+        MaintenanceCharges: propertyDocument.maintenanceCharges
+          ? propertyDocument.maintenanceCharges
           : "",
         MaintenanceChargesFrequency:
-          propertyDocument.maintenancechargesfrequency
-            ? propertyDocument.maintenancechargesfrequency
+          propertyDocument.maintenanceChargesFrequency
+            ? propertyDocument.maintenanceChargesFrequency
             : "",
+        SecurityDeposit: propertyDocument.securityDeposit ? propertyDocument.securityDeposit : "",
         Purpose: propertyDocument.purpose ? propertyDocument.purpose : "",
         Country: propertyDocument.country ? propertyDocument.country : "",
         State: propertyDocument.state ? propertyDocument.state : "",

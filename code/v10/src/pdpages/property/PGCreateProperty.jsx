@@ -11,6 +11,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
 import SearchBarAutoComplete from "../../pages/search/SearchBarAutoComplete";
 import Back from "../back/Back";
+import { TwoWheeler } from "@mui/icons-material";
 // import { projectID } from 'firebase-functions/params';
 
 //Restrict to Input
@@ -542,19 +543,19 @@ const CreateProperty = () => {
                 bhk: propertyDetails.Bhk ? propertyDetails.Bhk : "",
                 floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "",
                 status: propertyDetails.Purpose === "Rent" ? "Available for Rent" : "Available for Sale",
-                demandprice: propertyDetails.DemandPrice
+                demandPrice: propertyDetails.DemandPrice
                     ? propertyDetails.DemandPrice
                     : "",
-                maintenanceflag: propertyDetails.MaintenanceFlag
+                maintenanceFlag: propertyDetails.MaintenanceFlag
                     ? propertyDetails.MaintenanceFlag
                     : "",
-                maintenancecharges: propertyDetails.MaintenanceCharges
+                maintenanceCharges: propertyDetails.MaintenanceCharges
                     ? propertyDetails.MaintenanceCharges
                     : "",
-                maintenancechargesfrequency: propertyDetails.MaintenanceChargesFrequency
+                maintenanceChargesFrequency: propertyDetails.MaintenanceChargesFrequency
                     ? propertyDetails.MaintenanceChargesFrequency
                     : "NA",
-                securitydeposit: propertyDetails.SecurityDeposit
+                securityDeposit: propertyDetails.SecurityDeposit
                     ? propertyDetails.SecurityDeposit
                     : "",
                 state: state.label,
@@ -574,13 +575,44 @@ const CreateProperty = () => {
                 flag: "",
                 numberOfBedrooms: "0",
                 numberOfBathrooms: "0",
+                numberOfBalcony: "0",
+                numberOfKitchen: "0",
+                numberOfLivingArea: "0",
+                numberOfDiningArea: "0",
+                numberOfLivingAndDining: "0",
+                numberOfEntranceGallery: "0",
+                numberOfBasement: "0",
+                numberOfPassage: "0",
                 furnishing: "",
                 additionalRooms: [],
+                additionalArea: [],
+                plotArea: "",
                 superArea: "",
                 superAreaUnit: "",
+                builtupArea: "",
+                builtupAreaUnit: "",
                 carpetArea: "",
                 carpetAreaUnit: "",
                 imgURL: [],
+                carParking: [],
+                twoWheelerParking: [],
+                yearOfConstruction: "",
+                ageOfProperty: "",
+                totalFloor: "",
+                numberOfFlatsOnFloor: "",
+                numberOfLifts: "",
+                powerBackup: "",
+                mainDoorFacing: "",
+                overLooking: "",
+                balconyFacing: "",
+                visitingHrsFrom: "",
+                visitingHrsTo: "",
+                visitingDays: "",
+                bachlorsBoysAllowed: "",
+                bachlorsGirlsAllowed: "",
+                petsAllowed: "",
+                propertyDescription: "",
+                ownerInstructions: "",
                 propertyManager: user.uid,
                 propertyCoManager: user.uid,
                 propertySalesManager: user.uid,

@@ -103,7 +103,7 @@ export default function PGAddProperty_Old({ propertyid }) {
     PinCode: '',
     UnitNumber: '',
     TotalFloor: '',
-    FloorNumber: '',
+    FloorNo: '',
 
     // input type text + select 
     PlotArea: '',
@@ -210,7 +210,7 @@ export default function PGAddProperty_Old({ propertyid }) {
         PinCode: property.pinCode ? property.pinCode : '',
         UnitNumber: property.unitNumber ? property.unitNumber : '',
         TotalFloor: property.totalFloor ? property.totalFloor : '',
-        FloorNumber: property.floorNumber ? property.floorNumber : '',
+        FloorNo: property.floorNo ? property.floorNo : '',
 
         // input type text + select 
         PlotArea: property.plotArea ? property.plotArea : '',
@@ -302,7 +302,7 @@ export default function PGAddProperty_Old({ propertyid }) {
       pinCode: propertyDetails.PinCode ? propertyDetails.PinCode : '',
       unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : '',
       totalFloor: propertyDetails.TotalFloor ? propertyDetails.TotalFloor : '',
-      floorNumber: propertyDetails.FloorNumber ? propertyDetails.FloorNumber : '',
+      floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : '',
 
 
       // input type text + select 
@@ -2087,9 +2087,9 @@ export default function PGAddProperty_Old({ propertyid }) {
                         <input type="text" placeholder="Floor Number"
                           onChange={(e) => setPropertyDetails({
                             ...propertyDetails,
-                            FloorNumber: e.target.value
+                            FloorNo: e.target.value
                           })}
-                          value={propertyDetails && propertyDetails.FloorNumber} />
+                          value={propertyDetails && propertyDetails.FloorNo} />
                         <div className="field_icon">
                           <span className="material-symbols-outlined">
                             filter_none

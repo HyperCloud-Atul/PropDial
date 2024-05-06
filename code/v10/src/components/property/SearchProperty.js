@@ -38,8 +38,9 @@ const SearchProperty = ({ propertiesdocuments }) => {
             <div className="pcs_main_detail">
               <div className="pmd_top relative" >
                 <h4 className="property_name">
-                  {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.unitNumber : ''} - {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.society : ''}<br></br>
-                  {property.bhk} | {property.furnishing === "" ? "" : property.furnishing + "Furnished | "} {property.purpose}
+                  {/* {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.unitNumber : ''} - {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.society : ''} */}
+                  {/* <br></br> */}
+                  {property.bhk} | {property.furnishing === "" ? "" : property.furnishing + "Furnished | "} {property.status}
                 </h4>
                 <h6 className="property_location">{property.locality}, {property.city} |  {property.state}</h6>
                 <div className="fav_and_share">
@@ -70,7 +71,7 @@ const SearchProperty = ({ propertiesdocuments }) => {
 
                   <div className="pi_single">
                     <h6>Floor number</h6>
-                    <h5>{property.floorNumber}</h5>
+                    <h5>{property.floorNo}</h5>
                   </div>
                   <div className="pi_single">
                     <h6>Lift</h6>

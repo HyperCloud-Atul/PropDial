@@ -77,13 +77,35 @@ const Stage2 = (props) => {
         SuperArea: propertyDocument.superArea,
         SuperAreaUnit: propertyDocument.superAreaUnit,
         CarpetArea: propertyDocument.carpetArea,
-        // NumberOfBedrooms: propertyDocument.numberOfBedrooms ? propertyDocument.numberOfBedrooms : 'Select Bedroom',
         NumberOfBedrooms: propertyDocument.numberOfBedrooms
           ? propertyDocument.numberOfBedrooms
           : "0",
-        // NumberOfBathrooms: propertyDocument.numberOfBathrooms ? propertyDocument.numberOfBathrooms : 'Select Bathroom',
         NumberOfBathrooms: propertyDocument.numberOfBathrooms
           ? propertyDocument.numberOfBathrooms
+          : "0",
+        NumberOfBalcony: propertyDocument.numberOfBalcony
+          ? propertyDocument.numberOfBalcony
+          : "0",
+        NumberOfKitchen: propertyDocument.numberOfKitchen
+          ? propertyDocument.numberOfKitchen
+          : "0",
+        NumberOfLivingArea: propertyDocument.numberOfLivingArea
+          ? propertyDocument.numberOfLivingArea
+          : "0",
+        NumberOfDiningArea: propertyDocument.numberOfDiningArea
+          ? propertyDocument.numberOfDiningArea
+          : "0",
+        NumberOfLivingAndDining: propertyDocument.numberOfLivingAndDining
+          ? propertyDocument.numberOfLivingAndDining
+          : "0",
+        NumberOfEntranceGallery: propertyDocument.numberOfEntranceGallery
+          ? propertyDocument.numberOfEntranceGallery
+          : "0",
+        NumberOfBasement: propertyDocument.numberOfBasement
+          ? propertyDocument.numberOfBasement
+          : "0",
+        NumberOfPassage: propertyDocument.numberOfPassage
+          ? propertyDocument.numberOfPassage
           : "0",
         Furnishing: propertyDocument.furnishing
           ? propertyDocument.furnishing
@@ -132,6 +154,8 @@ const Stage2 = (props) => {
 
   const [bedroomInput, setbedroomInput] = useState(1);
   const [bathroomInput, setbathroomInput] = useState(1);
+  const [balconyInput, setbalconyInput] = useState(1);
+
 
   function increamentInput(input) {
     var inputValue = document.getElementById(input).value;
@@ -150,6 +174,12 @@ const Stage2 = (props) => {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBathrooms: inputValue,
+        });
+      } else if (input === "balconyNumberInput") {
+        setbalconyInput(inputValue);
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBalcony: inputValue,
         });
       }
     }
@@ -629,7 +659,7 @@ const Stage2 = (props) => {
                     />
                     <label htmlFor="semi_furnished">
                       <div className="radio_icon">
-                        <span className="material-symbols-outlined a">
+                        <span className="material-symbols-outlined add">
                           add
                         </span>
                         <span className="material-symbols-outlined check">
@@ -771,22 +801,22 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("bathroomNumberInput");
+                        decreamentInput("balconyNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
                     </div>
 
                     <input
-                      id="bathroomNumberInput"
+                      id="balconyNumberInput"
                       type="number"
                       disabled
-                      value={propertyDetails && propertyDetails.NumberOfBathrooms}
+                      value={propertyDetails && propertyDetails.NumberOfBalcony}
                     />
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("bathroomNumberInput");
+                        increamentInput("balconyNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
@@ -799,22 +829,22 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("bathroomNumberInput");
+                        decreamentInput("kitchenNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
                     </div>
 
                     <input
-                      id="bathroomNumberInput"
+                      id="kitchenNumberInput"
                       type="number"
                       disabled
-                      value={propertyDetails && propertyDetails.NumberOfBathrooms}
+                      value={propertyDetails && propertyDetails.NumberOfKitchens}
                     />
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("bathroomNumberInput");
+                        increamentInput("kitchenNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>

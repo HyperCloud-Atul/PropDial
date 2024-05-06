@@ -35,17 +35,17 @@ const PGAdminDashboard = () => {
 
   const activeProperties =
     properties &&
-    properties.filter((item) => item.status.trim().toUpperCase() === "ACTIVE");
+    properties.filter((item) => item.isActiveInactiveReview.trim().toUpperCase() === "ACTIVE");
 
   const pendingProperties =
     properties &&
     properties.filter(
-      (item) => item.status.trim().toUpperCase() === "PENDING APPROVAL"
+      (item) => item.isActiveInactiveReview.trim().toUpperCase() === "IN-REVIEW"
     );
 
   const inactiveProperties =
     properties &&
-    properties.filter((item) => item.status.trim().toUpperCase() === "INACTIVE");
+    properties.filter((item) => item.isActiveInactiveReview.trim().toUpperCase() === "INACTIVE");
 
   const residentialProperties =
     properties &&
@@ -253,7 +253,7 @@ const PGAdminDashboard = () => {
                     </div>
                   </div>
                 </div>
-              </section>     
+              </section>
 
               <div className="vg22"></div>
               <hr />

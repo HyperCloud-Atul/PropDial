@@ -406,7 +406,7 @@ const PropertyDetails = () => {
                                 {propertyDocument.unitNumber}, {propertyDocument.society}
                               </h4>
                               <h6>
-                                {((propertyDocument.purpose.toUpperCase() === 'AVAILABLE FOR RENT') || (propertyDocument.purpose.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertyDocument.purpose}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertyDocument.purpose}</span>}
+                                {((propertyDocument.status.toUpperCase() === 'AVAILABLE FOR RENT') || (propertyDocument.status.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertyDocument.status}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertyDocument.status}</span>}
                               </h6>
                               <h4 className="property_name">
                                 {propertyDocument.bhk} |{" "}
@@ -1137,7 +1137,7 @@ const PropertyDetails = () => {
                       )}
                     <div className="property_card_single">
                       <div className="more_detail_card_inner">
-                        <h2 className="card_title">Basic About Property</h2>
+                        <h2 className="card_title">About Property</h2>
                         <div className="p_info">
                           {/* <div className="p_info_single">
                             <div className="pd_icon">
@@ -1244,7 +1244,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Floor no</h6>
-                              <h5>{propertyDocument.floorNumber}</h5>
+                              <h5>{propertyDocument.floorNo}</h5>
                             </div>
 
                           </div>
@@ -1686,7 +1686,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Floor Number</h6>
-                              <h5>{propertyDocument.floorNumber}</h5>
+                              <h5>{propertyDocument.floorNo}</h5>
                             </div>
 
                           </div>
@@ -1695,8 +1695,8 @@ const PropertyDetails = () => {
                               <img src="/assets/img/property-detail-icon/apartmentOnFloor.png" alt="" />
                             </div>
                             <div className="pis_content">
-                              <h6>Apartment on Floor</h6>
-                              <h5>{propertyDocument.numberOfAptOnFloor}</h5>
+                              <h6>Number of Flats on a Floor</h6>
+                              <h5>{propertyDocument.numberOfFlatsOnFloor}</h5>
                             </div>
 
                           </div>

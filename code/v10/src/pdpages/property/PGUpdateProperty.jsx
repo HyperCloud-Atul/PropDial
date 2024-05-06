@@ -14,8 +14,8 @@ const PGUpdateProperty = () => {
         <div className="row">
           <div className="col-md-4">
             <div className="pg_header">
-              <h2 className="m22 mb-1">Add Property</h2>
-              <h4 className="r18 light_black">You can add your property here</h4>
+              <h2 className="m22 mb-1">Update Property</h2>
+              <h4 className="r18 light_black">You can update the property here</h4>
             </div>
           </div>
           <div className="col-md-8">
