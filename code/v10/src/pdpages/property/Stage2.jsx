@@ -52,6 +52,7 @@ const Stage2 = (props) => {
     SuperArea: "",
     SuperAreaUnit: "",
     CarpetArea: "",
+    CarpetAreaUnit: "",
     NumberOfBedrooms: "0",
     NumberOfBathrooms: "0",
     NumberOfBalcony: "0",
@@ -77,6 +78,8 @@ const Stage2 = (props) => {
     PrivateGardenClick: false,
     GarageClick: false,
     PowerBackup: "",
+    TotalFloor: "",
+    FloorNo: "",
   });
 
   useEffect(() => {
@@ -92,6 +95,7 @@ const Stage2 = (props) => {
         SuperArea: propertyDocument.superArea,
         SuperAreaUnit: propertyDocument.superAreaUnit,
         CarpetArea: propertyDocument.carpetArea,
+        CarpetAreaUnit: propertyDocument.carpetAreaUnit,
         NumberOfBedrooms: propertyDocument.numberOfBedrooms
           ? propertyDocument.numberOfBedrooms
           : "0",
@@ -187,7 +191,8 @@ const Stage2 = (props) => {
             ? true
             : false,
         PowerBackup: propertyDocument.powerBackup ? propertyDocument.powerBackup : "",
-
+        TotalFloor: propertyDocument.totalFloor ? propertyDocument.totalFloor : "",
+        FloorNo: propertyDocument.floorNo ? propertyDocument.floorNo : "",
       });
     }
   }, [propertyDocument]);
@@ -394,7 +399,11 @@ const Stage2 = (props) => {
       superArea: propertyDetails.SuperArea ? propertyDetails.SuperArea : "",
       carpetArea: propertyDetails.CarpetArea ? propertyDetails.CarpetArea : "",
       superAreaUnit: propertyDetails.SuperAreaUnit,
+      carpetAreaUnit: propertyDetails.SuperAreaUnit,
+
       powerBackup: propertyDetails.PowerBackup ? propertyDetails.PowerBackup : "",
+      totalFloor: propertyDetails.TotalFloor ? propertyDetails.TotalFloor : "",
+      floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "",
     };
 
     // console.log('property:', property)
@@ -402,11 +411,6 @@ const Stage2 = (props) => {
     if (propertyid !== "new") {
       const updatedBy = {
         id: user.uid,
-        displayName: user.displayName + "(" + user.role + ")",
-        fullName: user.fullName,
-        phoneNumber: user.phoneNumber,
-        emailID: user.email,
-        photoURL: user.photoURL,
       };
 
       const updatedProperty = {
@@ -2111,6 +2115,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+          {/* Super & Carpet Area */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Super area and Carpet area</label>
@@ -2325,18 +2330,18 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-
+          {/* Total Floor */}
           <div className="col-md-4">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Total Floor</label>
               <div className="form_field_inner">
                 <input
-                  id="id_demandprice"
+                  id="id_totalfloor"
                   className="custom-input"
                   required
                   type="text"
                   placeholder="Enter Here"
-                  maxLength={9}
+                  maxLength={2}
                   onInput={(e) => {
                     restrictInput(e, 9);
                   }}
@@ -2344,27 +2349,28 @@ const Stage2 = (props) => {
                     setPropertyDetails({
                       ...propertyDetails,
                       // DemandPrice: e.target.value,
-                      DemandPrice: e.target.value.trim(),
+                      TotalFloor: e.target.value.trim(),
                       // DemandPriceInWords: amountToWords(e.target.value)
                     });
                   }}
-                  value={propertyDetails && propertyDetails.DemandPrice}
+                  value={propertyDetails && propertyDetails.TotalFloor}
                 />
               </div>
             </div>
 
           </div>
+          {/* Floor No */}
           <div className="col-md-4">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Floor Number</label>
               <div className="form_field_inner">
                 <input
-                  id="id_demandprice"
+                  id="id_floorno"
                   className="custom-input"
                   required
                   type="text"
                   placeholder="Enter Here"
-                  maxLength={9}
+                  maxLength={2}
                   onInput={(e) => {
                     restrictInput(e, 9);
                   }}
@@ -2372,11 +2378,11 @@ const Stage2 = (props) => {
                     setPropertyDetails({
                       ...propertyDetails,
                       // DemandPrice: e.target.value,
-                      DemandPrice: e.target.value.trim(),
+                      FloorNo: e.target.value.trim(),
                       // DemandPriceInWords: amountToWords(e.target.value)
                     });
                   }}
-                  value={propertyDetails && propertyDetails.DemandPrice}
+                  value={propertyDetails && propertyDetails.FloorNo}
                 />
               </div>
             </div>
