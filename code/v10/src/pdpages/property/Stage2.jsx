@@ -54,6 +54,14 @@ const Stage2 = (props) => {
     CarpetArea: "",
     NumberOfBedrooms: "0",
     NumberOfBathrooms: "0",
+    NumberOfBalcony: "0",
+    NumberOfKitchen: "0",
+    NumberOfLivingArea: "0",
+    NumberOfBasement: "0",
+    DiningArea: "",
+    LivingAndDining: "",
+    Passage: "",
+    EntranceGallery: "",
     Furnishing: "Raw",
     AdditionalRooms: [],
     ServentRoomClick: false,
@@ -92,21 +100,21 @@ const Stage2 = (props) => {
         NumberOfLivingArea: propertyDocument.numberOfLivingArea
           ? propertyDocument.numberOfLivingArea
           : "0",
-        NumberOfDiningArea: propertyDocument.numberOfDiningArea
-          ? propertyDocument.numberOfDiningArea
-          : "0",
-        NumberOfLivingAndDining: propertyDocument.numberOfLivingAndDining
-          ? propertyDocument.numberOfLivingAndDining
-          : "0",
-        NumberOfEntranceGallery: propertyDocument.numberOfEntranceGallery
-          ? propertyDocument.numberOfEntranceGallery
-          : "0",
         NumberOfBasement: propertyDocument.numberOfBasement
           ? propertyDocument.numberOfBasement
           : "0",
-        NumberOfPassage: propertyDocument.numberOfPassage
-          ? propertyDocument.numberOfPassage
-          : "0",
+        DiningArea: propertyDocument.diningArea
+          ? propertyDocument.diningArea
+          : "",
+        LivingAndDining: propertyDocument.livingAndDining
+          ? propertyDocument.livingAndDining
+          : "",
+        EntranceGallery: propertyDocument.entranceGallery
+          ? propertyDocument.entranceGallery
+          : "",
+        Passage: propertyDocument.passage
+          ? propertyDocument.passage
+          : "",
         Furnishing: propertyDocument.furnishing
           ? propertyDocument.furnishing
           : "Raw",
@@ -335,6 +343,10 @@ const Stage2 = (props) => {
       numberOfKitchen: propertyDetails.NumberOfKitchen,
       numberOfLivingArea: propertyDetails.NumberOfLivingArea,
       numberOfBasement: propertyDetails.NumberOfBasement,
+      diningArea: propertyDetails.DiningArea,
+      livingAndDining: propertyDetails.LivingAndDining,
+      passage: propertyDetails.Passage,
+      entranceGallery: propertyDetails.EntranceGallery,
       furnishing: propertyDetails.Furnishing,
       additionalRooms: propertyDetails.AdditionalRooms
         ? propertyDetails.AdditionalRooms
@@ -966,6 +978,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+          {/* Additional Rooms */}
           <div className="col-md-6">
             <div className="form_field st-2 label_top">
               <label htmlFor=""> Additional Rooms - ( {propertyDetails.AdditionalRooms.length} )</label>
@@ -1256,6 +1269,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+          {/* Dining Area */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Dining Area</label>
@@ -1265,23 +1279,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Rent"
+                          propertyDetails.DiningArea === "Yes"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_rent"
+                          id="diningArea_yes"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Rent",
+                              DiningArea: "Yes",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_rent"
+                          htmlFor="diningArea_yes"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -1299,23 +1313,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Sale"
+                          propertyDetails.DiningArea === "No"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_sale"
+                          id="diningArea_no"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Sale",
+                              DiningArea: "No",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_sale"
+                          htmlFor="diningArea_no"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -1334,8 +1348,8 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-
           </div>
+          {/* Living & Dining */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Living & Dining</label>
@@ -1345,23 +1359,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Rent"
+                          propertyDetails.LivingAndDining === "Yes"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_rent"
+                          id="livinganddining_yes"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Rent",
+                              LivingAndDining: "Yes",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_rent"
+                          htmlFor="livinganddining_yes"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -1379,23 +1393,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Sale"
+                          propertyDetails.LivingAndDining === "No"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_sale"
+                          id="livinganddining_no"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Sale",
+                              LivingAndDining: "No",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_sale"
+                          htmlFor="livinganddining_no"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -1425,23 +1439,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Rent"
+                          propertyDetails.Passage === "Yes"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_rent"
+                          id="passage_yes"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Rent",
+                              Passage: "Yes",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_rent"
+                          htmlFor="passage_yes"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -1459,23 +1473,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Sale"
+                          propertyDetails.Passage === "No"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_sale"
+                          id="passage_no"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Sale",
+                              Passage: "No",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_sale"
+                          htmlFor="passage_no"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -1504,23 +1518,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Rent"
+                          propertyDetails.EntranceGallery === "Yes"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_rent"
+                          id="entrancegallery_yes"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Rent",
+                              EntranceGallery: "Yes",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_rent"
+                          htmlFor="entrancegallery_yes"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -1538,23 +1552,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Sale"
+                          propertyDetails.EntranceGallery === "No"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_sale"
+                          id="entrancegallery_no"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Sale",
+                              EntranceGallery: "No",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_sale"
+                          htmlFor="entrancegallery_no"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
