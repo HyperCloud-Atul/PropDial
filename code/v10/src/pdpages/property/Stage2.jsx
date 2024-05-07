@@ -70,6 +70,13 @@ const Stage2 = (props) => {
     PoojaRoomClick: false,
     StudyRoomClick: false,
     PowerRoomClick: false,
+    AdditionalArea: [],
+    FrontYardClick: false,
+    BackYardClick: false,
+    TerraceClick: false,
+    PrivateGardenClick: false,
+    GarageClick: false,
+    PowerBackup: "",
   });
 
   useEffect(() => {
@@ -151,6 +158,36 @@ const Stage2 = (props) => {
             propertyDocument.additionalRooms.find((e) => e === "Power Room")
             ? true
             : false,
+        AdditionalArea: propertyDocument.additionalArea
+          ? propertyDocument.additionalArea
+          : [],
+        FrontYardClick:
+          propertyDocument.additionalArea &&
+            propertyDocument.additionalArea.find((e) => e === "Front Yard")
+            ? true
+            : false,
+        BackYardClick:
+          propertyDocument.additionalArea &&
+            propertyDocument.additionalArea.find((e) => e === "Back Yard")
+            ? true
+            : false,
+        TerraceClick:
+          propertyDocument.additionalArea &&
+            propertyDocument.additionalArea.find((e) => e === "Terrace")
+            ? true
+            : false,
+        PrivateGardenClick:
+          propertyDocument.additionalArea &&
+            propertyDocument.additionalArea.find((e) => e === "Private Garden")
+            ? true
+            : false,
+        GarageClick:
+          propertyDocument.additionalArea &&
+            propertyDocument.additionalArea.find((e) => e === "Garage")
+            ? true
+            : false,
+        PowerBackup: propertyDocument.powerBackup ? propertyDocument.powerBackup : "",
+
       });
     }
   }, [propertyDocument]);
@@ -351,9 +388,13 @@ const Stage2 = (props) => {
       additionalRooms: propertyDetails.AdditionalRooms
         ? propertyDetails.AdditionalRooms
         : [],
+      additionalArea: propertyDetails.AdditionalArea
+        ? propertyDetails.AdditionalArea
+        : [],
       superArea: propertyDetails.SuperArea ? propertyDetails.SuperArea : "",
       carpetArea: propertyDetails.CarpetArea ? propertyDetails.CarpetArea : "",
       superAreaUnit: propertyDetails.SuperAreaUnit,
+      powerBackup: propertyDetails.PowerBackup ? propertyDetails.PowerBackup : "",
     };
 
     // console.log('property:', property)
@@ -1660,45 +1701,46 @@ const Stage2 = (props) => {
             </div>
 
           </div>
+          {/* Additional Area */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
-              <label htmlFor=""> Additional Area  - ( {propertyDetails.AdditionalRooms.length} )</label>
+              <label htmlFor=""> Additional Area  - ( {propertyDetails.AdditionalArea.length} )</label>
               <div className="radio_group">
                 <div className="radio_group_single">
                   <div
                     className={
-                      propertyDetails.ServentRoomClick
+                      propertyDetails.FrontYardClick
                         ? "custom_radio_button radiochecked"
                         : "custom_radio_button"
                     }
                   >
                     <input
                       type="checkbox"
-                      id="servent_room"
+                      id="frontyard_area"
                       onClick={(e) => {
-                        if (propertyDetails.ServentRoomClick) {
+                        if (propertyDetails.FrontYardClick) {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms:
-                              propertyDetails.AdditionalRooms &&
-                              propertyDetails.AdditionalRooms.filter(
-                                (elem) => elem !== "Servent Room"
+                            AdditionalArea:
+                              propertyDetails.AdditionalArea &&
+                              propertyDetails.AdditionalArea.filter(
+                                (elem) => elem !== "Front Yard"
                               ),
-                            ServentRoomClick: !propertyDetails.ServentRoomClick,
+                            FrontYardClick: !propertyDetails.FrontYardClick,
                           });
                         } else {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms: [
-                              ...propertyDetails.AdditionalRooms,
-                              "Servent Room",
+                            AdditionalArea: [
+                              ...propertyDetails.AdditionalArea,
+                              "Front Yard",
                             ],
-                            ServentRoomClick: !propertyDetails.ServentRoomClick,
+                            FrontYardClick: !propertyDetails.FrontYardClick,
                           });
                         }
                       }}
                     />
-                    <label htmlFor="servent_room">
+                    <label htmlFor="frontyard_area">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -1707,45 +1749,45 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6> Front Yard</h6>
+                      <h6>Front Yard</h6>
                     </label>
                   </div>
                 </div>
                 <div className="radio_group_single">
                   <div
                     className={
-                      propertyDetails.OfficeRoomClick
+                      propertyDetails.BackYardClick
                         ? "custom_radio_button radiochecked"
                         : "custom_radio_button"
                     }
                   >
                     <input
                       type="checkbox"
-                      id="office_room"
+                      id="backyard_area"
                       onClick={(e) => {
-                        if (propertyDetails.OfficeRoomClick) {
+                        if (propertyDetails.BackYardClick) {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms:
-                              propertyDetails.AdditionalRooms &&
-                              propertyDetails.AdditionalRooms.filter(
-                                (elem) => elem !== "Office Room"
+                            AdditionalArea:
+                              propertyDetails.AdditionalArea &&
+                              propertyDetails.AdditionalArea.filter(
+                                (elem) => elem !== "Back Yard"
                               ),
-                            OfficeRoomClick: !propertyDetails.OfficeRoomClick,
+                            BackYardClick: !propertyDetails.BackYardClick,
                           });
                         } else {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms: [
-                              ...propertyDetails.AdditionalRooms,
-                              "Office Room",
+                            AdditionalArea: [
+                              ...propertyDetails.AdditionalArea,
+                              "Back Yard",
                             ],
-                            OfficeRoomClick: !propertyDetails.OfficeRoomClick,
+                            BackYardClick: !propertyDetails.BackYardClick,
                           });
                         }
                       }}
                     />
-                    <label htmlFor="office_room">
+                    <label htmlFor="backyard_area">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -1754,45 +1796,45 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6> Back Yard</h6>
+                      <h6>Back Yard</h6>
                     </label>
                   </div>
                 </div>
                 <div className="radio_group_single">
                   <div
                     className={
-                      propertyDetails.StoreRoomClick
+                      propertyDetails.TerraceClick
                         ? "custom_radio_button radiochecked"
                         : "custom_radio_button"
                     }
                   >
                     <input
                       type="checkbox"
-                      id="store_room"
+                      id="terrace_area"
                       onClick={(e) => {
-                        if (propertyDetails.StoreRoomClick) {
+                        if (propertyDetails.TerraceClick) {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms:
-                              propertyDetails.AdditionalRooms &&
-                              propertyDetails.AdditionalRooms.filter(
-                                (elem) => elem !== "Store Room"
+                            AdditionalArea:
+                              propertyDetails.AdditionalArea &&
+                              propertyDetails.AdditionalArea.filter(
+                                (elem) => elem !== "Terrace"
                               ),
-                            StoreRoomClick: !propertyDetails.StoreRoomClick,
+                            TerraceClick: !propertyDetails.TerraceClick,
                           });
                         } else {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms: [
-                              ...propertyDetails.AdditionalRooms,
-                              "Store Room",
+                            AdditionalArea: [
+                              ...propertyDetails.AdditionalArea,
+                              "Terrace",
                             ],
-                            StoreRoomClick: !propertyDetails.StoreRoomClick,
+                            TerraceClick: !propertyDetails.TerraceClick,
                           });
                         }
                       }}
                     />
-                    <label htmlFor="store_room">
+                    <label htmlFor="terrace_area">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -1801,45 +1843,45 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6> Terrace</h6>
+                      <h6>Terrace</h6>
                     </label>
                   </div>
                 </div>
                 <div className="radio_group_single">
                   <div
                     className={
-                      propertyDetails.PoojaRoomClick
+                      propertyDetails.PrivateGardenClick
                         ? "custom_radio_button radiochecked"
                         : "custom_radio_button"
                     }
                   >
                     <input
                       type="checkbox"
-                      id="pooja_room"
+                      id="privategarden_area"
                       onClick={(e) => {
-                        if (propertyDetails.PoojaRoomClick) {
+                        if (propertyDetails.PrivateGardenClick) {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms:
-                              propertyDetails.AdditionalRooms &&
-                              propertyDetails.AdditionalRooms.filter(
-                                (elem) => elem !== "Pooja Room"
+                            AdditionalArea:
+                              propertyDetails.AdditionalArea &&
+                              propertyDetails.AdditionalArea.filter(
+                                (elem) => elem !== "Private Garden"
                               ),
-                            PoojaRoomClick: !propertyDetails.PoojaRoomClick,
+                            PrivateGardenClick: !propertyDetails.PrivateGardenClick,
                           });
                         } else {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms: [
-                              ...propertyDetails.AdditionalRooms,
-                              "Pooja Room",
+                            AdditionalArea: [
+                              ...propertyDetails.AdditionalArea,
+                              "Private Garden",
                             ],
-                            PoojaRoomClick: !propertyDetails.PoojaRoomClick,
+                            PrivateGardenClick: !propertyDetails.PrivateGardenClick,
                           });
                         }
                       }}
                     />
-                    <label htmlFor="pooja_room">
+                    <label htmlFor="privategarden_area">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -1848,7 +1890,7 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6>  Private Garden</h6>
+                      <h6>Private Garden</h6>
                     </label>
                   </div>
                 </div>
@@ -1856,38 +1898,38 @@ const Stage2 = (props) => {
                   {/* {console.log(propertyDetails.StudyRoomClick)} */}
                   <div
                     className={
-                      propertyDetails.StudyRoomClick
+                      propertyDetails.GarageClick
                         ? "custom_radio_button radiochecked"
                         : "custom_radio_button "
                     }
                   >
                     <input
                       type="checkbox"
-                      id="study_room"
+                      id="garage_area"
                       onClick={(e) => {
-                        if (propertyDetails.StudyRoomClick) {
+                        if (propertyDetails.GarageClick) {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms:
-                              propertyDetails.AdditionalRooms &&
-                              propertyDetails.AdditionalRooms.filter(
-                                (elem) => elem !== "Study Room"
+                            AdditionalArea:
+                              propertyDetails.AdditionalArea &&
+                              propertyDetails.AdditionalArea.filter(
+                                (elem) => elem !== "Garage"
                               ),
-                            StudyRoomClick: !propertyDetails.StudyRoomClick,
+                            GarageClick: !propertyDetails.GarageClick,
                           });
                         } else {
                           setPropertyDetails({
                             ...propertyDetails,
-                            AdditionalRooms: [
-                              ...propertyDetails.AdditionalRooms,
-                              "Study Room",
+                            AdditionalArea: [
+                              ...propertyDetails.AdditionalArea,
+                              "Garage",
                             ],
-                            StudyRoomClick: !propertyDetails.StudyRoomClick,
+                            GarageClick: !propertyDetails.GarageClick,
                           });
                         }
                       }}
                     />
-                    <label htmlFor="study_room">
+                    <label htmlFor="garage_area">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -1896,13 +1938,14 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6>  Garage</h6>
+                      <h6>Garage</h6>
                     </label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          {/* Power Backup */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Power Backup</label>
@@ -1912,7 +1955,7 @@ const Stage2 = (props) => {
               >
                 <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi"
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "No Backup"
                       ? "radiochecked"
                       : ""
                       }`}
@@ -1920,15 +1963,15 @@ const Stage2 = (props) => {
                     <input
                       type="radio"
                       name="group_furnishing"
-                      id="semi_furnished"
+                      id="nobackup_powerbackup"
                       onClick={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          Furnishing: "Semi",
+                          PowerBackup: "No Backup",
                         });
                       }}
                     />
-                    <label htmlFor="semi_furnished">
+                    <label htmlFor="nobackup_powerbackup">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -1943,7 +1986,7 @@ const Stage2 = (props) => {
                 </div>
                 <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully"
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "Full Backup"
                       ? "radiochecked"
                       : ""
                       }`}
@@ -1951,15 +1994,15 @@ const Stage2 = (props) => {
                     <input
                       type="radio"
                       name="group_furnishing"
-                      id="fully_furnished"
+                      id="fullbackup_powerbackup"
                       onClick={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          Furnishing: "Fully",
+                          PowerBackup: "Full Backup",
                         });
                       }}
                     />
-                    <label htmlFor="fully_furnished">
+                    <label htmlFor="fullbackup_powerbackup">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -1968,13 +2011,13 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6> Full Backup</h6>
+                      <h6>Full Backup</h6>
                     </label>
                   </div>
                 </div>
                 <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "Partial Backup"
                       ? "radiochecked"
                       : ""
                       }`}
@@ -1982,15 +2025,15 @@ const Stage2 = (props) => {
                     <input
                       type="radio"
                       name="group_furnishing"
-                      id="raw_furnished"
+                      id="partialbackup_powerbackup"
                       onClick={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          Furnishing: "Raw",
+                          PowerBackup: "Partial Backup",
                         });
                       }}
                     />
-                    <label htmlFor="raw_furnished">
+                    <label htmlFor="partialbackup_powerbackup">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -2005,7 +2048,7 @@ const Stage2 = (props) => {
                 </div>
                 <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "Lift Only"
                       ? "radiochecked"
                       : ""
                       }`}
@@ -2013,15 +2056,15 @@ const Stage2 = (props) => {
                     <input
                       type="radio"
                       name="group_furnishing"
-                      id="raw_furnished"
+                      id="liftonly_powerbackup"
                       onClick={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          Furnishing: "Raw",
+                          PowerBackup: "Lift Only",
                         });
                       }}
                     />
-                    <label htmlFor="raw_furnished">
+                    <label htmlFor="liftonly_powerbackup">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -2030,13 +2073,13 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6> Lift Only</h6>
+                      <h6>Lift Only</h6>
                     </label>
                   </div>
                 </div>
                 <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "Inverter"
                       ? "radiochecked"
                       : ""
                       }`}
@@ -2044,15 +2087,15 @@ const Stage2 = (props) => {
                     <input
                       type="radio"
                       name="group_furnishing"
-                      id="raw_furnished"
+                      id="inverter_powerbackup"
                       onClick={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          Furnishing: "Raw",
+                          PowerBackup: "Inverter",
                         });
                       }}
                     />
-                    <label htmlFor="raw_furnished">
+                    <label htmlFor="inverter_powerbackup">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
