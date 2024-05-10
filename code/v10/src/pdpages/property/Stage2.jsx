@@ -5,6 +5,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
 import { timestamp } from "../../firebase/config";
+import Select from "react-select";
 
 //Restrict to Input
 function restrictInput(event, maxLength) {
@@ -24,6 +25,9 @@ function restrictInput(event, maxLength) {
   event.target.value = numericValue;
 }
 
+
+
+
 const Stage2 = (props) => {
   const { propertyid } = useParams();
   // console.log('property id in Stage 2: ', propertyid)
@@ -37,6 +41,8 @@ const Stage2 = (props) => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const [formError, setFormError] = useState(null);
+  const [years, setYears] = useState({ label: "", value: "" });
+  const [yearOfConstruction, setYearOfConstruction] = useState({ label: "Year of Construction", value: "Year of Construction" });
   const { document: propertyDocument, error: propertyerror } = useDocument(
     "properties",
     propertyid
@@ -78,13 +84,26 @@ const Stage2 = (props) => {
     PrivateGardenClick: false,
     GarageClick: false,
     PowerBackup: "",
-    TotalFloor: "",
-    FloorNo: "",
+    NumberOfFloors: 0,
+    FloorNo: 0,
+    NumberOfFlatsOnFloor: 0,
+    NumberOfLifts: 0,
+    NumberOfOpenCarParking: 0,
+    NumberOfClosedCarParking: 0,
+    TwoWheelarParking: "",
+    YearOfConstruction: { label: 0, value: 0 },
+    // AgeOfProperty: 0,
   });
 
   useEffect(() => {
+
     if (propertyDocument) {
       // console.log("propertyDocument:", propertyDocument);
+
+      setYearOfConstruction({
+        label: propertyDocument.yearOfConstruction,
+        value: propertyDocument.yearOfConstruction,
+      })
 
       setPropertyDetails({
         // All select type
@@ -191,10 +210,20 @@ const Stage2 = (props) => {
             ? true
             : false,
         PowerBackup: propertyDocument.powerBackup ? propertyDocument.powerBackup : "",
-        TotalFloor: propertyDocument.totalFloor ? propertyDocument.totalFloor : "",
-        FloorNo: propertyDocument.floorNo ? propertyDocument.floorNo : "",
+        NumberOfFloors: propertyDocument.numberOfFloors ? propertyDocument.numberOfFloors : 0,
+        FloorNo: propertyDocument.floorNo ? propertyDocument.floorNo : 0,
+        NumberOfFlatsOnFloor: propertyDocument.numberOfFlatsOnFloor ? propertyDocument.numberOfFlatsOnFloor : 0,
+        NumberOfLifts: propertyDocument.numberOfLifts ? propertyDocument.numberOfLifts : 0,
+        NumberOfOpenCarParking: propertyDocument.numberOfOpenCarParking ? propertyDocument.numberOfOpenCarParking : 0,
+        NumberOfClosedCarParking: propertyDocument.numberOfClosedCarParking ? propertyDocument.numberOfClosedCarParking : 0,
+        TwoWheelarParking: propertyDocument.twoWheelarParking ? propertyDocument.twoWheelarParking : 0,
+        YearOfConstruction: propertyDocument.yearOfConstruction ? propertyDocument.yearOfConstruction : "Year of Construction",
+        // AgeOfProperty: propertyDocument.ageOfProperty ? propertyDocument.ageOfProperty : ""
+
       });
     }
+
+
   }, [propertyDocument]);
 
   const handleBackSubmit = (e) => {
@@ -202,112 +231,167 @@ const Stage2 = (props) => {
     props.setStateFlag("stage1");
   };
 
-  const [bedroomInput, setBedroomInput] = useState(1);
-  const [bathroomInput, setBathroomInput] = useState(1);
-  const [balconyInput, setBalconyInput] = useState(1);
-  const [kitchenInput, setKitchenInput] = useState(1);
-  const [livingAreaInput, setLivingAreaInput] = useState(1);
-  const [basementInput, setBasementInput] = useState(1);
-
-
-  function increamentInput(input) {
+  function incrementInput(input) {
     var inputValue = document.getElementById(input).value;
-    if (inputValue === "20") {
+    if (inputValue === "99") {
       //Don't do anything
     } else {
       inputValue++;
       if (input === "bedroomNumberInput") {
-        setBedroomInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBedrooms: inputValue,
         });
       } else if (input === "bathroomNumberInput") {
-        setBathroomInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBathrooms: inputValue,
         });
       } else if (input === "balconyNumberInput") {
-        setBalconyInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBalcony: inputValue,
         });
       }
       else if (input === "kitchenNumberInput") {
-        setKitchenInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfKitchen: inputValue,
         });
       }
       else if (input === "livingAreaNumberInput") {
-        setLivingAreaInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfLivingArea: inputValue,
         });
       }
       else if (input === "basementNumberInput") {
-        setBasementInput(inputValue);
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBasement: inputValue,
+        });
+      }
+      else if (input === "floorNoInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          FloorNo: inputValue,
+        });
+      }
+      else if (input === "numberOfFloorsInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfFloors: inputValue,
+        });
+      }
+      else if (input === "numberOfFlatsOnFloorInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfFlatsOnFloor: inputValue,
+        });
+      }
+      else if (input === "numberOfLiftsInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfLifts: inputValue,
+        });
+      }
+      else if (input === "numberOfOpenCarParkingInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfOpenCarParking: inputValue,
+        });
+      }
+      else if (input === "numberOfClosedCarParkingInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfClosedCarParking: inputValue,
+        });
+      }
+
+    }
+  }
+
+  function decrementInput(input) {
+    var inputValue = document.getElementById(input).value;
+    console.log("input value in decrementInput:", inputValue)
+    if (inputValue === "0") {
+      //Don't do anything
+    } else {
+      inputValue--;
+      if (input === "bedroomNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBedrooms: inputValue,
+        });
+      } else if (input === "bathroomNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBathrooms: inputValue,
+        });
+      } else if (input === "balconyNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBalcony: inputValue,
+        });
+      }
+      else if (input === "kitchenNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfKitchen: inputValue,
+        });
+      }
+      else if (input === "livingAreaNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfLivingArea: inputValue,
+        });
+      }
+      else if (input === "basementNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBasement: inputValue,
+        });
+      }
+      else if (input === "floorNoInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          FloorNo: inputValue,
+        });
+      }
+      else if (input === "numberOfFloorsInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfFloors: inputValue,
+        });
+      }
+      else if (input === "numberOfFlatsOnFloorInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfFlatsOnFloor: inputValue,
+        });
+      }
+      else if (input === "numberOfLiftsInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfLifts: inputValue,
+        });
+      }
+      else if (input === "numberOfOpenCarParkingInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfOpenCarParking: inputValue,
+        });
+      }
+      else if (input === "numberOfClosedCarParkingInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfClosedCarParking: inputValue,
         });
       }
     }
   }
 
-  function decreamentInput(input) {
-    var inputValue = document.getElementById(input).value;
-    console.log("input value in decreamentInput:", inputValue)
-    if (inputValue === "0") {
-      //Don't do anything
-    } else {
-      --inputValue;
-      if (input === "bedroomNumberInput") {
-        setBedroomInput(inputValue);
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfBedrooms: inputValue,
-        });
-      } else if (input === "bathroomNumberInput") {
-        setBathroomInput(inputValue);
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfBathrooms: inputValue,
-        });
-      } else if (input === "balconyNumberInput") {
-        setBalconyInput(inputValue);
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfBalcony: inputValue,
-        });
-      }
-      else if (input === "kitchenNumberInput") {
-        setKitchenInput(inputValue);
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfKitchen: inputValue,
-        });
-      }
-      else if (input === "livingAreaNumberInput") {
-        setLivingAreaInput(inputValue);
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfLivingArea: inputValue,
-        });
-      }
-      else if (input === "basementNumberInput") {
-        setBasementInput(inputValue);
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfBasement: inputValue,
-        });
-      }
-    }
-  }
+
 
   const handleNextSubmit = async (e) => {
     e.preventDefault();
@@ -402,8 +486,15 @@ const Stage2 = (props) => {
       carpetAreaUnit: propertyDetails.SuperAreaUnit,
 
       powerBackup: propertyDetails.PowerBackup ? propertyDetails.PowerBackup : "",
-      totalFloor: propertyDetails.TotalFloor ? propertyDetails.TotalFloor : "",
+      numberOfFloors: propertyDetails.NumberOfFloors ? propertyDetails.NumberOfFloors : 0,
       floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "",
+      numberOfFlatsOnFloor: propertyDetails.NumberOfFlatsOnFloor ? propertyDetails.NumberOfFlatsOnFloor : 0,
+      numberOfLifts: propertyDetails.NumberOfLifts ? propertyDetails.NumberOfLifts : 0,
+      numberOfOpenCarParking: propertyDetails.NumberOfOpenCarParking ? propertyDetails.NumberOfOpenCarParking : 0,
+      numberOfClosedCarParking: propertyDetails.NumberOfClosedCarParking ? propertyDetails.NumberOfClosedCarParking : 0,
+      twoWheelarParking: propertyDetails.TwoWheelarParking ? propertyDetails.TwoWheelarParking : "",
+      yearOfConstruction: propertyDetails.YearOfConstruction,
+      // ageOfProperty: propertyDetails.AgeOfProperty ? propertyDetails.AgeOfProperty : document.getElementById('ageOfPropertyCount'),
     };
 
     // console.log('property:', property)
@@ -420,7 +511,7 @@ const Stage2 = (props) => {
       };
 
       if (!errorFlag) {
-        // console.log('updatedProperty:', updatedProperty)
+        console.log('updatedProperty:', updatedProperty)
         // console.log('propertyid:', propertyid)
         await updateDocument(propertyid, updatedProperty);
 
@@ -432,6 +523,45 @@ const Stage2 = (props) => {
       }
     }
   };
+
+
+  // const [years, setYears] = useState([]);
+  // Function to generate years from 1980 to current year
+  const generateYears = () => {
+    const currentYear = new Date().getFullYear();
+    const startYear = 1980;
+    const yearArray = [];
+    for (let year = startYear; year <= currentYear; year++) {
+      yearArray.push({
+        label: year,
+        value: year,
+      });
+    }
+    yearArray.unshift({
+      label: "Year of Construction",
+      value: "Year of Construction"
+    })
+    return yearArray;
+  };
+
+  useEffect(() => {
+    const yearList = generateYears();
+    setYears(yearList);
+  }, []);
+
+
+
+  const handleYearOfConstructionChange = async (option) => {
+    // console.log('Year Of Construction option: ', option)
+
+    // const ageOfProperty = (new Date().getFullYear()) - Number(option.value);
+
+    setPropertyDetails({
+      ...propertyDetails,
+      YearOfConstruction: option.value,
+      // AgeOfProperty: ageOfProperty,
+    });
+  }
 
   return (
     <form>
@@ -858,7 +988,7 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("bedroomNumberInput");
+                        decrementInput("bedroomNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
@@ -873,7 +1003,7 @@ const Stage2 = (props) => {
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("bedroomNumberInput");
+                        incrementInput("bedroomNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
@@ -886,7 +1016,7 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("bathroomNumberInput");
+                        decrementInput("bathroomNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
@@ -901,7 +1031,7 @@ const Stage2 = (props) => {
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("bathroomNumberInput");
+                        incrementInput("bathroomNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
@@ -914,7 +1044,7 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("balconyNumberInput");
+                        decrementInput("balconyNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
@@ -929,7 +1059,7 @@ const Stage2 = (props) => {
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("balconyNumberInput");
+                        incrementInput("balconyNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
@@ -942,7 +1072,7 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("kitchenNumberInput");
+                        decrementInput("kitchenNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
@@ -957,7 +1087,7 @@ const Stage2 = (props) => {
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("kitchenNumberInput");
+                        incrementInput("kitchenNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
@@ -970,7 +1100,7 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("livingAreaNumberInput");
+                        decrementInput("livingAreaNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
@@ -985,7 +1115,7 @@ const Stage2 = (props) => {
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("livingAreaNumberInput");
+                        incrementInput("livingAreaNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
@@ -998,7 +1128,7 @@ const Stage2 = (props) => {
                     <div
                       className="left-minus-button pmbutton"
                       onClick={() => {
-                        decreamentInput("basementNumberInput");
+                        decrementInput("basementNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">remove</span>
@@ -1013,7 +1143,7 @@ const Stage2 = (props) => {
                     <div
                       className="right-plus-button pmbutton"
                       onClick={() => {
-                        increamentInput("basementNumberInput");
+                        incrementInput("basementNumberInput");
                       }}
                     >
                       <span className="material-symbols-outlined">add</span>
@@ -1633,46 +1763,89 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+          {/* Year of Construction */}
           <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Year of Constuction</label>
               <div className="form_field_inner">
-                <select>
-                  <option value="" disabled="">Year of Constuction</option>
-                  <option value="">1990</option>
-                  <option value="">1991</option>
-                  <option value="">1992</option>
-                  <option value="">1993</option>
-                  <option value="">1994</option>
-                  <option value="">1995</option>
-                  <option value="">1996</option>
-                  <option value="">1997</option>
-                  <option value="">1998</option>
-                  <option value="">1999</option>
-                  <option value="">2000</option>
-                  <option value="">2001</option>
-                  <option value="">2002</option>
-                  <option value="">2003</option>
-                  <option value="">2004</option>
-                  <option value="">2005</option>
-                  <option value="">2006</option>
-                  <option value="">2007</option>
-                  <option value="">2008</option>
-                  <option value="">2009</option>
-                  <option value="" selected="">2010</option>
-                  <option value="">2011</option>
-                  <option value="">2012</option>
-                  <option value="">2013</option>
-                  <option value="">2014</option>
-                  <option value="">2015</option>
-                  <option value="">2016</option>
-                  <option value="">2017</option>
-                  <option value="">2018</option>
-                  <option value="">2019</option>
-                  <option value="">2020</option>
-                  <option value="">2021</option>
-                  <option value="">2022</option>
-                </select>
+                <Select
+                  id="yearOfConstructionSelect"
+                  className=""
+                  onChange={handleYearOfConstructionChange}
+                  options={years}
+                  // value={propertyDetails && propertyDetails.YearOfConstruction}
+                  value={yearOfConstruction}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      outline: "none",
+                      background: "#efefef",
+                      border: "none",
+                      borderBottom: "none",
+                      paddingLeft: "10px",
+                      textTransform: "capitalize",
+                    }),
+                  }}
+                >
+                  {/* <select id="yearOfConstructionSelect"
+                  value={propertyDetails && propertyDetails.YearOfConstruction}
+                  onChange={(e) => {
+                    ageOfPropertyCalc(e.target.value);
+                  }}
+                > */}
+                  {/* <option value="" disabled="">Year of Constuction</option> */}
+                  {/* <option
+                    defaultValue={
+                      propertyDetails && propertyDetails.YearOfConstruction === "Year of Construction"
+                        ? true
+                        : false
+                    }
+                  >
+                    Year of Construction
+                  </option> */}
+
+                  {/* <option defaultValue={propertyDetails && propertyDetails.YearOfConstruction === "1990" ? true
+                    : false
+                  }> 1990 </option> */}
+                  {/* <option defaultValue={propertyDetails && propertyDetails.YearOfConstruction === "1991" ? true
+                    : false
+                  }> 1991 </option> */}
+                  {/* <option defaultValue={propertyDetails && propertyDetails.YearOfConstruction === "1992" ? true
+                    : false
+                  }> 1992 </option> */}
+                  {/* <option value="">1991</option>
+                    <option value="">1992</option>
+                    <option value="">1993</option>
+                    <option value="">1994</option>
+                    <option value="">1995</option>
+                    <option value="">1996</option>
+                    <option value="">1997</option>
+                    <option value="">1998</option>
+                    <option value="">1999</option>
+                    <option value="">2000</option>
+                    <option value="">2001</option>
+                    <option value="">2002</option>
+                    <option value="">2003</option>
+                    <option value="">2004</option>
+                    <option value="">2005</option>
+                    <option value="">2006</option>
+                    <option value="">2007</option>
+                    <option value="">2008</option>
+                    <option value="">2009</option> */}
+                  {/* <option value="" selected="">2010</option> */}
+                  {/* <option value="">2011</option>
+                    <option value="">2012</option>
+                    <option value="">2013</option>
+                    <option value="">2014</option>
+                    <option value="">2015</option>
+                    <option value="">2016</option>
+                    <option value="">2017</option>
+                    <option value="">2018</option>
+                    <option value="">2019</option>
+                    <option value="">2020</option>
+                    <option value="">2021</option>
+                    <option value="">2022</option> */}
+                </Select>
 
               </div>
             </div>
@@ -1682,24 +1855,16 @@ const Stage2 = (props) => {
               <label htmlFor="">Age Of Property</label>
               <div className="form_field_inner">
                 <input
-                  id="id_demandprice"
+                  id="ageOfPropertyCount"
                   className="custom-input"
-                  required
+                  disabled
                   type="text"
                   placeholder="Enter Here"
                   maxLength={9}
                   onInput={(e) => {
                     restrictInput(e, 9);
                   }}
-                  onChange={(e) => {
-                    setPropertyDetails({
-                      ...propertyDetails,
-                      // DemandPrice: e.target.value,
-                      DemandPrice: e.target.value.trim(),
-                      // DemandPriceInWords: amountToWords(e.target.value)
-                    });
-                  }}
-                  value="18 year"
+                  value={propertyDetails && (((new Date().getFullYear()) - Number(propertyDetails.YearOfConstruction)) + " Years")}
                 />
               </div>
             </div>
@@ -2332,87 +2497,100 @@ const Stage2 = (props) => {
           </div>
           {/* Total Floor */}
           <div className="col-md-4">
-            <div id="id_demand" className="form_field label_top">
+            <div className="form_field label_top">
               <label htmlFor="">Total Floor</label>
-              <div className="form_field_inner">
-                <input
-                  id="id_totalfloor"
-                  className="custom-input"
-                  required
-                  type="text"
-                  placeholder="Enter Here"
-                  maxLength={2}
-                  onInput={(e) => {
-                    restrictInput(e, 9);
-                  }}
-                  onChange={(e) => {
-                    setPropertyDetails({
-                      ...propertyDetails,
-                      // DemandPrice: e.target.value,
-                      TotalFloor: e.target.value.trim(),
-                      // DemandPriceInWords: amountToWords(e.target.value)
-                    });
-                  }}
-                  value={propertyDetails && propertyDetails.TotalFloor}
-                />
+              <div className="plus_minus_input_wrapper">
+                <span className="pmi_label">#Floors</span>
+                <div className="plus_minus_input">
+                  <div
+                    className="left-minus-button pmbutton"
+                    onClick={() => {
+                      decrementInput("numberOfFloorsInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">remove</span>
+                  </div>
+
+                  <input
+                    id="numberOfFloorsInput"
+                    type="number"
+                    disabled
+                    value={propertyDetails && propertyDetails.NumberOfFloors}
+                  />
+                  <div
+                    className="right-plus-button pmbutton"
+                    onClick={() => {
+                      incrementInput("numberOfFloorsInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">add</span>
+                  </div>
+                </div>
               </div>
             </div>
-
           </div>
-          {/* Floor No */}
+
+          {/* Flat Floor No */}
           <div className="col-md-4">
-            <div id="id_demand" className="form_field label_top">
-              <label htmlFor="">Floor Number</label>
-              <div className="form_field_inner">
-                <input
-                  id="id_floorno"
-                  className="custom-input"
-                  required
-                  type="text"
-                  placeholder="Enter Here"
-                  maxLength={2}
-                  onInput={(e) => {
-                    restrictInput(e, 9);
-                  }}
-                  onChange={(e) => {
-                    setPropertyDetails({
-                      ...propertyDetails,
-                      // DemandPrice: e.target.value,
-                      FloorNo: e.target.value.trim(),
-                      // DemandPriceInWords: amountToWords(e.target.value)
-                    });
-                  }}
-                  value={propertyDetails && propertyDetails.FloorNo}
-                />
+            <div className="form_field label_top">
+              <label htmlFor="">Floor No.</label>
+              <div className="plus_minus_input_wrapper">
+                <span className="pmi_label">Floor no</span>
+                <div className="plus_minus_input">
+                  <div
+                    className="left-minus-button pmbutton"
+                    onClick={() => {
+                      decrementInput("floorNoInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">remove</span>
+                  </div>
+
+                  <input
+                    id="floorNoInput"
+                    type="number"
+                    disabled
+                    value={propertyDetails && propertyDetails.FloorNo}
+                  />
+                  <div
+                    className="right-plus-button pmbutton"
+                    onClick={() => {
+                      incrementInput("floorNoInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">add</span>
+                  </div>
+                </div>
               </div>
             </div>
 
           </div>
+          {/* No of Apts on Floor */}
           <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Apt On Floor</label>
               <div className="plus_minus_input_wrapper">
-                <span className="pmi_label">Fill in number</span>
+                <span className="pmi_label">Apts on Floor</span>
                 <div className="plus_minus_input">
                   <div
                     className="left-minus-button pmbutton"
                     onClick={() => {
-                      decreamentInput("bedroomNumberInput");
+                      decrementInput("numberOfFlatsOnFloorInput");
                     }}
                   >
                     <span className="material-symbols-outlined">remove</span>
                   </div>
 
                   <input
-                    id="bedroomNumberInput"
+                    id="numberOfFlatsOnFloorInput"
                     type="number"
                     disabled
-                    value={propertyDetails && propertyDetails.NumberOfBedrooms}
+                    value={propertyDetails && propertyDetails.NumberOfFlatsOnFloor}
                   />
                   <div
                     className="right-plus-button pmbutton"
                     onClick={() => {
-                      increamentInput("bedroomNumberInput");
+                      incrementInput("numberOfFlatsOnFloorInput");
                     }}
                   >
                     <span className="material-symbols-outlined">add</span>
@@ -2422,31 +2600,32 @@ const Stage2 = (props) => {
             </div>
 
           </div>
+          {/* No of Lifts */}
           <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Lifts</label>
               <div className="plus_minus_input_wrapper">
-                <span className="pmi_label">Fill in number</span>
+                <span className="pmi_label">#Lift</span>
                 <div className="plus_minus_input">
                   <div
                     className="left-minus-button pmbutton"
                     onClick={() => {
-                      decreamentInput("bedroomNumberInput");
+                      decrementInput("numberOfLiftsInput");
                     }}
                   >
                     <span className="material-symbols-outlined">remove</span>
                   </div>
 
                   <input
-                    id="bedroomNumberInput"
+                    id="numberOfLiftsInput"
                     type="number"
                     disabled
-                    value={propertyDetails && propertyDetails.NumberOfBedrooms}
+                    value={propertyDetails && propertyDetails.NumberOfLifts}
                   />
                   <div
                     className="right-plus-button pmbutton"
                     onClick={() => {
-                      increamentInput("bedroomNumberInput");
+                      incrementInput("numberOfLiftsInput");
                     }}
                   >
                     <span className="material-symbols-outlined">add</span>
@@ -2456,32 +2635,32 @@ const Stage2 = (props) => {
             </div>
 
           </div>
-
+          {/* No of Open Car Parking */}
           <div className="col-md-4">
             <div className="form_field label_top">
-              <label htmlFor="">No. of Car Parking</label>
+              <label htmlFor="">No. of OPEN Car Parking</label>
               <div className="plus_minus_input_wrapper">
-                <span className="pmi_label">Fill in number</span>
+                <span className="pmi_label">#OPEN</span>
                 <div className="plus_minus_input">
                   <div
                     className="left-minus-button pmbutton"
                     onClick={() => {
-                      decreamentInput("bedroomNumberInput");
+                      decrementInput("numberOfOpenCarParkingInput");
                     }}
                   >
                     <span className="material-symbols-outlined">remove</span>
                   </div>
 
                   <input
-                    id="bedroomNumberInput"
+                    id="numberOfOpenCarParkingInput"
                     type="number"
                     disabled
-                    value={propertyDetails && propertyDetails.NumberOfBedrooms}
+                    value={propertyDetails && propertyDetails.NumberOfOpenCarParking}
                   />
                   <div
                     className="right-plus-button pmbutton"
                     onClick={() => {
-                      increamentInput("bedroomNumberInput");
+                      incrementInput("numberOfOpenCarParkingInput");
                     }}
                   >
                     <span className="material-symbols-outlined">add</span>
@@ -2489,88 +2668,42 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-
           </div>
+          {/* No of Close Car Parking */}
           <div className="col-md-4">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Car Parking</label>
-              <div className="form_field_inner">
-                <div className="form_field_container">
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Rent"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_rent"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Rent",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_rent"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Open</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.Purpose === "Sale"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="purpose_sale"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              Purpose: "Sale",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="purpose_sale"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Closed</h6>
-                        </label>
-                      </div>
-                    </div>
+            <div className="form_field label_top">
+              <label htmlFor="">No. of CLOSED Car Parking</label>
+              <div className="plus_minus_input_wrapper">
+                <span className="pmi_label">#CLOSED</span>
+                <div className="plus_minus_input">
+                  <div
+                    className="left-minus-button pmbutton"
+                    onClick={() => {
+                      decrementInput("numberOfClosedCarParkingInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">remove</span>
+                  </div>
+
+                  <input
+                    id="numberOfClosedCarParkingInput"
+                    type="number"
+                    disabled
+                    value={propertyDetails && propertyDetails.NumberOfClosedCarParking}
+                  />
+                  <div
+                    className="right-plus-button pmbutton"
+                    onClick={() => {
+                      incrementInput("numberOfClosedCarParkingInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">add</span>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
+          {/* two wheeler parking */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">2-Wheeler Parking</label>
@@ -2580,23 +2713,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Rent"
+                          propertyDetails.TwoWheelarParking === "Yes"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_rent"
+                          id="twoWheelarParking_yes"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Rent",
+                              TwoWheelarParking: "Yes",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_rent"
+                          htmlFor="twoWheelarParking_yes"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -2614,23 +2747,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Sale"
+                          propertyDetails.TwoWheelarParking === "No"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="purpose_sale"
+                          id="twoWheelarParking_no"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Sale",
+                              TwoWheelarParking: "No",
                             });
                           }}
                         />
                         <label
-                          htmlFor="purpose_sale"
+                          htmlFor="twoWheelarParking_no"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
