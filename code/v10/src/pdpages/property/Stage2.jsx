@@ -1787,64 +1787,7 @@ const Stage2 = (props) => {
                     }),
                   }}
                 >
-                  {/* <select id="yearOfConstructionSelect"
-                  value={propertyDetails && propertyDetails.YearOfConstruction}
-                  onChange={(e) => {
-                    ageOfPropertyCalc(e.target.value);
-                  }}
-                > */}
-                  {/* <option value="" disabled="">Year of Constuction</option> */}
-                  {/* <option
-                    defaultValue={
-                      propertyDetails && propertyDetails.YearOfConstruction === "Year of Construction"
-                        ? true
-                        : false
-                    }
-                  >
-                    Year of Construction
-                  </option> */}
 
-                  {/* <option defaultValue={propertyDetails && propertyDetails.YearOfConstruction === "1990" ? true
-                    : false
-                  }> 1990 </option> */}
-                  {/* <option defaultValue={propertyDetails && propertyDetails.YearOfConstruction === "1991" ? true
-                    : false
-                  }> 1991 </option> */}
-                  {/* <option defaultValue={propertyDetails && propertyDetails.YearOfConstruction === "1992" ? true
-                    : false
-                  }> 1992 </option> */}
-                  {/* <option value="">1991</option>
-                    <option value="">1992</option>
-                    <option value="">1993</option>
-                    <option value="">1994</option>
-                    <option value="">1995</option>
-                    <option value="">1996</option>
-                    <option value="">1997</option>
-                    <option value="">1998</option>
-                    <option value="">1999</option>
-                    <option value="">2000</option>
-                    <option value="">2001</option>
-                    <option value="">2002</option>
-                    <option value="">2003</option>
-                    <option value="">2004</option>
-                    <option value="">2005</option>
-                    <option value="">2006</option>
-                    <option value="">2007</option>
-                    <option value="">2008</option>
-                    <option value="">2009</option> */}
-                  {/* <option value="" selected="">2010</option> */}
-                  {/* <option value="">2011</option>
-                    <option value="">2012</option>
-                    <option value="">2013</option>
-                    <option value="">2014</option>
-                    <option value="">2015</option>
-                    <option value="">2016</option>
-                    <option value="">2017</option>
-                    <option value="">2018</option>
-                    <option value="">2019</option>
-                    <option value="">2020</option>
-                    <option value="">2021</option>
-                    <option value="">2022</option> */}
                 </Select>
 
               </div>
