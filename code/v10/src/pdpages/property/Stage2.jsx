@@ -567,6 +567,8 @@ const Stage2 = (props) => {
     <form>
       <div className="add_property_fields">
         <div className="row row_gap">
+          <hr></hr>
+          {/* Property Type */}
           <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Property Type</label>
@@ -700,6 +702,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+          {/* BHK */}
           <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">BHK</label>
@@ -875,6 +878,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+          {/* Furnishing */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Furnishing</label>
@@ -978,6 +982,8 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+          <hr></hr>
+          {/* Rooms */}
           <div className="col-md-6">
             <div className="form_field label_top">
               <label htmlFor="">Rooms</label>
@@ -1605,6 +1611,7 @@ const Stage2 = (props) => {
             </div>
 
           </div>
+          {/* Passages */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Passages</label>
@@ -1684,6 +1691,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+          {/* Entrance Gallery */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Entrance Gallery</label>
@@ -1813,6 +1821,7 @@ const Stage2 = (props) => {
             </div>
 
           </div>
+          <hr></hr>
           {/* Additional Area */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">

@@ -81,7 +81,7 @@ export default function Stage3(props) {
         VegNonVeg: propertyDocument.vegNonVeg ? propertyDocument.vegNonVeg : "",
         PropertyDescription: propertyDocument.propertyDescription ? propertyDocument.propertyDescription : "",
         OwnerInstructions: propertyDocument.ownerInstructions ? propertyDocument.ownerInstructions : "",
-        // _imgURL: propertyDocument.imgURL ? propertyDocument.imgURL : [],
+        _imgURL: propertyDocument.imgURL ? propertyDocument.imgURL : [],
       })
     }
   }, [propertyDocument])
@@ -1233,38 +1233,38 @@ export default function Stage3(props) {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.ServentRoomClick
+                          propertyDetails.MondayClick
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="servent_room"
+                          id="monday_visitingdays"
                           onClick={(e) => {
-                            if (propertyDetails.ServentRoomClick) {
+                            if (propertyDetails.MondayClick) {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms:
-                                  propertyDetails.AdditionalRooms &&
-                                  propertyDetails.AdditionalRooms.filter(
-                                    (elem) => elem !== "Servent Room"
+                                VisitingDays:
+                                  propertyDetails.VisitingDays &&
+                                  propertyDetails.VisitingDays.filter(
+                                    (elem) => elem !== "Monday"
                                   ),
-                                ServentRoomClick: !propertyDetails.ServentRoomClick,
+                                MondayClick: !propertyDetails.MondayClick,
                               });
                             } else {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms: [
-                                  ...propertyDetails.AdditionalRooms,
-                                  "Servent Room",
+                                VisitingDays: [
+                                  ...propertyDetails.VisitingDays,
+                                  "Monday",
                                 ],
-                                ServentRoomClick: !propertyDetails.ServentRoomClick,
+                                MondayClick: !propertyDetails.MondayClick,
                               });
                             }
                           }}
                         />
-                        <label htmlFor="servent_room">
+                        <label htmlFor="monday_visitingdays">
                           <div className="radio_icon">
                             <span className="material-symbols-outlined add">
                               add
@@ -1283,38 +1283,38 @@ export default function Stage3(props) {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.OfficeRoomClick
+                          propertyDetails.TuesdayClick
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="office_room"
+                          id="tuesday_visitingdays"
                           onClick={(e) => {
-                            if (propertyDetails.OfficeRoomClick) {
+                            if (propertyDetails.TuesdayClick) {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms:
-                                  propertyDetails.AdditionalRooms &&
-                                  propertyDetails.AdditionalRooms.filter(
-                                    (elem) => elem !== "Office Room"
+                                VisitingDays:
+                                  propertyDetails.VisitingDays &&
+                                  propertyDetails.VisitingDays.filter(
+                                    (elem) => elem !== "Tuesday"
                                   ),
-                                OfficeRoomClick: !propertyDetails.OfficeRoomClick,
+                                TuesdayClick: !propertyDetails.TuesdayClick,
                               });
                             } else {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms: [
-                                  ...propertyDetails.AdditionalRooms,
-                                  "Office Room",
+                                VisitingDays: [
+                                  ...propertyDetails.VisitingDays,
+                                  "Tuesday",
                                 ],
-                                OfficeRoomClick: !propertyDetails.OfficeRoomClick,
+                                TuesdayClick: !propertyDetails.TuesdayClick,
                               });
                             }
                           }}
                         />
-                        <label htmlFor="office_room">
+                        <label htmlFor="tuesday_visitingdays">
                           <div className="radio_icon">
                             <span className="material-symbols-outlined add">
                               add
@@ -1333,38 +1333,38 @@ export default function Stage3(props) {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.StoreRoomClick
+                          propertyDetails.WednesdayClick
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="store_room"
+                          id="wednesday_visitingdays"
                           onClick={(e) => {
-                            if (propertyDetails.StoreRoomClick) {
+                            if (propertyDetails.WednesdayClick) {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms:
-                                  propertyDetails.AdditionalRooms &&
-                                  propertyDetails.AdditionalRooms.filter(
-                                    (elem) => elem !== "Store Room"
+                                VisitingDays:
+                                  propertyDetails.VisitingDays &&
+                                  propertyDetails.VisitingDays.filter(
+                                    (elem) => elem !== "Wednesday"
                                   ),
-                                StoreRoomClick: !propertyDetails.StoreRoomClick,
+                                WednesdayClick: !propertyDetails.WednesdayClick,
                               });
                             } else {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms: [
-                                  ...propertyDetails.AdditionalRooms,
-                                  "Store Room",
+                                VisitingDays: [
+                                  ...propertyDetails.VisitingDays,
+                                  "Wednesday",
                                 ],
-                                StoreRoomClick: !propertyDetails.StoreRoomClick,
+                                WednesdayClick: !propertyDetails.WednesdayClick,
                               });
                             }
                           }}
                         />
-                        <label htmlFor="store_room">
+                        <label htmlFor="wednesday_visitingdays">
                           <div className="radio_icon">
                             <span className="material-symbols-outlined add">
                               add
@@ -1383,38 +1383,38 @@ export default function Stage3(props) {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.PoojaRoomClick
+                          propertyDetails.ThursdayClick
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="pooja_room"
+                          id="thursday_visitingdays"
                           onClick={(e) => {
-                            if (propertyDetails.PoojaRoomClick) {
+                            if (propertyDetails.ThursdayClick) {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms:
-                                  propertyDetails.AdditionalRooms &&
-                                  propertyDetails.AdditionalRooms.filter(
-                                    (elem) => elem !== "Pooja Room"
+                                VisitingDays:
+                                  propertyDetails.VisitingDays &&
+                                  propertyDetails.VisitingDays.filter(
+                                    (elem) => elem !== "Thursday"
                                   ),
-                                PoojaRoomClick: !propertyDetails.PoojaRoomClick,
+                                ThursdayClick: !propertyDetails.ThursdayClick,
                               });
                             } else {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms: [
-                                  ...propertyDetails.AdditionalRooms,
-                                  "Pooja Room",
+                                VisitingDays: [
+                                  ...propertyDetails.VisitingDays,
+                                  "Thursday",
                                 ],
-                                PoojaRoomClick: !propertyDetails.PoojaRoomClick,
+                                ThursdayClick: !propertyDetails.ThursdayClick,
                               });
                             }
                           }}
                         />
-                        <label htmlFor="pooja_room">
+                        <label htmlFor="thursday_visitingdays">
                           <div className="radio_icon">
                             <span className="material-symbols-outlined add">
                               add
@@ -1434,38 +1434,38 @@ export default function Stage3(props) {
                       {/* {console.log(propertyDetails.StudyRoomClick)} */}
                       <div
                         className={
-                          propertyDetails.StudyRoomClick
+                          propertyDetails.FridayClick
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button "
                         }
                       >
                         <input
                           type="checkbox"
-                          id="study_room"
+                          id="friday_visitingdays"
                           onClick={(e) => {
-                            if (propertyDetails.StudyRoomClick) {
+                            if (propertyDetails.FridayClick) {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms:
-                                  propertyDetails.AdditionalRooms &&
-                                  propertyDetails.AdditionalRooms.filter(
-                                    (elem) => elem !== "Study Room"
+                                VisitingDays:
+                                  propertyDetails.VisitingDays &&
+                                  propertyDetails.VisitingDays.filter(
+                                    (elem) => elem !== "Friday"
                                   ),
-                                StudyRoomClick: !propertyDetails.StudyRoomClick,
+                                FridayClick: !propertyDetails.FridayClick,
                               });
                             } else {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms: [
-                                  ...propertyDetails.AdditionalRooms,
-                                  "Study Room",
+                                VisitingDays: [
+                                  ...propertyDetails.VisitingDays,
+                                  "Friday",
                                 ],
-                                StudyRoomClick: !propertyDetails.StudyRoomClick,
+                                FridayClick: !propertyDetails.FridayClick,
                               });
                             }
                           }}
                         />
-                        <label htmlFor="study_room">
+                        <label htmlFor="friday_visitingdays">
                           <div className="radio_icon">
                             <span className="material-symbols-outlined add">
                               add
@@ -1484,38 +1484,38 @@ export default function Stage3(props) {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.PowerRoomClick
+                          propertyDetails.SaturdayClick
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="power_room"
+                          id="saturday_visitingdays"
                           onClick={(e) => {
-                            if (propertyDetails.PowerRoomClick) {
+                            if (propertyDetails.SaturdayClick) {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms:
-                                  propertyDetails.AdditionalRooms &&
-                                  propertyDetails.AdditionalRooms.filter(
-                                    (elem) => elem !== "Power Room"
+                                VisitingDays:
+                                  propertyDetails.VisitingDays &&
+                                  propertyDetails.VisitingDays.filter(
+                                    (elem) => elem !== "Saturday"
                                   ),
-                                PowerRoomClick: !propertyDetails.PowerRoomClick,
+                                SaturdayClick: !propertyDetails.SaturdayClick,
                               });
                             } else {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms: [
-                                  ...propertyDetails.AdditionalRooms,
-                                  "Power Room",
+                                VisitingDays: [
+                                  ...propertyDetails.VisitingDays,
+                                  "Saturday",
                                 ],
-                                PowerRoomClick: !propertyDetails.PowerRoomClick,
+                                SaturdayClick: !propertyDetails.SaturdayClick,
                               });
                             }
                           }}
                         />
-                        <label htmlFor="power_room">
+                        <label htmlFor="saturday_visitingdays">
                           <div className="radio_icon">
                             <span className="material-symbols-outlined check">
                               done
@@ -1524,7 +1524,7 @@ export default function Stage3(props) {
                               add
                             </span>
                           </div>
-                          <h6> Saturday
+                          <h6>Saturday
 
 
                           </h6>
@@ -1534,38 +1534,38 @@ export default function Stage3(props) {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.PowerRoomClick
+                          propertyDetails.SundayClick
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="power_room"
+                          id="sunday_visitingdays"
                           onClick={(e) => {
-                            if (propertyDetails.PowerRoomClick) {
+                            if (propertyDetails.SundayClick) {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms:
-                                  propertyDetails.AdditionalRooms &&
-                                  propertyDetails.AdditionalRooms.filter(
+                                VisitingDays:
+                                  propertyDetails.VisitingDays &&
+                                  propertyDetails.VisitingDays.filter(
                                     (elem) => elem !== "Power Room"
                                   ),
-                                PowerRoomClick: !propertyDetails.PowerRoomClick,
+                                SundayClick: !propertyDetails.SundayClick,
                               });
                             } else {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                AdditionalRooms: [
-                                  ...propertyDetails.AdditionalRooms,
+                                VisitingDays: [
+                                  ...propertyDetails.VisitingDays,
                                   "Power Room",
                                 ],
-                                PowerRoomClick: !propertyDetails.PowerRoomClick,
+                                SundayClick: !propertyDetails.SundayClick,
                               });
                             }
                           }}
                         />
-                        <label htmlFor="power_room">
+                        <label htmlFor="sunday_visitingdays">
                           <div className="radio_icon">
                             <span className="material-symbols-outlined check">
                               done
@@ -1594,17 +1594,23 @@ export default function Stage3(props) {
                         <div className="radio_group_single">
                           <div
                             className={
-                              propertyDetails.Purpose === "Rent"
+                              propertyDetails.BachlorsBoysAllowed === "Yes"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
                           >
                             <input
                               type="checkbox"
-                              id="property_active"
+                              id="bachloresboysallowed_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BachlorsBoysAllowed: "Yes",
+                                });
+                              }}
                             />
                             <label
-                              htmlFor="property_active"
+                              htmlFor="bachloresboysallowed_yes"
                               style={{ paddingTop: "7px" }}
                             >
                               <div className="radio_icon">
@@ -1622,18 +1628,24 @@ export default function Stage3(props) {
                         <div className="radio_group_single">
                           <div
                             className={
-                              propertyDetails.Purpose === "Sale"
+                              propertyDetails.BachlorsBoysAllowed === "No"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
                           >
                             <input
                               type="checkbox"
-                              id="property_inactive"
+                              id="bachloresboysallowed_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BachlorsBoysAllowed: "No",
+                                });
+                              }}
 
                             />
                             <label
-                              htmlFor="property_inactive"
+                              htmlFor="bachloresboysallowed_no"
                               style={{ paddingTop: "7px" }}
                             >
                               <div className="radio_icon">
@@ -1665,17 +1677,23 @@ export default function Stage3(props) {
                         <div className="radio_group_single">
                           <div
                             className={
-                              propertyDetails.Purpose === "Rent"
+                              propertyDetails.BachlorsGirlsAllowed === "Yes"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
                           >
                             <input
                               type="checkbox"
-                              id="property_active"
+                              id="bachloresgirlsallowed_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BachlorsGirlsAllowed: "Yes",
+                                });
+                              }}
                             />
                             <label
-                              htmlFor="property_active"
+                              htmlFor="bachloresgirlsallowed_yes"
                               style={{ paddingTop: "7px" }}
                             >
                               <div className="radio_icon">
@@ -1693,18 +1711,23 @@ export default function Stage3(props) {
                         <div className="radio_group_single">
                           <div
                             className={
-                              propertyDetails.Purpose === "Sale"
+                              propertyDetails.BachlorsGirlsAllowed === "No"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
                           >
                             <input
                               type="checkbox"
-                              id="property_inactive"
-
+                              id="bachloresgirlsallowed_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BachlorsGirlsAllowed: "No",
+                                });
+                              }}
                             />
                             <label
-                              htmlFor="property_inactive"
+                              htmlFor="bachloresgirlsallowed_no"
                               style={{ paddingTop: "7px" }}
                             >
                               <div className="radio_icon">
@@ -1736,17 +1759,23 @@ export default function Stage3(props) {
                         <div className="radio_group_single">
                           <div
                             className={
-                              propertyDetails.Purpose === "Rent"
+                              propertyDetails.PetsAllowed === "Yes"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
                           >
                             <input
                               type="checkbox"
-                              id="property_active"
+                              id="petsallowed_yes"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PetsAllowed: "Yes",
+                                });
+                              }}
                             />
                             <label
-                              htmlFor="property_active"
+                              htmlFor="petsallowed_yes"
                               style={{ paddingTop: "7px" }}
                             >
                               <div className="radio_icon">
@@ -1764,18 +1793,24 @@ export default function Stage3(props) {
                         <div className="radio_group_single">
                           <div
                             className={
-                              propertyDetails.Purpose === "Sale"
+                              propertyDetails.PetsAllowed === "No"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
                           >
                             <input
                               type="checkbox"
-                              id="property_inactive"
+                              id="petsallowed_no"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  PetsAllowed: "No",
+                                });
+                              }}
 
                             />
                             <label
-                              htmlFor="property_inactive"
+                              htmlFor="petsallowed_no"
                               style={{ paddingTop: "7px" }}
                             >
                               <div className="radio_icon">
@@ -1807,17 +1842,23 @@ export default function Stage3(props) {
                         <div className="radio_group_single">
                           <div
                             className={
-                              propertyDetails.Purpose === "Rent"
+                              propertyDetails.VegNonVeg === "Veg"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
                           >
                             <input
                               type="checkbox"
-                              id="property_active"
+                              id="vegnonveg_veg"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  VegNonVeg: "Veg",
+                                });
+                              }}
                             />
                             <label
-                              htmlFor="property_active"
+                              htmlFor="vegnonveg_veg"
                               style={{ paddingTop: "7px" }}
                             >
                               <div className="radio_icon">
@@ -1828,25 +1869,31 @@ export default function Stage3(props) {
                                   done
                                 </span>
                               </div>
-                              <h6>Vegetarian</h6>
+                              <h6>Veg</h6>
                             </label>
                           </div>
                         </div>
                         <div className="radio_group_single">
                           <div
                             className={
-                              propertyDetails.Purpose === "Sale"
+                              propertyDetails.VegNonVeg === "Non-Veg"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
                           >
                             <input
                               type="checkbox"
-                              id="property_inactive"
+                              id="vegnonveg_nonveg"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  VegNonVeg: "Non-Veg",
+                                });
+                              }}
 
                             />
                             <label
-                              htmlFor="property_inactive"
+                              htmlFor="vegnonveg_nonveg"
                               style={{ paddingTop: "7px" }}
                             >
                               <div className="radio_icon">
@@ -1857,7 +1904,7 @@ export default function Stage3(props) {
                                   done
                                 </span>
                               </div>
-                              <h6>Non-Vegetarian</h6>
+                              <h6>Non-Veg</h6>
                             </label>
                           </div>
                         </div>
@@ -1942,7 +1989,7 @@ export default function Stage3(props) {
               {/* Property Images */}
               <div className="pcs_image_area">
                 <div className="bigimage_container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                  {/* {propertyDetails._imgURL.length > 0 ? (
+                  {propertyDetails._imgURL.length > 0 ? (
                     <div style={{ position: 'relative', width: '100%', maxWidth: '600px' }}>
                       {propertyDetails._imgURL.length > 1 && <div className='img-delete-icon' onClick={showPopup}>
                         <span className="material-symbols-outlined">
@@ -1958,41 +2005,41 @@ export default function Stage3(props) {
                           }))}
                         slideDuration={1000}
                       />
-                    </div>) : <div style={{ position: 'relative', textAlign: 'center', width: '100%', maxWidth: '600px' }}> <img width='100%' src='/assets/img/default_property_image.jpg' alt='default property pic'></img></div>} */}
+                    </div>) : <div style={{ position: 'relative', textAlign: 'center', width: '100%', maxWidth: '600px' }}> <img width='100%' src='/assets/img/default_property_image.jpg' alt='default property pic'></img></div>}
 
-                  {/* {propertyDetails._imgURL.length < 20 && ( */}
-                  <div
-                    className="d-flex align-items-center justify-content-center"
-                    style={{ margin: "15px 0px" }}
-                  >
-                    <input
-                      id="profile-upload-input"
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleFileChange}
-                      style={{ display: "none" }}
-                    />
-                    <label
-                      htmlFor="profile-upload-input"
-                      className="mybutton button_transparent pointer"
+                  {propertyDetails._imgURL.length < 20 && (
+                    <div
+                      className="d-flex align-items-center justify-content-center"
+                      style={{ margin: "15px 0px" }}
                     >
-                      <span>
-                        Add More Images
-                      </span>
-                    </label>
-                  </div>
+                      <input
+                        id="profile-upload-input"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleFileChange}
+                        style={{ display: "none" }}
+                      />
+                      <label
+                        htmlFor="profile-upload-input"
+                        className="mybutton button_transparent pointer"
+                      >
+                        <span>
+                          Add More Images
+                        </span>
+                      </label>
+                    </div>
                   )
-                  {/* } */}
+                  }
                 </div>
-                {/* {
-                  propertyDetails._imgURL.length > 0 &&  */}
-                {/* <div>
-                  <div style={{ textAlign: 'center', fontSize: '0.8rem', fontStyle: 'italic' }}>
-                    Image count : {propertyDetails._imgURL.length} out of 20
+                {
+                  propertyDetails._imgURL.length > 0 &&
+                  <div>
+                    <div style={{ textAlign: 'center', fontSize: '0.8rem', fontStyle: 'italic' }}>
+                      Image count : {propertyDetails._imgURL.length} out of 20
+                    </div>
                   </div>
-                </div> */}
-                {/* } */}
+                }
                 <div className="verticall_gap"></div>
                 <div className="verticall_gap"></div>
                 <div style={{ textAlign: 'center', fontSize: '0.8rem', fontStyle: 'italic' }}>
