@@ -64,7 +64,7 @@ export default function Stage3(props) {
 
   useEffect(() => {
     if (propertyDocument) {
-      // console.log('propertyDocument:', propertyDocument)
+      console.log('Visiting Hrs From:', propertyDocument.visitingHrsFrom)
       setPropertyDetails({
         MainDoorFacing: propertyDocument.mainDoorFacing ? propertyDocument.mainDoorFacing : "",
         OverLooking: propertyDocument.overLooking ? propertyDocument.overLooking : [],
@@ -1333,9 +1333,15 @@ export default function Stage3(props) {
                   <label htmlFor="">Visiting Hours From</label>
                   <div className="form_field_inner">
                     <input
-                      type="date"
+                      type="datetime-local"
                       placeholder="dd/mm/yyyy"
-
+                      value={propertyDetails.VisitingHrsFrom}
+                      onChange={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          VisitingHrsFrom: e.target.value
+                        })
+                      }}
                     />
 
                   </div>
@@ -1347,11 +1353,16 @@ export default function Stage3(props) {
                   <label htmlFor="">Visiting Hours To</label>
                   <div className="form_field_inner">
                     <input
-                      type="date"
+                      type="datetime-local"
                       placeholder="dd/mm/yyyy"
-
+                      value={propertyDetails.VisitingHrsTo}
+                      onChange={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          VisitingHrsTo: e.target.value
+                        })
+                      }}
                     />
-
                   </div>
                 </div>
               </div>
