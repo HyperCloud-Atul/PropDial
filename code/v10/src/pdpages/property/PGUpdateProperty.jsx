@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Stage1 from './Stage1'
 import Stage2 from './Stage2'
 import Stage3 from './Stage3'
+import Stage4 from './Stage4';
 
 const PGUpdateProperty = () => {
   const { propertyid } = useParams();
@@ -67,6 +68,7 @@ const PGUpdateProperty = () => {
         {stageFlag === 'stage1' && <Stage1 setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage1>}
         {stageFlag === 'stage2' && <Stage2 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage2>}
         {stageFlag === 'stage3' && <Stage3 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage3>}
+        {stageFlag === 'stage4' && <Stage4 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage4>}
       </div>
     </div>
   )
