@@ -1357,7 +1357,33 @@ const PropertyDetails = () => {
                               <h6>Entrance Gallery</h6>
                               <h5>{propertyDocument.entranceGallery}</h5>
                             </div>
-
+                          </div>
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/property-detail-icon/mainDoorFacing.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Main Door Facing</h6>
+                              <h5>{propertyDocument.mainDoorFacing}</h5>
+                            </div>
+                          </div>
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/property-detail-icon/balcony_windowsFacing.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Balcony Facing</h6>
+                              <h5>{propertyDocument.balconyFacing}</h5>
+                            </div>
+                          </div>
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/property-detail-icon/Overlooking.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Overlooking</h6>
+                              <h5>{propertyDocument.overLooking}</h5>
+                            </div>
                           </div>
                           <div className="p_info_single">
                             <div className="pd_icon">
@@ -1668,71 +1694,11 @@ const PropertyDetails = () => {
                         <div className="p_info">
                           <div className="p_info_single">
                             <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/mainDoorFacing.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Main Door Facing</h6>
-                              <h5>East</h5>
-                            </div>
-
-                          </div>
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/Overlooking.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Overlooking</h6>
-                              <h5>East</h5>
-                            </div>
-
-                          </div>
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/balcony_windowsFacing.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Balcony/Window Facing</h6>
-                              <h5>East</h5>
-                            </div>
-
-                          </div>
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/VisitingHrsFrom.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Visiting Hours From</h6>
-                              <h5></h5>
-                            </div>
-
-                          </div>
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/VisitingHrsTo.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Visiting Hours To</h6>
-                              <h5></h5>
-                            </div>
-
-                          </div>
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/VisitingDays.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Visiting Days</h6>
-                              <h5>Monday</h5>
-                            </div>
-
-                          </div>
-                          <div className="p_info_single">
-                            <div className="pd_icon">
                               <img src="/assets/img/property-detail-icon/BachelorBoys.png" alt="" />
                             </div>
                             <div className="pis_content">
                               <h6>Bachelor Boys Allowed</h6>
-                              <h5>Yes</h5>
+                              <h5>{propertyDocument.bachlorsBoysAllowed}</h5>
                             </div>
 
                           </div>
@@ -1742,7 +1708,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Bachelor Girls Allowed</h6>
-                              <h5>Yes</h5>
+                              <h5>{propertyDocument.bachlorsGirlsAllowed}</h5>
                             </div>
 
                           </div>
@@ -1752,7 +1718,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Pets Allowed</h6>
-                              <h5>Yes</h5>
+                              <h5>{propertyDocument.petsAllowed}</h5>
                             </div>
 
                           </div>
@@ -1761,10 +1727,50 @@ const PropertyDetails = () => {
                               <img src="/assets/img/property-detail-icon/calendar.png" alt="" />
                             </div>
                             <div className="pis_content">
-                              <h6>:</h6>
-                              <h5>No choice</h5>
+                              <h6>Veg/Non-Veg</h6>
+                              <h5>{propertyDocument.vegNonVeg}</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="property_card_single">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">Visiting Details</h2>
+                        <div className="p_info">
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/property-detail-icon/VisitingHrsFrom.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Visiting Hours From</h6>
+                              <h5>{format(new Date(propertyDocument.visitingHrsFrom), 'dd MMM,yy hh:mm aa')}</h5>
+                            </div>
+                          </div>
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/property-detail-icon/VisitingHrsTo.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Visiting Hours To</h6>
+                              <h5>{format(new Date(propertyDocument.visitingHrsTo), 'dd MMM,yy hh:mm aa')}</h5>
                             </div>
 
+                          </div>
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/property-detail-icon/VisitingDays.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Visiting Days</h6>
+                              <h5>{propertyDocument.visitingDays}</h5>
+                              <h5>
+                                {propertyDocument.visitingDays.map((days) => (
+                                  // <li key={user.id}>{user.fullName} ({user.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')})</li>
+                                  <span></span>
+                                ))}
+                              </h5>
+                            </div>
                           </div>
                         </div>
                       </div>
