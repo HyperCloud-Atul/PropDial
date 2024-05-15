@@ -28,13 +28,13 @@ const PropertyDetails = () => {
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
   // get user from useauthcontext
-  const { id } = useParams();
-  // console.log('property id: ', id)
+  const { propertyid } = useParams();
+  // console.log('property id: ', propertyid)
   const { user } = useAuthContext();
 
   const { document: propertyDocument, error: propertyDocError } = useDocument(
     "properties",
-    id
+    propertyid
   );
   // console.log("propertiesdocument:", propertyDocument);
 
@@ -225,7 +225,7 @@ const PropertyDetails = () => {
     // console.log('updatedProperty', updatedProperty)
     // console.log('property id: ', property.id)
 
-    await updateDocument(id, updatedProperty);
+    await updateDocument(propertyid, updatedProperty);
 
     setchangeManagerPopup(false);
   }
@@ -658,21 +658,25 @@ const PropertyDetails = () => {
                     {(user && (user.role === 'owner' || user.role === 'coowner' || user.role === 'admin')) &&
                       <div className="extra_info_card_property">
                         <OwlCarousel className="owl-theme" {...options}>
-                          <div className="item eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                                description
-                              </span>
-                              <div className="text">
-                                <h6>
-                                  5
-                                </h6>
-                                <h5>
-                                  Documents
-                                </h5>
+                          {/* Transactions */}
+                          <Link to={`/transactions/${propertyid}`}>
+                            <div className="item eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  description
+                                </span>
+                                <div className="text">
+                                  <h6>
+                                    5
+                                  </h6>
+                                  <h5>
+                                    Transactions
+                                  </h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          </Link>
+
                           <div className="item eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
@@ -1727,7 +1731,7 @@ const PropertyDetails = () => {
                               <img src="/assets/img/property-detail-icon/calendar.png" alt="" />
                             </div>
                             <div className="pis_content">
-                              <h6>Veg/Non-Veg</h6>
+                              <h6>Food Habit</h6>
                               <h5>{propertyDocument.vegNonVeg}</h5>
                             </div>
                           </div>

@@ -86,6 +86,8 @@ import AdminUser from "./pdpages/roles/admin/AdminUser";
 import PropdialAllProperties from "./components/property/PropdialAllProperties";
 import Stage4 from "./pdpages/property/Stage4";
 import Payment from "./pdpages/payment/Payment";
+import PGTransactions from "./pdpages/property/PGTransactions";
+
 // New component import end
 
 function App() {
@@ -238,7 +240,7 @@ function App() {
                   ></Route>
 
                   <Route
-                    path="/propertydetails/:id"
+                    path="/propertydetails/:propertyid"
                     element={<PropertyDetails></PropertyDetails>}
                   ></Route>
 
@@ -295,7 +297,13 @@ function App() {
                     path="/adminuser"
                     element={< AdminUser />}
                   ></Route>
-                    <Route
+
+                  <Route
+                    path="/transactions/:propertyid"
+                    element={< PGTransactions />}
+                  ></Route>
+
+                  <Route
                     path="/payment"
                     element={< Payment />}
                   ></Route>

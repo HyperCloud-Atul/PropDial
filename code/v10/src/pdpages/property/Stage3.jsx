@@ -1976,7 +1976,7 @@ export default function Stage3(props) {
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">
-                    Veg/Non-Veg</label>
+                    Food Habit</label>
                   <div className="form_field_inner">
                     <div className="form_field_container">
                       <div className="radio_group">
