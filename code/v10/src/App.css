@@ -312,6 +312,27 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     row-gap: 30px;
 }
 
+.bottom_add_button {
+    position: fixed;
+    right: 3%;
+    bottom: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: #fff;
+    background: #EB542E;
+    box-shadow: 0 -5px 10px 0 rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    text-decoration: none;
+    cursor: pointer;
+}
+.bottom_add_button span{
+    font-size: 26px;
+}
+
 /* common css end*/
 
 @media only screen and (max-width: 1199px) {
