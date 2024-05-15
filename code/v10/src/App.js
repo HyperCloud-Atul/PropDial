@@ -85,7 +85,7 @@ import PGDaashboard from "./pdpages/dashboard/PGDashboard";
 import AdminUser from "./pdpages/roles/admin/AdminUser";
 import PropdialAllProperties from "./components/property/PropdialAllProperties";
 import Stage4 from "./pdpages/property/Stage4";
-
+import Payment from "./pdpages/payment/Payment";
 // New component import end
 
 function App() {
@@ -294,6 +294,10 @@ function App() {
                   <Route
                     path="/adminuser"
                     element={< AdminUser />}
+                  ></Route>
+                    <Route
+                    path="/payment"
+                    element={< Payment />}
                   ></Route>
 
 

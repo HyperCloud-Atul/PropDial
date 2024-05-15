@@ -244,7 +244,7 @@
 
 .propagent_dashboard_inner .all_payments {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-column-gap: 22px;
     grid-row-gap: 22px;
 }
@@ -253,6 +253,23 @@
     display: flex;
     gap: 8px;
     align-items: center;
+}
+.balance_sheet th {
+    font-size: 14px;
+    font-weight: 500;
+    background: var(--theme-orange-bg);
+}
+.balance_sheet td {
+    font-size: 14px;
+}
+.balance_sheet tr td{
+background: white;
+}
+.balance_sheet tr:nth-child(2n) td{
+    background: #e8f0ff;
+}
+.balance_sheet  .table>:not(:first-child) {
+    border-top: 1px solid currentColor;
 }
 
 .all_payments .payment_single .right {

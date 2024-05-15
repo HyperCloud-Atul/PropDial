@@ -332,7 +332,12 @@
     background: var(--theme-green);
   }
 
-
+  .prop_edit {
+    position: absolute;
+    top: 16px;
+    right: 0;
+    color: var(--theme-green);
+}
   .category {
     position: absolute;
     top: -14px;

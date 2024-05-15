@@ -184,14 +184,6 @@ const PropertyCard = ({ propertydoc }) => {
           {propertydoc.category}
         </div>
 
-        {user && user.role === 'admin' &&
-          <Link
-            className="prop_edit"
-            to={`/updateproperty/${propertydoc.id}`}
-            key={propertydoc.propertyid}
-          >
-            <span className="material-symbols-outlined">edit_square</span>
-          </Link>}
 
         <div className="property_single_card relative">
           <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
@@ -206,6 +198,14 @@ const PropertyCard = ({ propertydoc }) => {
               <img src="./assets/img/admin_banner.jpg" alt="" />
             </div>
             <div className="left_side relative">
+              {user && user.role === 'admin' &&
+                <Link
+                  className="prop_edit"
+                  to={`/updateproperty/${propertydoc.id}`}
+                  key={propertydoc.propertyid}
+                >
+                  <span className="material-symbols-outlined">edit_square</span>
+                </Link>}
               <h5 className="demand">
                 <span>₹</span> {propertydoc.demandPrice}
                 {propertydoc.maintenancecharges !== '' && <span

@@ -1,9 +1,12 @@
 import React from "react";
+
 import { useState, useEffect } from "react";
 import LinearProgressBar from "../../../pages/roles/owner/LinearProgressBar";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useCollection } from "../../../hooks/useCollection";
+import Table from 'react-bootstrap/Table';
+import { Link } from "react-router-dom";
 
 // owl carousel
 import OwlCarousel from "react-owl-carousel";
@@ -226,70 +229,115 @@ const PGOwnerDashboard = () => {
               </section>
               <div className="vg22"></div>
               <hr />
+
               <div className="vg22"></div>
               <section>
-                <div className="payment_card">
-                  {/* <div className="top">
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="payment_card">
+                      {/* <div className="top">
                   <div className="left">
                     <h4 className="m20 text_grey">Payments</h4>
                     <h2 className="dashboard_number mt10">8,052</h2>
                   </div>
                   <div className="right"></div>
                 </div> */}
-                  <div className="all_payments">
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_orange">
-                        <img src="./assets/img/brokreage_bill_icon.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Brokerage Payment</h6>
-                        <h5 className="dashboard_number_small">₹ 1,000</h5>
+                      <div className="all_payments">
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_orange">
+                            <img src="./assets/img/brokreage_bill_icon.png" alt="" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Brokerage Payment</h6>
+                            <h5 className="dashboard_number_small">₹ 1,000</h5>
+                          </div>
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_blue">
+                            <img src="./assets/img/financial.png" alt="" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">PMS</h6>
+                            <h5 className="dashboard_number_small">₹ 2,500</h5>
+                          </div>
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_green">
+                            <img src="./assets/img/electricity-bill.png" alt="" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Electricity Bill</h6>
+                            <h5 className="dashboard_number_small">₹ 875</h5>
+                          </div>
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_orange">
+                            <img src="./assets/img/brokreage_bill_icon.png" alt="" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Society Maintainance</h6>
+                            <h5 className="dashboard_number_small">₹ 2,000</h5>
+                          </div>
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_blue">
+                            <img src="./assets/img/financial.png" alt="" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Water Bill</h6>
+                            <h5 className="dashboard_number_small">₹ 75</h5>
+                          </div>
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_green">
+                            <img src="./assets/img/electricity-bill.png" alt="" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Others</h6>
+                            <h5 className="dashboard_number_small">₹ 875</h5>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_blue">
-                        <img src="./assets/img/financial.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">PMS</h6>
-                        <h5 className="dashboard_number_small">₹ 2,500</h5>
-                      </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="balance_sheet my_big_card">
+                      <Table responsive="sm">
+                        <thead>
+                          <tr>
+                            <th>S.N.</th>
+                            <th>Property Details</th>
+                            <th>Remark</th>
+                            <th>Pay Amount</th>                          
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>G-25 | mp-nagar | kanipura road | ujjain</td>
+                            <td>On-boarding Charges</td>
+                            <td>2000</td>                        
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>G-25 | mp-nagar | kanipura road | ujjain</td>
+                            <td>On-boarding Charges</td>
+                            <td>2000</td>                        
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>G-25 | mp-nagar | kanipura road | ujjain</td>
+                            <td>On-boarding Charges</td>
+                            <td>2000</td>                        
+                          </tr>                       
+                     
+                        </tbody>
+                      </Table>
+                    <div className="text-end">
+                    <Link className="click_text" to="/payment">
+                        view more
+                      </Link>
                     </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_green">
-                        <img src="./assets/img/electricity-bill.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Electricity Bill</h6>
-                        <h5 className="dashboard_number_small">₹ 875</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_orange">
-                        <img src="./assets/img/brokreage_bill_icon.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Society Maintainance</h6>
-                        <h5 className="dashboard_number_small">₹ 2,000</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_blue">
-                        <img src="./assets/img/financial.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Water Bill</h6>
-                        <h5 className="dashboard_number_small">₹ 75</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_green">
-                        <img src="./assets/img/electricity-bill.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Others</h6>
-                        <h5 className="dashboard_number_small">₹ 875</h5>
-                      </div>
                     </div>
                   </div>
                 </div>
