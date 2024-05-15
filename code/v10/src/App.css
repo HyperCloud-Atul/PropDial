@@ -329,7 +329,8 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     text-decoration: none;
     cursor: pointer;
 }
-.bottom_add_button span{
+
+.bottom_add_button span {
     font-size: 26px;
 }
 
@@ -367,5 +368,103 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 
     .r18 {
         font-size: 16px;
+    }
+}
+
+.editable_text .material-symbols-outlined {
+    font-size: 15px;
+    color: var(--theme-green);
+}
+
+.edit_status_popup {
+    .theme_btn {
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 400;
+
+    }
+
+    border: 1px solid var(--theme-grey);
+    background: var(--white-color);
+    position: absolute;
+    z-index: 9;
+    /* bottom: 0px; */
+    width: 186px;
+    height: auto;
+    left: -185px;
+    right: 0px;
+    margin: auto;
+    padding: 6px;
+
+    .close_form {
+        background: transparent;
+        color: var(--theme-orange);
+    }
+
+    .form_field .field_box.theme_radio_new .theme_radio_container {
+        padding: 0px;
+        padding-left: 0px;
+        border: none;
+        background: none;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .form_field .field_box.theme_radio_new .theme_radio_container input[type="radio"]+label {
+        padding: 3px 6px;
+        border-radius: 6px;
+        font-size: 13px;
+        min-width: 0;
+    }
+}
+
+.theme_radio_new {
+    .theme_radio_container {
+        padding: 5px 10px;
+        padding-left: 50px;
+        border: 1px solid var(--theme-grey);
+        background: var(--white-color);
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]+label {
+            cursor: pointer;
+            padding: 3px 10px;
+            border: 1px solid #498fff;
+            color: var(--text-black);
+            border-radius: 30px;
+            font-size: 15px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        input[type="radio"]:checked+label {
+            background-color: var(--theme-blue);
+            color: var(--white-color);
+        }
+
+        input[type="radio"]+label::before {
+            content: "\002B";
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 15px;
+        }
+
+        input[type="radio"]:checked+label::before {
+            content: "\2713";
+            /* Check mark icon */
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 15px;
+        }
     }
 }
