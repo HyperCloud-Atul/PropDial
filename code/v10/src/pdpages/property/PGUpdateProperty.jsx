@@ -5,6 +5,8 @@ import Stage2 from './Stage2'
 import Stage3 from './Stage3'
 import Stage4 from './Stage4';
 
+import './PGUpdateProperty.css'
+
 const PGUpdateProperty = () => {
   const { propertyid } = useParams();
   const [propertyObj, setPropertyObj] = useState(null)

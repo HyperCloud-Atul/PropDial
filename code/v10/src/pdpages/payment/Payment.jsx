@@ -3,9 +3,6 @@ import Table from 'react-bootstrap/Table';
 import { Link } from "react-router-dom";
 
 const Payment = () => {
-
-
-
     // 9 dots controls
     const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
     const openMoreAddOptions = () => {
