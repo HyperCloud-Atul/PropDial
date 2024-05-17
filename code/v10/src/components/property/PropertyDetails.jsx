@@ -797,14 +797,6 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                           </div>
-
-
-
-
-
-
-
-
                         </OwlCarousel>
                       </div>
                     }

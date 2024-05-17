@@ -28,7 +28,7 @@ const PGUpdateProperty = () => {
                   width: "25%"
                 }}></div>
               </div>
-              <div className="step_single">
+              <div className="step_single ">
                 <div className="number">
                   1
                 </div>
@@ -61,7 +61,7 @@ const PGUpdateProperty = () => {
                 </h6>
               </div>
             </div>
-          </div>
+          </div>  
         </div>
 
 
