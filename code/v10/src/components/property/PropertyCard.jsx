@@ -331,20 +331,25 @@ const PropertyCard = ({ propertydoc }) => {
                   {userDoc && <img src={userDoc && userDoc.photoURL} alt="" />}
                 </div>
                 <div className="pod_right">
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {userDoc && <h5>{userDoc && userDoc.fullName}</h5>}
-                    {
-                      user && user.role === "admin" &&
-                      <div>
-                        <small onClick={openChangeManager} style={{ paddingLeft: '10px', fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}>change</small>
-                        <span
-                          className="material-symbols-outlined"
-                          onClick={openChangeManager}
-                          style={{ fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}
-                        >
-                          edit
-                        </span>
-                      </div>}
+                  <div>
+                    {userDoc && (
+                      <h5
+                      onClick={user && user.role === "admin" ? openChangeManager : undefined}
+                      className={user && user.role === "admin" ? "pointer" : ""}
+                      >
+                        {userDoc.fullName}
+                        {user && user.role === "admin" && (
+                          <span
+                            className="material-symbols-outlined click_icon text_near_icon"
+                            onClick={openChangeManager}
+                          >
+                            edit
+                          </span>
+                        )}
+                      </h5>
+                    )}
+
+
 
                   </div>
 

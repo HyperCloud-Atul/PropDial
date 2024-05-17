@@ -87,6 +87,7 @@ import PropdialAllProperties from "./components/property/PropdialAllProperties";
 import Stage4 from "./pdpages/property/Stage4";
 import Payment from "./pdpages/payment/Payment";
 import PGTransactions from "./pdpages/property/PGTransactions";
+import PGRateCard from "./pdpages/roles/admin/master/PGRateCard";
 
 // New component import end
 
@@ -296,6 +297,11 @@ function App() {
                   <Route
                     path="/adminuser"
                     element={< AdminUser />}
+                  ></Route>
+
+                  <Route
+                    path="/ratecard"
+                    element={< PGRateCard />}
                   ></Route>
 
                   <Route

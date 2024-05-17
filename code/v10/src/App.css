@@ -144,7 +144,9 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     font-variation-settings:
         'FILL' 0
 }
-
+.text_near_icon {
+    font-size: 12px;
+}
 .click_icon:hover,
 .click_icon span:hover {
     transition: 0.5s;
