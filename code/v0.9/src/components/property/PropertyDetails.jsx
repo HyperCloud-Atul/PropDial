@@ -50,6 +50,53 @@ const PropertyDetails = () => {
     }
   };
   // share url code
+
+  // upload tenant code start 
+  const [tenantName, setTenantName] = useState('Sanskar Solanki');
+  // const [tenantWhatsappNumber, setTenantWhatsappNumber] = useState('+919009939289');
+  const [tenantCallNumber, seTenantCallNumber] = useState('8770534650');
+  const [isTenantEditing, setIsTenantEditing] = useState(false);
+
+  const [selectedTenantImage, setSelectedTenantImage] = useState(null);
+  const [previewTenantImage, setPreviewTenantImage] = useState(null);
+
+  const handleEditTenantToggle = () => {
+    setIsTenantEditing(!isTenantEditing);
+  };
+
+  const handleTenantImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedTenantImage(file);
+
+      // Create a preview URL for the selected image
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewTenantImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveTenantImage = () => {
+    setSelectedTenantImage(null);
+    setPreviewTenantImage(null);
+  };
+
+
+  const getImageSrc = () => {
+    if (isTenantEditing && !previewTenantImage) {
+      return '/assets/img/upload_img_small.png';
+    } else if (previewTenantImage) {
+      return previewTenantImage;
+    } else {
+      return '/assets/img/user_dummy.png';
+    }
+  };
+
+  // upload tenant code end 
+
+
   return (
     <div className="pg_property aflbg pd_single">
       {/* top search bar */}
@@ -479,6 +526,65 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                     )}
+                  <div className="vg10"></div>
+                  <div className="tenant_card">
+                    <div className="tc_single relative">
+                      <div className="tcs_img_container">
+                        <img
+                          src={getImageSrc()}
+                          alt="Preview"
+                        />
+                        {/* {isTenantEditing && previewTenantImage && (
+                          <div
+                            onClick={handleRemoveTenantImage}
+                          >
+                            X
+                          </div>
+
+                        )} */}
+                        {isTenantEditing && (
+                          <div className="upload_tenant_img">
+                            <label htmlFor="ut_img">
+                              <input type="file" accept="image/*" id="ut_img" onChange={handleTenantImageChange} />
+                            </label>
+                          </div>
+                        )}
+
+                      </div>
+                      <div className={`tenant_detail ${isTenantEditing ? "td_edit" : ""} `}>
+                        <input
+                          type="text"
+                          value={tenantName}
+                          onChange={(e) => setTenantName(e.target.value)}
+                          readOnly={!isTenantEditing}
+                          className="t_name"
+
+                        />
+                        <input
+                          type="number"
+                          value={tenantCallNumber}
+                          onChange={(e) => seTenantCallNumber(e.target.value)}
+                          readOnly={!isTenantEditing}
+                          className="t_number"
+                        />
+
+
+                      </div>
+                      <div className="wha_call_icon">
+                        <Link className="call_icon wc_single">
+                          <img src="/assets/img/simple_call.png" alt="" />
+                        </Link>
+                        <Link className="wha_icon wc_single">
+                          <img src="/assets/img/whatsapp_simple.png" alt="" />
+                        </Link>
+
+                      </div>
+                      <span className="edit_save" onClick={handleEditTenantToggle}>
+                        {isTenantEditing ? 'save' : 'edit'}
+                        </span>
+                    </div>
+                  </div>
+                  <div className="vg10"></div>
                   {user && user.role === "owner" ||
                     (user && user.role === "admin") && (
                       <div className="property_card_single">
@@ -863,31 +969,31 @@ const PropertyDetails = () => {
                             <img src="/assets/img/property-detail-icon/poojaRoom.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>4</h6>
-                          <h5>Pooja Room</h5>
+                            <h6>4</h6>
+                            <h5>Pooja Room</h5>
                           </div>
-                       
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/studyRoom.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>5</h6>
-                          <h5>Study Room</h5>
+                            <h6>5</h6>
+                            <h5>Study Room</h5>
                           </div>
-                       
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/powerRoom.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>6</h6>
-                          <h5>
-                            Power Room</h5>
+                            <h6>6</h6>
+                            <h5>
+                              Power Room</h5>
                           </div>
-                        
+
                         </div>
 
                       </div>
@@ -902,51 +1008,51 @@ const PropertyDetails = () => {
                             <img src="/assets/img/property-detail-icon/frontyard.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>1</h6>
-                          <h5>Front Yard</h5>
+                            <h6>1</h6>
+                            <h5>Front Yard</h5>
                           </div>
-                         
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/backyard.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>2</h6>
-                          <h5>Back Yard</h5>
+                            <h6>2</h6>
+                            <h5>Back Yard</h5>
                           </div>
-                        
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/terrace.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>3</h6>
-                          <h5> Terrace</h5>
+                            <h6>3</h6>
+                            <h5> Terrace</h5>
                           </div>
-                        
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/privateGarden.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>4</h6>
-                          <h5>
-                            Private Garden</h5>
+                            <h6>4</h6>
+                            <h5>
+                              Private Garden</h5>
                           </div>
-                        
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/garage.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>5</h6>
-                          <h5>Garage</h5>
+                            <h6>5</h6>
+                            <h5>Garage</h5>
                           </div>
-                         
+
                         </div>
 
                       </div>
@@ -961,60 +1067,60 @@ const PropertyDetails = () => {
                             <img src="/assets/img/property-detail-icon/calendar.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Plot Area:</h6>
-                          <h5>
-                            {propertyDocument.plotArea}{" "}
-                            {propertyDocument.plotArea
-                              ? propertyDocument.plotAreaUnit
-                              : ""}
-                          </h5>
+                            <h6>Plot Area:</h6>
+                            <h5>
+                              {propertyDocument.plotArea}{" "}
+                              {propertyDocument.plotArea
+                                ? propertyDocument.plotAreaUnit
+                                : ""}
+                            </h5>
                           </div>
-                        
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/superArea.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Super Area</h6>
-                          <h5>
-                            {propertyDocument.superArea}{" "}
-                            {propertyDocument.superArea
-                              ? propertyDocument.superAreaUnit
-                              : ""}
-                          </h5>
+                            <h6>Super Area</h6>
+                            <h5>
+                              {propertyDocument.superArea}{" "}
+                              {propertyDocument.superArea
+                                ? propertyDocument.superAreaUnit
+                                : ""}
+                            </h5>
                           </div>
-                      
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/buildUpArea.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Built-up Area</h6>
-                          <h5>
-                            {propertyDocument.builtUpArea}{" "}
-                            {propertyDocument.builtUpArea
-                              ? propertyDocument.builtUpAreaUnit
-                              : ""}
-                          </h5>
+                            <h6>Built-up Area</h6>
+                            <h5>
+                              {propertyDocument.builtUpArea}{" "}
+                              {propertyDocument.builtUpArea
+                                ? propertyDocument.builtUpAreaUnit
+                                : ""}
+                            </h5>
                           </div>
-                       
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/carpetArea.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Carpet Area</h6>
-                          <h5>
-                            {propertyDocument.carpetArea}{" "}
-                            {propertyDocument.carpetArea
-                              ? propertyDocument.carpetAreaUnit
-                              : ""}
-                          </h5>
+                            <h6>Carpet Area</h6>
+                            <h5>
+                              {propertyDocument.carpetArea}{" "}
+                              {propertyDocument.carpetArea
+                                ? propertyDocument.carpetAreaUnit
+                                : ""}
+                            </h5>
                           </div>
-                      
+
                         </div>
                       </div>
                     </div>
@@ -1028,30 +1134,30 @@ const PropertyDetails = () => {
                             <img src="/assets/img/property-detail-icon/car-parking.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Car Parking Mode</h6>
-                          <h5>Open</h5>
+                            <h6>Car Parking Mode</h6>
+                            <h5>Open</h5>
                           </div>
-                    
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/car-parking.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>No. Car Parking</h6>
-                          <h5>{propertyDocument.numberOfCarParking}</h5>
+                            <h6>No. Car Parking</h6>
+                            <h5>{propertyDocument.numberOfCarParking}</h5>
                           </div>
-                          
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/2Wheelerparking.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>2 Wheeler Parking</h6>
-                          <h5>{propertyDocument.twowheelerparking}</h5>
+                            <h6>2 Wheeler Parking</h6>
+                            <h5>{propertyDocument.twowheelerparking}</h5>
                           </div>
-                       
+
                         </div>
                       </div>
                     </div>
@@ -1112,50 +1218,50 @@ const PropertyDetails = () => {
                             <img src="/assets/img/property-detail-icon/TotalFloors.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Total Floors</h6>
-                          <h5>{propertyDocument.totalFloor}</h5>
+                            <h6>Total Floors</h6>
+                            <h5>{propertyDocument.totalFloor}</h5>
                           </div>
-                     
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/FloorNumber.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Floor Number</h6>
-                          <h5>{propertyDocument.floorNumber}</h5>
+                            <h6>Floor Number</h6>
+                            <h5>{propertyDocument.floorNumber}</h5>
                           </div>
-                    
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/apartmentOnFloor.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Apartment on Floor</h6>
-                          <h5>{propertyDocument.numberOfAptOnFloor}</h5>
+                            <h6>Apartment on Floor</h6>
+                            <h5>{propertyDocument.numberOfAptOnFloor}</h5>
                           </div>
-                        
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/lift.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Lift</h6>
-                          <h5>{propertyDocument.numberOfLifts}</h5>
+                            <h6>Lift</h6>
+                            <h5>{propertyDocument.numberOfLifts}</h5>
                           </div>
-                       
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/PowerBackup.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Power Backup</h6>
-                          <h5>{propertyDocument.powerbackup}</h5>
+                            <h6>Power Backup</h6>
+                            <h5>{propertyDocument.powerbackup}</h5>
                           </div>
-                     
+
                         </div>
                       </div>
                     </div>
@@ -1169,100 +1275,100 @@ const PropertyDetails = () => {
                             <img src="/assets/img/property-detail-icon/mainDoorFacing.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Main Door Facing</h6>
-                          <h5>East</h5>
+                            <h6>Main Door Facing</h6>
+                            <h5>East</h5>
                           </div>
-                    
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/Overlooking.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Overlooking</h6>
-                          <h5>East</h5>
+                            <h6>Overlooking</h6>
+                            <h5>East</h5>
                           </div>
-                     
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/balcony_windowsFacing.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Balcony/Window Facing</h6>
-                          <h5>East</h5>
+                            <h6>Balcony/Window Facing</h6>
+                            <h5>East</h5>
                           </div>
-                      
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/VisitingHrsFrom.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Visiting Hours From</h6>
-                          <h5></h5>
+                            <h6>Visiting Hours From</h6>
+                            <h5></h5>
                           </div>
-                       
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/VisitingHrsTo.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Visiting Hours To</h6>
-                          <h5></h5>
+                            <h6>Visiting Hours To</h6>
+                            <h5></h5>
                           </div>
-                     
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/VisitingDays.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Visiting Days</h6>
-                          <h5>Monday</h5>
+                            <h6>Visiting Days</h6>
+                            <h5>Monday</h5>
                           </div>
-                      
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/BachelorBoys.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Bachelor Boys Allowed</h6>
-                          <h5>Yes</h5>
+                            <h6>Bachelor Boys Allowed</h6>
+                            <h5>Yes</h5>
                           </div>
-                     
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/BachelorGirls.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Bachelor Girls Allowed</h6>
-                          <h5>Yes</h5>
+                            <h6>Bachelor Girls Allowed</h6>
+                            <h5>Yes</h5>
                           </div>
-                      
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/pets.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>Pets Allowed</h6>
-                          <h5>Yes</h5>
+                            <h6>Pets Allowed</h6>
+                            <h5>Yes</h5>
                           </div>
-                     
+
                         </div>
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img src="/assets/img/property-detail-icon/calendar.png" alt="" />
                           </div>
                           <div className="pis_content">
-                          <h6>:</h6>
-                          <h5>No choice</h5>
+                            <h6>:</h6>
+                            <h5>No choice</h5>
                           </div>
-                   
+
                         </div>
                       </div>
                     </div>
