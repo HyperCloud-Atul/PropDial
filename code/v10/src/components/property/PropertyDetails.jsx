@@ -286,6 +286,53 @@ const PropertyDetails = () => {
     setHandleMoreOptionsClick(false);
   };
   // 9 dots controls 
+
+
+  // upload tenant code start 
+  const [tenantName, setTenantName] = useState('Sanskar Solanki');
+  // const [tenantWhatsappNumber, setTenantWhatsappNumber] = useState('+919009939289');
+  const [tenantCallNumber, seTenantCallNumber] = useState('8770534650');
+  const [isTenantEditing, setIsTenantEditing] = useState(false);
+
+  const [selectedTenantImage, setSelectedTenantImage] = useState(null);
+  const [previewTenantImage, setPreviewTenantImage] = useState(null);
+
+  const handleEditTenantToggle = () => {
+    setIsTenantEditing(!isTenantEditing);
+  };
+
+  const handleTenantImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedTenantImage(file);
+
+      // Create a preview URL for the selected image
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewTenantImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveTenantImage = () => {
+    setSelectedTenantImage(null);
+    setPreviewTenantImage(null);
+  };
+
+
+  const getImageSrc = () => {
+    if (isTenantEditing && !previewTenantImage) {
+      return '/assets/img/upload_img_small.png';
+    } else if (previewTenantImage) {
+      return previewTenantImage;
+    } else {
+      return '/assets/img/user_dummy.png';
+    }
+  };
+
+  // upload tenant code end 
+
   return (
     <>
       {/* Change User Popup - Start */}
@@ -524,6 +571,7 @@ const PropertyDetails = () => {
                                   share
                                 </span>
                               </div>
+                           
                               {!(
                                 (user && user.role === "owner") ||
                                 (user && user.role === "coowner") ||
@@ -800,7 +848,65 @@ const PropertyDetails = () => {
                         </OwlCarousel>
                       </div>
                     }
+   <div className="vg10"></div>
+                              <div className="tenant_card">
+                                <div className="tc_single relative">
+                                  <div className="tcs_img_container">
+                                    <img
+                                      src={getImageSrc()}
+                                      alt="Preview"
+                                    />
+                                    {/* {isTenantEditing && previewTenantImage && (
+                          <div
+                            onClick={handleRemoveTenantImage}
+                          >
+                            X
+                          </div>
 
+                        )} */}
+                                    {isTenantEditing && (
+                                      <div className="upload_tenant_img">
+                                        <label htmlFor="ut_img">
+                                          <input type="file" accept="image/*" id="ut_img" onChange={handleTenantImageChange} />
+                                        </label>
+                                      </div>
+                                    )}
+
+                                  </div>
+                                  <div className={`tenant_detail ${isTenantEditing ? "td_edit" : ""} `}>
+                                    <input
+                                      type="text"
+                                      value={tenantName}
+                                      onChange={(e) => setTenantName(e.target.value)}
+                                      readOnly={!isTenantEditing}
+                                      className="t_name"
+
+                                    />
+                                    <input
+                                      type="number"
+                                      value={tenantCallNumber}
+                                      onChange={(e) => seTenantCallNumber(e.target.value)}
+                                      readOnly={!isTenantEditing}
+                                      className="t_number"
+                                    />
+
+
+                                  </div>
+                                  <div className="wha_call_icon">
+                                    <Link className="call_icon wc_single">
+                                      <img src="/assets/img/simple_call.png" alt="" />
+                                    </Link>
+                                    <Link className="wha_icon wc_single">
+                                      <img src="/assets/img/whatsapp_simple.png" alt="" />
+                                    </Link>
+
+                                  </div>
+                                  <span className="edit_save" onClick={handleEditTenantToggle}>
+                                    {isTenantEditing ? 'save' : 'edit'}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="vg10"></div>
                     {((user && user.role === "owner") ||
                       (user && user.role === "coowner")
                       ||

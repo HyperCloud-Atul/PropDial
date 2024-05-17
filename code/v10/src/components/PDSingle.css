@@ -316,3 +316,122 @@
         width: 100% !important;
     }
 }
+
+
+/* tenant css start  */
+.tc_single {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background: var(--white-color);
+    border-radius: 15px;
+    padding: 8px;
+    width: fit-content;
+    overflow: hidden;
+}
+
+.tc_single .tenant_detail {
+    display: flex;
+    flex-direction: column;
+}
+
+.tcs_img_container {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    position: relative;
+    margin: auto;
+}
+
+.tcs_img_container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #e5e5e5;
+}
+
+.upload_tenant_img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.upload_tenant_img label {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.upload_tenant_img label input {
+    display: none;
+}
+
+.tenant_detail input {
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    min-width: 100%;
+    text-align: center;
+}
+
+.tenant_detail input.t_name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--light-black);
+}
+
+.tenant_detail input.t_number {
+    font-size: 14px;
+    font-weight: 400;
+    color: #7d7d7d;
+}
+.tc_single  .wha_call_icon {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid #e5e5e5;
+    margin-left: -8px;
+    margin-right: -8px;
+    margin-bottom: -8px;
+    padding: 6px;
+    margin-top: 6px;
+    position: relative;
+}
+.tc_single  .wha_call_icon:after{
+    content: '';
+    background: #e5e5e5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 1px;
+    height: 100%;
+}
+.tc_single  .wha_call_icon  .wc_single{
+    text-align: center;
+}
+.tc_single .edit_save {
+    position: absolute;
+    top: 3px;
+    right: 8px;  
+    color: var(--theme-green);
+    font-size: 13px;  
+    text-transform: capitalize;  
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.tenant_detail.td_edit input {
+    border-bottom: 1px solid #d5d5d5;
+    border-radius: 6px;
+}
+
+
+
+/* tenant css end */
