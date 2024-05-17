@@ -274,6 +274,7 @@ const Stage1 = (props) => {
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
+    Package: "PMS Premium",
     Category: "Residential",
     UnitNumber: "",
     DemandPrice: "",
@@ -342,6 +343,7 @@ const Stage1 = (props) => {
     if (propertyDocument) {
       setPropertyDetails({
         // All select type
+        Package: propertyDocument.package,
         Category: propertyDocument.category
           ? propertyDocument.category
           : "Residential",
@@ -613,6 +615,7 @@ const Stage1 = (props) => {
     // console.log('propertyDetails.City:', propertyDetails.City)
 
     const property = {
+      package: propertyDetails.Package,
       category: propertyDetails.Category
         ? propertyDetails.Category
         : "Residential",
@@ -647,7 +650,6 @@ const Stage1 = (props) => {
         //Stage 2 fields-createhere
         source: "",
         ownership: "",
-        package: "",
         flag: "",
         propertyType: "",
         bhk: "",
