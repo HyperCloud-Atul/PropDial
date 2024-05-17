@@ -29,7 +29,7 @@ const PropertyDetails = () => {
   // Scroll to the top of the page whenever the location changes end
   // get user from useauthcontext
   const { propertyid } = useParams();
-  // console.log('property id: ', propertyid)
+  console.log('property id: ', propertyid)
   const { user } = useAuthContext();
 
   const { document: propertyDocument, error: propertyDocError } = useDocument(
@@ -1740,7 +1740,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Visiting Hours From</h6>
-                              <h5>{format(new Date(propertyDocument.visitingHrsFrom), 'dd MMM,yy hh:mm aa')}</h5>
+                              <h5>{propertyDocument.visitingHrsFrom && format(new Date(propertyDocument.visitingHrsFrom), 'dd MMM,yy hh:mm aa')}</h5>
                             </div>
                           </div>
                           <div className="p_info_single">
@@ -1749,7 +1749,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Visiting Hours To</h6>
-                              <h5>{format(new Date(propertyDocument.visitingHrsTo), 'dd MMM,yy hh:mm aa')}</h5>
+                              <h5>{propertyDocument.visitingHrsTo && format(new Date(propertyDocument.visitingHrsTo), 'dd MMM,yy hh:mm aa')}</h5>
                             </div>
 
                           </div>
