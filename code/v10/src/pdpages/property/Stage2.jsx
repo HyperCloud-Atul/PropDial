@@ -181,6 +181,12 @@ const Stage2 = (props) => {
             propertyDocument.additionalRooms.find((e) => e === "Power Room")
             ? true
             : false,
+        BasementClick:
+          propertyDocument.additionalRooms &&
+            propertyDocument.additionalRooms.find((e) => e === "Basement")
+            ? true
+            : false,
+
         AdditionalArea: propertyDocument.additionalArea
           ? propertyDocument.additionalArea
           : [],
@@ -1444,6 +1450,53 @@ const Stage2 = (props) => {
                         </span>
                       </div>
                       <h6> Power Room</h6>
+                    </label>
+                  </div>
+                </div>
+                <div className="radio_group_single">
+                  <div
+                    className={
+                      propertyDetails.BasementClick
+                        ? "custom_radio_button radiochecked"
+                        : "custom_radio_button"
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      id="basement_room"
+                      onClick={(e) => {
+                        if (propertyDetails.BasementClick) {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            AdditionalRooms:
+                              propertyDetails.AdditionalRooms &&
+                              propertyDetails.AdditionalRooms.filter(
+                                (elem) => elem !== "Basement"
+                              ),
+                            BasementClick: !propertyDetails.BasementClick,
+                          });
+                        } else {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            AdditionalRooms: [
+                              ...propertyDetails.AdditionalRooms,
+                              "Basement",
+                            ],
+                            BasementClick: !propertyDetails.BasementClick,
+                          });
+                        }
+                      }}
+                    />
+                    <label htmlFor="basement_room">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                      </div>
+                      <h6>Basement</h6>
                     </label>
                   </div>
                 </div>

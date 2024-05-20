@@ -489,16 +489,17 @@ function App() {
                     }
                   ></Route>
 
-                  {/* <Route
-                    path="/propertydetails"
+                  <Route
+                    path="/ratecard"
                     element={
                       user && user.role ? (
-                        <PGPropertyDetails />
+                        <PGRateCard />
                       ) : (
                         <Navigate to="/login" />
                       )
                     }
-                  ></Route> */}
+                  ></Route>
+
 
                   <Route
                     path="/bills"

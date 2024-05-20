@@ -1,6 +1,40 @@
 import React, { useState } from 'react'
 import Table from 'react-bootstrap/Table';
 import { Link } from "react-router-dom";
+import { useFirestore } from '../../../../hooks/useFirestore';
+import { useDocument } from '../../../../hooks/useDocument';
+import { useCollection } from '../../../../hooks/useCollection';
+import ReactTable from '../../../../components/ReactTable';
+import ReactTableColumnFilter from '../../../../components/ReactTableColumnFilter';
+
+const COLUMNS = [
+    // {
+    //     Header: 'Id',
+    //     accessor: 'id'
+    // },
+    {
+        Header: 'Package',
+        accessor: 'package'
+    },
+    {
+        Header: 'Property Type',
+        accessor: 'propertytype'
+    },
+    {
+        Header: 'Property Size',
+        accessor: 'size'
+    },
+    {
+        Header: 'Frequency',
+        accessor: 'frequency'
+    },
+    {
+        Header: 'Amount',
+        disableFilters: true, //disable column filter for particular column
+        accessor: 'amount'
+    },
+]
+
 
 const PGRateCard = () => {
     // 9 dots controls
@@ -12,6 +46,48 @@ const PGRateCard = () => {
         setHandleMoreOptionsClick(false);
     };
     // 9 dots controls
+
+    const { documents: ratecards, error: ratecardserror } = useCollection("ratecard");
+    console.log('ratecards: ', ratecards)
+
+    const [propertyDetails, setPropertyDetails] = useState({
+        // All select type
+        Package: "",
+        PropertyType: "",
+        PropertySize: "",
+        Frequency: "",
+        Amount: "",
+    });
+
+    const [formError, setFormError] = useState(null);
+    const [formSuccess, setFormSuccess] = useState(null);
+    const { addDocument, response: addDocumentResponse } = useFirestore("ratecard");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setFormError(null);
+        let errorFlag = false;
+        const ratecard = {
+            package: propertyDetails.Package,
+            propertytype: propertyDetails.PropertyType,
+            size: propertyDetails.PropertySize,
+            frequency: propertyDetails.Frequency,
+            amount: propertyDetails.Amount
+        };
+
+        if (!errorFlag) {
+            setFormSuccess("Rate Card Added Successfully");
+            setFormError(null)
+            await addDocument(ratecard);
+            if (addDocumentResponse.error) {
+                // navigate("/transaction");
+            } else {
+                // var x = document.getElementById("btn_create").name;
+                // document.getElementById("btn_create").innerHTML = "Properties";
+                // navigate("/dashboard");
+                // setNewProperty(newProperty);
+            }
+        }
+    }
 
     return (
         <div className='top_header_pg pg_bg'>
@@ -69,10 +145,72 @@ const PGRateCard = () => {
                                 <div class="form_field">
                                     <label for="">Package</label>
                                     <div class="form_field_inner">
-                                        <select name="" id="">
-                                            <option value="">Package one</option>
-                                            <option value="">Package two</option>
-                                            <option value="">Package three</option>
+
+                                        <select
+                                            value={propertyDetails && propertyDetails.Package}
+                                            onChange={(e) => {
+                                                setPropertyDetails({
+                                                    ...propertyDetails,
+                                                    Package: e.target.value,
+                                                });
+                                            }}
+                                        >
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Package === "Select Package"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Select Package
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Package === "PMS Premium"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                PMS Premium
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Package === "PMS Light"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                PMS Light
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Package === "PMS Sale"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                PMS Sale
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Package === "Pre PMS"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Pre PMS
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Package === "Rent Only"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Rent Only{" "}
+                                            </option>
+
+
                                         </select>
                                         <div class="field_icon">
                                             <span class="material-symbols-outlined">description</span>
@@ -80,13 +218,295 @@ const PGRateCard = () => {
                                     </div>
                                 </div>
                             </div>
+                            {/* Property Type */}
                             <div className="col-md-2">
                                 <div class="form_field">
                                     <label for="">Property Type</label>
                                     <div class="form_field_inner">
-                                        <select name="" id="">
-                                            <option value="">Villa</option>
-                                            <option value="">Kothi</option>
+
+                                        <select
+                                            value={propertyDetails && propertyDetails.PropertyType}
+                                            onChange={(e) => {
+                                                setPropertyDetails({
+                                                    ...propertyDetails,
+                                                    PropertyType: e.target.value,
+                                                });
+                                            }}
+                                        >
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Select Type"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Select Type
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "High Rise Apt"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                High Rise Apt
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Low Rise Apt"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Low Rise Apt
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Builder Floor"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Builder Floor
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Kothi"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Kothi
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Villa - Simplex"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Villa - Simplex{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Villa - Duplex"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Villa - Duplex{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Pent House - Simplex"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Pent House - Simplex{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Pent House - Duplex"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Pent House - Duplex{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Row House - Simplex"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Row House - Simplex{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertyType === "Row House - Duplex"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Row House - Duplex{" "}
+                                            </option>
+
+                                        </select>
+                                        <div class="field_icon">
+                                            <span class="material-symbols-outlined">description</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* Property Size */}
+                            <div className="col-md-2">
+                                <div class="form_field">
+                                    <label for="">Property Size</label>
+                                    <div class="form_field_inner">
+                                        <select
+                                            value={propertyDetails && propertyDetails.PropertySize}
+                                            onChange={(e) => {
+                                                setPropertyDetails({
+                                                    ...propertyDetails,
+                                                    PropertySize: e.target.value,
+                                                });
+                                            }}
+                                        >
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "Select Size"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Select Size
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "EWS"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                EWS
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "1 RK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                1 RK
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "Studio"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Studio
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "1 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                1 BHK
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "1.5 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                1.5 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "2 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                2 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "2.5 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                2.5 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "3 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                3 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "3.5 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                3.5 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "4 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                4 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "5 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                5 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "6 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                6 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "7 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                7 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "8 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                8 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "9 BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                9 BHK{" "}
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.PropertySize === "9+ BHK"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                9+ BHK{" "}
+                                            </option>
                                         </select>
                                         <div class="field_icon">
                                             <span class="material-symbols-outlined">description</span>
@@ -98,9 +518,52 @@ const PGRateCard = () => {
                                 <div class="form_field">
                                     <label for="">Frequency</label>
                                     <div class="form_field_inner">
-                                        <select name="" id="">
-                                            <option value="">Monthly</option>
-                                            <option value="">Yearly</option>
+
+                                        <select
+                                            value={propertyDetails && propertyDetails.Frequency}
+                                            onChange={(e) => {
+                                                setPropertyDetails({
+                                                    ...propertyDetails,
+                                                    Frequency: e.target.value,
+                                                });
+                                            }}
+                                        >
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Frequency === "Select Frequency"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                Select Frequency
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Frequency === "YEARLY"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                YEARLY
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Frequency === "QUARTERLY"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                QUARTERLY
+                                            </option>
+                                            <option
+                                                defaultValue={
+                                                    propertyDetails && propertyDetails.Frequency === "MONTHLY"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                MONTHLY
+                                            </option>
                                         </select>
                                         <div class="field_icon">
                                             <span class="material-symbols-outlined">description</span>
@@ -112,7 +575,19 @@ const PGRateCard = () => {
                                 <div class="form_field">
                                     <label for="">Amount</label>
                                     <div class="form_field_inner">
-                                        <input required="" type="number" />
+                                        <input
+                                            required
+                                            type="number"
+                                            placeholder="Enter Amount"
+                                            maxLength={100}
+                                            onChange={(e) =>
+                                                setPropertyDetails({
+                                                    ...propertyDetails,
+                                                    Amount: e.target.value.trim(),
+                                                })
+                                            }
+                                            value={propertyDetails && propertyDetails.Amount}
+                                        />
                                         <div class="field_icon">
                                             <span class="material-symbols-outlined">description</span>
                                         </div>
@@ -123,7 +598,11 @@ const PGRateCard = () => {
 
                             <div className="col-md-2">
                                 <div className="theme_btn btn_fill mt-4 text-center">
-                                    Add
+                                    <button className="theme_btn btn_fill" onClick={handleSubmit} style={{
+                                        width: "100%"
+                                    }}>
+                                        {"Add"}
+                                    </button>
                                 </div>
                             </div>
 
@@ -133,8 +612,10 @@ const PGRateCard = () => {
                     </form>
                 </div>
                 <div className="vg22"></div>
+                {ratecards && <ReactTable tableColumns={COLUMNS} tableData={ratecards}></ReactTable>}
 
-                <div className="balance_sheet">
+                {/* <div className="vg22"></div> */}
+                {/* <div className="balance_sheet">
                     <Table responsive="sm">
                         <thead>
                             <tr>
@@ -144,7 +625,7 @@ const PGRateCard = () => {
                                     Property type
                                 </th>
                                 <th>Frequency</th>
-                                <th>Amount</th>                             
+                                <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -152,22 +633,16 @@ const PGRateCard = () => {
                                 <td>1</td>
                                 <td>package one</td>
                                 <td>kothi</td>
-                                <td>monthly</td>                            
+                                <td>monthly</td>
                                 <td>2000</td>
-                              
+
                             </tr>
-
-
-
-
-
                         </tbody>
                     </Table>
-
-                </div>
+                </div> */}
 
             </div>
-        </div>
+        </div >
     )
 }
 
