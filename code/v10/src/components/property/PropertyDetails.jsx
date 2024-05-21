@@ -583,7 +583,36 @@ const PropertyDetails = () => {
             <div className="row">
               <div className="col-xl-12">
                 {propertyDocument && (
-                  <div className="">                  
+                  <div className="">  
+                  <div className="property_card_single quick_detail_show">
+                      <div className="more_detail_card_inner">
+                        <div className="row align-items-center">
+                          <div className="col-md-9">
+                            <div className="left">
+                              <div className="qd_single">
+                                <span class="material-symbols-outlined">
+                                  home
+                                </span>
+                                <h6>
+                                  {propertyDocument.category}
+                                - {propertyDocument.bhk}
+                                </h6>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-3">
+                            <div className="right">
+                              <div className="premium text-center">
+                                <img src="/assets/img/premium_img.jpg" alt="" />
+                                <h6>PMS Premium - PMS After Rent</h6>
+                                <h5>On Boarding 2nd Jan'22</h5>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>                
                     {
                       <div className="property_card_single">
                         <div className="pcs_inner pointer" to="/pdsingle">
