@@ -17,7 +17,7 @@
     border-radius: 0px 0px 16px 16px;
 }
 .bigimage_container .image-gallery-swipe {
-    border-radius: 16px 16px 0px 0px;
+    border-radius: 16px;
     overflow: hidden;
 }
 .bigimage_container .image-gallery-left-nav .image-gallery-svg, .bigimage_container .image-gallery-right-nav .image-gallery-svg {

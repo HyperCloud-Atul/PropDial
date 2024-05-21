@@ -8,7 +8,21 @@
 .pd_single .pcs_inner .pcs_image_area {
     width: 40%;
 }
-
+.pd_single .pcs_inner .pcs_image_area .default_prop_img{
+    width: 100%;
+    aspect-ratio: 3/2;
+    border-radius: 16px;
+}
+.pd_single .upload_prop_img {
+    position: absolute;
+    top: 15px;
+    right: 15px;    
+}
+.pd_single .upload_prop_img img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
 .pd_single .pcs_inner .pcs_main_detail {
     width: 60%;
 }
