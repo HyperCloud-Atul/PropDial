@@ -2,11 +2,61 @@ import React, { useState } from 'react'
 import Table from 'react-bootstrap/Table';
 import { Link, useParams } from "react-router-dom";
 import { useFirestore } from "../../hooks/useFirestore";
+import ReactTable from '../../components/ReactTable';
+import { useDocument } from '../../hooks/useDocument';
+import { useCollection } from '../../hooks/useCollection';
+
+const COLUMNS = [
+    // {
+    //     Header: 'Id',
+    //     accessor: 'id'
+    // },
+    {
+        Header: 'Package',
+        accessor: 'package'
+    },
+    {
+        Header: 'Property Type',
+        accessor: 'propertytype'
+    },
+    {
+        Header: 'Property Size',
+        accessor: 'size'
+    },
+    {
+        Header: 'Frequency',
+        accessor: 'frequency'
+    },
+    {
+        Header: 'Amount',
+        disableFilters: true, //disable column filter for particular column
+        accessor: 'amount'
+    },
+]
 
 const PGTransactions = () => {
 
     const { propertyid } = useParams();
     console.log("property id: ", propertyid)
+
+
+    const { documents: transactions, error: transactionserror } = useCollection("transactions", ["propertyid", "==", propertyid],);
+    // const { documents: dbticketdocuments, error: dbticketerror } = useCollection(
+    //     "tickets",
+    //     ["postedBy", "==", "Propdial"],
+    //     ["updatedAt", "desc"]
+    // );
+    console.log('transactions: ', transactions)
+
+    const [propertyDetails, setPropertyDetails] = useState({
+        // All select type
+        Package: "",
+        PropertyType: "",
+        PropertySize: "",
+        Frequency: "",
+        Amount: "",
+    });
+
 
     const [paymentForm, ShowPaymentForm] = useState(false);
 
@@ -24,7 +74,7 @@ const PGTransactions = () => {
         ShowPaymentForm(!paymentForm);
     };
 
-    console.log("paymentform", paymentForm);
+    // console.log("paymentform", paymentForm);
 
     const [formError, setFormError] = useState(null);
     const [formSuccess, setFormSuccess] = useState(null);
@@ -254,6 +304,9 @@ const PGTransactions = () => {
                         </form>
                     </div>
                 )}
+                {!paymentForm && transactions && <ReactTable tableColumns={COLUMNS} tableData={transactions}></ReactTable>}
+
+
                 {!paymentForm && (
                     <div className="balance_sheet">
                         <Table responsive="sm">

@@ -31,13 +31,6 @@ export default function PGProfile() {
   // console.log('user:', user)
 
   const { updateDocument, response } = useFirestore("users");
-  // const { document: userDocument, error: userDocumentError } = useDocument(
-  //   "users",
-  //   user.uid
-  // );
-
-  // console.log('user details:', user.uid)
-  // const [userFullName, setUserFullName] = useState(user.displayName);
 
   const [userPhoneNumber, setUserPhoneNumber] = useState(user.phoneNumber);
 
@@ -369,8 +362,8 @@ export default function PGProfile() {
                 <span className="r14" >Existing no : {userPhoneNumber} </span>
                 <div className="vg12"></div>
                 <div className="m22">
-                Enter New Number
-                </div>              
+                  Enter New Number
+                </div>
 
                 <div className="sroll-outter-div">
                   <div className="sroll-inner-div">
@@ -379,7 +372,7 @@ export default function PGProfile() {
 
                       <form
                         action=""
-                        onSubmit={handleSendVerificationCode}                        
+                        onSubmit={handleSendVerificationCode}
                       >
                         <div className="form_field label_top">
                           <PhoneInput
@@ -399,12 +392,12 @@ export default function PGProfile() {
                               autoFocus: true,
                             }}
                           ></PhoneInput>
-                             <div id="id_sendotpButton" className="change-number-button-div">
-                          <button onClick={closeChangeNumber} className="theme_btn no_icon btn_red" > Cancel</button>
-                          <button className="theme_btn btn_fill no_icon">Send OTP</button>
+                          <div id="id_sendotpButton" className="change-number-button-div">
+                            <button onClick={closeChangeNumber} className="theme_btn no_icon btn_red" > Cancel</button>
+                            <button className="theme_btn btn_fill no_icon">Send OTP</button>
+                          </div>
                         </div>
-                        </div>                    
-                     
+
                       </form>
 
                     </div>
@@ -418,7 +411,7 @@ export default function PGProfile() {
                           value={verificationCode}
                           onChange={(e) => setVerificationCode(e.target.value)}
                           style={{
-                            background:"none"
+                            background: "none"
                           }}
                         />
                         {/* new code */}
@@ -440,7 +433,7 @@ export default function PGProfile() {
 
           </div>
         </div>
-      </section>    
+      </section>
       <div className="vg22"></div>
       <div className="container">
         <div className="visit_dashboard">

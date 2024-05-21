@@ -130,6 +130,7 @@ const PGRateCard = () => {
                 {/* 9 dots html  */}
 
                 <div className="vg10"></div>
+                {/* Form to add Rate card  */}
                 <div className="add_rate_form">
                     <form action="">
                         <div className="row" style={{
