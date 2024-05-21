@@ -39,7 +39,6 @@ const PropertyDetails = () => {
     propertyid
   );
 
-  console.log("propertiesdocument:", propertyDocument);
   const [propertyManagerDoc, setpropertyManagerDoc] = useState(null);
   const [propertyOwnerDoc, setpropertyOwnerDoc] = useState(null);
   const [propertyCoOwnerDoc, setpropertyCoOwnerDoc] = useState(null);
@@ -387,61 +386,54 @@ const PropertyDetails = () => {
   };
   // add from field of additonal info code end
 
-  // START CODE FOR ADD MORE IMAGE IN GALLERY
+  // START CODE FOR ADD NEW IMAGES
   const fileInputRef = useRef(null);
   const [productImages, setProductImages] = useState([]);
-
-  // CODE FOR ADD IMAGE IN GALLERY
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const handleAddMoreImages = () => {
     fileInputRef.current.click();
   };
 
-  // add new images
-  const handleImageChange = async (event) => {
-    const files = event.target.files;
-    const updatedImages = []; // Create a new array to store updated images
-
-    try {
-      // Upload new images to Firebase Storage and retrieve download URLs
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const storageRef = projectStorage.ref(
-          `property_img/${propertyid}/${file.name}`
-        );
-        await storageRef.put(file);
-
-        // Get the download URL for the uploaded file
-        const downloadURL = await storageRef.getDownloadURL();
-
-        // Push the download URL to the updatedImages array
-        updatedImages.push(downloadURL);
-      }
-
-      // Get the current images array from the document
-      const currentImages = propertyDocument.images || [];
-
-      // Combine the current images with the new images
-      const allImages = [...currentImages, ...updatedImages];
-
-      // Update the "images" array in Firestore
-      await projectFirestore
-        .collection("properties")
-        .doc(propertyid)
-        .update({ images: allImages });
-
-      // Update the state with the updatedImages array
-      setProductImages(allImages);
-    } catch (error) {
-      console.error("Error uploading images:", error);
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(URL.createObjectURL(file));
+      setIsConfirmVisible(true);
     }
   };
 
-  // Fetch images array from the document state
+  const handleConfirmUpload = async () => {
+    if (selectedImage) {
+      setIsUploading(true); // Set isUploading to false when upload completes
+      try {
+        const file = fileInputRef.current.files[0];
+        const storageRef = projectStorage.ref(
+          `properties/${propertyid}/${file.name}`
+        );
+        await storageRef.put(file);
+
+        const downloadURL = await storageRef.getDownloadURL();
+        const updatedImages = [...(propertyDocument.images || []), downloadURL];
+
+        await projectFirestore
+          .collection("properties")
+          .doc(propertyid)
+          .update({ images: updatedImages });
+        setProductImages(updatedImages);
+
+        setSelectedImage(null);
+        setIsConfirmVisible(false);
+        setIsUploading(false); // Set isUploading to false when upload completes
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    }
+  };
+
   const images = (propertyDocument && propertyDocument.images) || [];
-
-  const filteredImages = images.filter((url) => url);
-
-  //END CODE FOR ADD IMAGE IN GALLERY
+  // END CODE FOR ADD NEW IMAGES
 
   return (
     <>
@@ -596,8 +588,8 @@ const PropertyDetails = () => {
                                   home
                                 </span>
                                 <h6>
-                                  {propertyDocument.category}
-                                  - {propertyDocument.bhk}
+                                  {propertyDocument.category}-{" "}
+                                  {propertyDocument.bhk}
                                 </h6>
                               </div>
                             </div>
@@ -609,360 +601,425 @@ const PropertyDetails = () => {
                                 <h6>PMS Premium - PMS After Rent</h6>
                                 <h5>On Boarding 2nd Jan'22</h5>
                               </div>
-
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    {
-                      <div className="property_card_single">
-                        <div className="pcs_inner pointer" to="/pdsingle">
-                          <div className="pcs_image_area relative">
-                            {filteredImages.length > 0 ? (
-                              <div className="bigimage_container">
-                                <Gallery
-                                  items={filteredImages.map((url) => ({
+
+                    <div className="property_card_single">
+                      <div className="pcs_inner pointer" to="/pdsingle">
+                        {/* <div className="pcs_image_area relative">
+                          {filteredImages.length > 0 ? (
+                            <div className="bigimage_container">
+                              <Gallery
+                                items={filteredImages.map((url) => ({
+                                  original: url,
+                                  thumbnail: url,
+                                }))}
+                                slideDuration={1000}
+                              />
+                            </div>
+                          ) : (
+                            <img
+                              className="default_prop_img"
+                              src="/assets/img/admin_banner.jpg"
+                              alt=""
+                            />
+                          )}
+                          {user && user.role == "admin" && (
+                            <div className="upload_prop_img">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                id="imageInput"
+                                multiple
+                                onChange={handleImageChange}
+                                style={{ display: "none" }}
+                                ref={fileInputRef}
+                              />
+                              <img
+                                src="/assets/img/upload_img_small.png"
+                                alt=""
+                                onClick={handleAddMoreImages}
+                              />
+                            </div>
+                          )}
+                        </div> */}
+
+                        <div className="pcs_image_area relative">
+                          {images.length > 0 ? (
+                            <div className="bigimage_container">
+                              {" "}
+                              <Gallery
+                                style={{ background: "red" }}
+                                items={images
+                                  .filter((url) => url)
+                                  .map((url, index) => ({
                                     original: url,
                                     thumbnail: url,
                                   }))}
-                                  slideDuration={1000}
-                                />
-                              </div>
-                            )
-                              : (
-                                <img className="default_prop_img" src="/assets/img/admin_banner.jpg" alt="" />
-                              )
-                            }
-
-
-                            {/* code for adding more images */}
-                            {user && user.role == "admin" && (
-                              <div className="upload_prop_img"
-
-                              >
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  id="imageInput"
-                                  multiple
-                                  onChange={handleImageChange}
-                                  style={{ display: "none" }}
-                                  ref={fileInputRef}
-                                />
-                                <img src="/assets/img/upload_img_small.png" alt="" onClick={handleAddMoreImages} />
-                              </div>
-                            )}
-
-                          </div>
-
-                          <div className="pcs_main_detail">
-                            <div className="pmd_top">
-                              <h4>
-                                {propertyDocument.unitNumber},{" "}
-                                {propertyDocument.society}
-                              </h4>
-                              <h6>
-                                {propertyDocument.status.toUpperCase() ===
-                                  "AVAILABLE FOR RENT" ||
-                                  propertyDocument.status.toUpperCase() ===
-                                  "AVAILABLE FOR SALE" ? (
-                                  <span
-                                    style={{
-                                      textAlign: "center",
-                                      color: "white",
-                                      fontWeight: "bolder",
-                                      padding: "2px 8px",
-                                      borderRadius: "8px",
-                                      background: "red",
-                                    }}
-                                  >
-                                    {" "}
-                                    {propertyDocument.status}
-                                  </span>
-                                ) : (
-                                  <span
-                                    style={{
-                                      textAlign: "center",
-                                      color: "black",
-                                      fontWeight: "bolder",
-                                      padding: "2px 8px",
-                                      borderRadius: "8px",
-                                      background: "lightgreen",
-                                    }}
-                                  >
-                                    {" "}
-                                    {propertyDocument.status}
-                                  </span>
-                                )}
-                              </h6>
-                              <h4 className="property_name">
-                                {propertyDocument.bhk} |{" "}
-                                {propertyDocument.furnishing === ""
-                                  ? ""
-                                  : propertyDocument.furnishing +
-                                  " Furnished | "}{" "}
-                                for {propertyDocument.purpose}
-                                <br />
-                              </h4>
-                              <h6 className="property_location">
-                                {propertyDocument.locality},{" "}
-                                {propertyDocument.city},{" "}
-                                {propertyDocument.state}
-                              </h6>
+                                slideDuration={1000}
+                              />
                             </div>
-                            <div className="divider"></div>
-                            <div className="pmd_section2 row">
+                          ) : (
+                            <img
+                              className="default_prop_img"
+                              src="/assets/img/admin_banner.jpg"
+                              alt=""
+                            />
+                          )}
+                          {user && user.role === "admin" && (
+                            <div
+                              className="d-flex align-items-center justify-content-center gap-2"
+                              style={{ margin: "15px 0px" }}
+                            >
+                              <input
+                                type="file"
+                                accept="image/*"
+                                id="imageInput"
+                                onChange={handleImageChange}
+                                style={{ display: "none" }}
+                                ref={fileInputRef}
+                              />
+                              <div className="d-flex flex-column align-items-center justify-content-center">
+                                {!isUploading && (
+                                  <button
+                                    className="btn_fill_add_property_images mb-2" // Use mb-2 for spacing between buttons
+                                    onClick={handleAddMoreImages}
+                                  >
+                                    {isConfirmVisible
+                                      ? "Replace Image"
+                                      : "Add More Images"}
+                                  </button>
+                                )}
+
+                                {selectedImage && (
+                                  <button
+                                    className="btn_fill_add_property_images"
+                                    onClick={handleConfirmUpload}
+                                    disabled={!isConfirmVisible || isUploading} // Disable button when uploading
+                                  >
+                                    {isUploading ? "Uploading..." : "Confirm"}
+                                  </button>
+                                )}
+                              </div>
+                              {selectedImage && (
+                                <div>
+                                  <img
+                                    src={selectedImage}
+                                    alt="Selected img"
+                                    style={{ maxWidth: "100px" }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div className="pcs_main_detail">
+                          <div className="pmd_top">
+                            <h4>
+                              {propertyDocument.unitNumber},{" "}
+                              {propertyDocument.society}
+                            </h4>
+                            <h6>
+                              {propertyDocument.status.toUpperCase() ===
+                                "AVAILABLE FOR RENT" ||
+                              propertyDocument.status.toUpperCase() ===
+                                "AVAILABLE FOR SALE" ? (
+                                <span
+                                  style={{
+                                    textAlign: "center",
+                                    color: "white",
+                                    fontWeight: "bolder",
+                                    padding: "2px 8px",
+                                    borderRadius: "8px",
+                                    background: "red",
+                                  }}
+                                >
+                                  {" "}
+                                  {propertyDocument.status}
+                                </span>
+                              ) : (
+                                <span
+                                  style={{
+                                    textAlign: "center",
+                                    color: "black",
+                                    fontWeight: "bolder",
+                                    padding: "2px 8px",
+                                    borderRadius: "8px",
+                                    background: "lightgreen",
+                                  }}
+                                >
+                                  {" "}
+                                  {propertyDocument.status}
+                                </span>
+                              )}
+                            </h6>
+                            <h4 className="property_name">
+                              {propertyDocument.bhk} |{" "}
+                              {propertyDocument.furnishing === ""
+                                ? ""
+                                : propertyDocument.furnishing +
+                                  " Furnished | "}{" "}
+                              for {propertyDocument.purpose}
+                              <br />
+                            </h4>
+                            <h6 className="property_location">
+                              {propertyDocument.locality},{" "}
+                              {propertyDocument.city}, {propertyDocument.state}
+                            </h6>
+                          </div>
+                          <div className="divider"></div>
+                          <div className="pmd_section2 row">
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <span className="currency">₹</span>
+                                {propertyDocument.demandPrice}/-
+                                <span className="price"></span>
+                              </h4>
+                              <h6>Demand Price</h6>
+                              {propertyDocument.superArea !== "" ? (
+                                <h6>
+                                  {propertyDocument.superArea}{" "}
+                                  {propertyDocument.superAreaUnit}
+                                </h6>
+                              ) : (
+                                <h6>
+                                  {propertyDocument.superArea}{" "}
+                                  {propertyDocument.superAreaUnit}
+                                </h6>
+                              )}
+                            </div>
+                            {propertyDocument.purpose.toUpperCase() ===
+                              "RENT" && (
                               <div className="pdms_single col-4">
                                 <h4>
                                   <span className="currency">₹</span>
-                                  {propertyDocument.demandPrice}/-
-                                  <span className="price"></span>
+                                  {propertyDocument.maintenanceCharges}/-{" "}
+                                  <span style={{ fontSize: "0.8rem" }}>
+                                    {" "}
+                                    {propertyDocument.maintenanceFlag}
+                                  </span>
                                 </h4>
-                                <h6>Demand Price</h6>
-                                {propertyDocument.superArea !== "" ? (
-                                  <h6>
-                                    {propertyDocument.superArea}{" "}
-                                    {propertyDocument.superAreaUnit}
-                                  </h6>
-                                ) : (
-                                  <h6>
-                                    {propertyDocument.superArea}{" "}
-                                    {propertyDocument.superAreaUnit}
-                                  </h6>
-                                )}
+                                <h6>
+                                  {propertyDocument.maintenanceChargesFrequency}{" "}
+                                  Maintenance
+                                </h6>
                               </div>
-                              {propertyDocument.purpose.toUpperCase() ===
-                                "RENT" && (
-                                  <div className="pdms_single col-4">
-                                    <h4>
-                                      <span className="currency">₹</span>
-                                      {propertyDocument.maintenanceCharges}/-{" "}
-                                      <span style={{ fontSize: "0.8rem" }}>
-                                        {" "}
-                                        {propertyDocument.maintenanceFlag}
-                                      </span>
-                                    </h4>
-                                    <h6>
-                                      {
-                                        propertyDocument.maintenanceChargesFrequency
-                                      }{" "}
-                                      Maintenance
-                                    </h6>
-                                  </div>
-                                )}
-                              {propertyDocument.purpose.toUpperCase() ===
-                                "RENT" && (
-                                  <div className="pdms_single col-4">
-                                    <h4>
-                                      <span className="currency">₹</span>
-                                      {propertyDocument.securityDeposit}/-
-                                    </h4>
-                                    <h6>Security Deposit</h6>
-                                  </div>
-                                )}
+                            )}
+                            {propertyDocument.purpose.toUpperCase() ===
+                              "RENT" && (
+                              <div className="pdms_single col-4">
+                                <h4>
+                                  <span className="currency">₹</span>
+                                  {propertyDocument.securityDeposit}/-
+                                </h4>
+                                <h6>Security Deposit</h6>
+                              </div>
+                            )}
 
-                              <div className="pdms_single col-4"></div>
+                            <div className="pdms_single col-4"></div>
+                          </div>
+                          <div className="divider"></div>
+                          <div className="pmd_section2 pmd_section3 row">
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <img src="/assets/img/new_carpet.png"></img>
+                                {propertyDocument.superArea}{" "}
+                                {propertyDocument.superAreaUnit}
+                              </h4>
+                              <h6>Super Area</h6>
                             </div>
-                            <div className="divider"></div>
-                            <div className="pmd_section2 pmd_section3 row">
-                              <div className="pdms_single col-4">
-                                <h4>
-                                  <img src="/assets/img/new_carpet.png"></img>
-                                  {propertyDocument.superArea}{" "}
-                                  {propertyDocument.superAreaUnit}
-                                </h4>
-                                <h6>Super Area</h6>
-                              </div>
-                              <div className="pdms_single col-4">
-                                <h4>
-                                  <img src="/assets/img/new_bedroom.png"></img>
-                                  {propertyDocument.numberOfBedrooms}
-                                </h4>
-                                <h6>Bedrooms</h6>
-                              </div>
-                              <div className="pdms_single col-4">
-                                <h4>
-                                  <img src="/assets/img/new_bathroom.png"></img>
-                                  {propertyDocument.numberOfBathrooms}
-                                </h4>
-                                <h6>Bathroom</h6>
-                              </div>
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <img src="/assets/img/new_bedroom.png"></img>
+                                {propertyDocument.numberOfBedrooms}
+                              </h4>
+                              <h6>Bedrooms</h6>
                             </div>
-                            <div className="divider"></div>
-                            <div className="pmd_section2 pmd_section3 row">
-                              <div className="pdms_single col-4">
-                                <h4>
-                                  <img src="/assets/img/new_super_area.png"></img>
-                                  {propertyDocument.carpetArea}{" "}
-                                  {propertyDocument.carpetAreaUnit}
-                                </h4>
-                                <h6>Carpet Area</h6>
-                              </div>
-                              <div className="pdms_single col-4">
-                                <h4>
-                                  <img src="/assets/img/new_bhk.png"></img>
-                                  {propertyDocument.bhk}
-                                </h4>
-                                <h6>BHK</h6>
-                              </div>
-                              <div className="pdms_single col-4">
-                                <h4>
-                                  <img src="/assets/img/new_furniture.png"></img>
-                                  {propertyDocument.furnishing}
-                                </h4>
-                                <h6>Furnishing</h6>
-                              </div>
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <img src="/assets/img/new_bathroom.png"></img>
+                                {propertyDocument.numberOfBathrooms}
+                              </h4>
+                              <h6>Bathroom</h6>
                             </div>
-                            <div className="pmd_section4">
-                              <div className="left">
-                                <span
-                                  className="material-symbols-outlined mr-2"
+                          </div>
+                          <div className="divider"></div>
+                          <div className="pmd_section2 pmd_section3 row">
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <img src="/assets/img/new_super_area.png"></img>
+                                {propertyDocument.carpetArea}{" "}
+                                {propertyDocument.carpetAreaUnit}
+                              </h4>
+                              <h6>Carpet Area</h6>
+                            </div>
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <img src="/assets/img/new_bhk.png"></img>
+                                {propertyDocument.bhk}
+                              </h4>
+                              <h6>BHK</h6>
+                            </div>
+                            <div className="pdms_single col-4">
+                              <h4>
+                                <img src="/assets/img/new_furniture.png"></img>
+                                {propertyDocument.furnishing}
+                              </h4>
+                              <h6>Furnishing</h6>
+                            </div>
+                          </div>
+                          <div className="pmd_section4">
+                            <div className="left">
+                              <span
+                                className="material-symbols-outlined mr-2"
+                                style={{
+                                  marginRight: "3px",
+                                }}
+                              >
+                                favorite
+                              </span>
+                              <span
+                                className="material-symbols-outlined"
+                                onClick={handleShareClick}
+                              >
+                                share
+                              </span>
+                            </div>
+
+                            {!(
+                              (user && user.role === "owner") ||
+                              (user && user.role === "coowner") ||
+                              (user && user.role === "admin")
+                            ) && (
+                              <div className="right">
+                                <a
+                                  href="."
+                                  className="theme_btn no_icon btn_fill"
                                   style={{
-                                    marginRight: "3px",
+                                    marginRight: "10px",
                                   }}
                                 >
-                                  favorite
-                                </span>
-                                <span
-                                  className="material-symbols-outlined"
-                                  onClick={handleShareClick}
+                                  {" "}
+                                  Contact Agent
+                                </a>
+                                <a
+                                  href="."
+                                  className="theme_btn no_icon btn_border"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#exampleModal"
                                 >
-                                  share
-                                </span>
-                              </div>
-
-                              {!(
-                                (user && user.role === "owner") ||
-                                (user && user.role === "coowner") ||
-                                (user && user.role === "admin")
-                              ) && (
-                                  <div className="right">
-                                    <a
-                                      href="."
-                                      className="theme_btn no_icon btn_fill"
-                                      style={{
-                                        marginRight: "10px",
-                                      }}
-                                    >
-                                      {" "}
-                                      Contact Agent
-                                    </a>
-                                    <a
-                                      href="."
-                                      className="theme_btn no_icon btn_border"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#exampleModal"
-                                    >
-                                      {" "}
-                                      Enquire Now
-                                    </a>
-                                    <div
-                                      className="modal fade"
-                                      id="exampleModal"
-                                      tabindex="-1"
-                                      aria-labelledby="exampleModalLabel"
-                                      aria-hidden="true"
-                                    >
-                                      <div className="modal-dialog">
-                                        <div className="modal-content relative">
-                                          <span
-                                            className="material-symbols-outlined close_modal"
-                                            data-bs-dismiss="modal"
-                                          >
-                                            close
-                                          </span>
-                                          <div className="modal-body">
-                                            <form>
-                                              <div className="row">
-                                                <div className="col-sm-12">
-                                                  <div className="section_title mb-4">
-                                                    <h3>Enquiry</h3>
-                                                    <h6 className="modal_subtitle">
-                                                      Thank you for your interest
-                                                      in reaching out to us.
-                                                      Please use the form below to
-                                                      submit any question.
-                                                    </h6>
-                                                  </div>
-                                                </div>
-                                                <div className="col-sm-12">
-                                                  <div className="form_field st-2">
-                                                    <div className="field_inner select">
-                                                      <select>
-                                                        <option
-                                                          value=""
-                                                          disabled
-                                                          selected
-                                                        >
-                                                          I am
-                                                        </option>
-
-                                                        <option>Tenant</option>
-                                                        <option>Agent</option>
-                                                      </select>
-                                                      <div className="field_icon">
-                                                        <span className="material-symbols-outlined">
-                                                          person
-                                                        </span>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="col-sm-12">
-                                                  <div className="form_field st-2">
-                                                    <div className="field_inner">
-                                                      <input
-                                                        type="text"
-                                                        placeholder="Name"
-                                                      />
-                                                      <div className="field_icon">
-                                                        <span className="material-symbols-outlined">
-                                                          person
-                                                        </span>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="col-sm-12">
-                                                  <div className="form_field st-2">
-                                                    <div className="field_inner">
-                                                      <input
-                                                        type="text"
-                                                        placeholder="Phone Number"
-                                                      />
-                                                      <div className="field_icon">
-                                                        <span className="material-symbols-outlined">
-                                                          call
-                                                        </span>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="col-sm-12">
-                                                  <div className="submit_btn mt-4">
-                                                    <button
-                                                      type="submit"
-                                                      className="modal_btn theme_btn no_icon btn_fill"
+                                  {" "}
+                                  Enquire Now
+                                </a>
+                                <div
+                                  className="modal fade"
+                                  id="exampleModal"
+                                  tabindex="-1"
+                                  aria-labelledby="exampleModalLabel"
+                                  aria-hidden="true"
+                                >
+                                  <div className="modal-dialog">
+                                    <div className="modal-content relative">
+                                      <span
+                                        className="material-symbols-outlined close_modal"
+                                        data-bs-dismiss="modal"
+                                      >
+                                        close
+                                      </span>
+                                      <div className="modal-body">
+                                        <form>
+                                          <div className="row">
+                                            <div className="col-sm-12">
+                                              <div className="section_title mb-4">
+                                                <h3>Enquiry</h3>
+                                                <h6 className="modal_subtitle">
+                                                  Thank you for your interest in
+                                                  reaching out to us. Please use
+                                                  the form below to submit any
+                                                  question.
+                                                </h6>
+                                              </div>
+                                            </div>
+                                            <div className="col-sm-12">
+                                              <div className="form_field st-2">
+                                                <div className="field_inner select">
+                                                  <select>
+                                                    <option
+                                                      value=""
+                                                      disabled
+                                                      selected
                                                     >
-                                                      Submit
-                                                    </button>
+                                                      I am
+                                                    </option>
+
+                                                    <option>Tenant</option>
+                                                    <option>Agent</option>
+                                                  </select>
+                                                  <div className="field_icon">
+                                                    <span className="material-symbols-outlined">
+                                                      person
+                                                    </span>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </form>
+                                            </div>
+                                            <div className="col-sm-12">
+                                              <div className="form_field st-2">
+                                                <div className="field_inner">
+                                                  <input
+                                                    type="text"
+                                                    placeholder="Name"
+                                                  />
+                                                  <div className="field_icon">
+                                                    <span className="material-symbols-outlined">
+                                                      person
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div className="col-sm-12">
+                                              <div className="form_field st-2">
+                                                <div className="field_inner">
+                                                  <input
+                                                    type="text"
+                                                    placeholder="Phone Number"
+                                                  />
+                                                  <div className="field_icon">
+                                                    <span className="material-symbols-outlined">
+                                                      call
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div className="col-sm-12">
+                                              <div className="submit_btn mt-4">
+                                                <button
+                                                  type="submit"
+                                                  className="modal_btn theme_btn no_icon btn_fill"
+                                                >
+                                                  Submit
+                                                </button>
+                                              </div>
+                                            </div>
                                           </div>
-                                          )
-                                        </div>
+                                        </form>
                                       </div>
+                                      )
                                     </div>
                                   </div>
-                                )}
-                            </div>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
-                    }
+                    </div>
+
                     {user &&
                       (user.role === "owner" ||
                         user.role === "coowner" ||
@@ -1102,8 +1159,9 @@ const PropertyDetails = () => {
                           )}
                         </div>
                         <div
-                          className={`tenant_detail ${isTenantEditing ? "td_edit" : ""
-                            } `}
+                          className={`tenant_detail ${
+                            isTenantEditing ? "td_edit" : ""
+                          } `}
                         >
                           <input
                             type="text"
@@ -1301,12 +1359,8 @@ const PropertyDetails = () => {
                                 </span>
                                 <span className="in_single">2 fan</span>
                                 <span className="in_single">2 almira</span>
-                                <span className="in_single">
-                                  2 fan
-                                </span>
-                                <span className="in_single">
-                                  2 almira
-                                </span>
+                                <span className="in_single">2 fan</span>
+                                <span className="in_single">2 almira</span>
                               </div>
                             </div>
                           </div>
@@ -1317,161 +1371,38 @@ const PropertyDetails = () => {
                     {((user && user.role === "owner") ||
                       (user && user.role === "coowner") ||
                       (user && user.role === "admin")) && (
-                        <div className="property_card_single">
-                          <div className="more_detail_card_inner">
-                            <div className="row no-gutters row_reverse_767">
-                              <div className="col-md-6">
-                                <div className="property_full_address d_none_767">
-                                  <h2 className="card_title">
-                                    {propertyDocument.unitNumber},{" "}
-                                    {propertyDocument.society}
-                                  </h2>
-                                  <h3>
-                                    {propertyDocument.locality},{" "}
-                                    {propertyDocument.city}{" "}
-                                  </h3>
-                                  <h3>
-                                    {propertyDocument.state},{" "}
-                                    {propertyDocument.country},{" "}
-                                    {propertyDocument.pinCode}
-                                  </h3>
-                                </div>
-                                <div className="property_connected_people userlist">
-                                  <div className="item pcp_single">
-                                    <div className="property_people_designation">
-                                      Property Manager
-                                    </div>
-                                    <div className="single_user">
-                                      <div className="left">
-                                        <div className="user_img">
-                                          {propertyManagerDoc && (
-                                            <img
-                                              src={
-                                                propertyManagerDoc &&
-                                                propertyManagerDoc.photoURL
-                                              }
-                                              alt=""
-                                            />
-                                          )}
-                                        </div>
-                                      </div>
-                                      <div className="right">
-                                        <h5
-                                          onClick={
-                                            user && user.role === "admin"
-                                              ? () =>
-                                                openChangeUser(
-                                                  "propertyManager"
-                                                )
-                                              : ""
-                                          }
-                                          className={
-                                            user && user.role === "admin"
-                                              ? "pointer"
-                                              : ""
-                                          }
-                                        >
-                                          {propertyManagerDoc &&
-                                            propertyManagerDoc.fullName}
-                                          {user && user.role === "admin" && (
-                                            <span className="material-symbols-outlined click_icon text_near_icon">
-                                              edit
-                                            </span>
-                                          )}
-                                        </h5>
-
-                                        <h6>
-                                          {propertyManagerDoc &&
-                                            propertyManagerDoc.phoneNumber.replace(
-                                              /(\d{2})(\d{5})(\d{5})/,
-                                              "+$1 $2-$3"
-                                            )}
-                                        </h6>
-                                      </div>
-                                    </div>
-
-                                    <div className="contacts">
-                                      {propertyManagerDoc && (
-                                        <Link
-                                          to={
-                                            "tel:" +
-                                            propertyManagerDoc.phoneNumber
-                                          }
-                                          className="contacts_single"
-                                        >
-                                          <div className="icon">
-                                            <span className="material-symbols-outlined">
-                                              call
-                                            </span>
-                                          </div>
-                                          <h6>Call</h6>
-                                        </Link>
-                                      )}
-                                      {propertyManagerDoc && (
-                                        <Link
-                                          to={
-                                            "https://wa.me/" +
-                                            propertyManagerDoc.phoneNumber
-                                          }
-                                          className="contacts_single"
-                                        >
-                                          <div className="icon">
-                                            <img
-                                              src="/assets/img/whatsapp.png"
-                                              alt=""
-                                            />
-                                          </div>
-                                          <h6>Whatsapp</h6>
-                                        </Link>
-                                      )}
-                                      {propertyManagerDoc &&
-                                        propertyManagerDoc.email !== "" && (
-                                          <Link
-                                            to={
-                                              "mailto:" + propertyManagerDoc.email
-                                            }
-                                            className="contacts_single"
-                                          >
-                                            <div className="icon">
-                                              <span className="material-symbols-outlined">
-                                                mail
-                                              </span>
-                                            </div>
-                                            <h6>Email</h6>
-                                          </Link>
-                                        )}
-                                    </div>
-                                  </div>
-                                </div>
+                      <div className="property_card_single">
+                        <div className="more_detail_card_inner">
+                          <div className="row no-gutters row_reverse_767">
+                            <div className="col-md-6">
+                              <div className="property_full_address d_none_767">
+                                <h2 className="card_title">
+                                  {propertyDocument.unitNumber},{" "}
+                                  {propertyDocument.society}
+                                </h2>
+                                <h3>
+                                  {propertyDocument.locality},{" "}
+                                  {propertyDocument.city}{" "}
+                                </h3>
+                                <h3>
+                                  {propertyDocument.state},{" "}
+                                  {propertyDocument.country},{" "}
+                                  {propertyDocument.pinCode}
+                                </h3>
                               </div>
-                              <div className="col-md-6">
-                                <div className="property_full_address d_none d_block_767">
-                                  <h2 className="card_title">
-                                    {propertyDocument.unitNumber},{" "}
-                                    {propertyDocument.society}
-                                  </h2>
-                                  <h3>
-                                    {propertyDocument.locality},{" "}
-                                    {propertyDocument.city}{" "}
-                                  </h3>
-                                  <h3>
-                                    {propertyDocument.state},{" "}
-                                    {propertyDocument.country},{" "}
-                                    {propertyDocument.pinCode}
-                                  </h3>
-                                </div>
-                                <div className="userlist property_owners">
+                              <div className="property_connected_people userlist">
+                                <div className="item pcp_single">
+                                  <div className="property_people_designation">
+                                    Property Manager
+                                  </div>
                                   <div className="single_user">
-                                    <div className="property_people_designation">
-                                      Owner
-                                    </div>
                                     <div className="left">
                                       <div className="user_img">
-                                        {propertyOwnerDoc && (
+                                        {propertyManagerDoc && (
                                           <img
                                             src={
-                                              propertyOwnerDoc &&
-                                              propertyOwnerDoc.photoURL
+                                              propertyManagerDoc &&
+                                              propertyManagerDoc.photoURL
                                             }
                                             alt=""
                                           />
@@ -1483,7 +1414,9 @@ const PropertyDetails = () => {
                                         onClick={
                                           user && user.role === "admin"
                                             ? () =>
-                                              openChangeUser("propertyOwner")
+                                                openChangeUser(
+                                                  "propertyManager"
+                                                )
                                             : ""
                                         }
                                         className={
@@ -1492,8 +1425,8 @@ const PropertyDetails = () => {
                                             : ""
                                         }
                                       >
-                                        {propertyOwnerDoc &&
-                                          propertyOwnerDoc.fullName}
+                                        {propertyManagerDoc &&
+                                          propertyManagerDoc.fullName}
                                         {user && user.role === "admin" && (
                                           <span className="material-symbols-outlined click_icon text_near_icon">
                                             edit
@@ -1502,21 +1435,142 @@ const PropertyDetails = () => {
                                       </h5>
 
                                       <h6>
-                                        {propertyOwnerDoc &&
-                                          propertyOwnerDoc.phoneNumber.replace(
+                                        {propertyManagerDoc &&
+                                          propertyManagerDoc.phoneNumber.replace(
                                             /(\d{2})(\d{5})(\d{5})/,
                                             "+$1 $2-$3"
                                           )}
                                       </h6>
-                                      <h6>
-                                        {propertyOwnerDoc &&
-                                          propertyOwnerDoc.city}
-                                        ,{" "}
-                                        {propertyOwnerDoc &&
-                                          propertyOwnerDoc.country}
-                                      </h6>
+                                    </div>
+                                  </div>
 
-                                      {/* <div className="wc">
+                                  <div className="contacts">
+                                    {propertyManagerDoc && (
+                                      <Link
+                                        to={
+                                          "tel:" +
+                                          propertyManagerDoc.phoneNumber
+                                        }
+                                        className="contacts_single"
+                                      >
+                                        <div className="icon">
+                                          <span className="material-symbols-outlined">
+                                            call
+                                          </span>
+                                        </div>
+                                        <h6>Call</h6>
+                                      </Link>
+                                    )}
+                                    {propertyManagerDoc && (
+                                      <Link
+                                        to={
+                                          "https://wa.me/" +
+                                          propertyManagerDoc.phoneNumber
+                                        }
+                                        className="contacts_single"
+                                      >
+                                        <div className="icon">
+                                          <img
+                                            src="/assets/img/whatsapp.png"
+                                            alt=""
+                                          />
+                                        </div>
+                                        <h6>Whatsapp</h6>
+                                      </Link>
+                                    )}
+                                    {propertyManagerDoc &&
+                                      propertyManagerDoc.email !== "" && (
+                                        <Link
+                                          to={
+                                            "mailto:" + propertyManagerDoc.email
+                                          }
+                                          className="contacts_single"
+                                        >
+                                          <div className="icon">
+                                            <span className="material-symbols-outlined">
+                                              mail
+                                            </span>
+                                          </div>
+                                          <h6>Email</h6>
+                                        </Link>
+                                      )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6">
+                              <div className="property_full_address d_none d_block_767">
+                                <h2 className="card_title">
+                                  {propertyDocument.unitNumber},{" "}
+                                  {propertyDocument.society}
+                                </h2>
+                                <h3>
+                                  {propertyDocument.locality},{" "}
+                                  {propertyDocument.city}{" "}
+                                </h3>
+                                <h3>
+                                  {propertyDocument.state},{" "}
+                                  {propertyDocument.country},{" "}
+                                  {propertyDocument.pinCode}
+                                </h3>
+                              </div>
+                              <div className="userlist property_owners">
+                                <div className="single_user">
+                                  <div className="property_people_designation">
+                                    Owner
+                                  </div>
+                                  <div className="left">
+                                    <div className="user_img">
+                                      {propertyOwnerDoc && (
+                                        <img
+                                          src={
+                                            propertyOwnerDoc &&
+                                            propertyOwnerDoc.photoURL
+                                          }
+                                          alt=""
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="right">
+                                    <h5
+                                      onClick={
+                                        user && user.role === "admin"
+                                          ? () =>
+                                              openChangeUser("propertyOwner")
+                                          : ""
+                                      }
+                                      className={
+                                        user && user.role === "admin"
+                                          ? "pointer"
+                                          : ""
+                                      }
+                                    >
+                                      {propertyOwnerDoc &&
+                                        propertyOwnerDoc.fullName}
+                                      {user && user.role === "admin" && (
+                                        <span className="material-symbols-outlined click_icon text_near_icon">
+                                          edit
+                                        </span>
+                                      )}
+                                    </h5>
+
+                                    <h6>
+                                      {propertyOwnerDoc &&
+                                        propertyOwnerDoc.phoneNumber.replace(
+                                          /(\d{2})(\d{5})(\d{5})/,
+                                          "+$1 $2-$3"
+                                        )}
+                                    </h6>
+                                    <h6>
+                                      {propertyOwnerDoc &&
+                                        propertyOwnerDoc.city}
+                                      ,{" "}
+                                      {propertyOwnerDoc &&
+                                        propertyOwnerDoc.country}
+                                    </h6>
+
+                                    {/* <div className="wc">
                                       <Link
                                           to={"https://wa.me/" + propertyOwnerDoc.phoneNumber}
                                           className="contacts_single"
@@ -1534,139 +1588,138 @@ const PropertyDetails = () => {
                                           alt=""
                                         />
                                       </div> */}
+                                  </div>
+                                </div>
+                                <div className="single_user">
+                                  <div className="property_people_designation">
+                                    Co-Owner
+                                  </div>
+                                  <div className="left">
+                                    <div className="user_img">
+                                      {propertyCoOwnerDoc && (
+                                        <img
+                                          src={
+                                            propertyCoOwnerDoc &&
+                                            propertyCoOwnerDoc.photoURL
+                                          }
+                                          alt=""
+                                        />
+                                      )}
                                     </div>
                                   </div>
-                                  <div className="single_user">
-                                    <div className="property_people_designation">
-                                      Co-Owner
-                                    </div>
-                                    <div className="left">
-                                      <div className="user_img">
-                                        {propertyCoOwnerDoc && (
-                                          <img
-                                            src={
-                                              propertyCoOwnerDoc &&
-                                              propertyCoOwnerDoc.photoURL
-                                            }
-                                            alt=""
-                                          />
-                                        )}
-                                      </div>
-                                    </div>
-                                    <div className="right">
-                                      <h5
-                                        onClick={
-                                          user && user.role === "admin"
-                                            ? () =>
+                                  <div className="right">
+                                    <h5
+                                      onClick={
+                                        user && user.role === "admin"
+                                          ? () =>
                                               openChangeUser("propertyCoOwner")
-                                            : ""
-                                        }
-                                        className={
-                                          user && user.role === "admin"
-                                            ? "pointer"
-                                            : ""
-                                        }
-                                      >
-                                        {propertyCoOwnerDoc &&
-                                          propertyCoOwnerDoc.fullName}
-                                        {user && user.role === "admin" && (
-                                          <span className="material-symbols-outlined click_icon text_near_icon">
-                                            edit
-                                          </span>
+                                          : ""
+                                      }
+                                      className={
+                                        user && user.role === "admin"
+                                          ? "pointer"
+                                          : ""
+                                      }
+                                    >
+                                      {propertyCoOwnerDoc &&
+                                        propertyCoOwnerDoc.fullName}
+                                      {user && user.role === "admin" && (
+                                        <span className="material-symbols-outlined click_icon text_near_icon">
+                                          edit
+                                        </span>
+                                      )}
+                                    </h5>
+
+                                    <h6>
+                                      {propertyCoOwnerDoc &&
+                                        propertyCoOwnerDoc.phoneNumber.replace(
+                                          /(\d{2})(\d{5})(\d{5})/,
+                                          "+$1 $2-$3"
                                         )}
-                                      </h5>
+                                    </h6>
+                                    <h6>
+                                      {propertyCoOwnerDoc &&
+                                        propertyCoOwnerDoc.city}
+                                      ,{" "}
+                                      {propertyCoOwnerDoc &&
+                                        propertyCoOwnerDoc.country}
+                                    </h6>
 
-                                      <h6>
-                                        {propertyCoOwnerDoc &&
-                                          propertyCoOwnerDoc.phoneNumber.replace(
-                                            /(\d{2})(\d{5})(\d{5})/,
-                                            "+$1 $2-$3"
-                                          )}
-                                      </h6>
-                                      <h6>
-                                        {propertyCoOwnerDoc &&
-                                          propertyCoOwnerDoc.city}
-                                        ,{" "}
-                                        {propertyCoOwnerDoc &&
-                                          propertyCoOwnerDoc.country}
-                                      </h6>
-
-                                      <div className="wc">
-                                        <img
-                                          src="/assets/img/whatsapp.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                        <img
-                                          src="/assets/img/phone-call.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                      </div>
+                                    <div className="wc">
+                                      <img
+                                        src="/assets/img/whatsapp.png"
+                                        className="pointer"
+                                        alt=""
+                                      />
+                                      <img
+                                        src="/assets/img/phone-call.png"
+                                        className="pointer"
+                                        alt=""
+                                      />
                                     </div>
                                   </div>
-                                  <div className="single_user">
-                                    <div className="property_people_designation">
-                                      POC
+                                </div>
+                                <div className="single_user">
+                                  <div className="property_people_designation">
+                                    POC
+                                  </div>
+                                  <div className="left">
+                                    <div className="user_img">
+                                      {propertyPOCDoc && (
+                                        <img
+                                          src={
+                                            propertyPOCDoc &&
+                                            propertyPOCDoc.photoURL
+                                          }
+                                          alt=""
+                                        />
+                                      )}
                                     </div>
-                                    <div className="left">
-                                      <div className="user_img">
-                                        {propertyPOCDoc && (
-                                          <img
-                                            src={
-                                              propertyPOCDoc &&
-                                              propertyPOCDoc.photoURL
-                                            }
-                                            alt=""
-                                          />
+                                  </div>
+                                  <div className="right">
+                                    <h5
+                                      onClick={
+                                        user && user.role === "admin"
+                                          ? () => openChangeUser("propertyPOC")
+                                          : ""
+                                      }
+                                      className={
+                                        user && user.role === "admin"
+                                          ? "pointer"
+                                          : ""
+                                      }
+                                    >
+                                      {propertyPOCDoc &&
+                                        propertyPOCDoc.fullName}
+                                      {user && user.role === "admin" && (
+                                        <span className="material-symbols-outlined click_icon text_near_icon">
+                                          edit
+                                        </span>
+                                      )}
+                                    </h5>
+                                    <h6>
+                                      {propertyPOCDoc &&
+                                        propertyPOCDoc.phoneNumber.replace(
+                                          /(\d{2})(\d{5})(\d{5})/,
+                                          "+$1 $2-$3"
                                         )}
-                                      </div>
-                                    </div>
-                                    <div className="right">
-                                      <h5
-                                        onClick={
-                                          user && user.role === "admin"
-                                            ? () => openChangeUser("propertyPOC")
-                                            : ""
-                                        }
-                                        className={
-                                          user && user.role === "admin"
-                                            ? "pointer"
-                                            : ""
-                                        }
-                                      >
-                                        {propertyPOCDoc &&
-                                          propertyPOCDoc.fullName}
-                                        {user && user.role === "admin" && (
-                                          <span className="material-symbols-outlined click_icon text_near_icon">
-                                            edit
-                                          </span>
-                                        )}
-                                      </h5>
-                                      <h6>
-                                        {propertyPOCDoc &&
-                                          propertyPOCDoc.phoneNumber.replace(
-                                            /(\d{2})(\d{5})(\d{5})/,
-                                            "+$1 $2-$3"
-                                          )}
-                                      </h6>
-                                      <h6>
-                                        {propertyPOCDoc && propertyPOCDoc.city},{" "}
-                                        {propertyPOCDoc && propertyPOCDoc.country}
-                                      </h6>
+                                    </h6>
+                                    <h6>
+                                      {propertyPOCDoc && propertyPOCDoc.city},{" "}
+                                      {propertyPOCDoc && propertyPOCDoc.country}
+                                    </h6>
 
-                                      <div className="wc">
-                                        <img
-                                          src="/assets/img/whatsapp.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                        <img
-                                          src="/assets/img/phone-call.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                      </div>
+                                    <div className="wc">
+                                      <img
+                                        src="/assets/img/whatsapp.png"
+                                        className="pointer"
+                                        alt=""
+                                      />
+                                      <img
+                                        src="/assets/img/phone-call.png"
+                                        className="pointer"
+                                        alt=""
+                                      />
                                     </div>
                                   </div>
                                 </div>
@@ -1674,7 +1727,8 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         </div>
-                      )}
+                      </div>
+                    )}
                     {(user && user.role === "owner") ||
                       (user && user.role === "admin" && (
                         <div className="property_card_single">
@@ -2105,10 +2159,10 @@ const PropertyDetails = () => {
                                 {" "}
                                 {propertyDocument &&
                                   new Date().getFullYear() -
-                                  Number(
-                                    propertyDocument.yearOfConstruction
-                                  ) +
-                                  " Years"}{" "}
+                                    Number(
+                                      propertyDocument.yearOfConstruction
+                                    ) +
+                                    " Years"}{" "}
                               </h5>
                             </div>
                           </div>

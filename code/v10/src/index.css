@@ -97,6 +97,16 @@ body {
   width: 100%;
 }
 
+.btn_fill_add_property_images {
+  background: var(--theme-green);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 6px 25px;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+}
+
 .theme_btn.btn_white {
   background: white;
   color: #303030;
@@ -364,9 +374,11 @@ form.auth-form .theme_btn {
   .d_none_767 {
     display: none !important;
   }
+
   .d_block_767 {
     display: block !important;
   }
+
   .theme_btn {
     padding: 6px 12px;
     font-size: 14px;
