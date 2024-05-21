@@ -583,7 +583,7 @@ const PropertyDetails = () => {
             <div className="row">
               <div className="col-xl-12">
                 {propertyDocument && (
-                  <div className="">
+                  <div className="">                  
                     {
                       <div className="property_card_single">
                         <div className="pcs_inner pointer" to="/pdsingle">
@@ -1273,6 +1273,12 @@ const PropertyDetails = () => {
                                 </span>
                                 <span className="in_single">2 fan</span>
                                 <span className="in_single">2 almira</span>
+                                <span className="in_single">
+                                  2 fan
+                                </span>
+                                <span className="in_single">
+                                  2 almira
+                                </span>
                               </div>
                             </div>
                           </div>

@@ -290,12 +290,14 @@
     color: var(--theme-blue);
     font-size: 28px;
 }
-.eicp_single .text h6{
+
+.eicp_single .text h6 {
     font-size: 20px;
     color: var(--theme-blue);
     font-weight: 500;
 }
-.eicp_single .text h5{
+
+.eicp_single .text h5 {
     font-size: 16px;
     color: #303030;
     font-weight: 400;
@@ -305,29 +307,34 @@
     padding: 0px;
     padding-left: 0px;
     border: none;
-   
+
 }
-.aai_form  .form_field input {
-    border-radius: 8px;    
+
+.aai_form .form_field input {
+    border-radius: 8px;
     font-size: 16px;
     padding: 6px;
     width: fit-content;
     color: var(--light-black);
 }
-.aai_form  .form_field input:focus{
+
+.aai_form .form_field input:focus {
     outline: none;
     border-color: #498fff;
 }
-.aai_form  .form_field {
+
+.aai_form .form_field {
     width: fit-content;
 }
-.aai_form .add_info_text{
+
+.aai_form .add_info_text {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     align-items: end;
 }
-.aai_form  .addmore {
+
+.aai_form .addmore {
     color: var(--theme-green);
     font-size: 13px;
     text-transform: capitalize;
@@ -335,7 +342,8 @@
     cursor: pointer;
     width: fit-content;
 }
-.aai_form  .close_field {
+
+.aai_form .close_field {
     position: absolute;
     color: red;
     top: -7px;
@@ -351,10 +359,12 @@
     justify-content: center;
     font-size: 11px;
 }
-.ai_detail_show .left{
+
+.ai_detail_show .left {
     width: 35%;
 
 }
+
 .ai_detail_show {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .24), 0 1px 4px 0 rgba(0, 0, 0, .12);
     display: flex;
@@ -362,28 +372,32 @@
     overflow: hidden;
 }
 
-.ai_detail_show .left img{
+.ai_detail_show .left img {
     width: 100%;
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
-.ai_detail_show .right{
+
+.ai_detail_show .right {
     width: 65%;
     padding: 8px;
 }
-.ai_detail_show .right h5{
+
+.ai_detail_show .right h5 {
     color: #303030;
     font-weight: 600;
     font-size: 16px;
 }
-.ai_detail_show .right .in_single{
+
+.ai_detail_show .right .in_single {
     background: #dfdfdf;
     border-radius: 30px;
     font-size: 12px;
     margin-top: 2px;
     padding: 4px 12px;
 }
+
 .ai_detail_show .in_detail {
     margin-top: 6px;
     display: flex;
@@ -393,16 +407,19 @@
 
 
 @media only screen and (max-width: 767px) {
-    .pd_single .property_card_single {       
+    .pd_single .property_card_single {
         width: 100%;
     }
-    .pd_single .pcs_inner {     
-        display: block !important ;
-       
+
+    .pd_single .pcs_inner {
+        display: block !important;
+
     }
+
     .pcs_inner .pcs_image_area {
         width: 100% !important;
     }
+
     .pd_single .pcs_inner .pcs_main_detail {
         width: 100% !important;
     }
@@ -482,7 +499,8 @@
     font-weight: 400;
     color: #7d7d7d;
 }
-.tc_single  .wha_call_icon {
+
+.tc_single .wha_call_icon {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     border-top: 1px solid #e5e5e5;
@@ -493,7 +511,8 @@
     margin-top: 6px;
     position: relative;
 }
-.tc_single  .wha_call_icon:after{
+
+.tc_single .wha_call_icon:after {
     content: '';
     background: #e5e5e5;
     position: absolute;
@@ -504,16 +523,18 @@
     width: 1px;
     height: 100%;
 }
-.tc_single  .wha_call_icon  .wc_single{
+
+.tc_single .wha_call_icon .wc_single {
     text-align: center;
 }
+
 .tc_single .edit_save {
     position: absolute;
     top: 3px;
-    right: 8px;  
+    right: 8px;
     color: var(--theme-green);
-    font-size: 13px;  
-    text-transform: capitalize;  
+    font-size: 13px;
+    text-transform: capitalize;
     text-decoration: underline;
     cursor: pointer;
 }
@@ -522,7 +543,38 @@
     border-bottom: 1px solid #d5d5d5;
     border-radius: 6px;
 }
-
-
-
 /* tenant css end */
+
+.quick_detail_show .premium img{
+    width: 110px;
+    height: auto;
+    object-fit: contain;
+    margin: auto;
+}
+.quick_detail_show .premium h6 {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 8px 0px 12px 0px;
+}
+.quick_detail_show .premium h5{
+    color: var(--theme-orange);
+    font-size: 18px;
+    font-weight: 500;
+}
+.quick_detail_show .qd_single {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: green;
+}
+.quick_detail_show .qd_single span{
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+.quick_detail_show .qd_single h6 {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+
+
