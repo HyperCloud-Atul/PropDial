@@ -1,4 +1,3 @@
-// npm install react-image-gallery
 
 
 import React from 'react'
