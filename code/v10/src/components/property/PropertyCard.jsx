@@ -340,8 +340,7 @@ const PropertyCard = ({ propertydoc }) => {
                         {userDoc.fullName}
                         {user && user.role === "admin" && (
                           <span
-                            className="material-symbols-outlined click_icon text_near_icon"
-                            onClick={openChangeManager}
+                            className="material-symbols-outlined click_icon text_near_icon"                            
                           >
                             edit
                           </span>

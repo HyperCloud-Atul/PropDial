@@ -333,6 +333,37 @@ const PropertyDetails = () => {
 
   // upload tenant code end 
 
+
+  // show add additional info form code start 
+  const [showAIForm, setShowAIForm] = useState(false);
+
+  const handleShowAIForm = () => {
+    setShowAIForm(!showAIForm);
+  }
+
+  // show add additional info form code end
+
+  // add from field of additonal info code start 
+  const [additionalInfos, setAdditionalInfos] = useState(['']); // Initialize with one field
+
+  const handleAddMore = () => {
+    setAdditionalInfos([...additionalInfos, '']);
+  };
+
+  const handleRemove = (index) => {
+    if (additionalInfos.length > 1) { // Prevent removal if only one field remains
+      const newInfos = additionalInfos.filter((_, i) => i !== index);
+      setAdditionalInfos(newInfos);
+    }
+  };
+
+  const handleInputChange = (index, value) => {
+    const newInfos = [...additionalInfos];
+    newInfos[index] = value;
+    setAdditionalInfos(newInfos);
+  };
+  // add from field of additonal info code end
+
   return (
     <>
       {/* Change User Popup - Start */}
@@ -571,7 +602,7 @@ const PropertyDetails = () => {
                                   share
                                 </span>
                               </div>
-                           
+
                               {!(
                                 (user && user.role === "owner") ||
                                 (user && user.role === "coowner") ||
@@ -848,15 +879,15 @@ const PropertyDetails = () => {
                         </OwlCarousel>
                       </div>
                     }
-   <div className="vg10"></div>
-                              <div className="tenant_card">
-                                <div className="tc_single relative">
-                                  <div className="tcs_img_container">
-                                    <img
-                                      src={getImageSrc()}
-                                      alt="Preview"
-                                    />
-                                    {/* {isTenantEditing && previewTenantImage && (
+                    <div className="vg10"></div>
+                    <section className="tenant_card">
+                      <div className="tc_single relative">
+                        <div className="tcs_img_container">
+                          <img
+                            src={getImageSrc()}
+                            alt="Preview"
+                          />
+                          {/* {isTenantEditing && previewTenantImage && (
                           <div
                             onClick={handleRemoveTenantImage}
                           >
@@ -864,49 +895,184 @@ const PropertyDetails = () => {
                           </div>
 
                         )} */}
-                                    {isTenantEditing && (
-                                      <div className="upload_tenant_img">
-                                        <label htmlFor="ut_img">
-                                          <input type="file" accept="image/*" id="ut_img" onChange={handleTenantImageChange} />
-                                        </label>
+                          {isTenantEditing && (
+                            <div className="upload_tenant_img">
+                              <label htmlFor="ut_img">
+                                <input type="file" accept="image/*" id="ut_img" onChange={handleTenantImageChange} />
+                              </label>
+                            </div>
+                          )}
+
+                        </div>
+                        <div className={`tenant_detail ${isTenantEditing ? "td_edit" : ""} `}>
+                          <input
+                            type="text"
+                            value={tenantName}
+                            onChange={(e) => setTenantName(e.target.value)}
+                            readOnly={!isTenantEditing}
+                            className="t_name"
+
+                          />
+                          <input
+                            type="number"
+                            value={tenantCallNumber}
+                            onChange={(e) => seTenantCallNumber(e.target.value)}
+                            readOnly={!isTenantEditing}
+                            className="t_number"
+                          />
+
+
+                        </div>
+                        <div className="wha_call_icon">
+                          <Link className="call_icon wc_single">
+                            <img src="/assets/img/simple_call.png" alt="" />
+                          </Link>
+                          <Link className="wha_icon wc_single">
+                            <img src="/assets/img/whatsapp_simple.png" alt="" />
+                          </Link>
+
+                        </div>
+                        <span className="edit_save" onClick={handleEditTenantToggle}>
+                          {isTenantEditing ? 'save' : 'edit'}
+                        </span>
+                      </div>
+                    </section>
+                    <div className="vg22"></div>
+                    {showAIForm && (
+                      <section className="property_card_single add_aditional_form">
+                        <div className="more_detail_card_inner relative">
+                          {/* <h2 className="card_title">
+                         Add form
+                       </h2> */}
+                          <div className="aai_form">
+                            <div className="row" style={{
+                              rowGap: "18px"
+                            }}>
+                              <div className="col-md-12">
+                                <div className='form_field'>
+                                  <div className='field_box theme_radio_new'>
+                                    <div className="theme_radio_container">
+                                      <div className="radio_single">
+                                        <input type="radio" name="aai_type" id='bedroom' />
+                                        <label htmlFor="bedroom">bedroom</label>
                                       </div>
-                                    )}
-
+                                      <div className="radio_single">
+                                        <input type="radio" name="aai_type" id='bathroom' />
+                                        <label htmlFor="bathroom">bathroom</label>
+                                      </div>
+                                      <div className="radio_single">
+                                        <input type="radio" name="aai_type" id='kitchen' />
+                                        <label htmlFor="kitchen">kitchen</label>
+                                      </div>
+                                      <div className="radio_single">
+                                        <input type="radio" name="aai_type" id='living' />
+                                        <label htmlFor="living">living</label>
+                                      </div>
+                                      <div className="radio_single">
+                                        <input type="radio" name="aai_type" id='dining' />
+                                        <label htmlFor="dining">dining</label>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className={`tenant_detail ${isTenantEditing ? "td_edit" : ""} `}>
-                                    <input
-                                      type="text"
-                                      value={tenantName}
-                                      onChange={(e) => setTenantName(e.target.value)}
-                                      readOnly={!isTenantEditing}
-                                      className="t_name"
-
-                                    />
-                                    <input
-                                      type="number"
-                                      value={tenantCallNumber}
-                                      onChange={(e) => seTenantCallNumber(e.target.value)}
-                                      readOnly={!isTenantEditing}
-                                      className="t_number"
-                                    />
-
-
-                                  </div>
-                                  <div className="wha_call_icon">
-                                    <Link className="call_icon wc_single">
-                                      <img src="/assets/img/simple_call.png" alt="" />
-                                    </Link>
-                                    <Link className="wha_icon wc_single">
-                                      <img src="/assets/img/whatsapp_simple.png" alt="" />
-                                    </Link>
-
-                                  </div>
-                                  <span className="edit_save" onClick={handleEditTenantToggle}>
-                                    {isTenantEditing ? 'save' : 'edit'}
-                                  </span>
                                 </div>
                               </div>
-                              <div className="vg10"></div>
+                              <div className="col-md-1">
+                                <div className="form_field_upload">
+                                  <label htmlFor="upload">
+                                    <div className="text-center">
+                                      <span class="material-symbols-outlined">
+                                        upload
+                                      </span>
+                                      <p>Upload image</p>
+                                    </div>
+                                  </label>
+                                  <input type="file" id="upload" />
+                                </div>
+                              </div>
+                              <div className="col-md-11">
+                                <div className="add_info_text">
+                                  {additionalInfos.map((info, index) => (
+                                    <div className="form_field">
+                                      <div className="relative" key={index} >
+                                        <input
+                                          type="text"
+                                          value={info}
+                                          onChange={(e) => handleInputChange(index, e.target.value)}
+                                          placeholder="area, furniture, etc."
+                                        />
+                                        {additionalInfos.length > 1 && (
+                                          <span onClick={() => handleRemove(index)}
+                                            className="pointer close_field"
+                                          >X</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                  <div className="addmore" onClick={handleAddMore}>
+                                    add more
+                                  </div>
+                                </div>
+
+                              </div>
+
+                            </div>
+                          </div>
+                          <div className="row mt-3">
+                            <div className="col-sm-1">
+                              <div className="theme_btn btn_border text-center" onClick={handleShowAIForm}>
+                                Cancel
+                              </div>
+                            </div>
+                            <div className="col-sm-3">
+                              <div className="theme_btn btn_fill text-center">
+                                Save
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </section>
+                    )}
+                    <section className="property_card_single">
+                      <div className="more_detail_card_inner d-flex align-items-center" style={{
+                        gap: "15px"
+                      }} >
+                        {!showAIForm && (
+                          <div className="add_btn" onClick={handleShowAIForm}>
+                            <div className="add_btn_inner">
+                              <div className="add_icon">
+                                +
+                              </div>
+                              <div className="ab_text">
+                                bedroom, bathroom, kitchen, etc
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        <div className="col-md-4">
+                          <div className="ai_detail_show">
+                            <div className="left">
+                              <img src="/assets/img/p_img/drawingroom.jpg" alt="" />
+                            </div>
+                            <div className="right">
+                              <h5>Master Bedroom</h5>
+                              <div className="in_detail">
+                                <span className="in_single">
+                                  Area 1252sq/ft
+                                </span>
+                                <span className="in_single">
+                             2 fan
+                            </span>
+                            <span className="in_single">
+                             2 almira
+                            </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                    <div className="vg10"></div>
                     {((user && user.role === "owner") ||
                       (user && user.role === "coowner")
                       ||
@@ -914,156 +1080,24 @@ const PropertyDetails = () => {
                     ) && (
                         <div className="property_card_single">
                           <div className="more_detail_card_inner">
-                            <div className="row no-gutters">
+                            <div className="row no-gutters row_reverse_767">
 
                               <div className="col-md-6">
-                                <div className="userlist property_owners">
-                                  <div className="single_user">
-                                    <div className="property_people_designation">
-                                      Owner
-                                    </div>
-                                    <div className="left">
-                                      <div className="user_img">
-                                        {propertyOwnerDoc && <img src={propertyOwnerDoc && propertyOwnerDoc.photoURL} alt="" />}
-                                      </div>
-                                    </div>
-                                    <div className="right">
-                                      {
-                                        user && user.role === "admin" &&
-                                        <div>
-                                          <small
-                                            // onClick={openChangeManager} 
-                                            onClick={() => openChangeUser("propertyOwner")}
-                                            style={{ paddingLeft: '10px', fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}>change</small>
-                                          <span
-                                            className="material-symbols-outlined"
-                                            onClick={() => openChangeUser("propertyOwner")}
-                                            style={{ fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}
-                                          >
-                                            edit
-                                          </span>
-                                        </div>}
-                                      <h5>{propertyOwnerDoc && propertyOwnerDoc.fullName}</h5>
-                                      <h6>{propertyOwnerDoc && propertyOwnerDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}</h6>
-                                      <h6>{propertyOwnerDoc && propertyOwnerDoc.city}, {propertyOwnerDoc && propertyOwnerDoc.country}</h6>
-
-                                      {propertyOwnerDoc &&
-                                        <Link
-                                          to={"https://wa.me/" + propertyOwnerDoc.phoneNumber}
-                                          className="contacts_single"
-                                        >
-                                          <div className="icon">
-                                            <img
-                                              src="/assets/img/whatsapp.png"
-                                              alt=""
-                                            />
-                                          </div>
-                                          <h6>Whatsapp</h6>
-                                        </Link>}
-                                      <div className="wc">
-                                        <img
-                                          src="/assets/img/whatsapp.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                        <img
-                                          src="/assets/img/phone-call.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                      </div>
-
-                                    </div>
-                                  </div>
-                                  <div className="single_user">
-                                    <div className="property_people_designation">
-                                      Co-Owner
-                                    </div>
-                                    <div className="left">
-                                      <div className="user_img">
-                                        {propertyCoOwnerDoc && <img src={propertyCoOwnerDoc && propertyCoOwnerDoc.photoURL} alt="" />}
-                                      </div>
-                                    </div>
-                                    <div className="right">
-                                      {
-                                        user && user.role === "admin" &&
-                                        <div>
-                                          <small
-                                            // onClick={openChangeManager} 
-                                            onClick={() => openChangeUser("propertyCoOwner")}
-                                            style={{ paddingLeft: '10px', fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}>change</small>
-                                          <span
-                                            className="material-symbols-outlined"
-                                            onClick={() => openChangeUser("propertyCoOwner")}
-                                            style={{ fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}
-                                          >
-                                            edit
-                                          </span>
-                                        </div>}
-                                      <h5>{propertyCoOwnerDoc && propertyCoOwnerDoc.fullName}</h5>
-                                      <h6>{propertyCoOwnerDoc && propertyCoOwnerDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}</h6>
-                                      <h6>{propertyCoOwnerDoc && propertyCoOwnerDoc.city}, {propertyCoOwnerDoc && propertyCoOwnerDoc.country}</h6>
-
-                                      <div className="wc">
-                                        <img
-                                          src="/assets/img/whatsapp.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                        <img
-                                          src="/assets/img/phone-call.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="single_user">
-                                    <div className="property_people_designation">
-                                      POC
-                                    </div>
-                                    <div className="left">
-                                      <div className="user_img">
-                                        {propertyPOCDoc && <img src={propertyPOCDoc && propertyPOCDoc.photoURL} alt="" />}
-                                      </div>
-                                    </div>
-                                    <div className="right">
-                                      {
-                                        user && user.role === "admin" &&
-                                        <div>
-                                          <small
-                                            // onClick={openChangeManager} 
-                                            onClick={() => openChangeUser("propertyPOC")}
-                                            style={{ paddingLeft: '10px', fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}>change</small>
-                                          <span
-                                            className="material-symbols-outlined"
-                                            onClick={() => openChangeUser("propertyPOC")}
-                                            style={{ fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}
-                                          >
-                                            edit
-                                          </span>
-                                        </div>}
-                                      <h5>{propertyPOCDoc && propertyPOCDoc.fullName}</h5>
-                                      <h6>{propertyPOCDoc && propertyPOCDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}</h6>
-                                      <h6>{propertyPOCDoc && propertyPOCDoc.city}, {propertyPOCDoc && propertyPOCDoc.country}</h6>
-
-                                      <div className="wc">
-                                        <img
-                                          src="/assets/img/whatsapp.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                        <img
-                                          src="/assets/img/phone-call.png"
-                                          className="pointer"
-                                          alt=""
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
+                                <div className="property_full_address d_none_767">
+                                  <h2 className="card_title">
+                                    {propertyDocument.unitNumber},{" "}
+                                    {propertyDocument.society}
+                                  </h2>
+                                  <h3>
+                                    {propertyDocument.locality},{" "}
+                                    {propertyDocument.city}{" "}
+                                  </h3>
+                                  <h3>
+                                    {propertyDocument.state},{" "}
+                                    {propertyDocument.country},{" "}
+                                    {propertyDocument.pinCode}
+                                  </h3>
                                 </div>
-                              </div>
-                              <div className="col-md-6">
                                 <div className="property_connected_people userlist">
                                   <div className="item pcp_single">
                                     <div className="property_people_designation">
@@ -1076,24 +1110,29 @@ const PropertyDetails = () => {
                                         </div>
                                       </div>
                                       <div className="right">
-                                        <h5>{propertyManagerDoc && propertyManagerDoc.fullName}</h5>
-                                        <h6>{propertyManagerDoc && propertyManagerDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}</h6>
-                                        {
-                                          user && user.role === "admin" &&
-                                          <div>
-                                            <small
-                                              onClick={() => openChangeUser("propertyManager")}
-                                              style={{ paddingLeft: '10px', fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}>change</small>
+                                        <h5
+                                          onClick={user && user.role === "admin" ? () => openChangeUser("propertyManager") : ""}
+                                          className={user && user.role === "admin" ? "pointer" : ""}
+                                        >
+                                          {propertyManagerDoc && propertyManagerDoc.fullName}
+                                          {user && user.role === "admin" && (
                                             <span
-                                              className="material-symbols-outlined"
-                                              onClick={() => openChangeUser("propertyManager")}
-                                              style={{ fontSize: '0.8rem', color: '#5a99cc', cursor: 'pointer' }}
+                                              className="material-symbols-outlined click_icon text_near_icon"
                                             >
                                               edit
                                             </span>
-                                          </div>}
+                                          )}
+                                        </h5>
 
-                                        {/* <h6>Bhopal, India</h6> */}
+
+
+
+                                        <h6>{propertyManagerDoc && propertyManagerDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}
+
+                                        </h6>
+
+
+
                                       </div>
                                     </div>
 
@@ -1136,6 +1175,160 @@ const PropertyDetails = () => {
                                   </div>
                                 </div>
                               </div>
+                              <div className="col-md-6">
+                                <div className="property_full_address d_none d_block_767">
+                                  <h2 className="card_title">
+                                    {propertyDocument.unitNumber},{" "}
+                                    {propertyDocument.society}
+                                  </h2>
+                                  <h3>
+                                    {propertyDocument.locality},{" "}
+                                    {propertyDocument.city}{" "}
+                                  </h3>
+                                  <h3>
+                                    {propertyDocument.state},{" "}
+                                    {propertyDocument.country},{" "}
+                                    {propertyDocument.pinCode}
+                                  </h3>
+                                </div>
+                                <div className="userlist property_owners">
+                                  <div className="single_user">
+                                    <div className="property_people_designation">
+                                      Owner
+                                    </div>
+                                    <div className="left">
+                                      <div className="user_img">
+                                        {propertyOwnerDoc && <img src={propertyOwnerDoc && propertyOwnerDoc.photoURL} alt="" />}
+                                      </div>
+                                    </div>
+                                    <div className="right">
+
+                                      <h5
+                                        onClick={user && user.role === "admin" ? () => openChangeUser("propertyOwner") : ""}
+                                        className={user && user.role === "admin" ? "pointer" : ""}
+                                      >
+                                        {propertyOwnerDoc && propertyOwnerDoc.fullName}
+                                        {user && user.role === "admin" && (
+                                          <span
+                                            className="material-symbols-outlined click_icon text_near_icon"
+                                          >
+                                            edit
+                                          </span>
+                                        )}
+                                      </h5>
+
+
+                                      <h6>{propertyOwnerDoc && propertyOwnerDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}</h6>
+                                      <h6>{propertyOwnerDoc && propertyOwnerDoc.city}, {propertyOwnerDoc && propertyOwnerDoc.country}</h6>
+
+
+                                      {/* <div className="wc">
+                                      <Link
+                                          to={"https://wa.me/" + propertyOwnerDoc.phoneNumber}
+                                          className="contacts_single"
+                                        >
+                                          <div className="icon">
+                                            <img
+                                              src="/assets/img/whatsapp.png"
+                                              alt=""
+                                            />
+                                          </div>                                          
+                                        </Link>
+                                        <img
+                                          src="/assets/img/phone-call.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                      </div> */}
+
+                                    </div>
+                                  </div>
+                                  <div className="single_user">
+                                    <div className="property_people_designation">
+                                      Co-Owner
+                                    </div>
+                                    <div className="left">
+                                      <div className="user_img">
+                                        {propertyCoOwnerDoc && <img src={propertyCoOwnerDoc && propertyCoOwnerDoc.photoURL} alt="" />}
+                                      </div>
+                                    </div>
+                                    <div className="right">
+
+                                      <h5
+                                        onClick={user && user.role === "admin" ? () => openChangeUser("propertyCoOwner") : ""}
+                                        className={user && user.role === "admin" ? "pointer" : ""}
+                                      >
+                                        {propertyCoOwnerDoc && propertyCoOwnerDoc.fullName}
+                                        {user && user.role === "admin" && (
+                                          <span
+                                            className="material-symbols-outlined click_icon text_near_icon"
+                                          >
+                                            edit
+                                          </span>
+                                        )}
+                                      </h5>
+
+
+                                      <h6>{propertyCoOwnerDoc && propertyCoOwnerDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}</h6>
+                                      <h6>{propertyCoOwnerDoc && propertyCoOwnerDoc.city}, {propertyCoOwnerDoc && propertyCoOwnerDoc.country}</h6>
+
+                                      <div className="wc">
+                                        <img
+                                          src="/assets/img/whatsapp.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                        <img
+                                          src="/assets/img/phone-call.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="single_user">
+                                    <div className="property_people_designation">
+                                      POC
+                                    </div>
+                                    <div className="left">
+                                      <div className="user_img">
+                                        {propertyPOCDoc && <img src={propertyPOCDoc && propertyPOCDoc.photoURL} alt="" />}
+                                      </div>
+                                    </div>
+                                    <div className="right">
+                                      <h5
+                                        onClick={user && user.role === "admin" ? () => openChangeUser("propertyPOC") : ""}
+                                        className={user && user.role === "admin" ? "pointer" : ""}
+                                      >
+                                        {propertyPOCDoc && propertyPOCDoc.fullName}
+                                        {user && user.role === "admin" && (
+                                          <span
+                                            className="material-symbols-outlined click_icon text_near_icon"
+                                          >
+                                            edit
+                                          </span>
+                                        )}
+                                      </h5>
+                                      <h6>{propertyPOCDoc && propertyPOCDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}</h6>
+                                      <h6>{propertyPOCDoc && propertyPOCDoc.city}, {propertyPOCDoc && propertyPOCDoc.country}</h6>
+
+                                      <div className="wc">
+                                        <img
+                                          src="/assets/img/whatsapp.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                        <img
+                                          src="/assets/img/phone-call.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
                             </div>
                           </div>
                         </div>

@@ -566,7 +566,8 @@
         }
 
         .pod_right {
-          width: 90%;
+          // width: 90%;
+          flex-grow: 1;
 
           h5 {
             color: #303030;
@@ -763,6 +764,38 @@
   height: 12px;
 }
 
+.add_btn {
+  background: #f5f5f5;
+  border-radius: 12px;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  cursor: pointer;
+
+    .add_icon {
+      font-size: 60px;
+    line-height: 0px;
+    margin-top: 6px;
+    color: var(--theme-green);
+    text-align: center;
+    font-weight: 200;
+  }
+  .ab_text {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+    font-size: 13px;
+    text-align: center;
+    color: #606060;
+}
+
+}
+
 .back_with_title {
   display: flex;
   align-items: center;
@@ -810,7 +843,36 @@
     font-size: 18px;
   }
 }
+.form_field_upload {
+  background: #f5f5f5;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 12px;
+  position: relative;
+ 
+  label{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    color: var(--theme-green);  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span{
+      font-size: 28px;
+    }
+    p{
+      font-size: 10px;
+    }
+  }
+  input{
+    display: none;
 
+  }
+}
 .filters {
   display: flex;
   align-items: center;

@@ -251,7 +251,7 @@
     border: 1px solid #e7e7e7;
     border-radius: 15px;
     overflow: hidden;
-    cursor: -webkit-grab;
+    /* cursor: -webkit-grab; */
 }
 
 .pd_single .p_info_single h6 {
@@ -300,6 +300,97 @@
     color: #303030;
     font-weight: 400;
 }
+
+.aai_form .theme_radio_container {
+    padding: 0px;
+    padding-left: 0px;
+    border: none;
+   
+}
+.aai_form  .form_field input {
+    border-radius: 8px;    
+    font-size: 16px;
+    padding: 6px;
+    width: fit-content;
+    color: var(--light-black);
+}
+.aai_form  .form_field input:focus{
+    outline: none;
+    border-color: #498fff;
+}
+.aai_form  .form_field {
+    width: fit-content;
+}
+.aai_form .add_info_text{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: end;
+}
+.aai_form  .addmore {
+    color: var(--theme-green);
+    font-size: 13px;
+    text-transform: capitalize;
+    text-decoration: underline;
+    cursor: pointer;
+    width: fit-content;
+}
+.aai_form  .close_field {
+    position: absolute;
+    color: red;
+    top: -7px;
+    right: -4px;
+    background: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #d9d9d9;
+    line-height: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+}
+.ai_detail_show .left{
+    width: 35%;
+
+}
+.ai_detail_show {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .24), 0 1px 4px 0 rgba(0, 0, 0, .12);
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.ai_detail_show .left img{
+    width: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.ai_detail_show .right{
+    width: 65%;
+    padding: 8px;
+}
+.ai_detail_show .right h5{
+    color: #303030;
+    font-weight: 600;
+    font-size: 16px;
+}
+.ai_detail_show .right .in_single{
+    background: #dfdfdf;
+    border-radius: 30px;
+    font-size: 12px;
+    margin-top: 2px;
+    padding: 4px 12px;
+}
+.ai_detail_show .in_detail {
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
 
 @media only screen and (max-width: 767px) {
     .pd_single .property_card_single {       
