@@ -449,6 +449,7 @@
     padding: 8px;
     width: fit-content;
     overflow: hidden;
+    margin: 0px 3px 3px 3px;
 }
 
 .tc_single .tenant_detail {
@@ -536,6 +537,10 @@
     margin: auto;
     width: 1px;
     height: 100%;
+}
+.owl-carousel .owl-item .wha_call_icon img {
+    display: inline-block;
+    width: auto;
 }
 
 .tc_single .wha_call_icon .wc_single {
