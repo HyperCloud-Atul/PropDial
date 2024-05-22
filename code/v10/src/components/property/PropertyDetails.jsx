@@ -1285,9 +1285,9 @@ const PropertyDetails = () => {
                     {/* tenant card start */}
                     <section className="property_card_single">
                       <div className="more_detail_card_inner">
-                      <h2 className="card_title">
-                       Tenant Information
-                       </h2>
+                        <h2 className="card_title">
+                          Tenant Information
+                        </h2>
                         <div className="tenant_card">
                           <div className="row">
                             <div className="col-md-2">
@@ -1301,56 +1301,60 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                             <div className="col-md-10">
-                            <OwlCarousel className="owl-theme" {...optionsTenant}>
-                            {tenantDocument &&
-                            tenantDocument.map((tenant) => (
-                              <div className="tc_single relative item" key={tenant.id}>
-                                <div className="tcs_img_container">
-                                  <img src={getImageSrc()} alt="Preview" />
-                                </div>
-                                <div
-                                  className={`tenant_detail ${editingTenantId === tenant.id ? "td_edit" : ""
-                                    }`}
-                                >
-                                  <input
-                                    type="text"
-                                    value={tenantName[tenant.id] ?? tenant.name}
-                                    onChange={(e) => handleNameChange(tenant.id, e.target.value)}
-                                    readOnly={editingTenantId !== tenant.id}
-                                    className="t_name"
-                                  />
-                                  <input
-                                    type="number"
-                                    value={tenant.mobile || ""}
-                                    readOnly={editingTenantId !== tenant.id}
-                                    className="t_number"
-                                  />
-                                </div>
-                                <div className="wha_call_icon">
-                                  <Link className="call_icon wc_single">
-                                    <img src="/assets/img/simple_call.png" alt="" />
-                                  </Link>
-                                  <Link className="wha_icon wc_single">
-                                    <img src="/assets/img/whatsapp_simple.png" alt="" />
-                                  </Link>
-                                </div>
-                                <span
-                                  className="edit_save"
-                                  onClick={() =>
-                                    editingTenantId === tenant.id
-                                      ? handleSaveTenant(tenant.id)
-                                      : handleEditTenantToggle(tenant.id)
-                                  }
-                                >
-                                  {editingTenantId === tenant.id ? "save" : "edit"}
-                                </span>
+                              {/* <OwlCarousel className="owl-theme" {...optionsTenant}> */}
+                              <div className="d-flex flex-wrap-wrap" style={{
+                                gap:"10px"
+                              }}>
+                                {tenantDocument &&
+                                  tenantDocument.map((tenant) => (
+                                    <div className="tc_single relative item" key={tenant.id}>
+                                      <div className="tcs_img_container">
+                                        <img src={getImageSrc()} alt="Preview" />
+                                      </div>
+                                      <div
+                                        className={`tenant_detail ${editingTenantId === tenant.id ? "td_edit" : ""
+                                          }`}
+                                      >
+                                        <input
+                                          type="text"
+                                          value={tenantName[tenant.id] ?? tenant.name}
+                                          onChange={(e) => handleNameChange(tenant.id, e.target.value)}
+                                          readOnly={editingTenantId !== tenant.id}
+                                          className="t_name"
+                                        />
+                                        <input
+                                          type="number"
+                                          value={tenant.mobile || ""}
+                                          readOnly={editingTenantId !== tenant.id}
+                                          className="t_number"
+                                        />
+                                      </div>
+                                      <div className="wha_call_icon">
+                                        <Link className="call_icon wc_single">
+                                          <img src="/assets/img/simple_call.png" alt="" />
+                                        </Link>
+                                        <Link className="wha_icon wc_single">
+                                          <img src="/assets/img/whatsapp_simple.png" alt="" />
+                                        </Link>
+                                      </div>
+                                      <span
+                                        className="edit_save"
+                                        onClick={() =>
+                                          editingTenantId === tenant.id
+                                            ? handleSaveTenant(tenant.id)
+                                            : handleEditTenantToggle(tenant.id)
+                                        }
+                                      >
+                                        {editingTenantId === tenant.id ? "save" : "edit"}
+                                      </span>
+                                    </div>
+                                  ))}
                               </div>
-                            ))}
-                            </OwlCarousel>
+                              {/* </OwlCarousel> */}
                             </div>
                           </div>
 
-                     
+
 
                         </div>
                       </div>
@@ -1364,8 +1368,8 @@ const PropertyDetails = () => {
                       <section className="property_card_single add_aditional_form">
                         <div className="more_detail_card_inner relative">
                           <h2 className="card_title">
-                         Bedroom, Bathroom and Other
-                       </h2>
+                            Bedroom, Bathroom and Other
+                          </h2>
                           <div className="aai_form">
                             <div
                               className="row"
