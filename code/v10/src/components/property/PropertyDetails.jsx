@@ -2555,7 +2555,7 @@ const PropertyDetails = () => {
 
                     {/* {propertyDocument.additionalRooms &&
                       propertyDocument.additionalRooms !== null &&
-                      propertyDocument.additionalRooms !== "" &&
+                      propertyDocument.additionalRooms !== '' &&
                       propertyDocument.additionalRooms.length > 0 && (
                         <div className="property_card_single">
                           <div className="more_detail_card_inner">
