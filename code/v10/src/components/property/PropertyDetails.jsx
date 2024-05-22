@@ -1291,6 +1291,12 @@ const PropertyDetails = () => {
                         <div className="tenant_card">
                           <div className="row">
                             <div className="col-md-2">
+                              <div className="add_btn eicp_single mb-2" onClick={handleAddTenant}>
+                                <div class="icon"><div class="text">
+                                  <h6>6</h6>
+                                </div>
+                                </div>
+                              </div>
                               <div className="add_btn" onClick={handleAddTenant}>
                                 <div className="add_btn_inner">
                                   <div className="add_icon">+</div>
@@ -1303,7 +1309,7 @@ const PropertyDetails = () => {
                             <div className="col-md-10">
                               {/* <OwlCarousel className="owl-theme" {...optionsTenant}> */}
                               <div className="d-flex flex-wrap-wrap" style={{
-                                gap:"10px"
+                                gap: "10px"
                               }}>
                                 {tenantDocument &&
                                   tenantDocument.map((tenant) => (
