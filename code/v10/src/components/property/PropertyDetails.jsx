@@ -17,6 +17,8 @@ import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
 import { format } from "date-fns";
+import RichTextEditor from "react-rte";
+import { FaEdit } from "react-icons/fa";
 
 import "./UserList.css";
 
@@ -62,7 +64,6 @@ const PropertyDetails = () => {
   // const handleEditTenantToggle = () => {
   //   setIsTenantEditing(!isTenantEditing);
   // };
-  console.log("tenantName", tenantName);
 
   const handleNameChange = (tenantId, newName) => {
     setTenantName((prev) => ({
@@ -500,10 +501,105 @@ const PropertyDetails = () => {
   const images = (propertyDocument && propertyDocument.images) || [];
   // END CODE FOR ADD NEW IMAGES
 
+  // START CODE FOR EDIT TEXT USING TEXT EDITOR
+  const [editedDesc, setEditedDesc] = useState("");
+  const [isEditingDesc, setIsEditingDesc] = useState(false);
+  const [value, setValue] = useState(
+    RichTextEditor.createValueFromString(editedDesc, "html")
+  );
+
+  // START CODE FOR EDIT FIELDS
+  const handleEditDesClick = () => {
+    setIsEditingDesc(true);
+  };
+
+  const handleSaveDesClick = async () => {
+    try {
+      await updateDocument(propertyid, {
+        propertyDescription: value.toString("html"),
+      });
+      setIsEditingDesc(false);
+    } catch (error) {
+      console.error("Error updating document:", error);
+    }
+  };
+
+  const handleCancelDesClick = () => {
+    setIsEditingDesc(false);
+  };
+  // END CODE FOR EDIT TEXT USING TEXT EDITOR
+
   return (
     <>
       {/* tenant card start */}
 
+      <div className="row">
+        <div className="col-lg-6">
+          <div className="property_card_single">
+            <div className="more_detail_card_inner">
+              <h2 className="card_title">Property Description</h2>
+
+              {isEditingDesc ? (
+                <div>
+                  <div>
+                    <RichTextEditor value={value} onChange={setValue} />
+                  </div>
+                  <button onClick={handleSaveDesClick}>Save</button>
+                  <button onClick={handleCancelDesClick}>Cancel</button>
+                </div>
+              ) : (
+                <>
+                  <div className="d-flex align-items-center">
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          propertyDocument &&
+                          propertyDocument.propertyDescription.toString("html"),
+                      }}
+                    ></p>
+                    {!isEditingDesc && user && user.role == "admin" && (
+                      <FaEdit
+                        style={{
+                          fontSize: 20,
+                          cursor: "pointer",
+                          marginLeft: "10px",
+                          color: "var(--pink)",
+                        }}
+                        onClick={() =>
+                          handleEditDesClick("propertyDescription")
+                        }
+                      />
+                    )}
+                  </div>
+                </>
+              )}
+              {/* <div
+                              className="p_info_single"
+                              style={{
+                                width: "100%",
+                              }}
+                            >
+                              <h6>{propertyDocument.propertyDescription}</h6>
+                            </div> */}
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-6">
+          <div className="property_card_single">
+            <div className="more_detail_card_inner">
+              <h2 className="card_title">Owner Instruction</h2>
+              <div
+                className="p_info_single"
+                style={{
+                  width: "100%",
+                }}
+              >
+                <h6>{propertyDocument.ownerInstructions}</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="vg10"></div>
       <section className="tenant_card" style={{ marginTop: "100px" }}>
         {tenantDocument &&
@@ -2681,38 +2777,6 @@ const PropertyDetails = () => {
                                   <span></span>
                                 ))}
                               </h5>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-lg-6">
-                        <div className="property_card_single">
-                          <div className="more_detail_card_inner">
-                            <h2 className="card_title">Property Description</h2>
-                            <div
-                              className="p_info_single"
-                              style={{
-                                width: "100%",
-                              }}
-                            >
-                              <h6>{propertyDocument.propertyDescription}</h6>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-lg-6">
-                        <div className="property_card_single">
-                          <div className="more_detail_card_inner">
-                            <h2 className="card_title">Owner Instruction</h2>
-                            <div
-                              className="p_info_single"
-                              style={{
-                                width: "100%",
-                              }}
-                            >
-                              <h6>{propertyDocument.ownerInstructions}</h6>
                             </div>
                           </div>
                         </div>
