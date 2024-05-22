@@ -140,7 +140,8 @@ export default function Navbar() {
   // array for header social media hide after login 
 
   // hide navbar array 
-  const navbarHidePaths = ["/login"];
+  // const navbarHidePaths = ["/login"];
+  const navbarHidePaths = [""];
   const shouldNavbarHide = navbarHidePaths.includes(location.pathname);
   const navbarHideClass = `${shouldNavbarHide ? "navbarhide" : ""}`;
   // hide navbar array 
