@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTable, useGlobalFilter, useFilters, usePagination } from 'react-table'
-import './ReactTable.css'
+import './ReactTable.scss'
 import ReactTableGlobalFilter from './ReactTableGlobalFilter'
 import ReactTableColumnFilter from './ReactTableColumnFilter'
 
@@ -47,10 +47,44 @@ export default function ReactTable({ tableColumns, tableData }) {
 
     return (
         <>
-            <div>
-                <ReactTableGlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+            <div className="vg22"></div>
+            <div className="filters">
+                <div className='left'>
+                    <ReactTableGlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+                </div>
+                <div className="right">
+                    <div className="button_filter diff_views">
+                        <div className="bf_single">
+                            <span className="material-symbols-outlined">calendar_view_month</span>
+                        </div>
+                        <div className="bf_single">
+                            <span className="material-symbols-outlined">grid_view</span>
+                        </div>
+                        <div className="bf_single active">
+                            <span className="material-symbols-outlined">view_list</span>
+                        </div>
+                    </div>
+                    <div className="icon_dropdown">
+                        <select name="months" id="months">
+                            <option value="" disabled>Select Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div>
+            <div className="vg10"></div>
+            <div className='react_table'>
                 <table {...getTableProps()}>
                     <thead>
                         {headerGroups.map((headergroup) => (
@@ -85,32 +119,73 @@ export default function ReactTable({ tableColumns, tableData }) {
                     </tbody>
                 </table>
             </div>
-            <div>
-                <span>
-                    <strong>
-                        {pageIndex + 1} of {pageOptions.length}
-                    </strong>{' '}
-                </span>
+            <div className='react_pagination'>
+                <div className="left">
+                    <div className="items_on_page">
+                        <span>
+                            Items per page
+                        </span>
+                        <select value={pageSize} onChange={e => setPageSize(Number(e.target.value))}>
+                            {
+                                [5, 10, 25, 50, 100].map(pageSize => (
+                                    <option key={pageSize} value={pageSize}>
+                                        {pageSize}
+                                    </option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div className="right">
+                    <div className="previous_previous_first">
+                        <span class={`material-symbols-outlined previous_first ${!canPreviousPage ? "disabled" : "pointer"}`} onClick={() => gotoPage(0)}>
+                            skip_previous
+                        </span>
+                        <div className={`previous_click ${!canPreviousPage ? "disabled" : "pointer"}`} onClick={() => previousPage()}>
+                            <div className="arrow">
+                            <span class="material-symbols-outlined">
+                                arrow_back_ios
+                            </span> <span class="material-symbols-outlined">
+                                arrow_back_ios
+                            </span>
+                            </div>
+                           
 
-                <select value={pageSize} onChange={e => setPageSize(Number(e.target.value))}>
-                    {
-                        [5, 10, 25, 50, 100].map(pageSize => (
-                            <option key={pageSize} value={pageSize}>
-                                Show {pageSize}
-                            </option>
-                        ))
-                    }
-                </select>
+                            <span>
+                                Previous
+                            </span>
+                        </div>
+                    </div>
+                    <div className="total_page">
+                        <span className="active_page">
+                            {pageIndex + 1}
+                        </span>
+                        <span className="tp_number">
+                            of {pageOptions.length}
+                        </span>
+                    </div>
+                    <div className="next_next_last">
+                        <div className={`next_click ${!canNextPage ? "disabled" : "pointer"}`} onClick={() => nextPage()}>
+                            <span>
+                                Next
+                            </span>
+                            <div className="arrow">
+                                <span class="material-symbols-outlined">
+                                    arrow_forward_ios
+                                </span><span class="material-symbols-outlined">
+                                    arrow_forward_ios
+                                </span>
+                            </div>
 
-                <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>{'<<'}</button>
-                <button
-                    onClick={() => previousPage()}
-                    disabled={!canPreviousPage}
-                >
-                    Previous
-                </button>
-                <button onClick={() => nextPage()} disabled={!canNextPage}> Next</button>
-                <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>{'>>'}</button>
+                        </div>
+                        <span class={`material-symbols-outlined next_last ${!canNextPage ? "disabled" : "pointer"}`} onClick={() => gotoPage(pageCount - 1)}>
+                            skip_next
+                        </span>
+                    </div>
+                </div>
+
+
+
             </div >
         </>
     )

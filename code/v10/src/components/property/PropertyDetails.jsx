@@ -19,7 +19,6 @@ import { timestamp } from "../../firebase/config";
 import { format } from "date-fns";
 import RichTextEditor from "react-rte";
 
-
 import "./UserList.css";
 
 // component
@@ -57,7 +56,7 @@ const PropertyDetails = () => {
   // upload tenant code start
   const [tenantName, setTenantName] = useState("");
   const [editingTenantId, setEditingTenantId] = useState(null);
-  const [tenantCallNumber, seTenantCallNumber] = useState("");
+  const [tenantMobile, setTenantMobile] = useState("");
   const [isTenantEditing, setIsTenantEditing] = useState(false);
   const [selectedTenantImage, setSelectedTenantImage] = useState(null);
   const [previewTenantImage, setPreviewTenantImage] = useState(null);
@@ -72,6 +71,13 @@ const PropertyDetails = () => {
     }));
   };
 
+  const handleMobileChange = (tenantId, newMobile) => {
+    setTenantMobile((prev) => ({
+      ...prev,
+      [tenantId]: newMobile,
+    }));
+  };
+
   const handleEditTenantToggle = (tenantId) => {
     const tenant = tenantDocument?.find((tenant) => tenant.id === tenantId);
     if (tenant) {
@@ -80,17 +86,21 @@ const PropertyDetails = () => {
         ...prev,
         [tenantId]: tenant.name,
       }));
+      setTenantMobile((prev) => ({
+        ...prev,
+        [tenantId]: tenant.mobile,
+      }));
     } else {
       console.error("Tenant not found or tenantDocument is undefined");
     }
   };
 
-  const updateTenantName = async (tenantId, name) => {
+  const updateTenantDetails = async (tenantId, name, mobile) => {
     try {
       await projectFirestore
         .collection("tenants")
         .doc(tenantId)
-        .update({ name });
+        .update({ name, mobile });
       console.log("Document updated successfully");
     } catch (error) {
       console.log("Error updating document:", error);
@@ -98,8 +108,15 @@ const PropertyDetails = () => {
   };
 
   const handleSaveTenant = async (tenantId) => {
-    if (tenantName[tenantId] !== undefined) {
-      await updateTenantName(tenantId, tenantName[tenantId]);
+    if (
+      tenantName[tenantId] !== undefined &&
+      tenantMobile[tenantId] !== undefined
+    ) {
+      await updateTenantDetails(
+        tenantId,
+        tenantName[tenantId],
+        tenantMobile[tenantId]
+      );
     }
     setEditingTenantId(null);
   };
@@ -552,12 +569,12 @@ const PropertyDetails = () => {
   const handleCancelPropDesc = () => {
     setIsPropDescEdit(false);
   };
-  // END CODE FOR EDIT Property desc by TEXT USING TEXT EDITOR  
-
+  // END CODE FOR EDIT Property desc by TEXT USING TEXT EDITOR
 
   // START CODE FOR EDIT TEXT USING TEXT EDITOR
   const [editedOwnerInstruction, setEditedOwnerInstruction] = useState("");
-  const [isEditingOwnerInstruction, setIsEditingOwnerInstruction] = useState(false);
+  const [isEditingOwnerInstruction, setIsEditingOwnerInstruction] =
+    useState(false);
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
     RichTextEditor.createValueFromString(editedOwnerInstruction, "html")
   );
@@ -582,9 +599,6 @@ const PropertyDetails = () => {
     setIsEditingOwnerInstruction(false);
   };
   // END CODE FOR EDIT TEXT USING TEXT EDITOR
-
-
-
 
   return (
     <>
@@ -1282,94 +1296,7 @@ const PropertyDetails = () => {
                           </OwlCarousel>
                         </div>
                       )}
-                    {/* tenant card start */}
-                    <section className="property_card_single">
-                      <div className="more_detail_card_inner">
-                        <h2 className="card_title">
-                          Tenant Information
-                        </h2>
-                        <div className="tenant_card">
-                          <div className="row">
-                            <div className="col-md-2">
-                              <div className="add_btn eicp_single mb-2" onClick={handleAddTenant}>
-                                <div class="icon"><div class="text">
-                                  <h6>6</h6>
-                                </div>
-                                </div>
-                              </div>
-                              <div className="add_btn" onClick={handleAddTenant}>
-                                <div className="add_btn_inner">
-                                  <div className="add_icon">+</div>
-                                  <div className="ab_text">
-                                    Add tenant Name, Mobile, IMG etc.
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-10">
-                              {/* <OwlCarousel className="owl-theme" {...optionsTenant}> */}
-                              <div className="d-flex flex-wrap-wrap" style={{
-                                gap: "10px"
-                              }}>
-                                {tenantDocument &&
-                                  tenantDocument.map((tenant) => (
-                                    <div className="tc_single relative item" key={tenant.id}>
-                                      <div className="tcs_img_container">
-                                        <img src={getImageSrc()} alt="Preview" />
-                                      </div>
-                                      <div
-                                        className={`tenant_detail ${editingTenantId === tenant.id ? "td_edit" : ""
-                                          }`}
-                                      >
-                                        <input
-                                          type="text"
-                                          value={tenantName[tenant.id] ?? tenant.name}
-                                          onChange={(e) => handleNameChange(tenant.id, e.target.value)}
-                                          readOnly={editingTenantId !== tenant.id}
-                                          className="t_name"
-                                        />
-                                        <input
-                                          type="number"
-                                          value={tenant.mobile || ""}
-                                          readOnly={editingTenantId !== tenant.id}
-                                          className="t_number"
-                                        />
-                                      </div>
-                                      <div className="wha_call_icon">
-                                        <Link className="call_icon wc_single">
-                                          <img src="/assets/img/simple_call.png" alt="" />
-                                        </Link>
-                                        <Link className="wha_icon wc_single">
-                                          <img src="/assets/img/whatsapp_simple.png" alt="" />
-                                        </Link>
-                                      </div>
-                                      <span
-                                        className="edit_save"
-                                        onClick={() =>
-                                          editingTenantId === tenant.id
-                                            ? handleSaveTenant(tenant.id)
-                                            : handleEditTenantToggle(tenant.id)
-                                        }
-                                      >
-                                        {editingTenantId === tenant.id ? "save" : "edit"}
-                                      </span>
-                                    </div>
-                                  ))}
-                              </div>
-                              {/* </OwlCarousel> */}
-                            </div>
-                          </div>
 
-
-
-                        </div>
-                      </div>
-
-                    </section>
-
-
-                    <div className="vg22"></div>
-                    {/* tenant card end  */}
                     {showAIForm && (
                       <section className="property_card_single add_aditional_form">
                         <div className="more_detail_card_inner relative">
@@ -1542,6 +1469,148 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                     </section>
+                    {/* tenant card start */}
+                    <section className="property_card_single">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">Tenant Information</h2>
+                        <div className="tenant_card">
+                          <div className="row">
+                            <div className="col-md-2">
+                              <div
+                                className="add_btn eicp_single mb-2"
+                                onClick={handleAddTenant}
+                              >
+                                <div class="icon">
+                                  <div class="text">
+                                    <h6>6</h6>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                className="add_btn"
+                                onClick={handleAddTenant}
+                              >
+                                <div className="add_btn_inner">
+                                  <div className="add_icon">+</div>
+                                  <div className="ab_text">
+                                    Add tenant Name, Mobile, IMG etc.
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-10">
+                              {/* <OwlCarousel className="owl-theme" {...optionsTenant}> */}
+                              <div
+                                className="d-flex"
+                                style={{
+                                  gap: "15px",
+                                }}
+                              >
+                                {tenantDocument &&
+                                  tenantDocument.map((tenant) => (
+                                    <div
+                                      className="tc_single relative item"
+                                      key={tenant.id}
+                                    >
+                                      <div className="tcs_img_container">
+                                        <img
+                                          src={getImageSrc()}
+                                          alt="Preview"
+                                        />
+                                      </div>
+                                      <div
+                                        className={`tenant_detail ${editingTenantId === tenant.id
+                                          ? "td_edit"
+                                          : ""
+                                          }`}
+                                      >
+                                      
+                                          <div className="edit_inputs">
+                                            <input
+                                              type="text"
+                                              placeholder="Tenant Name"
+                                              value={
+                                                tenantName[tenant.id] ?? tenant.name
+                                              }
+                                              onChange={(e) =>
+                                                handleNameChange(
+                                                  tenant.id,
+                                                  e.target.value
+                                                )
+                                              }
+                                              readOnly={
+                                                editingTenantId !== tenant.id
+                                              }
+                                              className="t_name"
+                                            />
+                                            <input
+                                              type="number"
+                                              placeholder="Tenant Phone"
+                                              value={
+                                                tenantMobile[tenant.id] ??
+                                                tenant.mobile
+                                              }
+                                              onChange={(e) =>
+                                                handleMobileChange(
+                                                  tenant.id,
+                                                  e.target.value
+                                                )
+                                              }
+                                              readOnly={
+                                                editingTenantId !== tenant.id
+                                              }
+                                              className="t_number"
+                                            />
+                                          </div>
+                                 
+
+                                      </div>
+                                      <div className="wha_call_icon">
+                                        <Link
+                                          className="call_icon wc_single"
+                                          to={`tel:${tenant.mobile}`}
+                                          target="_blank"
+                                        >
+                                          <img
+                                            src="/assets/img/simple_call.png"
+                                            alt=""
+                                          />
+                                        </Link>
+                                        <Link
+                                          className="wha_icon wc_single"
+                                          to={`https://wa.me/${tenant.mobile}`}
+                                          target="_blank"
+                                        >
+                                          <img
+                                            src="/assets/img/whatsapp_simple.png"
+                                            alt=""
+                                          />
+                                        </Link>
+                                      </div>
+                                      <span
+                                        className="edit_save"
+                                        onClick={() =>
+                                          editingTenantId === tenant.id
+                                            ? handleSaveTenant(tenant.id)
+                                            : handleEditTenantToggle(tenant.id)
+                                        }
+                                      >
+                                        {editingTenantId === tenant.id
+                                          ? "save"
+                                          : "edit"}
+                                      </span>
+                                    </div>
+                                  ))}
+                              </div>
+                              {/* </OwlCarousel> */}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+                    <div className="vg22"></div>
+                    {/* tenant card end  */}
                     <div className="vg10"></div>
                     {((user && user.role === "owner") ||
                       (user && user.role === "coowner") ||
@@ -2812,18 +2881,29 @@ const PropertyDetails = () => {
                             {isPropDescEdit ? (
                               <div>
                                 <div>
-                                  <RichTextEditor value={Propvalue} onChange={setPropValue} />
+                                  <RichTextEditor
+                                    value={Propvalue}
+                                    onChange={setPropValue}
+                                  />
                                 </div>
                                 <div className="vg10"></div>
                                 <div className="d-flex justify-content-between">
-                                  <div className="theme_btn btn_border" onClick={handleCancelPropDesc} style={{
-                                    width: "fit-content"
-                                  }}>
+                                  <div
+                                    className="theme_btn btn_border"
+                                    onClick={handleCancelPropDesc}
+                                    style={{
+                                      width: "fit-content",
+                                    }}
+                                  >
                                     Cancel
                                   </div>
-                                  <div className="theme_btn btn_fill" onClick={handleSavePropDesc} style={{
-                                    width: "fit-content"
-                                  }}>
+                                  <div
+                                    className="theme_btn btn_fill"
+                                    onClick={handleSavePropDesc}
+                                    style={{
+                                      width: "fit-content",
+                                    }}
+                                  >
                                     Save
                                   </div>
                                 </div>
@@ -2831,24 +2911,33 @@ const PropertyDetails = () => {
                             ) : (
                               <>
                                 <div className="d-flex align-items-center">
-                                  <p className="editortext"
+                                  <p
+                                    className="editortext"
                                     dangerouslySetInnerHTML={{
                                       __html:
                                         propertyDocument &&
-                                        propertyDocument.propertyDescription.toString("html"),
+                                        propertyDocument.propertyDescription.toString(
+                                          "html"
+                                        ),
                                     }}
                                   ></p>
-                                  {!isPropDescEdit && user && user.role == "admin" && (
-                                    <span class="material-symbols-outlined click_icon text_near_icon" onClick={() =>
-                                      handleEditPropDesc("propertyDescription")
-                                    }>
-                                      edit
-                                    </span>
-                                  )}
+                                  {!isPropDescEdit &&
+                                    user &&
+                                    user.role == "admin" && (
+                                      <span
+                                        class="material-symbols-outlined click_icon text_near_icon"
+                                        onClick={() =>
+                                          handleEditPropDesc(
+                                            "propertyDescription"
+                                          )
+                                        }
+                                      >
+                                        edit
+                                      </span>
+                                    )}
                                 </div>
                               </>
                             )}
-
                           </div>
                         </div>
                       </div>
@@ -2860,19 +2949,29 @@ const PropertyDetails = () => {
                             {isEditingOwnerInstruction ? (
                               <div>
                                 <div>
-                                  <RichTextEditor value={ownerInstructionvalue} onChange={setOwnerInstrucitonValue} />
+                                  <RichTextEditor
+                                    value={ownerInstructionvalue}
+                                    onChange={setOwnerInstrucitonValue}
+                                  />
                                 </div>
                                 <div className="vg10"></div>
                                 <div className="d-flex justify-content-between">
-                                  <div className="theme_btn btn_border" onClick={handleCancelOwnerInstruction}
+                                  <div
+                                    className="theme_btn btn_border"
+                                    onClick={handleCancelOwnerInstruction}
                                     style={{
-                                      width: "fit-content"
-                                    }}>
+                                      width: "fit-content",
+                                    }}
+                                  >
                                     Cancel
                                   </div>
-                                  <div className="theme_btn btn_fill" onClick={handleSaveOwnerInstruction} style={{
-                                    width: "fit-content"
-                                  }}>
+                                  <div
+                                    className="theme_btn btn_fill"
+                                    onClick={handleSaveOwnerInstruction}
+                                    style={{
+                                      width: "fit-content",
+                                    }}
+                                  >
                                     Save
                                   </div>
                                 </div>
@@ -2884,24 +2983,31 @@ const PropertyDetails = () => {
                                     dangerouslySetInnerHTML={{
                                       __html:
                                         propertyDocument &&
-                                        propertyDocument.ownerInstructions.toString("html"),
+                                        propertyDocument.ownerInstructions.toString(
+                                          "html"
+                                        ),
                                     }}
                                   ></p>
-                                  {!isEditingOwnerInstruction && user && user.role == "admin" && (
-
-                                    <span class="material-symbols-outlined click_icon text_near_icon" onClick={() =>
-                                      handleEditOwnerInstruction("ownerInstructions")
-                                    }>
-                                      edit
-                                    </span>
-                                  )}
+                                  {!isEditingOwnerInstruction &&
+                                    user &&
+                                    user.role == "admin" && (
+                                      <span
+                                        class="material-symbols-outlined click_icon text_near_icon"
+                                        onClick={() =>
+                                          handleEditOwnerInstruction(
+                                            "ownerInstructions"
+                                          )
+                                        }
+                                      >
+                                        edit
+                                      </span>
+                                    )}
                                 </div>
                               </>
                             )}
                           </div>
                         </div>
                       </div>
-
                     </div>
                   </div>
                 )}

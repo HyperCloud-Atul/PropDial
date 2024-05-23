@@ -169,14 +169,9 @@ const PGTransactions = () => {
                         {paymentForm ? "close" : "add"}
                     </span>
                 </Link>
-                <div className="pg_header">
-                    <h2 className="m22 mb-1">Transaction Detail</h2>
-                    <h4 className="r16 light_black">Your all transaction history </h4>
-                </div>
                 {propertydoc && <div className="pg_header">
-                    <h2 className="m22 mb-1">{propertydoc.unitNumber}, {propertydoc.locality}, {propertydoc.society}, {propertydoc.city}</h2>
-                </div>}
-                <div className="vg22"></div>
+                    <h2 className="m22">{propertydoc.unitNumber}, {propertydoc.locality}, {propertydoc.society}, {propertydoc.city}</h2>
+                </div>}              
                 {paymentForm && (
                     <div className="add_payment_form">
                         <form action="">

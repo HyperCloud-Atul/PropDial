@@ -9,16 +9,20 @@ export default function ReactTableGlobalFilter({ filter, setFilter }) {
     }, 200)
 
     return (
-        <span>
-            Search: {' '}
+        <div className="rt_global_search search_field">
             <input
                 value={value || ''}
                 onChange={e => {
                     setValue(e.target.value)
                     onChange(e.target.value)
                 }}
+                placeholder='Search'
             ></input>
-            <div className="vg22"></div>
-        </span>
+            <div class="field_icon"><span class="material-symbols-outlined">search</span></div>
+        </div>
+
+
+
+
     )
 }
