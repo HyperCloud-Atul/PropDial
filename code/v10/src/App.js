@@ -8,7 +8,6 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import NavbarBottom from "./components/NavbarBottom";
 
-
 import "./App.css";
 import PhoneLogin from "./pdpages/phonelogin/PhoneLogin";
 import PGProfile from "./pdpages/profile/PGProfile";
@@ -25,7 +24,6 @@ import PGUpdateProperty from "./pdpages/property/PGUpdateProperty";
 import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
 
 // ------------------------------------------------------------------------------------
-
 
 // pages
 // superadmin
@@ -52,7 +50,7 @@ import AddPhoto from "./pages/create/AddPhoto";
 import AddDocument from "./pages/create/AddDocument";
 import AddDocumentNew from "./pages/create/AddDocumentNew";
 import PropertyStatus from "./components/PropertyStatus";
-
+import TenantDetails from "./components/TenantDetails";
 
 import PGPropertyBills from "./pages/property/PGPropertyBills";
 import PGPropertyDetails from "./pages/property/PGPropertyDetails";
@@ -75,7 +73,7 @@ import PGSearch from "./pages/search/PGSearch";
 
 // import BillList from './components/BillList'
 
-// New component import start 
+// New component import start
 import AddNotification from "./pages/create/AddNotification";
 import CreateTicket from "./chatboard/CreateTicket";
 import TicketDetail from "./chatboard/TicketDetail";
@@ -94,14 +92,14 @@ import PGRateCard from "./pdpages/roles/admin/master/PGRateCard";
 function App() {
   const { authIsReady, user } = useAuthContext();
 
-  useEffect(() => { }, [user]);
+  useEffect(() => {}, [user]);
 
   const [currentModeStatus, setCurrentModeStatus] = useState("dark");
   const { document: dbDisplayModeDocuments, error: dbDisplayModeError } =
     useDocument("settings", "mode");
 
-  // PWA CODE START 
-  //  required to import useDocument 
+  // PWA CODE START
+  //  required to import useDocument
   const { document: dbTextContentDocuments, error: dbTextContentError } =
     useDocument("settings", "PWA");
 
@@ -121,7 +119,6 @@ function App() {
     setinstallPopupDiv(false);
   };
   // PWA CODE END
-
 
   useEffect(() => {
     //First time set display mode from db to useState variable and also store the same value in localStorage
@@ -168,7 +165,7 @@ function App() {
               <div>
                 {/* PWA INSTALLATION CODE START */}
                 {dbTextContentDocuments &&
-                  dbTextContentDocuments.status == "active" ? (
+                dbTextContentDocuments.status == "active" ? (
                   <>
                     {" "}
                     {deferredPrompt && (
@@ -202,49 +199,33 @@ function App() {
                 {/* PWA INSTALLATION CODE END */}
                 <Navbar />
                 <Routes>
-                  <Route
-                    path="/login"
-                    element={<PhoneLogin />}
-                  ></Route>
-
+                  <Route path="/login" element={<PhoneLogin />}></Route>
                   <Route path="/" element={<Home></Home>}></Route>
-
                   <Route
                     path="/more-menu"
                     element={<PGMoreMenu></PGMoreMenu>}
                   ></Route>
-
-                  <Route
-                    path="/stage4"
-                    element={<Stage4 />}
-                  ></Route>
-
+                  <Route path="/stage4" element={<Stage4 />}></Route>
                   <Route
                     path="/profile"
                     element={user ? <PGProfile /> : <PhoneLogin />}
                   ></Route>
-
                   <Route
                     path="/notification"
-                    element={< PGNotification />}
+                    element={<PGNotification />}
                   ></Route>
-
                   <Route path="/about-us" element={<PGAboutUs />}></Route>
-
                   <Route path="/contact-us" element={<PGContactUs />}></Route>
-
                   <Route path="/faq" element={<Faq></Faq>}></Route>
-
-                  <Route
-                    path="/properties"
-                    element={< PGProperties />}
-                  ></Route>
-
+                  <Route path="/properties" element={<PGProperties />}></Route>
                   <Route
                     path="/propertydetails/:propertyid"
                     element={<PropertyDetails></PropertyDetails>}
                   ></Route>
-
+                  <Route
+                    path="/tenantdetails/:tenantId"
+                    element={<TenantDetails />}
+                  ></Route>
                   {/* <Route
                     path="/addproperty"
                     element={
@@ -255,16 +236,10 @@ function App() {
                       )
                     }
                   ></Route> */}
-
                   <Route
                     path="/allproperties"
-                    element={
-                      <PropdialAllProperties />
-                    }
+                    element={<PropdialAllProperties />}
                   ></Route>
-
-
-
                   {/* <Route
                     path="/addproperty_quick"
                     element={
@@ -275,89 +250,71 @@ function App() {
                       )
                     }
                   ></Route> */}
-
                   <Route
                     path="/ticketdetail"
                     element={
-                      user && user.status === 'active' && (user.role === "owner" || user.role !== "admin") ?
-                        <TicketDetail /> : <Navigate to="/login" />
+                      user &&
+                      user.status === "active" &&
+                      (user.role === "owner" || user.role !== "admin") ? (
+                        <TicketDetail />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
                     }
                   ></Route>
                   <Route
                     path="/tickets"
                     element={
-                      user && user.role ? <PGTickets /> : <Navigate to="/login" />
+                      user && user.role ? (
+                        <PGTickets />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
                     }
                   ></Route>
                   <Route
                     path="/addnotification/:notificationid"
-                    element={< AddNotification />}
+                    element={<AddNotification />}
                   ></Route>
-
-                  <Route
-                    path="/adminuser"
-                    element={< AdminUser />}
-                  ></Route>
-
-                  <Route
-                    path="/ratecard"
-                    element={< PGRateCard />}
-                  ></Route>
-
+                  <Route path="/adminuser" element={<AdminUser />}></Route>
+                  <Route path="/ratecard" element={<PGRateCard />}></Route>
                   <Route
                     path="/transactions/:propertyid"
-                    element={< PGTransactions />}
+                    element={<PGTransactions />}
                   ></Route>
-
-                  <Route
-                    path="/payment"
-                    element={< Payment />}
-                  ></Route>
-
-
+                  <Route path="/payment" element={<Payment />}></Route>
                   {/* owner & co-owner */}
                   <Route
                     path="/dashboard"
-                    element={user ? < PGDaashboard /> : <PhoneLogin />}
+                    element={user ? <PGDaashboard /> : <PhoneLogin />}
                   ></Route>
-
                   {/* *********************************** */}
-
                   {/* <Route
               path="/search-property"
               element={<PGSearchProperty></PGSearchProperty>}
             ></Route> */}
-
-
-
                   <Route
                     path="/pgsearch"
                     element={
-                      user && user.role === "admin" ?
-                        (
-                          <PGSearch />
-                        )
-                        : (
-                          <Navigate to="/login" />
-                        )
+                      user && user.role === "admin" ? (
+                        <PGSearch />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
                     }
                   ></Route>
                   <Route
                     path="/more-menu"
                     element={<PGMoreMenu></PGMoreMenu>}
                   ></Route>
-
-                  <Route path="/adminsettings" element={<AdminSettings />}></Route>
-
+                  <Route
+                    path="/adminsettings"
+                    element={<AdminSettings />}
+                  ></Route>
                   <Route
                     path="/updatepwd"
                     element={user ? <UpdatePassword /> : <PhoneLogin />}
                   ></Route>
-
-
-
-
-
                   <Route
                     path="/admindashboard"
                     element={
@@ -368,7 +325,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/adminproperties"
                     element={
@@ -379,7 +335,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/newproperty"
                     element={
@@ -390,7 +345,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/updateproperty/:propertyid"
                     element={
@@ -401,7 +355,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/addbill/:propertyid"
                     element={
@@ -412,7 +365,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/addphoto"
                     element={
@@ -423,7 +375,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/adddocument"
                     element={
@@ -454,8 +405,6 @@ function App() {
                       )
                     }
                   ></Route>
-
-
                   <Route
                     path="/propertystatus"
                     element={
@@ -466,7 +415,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/propertyedit/:id"
                     element={
@@ -477,7 +425,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/propertybills/:propertyid"
                     element={
@@ -488,7 +435,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/ratecard"
                     element={
@@ -499,22 +445,22 @@ function App() {
                       )
                     }
                   ></Route>
-
-
                   <Route
                     path="/bills"
                     element={
                       user && user.role ? <PGBills /> : <Navigate to="/login" />
                     }
                   ></Route>
-
                   <Route
                     path="/tickets"
                     element={
-                      user && user.role ? <PGTickets /> : <Navigate to="/login" />
+                      user && user.role ? (
+                        <PGTickets />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
                     }
                   ></Route>
-
                   <Route
                     path="/userdashboard"
                     element={
@@ -525,12 +471,11 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/ownerdashboard"
                     element={
                       (user && user.role === "owner") ||
-                        (user && user.role === "coowner") ? (
+                      (user && user.role === "coowner") ? (
                         <PGOwnerDashboard />
                       ) : (
                         <Navigate to="/login" />
@@ -547,10 +492,6 @@ function App() {
                 )
               }
             ></Route> */}
-
-
-
-
                   <Route
                     path="/tenantdashboard"
                     element={
@@ -561,7 +502,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/executivedashboard"
                     element={
@@ -572,7 +512,6 @@ function App() {
                       )
                     }
                   ></Route>
-
                   <Route
                     path="/login"
                     element={user ? <Navigate to="/" /> : <PhoneLogin />}
@@ -585,7 +524,6 @@ function App() {
                     path="/profile"
                     element={user ? <PGProfile /> : <PhoneLogin />}
                   ></Route>
-
                   <Route
                     path="/countrylist"
                     element={
@@ -637,22 +575,17 @@ function App() {
                     }
                   ></Route>
                   <Route path="/error" element={<PGError />}></Route>
-
-
                   <Route
                     path="/pgsingleproperty"
-                    element={< PGSingleProperty />}
+                    element={<PGSingleProperty />}
                   ></Route>
-
-
                   <Route
                     path="/addnotification/:notificationid"
-                    element={< AddNotification />}
+                    element={<AddNotification />}
                   ></Route>
-
                   <Route
                     path="/notification"
-                    element={< PGNotification />}
+                    element={<PGNotification />}
                   ></Route>
                 </Routes>
                 {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}
@@ -664,7 +597,6 @@ function App() {
         )}
       </div>
     </div>
-
   );
 }
 
