@@ -145,7 +145,11 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
         'FILL' 0
 }
 .text_near_icon {
-    font-size: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 3px;
+    position: relative;
+    top: -2px;
 }
 .click_icon:hover,
 .click_icon span:hover {

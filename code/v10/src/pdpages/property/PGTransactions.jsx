@@ -171,7 +171,7 @@ const PGTransactions = () => {
                 </Link>
                 {propertydoc && <div className="pg_header">
                     <h2 className="m22">{propertydoc.unitNumber}, {propertydoc.locality}, {propertydoc.society}, {propertydoc.city}</h2>
-                </div>}              
+                </div>}
                 {paymentForm && (
                     <div className="add_payment_form">
                         <form action="">

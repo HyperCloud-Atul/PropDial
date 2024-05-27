@@ -1519,8 +1519,9 @@ const PropertyDetails = () => {
                                       {" "}
                                       <Link to={`/tenantdetails/${tenant.id}`}>
                                         <div className="tcs_img_container">
-                                          <img
-                                            src={getImageSrc()}
+                                          <img                                        
+                                            src={tenant.tenantImgUrl ||   "/assets/img/user_dummy.png"}
+                                          
                                             alt="Preview"
                                           />
                                         </div>
