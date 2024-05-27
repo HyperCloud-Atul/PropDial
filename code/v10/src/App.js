@@ -86,6 +86,7 @@ import Stage4 from "./pdpages/property/Stage4";
 import Payment from "./pdpages/payment/Payment";
 import PGTransactions from "./pdpages/property/PGTransactions";
 import PGRateCard from "./pdpages/roles/admin/master/PGRateCard";
+import PropertyDocuments from "./components/PropertyDocuments";
 
 // New component import end
 
@@ -225,6 +226,10 @@ function App() {
                   <Route
                     path="/tenantdetails/:tenantId"
                     element={<TenantDetails />}
+                  ></Route>
+                  <Route
+                    path="/propertydocumentdetails/:propertyDocumentId"
+                    element={<PropertyDocuments />}
                   ></Route>
                   {/* <Route
                     path="/addproperty"

@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useDocument } from "../hooks/useDocument";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
+import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
 
 const TenantDetails = () => {
-  // Scroll to the top of the page whenever the location changes
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -16,11 +16,12 @@ const TenantDetails = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { tenantId } = useParams();
-  const fileInputRef = useRef(null); // Create a ref for the file input
+  const fileInputRef = useRef(null);
 
   const [editedFields, setEditedFields] = useState({});
   const [editingField, setEditingField] = useState(null);
   const [imageURL, setImageURL] = useState();
+  const [loading, setLoading] = useState(false); // New state for loading
   const { updateDocument, deleteDocument } = useFirestore("tenants");
 
   const { document, error } = useDocument("tenants", tenantId);
@@ -60,6 +61,7 @@ const TenantDetails = () => {
     const storageRef = projectStorage.ref(uploadPath);
 
     try {
+      setLoading(true); // Set loading to true before uploading
       const img = await storageRef.put(file);
       const imgUrl = await img.ref.getDownloadURL();
       setImageURL(imgUrl);
@@ -67,6 +69,8 @@ const TenantDetails = () => {
       fileInputRef.current.value = "";
     } catch (error) {
       console.error("Error uploading image:", error);
+    } finally {
+      setLoading(false); // Set loading to false after uploading
     }
   };
 
@@ -99,423 +103,549 @@ const TenantDetails = () => {
   };
 
   return (
-    <div>
-      <div style={{ marginTop: "100px" }}>
-        <img
-          src={imageURL || "/assets/img/upload_img_small.png"}
-          style={{ width: "200px", height: "auto" }}
-        />
-        <input type="file" onChange={changeTenantPhoto} ref={fileInputRef} />
-        {imageURL && (
-          <span
-            className="material-symbols-outlined"
-            onClick={deleteTenantPhoto}
-            style={{ cursor: "pointer" }}
-          >
-            delete
-          </span>
-        )}
-      </div>
-      <div>
-        Name:
-        {editingField === "name" ? (
-          <div>
-            <input
-              type="text"
-              value={editedFields.name || ""}
-              onChange={(e) => handleInputChange("name", e.target.value)}
-            />
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("name")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("name")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
+    <div className="tenant_detail_pg">
+      <div className="top_header_pg pg_bg">
+        <div className="page_spacing">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-4">
+                <div className="tc_single">
+                  <div className="tcs_img_container relative">
+                    {loading ? (
+                      <div className="loader">
+                        <BeatLoader color={"#FF5733"} loading={true} />
+                      </div>
+                    ) : (
+                      <>
+                        <img
+                          src={imageURL || "/assets/img/upload_img_small.png"}
+                        />
+                        <label htmlFor="upload" className="upload_img">
+                          <input
+                            type="file"
+                            onChange={changeTenantPhoto}
+                            ref={fileInputRef}
+                            id="upload"
+                          />
+                        </label>
+
+                        {imageURL && (
+                          <span
+                            className="material-symbols-outlined delete_icon"
+                            onClick={deleteTenantPhoto}
+                          >
+                            delete_forever
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <div className="tenant_detail ">
+                    <h5 className="t_name">
+                      {editingField === "name" ? (
+                        <div className="edit_field">
+                          <input
+                            type="text"
+                            value={editedFields.name || ""}
+                            onChange={(e) =>
+                              handleInputChange("name", e.target.value)
+                            }
+                            placeholder="Name"
+                          />
+                          <div className="d-flex justify-content-between">
+                            <span
+                              className="cancel_btn"
+                              onClick={() => handleCancelClick("name")}
+                            >
+                              Cancel
+                            </span>
+                            <span
+                              className="save_btn"
+                              onClick={() => handleSaveClick("name")}
+                            >
+                              Save
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {document && document.name
+                            ? document && document.name
+                            : "Name"}
+                          {!editingField && user && user.role === "admin" && (
+                            <span
+                              className="material-symbols-outlined click_icon text_near_icon"
+                              onClick={() => handleEditClick("name")}
+                            >
+                              edit
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </h5>
+                    <h6 className="t_number">
+                      {editingField === "mobile" ? (
+                        <div className="edit_field">
+                          <input
+                            type="text"
+                            value={editedFields.mobile || ""}
+                            onChange={(e) =>
+                              handleInputChange("mobile", e.target.value)
+                            }
+                            placeholder="Mobile number"
+                          />
+                          <div className="d-flex justify-content-between">
+                            <span
+                              className="cancel_btn"
+                              onClick={() => handleCancelClick("mobile")}
+                            >
+                              Cancel
+                            </span>
+                            <span
+                              className="save_btn"
+                              onClick={() => handleSaveClick("mobile")}
+                            >
+                              Save
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {document && document.mobile
+                            ? document && document.mobile
+                            : "Mobile number"}
+                          {!editingField && user && user.role === "admin" && (
+                            <span
+                              className="material-symbols-outlined click_icon text_near_icon"
+                              onClick={() => handleEditClick("mobile")}
+                            >
+                              edit
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </h6>
+                  </div>
+                  <div className="wha_call_icon">
+                    <Link
+                      className="call_icon wc_single"
+                      to={`tel:${document && document.mobile}`}
+                      target="_blank"
+                    >
+                      <img src="/assets/img/simple_call.png" alt="" />
+                    </Link>
+                    <Link
+                      className="wha_icon wc_single"
+                      to={`https://wa.me/${document && document.mobile}`}
+                      target="_blank"
+                    >
+                      <img src="/assets/img/whatsapp_simple.png" alt="" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-8">
+                <div className="tc_single">
+                  <div className="tcs_single">
+                    <h5>On Boarding Date</h5>
+                    <h6>
+                      {editingField === "onBoardingDate" ? (
+                        <div className="edit_field">
+                          <input
+                            type="date"
+                            value={editedFields.onBoardingDate || ""}
+                            onChange={(e) =>
+                              handleInputChange(
+                                "onBoardingDate",
+                                e.target.value
+                              )
+                            }
+                          />
+                          <div className="d-flex justify-content-between">
+                            <span
+                              className="cancel_btn"
+                              onClick={() =>
+                                handleCancelClick("onBoardingDate")
+                              }
+                            >
+                              Cancel
+                            </span>
+                            <span
+                              className="save_btn"
+                              onClick={() => handleSaveClick("onBoardingDate")}
+                            >
+                              Save
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {document && document.onBoardingDate
+                            ? document && document.onBoardingDate
+                            : "Add onborading date"}
+                          {!editingField && user && user.role === "admin" && (
+                            <span
+                              className="material-symbols-outlined click_icon text_near_icon"
+                              onClick={() => handleEditClick("onBoardingDate")}
+                            >
+                              edit
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </h6>
+                  </div>
+                  <div className="divider"></div>
+                  <div className="tcs_single">
+                    <h5>Off Boarding Date</h5>
+                    <h6>
+                      {editingField === "offBoardingDate" ? (
+                        <div className="edit_field">
+                          <input
+                            type="date"
+                            value={editedFields.offBoardingDate || ""}
+                            onChange={(e) =>
+                              handleInputChange(
+                                "offBoardingDate",
+                                e.target.value
+                              )
+                            }
+                          />
+                          <div className="d-flex justify-content-between">
+                            <span
+                              className="cancel_btn"
+                              onClick={() =>
+                                handleCancelClick("offBoardingDate")
+                              }
+                            >
+                              Cancel
+                            </span>
+                            <span
+                              className="save_btn"
+                              onClick={() => handleSaveClick("offBoardingDate")}
+                            >
+                              Save
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {document && document.offBoardingDate
+                            ? document && document.offBoardingDate
+                            : "Add off borading date"}
+                          {!editingField && user && user.role === "admin" && (
+                            <span
+                              className="material-symbols-outlined click_icon text_near_icon"
+                              onClick={() => handleEditClick("offBoardingDate")}
+                            >
+                              edit
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </h6>
+                  </div>
+                  <div className="divider"></div>
+                  <div className="tcs_single">
+                    <h5>Status</h5>
+                    <h6>
+                      {editingField === "status" ? (
+                        <div className="edit_field">
+                          <div className="form_field">
+                            <div className="field_box theme_radio_new">
+                              <div className="theme_radio_container">
+                                <div className="radio_single">
+                                  <input
+                                    type="radio"
+                                    value="active"
+                                    checked={editedFields.status === "active"}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        "status",
+                                        e.target.value
+                                      )
+                                    }
+                                    id="active"
+                                  />
+                                  <label htmlFor="active">Active</label>
+                                </div>
+                                <div className="radio_single">
+                                  <input
+                                    type="radio"
+                                    value="inactive"
+                                    checked={editedFields.status === "inactive"}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        "status",
+                                        e.target.value
+                                      )
+                                    }
+                                    id="inactive"
+                                  />
+                                  <label htmlFor="inactive">Inactive</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="d-flex justify-content-between">
+                            <span
+                              className="cancel_btn"
+                              onClick={() => handleCancelClick("status")}
+                              style={{ marginLeft: "10px" }}
+                            >
+                              Cancel
+                            </span>
+                            <span
+                              className="save_btn"
+                              onClick={() => handleSaveClick("status")}
+                            >
+                              Save
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {document && document.status}
+                          {!editingField && user && user.role === "admin" && (
+                            <span
+                              className="material-symbols-outlined click_icon text_near_icon"
+                              onClick={() => handleEditClick("status")}
+                            >
+                              edit
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </h6>
+                  </div>
+                  <div className="divider"></div>
+                  <div className="tcs_single">
+                    <h5>Email ID</h5>
+                    <h6>
+                      {editingField === "emailID" ? (
+                        <div className="edit_field">
+                          <input
+                            type="email"
+                            value={editedFields.emailID || ""}
+                            onChange={(e) =>
+                              handleInputChange("emailID", e.target.value)
+                            }
+                          />
+                          <div className="d-flex justify-content-between">
+                            <span
+                              className="cancel_btn"
+                              onClick={() => handleCancelClick("emailID")}
+                              style={{ marginLeft: "10px" }}
+                            >
+                              Cancel
+                            </span>
+                            <span
+                              className="save_btn"
+                              onClick={() => handleSaveClick("emailID")}
+                            >
+                              Save
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {document && document.emailID
+                            ? document && document.emailID
+                            : "Email ID here"}
+                          {!editingField && user && user.role === "admin" && (
+                            <span
+                              className="material-symbols-outlined click_icon text_near_icon"
+                              onClick={() => handleEditClick("emailID")}
+                            >
+                              edit
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </h6>
+                  </div>
+                  <div className="divider"></div>
+                  <div className="tcs_single">
+                    <h5>Address</h5>
+                    <h6>
+                      {editingField === "address" ? (
+                        <div className="edit_field">
+                          <input
+                            type="text"
+                            value={editedFields.address || ""}
+                            onChange={(e) =>
+                              handleInputChange("address", e.target.value)
+                            }
+                          />
+                          <div className="d-flex justify-content-between">
+                            <span
+                              className="cancel_btn"
+                              onClick={() => handleCancelClick("address")}
+                            >
+                              Cancel
+                            </span>
+                            <span
+                              className="save_btn"
+                              onClick={() => handleSaveClick("address")}
+                            >
+                              Save
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {document && document.address
+                            ? document && document.address
+                            : "Address here"}
+                          {!editingField && user && user.role === "admin" && (
+                            <span
+                              className="material-symbols-outlined click_icon text_near_icon"
+                              onClick={() => handleEditClick("address")}
+                            >
+                              edit
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </h6>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        ) : (
-          <>
-            {document && document.name}
             {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("name")}
-              >
-                edit
-              </span>
+              <>
+                <div className="vg22"></div>
+                <div className="divider"></div>
+                <div className="vg10"></div>
+                <div onClick={deleteTenant} className="delete_bottom">
+                  <span className="material-symbols-outlined">delete</span>
+                  <span>Delete Tenant</span>
+                </div>
+                <div className="vg22"></div>
+              </>
             )}
-          </>
-        )}
-      </div>
-      <div>
-        Address:
-        {editingField === "address" ? (
-          <div>
-            <input
-              type="text"
-              value={editedFields.address || ""}
-              onChange={(e) => handleInputChange("address", e.target.value)}
-            />
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("address")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("address")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
-            </div>
+            {/* <div>
+            ID Number:
+            {editingField === "idNumber" ? (
+              <div>
+                <input
+                  type="text"
+                  value={editedFields.idNumber || ""}
+                  onChange={(e) => handleInputChange("idNumber", e.target.value)}
+                />
+                <div className="d-flex">
+                  <button
+                    className="product_edit_save_btn"
+                    onClick={() => handleSaveClick("idNumber")}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="product_edit_save_btn cancel-btn"
+                    onClick={() => handleCancelClick("idNumber")}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {document && document.idNumber}
+                {!editingField && user && user.role === "admin" && (
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => handleEditClick("idNumber")}
+                  >
+                    edit
+                  </span>
+                )}
+              </>
+            )}
+          </div>       */}
+
+            {/* <div>
+            Rent Start Date:
+            {editingField === "rentStartDate" ? (
+              <div>
+                <input
+                  type="date"
+                  value={editedFields.rentStartDate || ""}
+                  onChange={(e) =>
+                    handleInputChange("rentStartDate", e.target.value)
+                  }
+                />
+                <div className="d-flex">
+                  <button
+                    className="product_edit_save_btn"
+                    onClick={() => handleSaveClick("rentStartDate")}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="product_edit_save_btn cancel-btn"
+                    onClick={() => handleCancelClick("rentStartDate")}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {document && document.rentStartDate}
+                {!editingField && user && user.role === "admin" && (
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => handleEditClick("rentStartDate")}
+                  >
+                    edit
+                  </span>
+                )}
+              </>
+            )}
+          </div> */}
+            {/* <div>
+            Rent End Date:
+            {editingField === "rentEndDate" ? (
+              <div>
+                <input
+                  type="date"
+                  value={editedFields.rentEndDate || ""}
+                  onChange={(e) => handleInputChange("rentEndDate", e.target.value)}
+                />
+                <div className="d-flex">
+                  <button
+                    className="product_edit_save_btn"
+                    onClick={() => handleSaveClick("rentEndDate")}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="product_edit_save_btn cancel-btn"
+                    onClick={() => handleCancelClick("rentEndDate")}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {document && document.rentEndDate}
+                {!editingField && user && user.role === "admin" && (
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => handleEditClick("rentEndDate")}
+                  >
+                    edit
+                  </span>
+                )}
+              </>
+            )}
+          </div> */}
           </div>
-        ) : (
-          <>
-            {document && document.address}
-            {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("address")}
-              >
-                edit
-              </span>
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        ID Number:
-        {editingField === "idNumber" ? (
-          <div>
-            <input
-              type="text"
-              value={editedFields.idNumber || ""}
-              onChange={(e) => handleInputChange("idNumber", e.target.value)}
-            />
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("idNumber")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("idNumber")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {document && document.idNumber}
-            {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("idNumber")}
-              >
-                edit
-              </span>
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        Mobile:
-        {editingField === "mobile" ? (
-          <div>
-            <input
-              type="text"
-              value={editedFields.mobile || ""}
-              onChange={(e) => handleInputChange("mobile", e.target.value)}
-            />
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("mobile")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("mobile")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {document && document.mobile}
-            {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("mobile")}
-              >
-                edit
-              </span>
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        Email ID:
-        {editingField === "emailID" ? (
-          <div>
-            <input
-              type="email"
-              value={editedFields.emailID || ""}
-              onChange={(e) => handleInputChange("emailID", e.target.value)}
-            />
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("emailID")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("emailID")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {document && document.emailID}
-            {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("emailID")}
-              >
-                edit
-              </span>
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        Onboarding Date:
-        {editingField === "onBoardingDate" ? (
-          <div>
-            <input
-              type="date"
-              value={editedFields.onBoardingDate || ""}
-              onChange={(e) =>
-                handleInputChange("onBoardingDate", e.target.value)
-              }
-            />
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("onBoardingDate")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("onBoardingDate")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {document && document.onBoardingDate}
-            {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("onBoardingDate")}
-              >
-                edit
-              </span>
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        Offboarding Date:
-        {editingField === "offBoardingDate" ? (
-          <div>
-            <input
-              type="date"
-              value={editedFields.offBoardingDate || ""}
-              onChange={(e) =>
-                handleInputChange("offBoardingDate", e.target.value)
-              }
-            />
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("offBoardingDate")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("offBoardingDate")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {document && document.offBoardingDate}
-            {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("offBoardingDate")}
-              >
-                edit
-              </span>
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        Rent Start Date:
-        {editingField === "rentStartDate" ? (
-          <div>
-            <input
-              type="date"
-              value={editedFields.rentStartDate || ""}
-              onChange={(e) =>
-                handleInputChange("rentStartDate", e.target.value)
-              }
-            />
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("rentStartDate")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("rentStartDate")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {document && document.rentStartDate}
-            {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("rentStartDate")}
-              >
-                edit
-              </span>
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        Rent End Date:
-        {editingField === "rentEndDate" ? (
-          <div>
-            <input
-              type="date"
-              value={editedFields.rentEndDate || ""}
-              onChange={(e) => handleInputChange("rentEndDate", e.target.value)}
-            />
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("rentEndDate")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("rentEndDate")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {document && document.rentEndDate}
-            {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("rentEndDate")}
-              >
-                edit
-              </span>
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        Status:
-        {editingField === "status" ? (
-          <div>
-            <select
-              value={editedFields.status || ""}
-              onChange={(e) => handleInputChange("status", e.target.value)}
-            >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-            <div className="d-flex">
-              <button
-                className="product_edit_save_btn"
-                onClick={() => handleSaveClick("status")}
-              >
-                Save
-              </button>
-              <button
-                className="product_edit_save_btn cancel-btn"
-                onClick={() => handleCancelClick("status")}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {document && document.status}
-            {!editingField && user && user.role === "admin" && (
-              <span
-                className="material-symbols-outlined"
-                onClick={() => handleEditClick("status")}
-              >
-                edit
-              </span>
-            )}
-          </>
-        )}
-      </div>
-      <div onClick={deleteTenant}>
-        <span className="material-symbols-outlined">delete</span>
+        </div>
       </div>
     </div>
   );
