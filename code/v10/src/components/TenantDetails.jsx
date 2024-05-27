@@ -5,7 +5,7 @@ import { useDocument } from "../hooks/useDocument";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
-import { BarLoader, BeatLoader, ClimbingBoxLoader } from 'react-spinners';
+import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
 
 const TenantDetails = () => {
   const location = useLocation();
@@ -112,9 +112,8 @@ const TenantDetails = () => {
                 <div className="tc_single">
                   <div className="tcs_img_container relative">
                     {loading ? (
-
                       <div className="loader">
-                        <BeatLoader color={'#FF5733'} loading={true} />
+                        <BeatLoader color={"#FF5733"} loading={true} />
                       </div>
                     ) : (
                       <>
@@ -122,15 +121,18 @@ const TenantDetails = () => {
                           src={imageURL || "/assets/img/upload_img_small.png"}
                         />
                         <label htmlFor="upload" className="upload_img">
-                          <input type="file" onChange={changeTenantPhoto} ref={fileInputRef} id="upload" />
+                          <input
+                            type="file"
+                            onChange={changeTenantPhoto}
+                            ref={fileInputRef}
+                            id="upload"
+                          />
                         </label>
-
 
                         {imageURL && (
                           <span
                             className="material-symbols-outlined delete_icon"
                             onClick={deleteTenantPhoto}
-
                           >
                             delete_forever
                           </span>
@@ -145,7 +147,9 @@ const TenantDetails = () => {
                           <input
                             type="text"
                             value={editedFields.name || ""}
-                            onChange={(e) => handleInputChange("name", e.target.value)}
+                            onChange={(e) =>
+                              handleInputChange("name", e.target.value)
+                            }
                             placeholder="Name"
                           />
                           <div className="d-flex justify-content-between">
@@ -161,12 +165,13 @@ const TenantDetails = () => {
                             >
                               Save
                             </span>
-
                           </div>
                         </div>
                       ) : (
                         <>
-                          {document && document.name ? document && document.name : "Name"}
+                          {document && document.name
+                            ? document && document.name
+                            : "Name"}
                           {!editingField && user && user.role === "admin" && (
                             <span
                               className="material-symbols-outlined click_icon text_near_icon"
@@ -174,19 +179,19 @@ const TenantDetails = () => {
                             >
                               edit
                             </span>
-
                           )}
                         </>
                       )}
                     </h5>
                     <h6 className="t_number">
-
                       {editingField === "mobile" ? (
                         <div className="edit_field">
                           <input
                             type="text"
                             value={editedFields.mobile || ""}
-                            onChange={(e) => handleInputChange("mobile", e.target.value)}
+                            onChange={(e) =>
+                              handleInputChange("mobile", e.target.value)
+                            }
                             placeholder="Mobile number"
                           />
                           <div className="d-flex justify-content-between">
@@ -202,13 +207,13 @@ const TenantDetails = () => {
                             >
                               Save
                             </span>
-
                           </div>
-
                         </div>
                       ) : (
                         <>
-                          {document && document.mobile ? document && document.mobile : "Mobile number"}
+                          {document && document.mobile
+                            ? document && document.mobile
+                            : "Mobile number"}
                           {!editingField && user && user.role === "admin" && (
                             <span
                               className="material-symbols-outlined click_icon text_near_icon"
@@ -228,31 +233,22 @@ const TenantDetails = () => {
 
                       target="_blank"
                     >
-                      <img
-                        src="/assets/img/simple_call.png"
-                        alt=""
-                      />
+                      <img src="/assets/img/simple_call.png" alt="" />
                     </Link>
                     <Link
                       className="wha_icon wc_single"
                       to={`https://wa.me/${document && document.mobile}`}
                       target="_blank"
                     >
-                      <img
-                        src="/assets/img/whatsapp_simple.png"
-                        alt=""
-                      />
+                      <img src="/assets/img/whatsapp_simple.png" alt="" />
                     </Link>
                   </div>
-
                 </div>
               </div>
               <div className="col-md-8">
                 <div className="tc_single">
                   <div className="tcs_single">
-                    <h5>
-                      On Boarding Date
-                    </h5>
+                    <h5>On Boarding Date</h5>
                     <h6>
                       {editingField === "onBoardingDate" ? (
                         <div className="edit_field">
@@ -260,13 +256,18 @@ const TenantDetails = () => {
                             type="date"
                             value={editedFields.onBoardingDate || ""}
                             onChange={(e) =>
-                              handleInputChange("onBoardingDate", e.target.value)
+                              handleInputChange(
+                                "onBoardingDate",
+                                e.target.value
+                              )
                             }
                           />
                           <div className="d-flex justify-content-between">
                             <span
                               className="cancel_btn"
-                              onClick={() => handleCancelClick("onBoardingDate")}
+                              onClick={() =>
+                                handleCancelClick("onBoardingDate")
+                              }
                             >
                               Cancel
                             </span>
@@ -276,12 +277,13 @@ const TenantDetails = () => {
                             >
                               Save
                             </span>
-
                           </div>
                         </div>
                       ) : (
                         <>
-                          {document && document.onBoardingDate ? document && document.onBoardingDate : "Add onborading date"}
+                          {document && document.onBoardingDate
+                            ? document && document.onBoardingDate
+                            : "Add onborading date"}
                           {!editingField && user && user.role === "admin" && (
                             <span
                               className="material-symbols-outlined click_icon text_near_icon"
@@ -296,9 +298,7 @@ const TenantDetails = () => {
                   </div>
                   <div className="divider"></div>
                   <div className="tcs_single">
-                    <h5>
-                      Off Boarding Date
-                    </h5>
+                    <h5>Off Boarding Date</h5>
                     <h6>
                       {editingField === "offBoardingDate" ? (
                         <div className="edit_field">
@@ -306,13 +306,18 @@ const TenantDetails = () => {
                             type="date"
                             value={editedFields.offBoardingDate || ""}
                             onChange={(e) =>
-                              handleInputChange("offBoardingDate", e.target.value)
+                              handleInputChange(
+                                "offBoardingDate",
+                                e.target.value
+                              )
                             }
                           />
                           <div className="d-flex justify-content-between">
                             <span
                               className="cancel_btn"
-                              onClick={() => handleCancelClick("offBoardingDate")}
+                              onClick={() =>
+                                handleCancelClick("offBoardingDate")
+                              }
                             >
                               Cancel
                             </span>
@@ -322,12 +327,13 @@ const TenantDetails = () => {
                             >
                               Save
                             </span>
-
                           </div>
                         </div>
                       ) : (
                         <>
-                          {document && document.offBoardingDate ? document && document.offBoardingDate : "Add off borading date"}
+                          {document && document.offBoardingDate
+                            ? document && document.offBoardingDate
+                            : "Add off borading date"}
                           {!editingField && user && user.role === "admin" && (
                             <span
                               className="material-symbols-outlined click_icon text_near_icon"
@@ -346,15 +352,20 @@ const TenantDetails = () => {
                     <h6>
                       {editingField === "status" ? (
                         <div className="edit_field">
-                          <div className='form_field'>
-                            <div className='field_box theme_radio_new'>
+                          <div className="form_field">
+                            <div className="field_box theme_radio_new">
                               <div className="theme_radio_container">
                                 <div className="radio_single">
                                   <input
                                     type="radio"
                                     value="active"
                                     checked={editedFields.status === "active"}
-                                    onChange={(e) => handleInputChange("status", e.target.value)}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        "status",
+                                        e.target.value
+                                      )
+                                    }
                                     id="active"
                                   />
                                   <label htmlFor="active">Active</label>
@@ -364,7 +375,12 @@ const TenantDetails = () => {
                                     type="radio"
                                     value="inactive"
                                     checked={editedFields.status === "inactive"}
-                                    onChange={(e) => handleInputChange("status", e.target.value)}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        "status",
+                                        e.target.value
+                                      )
+                                    }
                                     id="inactive"
                                   />
                                   <label htmlFor="inactive">Inactive</label>
@@ -387,7 +403,6 @@ const TenantDetails = () => {
                               Save
                             </span>
                           </div>
-
                         </div>
                       ) : (
                         <>
@@ -406,16 +421,16 @@ const TenantDetails = () => {
                   </div>
                   <div className="divider"></div>
                   <div className="tcs_single">
-                    <h5>
-                      Email ID
-                    </h5>
+                    <h5>Email ID</h5>
                     <h6>
                       {editingField === "emailID" ? (
                         <div className="edit_field">
                           <input
                             type="email"
                             value={editedFields.emailID || ""}
-                            onChange={(e) => handleInputChange("emailID", e.target.value)}
+                            onChange={(e) =>
+                              handleInputChange("emailID", e.target.value)
+                            }
                           />
                           <div className="d-flex justify-content-between">
                             <span
@@ -431,12 +446,13 @@ const TenantDetails = () => {
                             >
                               Save
                             </span>
-
                           </div>
                         </div>
                       ) : (
                         <>
-                          {document && document.emailID ? document && document.emailID : "Email ID here"}
+                          {document && document.emailID
+                            ? document && document.emailID
+                            : "Email ID here"}
                           {!editingField && user && user.role === "admin" && (
                             <span
                               className="material-symbols-outlined click_icon text_near_icon"
@@ -451,16 +467,16 @@ const TenantDetails = () => {
                   </div>
                   <div className="divider"></div>
                   <div className="tcs_single">
-                    <h5>
-                      Address
-                    </h5>
+                    <h5>Address</h5>
                     <h6>
                       {editingField === "address" ? (
                         <div className="edit_field">
                           <input
                             type="text"
                             value={editedFields.address || ""}
-                            onChange={(e) => handleInputChange("address", e.target.value)}
+                            onChange={(e) =>
+                              handleInputChange("address", e.target.value)
+                            }
                           />
                           <div className="d-flex justify-content-between">
                             <span
@@ -475,12 +491,13 @@ const TenantDetails = () => {
                             >
                               Save
                             </span>
-
                           </div>
                         </div>
                       ) : (
                         <>
-                          {document && document.address ? document && document.address : "Address here"}
+                          {document && document.address
+                            ? document && document.address
+                            : "Address here"}
                           {!editingField && user && user.role === "admin" && (
                             <span
                               className="material-symbols-outlined click_icon text_near_icon"
@@ -505,7 +522,8 @@ const TenantDetails = () => {
                   <span className="material-symbols-outlined">delete</span>
                   <span>Delete Tenant</span>
                 </div>
-                <div className="vg22"></div></>
+                <div className="vg22"></div>
+              </>
             )}
             {/* <div>
             ID Number:
@@ -546,7 +564,6 @@ const TenantDetails = () => {
               </>
             )}
           </div>       */}
-
 
             {/* <div>
             Rent Start Date:
@@ -629,14 +646,8 @@ const TenantDetails = () => {
             )}
           </div> */}
           </div>
-
-
-
         </div>
       </div>
-
-
-
     </div>
   );
 };
