@@ -135,6 +135,9 @@ const PropertyDetails = () => {
       offBoardingDate: "",
       idNumber: "",
       address: "",
+      emailId: "",
+      rentStartDate: "",
+      rentEndDate: "",
     };
 
     await addDocument(tenantData);
