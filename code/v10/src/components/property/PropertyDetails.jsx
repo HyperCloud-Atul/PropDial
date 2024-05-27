@@ -128,7 +128,7 @@ const PropertyDetails = () => {
       name: "",
       mobile: "",
       whatsappNumber: "",
-      status: "",
+      status: "active",
       propertyId: propertyid,
       photo: "",
       onBoardingDate: "",
@@ -1574,7 +1574,7 @@ const PropertyDetails = () => {
                                         <div className="wha_call_icon">
                                           <Link
                                             className="call_icon wc_single"
-                                            to={`tel:${tenant.mobile}`}
+                                            to={`tel:${tenant.mobile}`}                                          
                                             target="_blank"
                                           >
                                             <img

@@ -224,7 +224,8 @@ const TenantDetails = () => {
                   <div className="wha_call_icon">
                     <Link
                       className="call_icon wc_single"
-                      to=""
+                      to={`tel:${document && document.mobile}`}
+
                       target="_blank"
                     >
                       <img
@@ -234,7 +235,7 @@ const TenantDetails = () => {
                     </Link>
                     <Link
                       className="wha_icon wc_single"
-                      to=""
+                      to={`https://wa.me/${document && document.mobile}`}
                       target="_blank"
                     >
                       <img
