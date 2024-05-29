@@ -1487,7 +1487,7 @@ const PropertyDetails = () => {
                               >
                                 <div class="icon">
                                   <div class="text">
-                                    <h6>6</h6>
+                                    <h6>{tenantDocument && tenantDocument.length}</h6>
                                   </div>
                                 </div>
                               </div>

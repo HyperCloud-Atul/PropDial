@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { useCollection } from "../hooks/useCollection";
 import { projectFirestore, projectStorage } from "../firebase/config";
 import { useFirestore } from "../hooks/useFirestore";
@@ -7,6 +7,11 @@ import { useFirestore } from "../hooks/useFirestore";
 import "./PropertyDocuments.scss";
 
 const PropertyDocuments = () => {
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
   const { propertyDocumentId } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -127,6 +132,50 @@ const PropertyDocuments = () => {
                             <input
                               type="radio"
                               name="aai_type"
+                              id="indexii"
+                              value="Index II"
+                              onChange={handleRadioChange}
+                              checked={selectedIdType === "Index II"}
+                            />
+                            <label htmlFor="indexii">Index II</label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="aai_type"
+                              id="rentagreement"
+                              value="Rent Agreement"
+                              onChange={handleRadioChange}
+                              checked={selectedIdType === "Rent Agreement"}
+                            />
+                            <label htmlFor="rentagreement">Rent Agreement</label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="aai_type"
+                              id="layout"
+                              value="Layout"
+                              onChange={handleRadioChange}
+                              checked={selectedIdType === "Layout"}
+                            />
+                            <label htmlFor="layout">Layout</label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="aai_type"
+                              id="blueprint"
+                              value="Blue Print"
+                              onChange={handleRadioChange}
+                              checked={selectedIdType === "Blue Print"}
+                            />
+                            <label htmlFor="blueprint">Blue Print</label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="aai_type"
                               id="aadhar"
                               value="Aadhar"
                               onChange={handleRadioChange}
@@ -222,9 +271,8 @@ const PropertyDocuments = () => {
                 </div>
                 <div className="col-sm-3">
                   <div
-                    className={`theme_btn btn_fill text-center ${
-                      isUploading ? "disabled" : ""
-                    }`}
+                    className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
+                      }`}
                     onClick={isUploading ? null : addPropertyDocuments}
                   >
                     {isUploading ? "Uploading..." : "Save"}
