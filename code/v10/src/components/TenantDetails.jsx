@@ -230,7 +230,6 @@ const TenantDetails = () => {
                     <Link
                       className="call_icon wc_single"
                       to={`tel:${document && document.mobile}`}
-
                       target="_blank"
                     >
                       <img src="/assets/img/simple_call.png" alt="" />

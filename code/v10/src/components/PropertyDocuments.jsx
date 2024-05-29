@@ -4,14 +4,14 @@ import { useCollection } from "../hooks/useCollection";
 import { projectFirestore, projectStorage } from "../firebase/config";
 import { useFirestore } from "../hooks/useFirestore";
 
-import './PropertyDocuments.scss'
+import "./PropertyDocuments.scss";
 
 const PropertyDocuments = () => {
   const { propertyDocumentId } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
-  const { updateDocument, deleteDocument, error } = useFirestore("docs");
+  const { deleteDocument, error } = useFirestore("docs");
   const { documents: propertyDocument, errors: propertyDocError } =
     useCollection("docs", ["propertyId", "==", propertyDocumentId]);
 
@@ -99,7 +99,9 @@ const PropertyDocuments = () => {
         <div className="pg_header d-flex align-items-center justify-content-between">
           <div className="left">
             <h2 className="m22 mb-1">Property Documents</h2>
-            <h4 className="r16 light_black">Add new, show and download existing document </h4>
+            <h4 className="r16 light_black">
+              Add new, show and download existing document{" "}
+            </h4>
           </div>
           <div className="right">
             {!showAIForm && (
@@ -112,8 +114,7 @@ const PropertyDocuments = () => {
 
         {showAIForm && (
           <>
-            <div className="vg22">
-            </div>
+            <div className="vg22"></div>
             <section className="my_big_card">
               <h2 className="card_title">Select any one document ID</h2>
               <div className="aai_form">
@@ -221,19 +222,18 @@ const PropertyDocuments = () => {
                 </div>
                 <div className="col-sm-3">
                   <div
-                    className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
-                      }`}
+                    className={`theme_btn btn_fill text-center ${
+                      isUploading ? "disabled" : ""
+                    }`}
                     onClick={isUploading ? null : addPropertyDocuments}
                   >
                     {isUploading ? "Uploading..." : "Save"}
                   </div>
                 </div>
               </div>
-            </section></>
+            </section>
+          </>
         )}
-
-        {/* CODE FOR DOCUMENT CARD DESGIN */}
-
         <div className="blog_sect">
           <div className="row">
             {propertyDocument &&
@@ -247,27 +247,27 @@ const PropertyDocuments = () => {
                           src={doc.documentUrl}
                           style={{
                             width: "100%",
-                            aspectRatio: "3/2"
+                            aspectRatio: "3/2",
                           }}
                         ></iframe>
                       ) : (
-                        <img src={doc.documentUrl || "https://via.placeholder.com/150"} />
+                        <img
+                          src={
+                            doc.documentUrl || "https://via.placeholder.com/150"
+                          }
+                        />
                       )}
-
                     </div>
                     <div className="card-body">
-                      <h3>
-                        {doc.idType}
-                      </h3>
-                      <p className="card-subtitle">
-                        {doc.idNumber}
-                      </p>
+                      <h3>{doc.idType}</h3>
+                      <p className="card-subtitle">{doc.idNumber}</p>
                       <div className="card-author">
-
-                        <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
+                        <div
+                          onClick={() => deletePropertyDocument(doc.id)}
+                          className="learn-more pointer"
+                        >
                           Delete
                         </div>
-
                       </div>
                     </div>
                   </div>
