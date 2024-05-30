@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { useCollection } from "../hooks/useCollection";
 import { projectFirestore, projectStorage } from "../firebase/config";
 import { useFirestore } from "../hooks/useFirestore";
+import Back from "../pdpages/back/Back";
 
 import "./PropertyDocuments.scss";
 
@@ -98,9 +99,60 @@ const PropertyDocuments = () => {
     }
   };
 
+  // 9 dots controls
+  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+  const openMoreAddOptions = () => {
+    setHandleMoreOptionsClick(true);
+  };
+  const closeMoreAddOptions = () => {
+    setHandleMoreOptionsClick(false);
+  };
+  // 9 dots controls
+
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
       <div className="page_spacing">
+        {/* 9 dots html  */}
+        <div onClick={openMoreAddOptions} className="property-list-add-property">
+          <span className="material-symbols-outlined">apps</span>
+        </div>
+        <div
+          className={
+            handleMoreOptionsClick
+              ? "more-add-options-div open"
+              : "more-add-options-div"
+          }
+          onClick={closeMoreAddOptions}
+          id="moreAddOptions"
+        >
+          <div className="more-add-options-inner-div">
+            <div className="more-add-options-icons">
+              <h1>Close</h1>
+              <span className="material-symbols-outlined">close</span>
+            </div>
+
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Image</h1>
+              <span className="material-symbols-outlined">location_city</span>
+            </Link>
+
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Document</h1>
+              <span className="material-symbols-outlined">holiday_village</span>
+            </Link>
+
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Report</h1>
+              <span className="material-symbols-outlined">home</span>
+            </Link>
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Bills</h1>
+              <span className="material-symbols-outlined">home</span>
+            </Link>
+          </div>
+        </div>
+        <Back pageTitle="Back" />
+        <hr />
         <div className="pg_header d-flex align-items-center justify-content-between">
           <div className="left">
             <h2 className="m22 mb-1">Property Documents</h2>

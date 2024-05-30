@@ -6,6 +6,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
 import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
+import Back from "../pdpages/back/Back";
 
 const TenantDetails = () => {
   const location = useLocation();
@@ -101,12 +102,61 @@ const TenantDetails = () => {
       [fieldName]: value,
     }));
   };
-
+  // 9 dots controls
+  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+  const openMoreAddOptions = () => {
+    setHandleMoreOptionsClick(true);
+  };
+  const closeMoreAddOptions = () => {
+    setHandleMoreOptionsClick(false);
+  };
+  // 9 dots controls
   return (
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
         <div className="page_spacing">
-          <div className="container">
+              {/* 9 dots html  */}
+        <div onClick={openMoreAddOptions} className="property-list-add-property">
+          <span className="material-symbols-outlined">apps</span>
+        </div>
+        <div
+          className={
+            handleMoreOptionsClick
+              ? "more-add-options-div open"
+              : "more-add-options-div"
+          }
+          onClick={closeMoreAddOptions}
+          id="moreAddOptions"
+        >
+          <div className="more-add-options-inner-div">
+            <div className="more-add-options-icons">
+              <h1>Close</h1>
+              <span className="material-symbols-outlined">close</span>
+            </div>
+
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Image</h1>
+              <span className="material-symbols-outlined">location_city</span>
+            </Link>
+
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Document</h1>
+              <span className="material-symbols-outlined">holiday_village</span>
+            </Link>
+
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Report</h1>
+              <span className="material-symbols-outlined">home</span>
+            </Link>
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Bills</h1>
+              <span className="material-symbols-outlined">home</span>
+            </Link>
+          </div>
+        </div>
+        <Back pageTitle="Back" />
+        <hr />
+          <div className="">
             <div className="row">
               <div className="col-md-4">
                 <div className="tc_single">

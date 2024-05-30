@@ -1552,7 +1552,7 @@ const PropertyDetails = () => {
                                               }
                                               className="t_name"
                                             />
-                                            <input
+                                            {/* <input
                                               type="number"
                                               placeholder="Tenant Phone"
                                               value={
@@ -1569,7 +1569,11 @@ const PropertyDetails = () => {
                                                 editingTenantId !== tenant.id
                                               }
                                               className="t_number"
-                                            />
+                                            /> */}
+                                            <h6 className="t_number">
+                                            {tenant.mobile ? tenant.mobile : "Tenant Phone"}
+                                            </h6>
+                                         
                                           </div>
                                         </div>
                                         <div className="wha_call_icon">
@@ -1594,7 +1598,7 @@ const PropertyDetails = () => {
                                             />
                                           </Link>
                                         </div>
-                                        <span
+                                        {/* <span
                                           className="edit_save"
                                           onClick={() =>
                                             editingTenantId === tenant.id
@@ -1607,7 +1611,7 @@ const PropertyDetails = () => {
                                           {editingTenantId === tenant.id
                                             ? "save"
                                             : "edit"}
-                                        </span>{" "}
+                                        </span> */}
                                       </Link>
                                     </div>
                                   ))}
