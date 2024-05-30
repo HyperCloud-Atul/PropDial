@@ -23,7 +23,7 @@ const PropertyDocuments = () => {
   const fileInputRef = useRef(null);
 
   const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
-  const { documents: propertyDocument, errors: propertyDocError } = useCollection("docs", ["propertyId", "==", propertyDocumentId]);
+  const { documents: propertyDocument, errors: propertyDocError } = useCollection("docs", ["masterRefId", "==", propertyDocumentId]);
 
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
@@ -127,8 +127,8 @@ const PropertyDocuments = () => {
     setHandleMoreOptionsClick(false);
   };
   // 9 dots controls
-   // owl carousel option start
-   const options = {
+  // owl carousel option start
+  const options = {
     items: 6,
     dots: false,
     loop: true,
@@ -199,13 +199,13 @@ const PropertyDocuments = () => {
           </div>
         </div>
         <Back pageTitle="Back" />
-      
+
         <hr />
-        <Breadcrumb/>
+        <Breadcrumb />
         <div className="extra_info_card_property">
-                          <OwlCarousel className="owl-theme" {...options}>
-                            {/* Transactions */}
-                            {/* <Link to={`/transactions/${propertyid}`}>
+          <OwlCarousel className="owl-theme" {...options}>
+            {/* Transactions */}
+            {/* <Link to={`/transactions/${propertyid}`}>
                               <div className="item eicp_single">
                                 <div className="icon">
                                   <span class="material-symbols-outlined">
@@ -218,8 +218,8 @@ const PropertyDocuments = () => {
                                 </div>
                               </div>
                             </Link> */}
-                            {/* Documents */}
-                            {/* <Link to={`/propertydocumentdetails/${propertyid}`}>
+            {/* Documents */}
+            {/* <Link to={`/propertydocumentdetails/${propertyid}`}>
                               <div className="item eicp_single">
                                 <div className="icon">
                                   <span class="material-symbols-outlined">
@@ -233,30 +233,30 @@ const PropertyDocuments = () => {
                               </div>
                             </Link> */}
 
-                            <div className="item eicp_single">
-                              <div className="icon">
-                                <span class="material-symbols-outlined">
-                                  description
-                                </span>
-                                <div className="text">
-                                  <h6>10</h6>
-                                  <h5>Enquiries</h5>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="item eicp_single">
-                              <div className="icon">
-                                <span class="material-symbols-outlined">
-                                  description
-                                </span>
-                                <div className="text">
-                                  <h6>2</h6>
-                                  <h5>Bills</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </OwlCarousel>
-                        </div>
+            <div className="item eicp_single">
+              <div className="icon">
+                <span class="material-symbols-outlined">
+                  description
+                </span>
+                <div className="text">
+                  <h6>10</h6>
+                  <h5>Enquiries</h5>
+                </div>
+              </div>
+            </div>
+            <div className="item eicp_single">
+              <div className="icon">
+                <span class="material-symbols-outlined">
+                  description
+                </span>
+                <div className="text">
+                  <h6>2</h6>
+                  <h5>Bills</h5>
+                </div>
+              </div>
+            </div>
+          </OwlCarousel>
+        </div>
         <div className="pg_header d-flex align-items-center justify-content-between">
           <div className="left">
             <h2 className="m22 mb-1">Property Documents</h2>
@@ -271,7 +271,7 @@ const PropertyDocuments = () => {
               </div>
             )}
           </div>
-        </div>      
+        </div>
         {showAIForm && (
           <>
             <div className="vg22"></div>

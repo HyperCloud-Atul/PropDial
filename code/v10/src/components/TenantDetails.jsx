@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useDocument } from "../hooks/useDocument";
+import { useCollection } from "../hooks/useCollection";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
@@ -26,6 +27,7 @@ const TenantDetails = () => {
   const { updateDocument, deleteDocument } = useFirestore("tenants");
 
   const { document, error } = useDocument("tenants", tenantId);
+  const { documents: tenantDocs, errors: tenantDocsError } = useCollection("docs", ["masterRefId", "==", tenantId]);
 
   useEffect(() => {
     if (document) {
@@ -113,8 +115,8 @@ const TenantDetails = () => {
   // 9 dots controls
 
 
-  const { addDocument, docerror } = useFirestore("docs");
-  // const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
+  const { addDocument: tenantDocsAddDocument, updateDocument: tenantDocsUpdateDocument, deleteDocument: tenantDocsDeleteDocument, docerror } = useFirestore("docs");
+  const [uploadingDocId, setUploadingDocId] = useState(null); // Track uploading document ID
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const [isUploading, setIsUploading] = useState(false);
@@ -122,6 +124,8 @@ const TenantDetails = () => {
   const [idNumber, setIdNumber] = useState("");
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
+  const [documentFile, setDocumentFile] = useState(null);
+  const [newDocId, setNewDocId] = useState("");
 
   const addTenantDocuments = async () => {
     if (!selectedIdType || !idNumber) {
@@ -131,9 +135,9 @@ const TenantDetails = () => {
 
     try {
       setIsUploading(true);
-      const docRef = await addDocument({
-        status: "",
-        // propertyId: propertyDocumentId,
+      const docRef = await tenantDocsAddDocument({
+        status: "active",
+        masterRefId: tenantId,
         documentUrl: "",
         idType: selectedIdType,
         idNumber: idNumber,
@@ -146,6 +150,60 @@ const TenantDetails = () => {
     } catch (error) {
       console.error("Error adding document:", error);
       setIsUploading(false);
+    }
+  };
+
+  const handleFileChange = (event, docId) => {
+    const file = event.target.files[0];
+    if (file) {
+      setDocumentFile(file);
+      setNewDocId(docId);
+    }
+  };
+
+  const getFileType = (file) => {
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    return fileExtension === "pdf" ? "pdf" : "image";
+  };
+
+  useEffect(() => {
+    if (newDocId && documentFile) {
+      uploadDocumentImage();
+    }
+  }, [newDocId, documentFile]);
+
+  const uploadDocumentImage = async () => {
+    try {
+      setIsUploading(true);
+      setUploadingDocId(newDocId); // Set the uploading document ID
+      const fileType = getFileType(documentFile);
+      const storageRef = projectStorage.ref(`docs/${newDocId}/${documentFile.name}`);
+      await storageRef.put(documentFile);
+
+      const fileURL = await storageRef.getDownloadURL();
+
+      await tenantDocsUpdateDocument(newDocId, {
+        documentUrl: fileURL,
+        mediaType: fileType,
+      });
+
+      setDocumentFile(null);
+      setIsUploading(false);
+      setUploadingDocId(null); // Reset the uploading document ID
+      fileInputRef.current.value = "";
+    } catch (error) {
+      console.error("Error uploading document image:", error);
+      setIsUploading(false);
+      setUploadingDocId(null); // Reset the uploading document ID in case of error
+    }
+  };
+
+  const deleteTenantDocument = async (docId) => {
+    try {
+      await tenantDocsDeleteDocument(docId);
+      // navigate("/properties");
+    } catch (error) {
+      console.error("Error deleting document:", error);
     }
   };
 
@@ -612,7 +670,7 @@ const TenantDetails = () => {
               <div className="left">
                 <h2 className="m22 mb-1">Documents</h2>
                 <h4 className="r16 light_black">
-                  Add new, show and download existing document{" "}
+                  Add new, show and download documents{" "}
                 </h4>
               </div>
               <div className="right">
@@ -627,24 +685,14 @@ const TenantDetails = () => {
               <>
                 <div className="vg22"></div>
                 <section className="my_big_card">
-                  <h2 className="card_title">Select any one document ID</h2>
+                  <h2 className="card_title">Select document type</h2>
                   <div className="aai_form">
                     <div className="row" style={{ rowGap: "18px" }}>
                       <div className="col-md-12">
                         <div className="form_field">
                           <div className="field_box theme_radio_new">
                             <div className="theme_radio_container">
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="aai_type"
-                                  id="indexii"
-                                  value="Index II"
-                                  onChange={handleRadioChange}
-                                  checked={selectedIdType === "Index II"}
-                                />
-                                <label htmlFor="indexii">Index II</label>
-                              </div>
+
                               <div className="radio_single">
                                 <input
                                   type="radio"
@@ -658,28 +706,8 @@ const TenantDetails = () => {
                                   Rent Agreement
                                 </label>
                               </div>
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="aai_type"
-                                  id="layout"
-                                  value="Layout"
-                                  onChange={handleRadioChange}
-                                  checked={selectedIdType === "Layout"}
-                                />
-                                <label htmlFor="layout">Layout</label>
-                              </div>
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="aai_type"
-                                  id="blueprint"
-                                  value="Blue Print"
-                                  onChange={handleRadioChange}
-                                  checked={selectedIdType === "Blue Print"}
-                                />
-                                <label htmlFor="blueprint">Blue Print</label>
-                              </div>
+
+
                               <div className="radio_single">
                                 <input
                                   type="radio"
@@ -751,7 +779,6 @@ const TenantDetails = () => {
                                 value={idNumber}
                                 onChange={handleIdNumberChange}
                                 placeholder="Enter Document Id"
-                                required
                               />
                             </div>
                           </div>
@@ -774,13 +801,69 @@ const TenantDetails = () => {
                           }`}
                         onClick={isUploading ? null : addTenantDocuments}
                       >
-                        {isUploading ? "Uploading..." : "Save"}
+                        {isUploading ? "Uploading..." : "Create"}
                       </div>
                     </div>
                   </div>
                 </section>
               </>
             )}
+
+            <div className="blog_sect">
+              <div className="row">
+                {tenantDocs &&
+                  tenantDocs.map((doc, index) => (
+                    <div className="col-md-4" key={index}>
+                      <div className="item card-container">
+                        <div className="card-image relative">
+                          {uploadingDocId !== doc.id && (
+                            <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                              Upload PDF or Img
+                              <input
+                                type="file"
+                                onChange={(e) => handleFileChange(e, doc.id)}
+                                ref={fileInputRef}
+                                id={`upload_img_${doc.id}`}
+                              />
+                            </label>
+                          )}
+                          {uploadingDocId === doc.id ? (
+                            <div className="loader d-flex justify-content-center align-items-center" style={{
+                              width: "100%",
+                              height: "100%"
+                            }}>
+                              <BeatLoader color={"#FF5733"} loading={true} />
+                            </div>
+                          ) : doc.mediaType === "pdf" ? (
+                            <iframe
+                              title="PDF Viewer"
+                              src={doc.documentUrl}
+                              style={{
+                                width: "100%",
+                                aspectRatio: "3/2",
+                              }}
+                            ></iframe>
+                          ) : (
+                            <img
+                              src={doc.documentUrl || "https://via.placeholder.com/150"}
+                              alt="Document"
+                            />
+                          )}
+                        </div>
+                        <div className="card-body">
+                          <h3>{doc.idType}</h3>
+                          <p className="card-subtitle">{doc.idNumber}</p>
+                          <div className="card-author">
+                            <div onClick={() => deleteTenantDocument(doc.id)} className="learn-more pointer">
+                              Delete
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
 
             {!editingField && user && user.role === "admin" && (
               <>
