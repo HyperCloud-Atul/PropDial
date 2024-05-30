@@ -5,8 +5,11 @@ import { projectFirestore, projectStorage } from "../firebase/config";
 import { useFirestore } from "../hooks/useFirestore";
 import Back from "../pdpages/back/Back";
 import { BeatLoader } from "react-spinners";
-
+import { Breadcrumb } from "react-bootstrap";
 import "./PropertyDocuments.scss";
+import OwlCarousel from "react-owl-carousel";
+import "owl.carousel/dist/assets/owl.carousel.css";
+import "owl.carousel/dist/assets/owl.theme.default.css";
 
 const PropertyDocuments = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -124,6 +127,30 @@ const PropertyDocuments = () => {
     setHandleMoreOptionsClick(false);
   };
   // 9 dots controls
+   // owl carousel option start
+   const options = {
+    items: 6,
+    dots: false,
+    loop: true,
+    margin: 30,
+    nav: true,
+    smartSpeed: 1500,
+    // autoplay: true,
+    autoplayTimeout: 10000,
+    responsive: {
+      // Define breakpoints and the number of items to show at each breakpoint
+      0: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+      992: {
+        items: 6,
+      },
+    },
+  };
+  // owl carousel option end
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
       <div className="page_spacing">
@@ -172,7 +199,64 @@ const PropertyDocuments = () => {
           </div>
         </div>
         <Back pageTitle="Back" />
+      
         <hr />
+        <Breadcrumb/>
+        <div className="extra_info_card_property">
+                          <OwlCarousel className="owl-theme" {...options}>
+                            {/* Transactions */}
+                            {/* <Link to={`/transactions/${propertyid}`}>
+                              <div className="item eicp_single">
+                                <div className="icon">
+                                  <span class="material-symbols-outlined">
+                                    description
+                                  </span>
+                                  <div className="text">
+                                    <h6>5</h6>
+                                    <h5>Transactions</h5>
+                                  </div>
+                                </div>
+                              </div>
+                            </Link> */}
+                            {/* Documents */}
+                            {/* <Link to={`/propertydocumentdetails/${propertyid}`}>
+                              <div className="item eicp_single">
+                                <div className="icon">
+                                  <span class="material-symbols-outlined">
+                                    description
+                                  </span>
+                                  <div className="text">
+                                    <h6>5</h6>
+                                    <h5>Documents</h5>
+                                  </div>
+                                </div>
+                              </div>
+                            </Link> */}
+
+                            <div className="item eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  description
+                                </span>
+                                <div className="text">
+                                  <h6>10</h6>
+                                  <h5>Enquiries</h5>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="item eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  description
+                                </span>
+                                <div className="text">
+                                  <h6>2</h6>
+                                  <h5>Bills</h5>
+                                </div>
+                              </div>
+                            </div>
+                          </OwlCarousel>
+                        </div>
         <div className="pg_header d-flex align-items-center justify-content-between">
           <div className="left">
             <h2 className="m22 mb-1">Property Documents</h2>
