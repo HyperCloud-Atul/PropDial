@@ -3,7 +3,6 @@ import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { useCollection } from "../hooks/useCollection";
 import { projectFirestore, projectStorage } from "../firebase/config";
 import { useFirestore } from "../hooks/useFirestore";
-import Back from "../pdpages/back/Back";
 
 import "./PropertyDocuments.scss";
 
@@ -17,7 +16,8 @@ const PropertyDocuments = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
-  const { deleteDocument, error } = useFirestore("docs");
+  const { addDocument, updateDocument, deleteDocument, error } =
+    useFirestore("docs");
   const { documents: propertyDocument, errors: propertyDocError } =
     useCollection("docs", ["propertyId", "==", propertyDocumentId]);
 
@@ -28,15 +28,16 @@ const PropertyDocuments = () => {
   const [idNumber, setIdNumber] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [documentFile, setDocumentFile] = useState(null);
-  const [imageURL, setImageURL] = useState("");
+  const [newDocId, setNewDocId] = useState("");
 
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
 
-  const handleFileChange = (event) => {
+  const handleFileChange = (event, docId) => {
     const file = event.target.files[0];
     if (file) {
       setDocumentFile(file);
+      setNewDocId(docId);
     }
   };
 
@@ -46,14 +47,14 @@ const PropertyDocuments = () => {
   };
 
   const addPropertyDocuments = async () => {
-    if (!selectedIdType || !idNumber || !documentFile) {
+    if (!selectedIdType || !idNumber) {
       alert("All fields are required!");
       return;
     }
 
     try {
       setIsUploading(true);
-      const newProductRef = await projectFirestore.collection("docs").add({
+      const docRef = await addDocument({
         status: "",
         propertyId: propertyDocumentId,
         documentUrl: "",
@@ -61,32 +62,44 @@ const PropertyDocuments = () => {
         idNumber: idNumber,
         mediaType: "",
       });
-
-      if (documentFile) {
-        const newProductId = newProductRef.id;
-        const storageRef = projectStorage.ref(`docs/${newProductId}`);
-        const fileExtension = documentFile.name.split(".").pop();
-        const fileType = getFileType(documentFile);
-        const fileRef = storageRef.child(`document.${fileExtension}`);
-        await fileRef.put(documentFile);
-        const fileUrl = await fileRef.getDownloadURL();
-
-        await newProductRef.update({
-          documentUrl: fileUrl,
-          mediaType: fileType,
-        });
-        setImageURL(fileUrl);
-      }
-
       setSelectedIdType("");
       setIdNumber("");
-      setDocumentFile(null);
-      setImageURL("");
       setIsUploading(false);
-
-      fileInputRef.current.value = "";
+      setNewDocId(docRef.id);
     } catch (error) {
       console.error("Error adding document:", error);
+      setIsUploading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (newDocId && documentFile) {
+      uploadDocumentImage();
+    }
+  }, [newDocId, documentFile]);
+
+  const uploadDocumentImage = async () => {
+    try {
+      setIsUploading(true);
+      const fileType = getFileType(documentFile);
+      const storageRef = projectStorage.ref(
+        `docs/${newDocId}/${documentFile.name}`
+      );
+      await storageRef.put(documentFile);
+
+      const fileURL = await storageRef.getDownloadURL();
+
+      await updateDocument(newDocId, {
+        documentUrl: fileURL,
+        mediaType: fileType,
+      });
+
+      setDocumentFile(null);
+      setIsUploading(false);
+      fileInputRef.current.value = "";
+    } catch (error) {
+      console.error("Error uploading document image:", error);
+      setIsUploading(false);
     }
   };
 
@@ -99,60 +112,9 @@ const PropertyDocuments = () => {
     }
   };
 
-  // 9 dots controls
-  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
-  const openMoreAddOptions = () => {
-    setHandleMoreOptionsClick(true);
-  };
-  const closeMoreAddOptions = () => {
-    setHandleMoreOptionsClick(false);
-  };
-  // 9 dots controls
-
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
       <div className="page_spacing">
-        {/* 9 dots html  */}
-        <div onClick={openMoreAddOptions} className="property-list-add-property">
-          <span className="material-symbols-outlined">apps</span>
-        </div>
-        <div
-          className={
-            handleMoreOptionsClick
-              ? "more-add-options-div open"
-              : "more-add-options-div"
-          }
-          onClick={closeMoreAddOptions}
-          id="moreAddOptions"
-        >
-          <div className="more-add-options-inner-div">
-            <div className="more-add-options-icons">
-              <h1>Close</h1>
-              <span className="material-symbols-outlined">close</span>
-            </div>
-
-            <Link to="" className="more-add-options-icons">
-              <h1>Property Image</h1>
-              <span className="material-symbols-outlined">location_city</span>
-            </Link>
-
-            <Link to="" className="more-add-options-icons">
-              <h1>Property Document</h1>
-              <span className="material-symbols-outlined">holiday_village</span>
-            </Link>
-
-            <Link to="" className="more-add-options-icons">
-              <h1>Property Report</h1>
-              <span className="material-symbols-outlined">home</span>
-            </Link>
-            <Link to="" className="more-add-options-icons">
-              <h1>Property Bills</h1>
-              <span className="material-symbols-outlined">home</span>
-            </Link>
-          </div>
-        </div>
-        <Back pageTitle="Back" />
-        <hr />
         <div className="pg_header d-flex align-items-center justify-content-between">
           <div className="left">
             <h2 className="m22 mb-1">Property Documents</h2>
@@ -200,7 +162,9 @@ const PropertyDocuments = () => {
                               onChange={handleRadioChange}
                               checked={selectedIdType === "Rent Agreement"}
                             />
-                            <label htmlFor="rentagreement">Rent Agreement</label>
+                            <label htmlFor="rentagreement">
+                              Rent Agreement
+                            </label>
                           </div>
                           <div className="radio_single">
                             <input
@@ -285,16 +249,7 @@ const PropertyDocuments = () => {
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <div>
-                      <input
-                        type="file"
-                        id="serviceimageInput"
-                        onChange={handleFileChange}
-                        ref={fileInputRef}
-                      />
-                    </div>
-                  </div>
+
                   <div className="col-md-11">
                     <div className="add_info_text">
                       <div className="form_field">
@@ -323,8 +278,9 @@ const PropertyDocuments = () => {
                 </div>
                 <div className="col-sm-3">
                   <div
-                    className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
-                      }`}
+                    className={`theme_btn btn_fill text-center ${
+                      isUploading ? "disabled" : ""
+                    }`}
                     onClick={isUploading ? null : addPropertyDocuments}
                   >
                     {isUploading ? "Uploading..." : "Save"}
@@ -340,6 +296,15 @@ const PropertyDocuments = () => {
               propertyDocument.map((doc, index) => (
                 <div className="col-md-4">
                   <div className="item card-container" key={index}>
+                    <div>
+                      <div>
+                        <input
+                          type="file"
+                          onChange={(e) => handleFileChange(e, doc.id)}
+                          ref={fileInputRef}
+                        />
+                      </div>
+                    </div>
                     <div className="card-image">
                       {doc.mediaType === "pdf" ? (
                         <iframe
