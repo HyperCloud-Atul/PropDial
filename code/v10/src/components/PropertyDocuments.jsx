@@ -114,6 +114,7 @@ const PropertyDocuments = () => {
       console.error("Error deleting document:", error);
     }
   };
+
   // 9 dots controls
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
   const openMoreAddOptions = () => {
@@ -186,8 +187,7 @@ const PropertyDocuments = () => {
               </div>
             )}
           </div>
-        </div>
-
+        </div>      
         {showAIForm && (
           <>
             <div className="vg22"></div>
