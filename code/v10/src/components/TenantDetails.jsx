@@ -113,7 +113,8 @@ const TenantDetails = () => {
   // 9 dots controls
 
 
-  const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
+  const { addDocument, docerror } = useFirestore("docs");
+  // const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const [isUploading, setIsUploading] = useState(false);
@@ -132,7 +133,7 @@ const TenantDetails = () => {
       setIsUploading(true);
       const docRef = await addDocument({
         status: "",
-        propertyId: propertyDocumentId,
+        // propertyId: propertyDocumentId,
         documentUrl: "",
         idType: selectedIdType,
         idNumber: idNumber,
@@ -141,7 +142,7 @@ const TenantDetails = () => {
       setSelectedIdType("");
       setIdNumber("");
       setIsUploading(false);
-      setNewDocId(docRef.id);
+      // setNewDocId(docRef.id);
     } catch (error) {
       console.error("Error adding document:", error);
       setIsUploading(false);
