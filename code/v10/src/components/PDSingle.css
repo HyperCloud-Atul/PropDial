@@ -459,6 +459,7 @@
 .tc_single.t_inactive{
     filter: grayscale(100%);   
     opacity: 0.5;
+    background: #efefef;
 }
 
 .tenant_detail_pg .tc_single {

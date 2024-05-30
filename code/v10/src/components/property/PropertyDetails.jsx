@@ -1486,7 +1486,7 @@ const PropertyDetails = () => {
                                             }`}
                                         >
                                           <div className="edit_inputs">
-                                            <input
+                                            {/* <input
                                               type="text"
                                               placeholder="Tenant Name"
                                               value={
@@ -1503,7 +1503,7 @@ const PropertyDetails = () => {
                                                 editingTenantId !== tenant.id
                                               }
                                               className="t_name"
-                                            />
+                                            /> */}
                                             {/* <input
                                               type="number"
                                               placeholder="Tenant Phone"
@@ -1522,6 +1522,12 @@ const PropertyDetails = () => {
                                               }
                                               className="t_number"
                                             /> */}
+                                            <h6 className="t_name">
+                                              {
+                                                tenantName[tenant.id] ??
+                                                tenant.name
+                                              }
+                                            </h6>
                                             <h6 className="t_number">
                                               {tenant.mobile
                                                 ? tenant.mobile
