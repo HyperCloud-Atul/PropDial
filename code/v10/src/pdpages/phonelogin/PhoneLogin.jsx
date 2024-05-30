@@ -83,69 +83,17 @@ const PhoneLogin = () => {
     setIsResendDisabled(true);
   };
 
-  //   send opt
-  const getOTP = async (e) => {
-    e.preventDefault();
-    setOtpTimer(20);
-    setIsResendDisabled(true);
-    e.preventDefault();
-    console.log("In getOTP");
-    setError("");
-    if (phone === "" || phone === undefined || phone.length < 10) {
-      return setError("Please enter valid Phone Number");
-    }
-    try {
-      let btnSendOTP = document.getElementById("btn_sendotp");
-      btnSendOTP.style.display = "none";
-      // console.log('btnSendOTP:')
-      // console.log("in try 1", phone);
-      const respons = await setUpRecapcha("+" + phone);
-      console.log("in try 2", respons);
-      setConfirmObj(respons);
-      // setFlag(true);
-      setotpSliderState(true);
-      //   setIsOtpButtonVisible(false); // Hide the OTP button
-
-      //Set User Name for existing user, else blank
-      const existingUser = dbUsers && dbUsers.filter((item) => item.phoneNumber === phone);
-
-      console.log('existingUser: ', existingUser)
-      console.log("phone: ", phone)
-
-      if (existingUser && existingUser.length > 0) {
-        setUserName(existingUser[0].fullName);
-        if (existingUser[0].status === "inactive") {
-          navigate("/inactiveuser");
-          return;
-        }
-        console.log('existing user')
-        setIsNewUser(false);
-      } else {
-        console.log('new user')
-        setIsNewUser(true);
-      }
-
-    } catch (error) {
-      console.log("2 error.message", error.message);
-      setError(error.message);
-      await resendOTP("+" + phone);
-      let obj_maintenance = document.getElementById("btn_sendotp");
-      obj_maintenance.style.display = "block";
-    }
-  };
-
-  // OTP verify
-  const verifyOTP = async (e) => {
-    e.preventDefault();
-    setError("");
-    console.log("in verifyOTP", otp);
-    // setLoading(true);
-    if (otp === "" || otp === undefined || otp === null) return;
-    try {
-      await confirmObj.confirm(otp).then(async (result) => {
+  // Google authentication
+  const signInWithGoogle = () => {
+    const provider = new projectAuthObj.GoogleAuthProvider();
+    projectAuth.signInWithPopup(provider)
+      .then(async (result) => {
+        // User signed in
+        console.log(result.user);
         const user = result.user;
 
-        if (isNewUser) {
+        if (result.additionalUserInfo.isNewUser) {
+          console.log("New user signed in with Google");
           console.log("new user created:", user);
           setUserName(user.displayName);
           // Split the full name by space
@@ -154,13 +102,13 @@ const PhoneLogin = () => {
           // Extract the first name
           let firstName = splitName[0];
 
-          let imgUrl =
-            "https://firebasestorage.googleapis.com/v0/b/townify-dev.appspot.com/o/images%2FDefaultUserIcon.png?alt=media&token=625a6412-f072-4327-97ab-d59c3b67598f";
+          let imgUrl = "/assets/img/dummy_user.png";
 
           await user.updateProfile({
             phoneNumber: phone,
             displayName: firstName,
             photoURL: imgUrl,
+            email: user.email,
           });
 
           projectFirestore
@@ -172,7 +120,7 @@ const PhoneLogin = () => {
               fullName: userName,
               // email,
               phoneNumber: phone,
-              email: "",
+              email: user.email,
               city: "",
               country: "",
               address: "",
@@ -187,7 +135,144 @@ const PhoneLogin = () => {
             });
 
         } else {
+          console.log("Existing user signed in with Google");
           console.log("existing user:", user);
+          let role = 'owner';
+          const docRef = projectFirestore.collection("users").doc(user.uid)
+          // Get the document snapshot
+          const docSnapshot = await docRef.get();
+          // Check if the document exists
+          if (docSnapshot.exists) {
+            // Extract the data from the document snapshot
+            // const data = docSnapshot.data();
+            if (docSnapshot.data().rolePropDial === 'na')
+              role = 'owner'
+            else
+              role = docSnapshot.data().rolePropDial
+          }
+
+          // console.log('role: ', role)
+          await user.updateProfile({
+            email: user.email,
+          });
+
+          await updateDocument(user.uid, {
+            rolePropDial: role,
+            online: true,
+            email: user.email,
+            lastLoginTimestamp: timestamp.fromDate(new Date()),
+          });
+
+        }
+
+        navigate("/profile");
+
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        console.error(error);
+      });
+
+  };
+
+  //Link Google Account with phone number
+  const linkGoogleAccount = (curuser) => {
+    const provider = new projectAuthObj.GoogleAuthProvider();
+
+    curuser.linkWithPopup(provider)
+      .then(async (result) => {
+        const user = result.user;
+        // Accounts successfully linked
+        console.log("Accounts successfully linked", user);
+        await updateDocument(user.uid, {
+          email: user.email,
+        });
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        console.error("Error linking accounts", error);
+      });
+  };
+
+  //   send opt
+  const getOTP = async (e) => {
+    e.preventDefault();
+    setOtpTimer(20);
+    setIsResendDisabled(true);
+    console.log("In getOTP");
+    setError("");
+    if (phone === "" || phone === undefined || phone.length < 10) {
+      return setError("Please enter valid Phone Number");
+    }
+
+    try {
+      let btnSendOTP = document.getElementById("btn_sendotp");
+      btnSendOTP.style.display = "none";
+      const respons = await setUpRecapcha("+" + phone);
+      console.log("in try 2", respons);
+      setConfirmObj(respons);
+      setotpSliderState(true);
+    }
+    catch (error) {
+      console.log("2 error.message", error.message);
+      setError(error.message);
+      await resendOTP("+" + phone);
+      let obj_maintenance = document.getElementById("btn_sendotp");
+      obj_maintenance.style.display = "block";
+    }
+  }
+
+  // OTP verify
+  const verifyOTP = async (e) => {
+    e.preventDefault();
+    setError("");
+    console.log("in verifyOTP", otp);
+    // setLoading(true);
+    if (otp === "" || otp === undefined || otp === null) return;
+    try {
+      await confirmObj.confirm(otp).then(async (result) => {
+        const user = result.user;
+        // Check if the user is new
+        if (result.additionalUserInfo.isNewUser) {
+          console.log("New user signed in with phone number");
+          setUserName(user.displayName);
+          // Split the full name by space
+          let splitName = userName.split(" ");
+
+          // Extract the first name
+          let firstName = splitName[0];
+
+          let imgUrl = "/assets/img/dummy_user.png";
+
+          await user.updateProfile({
+            phoneNumber: phone,
+            displayName: firstName,
+            photoURL: imgUrl,
+          });
+
+          projectFirestore
+            .collection("users")
+            .doc(user.uid)
+            .set({
+              online: true,
+              displayName: firstName,
+              fullName: userName,
+              phoneNumber: phone,
+              email: "",
+              city: "",
+              country: "",
+              address: "",
+              photoURL: imgUrl,
+              rolePropAgent: "na",
+              rolePropDial: "owner",
+              rolesPropAgent: ["propagent"],
+              rolesPropDial: ['owner'],
+              status: "active",
+              createdAt: timestamp.fromDate(new Date()),
+              lastLoginTimestamp: timestamp.fromDate(new Date()),
+            });
+        } else {
+          console.log("Existing user signed in with phone number");
           let role = 'owner';
           const docRef = projectFirestore.collection("users").doc(user.uid)
           // Get the document snapshot
@@ -215,24 +300,36 @@ const PhoneLogin = () => {
           });
         }
 
+        if (user) {
+          const providerData = user.providerData;
+          const isLinkedWithGoogle = providerData.some(provider => provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID);
+
+          if (isLinkedWithGoogle) {
+            console.log("User is already linked with Google");
+            // setError("User is already linked with Google");
+          } else {
+            console.log("User is not linked with Google");
+            // Now link with Google account
+            linkGoogleAccount(user);
+          }
+        }
+
         navigate("/profile");
-      });
 
-      navigate("/profile");
-    } catch (error) {
+      })
+    }
+    catch (error) {
       console.log("error.message", error.message);
-
       setError(
         "Given OTP is not valid, please enter the valid OTP sent to your mobile"
       );
-      // setLoading(false);
 
       setTimeout(function () {
         setError("");
         setResendOTPFlag(true);
       }, 3000);
     }
-  };
+  }
 
   return (
     <div className="phone_login two_col_page top_header_pg">
@@ -241,73 +338,79 @@ const PhoneLogin = () => {
       </div>
       <div className="left col_left">
         {!otpSliderState && (
-          <div className="left_inner col_left_inner">
-            <div className="page_inner_logo">
-              <img src="/assets/img/logo_propdial.png" alt="" />
-            </div>
-            <h5 className="m20 mt-3 mb-4">
-              Unlocking Your Property Prospects: PropDial - Where Realty Meets
-              Security.
-            </h5>
-            <form action="">
-              <div className="new_form_field with_icon phoneinput">
-                <label htmlFor="" className="text-center">
-                  Mobile Number
-                </label>
-                <div className="nff_inner">
-                  <PhoneInput
-                    country={"in"}
-                    // onlyCountries={['in', 'us']}
-                    value={phone}
-                    onChange={setPhone}
-                    international
-                    keyboardType="phone-pad"
-                    // countryCallingCodeEditable={false}
-                    countryCodeEditable={false}
-                    // disableCountryCode={true}
-                    placeholder="10 Digit Phone Number"
-                    inputProps={{
-                      name: "phone",
-                      required: true,
-                      autoFocus: false,
-                    }}
-                  ></PhoneInput>
-                  <div className="nff_icon">
-                    <span className="material-symbols-outlined">call</span>
+          <>
+            <div className="left_inner col_left_inner">
+              <div className="page_inner_logo">
+                <img src="/assets/img/logo_propdial.png" alt="" />
+              </div>
+              <h5 className="m20 mt-3 mb-4">
+                Unlocking Your Property Prospects: PropDial - Where Realty Meets
+                Security.
+              </h5>
+              <form action="">
+                <div className="new_form_field with_icon phoneinput">
+                  <label htmlFor="" className="text-center">
+                    Mobile Number
+                  </label>
+                  <div className="nff_inner">
+                    <PhoneInput
+                      country={"in"}
+                      // onlyCountries={['in', 'us']}
+                      value={phone}
+                      onChange={setPhone}
+                      international
+                      keyboardType="phone-pad"
+                      // countryCallingCodeEditable={false}
+                      countryCodeEditable={false}
+                      // disableCountryCode={true}
+                      placeholder="10 Digit Phone Number"
+                      inputProps={{
+                        name: "phone",
+                        required: true,
+                        autoFocus: false,
+                      }}
+                    ></PhoneInput>
+                    <div className="nff_icon">
+                      <span className="material-symbols-outlined">call</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="new_form_field">
-                <div className="checkbox">
-                  <input type="checkbox" id="agree_tcp" checked />
-                  <label htmlFor="agree_tcp">
-                    I agree to PropAgent{" "}
-                    <Link to="" className="my_click_text">
-                      T&C
-                    </Link>{" "}
-                    &{" "}
-                    <Link to="" className="my_click_text">
-                      Privacy Policy
-                    </Link>
-                  </label>
+                <div className="new_form_field">
+                  <div className="checkbox">
+                    <input type="checkbox" id="agree_tcp" checked />
+                    <label htmlFor="agree_tcp">
+                      I agree to PropAgent{" "}
+                      <Link to="" className="my_click_text">
+                        T&C
+                      </Link>{" "}
+                      &{" "}
+                      <Link to="" className="my_click_text">
+                        Privacy Policy
+                      </Link>
+                    </label>
+                  </div>
                 </div>
-              </div>
 
-              <div
-                id="recapcha-container"
-                style={{
-                  marginTop: "20px",
-                }}
-              ></div>
+                <div
+                  id="recapcha-container"
+                  style={{
+                    marginTop: "20px",
+                  }}
+                ></div>
 
-              <div id='btn_sendotp'
-                className="p_theme_btn w_full"
-                onClick={getOTP}
-              >
-                Send OTP
-              </div>
-            </form>
-          </div>
+                <div id='btn_sendotp'
+                  className="p_theme_btn w_full"
+                  onClick={getOTP}
+                >
+                  Send OTP
+                </div>
+              </form>
+            </div>
+            <div>
+              Sign-in with Google
+              <button onClick={signInWithGoogle} >Google Icon</button>
+            </div>
+          </>
         )}
         {/* {otpSliderState && (
           <div className="left_inner col_left_inner">

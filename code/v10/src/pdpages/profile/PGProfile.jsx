@@ -63,6 +63,7 @@ export default function PGProfile() {
     setUserPhoneNumber(formattedNumber)
 
     setUserDetails({
+      DisplayName: user && user.displayName,
       FullName: user && user.fullName ? user.fullName : user.displayName,
       PhoneNumber: user && user.phoneNumber ? user.phoneNumber : user.phoneNumber,
       Role: user && user.role ? user.role : 'owner',
@@ -266,6 +267,62 @@ export default function PGProfile() {
     setchangeNumberDisplay(false);
   }
 
+  // Unlink old Google account
+  const unlinkGoogleAccount = async () => {
+    const user = projectAuth.currentUser;
+    if (user) {
+      // Check if the user is linked with Google
+      const isLinkedWithGoogle = user.providerData.some(
+        (provider) => provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID
+      );
+      if (isLinkedWithGoogle) {
+        try {
+          await user.unlink(projectAuthObj.GoogleAuthProvider.PROVIDER_ID);
+          await updateDocument(user.uid, {
+            email: "",
+          });
+          console.log("Old Google account unlinked");
+        } catch (error) {
+          console.error("Error unlinking old Google account", error);
+        }
+      } else {
+        console.log("User is not linked with a Google account");
+      }
+
+    }
+  };
+
+  // Link new Google account
+  const linkNewGoogleAccount = () => {
+    // const provider = new firebase.auth.GoogleAuthProvider();
+    const provider = new projectAuthObj.GoogleAuthProvider();
+
+    // firebase.auth().currentUser.linkWithPopup(provider)
+    projectAuth.currentUser.linkWithPopup(provider)
+      .then(async (result) => {
+        await result.user.updateProfile({
+          email: result.user.email,
+        });
+        await updateDocument(user.uid, {
+          email: result.user.email,
+        });
+        console.log("New Google account linked", result.user);
+      })
+      .catch((error) => {
+        console.error("Error linking new Google account", error);
+      });
+  };
+
+  // Function to unlink old and link new Google account
+  const changeGoogleAccount = () => {
+    unlinkGoogleAccount();
+
+    // Add a delay to ensure unlinking is complete before linking a new account
+    setTimeout(() => {
+      linkNewGoogleAccount();
+    }, 1000);
+  };
+
   // --------------------HTML UI Codebase------------------
   return (
     <div className="profile_pg pg_bg ">
@@ -312,7 +369,7 @@ export default function PGProfile() {
                   ...userDetails,
                   FullName: e.target.value
                 })}
-                value={userDetails && userDetails.FullName}
+                value={userDetails && userDetails.DisplayName}
                 style={{
                   width: "100%"
                 }}
@@ -353,6 +410,10 @@ export default function PGProfile() {
                   edit
                 </span>
               </div>
+            </h5>
+            <h5>
+              {user.email}
+              <Link onClick={changeGoogleAccount}>Unlink Google Account</Link>
             </h5>
             <div className={changeNumberDisplay ? 'pop-up-change-number-div open' : 'pop-up-change-number-div'} >
               <div className="direct-div">
