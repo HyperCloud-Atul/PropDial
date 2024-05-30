@@ -1328,6 +1328,18 @@ const PropertyDetails = () => {
                               </div>
                               <div className="col-md-11">
                                 <div className="add_info_text">
+                                  <div className="form_field">
+                                    <input type="text" placeholder="Name" />
+                                  </div>
+                                  <div className="form_field">
+                                    <input type="text" placeholder="Length" />
+                                  </div>
+                                  <div className="form_field">
+                                    <input type="text" placeholder="Width" />
+                                  </div>
+                                  <div className="form_field">
+                                    <input type="text" placeholder="Total area" />
+                                  </div>
                                   {additionalInfos.map((info, index) => (
                                     <div className="form_field">
                                       <div className="relative" key={index}>
@@ -1358,6 +1370,49 @@ const PropertyDetails = () => {
                                     onClick={handleAddMore}
                                   >
                                     add more
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-12">
+                                <h2 className="card_title">
+                                  Attached with
+                                </h2>
+                                <div className="form_field theme_checkbox">
+                                  <div className="theme_checkbox_container">
+                                    <div className="checkbox_single">
+                                      <input
+                                        type="checkbox"
+                                        id="bathroom1"
+                                        name="attach_with"
+                                      />
+                                      <label htmlFor="bathroom1">bathroom 1</label>
+                                    </div>
+                                    <div className="checkbox_single">
+                                      <input
+                                        type="checkbox"
+                                        id="balcony1"
+                                        name="attach_with"
+
+                                      />
+                                      <label htmlFor="balcony1">balcony 1</label>
+                                    </div>
+                                    <div className="checkbox_single">
+                                      <input
+                                        type="checkbox"
+                                        id="bathroom2"
+                                        name="attach_with"
+                                      />
+                                      <label htmlFor="bathroom2">bathroom 2</label>
+                                    </div>
+                                    <div className="checkbox_single">
+                                      <input
+                                        type="checkbox"
+                                        id="balcony2"
+                                        name="attach_with"
+
+                                      />
+                                      <label htmlFor="balcony2">balcony 2</label>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -1464,7 +1519,7 @@ const PropertyDetails = () => {
                               >
                                 {tenantDocument &&
                                   tenantDocument.map((tenant, index) => (
-                                    <div                                     
+                                    <div
                                       className={`tc_single relative item ${tenant.status === "inactive" ? "t_inactive" : ""}`}
                                       key={index}
                                     >
@@ -1478,7 +1533,7 @@ const PropertyDetails = () => {
                                             }
                                             alt="Preview"
                                           />
-                                        </div>                                      
+                                        </div>
                                         <div
                                           className={`tenant_detail ${editingTenantId === tenant.id
                                             ? "td_edit"
@@ -1524,8 +1579,8 @@ const PropertyDetails = () => {
                                             /> */}
                                             <h6 className="t_name">
                                               {
-                                                tenantName[tenant.id] ??
-                                                tenant.name
+                                               tenant.name ?  tenant.name : "Tenant Name"
+                                               
                                               }
                                             </h6>
                                             <h6 className="t_number">

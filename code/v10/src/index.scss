@@ -205,6 +205,113 @@
   }
 }
 
+.theme_radio_new {
+  .theme_radio_container {
+      padding: 5px 10px;
+      padding-left: 50px;
+      border: 1px solid var(--theme-grey);
+      background: var(--white-color);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      input[type="radio"] {
+          display: none;
+      }
+
+      input[type="radio"]+label {
+          cursor: pointer;
+          padding: 3px 10px;
+          border: 1px solid #498fff;
+          color: var(--text-black);
+          border-radius: 30px;
+          font-size: 15px;
+          min-width: 100px;
+          text-align: center;
+          text-transform: capitalize;
+      }
+
+      input[type="radio"]:checked+label {
+          background-color: var(--theme-blue);
+          color: var(--white-color);
+      }
+
+      input[type="radio"]+label::before {
+          content: "\002B";
+          display: inline-block;
+          margin-right: 5px;
+          font-size: 15px;
+      }
+
+      input[type="radio"]:checked+label::before {
+          content: "\2713";
+          /* Check mark icon */
+          display: inline-block;
+          margin-right: 5px;
+          font-size: 15px;
+      }
+  }
+}
+
+/* // css for custom checkbox start */
+.theme_checkbox {
+.theme_checkbox_container {
+  background: var(--white-color);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: relative;
+
+  .select_all_clear_all {
+    position: absolute;
+    top: -13px;
+    background: white;
+    right: 0;
+    padding: 0px 13px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+  }
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input[type="checkbox"] + label {
+    cursor: pointer;
+    padding: 3px 10px;
+    border: 1px solid #498fff;
+    color: var(--text-black);
+    border-radius: 30px;
+    font-size: 15px;
+    min-width: 100px;
+    text-align: center;
+    text-transform: capitalize;
+  }
+
+  input[type="checkbox"]:checked + label {
+    background-color: var(--theme-blue);
+    color: var(--white-color);
+  }
+  input[type="checkbox"] + label::before {
+    content: "\002B";
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 15px;
+  }
+  input[type="checkbox"]:checked + label::before {
+    content: "\2713"; /* Check mark icon */
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 15px;
+  }
+}
+}
+/* // css for custom checkbox end */
+
+
 // forms field css end
 .w_full {
   width: 100%;
