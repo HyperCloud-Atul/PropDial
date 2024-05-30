@@ -1464,13 +1464,13 @@ const PropertyDetails = () => {
                               >
                                 {tenantDocument &&
                                   tenantDocument.map((tenant, index) => (
-                                    <div
-                                      className="tc_single relative item"
+                                    <div                                     
+                                      className={`tc_single relative item ${tenant.status === "inactive" ? "t_inactive" : ""}`}
                                       key={index}
                                     >
                                       {" "}
                                       <Link to={`/tenantdetails/${tenant.id}`}>
-                                        <div className="tcs_img_container">
+                                        <div className="tcs_img_container" >
                                           <img
                                             src={
                                               tenant.tenantImgUrl ||
@@ -1478,7 +1478,7 @@ const PropertyDetails = () => {
                                             }
                                             alt="Preview"
                                           />
-                                        </div>
+                                        </div>                                      
                                         <div
                                           className={`tenant_detail ${editingTenantId === tenant.id
                                             ? "td_edit"

@@ -202,7 +202,7 @@ const TenantDetails = () => {
           <div className="">
             <div className="row">
               <div className="col-md-4">
-                <div className="tc_single">
+                <div className={`tc_single ${document && document.status === "inactive" ? "t_inactive" : ""}`}>
                   <div className="tcs_img_container relative">
                     {loading ? (
                       <div className="loader">
