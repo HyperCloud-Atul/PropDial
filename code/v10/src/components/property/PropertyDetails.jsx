@@ -172,7 +172,7 @@ const PropertyDetails = () => {
     } else if (previewTenantImage) {
       return previewTenantImage;
     } else {
-      return "/assets/img/user_dummy.png";
+      return "/assets/img/dummy_user.png";
     }
   };
 
@@ -892,7 +892,7 @@ const PropertyDetails = () => {
                             <h6>
                               {propertyDocument.status.toUpperCase() ===
                                 "AVAILABLE FOR RENT" ||
-                              propertyDocument.status.toUpperCase() ===
+                                propertyDocument.status.toUpperCase() ===
                                 "AVAILABLE FOR SALE" ? (
                                 <span
                                   style={{
@@ -928,7 +928,7 @@ const PropertyDetails = () => {
                               {propertyDocument.furnishing === ""
                                 ? ""
                                 : propertyDocument.furnishing +
-                                  " Furnished | "}{" "}
+                                " Furnished | "}{" "}
                               for {propertyDocument.purpose}
                               <br />
                             </h4>
@@ -960,31 +960,31 @@ const PropertyDetails = () => {
                             </div>
                             {propertyDocument.purpose.toUpperCase() ===
                               "RENT" && (
-                              <div className="pdms_single col-4">
-                                <h4>
-                                  <span className="currency">₹</span>
-                                  {propertyDocument.maintenanceCharges}/-{" "}
-                                  <span style={{ fontSize: "0.8rem" }}>
-                                    {" "}
-                                    {propertyDocument.maintenanceFlag}
-                                  </span>
-                                </h4>
-                                <h6>
-                                  {propertyDocument.maintenanceChargesFrequency}{" "}
-                                  Maintenance
-                                </h6>
-                              </div>
-                            )}
+                                <div className="pdms_single col-4">
+                                  <h4>
+                                    <span className="currency">₹</span>
+                                    {propertyDocument.maintenanceCharges}/-{" "}
+                                    <span style={{ fontSize: "0.8rem" }}>
+                                      {" "}
+                                      {propertyDocument.maintenanceFlag}
+                                    </span>
+                                  </h4>
+                                  <h6>
+                                    {propertyDocument.maintenanceChargesFrequency}{" "}
+                                    Maintenance
+                                  </h6>
+                                </div>
+                              )}
                             {propertyDocument.purpose.toUpperCase() ===
                               "RENT" && (
-                              <div className="pdms_single col-4">
-                                <h4>
-                                  <span className="currency">₹</span>
-                                  {propertyDocument.securityDeposit}/-
-                                </h4>
-                                <h6>Security Deposit</h6>
-                              </div>
-                            )}
+                                <div className="pdms_single col-4">
+                                  <h4>
+                                    <span className="currency">₹</span>
+                                    {propertyDocument.securityDeposit}/-
+                                  </h4>
+                                  <h6>Security Deposit</h6>
+                                </div>
+                              )}
 
                             <div className="pdms_single col-4"></div>
                           </div>
@@ -1061,127 +1061,127 @@ const PropertyDetails = () => {
                               (user && user.role === "coowner") ||
                               (user && user.role === "admin")
                             ) && (
-                              <div className="right">
-                                <a
-                                  href="."
-                                  className="theme_btn no_icon btn_fill"
-                                  style={{
-                                    marginRight: "10px",
-                                  }}
-                                >
-                                  {" "}
-                                  Contact Agent
-                                </a>
-                                <a
-                                  href="."
-                                  className="theme_btn no_icon btn_border"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#exampleModal"
-                                >
-                                  {" "}
-                                  Enquire Now
-                                </a>
-                                <div
-                                  className="modal fade"
-                                  id="exampleModal"
-                                  tabindex="-1"
-                                  aria-labelledby="exampleModalLabel"
-                                  aria-hidden="true"
-                                >
-                                  <div className="modal-dialog">
-                                    <div className="modal-content relative">
-                                      <span
-                                        className="material-symbols-outlined close_modal"
-                                        data-bs-dismiss="modal"
-                                      >
-                                        close
-                                      </span>
-                                      <div className="modal-body">
-                                        <form>
-                                          <div className="row">
-                                            <div className="col-sm-12">
-                                              <div className="section_title mb-4">
-                                                <h3>Enquiry</h3>
-                                                <h6 className="modal_subtitle">
-                                                  Thank you for your interest in
-                                                  reaching out to us. Please use
-                                                  the form below to submit any
-                                                  question.
-                                                </h6>
+                                <div className="right">
+                                  <a
+                                    href="."
+                                    className="theme_btn no_icon btn_fill"
+                                    style={{
+                                      marginRight: "10px",
+                                    }}
+                                  >
+                                    {" "}
+                                    Contact Agent
+                                  </a>
+                                  <a
+                                    href="."
+                                    className="theme_btn no_icon btn_border"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal"
+                                  >
+                                    {" "}
+                                    Enquire Now
+                                  </a>
+                                  <div
+                                    className="modal fade"
+                                    id="exampleModal"
+                                    tabindex="-1"
+                                    aria-labelledby="exampleModalLabel"
+                                    aria-hidden="true"
+                                  >
+                                    <div className="modal-dialog">
+                                      <div className="modal-content relative">
+                                        <span
+                                          className="material-symbols-outlined close_modal"
+                                          data-bs-dismiss="modal"
+                                        >
+                                          close
+                                        </span>
+                                        <div className="modal-body">
+                                          <form>
+                                            <div className="row">
+                                              <div className="col-sm-12">
+                                                <div className="section_title mb-4">
+                                                  <h3>Enquiry</h3>
+                                                  <h6 className="modal_subtitle">
+                                                    Thank you for your interest in
+                                                    reaching out to us. Please use
+                                                    the form below to submit any
+                                                    question.
+                                                  </h6>
+                                                </div>
                                               </div>
-                                            </div>
-                                            <div className="col-sm-12">
-                                              <div className="form_field st-2">
-                                                <div className="field_inner select">
-                                                  <select>
-                                                    <option
-                                                      value=""
-                                                      disabled
-                                                      selected
-                                                    >
-                                                      I am
-                                                    </option>
+                                              <div className="col-sm-12">
+                                                <div className="form_field st-2">
+                                                  <div className="field_inner select">
+                                                    <select>
+                                                      <option
+                                                        value=""
+                                                        disabled
+                                                        selected
+                                                      >
+                                                        I am
+                                                      </option>
 
-                                                    <option>Tenant</option>
-                                                    <option>Agent</option>
-                                                  </select>
-                                                  <div className="field_icon">
-                                                    <span className="material-symbols-outlined">
-                                                      person
-                                                    </span>
+                                                      <option>Tenant</option>
+                                                      <option>Agent</option>
+                                                    </select>
+                                                    <div className="field_icon">
+                                                      <span className="material-symbols-outlined">
+                                                        person
+                                                      </span>
+                                                    </div>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                            <div className="col-sm-12">
-                                              <div className="form_field st-2">
-                                                <div className="field_inner">
-                                                  <input
-                                                    type="text"
-                                                    placeholder="Name"
-                                                  />
-                                                  <div className="field_icon">
-                                                    <span className="material-symbols-outlined">
-                                                      person
-                                                    </span>
+                                              <div className="col-sm-12">
+                                                <div className="form_field st-2">
+                                                  <div className="field_inner">
+                                                    <input
+                                                      type="text"
+                                                      placeholder="Name"
+                                                    />
+                                                    <div className="field_icon">
+                                                      <span className="material-symbols-outlined">
+                                                        person
+                                                      </span>
+                                                    </div>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                            <div className="col-sm-12">
-                                              <div className="form_field st-2">
-                                                <div className="field_inner">
-                                                  <input
-                                                    type="text"
-                                                    placeholder="Phone Number"
-                                                  />
-                                                  <div className="field_icon">
-                                                    <span className="material-symbols-outlined">
-                                                      call
-                                                    </span>
+                                              <div className="col-sm-12">
+                                                <div className="form_field st-2">
+                                                  <div className="field_inner">
+                                                    <input
+                                                      type="text"
+                                                      placeholder="Phone Number"
+                                                    />
+                                                    <div className="field_icon">
+                                                      <span className="material-symbols-outlined">
+                                                        call
+                                                      </span>
+                                                    </div>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                            <div className="col-sm-12">
-                                              <div className="submit_btn mt-4">
-                                                <button
-                                                  type="submit"
-                                                  className="modal_btn theme_btn no_icon btn_fill"
-                                                >
-                                                  Submit
-                                                </button>
+                                              <div className="col-sm-12">
+                                                <div className="submit_btn mt-4">
+                                                  <button
+                                                    type="submit"
+                                                    className="modal_btn theme_btn no_icon btn_fill"
+                                                  >
+                                                    Submit
+                                                  </button>
+                                                </div>
                                               </div>
                                             </div>
-                                          </div>
-                                        </form>
+                                          </form>
+                                        </div>
+                                        )
                                       </div>
-                                      )
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
                           </div>
                         </div>
                       </div>
@@ -1526,17 +1526,16 @@ const PropertyDetails = () => {
                                           <img
                                             src={
                                               tenant.tenantImgUrl ||
-                                              "/assets/img/user_dummy.png"
+                                              "/assets/img/dummy_user.png"
                                             }
                                             alt="Preview"
                                           />
                                         </div>
                                         <div
-                                          className={`tenant_detail ${
-                                            editingTenantId === tenant.id
-                                              ? "td_edit"
-                                              : ""
-                                          }`}
+                                          className={`tenant_detail ${editingTenantId === tenant.id
+                                            ? "td_edit"
+                                            : ""
+                                            }`}
                                         >
                                           <div className="edit_inputs">
                                             <input
@@ -1636,10 +1635,10 @@ const PropertyDetails = () => {
                     {((user && user.role === "owner") ||
                       (user && user.role === "coowner") ||
                       (user && user.role === "admin")) && (
-                      <div className="property_card_single">
-                        <div className="more_detail_card_inner">
-                          <div className="row no-gutters row_reverse_767">
-                            {/* <div className="col-md-6">
+                        <div className="property_card_single">
+                          <div className="more_detail_card_inner">
+                            <div className="row no-gutters row_reverse_767">
+                              {/* <div className="col-md-6">
                               <div className="property_full_address d_none_767">
                                 <h2 className="card_title">
                                   {propertyDocument.unitNumber},{" "}
@@ -1763,57 +1762,57 @@ const PropertyDetails = () => {
                                 </div>
                               </div>
                             </div> */}
-                            <div className="col-md-6">
-                              <div className="userlist property_owners">
-                                <div className="single_user">
-                                  <div className="property_people_designation">
-                                    Property Manager
-                                  </div>
-                                  <div className="left">
-                                    <div className="user_img">
-                                      {propertyManagerDoc && (
-                                        <img
-                                          src={
-                                            propertyManagerDoc &&
-                                            propertyManagerDoc.photoURL
-                                          }
-                                          alt=""
-                                        />
-                                      )}
+                              <div className="col-md-6">
+                                <div className="userlist property_owners">
+                                  <div className="single_user">
+                                    <div className="property_people_designation">
+                                      Property Manager
                                     </div>
-                                  </div>
-                                  <div className="right">
-                                    <h5
-                                      onClick={
-                                        user && user.role === "admin"
-                                          ? () =>
-                                              openChangeUser("propertyManager")
-                                          : ""
-                                      }
-                                      className={
-                                        user && user.role === "admin"
-                                          ? "pointer"
-                                          : ""
-                                      }
-                                    >
-                                      {propertyManagerDoc &&
-                                        propertyManagerDoc.fullName}
-                                      {user && user.role === "admin" && (
-                                        <span className="material-symbols-outlined click_icon text_near_icon">
-                                          edit
-                                        </span>
-                                      )}
-                                    </h5>
-
-                                    <h6>
-                                      {propertyManagerDoc &&
-                                        propertyManagerDoc.phoneNumber.replace(
-                                          /(\d{2})(\d{5})(\d{5})/,
-                                          "+$1 $2-$3"
+                                    <div className="left">
+                                      <div className="user_img">
+                                        {propertyManagerDoc && (
+                                          <img
+                                            src={
+                                              propertyManagerDoc &&
+                                              propertyManagerDoc.photoURL
+                                            }
+                                            alt=""
+                                          />
                                         )}
-                                    </h6>
+                                      </div>
+                                    </div>
+                                    <div className="right">
+                                      <h5
+                                        onClick={
+                                          user && user.role === "admin"
+                                            ? () =>
+                                              openChangeUser("propertyManager")
+                                            : ""
+                                        }
+                                        className={
+                                          user && user.role === "admin"
+                                            ? "pointer"
+                                            : ""
+                                        }
+                                      >
+                                        {propertyManagerDoc &&
+                                          propertyManagerDoc.fullName}
+                                        {user && user.role === "admin" && (
+                                          <span className="material-symbols-outlined click_icon text_near_icon">
+                                            edit
+                                          </span>
+                                        )}
+                                      </h5>
 
-                                    {/* <div className="wc">
+                                      <h6>
+                                        {propertyManagerDoc &&
+                                          propertyManagerDoc.phoneNumber.replace(
+                                            /(\d{2})(\d{5})(\d{5})/,
+                                            "+$1 $2-$3"
+                                          )}
+                                      </h6>
+
+                                      {/* <div className="wc">
                                         <Link
                                           to={
                                             "https://wa.me/" +
@@ -1834,201 +1833,201 @@ const PropertyDetails = () => {
                                           alt=""
                                         />
                                       </div> */}
-                                  </div>
-                                </div>
-                                <div className="single_user">
-                                  <div className="property_people_designation">
-                                    Substitute Property Managaer
-                                  </div>
-                                  <div className="left">
-                                    <div className="user_img">
-                                      {propertyCoOwnerDoc && (
-                                        <img
-                                          src={
-                                            propertyCoOwnerDoc &&
-                                            propertyCoOwnerDoc.photoURL
-                                          }
-                                          alt=""
-                                        />
-                                      )}
                                     </div>
                                   </div>
-                                  <div className="right">
-                                    <h5
-                                      onClick={
-                                        user && user.role === "admin"
-                                          ? () =>
+                                  <div className="single_user">
+                                    <div className="property_people_designation">
+                                      Substitute Property Managaer
+                                    </div>
+                                    <div className="left">
+                                      <div className="user_img">
+                                        {propertyCoOwnerDoc && (
+                                          <img
+                                            src={
+                                              propertyCoOwnerDoc &&
+                                              propertyCoOwnerDoc.photoURL
+                                            }
+                                            alt=""
+                                          />
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="right">
+                                      <h5
+                                        onClick={
+                                          user && user.role === "admin"
+                                            ? () =>
                                               openChangeUser("propertyCoOwner")
-                                          : ""
-                                      }
-                                      className={
-                                        user && user.role === "admin"
-                                          ? "pointer"
-                                          : ""
-                                      }
-                                    >
-                                      {propertyCoOwnerDoc &&
-                                        propertyCoOwnerDoc.fullName}
-                                      {user && user.role === "admin" && (
-                                        <span className="material-symbols-outlined click_icon text_near_icon">
-                                          edit
-                                        </span>
-                                      )}
-                                    </h5>
-
-                                    <h6>
-                                      {propertyCoOwnerDoc &&
-                                        propertyCoOwnerDoc.phoneNumber.replace(
-                                          /(\d{2})(\d{5})(\d{5})/,
-                                          "+$1 $2-$3"
+                                            : ""
+                                        }
+                                        className={
+                                          user && user.role === "admin"
+                                            ? "pointer"
+                                            : ""
+                                        }
+                                      >
+                                        {propertyCoOwnerDoc &&
+                                          propertyCoOwnerDoc.fullName}
+                                        {user && user.role === "admin" && (
+                                          <span className="material-symbols-outlined click_icon text_near_icon">
+                                            edit
+                                          </span>
                                         )}
-                                    </h6>
-                                    <h6>
-                                      {propertyCoOwnerDoc &&
-                                        propertyCoOwnerDoc.city}
-                                      ,{" "}
-                                      {propertyCoOwnerDoc &&
-                                        propertyCoOwnerDoc.country}
-                                    </h6>
+                                      </h5>
 
-                                    <div className="wc">
-                                      <img
-                                        src="/assets/img/whatsapp.png"
-                                        className="pointer"
-                                        alt=""
-                                      />
-                                      <img
-                                        src="/assets/img/phone-call.png"
-                                        className="pointer"
-                                        alt=""
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="single_user">
-                                  <div className="property_people_designation">
-                                    Sales Manager
-                                  </div>
-                                  <div className="left">
-                                    <div className="user_img">
-                                      {propertyPOCDoc && (
+                                      <h6>
+                                        {propertyCoOwnerDoc &&
+                                          propertyCoOwnerDoc.phoneNumber.replace(
+                                            /(\d{2})(\d{5})(\d{5})/,
+                                            "+$1 $2-$3"
+                                          )}
+                                      </h6>
+                                      <h6>
+                                        {propertyCoOwnerDoc &&
+                                          propertyCoOwnerDoc.city}
+                                        ,{" "}
+                                        {propertyCoOwnerDoc &&
+                                          propertyCoOwnerDoc.country}
+                                      </h6>
+
+                                      <div className="wc">
                                         <img
-                                          src={
-                                            propertyPOCDoc &&
-                                            propertyPOCDoc.photoURL
-                                          }
+                                          src="/assets/img/whatsapp.png"
+                                          className="pointer"
                                           alt=""
                                         />
-                                      )}
+                                        <img
+                                          src="/assets/img/phone-call.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                      </div>
                                     </div>
                                   </div>
-                                  <div className="right">
-                                    <h5
-                                      onClick={
-                                        user && user.role === "admin"
-                                          ? () => openChangeUser("propertyPOC")
-                                          : ""
-                                      }
-                                      className={
-                                        user && user.role === "admin"
-                                          ? "pointer"
-                                          : ""
-                                      }
-                                    >
-                                      {propertyPOCDoc &&
-                                        propertyPOCDoc.fullName}
-                                      {user && user.role === "admin" && (
-                                        <span className="material-symbols-outlined click_icon text_near_icon">
-                                          edit
-                                        </span>
-                                      )}
-                                    </h5>
-                                    <h6>
-                                      {propertyPOCDoc &&
-                                        propertyPOCDoc.phoneNumber.replace(
-                                          /(\d{2})(\d{5})(\d{5})/,
-                                          "+$1 $2-$3"
+                                  <div className="single_user">
+                                    <div className="property_people_designation">
+                                      Sales Manager
+                                    </div>
+                                    <div className="left">
+                                      <div className="user_img">
+                                        {propertyPOCDoc && (
+                                          <img
+                                            src={
+                                              propertyPOCDoc &&
+                                              propertyPOCDoc.photoURL
+                                            }
+                                            alt=""
+                                          />
                                         )}
-                                    </h6>
-                                    <h6>
-                                      {propertyPOCDoc && propertyPOCDoc.city},{" "}
-                                      {propertyPOCDoc && propertyPOCDoc.country}
-                                    </h6>
+                                      </div>
+                                    </div>
+                                    <div className="right">
+                                      <h5
+                                        onClick={
+                                          user && user.role === "admin"
+                                            ? () => openChangeUser("propertyPOC")
+                                            : ""
+                                        }
+                                        className={
+                                          user && user.role === "admin"
+                                            ? "pointer"
+                                            : ""
+                                        }
+                                      >
+                                        {propertyPOCDoc &&
+                                          propertyPOCDoc.fullName}
+                                        {user && user.role === "admin" && (
+                                          <span className="material-symbols-outlined click_icon text_near_icon">
+                                            edit
+                                          </span>
+                                        )}
+                                      </h5>
+                                      <h6>
+                                        {propertyPOCDoc &&
+                                          propertyPOCDoc.phoneNumber.replace(
+                                            /(\d{2})(\d{5})(\d{5})/,
+                                            "+$1 $2-$3"
+                                          )}
+                                      </h6>
+                                      <h6>
+                                        {propertyPOCDoc && propertyPOCDoc.city},{" "}
+                                        {propertyPOCDoc && propertyPOCDoc.country}
+                                      </h6>
 
-                                    <div className="wc">
-                                      <img
-                                        src="/assets/img/whatsapp.png"
-                                        className="pointer"
-                                        alt=""
-                                      />
-                                      <img
-                                        src="/assets/img/phone-call.png"
-                                        className="pointer"
-                                        alt=""
-                                      />
+                                      <div className="wc">
+                                        <img
+                                          src="/assets/img/whatsapp.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                        <img
+                                          src="/assets/img/phone-call.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="userlist property_owners">
-                                <div className="single_user">
-                                  <div className="property_people_designation">
-                                    Owner
-                                  </div>
-                                  <div className="left">
-                                    <div className="user_img">
-                                      {propertyOwnerDoc && (
-                                        <img
-                                          src={
-                                            propertyOwnerDoc &&
-                                            propertyOwnerDoc.photoURL
-                                          }
-                                          alt=""
-                                        />
-                                      )}
+                              <div className="col-md-6">
+                                <div className="userlist property_owners">
+                                  <div className="single_user">
+                                    <div className="property_people_designation">
+                                      Owner
                                     </div>
-                                  </div>
-                                  <div className="right">
-                                    <h5
-                                      onClick={
-                                        user && user.role === "admin"
-                                          ? () =>
-                                              openChangeUser("propertyOwner")
-                                          : ""
-                                      }
-                                      className={
-                                        user && user.role === "admin"
-                                          ? "pointer"
-                                          : ""
-                                      }
-                                    >
-                                      {propertyOwnerDoc &&
-                                        propertyOwnerDoc.fullName}
-                                      {user && user.role === "admin" && (
-                                        <span className="material-symbols-outlined click_icon text_near_icon">
-                                          edit
-                                        </span>
-                                      )}
-                                    </h5>
-
-                                    <h6>
-                                      {propertyOwnerDoc &&
-                                        propertyOwnerDoc.phoneNumber.replace(
-                                          /(\d{2})(\d{5})(\d{5})/,
-                                          "+$1 $2-$3"
+                                    <div className="left">
+                                      <div className="user_img">
+                                        {propertyOwnerDoc && (
+                                          <img
+                                            src={
+                                              propertyOwnerDoc &&
+                                              propertyOwnerDoc.photoURL
+                                            }
+                                            alt=""
+                                          />
                                         )}
-                                    </h6>
-                                    <h6>
-                                      {propertyOwnerDoc &&
-                                        propertyOwnerDoc.city}
-                                      ,{" "}
-                                      {propertyOwnerDoc &&
-                                        propertyOwnerDoc.country}
-                                    </h6>
+                                      </div>
+                                    </div>
+                                    <div className="right">
+                                      <h5
+                                        onClick={
+                                          user && user.role === "admin"
+                                            ? () =>
+                                              openChangeUser("propertyOwner")
+                                            : ""
+                                        }
+                                        className={
+                                          user && user.role === "admin"
+                                            ? "pointer"
+                                            : ""
+                                        }
+                                      >
+                                        {propertyOwnerDoc &&
+                                          propertyOwnerDoc.fullName}
+                                        {user && user.role === "admin" && (
+                                          <span className="material-symbols-outlined click_icon text_near_icon">
+                                            edit
+                                          </span>
+                                        )}
+                                      </h5>
 
-                                    {/* <div className="wc">
+                                      <h6>
+                                        {propertyOwnerDoc &&
+                                          propertyOwnerDoc.phoneNumber.replace(
+                                            /(\d{2})(\d{5})(\d{5})/,
+                                            "+$1 $2-$3"
+                                          )}
+                                      </h6>
+                                      <h6>
+                                        {propertyOwnerDoc &&
+                                          propertyOwnerDoc.city}
+                                        ,{" "}
+                                        {propertyOwnerDoc &&
+                                          propertyOwnerDoc.country}
+                                      </h6>
+
+                                      {/* <div className="wc">
                                       <Link
                                           to={"https://wa.me/" + propertyOwnerDoc.phoneNumber}
                                           className="contacts_single"
@@ -2046,138 +2045,139 @@ const PropertyDetails = () => {
                                           alt=""
                                         />
                                       </div> */}
-                                  </div>
-                                </div>
-                                <div className="single_user">
-                                  <div className="property_people_designation">
-                                    Co-Owner
-                                  </div>
-                                  <div className="left">
-                                    <div className="user_img">
-                                      {propertyCoOwnerDoc && (
-                                        <img
-                                          src={
-                                            propertyCoOwnerDoc &&
-                                            propertyCoOwnerDoc.photoURL
-                                          }
-                                          alt=""
-                                        />
-                                      )}
                                     </div>
                                   </div>
-                                  <div className="right">
-                                    <h5
-                                      onClick={
-                                        user && user.role === "admin"
-                                          ? () =>
+                                  <div className="single_user">
+                                    <div className="property_people_designation">
+                                      Co-Owner
+                                    </div>
+                                    <div className="left">
+                                      <div className="user_img">
+                                        {propertyCoOwnerDoc && (
+                                          <img
+                                            src={
+                                              propertyCoOwnerDoc &&
+                                              propertyCoOwnerDoc.photoURL
+                                            }
+                                            alt=""
+                                          />
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="right">
+                                      <h5
+                                        onClick={
+                                          user && user.role === "admin"
+                                            ? () =>
                                               openChangeUser("propertyCoOwner")
-                                          : ""
-                                      }
-                                      className={
-                                        user && user.role === "admin"
-                                          ? "pointer"
-                                          : ""
-                                      }
-                                    >
-                                      {propertyCoOwnerDoc &&
-                                        propertyCoOwnerDoc.fullName}
-                                      {user && user.role === "admin" && (
-                                        <span className="material-symbols-outlined click_icon text_near_icon">
-                                          edit
-                                        </span>
-                                      )}
-                                    </h5>
-
-                                    <h6>
-                                      {propertyCoOwnerDoc &&
-                                        propertyCoOwnerDoc.phoneNumber.replace(
-                                          /(\d{2})(\d{5})(\d{5})/,
-                                          "+$1 $2-$3"
+                                            : ""
+                                        }
+                                        className={
+                                          user && user.role === "admin"
+                                            ? "pointer"
+                                            : ""
+                                        }
+                                      >
+                                        {propertyCoOwnerDoc &&
+                                          propertyCoOwnerDoc.fullName}
+                                        {user && user.role === "admin" && (
+                                          <span className="material-symbols-outlined click_icon text_near_icon">
+                                            edit
+                                          </span>
                                         )}
-                                    </h6>
-                                    <h6>
-                                      {propertyCoOwnerDoc &&
-                                        propertyCoOwnerDoc.city}
-                                      ,{" "}
-                                      {propertyCoOwnerDoc &&
-                                        propertyCoOwnerDoc.country}
-                                    </h6>
+                                      </h5>
 
-                                    <div className="wc">
-                                      <img
-                                        src="/assets/img/whatsapp.png"
-                                        className="pointer"
-                                        alt=""
-                                      />
-                                      <img
-                                        src="/assets/img/phone-call.png"
-                                        className="pointer"
-                                        alt=""
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="single_user">
-                                  <div className="property_people_designation">
-                                    POC
-                                  </div>
-                                  <div className="left">
-                                    <div className="user_img">
-                                      {propertyPOCDoc && (
+                                      <h6>
+                                        {propertyCoOwnerDoc &&
+                                          propertyCoOwnerDoc.phoneNumber.replace(
+                                            /(\d{2})(\d{5})(\d{5})/,
+                                            "+$1 $2-$3"
+                                          )}
+                                      </h6>
+                                      <h6>
+                                        {propertyCoOwnerDoc &&
+                                          propertyCoOwnerDoc.city}
+                                        ,{" "}
+                                        {propertyCoOwnerDoc &&
+                                          propertyCoOwnerDoc.country}
+                                      </h6>
+
+                                      <div className="wc">
                                         <img
-                                          src={
-                                            propertyPOCDoc &&
-                                            propertyPOCDoc.photoURL
-                                          }
+                                          src="/assets/img/whatsapp.png"
+                                          className="pointer"
                                           alt=""
                                         />
-                                      )}
+                                        <img
+                                          src="/assets/img/phone-call.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                      </div>
                                     </div>
                                   </div>
-                                  <div className="right">
-                                    <h5
-                                      onClick={
-                                        user && user.role === "admin"
-                                          ? () => openChangeUser("propertyPOC")
-                                          : ""
-                                      }
-                                      className={
-                                        user && user.role === "admin"
-                                          ? "pointer"
-                                          : ""
-                                      }
-                                    >
-                                      {propertyPOCDoc &&
-                                        propertyPOCDoc.fullName}
-                                      {user && user.role === "admin" && (
-                                        <span className="material-symbols-outlined click_icon text_near_icon">
-                                          edit
-                                        </span>
-                                      )}
-                                    </h5>
-                                    <h6>
-                                      {propertyPOCDoc &&
-                                        propertyPOCDoc.phoneNumber.replace(
-                                          /(\d{2})(\d{5})(\d{5})/,
-                                          "+$1 $2-$3"
+                                  <div className="single_user">
+                                    <div className="property_people_designation">
+                                      POC
+                                    </div>
+                                    <div className="left">
+                                      <div className="user_img">
+                                        {propertyPOCDoc && (
+                                          <img
+                                            src={
+                                              propertyPOCDoc &&
+                                              propertyPOCDoc.photoURL
+                                            }
+                                            alt=""
+                                          />
                                         )}
-                                    </h6>
-                                    <h6>
-                                      {propertyPOCDoc && propertyPOCDoc.city},{" "}
-                                      {propertyPOCDoc && propertyPOCDoc.country}
-                                    </h6>
+                                      </div>
+                                    </div>
+                                    <div className="right">
+                                      <h5
+                                        onClick={
+                                          user && user.role === "admin"
+                                            ? () => openChangeUser("propertyPOC")
+                                            : ""
+                                        }
+                                        className={
+                                          user && user.role === "admin"
+                                            ? "pointer"
+                                            : ""
+                                        }
+                                      >
+                                        {propertyPOCDoc &&
+                                          propertyPOCDoc.fullName}
+                                        {user && user.role === "admin" && (
+                                          <span className="material-symbols-outlined click_icon text_near_icon">
+                                            edit
+                                          </span>
+                                        )}
+                                      </h5>
+                                      <h6>
+                                        {propertyPOCDoc &&
+                                          propertyPOCDoc.phoneNumber.replace(
+                                            /(\d{2})(\d{5})(\d{5})/,
+                                            "+$1 $2-$3"
+                                          )}
+                                      </h6>
+                                      <h6>
+                                        {propertyPOCDoc && propertyPOCDoc.city},{" "}
+                                        {propertyPOCDoc && propertyPOCDoc.country}
+                                      </h6>
 
-                                    <div className="wc">
-                                      <img
-                                        src="/assets/img/whatsapp.png"
-                                        className="pointer"
-                                        alt=""
-                                      />
-                                      <img
-                                        src="/assets/img/phone-call.png"
-                                        className="pointer"
-                                        alt=""
-                                      />
+                                      <div className="wc">
+                                        <img
+                                          src="/assets/img/whatsapp.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                        <img
+                                          src="/assets/img/phone-call.png"
+                                          className="pointer"
+                                          alt=""
+                                        />
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -2185,8 +2185,7 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                     {(user && user.role === "owner") ||
                       (user && user.role === "admin" && (
                         <div className="property_card_single">
@@ -2617,10 +2616,10 @@ const PropertyDetails = () => {
                                 {" "}
                                 {propertyDocument &&
                                   new Date().getFullYear() -
-                                    Number(
-                                      propertyDocument.yearOfConstruction
-                                    ) +
-                                    " Years"}{" "}
+                                  Number(
+                                    propertyDocument.yearOfConstruction
+                                  ) +
+                                  " Years"}{" "}
                               </h5>
                             </div>
                           </div>
