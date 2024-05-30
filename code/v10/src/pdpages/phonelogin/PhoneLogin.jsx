@@ -384,9 +384,9 @@ const PhoneLogin = () => {
                   }}
                 ></div>
                 <div className="ordiv">
-                <span>
-                Or
-                </span>
+                  <span>
+                    Or
+                  </span>
                 </div>
                 <div onClick={signInWithGoogle} className="theme_btn btn_border d-flex align-items-center justify-content-center mb-3">
                   <img src="./assets/img/icons/google.png" alt="google_img" style={{
@@ -406,7 +406,7 @@ const PhoneLogin = () => {
                   <div className="checkbox justify-content-center">
                     {/* <input type="checkbox" id="agree_tcp" checked /> */}
                     <label htmlFor="agree_tcp">
-                      By proceeding, I agree to PropDial{" "}
+                      By proceeding, I agree to Propdial{" "}
                       <Link to="" className="click_text">
                         T&C
                       </Link>{" "}
@@ -527,7 +527,7 @@ const PhoneLogin = () => {
                               </span>
                             )}
                           </p> */}
-                          <div className="vg10"></div>
+            <div className="vg10"></div>
             <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
               Confirm
             </button>
