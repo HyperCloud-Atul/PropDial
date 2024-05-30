@@ -3,6 +3,8 @@ import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { useCollection } from "../hooks/useCollection";
 import { projectFirestore, projectStorage } from "../firebase/config";
 import { useFirestore } from "../hooks/useFirestore";
+import Back from "../pdpages/back/Back";
+import { BeatLoader } from "react-spinners";
 
 import "./PropertyDocuments.scss";
 
@@ -12,14 +14,13 @@ const PropertyDocuments = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
   const { propertyDocumentId } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
-  const { addDocument, updateDocument, deleteDocument, error } =
-    useFirestore("docs");
-  const { documents: propertyDocument, errors: propertyDocError } =
-    useCollection("docs", ["propertyId", "==", propertyDocumentId]);
+  const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
+  const { documents: propertyDocument, errors: propertyDocError } = useCollection("docs", ["propertyId", "==", propertyDocumentId]);
 
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
@@ -29,6 +30,7 @@ const PropertyDocuments = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [documentFile, setDocumentFile] = useState(null);
   const [newDocId, setNewDocId] = useState("");
+  const [uploadingDocId, setUploadingDocId] = useState(null); // Track uploading document ID
 
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
@@ -81,10 +83,9 @@ const PropertyDocuments = () => {
   const uploadDocumentImage = async () => {
     try {
       setIsUploading(true);
+      setUploadingDocId(newDocId); // Set the uploading document ID
       const fileType = getFileType(documentFile);
-      const storageRef = projectStorage.ref(
-        `docs/${newDocId}/${documentFile.name}`
-      );
+      const storageRef = projectStorage.ref(`docs/${newDocId}/${documentFile.name}`);
       await storageRef.put(documentFile);
 
       const fileURL = await storageRef.getDownloadURL();
@@ -96,10 +97,12 @@ const PropertyDocuments = () => {
 
       setDocumentFile(null);
       setIsUploading(false);
+      setUploadingDocId(null); // Reset the uploading document ID
       fileInputRef.current.value = "";
     } catch (error) {
       console.error("Error uploading document image:", error);
       setIsUploading(false);
+      setUploadingDocId(null); // Reset the uploading document ID in case of error
     }
   };
 
@@ -111,10 +114,64 @@ const PropertyDocuments = () => {
       console.error("Error deleting document:", error);
     }
   };
-
+  // 9 dots controls
+  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+  const openMoreAddOptions = () => {
+    setHandleMoreOptionsClick(true);
+  };
+  const closeMoreAddOptions = () => {
+    setHandleMoreOptionsClick(false);
+  };
+  // 9 dots controls
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
       <div className="page_spacing">
+        {/* 9 dots html  */}
+        <div
+          onClick={openMoreAddOptions}
+          className="property-list-add-property"
+        >
+          <span className="material-symbols-outlined">apps</span>
+        </div>
+        <div
+          className={
+            handleMoreOptionsClick
+              ? "more-add-options-div open"
+              : "more-add-options-div"
+          }
+          onClick={closeMoreAddOptions}
+          id="moreAddOptions"
+        >
+          <div className="more-add-options-inner-div">
+            <div className="more-add-options-icons">
+              <h1>Close</h1>
+              <span className="material-symbols-outlined">close</span>
+            </div>
+
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Image</h1>
+              <span className="material-symbols-outlined">location_city</span>
+            </Link>
+
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Document</h1>
+              <span className="material-symbols-outlined">
+                holiday_village
+              </span>
+            </Link>
+
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Report</h1>
+              <span className="material-symbols-outlined">home</span>
+            </Link>
+            <Link to="" className="more-add-options-icons">
+              <h1>Property Bills</h1>
+              <span className="material-symbols-outlined">home</span>
+            </Link>
+          </div>
+        </div>
+        <Back pageTitle="Back" />
+        <hr />
         <div className="pg_header d-flex align-items-center justify-content-between">
           <div className="left">
             <h2 className="m22 mb-1">Property Documents</h2>
@@ -278,9 +335,8 @@ const PropertyDocuments = () => {
                 </div>
                 <div className="col-sm-3">
                   <div
-                    className={`theme_btn btn_fill text-center ${
-                      isUploading ? "disabled" : ""
-                    }`}
+                    className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
+                      }`}
                     onClick={isUploading ? null : addPropertyDocuments}
                   >
                     {isUploading ? "Uploading..." : "Save"}
@@ -294,19 +350,28 @@ const PropertyDocuments = () => {
           <div className="row">
             {propertyDocument &&
               propertyDocument.map((doc, index) => (
-                <div className="col-md-4">
-                  <div className="item card-container" key={index}>
-                    <div>
-                      <div>
-                        <input
-                          type="file"
-                          onChange={(e) => handleFileChange(e, doc.id)}
-                          ref={fileInputRef}
-                        />
-                      </div>
-                    </div>
-                    <div className="card-image">
-                      {doc.mediaType === "pdf" ? (
+                <div className="col-md-4" key={index}>
+                  <div className="item card-container">
+                    <div className="card-image relative">
+                      {uploadingDocId !== doc.id && (
+                        <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                          Upload PDF or Img
+                          <input
+                            type="file"
+                            onChange={(e) => handleFileChange(e, doc.id)}
+                            ref={fileInputRef}
+                            id={`upload_img_${doc.id}`}
+                          />
+                        </label>
+                      )}
+                      {uploadingDocId === doc.id ? (
+                        <div className="loader d-flex justify-content-center align-items-center" style={{
+                          width: "100%",
+                          height: "100%"
+                        }}>
+                          <BeatLoader color={"#FF5733"} loading={true} />
+                        </div>
+                      ) : doc.mediaType === "pdf" ? (
                         <iframe
                           title="PDF Viewer"
                           src={doc.documentUrl}
@@ -317,9 +382,8 @@ const PropertyDocuments = () => {
                         ></iframe>
                       ) : (
                         <img
-                          src={
-                            doc.documentUrl || "https://via.placeholder.com/150"
-                          }
+                          src={doc.documentUrl || "https://via.placeholder.com/150"}
+                          alt="Document"
                         />
                       )}
                     </div>
@@ -327,10 +391,7 @@ const PropertyDocuments = () => {
                       <h3>{doc.idType}</h3>
                       <p className="card-subtitle">{doc.idNumber}</p>
                       <div className="card-author">
-                        <div
-                          onClick={() => deletePropertyDocument(doc.id)}
-                          className="learn-more pointer"
-                        >
+                        <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
                           Delete
                         </div>
                       </div>

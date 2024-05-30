@@ -412,8 +412,8 @@ export default function PGProfile() {
               </div>
             </h5>
             <h5>
-              {user.email}
-              <Link onClick={changeGoogleAccount}>Unlink Google Account</Link>
+              {user.email} <br />
+              <Link onClick={changeGoogleAccount} className="click_text">Unlink Google Account</Link>
             </h5>
             <div className={changeNumberDisplay ? 'pop-up-change-number-div open' : 'pop-up-change-number-div'} >
               <div className="direct-div">

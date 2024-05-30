@@ -343,10 +343,12 @@ const PhoneLogin = () => {
               <div className="page_inner_logo">
                 <img src="/assets/img/logo_propdial.png" alt="" />
               </div>
-              <h5 className="m20 mt-3 mb-4">
+              <div className="vg22"></div>
+              {/* <h5 className="m22 mt-3 mb-4">
                 Unlocking Your Property Prospects: PropDial - Where Realty Meets
                 Security.
-              </h5>
+           
+              </h5> */}
               <form action="">
                 <div className="new_form_field with_icon phoneinput">
                   <label htmlFor="" className="text-center">
@@ -375,41 +377,51 @@ const PhoneLogin = () => {
                     </div>
                   </div>
                 </div>
-                <div className="new_form_field">
-                  <div className="checkbox">
-                    <input type="checkbox" id="agree_tcp" checked />
-                    <label htmlFor="agree_tcp">
-                      I agree to PropAgent{" "}
-                      <Link to="" className="my_click_text">
-                        T&C
-                      </Link>{" "}
-                      &{" "}
-                      <Link to="" className="my_click_text">
-                        Privacy Policy
-                      </Link>
-                    </label>
-                  </div>
-                </div>
-
                 <div
                   id="recapcha-container"
                   style={{
                     marginTop: "20px",
                   }}
                 ></div>
-
+                <div className="ordiv">
+                <span>
+                Or
+                </span>
+                </div>
+                <div onClick={signInWithGoogle} className="theme_btn btn_border d-flex align-items-center justify-content-center mb-3">
+                  <img src="./assets/img/icons/google.png" alt="google_img" style={{
+                    height: "23px",
+                    width: "auto",
+                    marginRight: "7px"
+                  }} />
+                  Sign-in with Google
+                </div>
                 <div id='btn_sendotp'
-                  className="p_theme_btn w_full"
+                  className="theme_btn btn_fill w_full"
                   onClick={getOTP}
                 >
-                  Send OTP
+                  Continue
+                </div>
+                <div className="new_form_field">
+                  <div className="checkbox justify-content-center">
+                    {/* <input type="checkbox" id="agree_tcp" checked /> */}
+                    <label htmlFor="agree_tcp">
+                      By proceeding, I agree to PropDial{" "}
+                      <Link to="" className="click_text">
+                        T&C
+                      </Link>{" "}
+                      &{" "}
+                      <Link to="" className="click_text">
+                        Privacy Policy
+                      </Link>
+                    </label>
+                  </div>
                 </div>
               </form>
+
             </div>
-            <div>
-              Sign-in with Google
-              <button onClick={signInWithGoogle} >Google Icon</button>
-            </div>
+
+
           </>
         )}
         {/* {otpSliderState && (
@@ -465,10 +477,11 @@ const PhoneLogin = () => {
             <div className="page_inner_logo">
               <img src="/assets/img/logo_propdial.png" alt="" />
             </div>
-            <h5 className="m20 mt-3 mb-4">
+            {/* <h5 className="m20 mt-3 mb-4">
               Unlocking Your Property Prospects: PropDial - Where Realty Meets
               Security.
-            </h5>
+            </h5> */}
+            <div className="vg22"></div>
             <div className="otp_input">
               <label htmlFor="">Enter 6 digit OTP</label>
               <OtpInput
@@ -514,7 +527,8 @@ const PhoneLogin = () => {
                               </span>
                             )}
                           </p> */}
-            <button className="p_theme_btn w_full" onClick={verifyOTP}>
+                          <div className="vg10"></div>
+            <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
               Confirm
             </button>
           </div>

@@ -1,8 +1,8 @@
 // forms field css start
 .new_form_field {
   label {
-    font-size: 18px;
-    font-weight: 400;
+    font-size: 16px;
+    font-weight: 500;
     display: block;
     margin: 0px;
   }
@@ -48,7 +48,10 @@
     width: 100%;
     border-radius: 9px;
     padding: 10px 12px;
-    border: 1px solid grey;
+    border: 1px solid var(--theme-green);
+  }
+  input:focus{
+    box-shadow: none;
   }
 
   .checkbox {
@@ -203,7 +206,9 @@
 }
 
 // forms field css end
-
+.w_full {
+  width: 100%;
+}
 .my_accordion {
   .accordion .accordion-button:not(.collapsed) {
     background: var(--theme-green);
@@ -257,16 +262,38 @@
   .col_right {
     width: 50%;
 
-    img {
+     img {
       width: 100%;
-      height: 100vh;
+      height: calc(100vh - 68px);
       object-fit: cover;
-    }
+  }
   }
 
   .col_left {
     width: 50%;
     padding: 15px 30px;
+    .ordiv {
+      text-align: center;
+      margin-bottom: 16px;
+      font-size: 16px;
+      text-transform: lowercase;
+      position: relative;
+      &::after{
+        content: "";
+        background: #d7d7d7;
+        height: 0.5px;
+        width: 100%;
+        position: absolute;
+        top: 51%;
+        left: 0;
+        transform: translateY(-50%);
+        z-index: -1;
+      }
+      span{
+        background: var(--white-color);
+        padding: 0px 12px;
+      }
+  }
 
     .col_left_inner {
       text-align: center;
@@ -297,9 +324,7 @@
   gap: 4px;
   cursor: pointer;
 
-  &.w_full {
-    width: 100%;
-  }
+
 }
 
 .property_cards_parent {

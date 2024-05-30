@@ -550,7 +550,27 @@ label.upload_img {
     cursor: pointer;
 
 }
+.property_docs_pg .card-image.relative {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+}
+label.upload_img.by_text {
+    width: fit-content;
+    bottom: 15px;
+    height: fit-content;
+    display: inline-block;
+    top: inherit;
+    background: white;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--theme-green);
+    font-size: 13px;
+    left: 0;
+    right: 0;
+    margin: auto;
 
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
 .tcs_img_container .delete_icon {
     color: var(--theme-red);
     position: absolute;
