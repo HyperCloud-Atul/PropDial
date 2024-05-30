@@ -456,6 +456,10 @@
     overflow: hidden;
     width: 25%;
 }
+.tc_single.t_inactive{
+    filter: grayscale(100%);   
+    opacity: 0.5;
+}
 
 .tenant_detail_pg .tc_single {
     width: 100%;
