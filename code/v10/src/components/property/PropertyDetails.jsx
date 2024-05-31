@@ -1637,7 +1637,7 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                     </section>
-
+                    
                     <div className="vg22"></div>
                     {/* tenant card end  */}
                     <div className="vg10"></div>
