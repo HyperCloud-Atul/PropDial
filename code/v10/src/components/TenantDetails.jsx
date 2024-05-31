@@ -8,6 +8,7 @@ import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
 import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
 import Back from "../pdpages/back/Back";
+import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 
 const TenantDetails = () => {
   const location = useLocation();
@@ -207,7 +208,17 @@ const TenantDetails = () => {
     }
   };
 
-
+// data of quick access menu  start
+const menuItems = [
+  { name: 'Tenant', link: '/', icon: '/assets/img/icons/qa_tenant.png' },
+  { name: 'Document', link: '/', icon: '/assets/img/icons/qa_documentation.png' },
+  { name: 'Dashboard', link: '/', icon: '/assets/img/icons/qa_dashboard.png' },
+  { name: 'Properties', link: '', icon: '/assets/img/icons/qa_property.png' },
+  { name: 'Transaction', link: '/', icon: '/assets/img/icons/qa_transaction.png' },
+  { name: 'Bills', link: '/', icon: '/assets/img/icons/qa_bilss.png' },
+  { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
+];
+// data of quick access menu  end
   return (
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
@@ -256,8 +267,8 @@ const TenantDetails = () => {
               </Link>
             </div>
           </div>
-          <Back pageTitle="Back" />
-          <hr />
+          <QuickAccessMenu menuItems={menuItems} />
+     <hr />
           <div className="">
             <div className="row">
               <div className="col-md-4">
