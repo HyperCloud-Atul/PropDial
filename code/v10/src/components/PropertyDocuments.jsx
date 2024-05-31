@@ -61,7 +61,7 @@ const PropertyDocuments = () => {
       setIsUploading(true);
       const docRef = await addDocument({
         status: "",
-        propertyId: propertyDocumentId,
+        masterRefId: propertyDocumentId,
         documentUrl: "",
         idType: selectedIdType,
         idNumber: idNumber,
