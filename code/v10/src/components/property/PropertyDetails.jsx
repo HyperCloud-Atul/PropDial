@@ -1254,7 +1254,7 @@ const PropertyDetails = () => {
                       <section className="property_card_single add_aditional_form">
                         <div className="more_detail_card_inner relative">
                           <h2 className="card_title">
-                            Bedroom, Bathroom and Other
+                            Property Layout
                           </h2>
                           <div className="aai_form">
                             <div
