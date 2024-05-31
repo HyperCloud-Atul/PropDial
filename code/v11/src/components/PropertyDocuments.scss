@@ -1,0 +1,15 @@
+.property_docs_pg{
+    .blog_sect .card-body {    
+        padding: 8px 22px;      
+    }
+    .blog_sect .card-body h3 {
+        font-size: 17px;       
+    }
+    .blog_sect .card-body p {
+        font-size: 20px;        
+    }
+    .learn-more {
+           color: var(--theme-red);       
+        text-transform: capitalize;
+    }
+}

@@ -1,0 +1,91 @@
+.more_quick_card {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.more_quick_card .mqc_single {
+    display: grid;
+    row-gap: 7px;
+}
+
+.more_quick_card .icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--theme-blue-bg);
+    border-radius: 50%;
+    margin: auto;
+}
+.more_quick_card .icon span {
+    font-size: 30px;
+}
+.more_quick_card .mqc_single:hover .icon span {
+    transition: 0.5s;
+    font-variation-settings:
+        'FILL' 1
+}
+
+.mm_inner h6.title {
+    padding: 15px;
+    padding-bottom: 0px;
+    text-transform: capitalize;
+}
+
+a.mm_single {
+    display: block;
+    padding: 15px 50px;
+    background: var(--theme-blue-bg-light);
+    position: relative;
+    margin-top: 15px;
+    color: var(--theme-purple);
+}
+a.mm_single h5{
+    text-transform: capitalize;
+}
+a.mm_single h6 {
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 1px !IMPORTANT;
+    text-transform: lowercase;
+    opacity: 0.7;
+}
+
+a.mm_single span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+a.mm_single span.mms_icon {
+    left: 15px;
+}
+
+a.mm_single span.mms_ra {
+    right: 15px;
+}
+
+.more-menus_inner {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 22px;
+    grid-row-gap: 22px;
+}
+.mm_inner_full_width .inner{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 15px;
+}
+
+
+@media screen and (max-width: 767px) {
+    .more-menus_inner, .mm_inner_full_width .inner {
+        grid-template-columns: repeat(1, 1fr);
+        grid-row-gap: 22px;
+    } 
+
+}
