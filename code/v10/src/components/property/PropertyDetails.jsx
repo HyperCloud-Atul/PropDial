@@ -1770,7 +1770,554 @@ const PropertyDetails = () => {
                     </section>
 
                     <div className="vg22"></div>
-                    {/* tenant card end  */}
+                    {/* tenant card end  */}.
+
+
+     {/* property user card  start */}
+     {((user && user.role === "owner") ||
+                      (user && user.role === "coowner") ||
+                      (user && user.role === "admin")) && (
+                        <>
+                          <section className="property_card_single">
+                            <div className="more_detail_card_inner">
+                              <h2 className="card_title">Property users</h2>
+                              <div className="tenant_card">
+                                <div className="row">
+                                  <div className="col-md-2">
+                                    <div
+                                      className="add_btn eicp_single mb-2"
+                                    // onClick={handleAddTenant}
+                                    >
+                                      <div class="icon">
+                                        <div class="text">
+                                          <h6>
+                                            3
+                                          </h6>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div
+                                      className="add_btn"
+                                    // onClick={handleAddTenant}
+                                    >
+                                      <div className="add_btn_inner">
+                                        <div className="add_icon">+</div>
+                                        <div className="ab_text">
+                                          Add property users
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="col-md-10">
+
+                                    <div
+                                      className="d-flex"
+                                      style={{
+                                        gap: "15px",
+                                      }}
+                                    >
+                                      <div
+                                        className="tc_single relative item"
+                                      >
+                                        <div className="tcs_img_container" >
+                                          {propertyManagerDoc && (
+                                            <img
+                                              src={
+                                                propertyManagerDoc &&
+                                                propertyManagerDoc.photoURL
+                                              }
+                                              alt=""
+                                            />
+                                          )}
+                                        </div>
+                                        <div
+                                          className="tenant_detail"
+                                        >
+                                          <div className="edit_inputs">
+
+                                            <h5
+                                              onClick={
+                                                user && user.role === "admin"
+                                                  ? () =>
+                                                    openChangeUser("propertyManager")
+                                                  : ""
+                                              }
+                                              className={`t_name ${user && user.role === "admin"
+                                                ? "pointer"
+                                                : ""
+                                                }`}
+                                            >
+                                              {propertyManagerDoc &&
+                                                propertyManagerDoc.fullName}
+                                              {user && user.role === "admin" && (
+                                                <span className="material-symbols-outlined click_icon text_near_icon">
+                                                  edit
+                                                </span>
+                                              )}
+                                            </h5>
+                                            <h6 className="t_number">
+                                              {propertyManagerDoc &&
+                                                propertyManagerDoc.phoneNumber.replace(
+                                                  /(\d{2})(\d{5})(\d{5})/,
+                                                  "+$1 $2-$3"
+                                                )}
+                                            </h6>
+                                          </div>
+                                        </div>
+                                        <div className="wha_call_icon">
+                                          < Link
+                                            className="call_icon wc_single"
+                                            to={
+                                              propertyManagerDoc
+                                                ? `tel:${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                          >
+                                            <img
+                                              src="/assets/img/simple_call.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <Link
+                                            className="wha_icon wc_single"
+                                            to={
+                                              propertyManagerDoc
+                                                ? `https://wa.me/${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                            target="_blank"
+                                          >
+                                            <img
+                                              src="/assets/img/whatsapp_simple.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                        </div>
+                                      </div>
+                                      <div
+                                        className="tc_single relative item"
+                                      >
+                                        <div className="tcs_img_container" >
+                                          {propertyManagerDoc && (
+                                            <img
+                                              src={
+                                                propertyManagerDoc &&
+                                                propertyManagerDoc.photoURL
+                                              }
+                                              alt=""
+                                            />
+                                          )}
+                                        </div>
+                                        <div
+                                          className="tenant_detail"
+                                        >
+                                          <div className="edit_inputs">
+
+                                            <h5
+                                              className="t_name"
+                                            >
+                                              Amit tiwari
+                                            </h5>
+                                            <h6 className="t_number">
+                                              +91 87705-34650
+                                            </h6>
+                                          </div>
+                                        </div>
+                                        <div className="wha_call_icon">
+                                          < Link
+                                            className="call_icon wc_single"
+                                            to="tel:+918770534650
+                                            "
+
+                                          >
+                                            <img
+                                              src="/assets/img/simple_call.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <Link
+                                            className="wha_icon wc_single"
+                                            to="https://wa.me/+918770534650"
+                                            target="_blank"
+                                          >
+                                            <img
+                                              src="/assets/img/whatsapp_simple.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                        </div>
+                                      </div>
+                                      <div
+                                        className="tc_single relative item"
+                                      >
+                                        <div className="tcs_img_container" >
+                                          {propertyManagerDoc && (
+                                            <img
+                                              src={
+                                                propertyManagerDoc &&
+                                                propertyManagerDoc.photoURL
+                                              }
+                                              alt=""
+                                            />
+                                          )}
+                                        </div>
+                                        <div
+                                          className="tenant_detail"
+                                        >
+                                          <div className="edit_inputs">
+
+                                            <h5
+                                              className="t_name"
+                                            >
+                                              Rajiv kumar
+                                            </h5>
+                                            <h6 className="t_number">
+                                              +91 87705-34650
+                                            </h6>
+                                          </div>
+                                        </div>
+                                        <div className="wha_call_icon">
+                                          < Link
+                                            className="call_icon wc_single"
+                                            to="tel:+918770534650
+                                            "
+
+                                          >
+                                            <img
+                                              src="/assets/img/simple_call.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <Link
+                                            className="wha_icon wc_single"
+                                            to="https://wa.me/+918770534650"
+                                            target="_blank"
+                                          >
+                                            <img
+                                              src="/assets/img/whatsapp_simple.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                        </div>
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                          <div className="vg22"></div></>
+                      )}
+                    {/* property user card end  */}
+                    {/* propdial user card  start */}
+                    {((user && user.role === "owner") ||
+                      (user && user.role === "coowner") ||
+                      (user && user.role === "admin")) && (
+                        <>
+                          <section className="property_card_single">
+                            <div className="more_detail_card_inner">
+                              <h2 className="card_title">Propdial users</h2>
+                              <div className="tenant_card">
+                                <div className="row">
+                                  <div className="col-md-2">
+                                    <div
+                                      className="add_btn eicp_single mb-2"
+                                    // onClick={handleAddTenant}
+                                    >
+                                      <div class="icon">
+                                        <div class="text">
+                                          <h6>
+                                            3
+                                          </h6>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div
+                                      className="add_btn"
+                                    // onClick={handleAddTenant}
+                                    >
+                                      <div className="add_btn_inner">
+                                        <div className="add_icon">+</div>
+                                        <div className="ab_text">
+                                          Add property users
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="col-md-10">
+
+                                    <div
+                                      className="d-flex"
+                                      style={{
+                                        gap: "15px",
+                                      }}
+                                    >
+                                      <div
+                                        className="tc_single relative item"
+                                      >
+                                        <div className="tcs_img_container" >
+                                          {propertyOwnerDoc && (
+                                            <img
+                                              src={
+                                                propertyOwnerDoc &&
+                                                propertyOwnerDoc.photoURL
+                                              }
+                                              alt=""
+                                            />
+                                          )}
+                                        </div>
+                                        <div
+                                          className="tenant_detail"
+                                        >
+                                          <div className="edit_inputs">
+
+                                            <h5
+                                              onClick={
+                                                user && user.role === "admin"
+                                                  ? () =>
+                                                    openChangeUser("propertyOwner")
+                                                  : ""
+                                              }
+                                              className={`t_name ${user && user.role === "admin"
+                                                ? "pointer"
+                                                : ""
+                                                }`}
+                                            >
+                                              {propertyOwnerDoc &&
+                                                propertyOwnerDoc.fullName}
+                                              {user && user.role === "admin" && (
+                                                <span className="material-symbols-outlined click_icon text_near_icon">
+                                                  edit
+                                                </span>
+                                              )}
+                                            </h5>
+
+                                            <h6 className="t_number">
+                                              {propertyOwnerDoc &&
+                                                propertyOwnerDoc.phoneNumber.replace(
+                                                  /(\d{2})(\d{5})(\d{5})/,
+                                                  "+$1 $2-$3"
+                                                )}
+                                            </h6>
+                                            <h6 className="t_number">
+                                              {propertyOwnerDoc &&
+                                                propertyOwnerDoc.city}
+                                              ,{" "}
+                                              {propertyOwnerDoc &&
+                                                propertyOwnerDoc.country}
+                                            </h6>
+                                          </div>
+                                        </div>
+                                        <div className="wha_call_icon">
+                                          < Link
+                                            className="call_icon wc_single"
+                                            to={
+                                              propertyOwnerDoc
+                                                ? `tel:${propertyOwnerDoc.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                          >
+                                            <img
+                                              src="/assets/img/simple_call.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <Link
+                                            className="wha_icon wc_single"
+                                            to={
+                                              propertyOwnerDoc
+                                                ? `https://wa.me/${propertyOwnerDoc.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                            target="_blank"
+                                          >
+                                            <img
+                                              src="/assets/img/whatsapp_simple.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                        </div>
+                                      </div>
+                                      <div
+                                        className="tc_single relative item"
+                                      >
+                                        <div className="tcs_img_container" >
+                                          {propertyCoOwnerDoc && (
+                                            <img
+                                              src={
+                                                propertyCoOwnerDoc &&
+                                                propertyCoOwnerDoc.photoURL
+                                              }
+                                              alt=""
+                                            />
+                                          )}
+                                        </div>
+                                        <div
+                                          className="tenant_detail"
+                                        >
+                                          <div className="edit_inputs">
+
+                                            <h5
+                                              onClick={
+                                                user && user.role === "admin"
+                                                  ? () =>
+                                                    openChangeUser("propertyCoOwner")
+                                                  : ""
+                                              }
+                                              className={`t_name ${user && user.role === "admin"
+                                                  ? "pointer"
+                                                  : ""
+                                                }`}
+                                            >
+                                              {propertyCoOwnerDoc &&
+                                                propertyCoOwnerDoc.fullName}
+                                              {user && user.role === "admin" && (
+                                                <span className="material-symbols-outlined click_icon text_near_icon">
+                                                  edit
+                                                </span>
+                                              )}
+                                            </h5>
+
+                                            <h6 className="t_number">
+                                              {propertyCoOwnerDoc &&
+                                                propertyCoOwnerDoc.phoneNumber.replace(
+                                                  /(\d{2})(\d{5})(\d{5})/,
+                                                  "+$1 $2-$3"
+                                                )}
+                                            </h6>
+                                            <h6 className="t_number">
+                                              {propertyCoOwnerDoc &&
+                                                propertyCoOwnerDoc.city}
+                                              ,{" "}
+                                              {propertyCoOwnerDoc &&
+                                                propertyCoOwnerDoc.country}
+                                            </h6>
+                                          </div>
+                                        </div>
+                                        <div className="wha_call_icon">
+                                          < Link
+                                            className="call_icon wc_single"
+                                            to={
+                                              propertyCoOwnerDoc
+                                                ? `tel:${propertyCoOwnerDoc.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                          >
+                                            <img
+                                              src="/assets/img/simple_call.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <Link
+                                            className="wha_icon wc_single"
+                                            to={
+                                              propertyCoOwnerDoc
+                                                ? `https://wa.me/${propertyCoOwnerDoc.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                            target="_blank"
+                                          >
+                                            <img
+                                              src="/assets/img/whatsapp_simple.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                        </div>
+                                      </div>
+                                      <div
+                                        className="tc_single relative item"
+                                      >
+                                        <div className="tcs_img_container" >
+                                          {propertyPOCDoc && (
+                                            <img
+                                              src={
+                                                propertyPOCDoc &&
+                                                propertyPOCDoc.photoURL
+                                              }
+                                              alt=""
+                                            />
+                                          )}
+                                        </div>
+                                        <div
+                                          className="tenant_detail"
+                                        >
+                                          <div className="edit_inputs">
+
+                                            <h5
+                                              onClick={
+                                                user && user.role === "admin"
+                                                  ? () => openChangeUser("propertyPOC")
+                                                  : ""
+                                              }
+                                              className={`t_name ${
+                                                user && user.role === "admin"
+                                                  ? "pointer"
+                                                  : ""
+                                              }`}
+                                            >
+                                              {propertyPOCDoc &&
+                                                propertyPOCDoc.fullName}
+                                              {user && user.role === "admin" && (
+                                                <span className="material-symbols-outlined click_icon text_near_icon">
+                                                  edit
+                                                </span>
+                                              )}
+                                            </h5>
+                                            <h6 className="t_number">
+                                              {propertyPOCDoc &&
+                                                propertyPOCDoc.phoneNumber.replace(
+                                                  /(\d{2})(\d{5})(\d{5})/,
+                                                  "+$1 $2-$3"
+                                                )}
+                                            </h6>
+                                            <h6 className="t_number">
+                                              {propertyPOCDoc && propertyPOCDoc.city},{" "}
+                                              {propertyPOCDoc && propertyPOCDoc.country}
+                                            </h6>
+                                          </div>
+                                        </div>
+                                        <div className="wha_call_icon">
+                                          < Link
+                                            className="call_icon wc_single"
+                                            to={
+                                              propertyPOCDoc
+                                                ? `tel:${propertyPOCDoc.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                          >
+                                            <img
+                                              src="/assets/img/simple_call.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <Link
+                                            className="wha_icon wc_single"
+                                            to={
+                                              propertyPOCDoc
+                                                ? `https://wa.me/${propertyPOCDoc.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                            target="_blank"
+                                          >
+                                            <img
+                                              src="/assets/img/whatsapp_simple.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                          <div className="vg22"></div></>
+                      )}
+                    {/* propdial user card end  */}
+
+
                     <div className="vg10"></div>
                     {((user && user.role === "owner") ||
                       (user && user.role === "coowner") ||

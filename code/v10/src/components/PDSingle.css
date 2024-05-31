@@ -662,6 +662,8 @@ label.upload_img input {
     font-weight: 500;
     color: var(--light-black);
     text-align: center;
+    margin-top: 4px;
+    margin-bottom: 2px;
 }
 
 .tenant_detail_pg .t_name {
@@ -679,7 +681,7 @@ label.upload_img input {
     font-size: 14px;
     font-weight: 400;
     text-align: center;
-    color: #7d7d7d;
+    color: #7d7d7d;    
 }
 
 .tenant_detail_pg .tenant_detail .t_number {
