@@ -60,7 +60,7 @@ const PropertyDocuments = () => {
     try {
       setIsUploading(true);
       const docRef = await addDocument({
-        status: "",
+        status: "active",
         masterRefId: propertyDocumentId,
         documentUrl: "",
         idType: selectedIdType,
