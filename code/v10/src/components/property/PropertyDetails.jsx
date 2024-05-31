@@ -49,7 +49,7 @@ const PropertyDetails = () => {
   // add data of tenant in firebase start
   const { documents: tenantDocument, errors: tenantDocError } = useCollection(
     "tenants",
-    ["Id", "==", propertyid]
+    ["propertyId", "==", propertyid]
   );
 
   const { addDocument, error } = useFirestore("tenants");
@@ -125,12 +125,12 @@ const PropertyDetails = () => {
     e.preventDefault(); // Prevent the default form submission behavior
 
     const tenantData = {
+      propertyId: propertyid,
       name: "",
       mobile: "",
       whatsappNumber: "",
       status: "active",
-      Id: propertyid,
-      photo: "",
+      tenantImgUrl: "",
       onBoardingDate: "",
       offBoardingDate: "",
       idNumber: "",
@@ -1579,8 +1579,8 @@ const PropertyDetails = () => {
                                             /> */}
                                             <h6 className="t_name">
                                               {
-                                               tenant.name ?  tenant.name : "Tenant Name"
-                                               
+                                                tenant.name ? tenant.name : "Tenant Name"
+
                                               }
                                             </h6>
                                             <h6 className="t_number">

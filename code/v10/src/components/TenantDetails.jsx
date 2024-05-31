@@ -19,6 +19,7 @@ const TenantDetails = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { tenantId } = useParams();
+  console.log('Tenant ID: ', tenantId)
   const fileInputRef = useRef(null);
 
   const [editedFields, setEditedFields] = useState({});
@@ -27,15 +28,18 @@ const TenantDetails = () => {
   const [loading, setLoading] = useState(false); // New state for loading
   const { updateDocument, deleteDocument } = useFirestore("tenants");
 
-  const { document, error } = useDocument("tenants", tenantId);
+  const { document: tenantInfo, error: tenantInfoError } = useDocument("tenants", tenantId);
+  console.log('Tenant Info: ', tenantInfo)
+  const { document: propertyInfo, error: propertyInfoError } = useDocument("properties", editedFields.propertyId);
+  console.log('Property Details:', propertyInfo)
   const { documents: tenantDocs, errors: tenantDocsError } = useCollection("docs", ["masterRefId", "==", tenantId]);
 
   useEffect(() => {
-    if (document) {
-      setEditedFields(document);
-      setImageURL(document.tenantImgUrl);
+    if (tenantInfo) {
+      setEditedFields(tenantInfo);
+      setImageURL(tenantInfo.tenantImgUrl);
     }
-  }, [document]);
+  }, [tenantInfo]);
 
   const handleEditClick = (fieldName) => {
     setEditingField(fieldName);
@@ -94,7 +98,7 @@ const TenantDetails = () => {
   const handleCancelClick = (fieldName) => {
     setEditedFields((prevFields) => ({
       ...prevFields,
-      [fieldName]: document[fieldName],
+      [fieldName]: tenantInfo[fieldName],
     }));
     setEditingField(null);
   };
@@ -208,17 +212,19 @@ const TenantDetails = () => {
     }
   };
 
-// data of quick access menu  start
-const menuItems = [
-  { name: 'Tenant', link: '/', icon: '/assets/img/icons/qa_tenant.png' },
-  { name: 'Document', link: '/', icon: '/assets/img/icons/qa_documentation.png' },
-  { name: 'Dashboard', link: '/', icon: '/assets/img/icons/qa_dashboard.png' },
-  { name: 'Properties', link: '', icon: '/assets/img/icons/qa_property.png' },
-  { name: 'Transaction', link: '/', icon: '/assets/img/icons/qa_transaction.png' },
-  { name: 'Bills', link: '/', icon: '/assets/img/icons/qa_bilss.png' },
-  { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
-];
-// data of quick access menu  end
+  // data of quick access menu  start  
+  const menuItems = [
+    { name: 'Dashboard', link: '/dashboard', icon: '/assets/img/icons/qa_dashboard.png' },
+    { name: 'Property', link: '/propertydetails/' + editedFields.propertyId, icon: '/assets/img/icons/qa_property.png' },
+
+    // { name: 'Tenant', link: '/', icon: '/assets/img/icons/qa_tenant.png' },
+    // { name: 'Document', link: '/', icon: '/assets/img/icons/qa_documentation.png' },
+
+    // { name: 'Transaction', link: '/', icon: '/assets/img/icons/qa_transaction.png' },
+    // { name: 'Bills', link: '/', icon: '/assets/img/icons/qa_bilss.png' },
+    // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
+  ];
+  // data of quick access menu  end
   return (
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
@@ -268,11 +274,11 @@ const menuItems = [
             </div>
           </div>
           <QuickAccessMenu menuItems={menuItems} />
-     <hr />
+          <hr />
           <div className="">
             <div className="row">
               <div className="col-md-4">
-                <div className={`tc_single ${document && document.status === "inactive" ? "t_inactive" : ""}`}>
+                <div className={`tc_single ${tenantInfo && tenantInfo.status === "inactive" ? "t_inactive" : ""}`}>
                   <div className="tcs_img_container relative">
                     {loading ? (
                       <div className="loader">
@@ -332,8 +338,8 @@ const menuItems = [
                         </div>
                       ) : (
                         <>
-                          {document && document.name
-                            ? document && document.name
+                          {tenantInfo && tenantInfo.name
+                            ? tenantInfo && tenantInfo.name
                             : "Name"}
                           {!editingField && user && user.role === "admin" && (
                             <span
@@ -374,8 +380,8 @@ const menuItems = [
                         </div>
                       ) : (
                         <>
-                          {document && document.mobile
-                            ? document && document.mobile
+                          {tenantInfo && tenantInfo.mobile
+                            ? tenantInfo && tenantInfo.mobile
                             : "Mobile number"}
                           {!editingField && user && user.role === "admin" && (
                             <span
@@ -392,14 +398,14 @@ const menuItems = [
                   <div className="wha_call_icon">
                     <Link
                       className="call_icon wc_single"
-                      to={`tel:${document && document.mobile}`}
+                      to={`tel:${tenantInfo && tenantInfo.mobile}`}
                       target="_blank"
                     >
                       <img src="/assets/img/simple_call.png" alt="" />
                     </Link>
                     <Link
                       className="wha_icon wc_single"
-                      to={`https://wa.me/${document && document.mobile}`}
+                      to={`https://wa.me/${tenantInfo && tenantInfo.mobile}`}
                       target="_blank"
                     >
                       <img src="/assets/img/whatsapp_simple.png" alt="" />
@@ -409,6 +415,14 @@ const menuItems = [
               </div>
               <div className="col-md-8">
                 <div className="tc_single">
+
+                  {propertyInfo && (
+                    <>
+                      <div className="tcs_single">
+                        <h5>Property</h5>
+                        <h6>{propertyInfo.unitNumber}, {propertyInfo.society}, {propertyInfo.locality}, {propertyInfo.city}, {propertyInfo.state}</h6>
+                      </div>
+                      <div className="divider"></div></>)}
                   <div className="tcs_single">
                     <h5>On Boarding Date</h5>
                     <h6>
@@ -443,8 +457,8 @@ const menuItems = [
                         </div>
                       ) : (
                         <>
-                          {document && document.onBoardingDate
-                            ? document && document.onBoardingDate
+                          {tenantInfo && tenantInfo.onBoardingDate
+                            ? tenantInfo && tenantInfo.onBoardingDate
                             : "Add onborading date"}
                           {!editingField && user && user.role === "admin" && (
                             <span
@@ -493,8 +507,8 @@ const menuItems = [
                         </div>
                       ) : (
                         <>
-                          {document && document.offBoardingDate
-                            ? document && document.offBoardingDate
+                          {tenantInfo && tenantInfo.offBoardingDate
+                            ? tenantInfo && tenantInfo.offBoardingDate
                             : "Add off borading date"}
                           {!editingField && user && user.role === "admin" && (
                             <span
@@ -568,7 +582,7 @@ const menuItems = [
                         </div>
                       ) : (
                         <>
-                          {document && document.status}
+                          {tenantInfo && tenantInfo.status}
                           {!editingField && user && user.role === "admin" && (
                             <span
                               className="material-symbols-outlined click_icon text_near_icon"
@@ -612,8 +626,8 @@ const menuItems = [
                         </div>
                       ) : (
                         <>
-                          {document && document.emailID
-                            ? document && document.emailID
+                          {tenantInfo && tenantInfo.emailID
+                            ? tenantInfo && tenantInfo.emailID
                             : "Email ID here"}
                           {!editingField && user && user.role === "admin" && (
                             <span
@@ -657,8 +671,8 @@ const menuItems = [
                         </div>
                       ) : (
                         <>
-                          {document && document.address
-                            ? document && document.address
+                          {tenantInfo && tenantInfo.address
+                            ? tenantInfo && tenantInfo.address
                             : "Address here"}
                           {!editingField && user && user.role === "admin" && (
                             <span
@@ -915,7 +929,7 @@ const menuItems = [
               </div>
             ) : (
               <>
-                {document && document.idNumber}
+                {tenantInfo && tenantInfo.idNumber}
                 {!editingField && user && user.role === "admin" && (
                   <span
                     className="material-symbols-outlined"
@@ -957,7 +971,7 @@ const menuItems = [
               </div>
             ) : (
               <>
-                {document && document.rentStartDate}
+                {tenantInfo && tenantInfo.rentStartDate}
                 {!editingField && user && user.role === "admin" && (
                   <span
                     className="material-symbols-outlined"
@@ -996,7 +1010,7 @@ const menuItems = [
               </div>
             ) : (
               <>
-                {document && document.rentEndDate}
+                {tenantInfo && tenantInfo.rentEndDate}
                 {!editingField && user && user.role === "admin" && (
                   <span
                     className="material-symbols-outlined"
