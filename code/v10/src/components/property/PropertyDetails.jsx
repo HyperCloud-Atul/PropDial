@@ -121,6 +121,40 @@ const PropertyDetails = () => {
     setEditingTenantId(null);
   };
 
+
+  //Property Layout
+  const [propertyLayout, setPropertyLayout] = useState({
+    RoomType: "",
+    RoomName: "",
+    RoomLength: "",
+    RoomWidth: "",
+    RoomTotalArea: "",
+    RoomFixtures: [],
+    RoomImgUrl: "",
+  });
+
+  const handlePropertyLayout = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    const roomData = {
+      propertyId: propertyid,
+      roomType: propertyLayout.RoomType,
+      roomName: propertyLayout.RoomName.trim(),
+      roomLength: propertyLayout.RoomLength.trim(),
+      roomWidth: propertyLayout.RoomWidth.trim(),
+      roomTotalArea: "",
+      roomFixtures: propertyLayout.RoomFixtures,
+      roomImgUrl: "",
+    };
+    console.log('Room Data:', roomData)
+    // await addDocument(roomData);
+    if (error) {
+      console.log("response error");
+    }
+  }
+
+
+  //Tenant Information
   const handleAddTenant = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
 
@@ -1272,17 +1306,29 @@ const PropertyDetails = () => {
                                           type="radio"
                                           name="aai_type"
                                           id="bedroom"
+                                          onClick={(e) => {
+                                            setPropertyLayout({
+                                              ...propertyLayout,
+                                              RoomType: "Bedroom",
+                                            })
+                                          }}
                                         />
-                                        <label htmlFor="bedroom">bedroom</label>
+                                        <label htmlFor="bedroom">Bedroom</label>
                                       </div>
                                       <div className="radio_single">
                                         <input
                                           type="radio"
                                           name="aai_type"
                                           id="bathroom"
+                                          onClick={(e) => {
+                                            setPropertyLayout({
+                                              ...propertyLayout,
+                                              RoomType: "Bathroom",
+                                            })
+                                          }}
                                         />
                                         <label htmlFor="bathroom">
-                                          bathroom
+                                          Bathroom
                                         </label>
                                       </div>
                                       <div className="radio_single">
@@ -1290,24 +1336,70 @@ const PropertyDetails = () => {
                                           type="radio"
                                           name="aai_type"
                                           id="kitchen"
+                                          onClick={(e) => {
+                                            setPropertyLayout({
+                                              ...propertyLayout,
+                                              RoomType: "Kitchen",
+                                            })
+                                          }}
                                         />
-                                        <label htmlFor="kitchen">kitchen</label>
+                                        <label htmlFor="kitchen">Kitchen</label>
                                       </div>
                                       <div className="radio_single">
                                         <input
                                           type="radio"
                                           name="aai_type"
                                           id="living"
+                                          onClick={(e) => {
+                                            setPropertyLayout({
+                                              ...propertyLayout,
+                                              RoomType: "Living Room",
+                                            })
+                                          }}
                                         />
-                                        <label htmlFor="living">living</label>
+                                        <label htmlFor="living">Living Room</label>
                                       </div>
                                       <div className="radio_single">
                                         <input
                                           type="radio"
                                           name="aai_type"
                                           id="dining"
+                                          onClick={(e) => {
+                                            setPropertyLayout({
+                                              ...propertyLayout,
+                                              RoomType: "Dining Room",
+                                            })
+                                          }}
                                         />
-                                        <label htmlFor="dining">dining</label>
+                                        <label htmlFor="dining">Dining Room</label>
+                                      </div>
+                                      <div className="radio_single">
+                                        <input
+                                          type="radio"
+                                          name="aai_type"
+                                          id="balcony"
+                                          onClick={(e) => {
+                                            setPropertyLayout({
+                                              ...propertyLayout,
+                                              RoomType: "Balcony",
+                                            })
+                                          }}
+                                        />
+                                        <label htmlFor="balcony">Balcony</label>
+                                      </div>
+                                      <div className="radio_single">
+                                        <input
+                                          type="radio"
+                                          name="aai_type"
+                                          id="basement"
+                                          onClick={(e) => {
+                                            setPropertyLayout({
+                                              ...propertyLayout,
+                                              RoomType: "Basement",
+                                            })
+                                          }}
+                                        />
+                                        <label htmlFor="basement">Basement</label>
                                       </div>
                                     </div>
                                   </div>
@@ -1329,13 +1421,37 @@ const PropertyDetails = () => {
                               <div className="col-md-11">
                                 <div className="add_info_text">
                                   <div className="form_field">
-                                    <input type="text" placeholder="Name" />
+                                    <input type="text" placeholder="Room Name"
+                                      onChange={(e) =>
+                                        setPropertyLayout({
+                                          ...propertyLayout,
+                                          RoomName: e.target.value,
+                                        })
+                                      }
+                                      value={propertyLayout && propertyLayout.RoomName}
+                                    />
                                   </div>
                                   <div className="form_field">
-                                    <input type="text" placeholder="Length" />
+                                    <input type="text" placeholder="Room Length"
+                                      onChange={(e) =>
+                                        setPropertyLayout({
+                                          ...propertyLayout,
+                                          RoomLength: e.target.value,
+                                        })
+                                      }
+                                      value={propertyLayout && propertyLayout.RoomLength}
+                                    />
                                   </div>
                                   <div className="form_field">
-                                    <input type="text" placeholder="Width" />
+                                    <input type="text" placeholder="Room Width"
+                                      onChange={(e) =>
+                                        setPropertyLayout({
+                                          ...propertyLayout,
+                                          RoomWidth: e.target.value,
+                                        })
+                                      }
+                                      value={propertyLayout && propertyLayout.RoomWidth}
+                                    />
                                   </div>
                                   <div className="form_field">
                                     <input type="text" placeholder="Total area" />
@@ -1352,16 +1468,24 @@ const PropertyDetails = () => {
                                               e.target.value
                                             )
                                           }
-                                          placeholder="area, furniture, etc."
+                                          // onChange={(e) =>
+                                          //   setPropertyLayout({
+                                          //     ...propertyLayout,
+                                          //     RoomFixture: e.target.value,
+                                          //   })
+                                          // }
+                                          placeholder="Fixtures etc. fan, light, furniture, etc."
                                         />
-                                        {additionalInfos.length > 1 && (
-                                          <span
-                                            onClick={() => handleRemove(index)}
-                                            className="pointer close_field"
-                                          >
-                                            X
-                                          </span>
-                                        )}
+                                        {
+                                          additionalInfos.length > 1 && (
+                                            <span
+                                              onClick={() => handleRemove(index)}
+                                              className="pointer close_field"
+                                            >
+                                              X
+                                            </span>
+                                          )
+                                        }
                                       </div>
                                     </div>
                                   ))}
@@ -1428,8 +1552,8 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                             <div className="col-sm-3">
-                              <div className="theme_btn btn_fill text-center">
-                                Save
+                              <div className="theme_btn btn_fill text-center" onClick={handlePropertyLayout}>
+                                Add
                               </div>
                             </div>
                           </div>
@@ -1448,7 +1572,7 @@ const PropertyDetails = () => {
                             <div className="add_btn_inner">
                               <div className="add_icon">+</div>
                               <div className="ab_text">
-                                bedroom, bathroom, kitchen, etc
+                                Property Layout
                               </div>
                             </div>
                           </div>
@@ -1503,7 +1627,7 @@ const PropertyDetails = () => {
                                 <div className="add_btn_inner">
                                   <div className="add_icon">+</div>
                                   <div className="ab_text">
-                                    Add tenant Name, Mobile, IMG etc.
+                                    Add Tenants
                                   </div>
                                 </div>
                               </div>
@@ -1637,7 +1761,7 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                     </section>
-                    
+
                     <div className="vg22"></div>
                     {/* tenant card end  */}
                     <div className="vg10"></div>
