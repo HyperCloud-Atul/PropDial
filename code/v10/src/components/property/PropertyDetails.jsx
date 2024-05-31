@@ -52,7 +52,14 @@ const PropertyDetails = () => {
     ["propertyId", "==", propertyid]
   );
 
-  const { addDocument, error } = useFirestore("tenants");
+  const { documents: propertyLayouts, errors: propertyLayoutsError } = useCollection(
+    "propertylayouts",
+    ["propertyId", "==", propertyid]
+  );
+
+  const { addDocument: tenantAddDocument, error: tenantAddDocumentError } = useFirestore("tenants");
+  const { addDocument: propertyLayoutAddDocument, error: propertyLayoutAddDocumentError } = useFirestore("propertylayouts");
+
   // upload tenant code start
   const [tenantName, setTenantName] = useState("");
   const [editingTenantId, setEditingTenantId] = useState(null);
@@ -133,6 +140,35 @@ const PropertyDetails = () => {
     RoomImgUrl: "",
   });
 
+  // show add additional info form code start
+  const [showAIForm, setShowAIForm] = useState(false);
+  const handleShowAIForm = () => {
+    setShowAIForm(!showAIForm);
+  };
+  // show add additional info form code end
+
+  // add from field of additonal info code start
+  const [additionalInfos, setAdditionalInfos] = useState([""]); // Initialize with one field
+
+  const handleAddMore = () => {
+    setAdditionalInfos([...additionalInfos, ""]);
+  };
+
+  const handleRemove = (index) => {
+    if (additionalInfos.length > 1) {
+      // Prevent removal if only one field remains
+      const newInfos = additionalInfos.filter((_, i) => i !== index);
+      setAdditionalInfos(newInfos);
+    }
+  };
+
+  const handleInputChange = (index, value) => {
+    const newInfos = [...additionalInfos];
+    newInfos[index] = value;
+    setAdditionalInfos(newInfos);
+  };
+  // add from field of additonal info code end
+
   const handlePropertyLayout = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
 
@@ -142,13 +178,13 @@ const PropertyDetails = () => {
       roomName: propertyLayout.RoomName.trim(),
       roomLength: propertyLayout.RoomLength.trim(),
       roomWidth: propertyLayout.RoomWidth.trim(),
-      roomTotalArea: "",
-      roomFixtures: propertyLayout.RoomFixtures,
+      roomTotalArea: propertyLayout.RoomLength * propertyLayout.RoomWidth,
+      roomFixtures: additionalInfos,
       roomImgUrl: "",
     };
     console.log('Room Data:', roomData)
-    // await addDocument(roomData);
-    if (error) {
+    await propertyLayoutAddDocument(roomData);
+    if (propertyLayoutAddDocumentError) {
       console.log("response error");
     }
   }
@@ -174,8 +210,8 @@ const PropertyDetails = () => {
       rentEndDate: "",
     };
 
-    await addDocument(tenantData);
-    if (error) {
+    await tenantAddDocument(tenantData);
+    if (tenantAddDocumentError) {
       console.log("response error");
     }
     // setIsTenantEditing(!isTenantEditing);
@@ -502,34 +538,7 @@ const PropertyDetails = () => {
   };
   // 9 dots controls
 
-  // show add additional info form code start
-  const [showAIForm, setShowAIForm] = useState(false);
-  const handleShowAIForm = () => {
-    setShowAIForm(!showAIForm);
-  };
-  // show add additional info form code end
 
-  // add from field of additonal info code start
-  const [additionalInfos, setAdditionalInfos] = useState([""]); // Initialize with one field
-
-  const handleAddMore = () => {
-    setAdditionalInfos([...additionalInfos, ""]);
-  };
-
-  const handleRemove = (index) => {
-    if (additionalInfos.length > 1) {
-      // Prevent removal if only one field remains
-      const newInfos = additionalInfos.filter((_, i) => i !== index);
-      setAdditionalInfos(newInfos);
-    }
-  };
-
-  const handleInputChange = (index, value) => {
-    const newInfos = [...additionalInfos];
-    newInfos[index] = value;
-    setAdditionalInfos(newInfos);
-  };
-  // add from field of additonal info code end
 
   // START CODE FOR ADD NEW IMAGES
   const fileInputRef = useRef(null);
@@ -1453,9 +1462,11 @@ const PropertyDetails = () => {
                                       value={propertyLayout && propertyLayout.RoomWidth}
                                     />
                                   </div>
-                                  <div className="form_field">
-                                    <input type="text" placeholder="Total area" />
-                                  </div>
+                                  {/* <div className="form_field">
+                                    <input type="text" placeholder="Total area"
+                                      value={propertyLayout.RoomLength * propertyLayout.RoomWidth}
+                                    />
+                                  </div> */}
                                   {additionalInfos.map((info, index) => (
                                     <div className="form_field">
                                       <div className="relative" key={index}>
@@ -1468,12 +1479,6 @@ const PropertyDetails = () => {
                                               e.target.value
                                             )
                                           }
-                                          // onChange={(e) =>
-                                          //   setPropertyLayout({
-                                          //     ...propertyLayout,
-                                          //     RoomFixture: e.target.value,
-                                          //   })
-                                          // }
                                           placeholder="Fixtures etc. fan, light, furniture, etc."
                                         />
                                         {
@@ -1577,7 +1582,7 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         )}
-                        <div className="col-md-4">
+                        {propertyLayouts && propertyLayouts.map((room, index) => (<div className="col-md-4">
                           <div className="ai_detail_show">
                             <div className="left">
                               <img
@@ -1586,19 +1591,21 @@ const PropertyDetails = () => {
                               />
                             </div>
                             <div className="right">
-                              <h5>Master Bedroom</h5>
+                              <h5>{room.roomName}</h5>
                               <div className="in_detail">
                                 <span className="in_single">
-                                  Area 1252sq/ft
+                                  Area {room.roomTotalArea}sq/ft
                                 </span>
-                                <span className="in_single">2 fan</span>
-                                <span className="in_single">2 almira</span>
-                                <span className="in_single">2 fan</span>
-                                <span className="in_single">2 almira</span>
+                                <span className="in_single">Length {room.roomLength}ft</span>
+                                <span className="in_single">Width {room.roomWidth}ft</span>
+
+                                {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
+                                  <span className="in_single">{fixture}</span>
+                                ))}
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div>))}
                       </div>
                     </section>
                     {/* tenant card start */}
