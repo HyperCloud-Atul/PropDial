@@ -504,14 +504,14 @@ const PropertyDetails = () => {
   // owl carousel option end
 
   // owl carousel option start for tenant
-  const optionsTenant = {
-    items: 4,
+  const optionsroom = {
+    items: 2,
     dots: false,
     loop: false,
     margin: 15,
     nav: true,
     smartSpeed: 1500,
-    // autoplay: true,
+    autoplay: true,
     autoplayTimeout: 10000,
     responsive: {
       // Define breakpoints and the number of items to show at each breakpoint
@@ -522,7 +522,7 @@ const PropertyDetails = () => {
         items: 2,
       },
       992: {
-        items: 4,
+        items: 2,
       },
     },
   };
@@ -1567,23 +1567,26 @@ const PropertyDetails = () => {
                     )}
                     <section className="property_card_single">
                       <div
-                        className="more_detail_card_inner d-flex align-items-center"
-                        style={{
-                          gap: "15px",
-                        }}
+                        className="more_detail_card_inner row"
+
                       >
-                        {!showAIForm && (
-                          <div className="add_btn" onClick={handleShowAIForm}>
-                            <div className="add_btn_inner">
-                              <div className="add_icon">+</div>
-                              <div className="ab_text">
-                                Property Layout
+                        {/* optionsroom */}
+                        <div className="col-sm-2">
+                          {!showAIForm && (
+                            <div className="add_btn" onClick={handleShowAIForm}>
+                              <div className="add_btn_inner">
+                                <div className="add_icon">+</div>
+                                <div className="ab_text">
+                                  Property Layout
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
-                        {propertyLayouts && propertyLayouts.map((room, index) => (<div className="col-md-4">
-                          <div className="ai_detail_show">
+                          )}
+                        </div>
+                        <div className="col-sm-10">
+                        <OwlCarousel className="owl-theme" {...optionsroom}>
+                        {propertyLayouts && propertyLayouts.map((room, index) => (
+                          <div className="ai_detail_show item">
                             <div className="left">
                               <img
                                 src="/assets/img/p_img/drawingroom.jpg"
@@ -1605,7 +1608,10 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                           </div>
-                        </div>))}
+                        ))}
+                          </OwlCarousel>
+                        </div>
+                   
                       </div>
                     </section>
                     {/* tenant card start */}
@@ -1773,8 +1779,8 @@ const PropertyDetails = () => {
                     {/* tenant card end  */}.
 
 
-     {/* property user card  start */}
-     {((user && user.role === "owner") ||
+                    {/* property user card  start */}
+                    {((user && user.role === "owner") ||
                       (user && user.role === "coowner") ||
                       (user && user.role === "admin")) && (
                         <>
@@ -2166,8 +2172,8 @@ const PropertyDetails = () => {
                                                   : ""
                                               }
                                               className={`t_name ${user && user.role === "admin"
-                                                  ? "pointer"
-                                                  : ""
+                                                ? "pointer"
+                                                : ""
                                                 }`}
                                             >
                                               {propertyCoOwnerDoc &&
@@ -2250,11 +2256,10 @@ const PropertyDetails = () => {
                                                   ? () => openChangeUser("propertyPOC")
                                                   : ""
                                               }
-                                              className={`t_name ${
-                                                user && user.role === "admin"
-                                                  ? "pointer"
-                                                  : ""
-                                              }`}
+                                              className={`t_name ${user && user.role === "admin"
+                                                ? "pointer"
+                                                : ""
+                                                }`}
                                             >
                                               {propertyPOCDoc &&
                                                 propertyPOCDoc.fullName}
