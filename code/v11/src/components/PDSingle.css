@@ -194,6 +194,9 @@
     font-size: 12px;
     padding: 3px 10px;
 }
+.oneline_parent::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
 
 .userlist.property_owners .single_user .property_people_designation:after {
     content: '';
@@ -205,7 +208,24 @@
     left: -5px;
     transform: rotate(45deg);
 }
+.tc_single .property_people_designation {
+    position: absolute;
+    top: -13px;
+    right: 14px;
+    font-size: 12px;
+    padding: 3px 10px;
+}
 
+.tc_single .property_people_designation:after {
+    content: '';
+    position: absolute;
+    height: 50%;
+    background: #f3f3f3;
+    width: 10px;
+    top: 2px;
+    left: -5px;
+    transform: rotate(45deg);
+}
 .property_connected_people.userlist .single_user {
     padding: 0px;
 }
@@ -453,7 +473,6 @@
     border-radius: 15px;
     padding: 8px;
     width: fit-content;
-    overflow: hidden;
     width: 25%;
 }
 .tc_single.t_inactive{

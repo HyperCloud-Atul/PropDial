@@ -1584,34 +1584,34 @@ const PropertyDetails = () => {
                           )}
                         </div>
                         <div className="col-sm-10">
-                        <OwlCarousel className="owl-theme" {...optionsroom}>
-                        {propertyLayouts && propertyLayouts.map((room, index) => (
-                          <div className="ai_detail_show item">
-                            <div className="left">
-                              <img
-                                src="/assets/img/p_img/drawingroom.jpg"
-                                alt=""
-                              />
-                            </div>
-                            <div className="right">
-                              <h5>{room.roomName}</h5>
-                              <div className="in_detail">
-                                <span className="in_single">
-                                  Area {room.roomTotalArea}sq/ft
-                                </span>
-                                <span className="in_single">Length {room.roomLength}ft</span>
-                                <span className="in_single">Width {room.roomWidth}ft</span>
+                          <OwlCarousel className="owl-theme" {...optionsroom}>
+                            {propertyLayouts && propertyLayouts.map((room, index) => (
+                              <div className="ai_detail_show item">
+                                <div className="left">
+                                  <img
+                                    src="/assets/img/p_img/drawingroom.jpg"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="right">
+                                  <h5>{room.roomName}</h5>
+                                  <div className="in_detail">
+                                    <span className="in_single">
+                                      Area {room.roomTotalArea}sq/ft
+                                    </span>
+                                    <span className="in_single">Length {room.roomLength}ft</span>
+                                    <span className="in_single">Width {room.roomWidth}ft</span>
 
-                                {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
-                                  <span className="in_single">{fixture}</span>
-                                ))}
+                                    {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
+                                      <span className="in_single">{fixture}</span>
+                                    ))}
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        ))}
+                            ))}
                           </OwlCarousel>
                         </div>
-                   
+
                       </div>
                     </section>
                     {/* tenant card start */}
@@ -1823,8 +1823,11 @@ const PropertyDetails = () => {
                                       }}
                                     >
                                       <div
-                                        className="tc_single relative item"
+                                        className="tc_single relative item relative"
                                       >
+                                        <div className="property_people_designation">
+                                          Property Manager
+                                        </div>
                                         <div className="tcs_img_container" >
                                           {propertyManagerDoc && (
                                             <img
@@ -1903,6 +1906,9 @@ const PropertyDetails = () => {
                                       <div
                                         className="tc_single relative item"
                                       >
+                                        <div className="property_people_designation">
+                                          Substitute PM
+                                        </div>
                                         <div className="tcs_img_container" >
                                           {propertyManagerDoc && (
                                             <img
@@ -1956,6 +1962,9 @@ const PropertyDetails = () => {
                                       <div
                                         className="tc_single relative item"
                                       >
+                                        <div className="property_people_designation">
+                                          Sales Manager
+                                        </div>
                                         <div className="tcs_img_container" >
                                           {propertyManagerDoc && (
                                             <img
@@ -2062,6 +2071,9 @@ const PropertyDetails = () => {
                                       <div
                                         className="tc_single relative item"
                                       >
+                                                      <div className="property_people_designation">
+                                                      Owner
+                                    </div>
                                         <div className="tcs_img_container" >
                                           {propertyOwnerDoc && (
                                             <img
@@ -2148,6 +2160,9 @@ const PropertyDetails = () => {
                                       <div
                                         className="tc_single relative item"
                                       >
+                                                         <div className="property_people_designation">
+                                                         Co-Owner
+                                    </div>
                                         <div className="tcs_img_container" >
                                           {propertyCoOwnerDoc && (
                                             <img
@@ -2234,6 +2249,9 @@ const PropertyDetails = () => {
                                       <div
                                         className="tc_single relative item"
                                       >
+                                         <div className="property_people_designation">
+                                         POC
+                                    </div>
                                         <div className="tcs_img_container" >
                                           {propertyPOCDoc && (
                                             <img
@@ -2529,7 +2547,7 @@ const PropertyDetails = () => {
                                   </div>
                                   <div className="single_user">
                                     <div className="property_people_designation">
-                                      Substitute Property Managaer
+                                      Substitute PM
                                     </div>
                                     <div className="left">
                                       <div className="user_img">
