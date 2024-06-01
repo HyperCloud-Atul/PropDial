@@ -49,7 +49,7 @@ const PropertyDocuments = () => {
   };
 
   const addPropertyDocuments = async () => {
-    if (!selectedIdType || !idNumber) {
+    if (!selectedIdType) {
       alert("All fields are required!");
       return;
     }
@@ -332,8 +332,7 @@ const PropertyDocuments = () => {
                             type="text"
                             value={idNumber}
                             onChange={handleIdNumberChange}
-                            placeholder="Enter Document Id"
-                            required
+                            placeholder="Enter Document Id"                        
                           />
                         </div>
                       </div>

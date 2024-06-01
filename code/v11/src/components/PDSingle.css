@@ -467,14 +467,85 @@
 
 /* tenant css start  */
 .tc_single {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     background: var(--white-color);
     border-radius: 15px;
     padding: 8px;
     width: fit-content;
     width: 25%;
 }
+.all_tenants .tc_single { 
+    display: flex;
+    gap: 10px;
+    box-shadow: none;
+    border: 1px solid #dfdfdf;
+    justify-content: space-between;
+    width: 100%;  
+    margin-top: 1px;
+    border-radius: 10px;
+}
+
+
+
+.all_tenants .tc_single .wha_call_icon {
+    display: flex;
+    border-top: none;
+    margin-left: 0px;
+    margin-right: -10px;
+    margin-bottom: -10px;
+    padding: 0px;
+    margin-top: -10px;
+    position: relative;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-left: 1px solid #dfdfdf;
+    width: 15%;
+}
+.all_tenants .tc_single .wha_call_icon:after {  
+    top: 50%;  
+    width: 100%;
+    height: 1px;
+    transform: translateY(-50%);
+    background: #dfdfdf;;
+}
+.all_tenants .tc_single .wha_call_icon .wc_single {   
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.all_tenants .tc_single .wha_call_icon .wc_single img {
+    width: 19px;
+}
+.all_tenants .tc_single .left{
+    display: flex;
+    gap: 6px;
+    width: 85%;
+}
+.all_tenants .tcs_img_container {
+    width: 25%;
+    min-width: 60px;
+    height: auto;
+    aspect-ratio: 1/1;
+  margin: inherit;
+}
+.all_tenants  .tc_single .tenant_detail {
+    display: flex;
+    flex-direction: column;
+    gap: 5px !important;
+    width: 75%;
+}
+.all_tenants  .tc_single .tenant_detail .t_name{
+    text-align: inherit;
+    margin: 0px;
+}
+.all_tenants  .tc_single .tenant_detail .t_number{
+    text-align: inherit;
+    margin: 0px;
+}
+
 .tc_single.t_inactive{
     filter: grayscale(100%);   
     opacity: 0.5;

@@ -120,6 +120,9 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     font-weight: 500;
 
 }
+.text_green{
+    color: var(--theme-green) !important;
+}
 
 .bg_orange {
     background: #ffd6cb;
