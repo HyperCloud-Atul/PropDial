@@ -14,12 +14,13 @@ const PropertyDocuments = () => {
     window.scrollTo(0, 0);
   }, [location]);
 
-  const { propertyDocumentId } = useParams();
+  const { propertyId } = useParams();
+  console.log('propertyDocumentId: ', propertyId)
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
   const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
-  const { documents: propertyDocument, errors: propertyDocError } = useCollection("docs", ["masterRefId", "==", propertyDocumentId]);
+  const { documents: propertyDocument, errors: propertyDocError } = useCollection("docs", ["masterRefId", "==", propertyId]);
 
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
@@ -57,7 +58,7 @@ const PropertyDocuments = () => {
       setIsUploading(true);
       const docRef = await addDocument({
         status: "active",
-        masterRefId: propertyDocumentId,
+        masterRefId: propertyId,
         documentUrl: "",
         idType: selectedIdType,
         idNumber: idNumber,
@@ -124,19 +125,22 @@ const PropertyDocuments = () => {
   };
   // 9 dots controls
 
-// data of quick access menu  start
-const menuItems = [
-  { name: 'Tenant', link: '/', icon: '/assets/img/icons/qa_tenant.png' },
-  { name: 'Document', link: '/', icon: '/assets/img/icons/qa_documentation.png' },
-  { name: 'Dashboard', link: '/', icon: '/assets/img/icons/qa_dashboard.png' },
-  { name: 'Properties', link: '', icon: '/assets/img/icons/qa_property.png' },
-  { name: 'Transaction', link: '/', icon: '/assets/img/icons/qa_transaction.png' },
-  { name: 'Bills', link: '/', icon: '/assets/img/icons/qa_bilss.png' },
-  { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
-];
-// data of quick access menu  end
 
- 
+  // data of quick access menu  start  
+  const menuItems = [
+    { name: 'Dashboard', link: '/dashboard', icon: '/assets/img/icons/qa_dashboard.png' },
+    { name: 'Property', link: '/propertydetails/' + propertyId, icon: '/assets/img/icons/qa_property.png' },
+
+    // { name: 'Tenant', link: '/', icon: '/assets/img/icons/qa_tenant.png' },
+    // { name: 'Document', link: '/', icon: '/assets/img/icons/qa_documentation.png' },
+
+    // { name: 'Transaction', link: '/', icon: '/assets/img/icons/qa_transaction.png' },
+    // { name: 'Bills', link: '/', icon: '/assets/img/icons/qa_bilss.png' },
+    // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
+  ];
+  // data of quick access menu  end
+
+
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
       <div className="page_spacing">
@@ -185,7 +189,7 @@ const menuItems = [
           </div>
         </div>
         <QuickAccessMenu menuItems={menuItems} />
-     <hr />
+        <hr />
         <div className="pg_header d-flex align-items-center justify-content-between">
           <div className="left">
             <h2 className="m22 mb-1">Property Documents</h2>

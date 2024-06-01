@@ -93,7 +93,7 @@ import PropertyDocuments from "./components/PropertyDocuments";
 function App() {
   const { authIsReady, user } = useAuthContext();
 
-  useEffect(() => {}, [user]);
+  useEffect(() => { }, [user]);
 
   const [currentModeStatus, setCurrentModeStatus] = useState("dark");
   const { document: dbDisplayModeDocuments, error: dbDisplayModeError } =
@@ -166,7 +166,7 @@ function App() {
               <div>
                 {/* PWA INSTALLATION CODE START */}
                 {dbTextContentDocuments &&
-                dbTextContentDocuments.status == "active" ? (
+                  dbTextContentDocuments.status == "active" ? (
                   <>
                     {" "}
                     {deferredPrompt && (
@@ -228,7 +228,7 @@ function App() {
                     element={<TenantDetails />}
                   ></Route>
                   <Route
-                    path="/propertydocumentdetails/:propertyDocumentId"
+                    path="/propertydocumentdetails/:propertyId"
                     element={<PropertyDocuments />}
                   ></Route>
                   {/* <Route
@@ -259,8 +259,8 @@ function App() {
                     path="/ticketdetail"
                     element={
                       user &&
-                      user.status === "active" &&
-                      (user.role === "owner" || user.role !== "admin") ? (
+                        user.status === "active" &&
+                        (user.role === "owner" || user.role !== "admin") ? (
                         <TicketDetail />
                       ) : (
                         <Navigate to="/login" />
@@ -480,7 +480,7 @@ function App() {
                     path="/ownerdashboard"
                     element={
                       (user && user.role === "owner") ||
-                      (user && user.role === "coowner") ? (
+                        (user && user.role === "coowner") ? (
                         <PGOwnerDashboard />
                       ) : (
                         <Navigate to="/login" />
