@@ -1650,28 +1650,17 @@ const PropertyDetails = () => {
                   </div>
                 </section>
                 {/* tenant card start */}
-                <section className="property_card_single">
+                <section className="property_card_single full_width_sec">
+                  <span className="verticall_title">
+                    Tenants :  {tenantDocument && tenantDocument.length}
+                  </span>
                   <div className="more_detail_card_inner">
-                    <h2 className="card_title d-flex justify-content-between"
-
-                    >
-                      <div className="d-flex" style={{
-                        gap: "15px"
-                      }}>
-                        <span>
-                          Tenants :  {tenantDocument && tenantDocument.length}
-                        </span>                   
-                      </div>
-                      <div className="right d-flex" style={{
-                        gap: "22px",
-                        fontSize: "16px"
-                      }}>
-                        <div className="add_new text_green pointer" onClick={handleAddTenant}
-                          style={{
-                            textDecoration: "underline"
-                          }}>
-                          Add Tenants
-                        </div>
+                    <h2 className="card_title d-flex justify-content-end" >
+                      <div className="add_new text_green pointer" onClick={handleAddTenant}
+                        style={{
+                          textDecoration: "underline"
+                        }}>
+                        Add Tenants
                       </div>
                     </h2>
                     <div className="tenant_card">

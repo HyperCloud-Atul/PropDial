@@ -194,8 +194,10 @@
     font-size: 12px;
     padding: 3px 10px;
 }
+
 .oneline_parent::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
+    display: none;
+    /* Safari and Chrome */
 }
 
 .userlist.property_owners .single_user .property_people_designation:after {
@@ -208,6 +210,7 @@
     left: -5px;
     transform: rotate(45deg);
 }
+
 .tc_single .property_people_designation {
     position: absolute;
     top: -13px;
@@ -226,6 +229,7 @@
     left: -5px;
     transform: rotate(45deg);
 }
+
 .property_connected_people.userlist .single_user {
     padding: 0px;
 }
@@ -474,13 +478,14 @@
     width: fit-content;
     width: 25%;
 }
-.all_tenants .tc_single { 
+
+.all_tenants .tc_single {
     display: flex;
     gap: 10px;
     box-shadow: none;
     border: 1px solid #dfdfdf;
     justify-content: space-between;
-    width: 100%;  
+    width: 100%;
     margin-top: 1px;
     border-radius: 10px;
 }
@@ -502,52 +507,61 @@
     border-left: 1px solid #dfdfdf;
     width: 15%;
 }
-.all_tenants .tc_single .wha_call_icon:after {  
-    top: 50%;  
+
+.all_tenants .tc_single .wha_call_icon:after {
+    top: 50%;
     width: 100%;
     height: 1px;
     transform: translateY(-50%);
-    background: #dfdfdf;;
+    background: #dfdfdf;
+    ;
 }
-.all_tenants .tc_single .wha_call_icon .wc_single {   
+
+.all_tenants .tc_single .wha_call_icon .wc_single {
     height: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
 
 }
+
 .all_tenants .tc_single .wha_call_icon .wc_single img {
     width: 19px;
 }
-.all_tenants .tc_single .left{
+
+.all_tenants .tc_single .left {
     display: flex;
     gap: 6px;
     width: 85%;
 }
+
 .all_tenants .tcs_img_container {
     width: 25%;
     min-width: 60px;
     height: auto;
     aspect-ratio: 1/1;
-  margin: inherit;
+    margin: inherit;
 }
-.all_tenants  .tc_single .tenant_detail {
+
+.all_tenants .tc_single .tenant_detail {
     display: flex;
     flex-direction: column;
     gap: 5px !important;
     width: 75%;
 }
-.all_tenants  .tc_single .tenant_detail .t_name{
-    text-align: inherit;
-    margin: 0px;
-}
-.all_tenants  .tc_single .tenant_detail .t_number{
+
+.all_tenants .tc_single .tenant_detail .t_name {
     text-align: inherit;
     margin: 0px;
 }
 
-.tc_single.t_inactive{
-    filter: grayscale(100%);   
+.all_tenants .tc_single .tenant_detail .t_number {
+    text-align: inherit;
+    margin: 0px;
+}
+
+.tc_single.t_inactive {
+    filter: grayscale(100%);
     opacity: 0.5;
     background: #efefef;
 }
@@ -571,24 +585,28 @@
     border-radius: 5px;
     margin: 8px 0px;
 }
+
 .tenant_detail_pg .tcs_single {
     display: flex;
     gap: 12px;
     padding: 10px;
     padding-bottom: 0px;
 }
-.tenant_detail_pg .tcs_single  h5{
+
+.tenant_detail_pg .tcs_single h5 {
     color: #7d7d7d;
     font-size: 16px;
     font-weight: 400;
     width: 30%;
 }
-.tenant_detail_pg .tcs_single  h6{
+
+.tenant_detail_pg .tcs_single h6 {
     width: 70%;
     font-size: 16px;
     font-weight: 500;
     color: var(--light-black);
 }
+
 .tenant_detail_pg .edit_field span {
     font-size: 16px;
     font-weight: 400;
@@ -598,6 +616,7 @@
 .tenant_detail_pg .edit_field span.cancel_btn {
     color: var(--theme-red);
 }
+
 .tenant_detail_pg .edit_field input {
     border: none;
     border-bottom: 1px solid #e9e9e9;
@@ -605,15 +624,17 @@
     padding: 0px 10px 3px 10px;
     width: 100%;
 }
-.tenant_detail_pg  .theme_radio_new  .theme_radio_container{   
-       
-        padding-left: 10px;
-        border: none;
-   
-    
+
+.tenant_detail_pg .theme_radio_new .theme_radio_container {
+
+    padding-left: 10px;
+    border: none;
+
+
 }
+
 .delete_bottom {
-    display: flex;  
+    display: flex;
     width: fit-content;
     margin: auto;
     gap: 4px;
@@ -623,17 +644,20 @@
     cursor: pointer;
     align-items: center;
 }
-.delete_bottom .material-symbols-outlined{
+
+.delete_bottom .material-symbols-outlined {
     font-size: 18px;
 }
 
-.tenant_detail_pg .edit_field input:focus{
+.tenant_detail_pg .edit_field input:focus {
     outline: none;
     border-color: var(--theme-blue);
 }
-.tenant_detail_pg .edit_field span.save_btn{
+
+.tenant_detail_pg .edit_field span.save_btn {
     color: var(--theme-green);
 }
+
 label.upload_img {
     position: absolute;
     top: 0;
@@ -645,10 +669,12 @@ label.upload_img {
     cursor: pointer;
 
 }
+
 .property_docs_pg .card-image.relative {
     width: 100%;
     aspect-ratio: 3 / 2;
 }
+
 label.upload_img.by_text {
     width: fit-content;
     bottom: 15px;
@@ -666,6 +692,7 @@ label.upload_img.by_text {
 
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+
 .tcs_img_container .delete_icon {
     color: var(--theme-red);
     position: absolute;
@@ -771,7 +798,7 @@ label.upload_img input {
     font-size: 14px;
     font-weight: 400;
     text-align: center;
-    color: #7d7d7d;    
+    color: #7d7d7d;
 }
 
 .tenant_detail_pg .tenant_detail .t_number {
@@ -870,4 +897,45 @@ label.upload_img input {
 .quick_detail_show .qd_single h6 {
     font-size: 20px;
     font-weight: 400;
+}
+
+.full_width_sec {
+    border-radius: 0px;
+    box-shadow: none;
+    margin-left: -22px;
+    margin-right: -22px;
+    position: relative;
+    background: var(--theme-orange-bg);
+    padding-left: 50px;
+
+}
+
+.full_width_sec .verticall_title {
+    position: absolute;
+    background: var(--theme-orange);
+    color: var(--white-color);
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding: 4px;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    text-align: center;
+    letter-spacing: 0.3px;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 12px 0px 0px 12px;
+}
+
+.full_width_sec .verticall_title:after {
+    content: '';
+    position: absolute;
+    left: -14px;
+    background: var(--theme-orange);
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
 }
