@@ -138,7 +138,7 @@ const TenantDetails = () => {
   const [newDocId, setNewDocId] = useState("");
 
   const addTenantDocuments = async () => {
-    if (!selectedIdType || !idNumber) {
+    if (!selectedIdType) {
       alert("All fields are required!");
       return;
     }
@@ -850,7 +850,10 @@ const TenantDetails = () => {
                   tenantDocs.map((doc, index) => (
                     <div className="col-md-4" key={index}>
                       <div className="item card-container">
-                        <div className="card-image relative">
+                        <div className="card-image relative" style={{
+                          width:"100%",
+                          aspectRatio:"3/2"
+                        }}>
                           {uploadingDocId !== doc.id && (
                             <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
                               Upload PDF or Img

@@ -332,7 +332,7 @@ const PropertyDocuments = () => {
                             type="text"
                             value={idNumber}
                             onChange={handleIdNumberChange}
-                            placeholder="Enter Document Id"                        
+                            placeholder="Enter Document Id"
                           />
                         </div>
                       </div>
