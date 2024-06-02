@@ -1659,12 +1659,8 @@ const PropertyDetails = () => {
                         gap: "15px"
                       }}>
                         <span>
-                          Tenant Information
-                        </span>
-                        <span>|</span>
-                        <span className="show_total">
-                          Total :  {tenantDocument && tenantDocument.length}
-                        </span>
+                          Tenants :  {tenantDocument && tenantDocument.length}
+                        </span>                   
                       </div>
                       <div className="right d-flex" style={{
                         gap: "22px",
@@ -2031,7 +2027,7 @@ const PropertyDetails = () => {
                                   <div className="add_btn_inner">
                                     <div className="add_icon">+</div>
                                     <div className="ab_text">
-                                      Add property users
+                                      Add Propdial users
                                     </div>
                                   </div>
                                 </div>

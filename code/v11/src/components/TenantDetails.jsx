@@ -7,6 +7,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
 import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
+import SureDelete from "../pdpages/sureDelete/SureDelete";
 import Back from "../pdpages/back/Back";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 
@@ -44,11 +45,15 @@ const TenantDetails = () => {
   const handleEditClick = (fieldName) => {
     setEditingField(fieldName);
   };
-
+  // modal controls start
+  const [showModal, setShowModal] = useState(false);
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+  // modal controls end
   const deleteTenant = async () => {
     try {
       await deleteDocument(tenantId);
-      navigate("/properties");
+      navigate(`/propertydetails/${editedFields.propertyId}`);
     } catch (error) {
       console.error("Error deleting tenant:", error);
     }
@@ -225,6 +230,11 @@ const TenantDetails = () => {
     // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
   ];
   // data of quick access menu  end
+
+
+
+
+
   return (
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
@@ -889,19 +899,24 @@ const TenantDetails = () => {
                   ))}
               </div>
             </div>
-
             {!editingField && user && user.role === "admin" && (
               <>
                 <div className="vg22"></div>
                 <div className="divider"></div>
                 <div className="vg10"></div>
-                <div onClick={deleteTenant} className="delete_bottom">
+                <div onClick={handleShowModal} className="delete_bottom">
                   <span className="material-symbols-outlined">delete</span>
                   <span>Delete Tenant</span>
                 </div>
                 <div className="vg22"></div>
               </>
             )}
+            <SureDelete
+              show={showModal}
+              handleClose={handleCloseModal}
+              handleDelete={deleteTenant}
+            />
+
             {/* <div>
             ID Number:
             {editingField === "idNumber" ? (
