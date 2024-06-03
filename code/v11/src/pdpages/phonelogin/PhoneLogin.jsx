@@ -2,8 +2,12 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+
 import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css';
+// import 'flag-icon-css/css/flag-icon.min.css';
 import OtpInput from "react-otp-input";
+
 import { useSignupPhone } from "../../hooks/useSignupPhone";
 import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
@@ -354,27 +358,37 @@ const PhoneLogin = () => {
                   <label htmlFor="" className="text-center">
                     Mobile Number
                   </label>
-                  <div className="nff_inner">
+                  <div >
                     <PhoneInput
                       country={"in"}
-                      // onlyCountries={['in', 'us']}
+                      onlyCountries={['in', 'us', 'ae']}
                       value={phone}
                       onChange={setPhone}
                       international
                       keyboardType="phone-pad"
                       // countryCallingCodeEditable={false}
-                      countryCodeEditable={false}
+                      countryCodeEditable={true}
                       // disableCountryCode={true}
-                      placeholder="10 Digit Phone Number"
+                      placeholder="Country code + mobile number"
                       inputProps={{
                         name: "phone",
                         required: true,
                         autoFocus: false,
                       }}
+                      inputStyle={{
+                        width: '100%',
+                        height: '45px',
+                        paddingLeft: '45px',
+                        fontSize: '16px',
+                        borderRadius: '5px',
+                        border: '1px solid #00A8A8',
+                      }}
+                      buttonStyle={{
+                        borderRadius: '5px',
+                        textAlign: 'left',
+                        border: '1px solid #00A8A8',
+                      }}
                     ></PhoneInput>
-                    <div className="nff_icon">
-                      <span className="material-symbols-outlined">call</span>
-                    </div>
                   </div>
                 </div>
                 <div

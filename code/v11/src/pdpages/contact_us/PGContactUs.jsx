@@ -129,14 +129,12 @@ const PGContactUs = () => {
               </div>
               <h6>
                 +91 95821 95821
-                <br />
-                +91 95821 95821
               </h6>
             </div>
           </div>
         </div>
-      </section>      
-      <section className="form_sec">      
+      </section>
+      <section className="form_sec">
 
         <iframe
           title="Dentamax Clinic Location"
@@ -157,8 +155,8 @@ const PGContactUs = () => {
             backgroundImage: "url('./assets/img/contact_from_right.jpg')",
           }}
         >
-       <CreateTicket/>
-        </div>      
+          <CreateTicket />
+        </div>
       </section>
     </div>
   );
