@@ -147,16 +147,16 @@ const PropertyDocuments = () => {
 
   // filters start 
   // filter for property document start 
-  const filteredPropertyDocuments = propertyDocument.filter(doc => doc.docCat === "Property Document");
+  const filteredPropertyDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Property Document") : [];
   const filteredPropDocLength = filteredPropertyDocuments.length;
   // filter for property document end
 
   // filter for property maintainance document start 
-  const filteredPropertyMaintainanceDocuments = propertyDocument.filter(doc => doc.docCat === "Property Maitainance");
+  const filteredPropertyMaintainanceDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Property Maitainance") : [];
   const filteredMaintainanceDocLength = filteredPropertyMaintainanceDocuments.length;
   // filter for propertymaintainance document end
   // filter for property utility document start 
-  const filteredPropertyUtilityDocuments = propertyDocument.filter(doc => doc.docCat === "Utility Bills");
+  const filteredPropertyUtilityDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Utility Bills") : [];
   const filteredUtilityDocLength = filteredPropertyUtilityDocuments.length;
   // filter for property utility document end
   // filters end 
@@ -418,7 +418,6 @@ const PropertyDocuments = () => {
             </section>
           </>
         )}
-
         <div className="theme_tab prop_doc_tab">
           <Tabs>
             <TabList className="tabs">
@@ -429,6 +428,9 @@ const PropertyDocuments = () => {
             <TabPanel>
               <div className="blog_sect">
                 <div className="row">
+                  {filteredPropDocLength === 0 && (
+                    <h5 className="m20 text_red mt-4">No data found</h5>
+                  )}
                   {filteredPropertyDocuments.map((doc, index) => (
                     <div className="col-md-4" key={index}>
                       <div className="item card-container">

@@ -101,7 +101,9 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 .text_light_black {
     color: var(--light-black);
 }
-
+.text_red{
+    color: var(--theme-red);
+}
 .text_grey {
     color: var(--theme-grey);
 }
