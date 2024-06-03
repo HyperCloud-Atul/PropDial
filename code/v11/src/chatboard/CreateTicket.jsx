@@ -50,7 +50,7 @@ const CreateTicket = () => {
     }
   };
   return (
-    <div className="create_ticket_form">    
+    <div className="create_ticket_form">
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-12">
@@ -62,7 +62,7 @@ const CreateTicket = () => {
             <div className="form_field">
               <label htmlFor="user_name" className="white">Name</label>
               <div className="form_field_inner">
-                <input type="text" value={user.fullName} id="user_name" />
+                <input type="text" value={user && user.fullName} id="user_name" />
                 <div className="field_icon">
                   <span className="material-symbols-outlined">Person</span>
                 </div>
@@ -73,12 +73,12 @@ const CreateTicket = () => {
           <div className="col-md-6">
             <div className="form_field">
               <label htmlFor="user_number" className="white">Phone number</label>
-            <div className="form_field_inner">
-            <input type="number" value={user.phoneNumber} id="user_number"/>
-              <div className="field_icon">
-                <span className="material-symbols-outlined">call</span>
+              <div className="form_field_inner">
+                <input type="number" value={user && user.phoneNumber} id="user_number" />
+                <div className="field_icon">
+                  <span className="material-symbols-outlined">call</span>
+                </div>
               </div>
-            </div>
             </div>
             <div className="ff_gap"></div>
           </div>
@@ -121,7 +121,7 @@ const CreateTicket = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="ff_gap"></div>
           </div>
           <div className="col-12">
