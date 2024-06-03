@@ -326,7 +326,7 @@ const TenantDetails = () => {
             </div>
           </div>
           <QuickAccessMenu menuItems={menuItems} />
-          <hr />
+         <div className="vg22"></div>
           <div className="">
             <div className="row">
               <div className="col-md-4">
@@ -741,8 +741,7 @@ const TenantDetails = () => {
                 </div>
               </div>
             </div>
-
-            <hr />
+            <div className="vg22"></div>
             <div className="pg_header d-flex align-items-center justify-content-between">
               <div className="left">
                 <h2 className="m22 mb-1">Documents</h2>

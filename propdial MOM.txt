@@ -1,6 +1,5 @@
 MOM Of Propdial (06-June-2024 Sunday)
 
-
 .. veryfied document wala bna hai or verygied single page pr upload krwana hai or property detail wale pr show krwana hai 
 jisme uska name hoga or photo hogi
 
@@ -9,10 +8,6 @@ jisme uska name hoga or photo hogi
 4. property layout wala sir krte hai 
 
 5. property layout wala me bedroom or kitchen ka default icon lga dete hai 
-
-6. tenant detail wale me form me cat rhegi kyc, police verfication, aggrement 
-in kyc, addhar pan, police verification document type very doc, aggrement aayega rent agreement(word doc), rent agreement pdf.
-niche tab me show honge all kyc police veri, aggremet
 
 7. jese hi rent date dalega usko bolna hai ki rent agrement dalo
 
@@ -24,15 +19,17 @@ niche tab me show honge all kyc police veri, aggremet
 
 11. property flag based rules/depandancy (atul sir)
 
-
-
 13. ui of sure delete popup
 
 14.  "cancle button me space aarhi hai left me wh thik krna hai"
 
-done 
+------- done 
 12. tenant wale me plus ka sign lgana hai
 
 1.Need to create three cat in property document page first cat is property doc second is prop maintaincane and third is utility bill it shoul be readio button and after click it show documtent type and after document id or jo upper cat aaye uske wise hi niche document show honge to niche tab bna na hai
 
 2. porperty document me jo carousle lga hua hai usme first document, second inspection, enquiry , trascation , 
+
+6. tenant detail wale me form me cat rhegi kyc, police verfication, aggrement 
+in kyc, addhar pan, police verification document type very doc, aggrement aayega rent agreement(word doc), rent agreement pdf.
+niche tab me show honge all kyc police veri, aggremet
