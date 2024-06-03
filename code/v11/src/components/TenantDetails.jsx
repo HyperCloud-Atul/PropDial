@@ -434,7 +434,7 @@ const TenantDetails = () => {
                       </div>
                       <div className="divider"></div></>)}
                   <div className="tcs_single">
-                    <h5>On Boarding Date</h5>
+                    <h5>Rent Start Date</h5>
                     <h6>
                       {editingField === "onBoardingDate" ? (
                         <div className="edit_field">
@@ -484,7 +484,7 @@ const TenantDetails = () => {
                   </div>
                   <div className="divider"></div>
                   <div className="tcs_single">
-                    <h5>Off Boarding Date</h5>
+                    <h5>Rent End Date</h5>
                     <h6>
                       {editingField === "offBoardingDate" ? (
                         <div className="edit_field">

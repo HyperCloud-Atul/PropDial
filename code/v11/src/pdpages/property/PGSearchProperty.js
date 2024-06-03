@@ -143,7 +143,8 @@ const PGSearchProperty = () => {
           </div>
         </div> */}
       </div>
-      <Tabs>
+   <div className="theme_tab">
+   <Tabs>
         <div className="container-fluid"></div>
 
         <section className="property_cards">
@@ -286,6 +287,7 @@ const PGSearchProperty = () => {
           </div>
         </section>
       </Tabs>
+   </div>
     </div>
   );
 };

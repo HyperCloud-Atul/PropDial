@@ -70,13 +70,13 @@
 
 
 /* tabs css start  */
-.pg_property ul.tabs {
+.theme_tab ul.tabs {
     margin: 20px 0px !IMPORTANT;
     display: flex;
     gap: 10px;
 }
 
-.pg_property ul.tabs li {
+.theme_tab ul.tabs li {
     border-left: 1px solid #d7d7d7;
     border-top: 1px solid #d7d7d7;
     border-right: 1px solid #d7d7d7;
@@ -86,12 +86,28 @@
     padding: 12px !important;
 
 }
-
-.pg_property .react-tabs__tab--selected {
+.theme_tab.prop_doc_tab ul.tabs {
+    margin-bottom: 0px !important;
+    padding-left: 0px;
+}
+.theme_tab .react-tabs__tab--selected {
     border-bottom: 3px solid var(--theme-orange);
+    position: relative;
+}
+.theme_tab .react-tabs__tab--selected:after{
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    right: 0;
+    background: var(--theme-orange);
+    margin: auto;
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    width: 12px;
+    height: 12px;
 }
 @media only screen and (max-width: 767px) {
-    .pg_property ul.tabs li {
+    .theme_tab ul.tabs li {
         padding: 8px !important;
         font-size: 12px;
     }

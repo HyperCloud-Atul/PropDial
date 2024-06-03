@@ -4,6 +4,7 @@ import { useCollection } from "../hooks/useCollection";
 import { projectFirestore, projectStorage } from "../firebase/config";
 import { useFirestore } from "../hooks/useFirestore";
 import { BeatLoader } from "react-spinners";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PropertyDocuments.scss";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 
@@ -24,14 +25,14 @@ const PropertyDocuments = () => {
 
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
-
+  const [selectedDocCat, setSelectedDocCat] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [documentFile, setDocumentFile] = useState(null);
   const [newDocId, setNewDocId] = useState("");
   const [uploadingDocId, setUploadingDocId] = useState(null); // Track uploading document ID
-
+  const handleDocCatChnage = (event) => setSelectedDocCat(event.target.value);
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
 
@@ -49,7 +50,7 @@ const PropertyDocuments = () => {
   };
 
   const addPropertyDocuments = async () => {
-    if (!selectedIdType) {
+    if (!selectedDocCat || !selectedIdType) {
       alert("All fields are required!");
       return;
     }
@@ -60,10 +61,12 @@ const PropertyDocuments = () => {
         status: "active",
         masterRefId: propertyId,
         documentUrl: "",
+        docCat: selectedDocCat,
         idType: selectedIdType,
         idNumber: idNumber,
         mediaType: "",
       });
+      setSelectedDocCat("");
       setSelectedIdType("");
       setIdNumber("");
       setIsUploading(false);
@@ -73,6 +76,7 @@ const PropertyDocuments = () => {
       setIsUploading(false);
     }
   };
+  console.log("cat", selectedDocCat);
 
   useEffect(() => {
     if (newDocId && documentFile) {
@@ -139,6 +143,23 @@ const PropertyDocuments = () => {
     // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
   ];
   // data of quick access menu  end
+
+
+  // filters start 
+  // filter for property document start 
+  const filteredPropertyDocuments = propertyDocument.filter(doc => doc.docCat === "Property Document");
+  const filteredPropDocLength = filteredPropertyDocuments.length;
+  // filter for property document end
+
+  // filter for property maintainance document start 
+  const filteredPropertyMaintainanceDocuments = propertyDocument.filter(doc => doc.docCat === "Property Maitainance");
+  const filteredMaintainanceDocLength = filteredPropertyMaintainanceDocuments.length;
+  // filter for propertymaintainance document end
+  // filter for property utility document start 
+  const filteredPropertyUtilityDocuments = propertyDocument.filter(doc => doc.docCat === "Utility Bills");
+  const filteredUtilityDocLength = filteredPropertyUtilityDocuments.length;
+  // filter for property utility document end
+  // filters end 
 
 
   return (
@@ -212,119 +233,154 @@ const PropertyDocuments = () => {
               <h2 className="card_title">Select any one document ID</h2>
               <div className="aai_form">
                 <div className="row" style={{ rowGap: "18px" }}>
-                  <div className="col-md-12">
+                  <div className="col-12">
                     <div className="form_field">
                       <div className="field_box theme_radio_new">
                         <div className="theme_radio_container">
                           <div className="radio_single">
                             <input
                               type="radio"
-                              name="aai_type"
-                              id="indexii"
-                              value="Index II"
-                              onChange={handleRadioChange}
-                              checked={selectedIdType === "Index II"}
+                              name="doc_cat"
+                              id="prop_doc"
+                              value="Property Document"
+                              onChange={handleDocCatChnage}
+                              checked={selectedDocCat === "Property Document"}
                             />
-                            <label htmlFor="indexii">Index II</label>
+                            <label htmlFor="prop_doc">Property Document</label>
                           </div>
                           <div className="radio_single">
                             <input
                               type="radio"
-                              name="aai_type"
-                              id="rentagreement"
-                              value="Rent Agreement"
-                              onChange={handleRadioChange}
-                              checked={selectedIdType === "Rent Agreement"}
+                              name="doc_cat"
+                              id="prop_main"
+                              value="Property Maitainance"
+                              onChange={handleDocCatChnage}
+                              checked={selectedDocCat === "Property Maitainance"}
                             />
-                            <label htmlFor="rentagreement">
-                              Rent Agreement
+                            <label htmlFor="prop_main">
+                              Property Maitainance
                             </label>
                           </div>
                           <div className="radio_single">
                             <input
                               type="radio"
-                              name="aai_type"
-                              id="layout"
-                              value="Layout"
-                              onChange={handleRadioChange}
-                              checked={selectedIdType === "Layout"}
+                              name="doc_cat"
+                              id="utility_bill"
+                              value="Utility Bills"
+                              onChange={handleDocCatChnage}
+                              checked={selectedDocCat === "Utility Bills"}
                             />
-                            <label htmlFor="layout">Layout</label>
-                          </div>
-                          <div className="radio_single">
-                            <input
-                              type="radio"
-                              name="aai_type"
-                              id="blueprint"
-                              value="Blue Print"
-                              onChange={handleRadioChange}
-                              checked={selectedIdType === "Blue Print"}
-                            />
-                            <label htmlFor="blueprint">Blue Print</label>
-                          </div>
-                          <div className="radio_single">
-                            <input
-                              type="radio"
-                              name="aai_type"
-                              id="aadhar"
-                              value="Aadhar"
-                              onChange={handleRadioChange}
-                              checked={selectedIdType === "Aadhar"}
-                            />
-                            <label htmlFor="aadhar">Aadhar</label>
-                          </div>
-                          <div className="radio_single">
-                            <input
-                              type="radio"
-                              name="aai_type"
-                              id="passport"
-                              value="Passport"
-                              onChange={handleRadioChange}
-                              checked={selectedIdType === "Passport"}
-                            />
-                            <label htmlFor="passport">Passport</label>
-                          </div>
-                          <div className="radio_single">
-                            <input
-                              type="radio"
-                              name="aai_type"
-                              id="voterid"
-                              value="Voter Id"
-                              onChange={handleRadioChange}
-                              checked={selectedIdType === "Voter Id"}
-                            />
-                            <label htmlFor="voterid">Voter Id</label>
-                          </div>
-                          <div className="radio_single">
-                            <input
-                              type="radio"
-                              name="aai_type"
-                              id="drivinglicense"
-                              value="Driving Licence"
-                              onChange={handleRadioChange}
-                              checked={selectedIdType === "Driving Licence"}
-                            />
-                            <label htmlFor="drivinglicense">
-                              Driving Licence
-                            </label>
-                          </div>
-                          <div className="radio_single">
-                            <input
-                              type="radio"
-                              name="aai_type"
-                              id="pancard"
-                              value="Pan Card"
-                              onChange={handleRadioChange}
-                              checked={selectedIdType === "Pan Card"}
-                            />
-                            <label htmlFor="pancard">Pan Card</label>
+                            <label htmlFor="utility_bill">Utility Bills</label>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  {/* if doc cat is equal to property document  */}
+                  {selectedDocCat === "Property Document" && (
+                    <div className="col-12">
+                      <div className="form_field">
+                        <div className="field_box theme_radio_new">
+                          <div className="theme_radio_container">
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="aai_type"
+                                id="indexii"
+                                value="Index II"
+                                onChange={handleRadioChange}
+                                checked={selectedIdType === "Index II"}
+                              />
+                              <label htmlFor="indexii">Index II</label>
+                            </div>
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="aai_type"
+                                id="rentagreement"
+                                value="Rent Agreement"
+                                onChange={handleRadioChange}
+                                checked={selectedIdType === "Rent Agreement"}
+                              />
+                              <label htmlFor="rentagreement">
+                                Rent Agreement
+                              </label>
+                            </div>
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="aai_type"
+                                id="layout"
+                                value="Layout"
+                                onChange={handleRadioChange}
+                                checked={selectedIdType === "Layout"}
+                              />
+                              <label htmlFor="layout">Layout</label>
+                            </div>
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="aai_type"
+                                id="blueprint"
+                                value="Blue Print"
+                                onChange={handleRadioChange}
+                                checked={selectedIdType === "Blue Print"}
+                              />
+                              <label htmlFor="blueprint">Blue Print</label>
+                            </div>
 
-                  <div className="col-md-11">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {/* if doc cat is equal to property maintainance  */}
+                  {selectedDocCat === "Property Maitainance" && (
+                    <div className="col-12">
+                      <div className="form_field">
+                        <div className="field_box theme_radio_new">
+                          <div className="theme_radio_container">
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="aai_type"
+                                id="main_doc"
+                                value="Maintainance Document"
+                                onChange={handleRadioChange}
+                                checked={selectedIdType === "Maintainance Document"}
+                              />
+                              <label htmlFor="main_doc">Maintainance Document</label>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {/* if doc cat is equal to utility bills */}
+                  {selectedDocCat === "Utility Bills" && (
+                    <div className="col-12">
+                      <div className="form_field">
+                        <div className="field_box theme_radio_new">
+                          <div className="theme_radio_container">
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="aai_type"
+                                id="utility_doc"
+                                value="Utility Bill Document"
+                                onChange={handleRadioChange}
+                                checked={selectedIdType === "Utility Bill Document"}
+                              />
+                              <label htmlFor="utility_doc">Utility Bill Document</label>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div className="col-12">
                     <div className="add_info_text">
                       <div className="form_field">
                         <div className="relative">
@@ -362,61 +418,190 @@ const PropertyDocuments = () => {
             </section>
           </>
         )}
-        <div className="blog_sect">
-          <div className="row">
-            {propertyDocument &&
-              propertyDocument.map((doc, index) => (
-                <div className="col-md-4" key={index}>
-                  <div className="item card-container">
-                    <div className="card-image relative">
-                      {uploadingDocId !== doc.id && (
-                        <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
-                          Upload PDF or Img
-                          <input
-                            type="file"
-                            onChange={(e) => handleFileChange(e, doc.id)}
-                            ref={fileInputRef}
-                            id={`upload_img_${doc.id}`}
-                          />
-                        </label>
-                      )}
-                      {uploadingDocId === doc.id ? (
-                        <div className="loader d-flex justify-content-center align-items-center" style={{
-                          width: "100%",
-                          height: "100%"
-                        }}>
-                          <BeatLoader color={"#FF5733"} loading={true} />
+
+        <div className="theme_tab prop_doc_tab">
+          <Tabs>
+            <TabList className="tabs">
+              <Tab className="pointer">Property Document ({filteredPropDocLength})</Tab>
+              <Tab className="pointer">Maintainance Document ({filteredMaintainanceDocLength})</Tab>
+              <Tab className="pointer">Utility Document ({filteredUtilityDocLength})</Tab>
+            </TabList>
+            <TabPanel>
+              <div className="blog_sect">
+                <div className="row">
+                  {filteredPropertyDocuments.map((doc, index) => (
+                    <div className="col-md-4" key={index}>
+                      <div className="item card-container">
+                        <div className="card-image relative">
+                          {uploadingDocId !== doc.id && (
+                            <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                              Upload PDF or Img
+                              <input
+                                type="file"
+                                onChange={(e) => handleFileChange(e, doc.id)}
+                                ref={fileInputRef}
+                                id={`upload_img_${doc.id}`}
+                              />
+                            </label>
+                          )}
+                          {uploadingDocId === doc.id ? (
+                            <div className="loader d-flex justify-content-center align-items-center" style={{
+                              width: "100%",
+                              height: "100%"
+                            }}>
+                              <BeatLoader color={"#FF5733"} loading={true} />
+                            </div>
+                          ) : doc.mediaType === "pdf" ? (
+                            <iframe
+                              title="PDF Viewer"
+                              src={doc.documentUrl}
+                              style={{
+                                width: "100%",
+                                aspectRatio: "3/2",
+                              }}
+                            ></iframe>
+                          ) : (
+                            <img
+                              src={doc.documentUrl || "https://via.placeholder.com/150"}
+                              alt="Document"
+                            />
+                          )}
                         </div>
-                      ) : doc.mediaType === "pdf" ? (
-                        <iframe
-                          title="PDF Viewer"
-                          src={doc.documentUrl}
-                          style={{
-                            width: "100%",
-                            aspectRatio: "3/2",
-                          }}
-                        ></iframe>
-                      ) : (
-                        <img
-                          src={doc.documentUrl || "https://via.placeholder.com/150"}
-                          alt="Document"
-                        />
-                      )}
-                    </div>
-                    <div className="card-body">
-                      <h3>{doc.idType}</h3>
-                      <p className="card-subtitle">{doc.idNumber}</p>
-                      <div className="card-author">
-                        <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
-                          Delete
+                        <div className="card-body">
+                          <h3>{doc.idType}</h3>
+                          <p className="card-subtitle">{doc.idNumber}</p>
+                          <div className="card-author">
+                            <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
+                              Delete
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
+
                 </div>
-              ))}
-          </div>
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className="blog_sect">
+                <div className="row">
+                  {filteredPropertyMaintainanceDocuments.map((doc, index) => (
+                    <div className="col-md-4" key={index}>
+                      <div className="item card-container">
+                        <div className="card-image relative">
+                          {uploadingDocId !== doc.id && (
+                            <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                              Upload PDF or Img
+                              <input
+                                type="file"
+                                onChange={(e) => handleFileChange(e, doc.id)}
+                                ref={fileInputRef}
+                                id={`upload_img_${doc.id}`}
+                              />
+                            </label>
+                          )}
+                          {uploadingDocId === doc.id ? (
+                            <div className="loader d-flex justify-content-center align-items-center" style={{
+                              width: "100%",
+                              height: "100%"
+                            }}>
+                              <BeatLoader color={"#FF5733"} loading={true} />
+                            </div>
+                          ) : doc.mediaType === "pdf" ? (
+                            <iframe
+                              title="PDF Viewer"
+                              src={doc.documentUrl}
+                              style={{
+                                width: "100%",
+                                aspectRatio: "3/2",
+                              }}
+                            ></iframe>
+                          ) : (
+                            <img
+                              src={doc.documentUrl || "https://via.placeholder.com/150"}
+                              alt="Document"
+                            />
+                          )}
+                        </div>
+                        <div className="card-body">
+                          <h3>{doc.idType}</h3>
+                          <p className="card-subtitle">{doc.idNumber}</p>
+                          <div className="card-author">
+                            <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
+                              Delete
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                </div>
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className="blog_sect">
+                <div className="row">
+                  {filteredPropertyUtilityDocuments.map((doc, index) => (
+                    <div className="col-md-4" key={index}>
+                      <div className="item card-container">
+                        <div className="card-image relative">
+                          {uploadingDocId !== doc.id && (
+                            <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                              Upload PDF or Img
+                              <input
+                                type="file"
+                                onChange={(e) => handleFileChange(e, doc.id)}
+                                ref={fileInputRef}
+                                id={`upload_img_${doc.id}`}
+                              />
+                            </label>
+                          )}
+                          {uploadingDocId === doc.id ? (
+                            <div className="loader d-flex justify-content-center align-items-center" style={{
+                              width: "100%",
+                              height: "100%"
+                            }}>
+                              <BeatLoader color={"#FF5733"} loading={true} />
+                            </div>
+                          ) : doc.mediaType === "pdf" ? (
+                            <iframe
+                              title="PDF Viewer"
+                              src={doc.documentUrl}
+                              style={{
+                                width: "100%",
+                                aspectRatio: "3/2",
+                              }}
+                            ></iframe>
+                          ) : (
+                            <img
+                              src={doc.documentUrl || "https://via.placeholder.com/150"}
+                              alt="Document"
+                            />
+                          )}
+                        </div>
+                        <div className="card-body">
+                          <h3>{doc.idType}</h3>
+                          <p className="card-subtitle">{doc.idNumber}</p>
+                          <div className="card-author">
+                            <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
+                              Delete
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                </div>
+              </div>
+            </TabPanel>
+
+          </Tabs>
         </div>
+
+
       </div>
     </div>
   );

@@ -1,28 +1,35 @@
-MOM Of Propdial (21/11/23 Tuesday)
+MOM Of Propdial (06-June-2024 Sunday)
 
-1. Convert search data (like society) into keys for easy searching.
-2. Will discuss with vinay ji about POC (Point of contact).
-3. Take user mobile number with country code and also display with country code.
-4. Search owner by full name. EX:- sanskar solanki/ujjain/india
-5. Remove 0(Zero) from number no of bathrooms, no of bedrooms etc.
-6. Replace dropdown of basement with radio button (yes, no).
-7. Unit of Plot Area, Super Area, Built-up Area, Carpet Area should be select by default.
-8. If user fills Plot Area, Super Area, Built-up Area, Carpet Area then it is required to fill its units also.
-9. Unit of plot area may be different but unit of Super Area, Built-up Area, Carpet Area should be same.
-10. Super area should be less than or equal to plot area, Built-up area should be less than of equal to plot area and super area, Carpet area should be less than of equal to plot area, super area and built-up area.
-11. If we check on no in dining area, two wheeler parking than its should not be display on property detail card.
-12. Add country code or country flag field in enquiry popup.
-13. In search bar replace rent with lease if switch to commercial.
-14. Attach a flag with each property.
-15. Package flag
-16. Arrange well I am dropdown in enquiry popup
-17. Fetch google review on home page
+1.Need to create three cat in property document page first cat is property doc second is prop maintaincane and third is utility bill it shoul be readio button and after click it show documtent type and after document id or jo upper cat aaye uske wise hi niche document show honge to niche tab bna na hai
+
+2. porperty document me jo carousle lga hua hai usme first document, second inspection, enquiry , trascation , veryfied document wala bna hai or verygied single page pr upload krwana hai or property detail wale pr show krwana hai 
+jisme uska name hoga or photo hogi
+
+3. ab inspection ki baat krte hai ki ispection wala ek bna na hai jo form me inspection rhega usme filed rhegi inspection inpection date rhegi or usme restirciton 90 days ka rhega uske bad ek form aayega jisme yh konse room ka inspection hai wh wali filed or inspection ka photo bhi dalan hai 
+
+4. property layout wala sir krte hai 
+
+5. property layout wala me bedroom or kitchen ka default icon lga dete hai 
+
+6. tenant detail wale me form me cat rhegi kyc, police verfication, aggrement 
+in kyc, addhar pan, police verification document type very doc, aggrement aayega rent agreement(word doc), rent agreement pdf.
+niche tab me show honge all kyc police veri, aggremet
+
+7. jese hi rent date dalega usko bolna hai ki rent agrement dalo
+
+8. yha pr ek or poa add krna hai 
+
+9. property layout wale me react wala carousel lgwana hai jisme 
+
+10. employe on boarding, herracy based role setup (atul sir)
+
+11. property flag based rules/depandancy (atul sir)
 
 
 
-From client side
+13. ui of sure delete popup
 
-1. List of Airbnb properties
-2. All YouTube videos
-3. Top 5 FAQ for show on home page
-4. Arrage FAQ page with category wise
+14.  "cancle button me space aarhi hai left me wh thik krna hai"
+
+done 
+12. tenant wale me plus ka sign lgana hai

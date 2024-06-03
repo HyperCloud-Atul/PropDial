@@ -193,8 +193,9 @@ const PropertyDetails = () => {
 
 
   //Tenant Information
+
   const handleAddTenant = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault(); // Prevent the default form submission behavior   
 
     const tenantData = {
       propertyId: propertyid,
@@ -533,7 +534,7 @@ const PropertyDetails = () => {
 
   // owl carousel option start for rooms
   const optionstenant = {
-    items: 5,
+    items: 4,
     dots: false,
     loop: false,
     margin: 15,
@@ -550,7 +551,7 @@ const PropertyDetails = () => {
         items: 2,
       },
       992: {
-        items: 5,
+        items: 4,
       },
     },
   };
@@ -1655,87 +1656,88 @@ const PropertyDetails = () => {
                     Tenants :  {tenantDocument && tenantDocument.length}
                   </span>
                   <div className="more_detail_card_inner">
-                    <h2 className="card_title d-flex justify-content-end" >
-                      <div className="add_new text_green pointer" onClick={handleAddTenant}
-                        style={{
-                          textDecoration: "underline"
-                        }}>
-                        Add Tenants
+                    <div className="row">
+                      <div className="col-1">                      
+                        <div className="plus_icon">
+                          <Link className="plus_icon_inner" onClick={handleAddTenant}>
+                            <span class="material-symbols-outlined">
+                              add
+                            </span>
+                          </Link>
+                        </div>               
+
                       </div>
-                    </h2>
-                    <div className="tenant_card">
-                      <div className="all_tenants">
-                        <OwlCarousel className="owl-theme" {...optionstenant}>
-                          {tenantDocument &&
-                            tenantDocument.map((tenant, index) => (
-                              <div
-                                className={`tc_single relative item ${tenant.status === "inactive" ? "t_inactive" : ""}`}
-                                key={index}
-
-                              >
-
-                                <Link className="left" to={`/tenantdetails/${tenant.id}`}>
-                                  <div className="tcs_img_container" >
-                                    <img
-                                      src={
-                                        tenant.tenantImgUrl ||
-                                        "/assets/img/dummy_user.png"
-                                      }
-                                      alt="Preview"
-                                    />
-                                  </div>
+                      <div className="col-11">
+                        <div className="tenant_card">
+                          <div className="all_tenants">
+                            <OwlCarousel className="owl-theme" {...optionstenant}>
+                              {tenantDocument &&
+                                tenantDocument.map((tenant, index) => (
                                   <div
-                                    className={`tenant_detail ${editingTenantId === tenant.id
-                                      ? "td_edit"
-                                      : ""
-                                      }`}
-                                  >
-                                    <h6 className="t_name">
-                                      {
-                                        tenant.name ? tenant.name : "Tenant Name"
+                                    className={`tc_single relative item ${tenant.status === "inactive" ? "t_inactive" : ""}`}
+                                    key={index}>
+                                    <Link className="left" to={`/tenantdetails/${tenant.id}`}>
+                                      <div className="tcs_img_container" >
+                                        <img
+                                          src={
+                                            tenant.tenantImgUrl ||
+                                            "/assets/img/dummy_user.png"
+                                          }
+                                          alt="Preview"
+                                        />
+                                      </div>
+                                      <div
+                                        className={`tenant_detail ${editingTenantId === tenant.id
+                                          ? "td_edit"
+                                          : ""
+                                          }`}
+                                      >
+                                        <h6 className="t_name">
+                                          {
+                                            tenant.name ? tenant.name : "Tenant Name"
 
-                                      }
-                                    </h6>
-                                    <h6 className="t_number">
-                                      {tenant.mobile
-                                        ? tenant.mobile
-                                        : "Tenant Phone"}
-                                    </h6>
+                                          }
+                                        </h6>
+                                        <h6 className="t_number">
+                                          {tenant.mobile
+                                            ? tenant.mobile
+                                            : "Tenant Phone"}
+                                        </h6>
+                                      </div>
+                                    </Link>
+                                    <div className="wha_call_icon">
+                                      <Link
+                                        className="call_icon wc_single"
+                                        to={`tel:${tenant.mobile}`}
+                                        target="_blank"
+                                      >
+                                        <img
+                                          src="/assets/img/simple_call.png"
+                                          alt=""
+                                        />
+                                      </Link>
+                                      <Link
+                                        className="wha_icon wc_single"
+                                        to={`https://wa.me/${tenant.mobile}`}
+                                        target="_blank"
+                                      >
+                                        <img
+                                          src="/assets/img/whatsapp_simple.png"
+                                          alt=""
+                                        />
+                                      </Link>
+                                    </div>
                                   </div>
-                                </Link>
-                                <div className="wha_call_icon">
-                                  <Link
-                                    className="call_icon wc_single"
-                                    to={`tel:${tenant.mobile}`}
-                                    target="_blank"
-                                  >
-                                    <img
-                                      src="/assets/img/simple_call.png"
-                                      alt=""
-                                    />
-                                  </Link>
-                                  <Link
-                                    className="wha_icon wc_single"
-                                    to={`https://wa.me/${tenant.mobile}`}
-                                    target="_blank"
-                                  >
-                                    <img
-                                      src="/assets/img/whatsapp_simple.png"
-                                      alt=""
-                                    />
-                                  </Link>
-                                </div>
+                                ))}
+                            </OwlCarousel>
+                          </div>
 
-                              </div>
-                            ))}
-                        </OwlCarousel>
+                        </div>
                       </div>
-
                     </div>
-                  </div>
-                </section>
 
-                {/* <div className="vg22"></div> */}
+                  </div>
+                </section>         
                 {/* tenant card end  */}
 
 
