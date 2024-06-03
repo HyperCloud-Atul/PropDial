@@ -1266,6 +1266,49 @@ const PropertyDetails = () => {
 
                     <div className="extra_info_card_property">
                       <OwlCarousel className="owl-theme" {...options}>
+                        {/* Documents */}
+                        <Link to={`/propertydocumentdetails/${propertyid}`} >
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>{propertyDocList && propertyDocList.length}</h6>
+                                <h5>Documents</h5>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                        {/* Inspection  */}
+                        <Link to="" >
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>0</h6>
+                                <h5>inspection</h5>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                        {/* Enquiry  */}
+                        <Link to="" >
+                          <div className="item eicp_single">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                description
+                              </span>
+                              <div className="text">
+                                <h6>0</h6>
+                                <h5>Enquiries</h5>
+                              </div>
+                            </div>
+                          </div>
+
+                        </Link>
                         {/* Transactions */}
                         <Link to={`/transactions/${propertyid}`}>
                           <div className="item eicp_single">
@@ -1280,43 +1323,23 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         </Link>
-                        {/* Documents */}
-                        <Link to={`/propertydocumentdetails/${propertyid}`}>
+                        {/* Verified Document */}
+                        <Link to="">
                           <div className="item eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
                                 description
                               </span>
                               <div className="text">
-                                <h6>{propertyDocList && propertyDocList.length}</h6>
-                                <h5>Documents</h5>
+                                <h6>0</h6>
+                                <h5>Verified Document</h5>
                               </div>
                             </div>
                           </div>
                         </Link>
 
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>10</h6>
-                              <h5>Enquiries</h5>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="item eicp_single">
-                          <div className="icon">
-                            <span class="material-symbols-outlined">
-                              description
-                            </span>
-                            <div className="text">
-                              <h6>2</h6>
-                              <h5>Bills</h5>
-                            </div>
-                          </div>
-                        </div>
+
+
                       </OwlCarousel>
                     </div>
 
@@ -1596,9 +1619,7 @@ const PropertyDetails = () => {
                 )}
                 <section className="property_card_single">
                   <div
-                    className="more_detail_card_inner row"
-
-                  >
+                    className="more_detail_card_inner row" >
                     {/* optionsroom */}
                     <div className="col-sm-2">
                       {!showAIForm && (
@@ -1617,10 +1638,38 @@ const PropertyDetails = () => {
                         {propertyLayouts && propertyLayouts.map((room, index) => (
                           <div className="ai_detail_show item">
                             <div className="left relative">
-                              <img
-                                src="/assets/img/p_img/drawingroom.jpg"
-                                alt=""
-                              />
+                              {room.roomType === "Bedroom" && (
+                                <img
+                                  src="/assets/img/icons/illustrate_bedroom.jpg"
+                                  alt={room.roomType}
+                                />
+                              )}
+                              {room.roomType === "Kitchen" && (
+                                <img
+                                  src="/assets/img/icons/illustrate_kitchen.jpg"
+                                  alt={room.roomType}
+                                />
+                              )}
+                              {room.roomType === "Living Room" && (
+                                <img
+                                  src="/assets/img/icons/illustrate_livingroom.jpg"
+                                  alt={room.roomType}
+                                />
+                              )}
+                              {room.roomType === "Bathroom" && (
+                                <img
+                                  src="/assets/img/icons/illustrate_bathroom.jpg"
+                                  alt={room.roomType}
+                                />
+                              )}
+                              {room.roomType === "Dining Room" && (
+                                <img
+                                  src="/assets/img/icons/illustrate_dining.jpg"
+                                  alt={room.roomType}
+                                />
+                              )}
+
+
                               <label htmlFor="imgupload" className="upload_img click_text by_text">
                                 Upload img
                                 <input
@@ -1657,14 +1706,14 @@ const PropertyDetails = () => {
                   </span>
                   <div className="more_detail_card_inner">
                     <div className="row">
-                      <div className="col-1">                      
+                      <div className="col-1">
                         <div className="plus_icon">
                           <Link className="plus_icon_inner" onClick={handleAddTenant}>
                             <span class="material-symbols-outlined">
                               add
                             </span>
                           </Link>
-                        </div>               
+                        </div>
 
                       </div>
                       <div className="col-11">
@@ -1737,7 +1786,7 @@ const PropertyDetails = () => {
                     </div>
 
                   </div>
-                </section>         
+                </section>
                 {/* tenant card end  */}
 
 

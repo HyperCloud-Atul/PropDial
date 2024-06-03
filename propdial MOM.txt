@@ -1,8 +1,7 @@
 MOM Of Propdial (06-June-2024 Sunday)
 
-1.Need to create three cat in property document page first cat is property doc second is prop maintaincane and third is utility bill it shoul be readio button and after click it show documtent type and after document id or jo upper cat aaye uske wise hi niche document show honge to niche tab bna na hai
 
-2. porperty document me jo carousle lga hua hai usme first document, second inspection, enquiry , trascation , veryfied document wala bna hai or verygied single page pr upload krwana hai or property detail wale pr show krwana hai 
+.. veryfied document wala bna hai or verygied single page pr upload krwana hai or property detail wale pr show krwana hai 
 jisme uska name hoga or photo hogi
 
 3. ab inspection ki baat krte hai ki ispection wala ek bna na hai jo form me inspection rhega usme filed rhegi inspection inpection date rhegi or usme restirciton 90 days ka rhega uske bad ek form aayega jisme yh konse room ka inspection hai wh wali filed or inspection ka photo bhi dalan hai 
@@ -33,3 +32,7 @@ niche tab me show honge all kyc police veri, aggremet
 
 done 
 12. tenant wale me plus ka sign lgana hai
+
+1.Need to create three cat in property document page first cat is property doc second is prop maintaincane and third is utility bill it shoul be readio button and after click it show documtent type and after document id or jo upper cat aaye uske wise hi niche document show honge to niche tab bna na hai
+
+2. porperty document me jo carousle lga hua hai usme first document, second inspection, enquiry , trascation , 
