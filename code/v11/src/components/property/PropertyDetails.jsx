@@ -1466,7 +1466,7 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                           </div>
-                          <div className="col-md-1">
+                          {/* <div className="col-md-1">
                             <div className="form_field_upload">
                               <label htmlFor="upload">
                                 <div className="text-center">
@@ -1478,8 +1478,8 @@ const PropertyDetails = () => {
                               </label>
                               <input type="file" id="upload" />
                             </div>
-                          </div>
-                          <div className="col-md-11">
+                          </div> */}
+                          <div className="col-md-12">
                             <div className="add_info_text">
                               <div className="form_field">
                                 <input type="text" placeholder="Room Name"
@@ -1638,36 +1638,61 @@ const PropertyDetails = () => {
                         {propertyLayouts && propertyLayouts.map((room, index) => (
                           <div className="ai_detail_show item">
                             <div className="left relative">
-                              {room.roomType === "Bedroom" && (
-                                <img
-                                  src="/assets/img/icons/illustrate_bedroom.jpg"
-                                  alt={room.roomType}
-                                />
-                              )}
-                              {room.roomType === "Kitchen" && (
-                                <img
-                                  src="/assets/img/icons/illustrate_kitchen.jpg"
-                                  alt={room.roomType}
-                                />
-                              )}
-                              {room.roomType === "Living Room" && (
-                                <img
-                                  src="/assets/img/icons/illustrate_livingroom.jpg"
-                                  alt={room.roomType}
-                                />
-                              )}
-                              {room.roomType === "Bathroom" && (
-                                <img
-                                  src="/assets/img/icons/illustrate_bathroom.jpg"
-                                  alt={room.roomType}
-                                />
-                              )}
-                              {room.roomType === "Dining Room" && (
-                                <img
-                                  src="/assets/img/icons/illustrate_dining.jpg"
-                                  alt={room.roomType}
-                                />
-                              )}
+                              {(() => {
+                                if (room.roomType === "Bedroom") {
+                                  return (
+                                    <img
+                                      src="/assets/img/icons/illustrate_bedroom.jpg"
+                                      alt={room.roomType}
+                                    />
+                                  );
+                                } else if (room.roomType === "Kitchen") {
+                                  return (
+                                    <img
+                                      src="/assets/img/icons/illustrate_kitchen.jpg"
+                                      alt={room.roomType}
+                                    />
+                                  );
+                                } else if (room.roomType === "Living Room") {
+                                  return (
+                                    <img
+                                      src="/assets/img/icons/illustrate_livingroom.jpg"
+                                      alt={room.roomType}
+                                    />
+                                  );
+                                } else if (room.roomType === "Bathroom") {
+                                  return (
+                                    <img
+                                      src="/assets/img/icons/illustrate_bathroom.jpg"
+                                      alt={room.roomType}
+                                    />
+                                  );
+                                } else if (room.roomType === "Dining Room") {
+                                  return (
+                                    <img
+                                      src="/assets/img/icons/illustrate_dining.jpg"
+                                      alt={room.roomType}
+                                    />
+                                  );
+                                } else if (room.roomType === "Balcony") {
+                                  return (
+                                    <img
+                                      src="/assets/img/icons/illustrate_balcony.jpg"
+                                      alt={room.roomType}
+                                    />
+                                  );
+                                } else {
+                                  return (
+                                    <img
+                                      src="/assets/img/icons/illustrate_basment.jpg"
+                                      alt={room.roomType}
+                                    />
+                                  );
+                                }
+                                
+                              })()}
+
+
 
 
                               <label htmlFor="imgupload" className="upload_img click_text by_text">

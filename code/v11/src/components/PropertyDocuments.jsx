@@ -25,14 +25,14 @@ const PropertyDocuments = () => {
 
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
-  const [selectedDocCat, setSelectedDocCat] = useState("");
+  const [selectedDocCat, setSelectedDocCat] = useState("Property Document");
   const [selectedIdType, setSelectedIdType] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [documentFile, setDocumentFile] = useState(null);
   const [newDocId, setNewDocId] = useState("");
   const [uploadingDocId, setUploadingDocId] = useState(null); // Track uploading document ID
-  const handleDocCatChnage = (event) => setSelectedDocCat(event.target.value);
+  const handleDocCatChange = (event) => setSelectedDocCat(event.target.value);
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
 
@@ -119,6 +119,48 @@ const PropertyDocuments = () => {
     }
   };
 
+  // render jsx code in short form start 
+  const docCategories = [
+    { id: "prop_doc", value: "Property Document", label: "Property Document" },
+    { id: "prop_main", value: "Property Maintainance", label: "Property Maintainance" },
+    { id: "utility_bill", value: "Utility Bills", label: "Utility Bills" }
+  ];
+
+
+  const docTypes = {
+    "Property Document": [
+      { id: "indexii", value: "Index II", label: "Index II" },
+      { id: "rentagreement", value: "Rent Agreement", label: "Rent Agreement" },
+      { id: "layout", value: "Layout", label: "Layout" },
+      { id: "blueprint", value: "Blue Print", label: "Blue Print" }
+    ],
+    "Property Maintainance": [
+      { id: "main_doc", value: "Maintainance Document", label: "Maintainance Document" }
+    ],
+    "Utility Bills": [
+      { id: "utility_doc", value: "Utility Bill Document", label: "Utility Bill Document" }
+    ]
+  };
+  // render jsx code in short form end
+
+  // filters start 
+  // filter for property document start 
+  const filteredPropertyDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Property Document") : [];
+  const filteredPropDocLength = filteredPropertyDocuments.length;
+  // filter for property document end
+
+  // filter for property maintainance document start 
+  const filteredPropertyMaintainanceDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Property Maintainance") : [];
+  const filteredMaintainanceDocLength = filteredPropertyMaintainanceDocuments.length;
+  // filter for propertymaintainance document end
+  // filter for property utility document start 
+  const filteredPropertyUtilityDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Utility Bills") : [];
+  const filteredUtilityDocLength = filteredPropertyUtilityDocuments.length;
+  // filter for property utility document end
+  // filters end 
+
+
+
   // 9 dots controls
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
   const openMoreAddOptions = () => {
@@ -143,23 +185,6 @@ const PropertyDocuments = () => {
     // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
   ];
   // data of quick access menu  end
-
-
-  // filters start 
-  // filter for property document start 
-  const filteredPropertyDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Property Document") : [];
-  const filteredPropDocLength = filteredPropertyDocuments.length;
-  // filter for property document end
-
-  // filter for property maintainance document start 
-  const filteredPropertyMaintainanceDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Property Maitainance") : [];
-  const filteredMaintainanceDocLength = filteredPropertyMaintainanceDocuments.length;
-  // filter for propertymaintainance document end
-  // filter for property utility document start 
-  const filteredPropertyUtilityDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Utility Bills") : [];
-  const filteredUtilityDocLength = filteredPropertyUtilityDocuments.length;
-  // filter for property utility document end
-  // filters end 
 
 
   return (
@@ -235,146 +260,43 @@ const PropertyDocuments = () => {
                 <div className="row" style={{ rowGap: "18px" }}>
                   <div className="col-12">
                     <div className="form_field">
-                      <div className="field_box theme_radio_new">
+                      <div className="field_box theme_radio_new bottom_arrow_active">
                         <div className="theme_radio_container">
-                          <div className="radio_single">
-                            <input
-                              type="radio"
-                              name="doc_cat"
-                              id="prop_doc"
-                              value="Property Document"
-                              onChange={handleDocCatChnage}
-                              checked={selectedDocCat === "Property Document"}
-                            />
-                            <label htmlFor="prop_doc">Property Document</label>
-                          </div>
-                          <div className="radio_single">
-                            <input
-                              type="radio"
-                              name="doc_cat"
-                              id="prop_main"
-                              value="Property Maitainance"
-                              onChange={handleDocCatChnage}
-                              checked={selectedDocCat === "Property Maitainance"}
-                            />
-                            <label htmlFor="prop_main">
-                              Property Maitainance
-                            </label>
-                          </div>
-                          <div className="radio_single">
-                            <input
-                              type="radio"
-                              name="doc_cat"
-                              id="utility_bill"
-                              value="Utility Bills"
-                              onChange={handleDocCatChnage}
-                              checked={selectedDocCat === "Utility Bills"}
-                            />
-                            <label htmlFor="utility_bill">Utility Bills</label>
-                          </div>
+                          {docCategories.map((category) => (
+                            <div className="radio_single" key={category.id}>
+                              <input
+                                type="radio"
+                                name="doc_cat"
+                                id={category.id}
+                                value={category.value}
+                                onChange={handleDocCatChange}
+                                checked={selectedDocCat === category.value}
+                              />
+                              <label htmlFor={category.id}>{category.label}</label>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
                   </div>
-                  {/* if doc cat is equal to property document  */}
-                  {selectedDocCat === "Property Document" && (
+                  {docTypes[selectedDocCat] && (
                     <div className="col-12">
                       <div className="form_field">
                         <div className="field_box theme_radio_new">
                           <div className="theme_radio_container">
-                            <div className="radio_single">
-                              <input
-                                type="radio"
-                                name="aai_type"
-                                id="indexii"
-                                value="Index II"
-                                onChange={handleRadioChange}
-                                checked={selectedIdType === "Index II"}
-                              />
-                              <label htmlFor="indexii">Index II</label>
-                            </div>
-                            <div className="radio_single">
-                              <input
-                                type="radio"
-                                name="aai_type"
-                                id="rentagreement"
-                                value="Rent Agreement"
-                                onChange={handleRadioChange}
-                                checked={selectedIdType === "Rent Agreement"}
-                              />
-                              <label htmlFor="rentagreement">
-                                Rent Agreement
-                              </label>
-                            </div>
-                            <div className="radio_single">
-                              <input
-                                type="radio"
-                                name="aai_type"
-                                id="layout"
-                                value="Layout"
-                                onChange={handleRadioChange}
-                                checked={selectedIdType === "Layout"}
-                              />
-                              <label htmlFor="layout">Layout</label>
-                            </div>
-                            <div className="radio_single">
-                              <input
-                                type="radio"
-                                name="aai_type"
-                                id="blueprint"
-                                value="Blue Print"
-                                onChange={handleRadioChange}
-                                checked={selectedIdType === "Blue Print"}
-                              />
-                              <label htmlFor="blueprint">Blue Print</label>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {/* if doc cat is equal to property maintainance  */}
-                  {selectedDocCat === "Property Maitainance" && (
-                    <div className="col-12">
-                      <div className="form_field">
-                        <div className="field_box theme_radio_new">
-                          <div className="theme_radio_container">
-                            <div className="radio_single">
-                              <input
-                                type="radio"
-                                name="aai_type"
-                                id="main_doc"
-                                value="Maintainance Document"
-                                onChange={handleRadioChange}
-                                checked={selectedIdType === "Maintainance Document"}
-                              />
-                              <label htmlFor="main_doc">Maintainance Document</label>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {/* if doc cat is equal to utility bills */}
-                  {selectedDocCat === "Utility Bills" && (
-                    <div className="col-12">
-                      <div className="form_field">
-                        <div className="field_box theme_radio_new">
-                          <div className="theme_radio_container">
-                            <div className="radio_single">
-                              <input
-                                type="radio"
-                                name="aai_type"
-                                id="utility_doc"
-                                value="Utility Bill Document"
-                                onChange={handleRadioChange}
-                                checked={selectedIdType === "Utility Bill Document"}
-                              />
-                              <label htmlFor="utility_doc">Utility Bill Document</label>
-                            </div>
-
+                            {docTypes[selectedDocCat].map((radio) => (
+                              <div className="radio_single" key={radio.id}>
+                                <input
+                                  type="radio"
+                                  name="aai_type"
+                                  id={radio.id}
+                                  value={radio.value}
+                                  onChange={handleRadioChange}
+                                  checked={selectedIdType === radio.value}
+                                />
+                                <label htmlFor={radio.id}>{radio.label}</label>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -388,7 +310,7 @@ const PropertyDocuments = () => {
                             type="text"
                             value={idNumber}
                             onChange={handleIdNumberChange}
-                            placeholder="Enter Document Id"
+                            placeholder="Document ID (optional)"
                           />
                         </div>
                       </div>
@@ -488,6 +410,9 @@ const PropertyDocuments = () => {
             <TabPanel>
               <div className="blog_sect">
                 <div className="row">
+                {filteredMaintainanceDocLength === 0 && (
+                    <h5 className="m20 text_red mt-4">No data found</h5>
+                  )}
                   {filteredPropertyMaintainanceDocuments.map((doc, index) => (
                     <div className="col-md-4" key={index}>
                       <div className="item card-container">
@@ -545,6 +470,9 @@ const PropertyDocuments = () => {
             <TabPanel>
               <div className="blog_sect">
                 <div className="row">
+                {filteredUtilityDocLength === 0 && (
+                    <h5 className="m20 text_red mt-4">No data found</h5>
+                  )}
                   {filteredPropertyUtilityDocuments.map((doc, index) => (
                     <div className="col-md-4" key={index}>
                       <div className="item card-container">

@@ -6,6 +6,7 @@ import { useCollection } from "../hooks/useCollection";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
 import SureDelete from "../pdpages/sureDelete/SureDelete";
 import Back from "../pdpages/back/Back";
@@ -130,15 +131,17 @@ const TenantDetails = () => {
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedDocCat, setSelectedDocCat] = useState("KYC");
   const [selectedIdType, setSelectedIdType] = useState("");
   const [idNumber, setIdNumber] = useState("");
+  const handleDocCatChange = (event) => setSelectedDocCat(event.target.value);
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
   const [documentFile, setDocumentFile] = useState(null);
   const [newDocId, setNewDocId] = useState("");
 
   const addTenantDocuments = async () => {
-    if (!selectedIdType) {
+    if (!selectedDocCat || !selectedIdType) {
       alert("All fields are required!");
       return;
     }
@@ -149,10 +152,12 @@ const TenantDetails = () => {
         status: "active",
         masterRefId: tenantId,
         documentUrl: "",
+        docCat: selectedDocCat,
         idType: selectedIdType,
         idNumber: idNumber,
         mediaType: "",
       });
+      setSelectedDocCat("")
       setSelectedIdType("");
       setIdNumber("");
       setIsUploading(false);
@@ -162,7 +167,7 @@ const TenantDetails = () => {
       setIsUploading(false);
     }
   };
-
+  console.log("doccat", selectedDocCat);
   const handleFileChange = (event, docId) => {
     const file = event.target.files[0];
     if (file) {
@@ -217,6 +222,48 @@ const TenantDetails = () => {
     }
   };
 
+  // render jsx code in short form start 
+  const docCategories = [
+    { id: "kyc", value: "KYC", label: "KYC" },
+    { id: "police_verification", value: "Police Verification", label: "Police Verification" },
+    { id: "agreement", value: "Rent Agreement", label: "Rent Agreement" }
+  ];
+
+
+  const docTypes = {
+    "KYC": [
+      { id: "aadhar", value: "Aadhar Card", label: "Aadhar Card" },
+      { id: "pan_card", value: "Pan Card", label: "Pan Card" },
+      { id: "voter_id", value: "Voter ID", label: "Voter ID" },
+      { id: "driving_licence", value: "Driving Licence", label: "Driving Licence" }
+    ],
+    "Police Verification": [
+      { id: "police_verification_doc", value: "Police Verification Document", label: "Police Verification Document" }
+    ],
+    "Rent Agreement": [
+      { id: "rent_agree_doc", value: "Rent Agreement (Word Doc)", label: "Rent Agreement (Word Doc)" },
+      { id: "rent_agree_pdf", value: "Rent Agreement (PDF)", label: "Rent Agreement (PDF)" }
+    ]
+  };
+  // render jsx code in short form end
+
+  // filters start 
+  // filter for KYC start 
+  const filteredTenantDocuments = tenantDocs ? tenantDocs.filter(doc => doc.docCat === "KYC") : [];
+  const filteredTenantDocLength = filteredTenantDocuments.length;
+  // filter for KYC end
+
+  // filter for Police Verification document start 
+  const filteredPoliceVerificationDocuments = tenantDocs ? tenantDocs.filter(doc => doc.docCat === "Police Verification") : [];
+  const filteredPoliceVerificationDocLength = filteredPoliceVerificationDocuments.length;
+  // filter for propertymaintainance document end
+  // filter for property utility document start 
+  const filteredRentAgreementDocuments = tenantDocs ? tenantDocs.filter(doc => doc.docCat === "Rent Agreement") : [];
+  const filteredRentAgreementDocLength = filteredRentAgreementDocuments.length;
+  // filter for property utility document end
+  // filters end 
+
+
   // data of quick access menu  start  
   const menuItems = [
     { name: 'Dashboard', link: '/dashboard', icon: '/assets/img/icons/qa_dashboard.png' },
@@ -230,11 +277,6 @@ const TenantDetails = () => {
     // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
   ];
   // data of quick access menu  end
-
-
-
-
-
   return (
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
@@ -723,87 +765,51 @@ const TenantDetails = () => {
                   <h2 className="card_title">Select document type</h2>
                   <div className="aai_form">
                     <div className="row" style={{ rowGap: "18px" }}>
-                      <div className="col-md-12">
+                      <div className="col-12">
                         <div className="form_field">
-                          <div className="field_box theme_radio_new">
+                          <div className="field_box theme_radio_new bottom_arrow_active">
                             <div className="theme_radio_container">
-
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="aai_type"
-                                  id="rentagreement"
-                                  value="Rent Agreement"
-                                  onChange={handleRadioChange}
-                                  checked={selectedIdType === "Rent Agreement"}
-                                />
-                                <label htmlFor="rentagreement">
-                                  Rent Agreement
-                                </label>
-                              </div>
-
-
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="aai_type"
-                                  id="aadhar"
-                                  value="Aadhar"
-                                  onChange={handleRadioChange}
-                                  checked={selectedIdType === "Aadhar"}
-                                />
-                                <label htmlFor="aadhar">Aadhar</label>
-                              </div>
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="aai_type"
-                                  id="passport"
-                                  value="Passport"
-                                  onChange={handleRadioChange}
-                                  checked={selectedIdType === "Passport"}
-                                />
-                                <label htmlFor="passport">Passport</label>
-                              </div>
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="aai_type"
-                                  id="voterid"
-                                  value="Voter Id"
-                                  onChange={handleRadioChange}
-                                  checked={selectedIdType === "Voter Id"}
-                                />
-                                <label htmlFor="voterid">Voter Id</label>
-                              </div>
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="aai_type"
-                                  id="drivinglicense"
-                                  value="Driving Licence"
-                                  onChange={handleRadioChange}
-                                  checked={selectedIdType === "Driving Licence"}
-                                />
-                                <label htmlFor="drivinglicense">
-                                  Driving Licence
-                                </label>
-                              </div>
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="aai_type"
-                                  id="pancard"
-                                  value="Pan Card"
-                                  onChange={handleRadioChange}
-                                  checked={selectedIdType === "Pan Card"}
-                                />
-                                <label htmlFor="pancard">Pan Card</label>
-                              </div>
+                              {docCategories.map((category) => (
+                                <div className="radio_single" key={category.id}>
+                                  <input
+                                    type="radio"
+                                    name="doc_cat"
+                                    id={category.id}
+                                    value={category.value}
+                                    onChange={handleDocCatChange}
+                                    checked={selectedDocCat === category.value}
+                                  />
+                                  <label htmlFor={category.id}>{category.label}</label>
+                                </div>
+                              ))}
                             </div>
                           </div>
                         </div>
                       </div>
+
+                      {docTypes[selectedDocCat] && (
+                        <div className="col-12">
+                          <div className="form_field">
+                            <div className="field_box theme_radio_new">
+                              <div className="theme_radio_container">
+                                {docTypes[selectedDocCat].map((radio) => (
+                                  <div className="radio_single" key={radio.id}>
+                                    <input
+                                      type="radio"
+                                      name="aai_type"
+                                      id={radio.id}
+                                      value={radio.value}
+                                      onChange={handleRadioChange}
+                                      checked={selectedIdType === radio.value}
+                                    />
+                                    <label htmlFor={radio.id}>{radio.label}</label>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
                       <div className="col-md-11">
                         <div className="add_info_text">
@@ -813,7 +819,7 @@ const TenantDetails = () => {
                                 type="text"
                                 value={idNumber}
                                 onChange={handleIdNumberChange}
-                                placeholder="Enter Document Id"
+                                placeholder="Document ID (optional)"
                               />
                             </div>
                           </div>
@@ -844,15 +850,15 @@ const TenantDetails = () => {
               </>
             )}
 
-            <div className="blog_sect">
+            {/* <div className="blog_sect">
               <div className="row">
                 {tenantDocs &&
                   tenantDocs.map((doc, index) => (
                     <div className="col-md-4" key={index}>
                       <div className="item card-container">
                         <div className="card-image relative" style={{
-                          width:"100%",
-                          aspectRatio:"3/2"
+                          width: "100%",
+                          aspectRatio: "3/2"
                         }}>
                           {uploadingDocId !== doc.id && (
                             <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
@@ -901,7 +907,205 @@ const TenantDetails = () => {
                     </div>
                   ))}
               </div>
+            </div> */}
+            <div className="theme_tab prop_doc_tab">
+              <Tabs>
+                <TabList className="tabs">
+                  <Tab className="pointer">Tenant Document ({filteredTenantDocLength})</Tab>
+                  <Tab className="pointer">Police Verification Document ({filteredPoliceVerificationDocLength})</Tab>
+                  <Tab className="pointer">Rent Agreement Document ({filteredRentAgreementDocLength})</Tab>
+                </TabList>
+                <TabPanel>             
+                  <div className="blog_sect">
+                    <div className="row">
+                      {filteredTenantDocLength === 0 && (
+                        <h5 className="m20 text_red mt-4">No data found</h5>
+                      )}
+                      {filteredTenantDocuments.map((doc, index) => (
+                        <div className="col-md-4" key={index}>
+                          <div className="item card-container">
+                            <div className="card-image relative">
+                              {uploadingDocId !== doc.id && (
+                                <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                                  Upload PDF or Img
+                                  <input
+                                    type="file"
+                                    onChange={(e) => handleFileChange(e, doc.id)}
+                                    ref={fileInputRef}
+                                    id={`upload_img_${doc.id}`}
+                                  />
+                                </label>
+                              )}
+                              {uploadingDocId === doc.id ? (
+                                <div className="loader d-flex justify-content-center align-items-center" style={{
+                                  width: "100%",
+                                  height: "100%"
+                                }}>
+                                  <BeatLoader color={"#FF5733"} loading={true} />
+                                </div>
+                              ) : doc.mediaType === "pdf" ? (
+                                <iframe
+                                  title="PDF Viewer"
+                                  src={doc.documentUrl}
+                                  style={{
+                                    width: "100%",
+                                    aspectRatio: "3/2",
+                                  }}
+                                ></iframe>
+                              ) : (
+                                <img
+                                  src={doc.documentUrl || "https://via.placeholder.com/150"}
+                                  alt="Document"
+                                />
+                              )}
+                            </div>
+                            <div className="card-body">
+                              <h3>{doc.idType}</h3>
+                              <p className="card-subtitle">{doc.idNumber}</p>
+                              <div className="card-author">
+                                <div onClick={() => deleteTenantDocument(doc.id)} className="learn-more pointer">
+                                  Delete
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div className="blog_sect">
+                    <div className="row">
+                    {filteredPoliceVerificationDocLength === 0 && (
+                        <h5 className="m20 text_red mt-4">No data found</h5>
+                      )}
+                      {filteredPoliceVerificationDocuments.map((doc, index) => (
+                        <div className="col-md-4" key={index}>
+                          <div className="item card-container">
+                            <div className="card-image relative">
+                              {uploadingDocId !== doc.id && (
+                                <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                                  Upload PDF or Img
+                                  <input
+                                    type="file"
+                                    onChange={(e) => handleFileChange(e, doc.id)}
+                                    ref={fileInputRef}
+                                    id={`upload_img_${doc.id}`}
+                                  />
+                                </label>
+                              )}
+                              {uploadingDocId === doc.id ? (
+                                <div className="loader d-flex justify-content-center align-items-center" style={{
+                                  width: "100%",
+                                  height: "100%"
+                                }}>
+                                  <BeatLoader color={"#FF5733"} loading={true} />
+                                </div>
+                              ) : doc.mediaType === "pdf" ? (
+                                <iframe
+                                  title="PDF Viewer"
+                                  src={doc.documentUrl}
+                                  style={{
+                                    width: "100%",
+                                    aspectRatio: "3/2",
+                                  }}
+                                ></iframe>
+                              ) : (
+                                <img
+                                  src={doc.documentUrl || "https://via.placeholder.com/150"}
+                                  alt="Document"
+                                />
+                              )}
+                            </div>
+                            <div className="card-body">
+                              <h3>{doc.idType}</h3>
+                              <p className="card-subtitle">{doc.idNumber}</p>
+                              <div className="card-author">
+                                <div onClick={() => deleteTenantDocument(doc.id)} className="learn-more pointer">
+                                  Delete
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div className="blog_sect">
+                    <div className="row">
+                    {filteredRentAgreementDocLength === 0 && (
+                        <h5 className="m20 text_red mt-4">No data found</h5>
+                      )}
+                      {filteredRentAgreementDocuments.map((doc, index) => (
+                        <div className="col-md-4" key={index}>
+                          <div className="item card-container">
+                            <div className="card-image relative">
+                              {uploadingDocId !== doc.id && (
+                                <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                                  Upload PDF or Img
+                                  <input
+                                    type="file"
+                                    onChange={(e) => handleFileChange(e, doc.id)}
+                                    ref={fileInputRef}
+                                    id={`upload_img_${doc.id}`}
+                                  />
+                                </label>
+                              )}
+                              {uploadingDocId === doc.id ? (
+                                <div className="loader d-flex justify-content-center align-items-center" style={{
+                                  width: "100%",
+                                  height: "100%"
+                                }}>
+                                  <BeatLoader color={"#FF5733"} loading={true} />
+                                </div>
+                              ) : doc.mediaType === "pdf" ? (
+                                <iframe
+                                  title="PDF Viewer"
+                                  src={doc.documentUrl}
+                                  style={{
+                                    width: "100%",
+                                    aspectRatio: "3/2",
+                                  }}
+                                ></iframe>
+                              ) : (
+                                <img
+                                  src={doc.documentUrl || "https://via.placeholder.com/150"}
+                                  alt="Document"
+                                />
+                              )}
+                            </div>
+                            <div className="card-body">
+                              <h3>{doc.idType}</h3>
+                              <p className="card-subtitle">{doc.idNumber}</p>
+                              <div className="card-author">
+                                <div onClick={() => deleteTenantDocument(doc.id)} className="learn-more pointer">
+                                  Delete
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                    </div>
+                  </div>
+                </TabPanel>
+
+              </Tabs>
             </div>
+
+
+
+
+
+
+
+
             {!editingField && user && user.role === "admin" && (
               <>
                 <div className="vg22"></div>
