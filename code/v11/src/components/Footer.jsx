@@ -149,8 +149,8 @@ export default function Footer() {
                   >
                     Contact Us
                   </Link>
-                  <Link>Privacy Policy</Link>
-                  <Link>Terms & Condition</Link>
+                  <Link to="/privacypolicy">Privacy Policy</Link>
+                  <Link to="/privacypolicy">Terms & Condition</Link>
                 </div>
               </div>
               <div className="col-lg-3 col-md-4 col-sm-6">

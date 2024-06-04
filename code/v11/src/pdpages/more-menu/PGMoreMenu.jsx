@@ -442,7 +442,7 @@ const PGMoreMenu = () => {
                   />
                 </span>
               </Link>
-              <Link className="mm_single" to="">
+              <Link className="mm_single" to="/privacypolicy">
                 <span className="material-symbols-outlined mms_icon">report</span>
                 <h5 className="dr16">Privacy Policy</h5>
                 <h6>understanding our privacy commitments</h6>
