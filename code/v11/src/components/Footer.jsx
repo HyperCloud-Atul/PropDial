@@ -51,7 +51,7 @@ export default function Footer() {
       <footer
         className={footerClassName}
         style={{
-          backgroundImage: "url('./assets/img/home/footer-bg.png')",
+          backgroundImage: "url('/assets/img/home/footer-bg.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -98,8 +98,6 @@ export default function Footer() {
                     <h4>Phone</h4>
                   </div>
                   <h6>
-                    +91 95821 95821
-                    <br />
                     +91 95821 95821
                   </h6>
                 </div>
