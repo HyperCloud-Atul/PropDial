@@ -514,7 +514,7 @@ const PropertyDetails = () => {
     margin: 15,
     nav: true,
     smartSpeed: 1500,
-    autoplay: true,
+    autoplay: false,
     autoplayTimeout: 10000,
     responsive: {
       // Define breakpoints and the number of items to show at each breakpoint
@@ -1284,9 +1284,9 @@ const PropertyDetails = () => {
                         <Link to={`/propertyinspectiondocument/${propertyid}`} >
                           <div className="item eicp_single">
                             <div className="icon">
-                              <span class="material-symbols-outlined">
-                                description
-                              </span>
+                            <span class="material-symbols-outlined">
+pageview
+</span>
                               <div className="text">
                                 <h6>0</h6>
                                 <h5>inspection</h5>
@@ -1298,9 +1298,9 @@ const PropertyDetails = () => {
                         <Link to="" >
                           <div className="item eicp_single">
                             <div className="icon">
-                              <span class="material-symbols-outlined">
-                                description
-                              </span>
+                            <span class="material-symbols-outlined">
+support_agent
+</span>
                               <div className="text">
                                 <h6>0</h6>
                                 <h5>Enquiries</h5>
@@ -1313,9 +1313,9 @@ const PropertyDetails = () => {
                         <Link to={`/transactions/${propertyid}`}>
                           <div className="item eicp_single">
                             <div className="icon">
-                              <span class="material-symbols-outlined">
-                                description
-                              </span>
+                            <span class="material-symbols-outlined">
+payments
+</span>
                               <div className="text">
                                 <h6>5</h6>
                                 <h5>Transactions</h5>
@@ -1323,28 +1323,11 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         </Link>
-                        {/* Verified Document */}
-                        <Link to="">
-                          <div className="item eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                                description
-                              </span>
-                              <div className="text">
-                                <h6>0</h6>
-                                <h5>Verified Document</h5>
-                              </div>
-                            </div>
-                          </div>
-                        </Link>
-
-
-
                       </OwlCarousel>
                     </div>
 
                   )}
-
+                {/* property layout section start */}
                 {showAIForm && (
                   <section className="property_card_single add_aditional_form">
                     <div className="more_detail_card_inner relative">
@@ -1617,115 +1600,123 @@ const PropertyDetails = () => {
                     </div>
                   </section>
                 )}
-                <section className="property_card_single">
-                  <div
-                    className="more_detail_card_inner row" >
-                    {/* optionsroom */}
-                    <div className="col-sm-2">
-                      {!showAIForm && (
-                        <div className="add_btn" onClick={handleShowAIForm}>
-                          <div className="add_btn_inner">
-                            <div className="add_icon">+</div>
-                            <div className="ab_text">
-                              Property Layout
-                            </div>
+                <section className="property_card_single full_width_sec with_blue">
+                  <span className="verticall_title">
+                    Layout :  5
+                  </span>
+                  <div className="more_detail_card_inner">
+                    <div className="row">
+                      <div className="col-1">
+                        {!showAIForm && (
+                          <div className="plus_icon">
+                            <Link className="plus_icon_inner" onClick={handleShowAIForm}>
+                              <span class="material-symbols-outlined">
+                                add
+                              </span>
+                            </Link>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-sm-10">
-                      <OwlCarousel className="owl-theme" {...optionsroom}>
-                        {propertyLayouts && propertyLayouts.map((room, index) => (
-                          <div className="ai_detail_show item">
-                            <div className="left relative">
-                              {(() => {
-                                if (room.roomType === "Bedroom") {
-                                  return (
-                                    <img
-                                      src="/assets/img/icons/illustrate_bedroom.jpg"
-                                      alt={room.roomType}
-                                    />
-                                  );
-                                } else if (room.roomType === "Kitchen") {
-                                  return (
-                                    <img
-                                      src="/assets/img/icons/illustrate_kitchen.jpg"
-                                      alt={room.roomType}
-                                    />
-                                  );
-                                } else if (room.roomType === "Living Room") {
-                                  return (
-                                    <img
-                                      src="/assets/img/icons/illustrate_livingroom.jpg"
-                                      alt={room.roomType}
-                                    />
-                                  );
-                                } else if (room.roomType === "Bathroom") {
-                                  return (
-                                    <img
-                                      src="/assets/img/icons/illustrate_bathroom.jpg"
-                                      alt={room.roomType}
-                                    />
-                                  );
-                                } else if (room.roomType === "Dining Room") {
-                                  return (
-                                    <img
-                                      src="/assets/img/icons/illustrate_dining.jpg"
-                                      alt={room.roomType}
-                                    />
-                                  );
-                                } else if (room.roomType === "Balcony") {
-                                  return (
-                                    <img
-                                      src="/assets/img/icons/illustrate_balcony.jpg"
-                                      alt={room.roomType}
-                                    />
-                                  );
-                                } else {
-                                  return (
-                                    <img
-                                      src="/assets/img/icons/illustrate_basment.jpg"
-                                      alt={room.roomType}
-                                    />
-                                  );
-                                }
-                                
-                              })()}
+                        )}
+
+                      </div>
+                      <div className="col-11">
+                        <div className="property_layout_card">
+                          <OwlCarousel className="owl-theme" {...optionsroom}>
+                            {propertyLayouts && propertyLayouts.map((room, index) => (
+                              <div className="ai_detail_show item">
+                                <div className="left relative">
+                                  {(() => {
+                                    if (room.roomType === "Bedroom") {
+                                      return (
+                                        <img
+                                          src="/assets/img/icons/illustrate_bedroom.jpg"
+                                          alt={room.roomType}
+                                        />
+                                      );
+                                    } else if (room.roomType === "Kitchen") {
+                                      return (
+                                        <img
+                                          src="/assets/img/icons/illustrate_kitchen.jpg"
+                                          alt={room.roomType}
+                                        />
+                                      );
+                                    } else if (room.roomType === "Living Room") {
+                                      return (
+                                        <img
+                                          src="/assets/img/icons/illustrate_livingroom.jpg"
+                                          alt={room.roomType}
+                                        />
+                                      );
+                                    } else if (room.roomType === "Bathroom") {
+                                      return (
+                                        <img
+                                          src="/assets/img/icons/illustrate_bathroom.jpg"
+                                          alt={room.roomType}
+                                        />
+                                      );
+                                    } else if (room.roomType === "Dining Room") {
+                                      return (
+                                        <img
+                                          src="/assets/img/icons/illustrate_dining.jpg"
+                                          alt={room.roomType}
+                                        />
+                                      );
+                                    } else if (room.roomType === "Balcony") {
+                                      return (
+                                        <img
+                                          src="/assets/img/icons/illustrate_balcony.jpg"
+                                          alt={room.roomType}
+                                        />
+                                      );
+                                    } else {
+                                      return (
+                                        <img
+                                          src="/assets/img/icons/illustrate_basment.jpg"
+                                          alt={room.roomType}
+                                        />
+                                      );
+                                    }
+
+                                  })()}
 
 
 
 
-                              <label htmlFor="imgupload" className="upload_img click_text by_text">
-                                Upload img
-                                <input
-                                  type="file"
-                                  id="imgupload"
-                                />
-                              </label>
-                            </div>
-                            <div className="right">
-                              <h5>{room.roomName}</h5>
-                              <div className="in_detail">
-                                <span className="in_single">
-                                  Area {room.roomTotalArea}sq/ft
-                                </span>
-                                <span className="in_single">Length {room.roomLength}ft</span>
-                                <span className="in_single">Width {room.roomWidth}ft</span>
+                                  <label htmlFor="imgupload" className="upload_img click_text by_text">
+                                    Upload img
+                                    <input
+                                      type="file"
+                                      id="imgupload"
+                                    />
+                                  </label>
+                                </div>
+                                <div className="right">
+                                  <h5>{room.roomName}</h5>
+                                  <div className="in_detail">
+                                    <span className="in_single">
+                                      Area {room.roomTotalArea}sq/ft
+                                    </span>
+                                    <span className="in_single">Length {room.roomLength}ft</span>
+                                    <span className="in_single">Width {room.roomWidth}ft</span>
 
-                                {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
-                                  <span className="in_single">{fixture}</span>
-                                ))}
+                                    {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
+                                      <span className="in_single">{fixture}</span>
+                                    ))}
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        ))}
-                      </OwlCarousel>
+                            ))}
+                          </OwlCarousel>
+
+                        </div>
+                      </div>
                     </div>
 
                   </div>
                 </section>
+                {/* property layout section end  */}
+
                 {/* tenant card start */}
-                <section className="property_card_single full_width_sec">
+                <section className="property_card_single full_width_sec with_orange">
                   <span className="verticall_title">
                     Tenants :  {tenantDocument && tenantDocument.length}
                   </span>
@@ -1819,39 +1810,25 @@ const PropertyDetails = () => {
                 {((user && user.role === "owner") ||
                   (user && user.role === "coowner") ||
                   (user && user.role === "admin")) && (
-                    <>
-                      <section className="property_card_single">
+                    <>                      
+                      <section className="property_card_single full_width_sec with_blue">
+                        <span className="verticall_title">
+                        Property Users :  4
+                        </span>
                         <div className="more_detail_card_inner">
-                          <h2 className="card_title">Property users</h2>
-                          <div className="tenant_card">
-                            <div className="row">
-                              <div className="col-md-2">
-                                <div
-                                  className="add_btn eicp_single mb-2"
-                                // onClick={handleAddTenant}
-                                >
-                                  <div class="icon">
-                                    <div class="text">
-                                      <h6>
-                                        3
-                                      </h6>
-                                    </div>
-                                  </div>
+                          <div className="row">
+                            <div className="col-1">                          
+                                <div className="plus_icon">
+                                  <Link className="plus_icon_inner">
+                                    <span class="material-symbols-outlined">
+                                      add
+                                    </span>
+                                  </Link>
                                 </div>
-                                <div
-                                  className="add_btn"
-                                // onClick={handleAddTenant}
-                                >
-                                  <div className="add_btn_inner">
-                                    <div className="add_icon">+</div>
-                                    <div className="ab_text">
-                                      Add property users
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-md-10">
+                            
 
+                            </div>
+                            <div className="col-md-11">
                                 <div
                                   className="d-flex"
                                   style={{
@@ -2055,7 +2032,7 @@ const PropertyDetails = () => {
                                     className="tc_single relative item"
                                   >
                                     <div className="property_people_designation">
-                                    POA
+                                      POA
                                     </div>
                                     <div className="tcs_img_container" >
                                       {propertyManagerDoc && (
@@ -2110,58 +2087,43 @@ const PropertyDetails = () => {
 
                                 </div>
                               </div>
-                            </div>
                           </div>
+
                         </div>
                       </section>
-                      {/* <div className="vg22"></div> */}
                     </>
                   )}
                 {/* property user card end  */}
+
                 {/* propdial user card  start */}
                 {((user && user.role === "owner") ||
                   (user && user.role === "coowner") ||
                   (user && user.role === "admin")) && (
-                    <>
-                      <section className="property_card_single">
+                    <>               
+                      <section className="property_card_single full_width_sec with_orange">
+                        <span className="verticall_title">
+                        Propdial Users :  3
+                        </span>
                         <div className="more_detail_card_inner">
-                          <h2 className="card_title">Propdial Users</h2>
-                          <div className="tenant_card">
-                            <div className="row">
-                              <div className="col-md-2">
-                                <div
-                                  className="add_btn eicp_single mb-2"
-                                // onClick={handleAddTenant}
-                                >
-                                  <div class="icon">
-                                    <div class="text">
-                                      <h6>
-                                        3
-                                      </h6>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div
-                                  className="add_btn"
-                                // onClick={handleAddTenant}
-                                >
-                                  <div className="add_btn_inner">
-                                    <div className="add_icon">+</div>
-                                    <div className="ab_text">
-                                      Add Propdial users
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-md-10">
+                          <div className="row">
+                            <div className="col-1">                          
+                                <div className="plus_icon">
+                                  <Link className="plus_icon_inner">
+                                    <span class="material-symbols-outlined">
+                                      add
+                                    </span>
+                                  </Link>
+                                </div>                            
 
+                            </div>
+                            <div className="col-md-11">
                                 <div
                                   className="d-flex"
                                   style={{
                                     gap: "15px",
                                   }}
                                 >
-                                  <div
+                                    <div
                                     className="tc_single relative item"
                                   >
                                     <div className="property_people_designation">
@@ -2423,19 +2385,16 @@ const PropertyDetails = () => {
                                       </Link>
                                     </div>
                                   </div>
+
                                 </div>
                               </div>
-                            </div>
                           </div>
+
                         </div>
                       </section>
-                      {/* <div className="vg22"></div> */}
                     </>
                   )}
-                {/* propdial user card end  */}
-
-
-                {/* <div className="vg10"></div> */}
+                {/* propdial user card end  */}              
 
 
                 <div className="property_card_single">
