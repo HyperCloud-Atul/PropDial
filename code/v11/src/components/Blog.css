@@ -21,6 +21,28 @@ img.verified_img {
   left: 25px;
   border-radius: 50%;
 }
+.verified_batch {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  margin: auto;
+  transform: translateY(-50%);
+  z-index: 1;
+  width: fit-content;
+}
+.verified_batch span {
+  font-size: 26px;
+  color: var(--success-color);
+  transform: rotate(-45deg);
+  display: block;
+  position: relative;
+  top: 15px;
+  font-weight: 500;
+  opacity: 0.4;
+  letter-spacing: 1.5px;
+
+}
 .blog_source img {
   height: 36px;
   width: auto !important;

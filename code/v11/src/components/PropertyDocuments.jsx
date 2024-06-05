@@ -385,9 +385,8 @@ const PropertyDocuments = () => {
                 </div>
                 <div className="col-sm-3">
                   <div
-                    className={`theme_btn btn_fill text-center ${
-                      isUploading ? "disabled" : ""
-                    }`}
+                    className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
+                      }`}
                     onClick={isUploading ? null : addPropertyDocuments}
                   >
                     {isUploading ? "Uploading..." : "Save"}
@@ -470,6 +469,7 @@ const PropertyDocuments = () => {
                             />
                           )}
                         </div>
+
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
@@ -481,12 +481,13 @@ const PropertyDocuments = () => {
                               Delete
                             </div>
                           </div>
+                          <Switch
+                            checked={checkedStates[doc.id] || false}
+                            onChange={(e) => handleToggleChange(e, doc.id)}
+                            inputProps={{ "aria-label": "controlled" }}
+                          />
                         </div>
-                        <Switch
-                          checked={checkedStates[doc.id] || false}
-                          onChange={(e) => handleToggleChange(e, doc.id)}
-                          inputProps={{ "aria-label": "controlled" }}
-                        />
+
                       </div>
                     </div>
                   ))}
@@ -546,11 +547,16 @@ const PropertyDocuments = () => {
                             />
                           )}
                           {doc.docVerified && (
-                            <img
-                              className="verified_img"
-                              src="/assets/img/icons/verified_img.jpg"
-                              alt=""
-                            />
+                            // <img
+                            //   className="verified_img"
+                            //   src="/assets/img/icons/verified_img.jpg"
+                            //   alt=""
+                            // />
+                            <div className="verified_batch">
+                            <span>
+                            Verified
+                            </span>
+                            </div>
                           )}
                         </div>
                         <div className="card-body">
@@ -564,6 +570,11 @@ const PropertyDocuments = () => {
                               Delete
                             </div>
                           </div>
+                          <Switch
+                            checked={checkedStates[doc.id] || false}
+                            onChange={(e) => handleToggleChange(e, doc.id)}
+                            inputProps={{ "aria-label": "controlled" }}
+                          />
                         </div>
                       </div>
                     </div>
@@ -642,6 +653,11 @@ const PropertyDocuments = () => {
                               Delete
                             </div>
                           </div>
+                          <Switch
+                            checked={checkedStates[doc.id] || false}
+                            onChange={(e) => handleToggleChange(e, doc.id)}
+                            inputProps={{ "aria-label": "controlled" }}
+                          />
                         </div>
                       </div>
                     </div>
