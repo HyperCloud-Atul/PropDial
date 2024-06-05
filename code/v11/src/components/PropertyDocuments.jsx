@@ -6,6 +6,7 @@ import { useFirestore } from "../hooks/useFirestore";
 import { BeatLoader } from "react-spinners";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PropertyDocuments.scss";
+import Switch from "@mui/material/Switch";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 
 const PropertyDocuments = () => {
@@ -16,23 +17,26 @@ const PropertyDocuments = () => {
   }, [location]);
 
   const { propertyId } = useParams();
-  console.log('propertyDocumentId: ', propertyId)
+
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
-  const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
-  const { documents: propertyDocument, errors: propertyDocError } = useCollection("docs", ["masterRefId", "==", propertyId]);
+  const { addDocument, updateDocument, deleteDocument, error } =
+    useFirestore("docs");
+  const { documents: propertyDocument, errors: propertyDocError } =
+    useCollection("docs", ["masterRefId", "==", propertyId]);
 
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const [selectedDocCat, setSelectedDocCat] = useState("Property Document");
   const [selectedIdType, setSelectedIdType] = useState("");
   const [idNumber, setIdNumber] = useState("");
-  const [docVerified, setDocVerified] = useState(false)
   const [isUploading, setIsUploading] = useState(false);
   const [documentFile, setDocumentFile] = useState(null);
+  const [checkedStates, setCheckedStates] = useState({});
   const [newDocId, setNewDocId] = useState("");
   const [uploadingDocId, setUploadingDocId] = useState(null); // Track uploading document ID
+  // const [checked, setChecked] = React.useState(true);
   const handleDocCatChange = (event) => setSelectedDocCat(event.target.value);
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
@@ -66,7 +70,7 @@ const PropertyDocuments = () => {
         idType: selectedIdType,
         idNumber: idNumber,
         mediaType: "",
-        docVerified: docVerified
+        docVerified: "false",
       });
       setSelectedDocCat("");
       setSelectedIdType("");
@@ -85,12 +89,25 @@ const PropertyDocuments = () => {
     }
   }, [newDocId, documentFile]);
 
+  // Fetch initial document data and initialize checkedStates
+  useEffect(() => {
+    if (propertyDocument) {
+      const initialCheckedStates = {};
+      propertyDocument.forEach((doc) => {
+        initialCheckedStates[doc.id] = doc && doc.docVerified;
+      });
+      setCheckedStates(initialCheckedStates);
+    }
+  }, [propertyDocument]);
+
   const uploadDocumentImage = async () => {
     try {
       setIsUploading(true);
       setUploadingDocId(newDocId); // Set the uploading document ID
       const fileType = getFileType(documentFile);
-      const storageRef = projectStorage.ref(`docs/${newDocId}/${documentFile.name}`);
+      const storageRef = projectStorage.ref(
+        `docs/${newDocId}/${documentFile.name}`
+      );
       await storageRef.put(documentFile);
 
       const fileURL = await storageRef.getDownloadURL();
@@ -120,47 +137,80 @@ const PropertyDocuments = () => {
     }
   };
 
-  // render jsx code in short form start 
+  // render jsx code in short form start
   const docCategories = [
     { id: "prop_doc", value: "Property Document", label: "Property Document" },
-    { id: "prop_main", value: "Property Maintainance", label: "Property Maintainance" },
-    { id: "utility_bill", value: "Utility Bills", label: "Utility Bills" }
+    {
+      id: "prop_main",
+      value: "Property Maintainance",
+      label: "Property Maintainance",
+    },
+    { id: "utility_bill", value: "Utility Bills", label: "Utility Bills" },
   ];
-
 
   const docTypes = {
     "Property Document": [
       { id: "indexii", value: "Index II", label: "Index II" },
       { id: "rentagreement", value: "Rent Agreement", label: "Rent Agreement" },
       { id: "layout", value: "Layout", label: "Layout" },
-      { id: "blueprint", value: "Blue Print", label: "Blue Print" }
+      { id: "blueprint", value: "Blue Print", label: "Blue Print" },
     ],
     "Property Maintainance": [
-      { id: "main_doc", value: "Maintainance Document", label: "Maintainance Document" }
+      {
+        id: "main_doc",
+        value: "Maintainance Document",
+        label: "Maintainance Document",
+      },
     ],
     "Utility Bills": [
-      { id: "utility_doc", value: "Utility Bill Document", label: "Utility Bill Document" }
-    ]
+      {
+        id: "utility_doc",
+        value: "Utility Bill Document",
+        label: "Utility Bill Document",
+      },
+    ],
   };
   // render jsx code in short form end
 
-  // filters start 
-  // filter for property document start 
-  const filteredPropertyDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Property Document") : [];
+  // filters start
+  // filter for property document start
+  const filteredPropertyDocuments = propertyDocument
+    ? propertyDocument.filter((doc) => doc.docCat === "Property Document")
+    : [];
   const filteredPropDocLength = filteredPropertyDocuments.length;
   // filter for property document end
 
-  // filter for property maintainance document start 
-  const filteredPropertyMaintainanceDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Property Maintainance") : [];
-  const filteredMaintainanceDocLength = filteredPropertyMaintainanceDocuments.length;
+  // filter for property maintainance document start
+  const filteredPropertyMaintainanceDocuments = propertyDocument
+    ? propertyDocument.filter((doc) => doc.docCat === "Property Maintainance")
+    : [];
+  const filteredMaintainanceDocLength =
+    filteredPropertyMaintainanceDocuments.length;
   // filter for propertymaintainance document end
-  // filter for property utility document start 
-  const filteredPropertyUtilityDocuments = propertyDocument ? propertyDocument.filter(doc => doc.docCat === "Utility Bills") : [];
+  // filter for property utility document start
+  const filteredPropertyUtilityDocuments = propertyDocument
+    ? propertyDocument.filter((doc) => doc.docCat === "Utility Bills")
+    : [];
   const filteredUtilityDocLength = filteredPropertyUtilityDocuments.length;
   // filter for property utility document end
-  // filters end 
+  // filters end
 
+  // data of quick access menu  end
+  const handleToggleChange = async (event, id) => {
+    const newCheckedState = event.target.checked;
+    setCheckedStates((prevStates) => ({
+      ...prevStates,
+      [id]: newCheckedState,
+    }));
 
+    try {
+      await updateDocument(id, {
+        docVerified: newCheckedState,
+      });
+    } catch (error) {
+      console.error("Error updating document state:", error);
+    }
+  };
 
   // 9 dots controls
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
@@ -172,11 +222,18 @@ const PropertyDocuments = () => {
   };
   // 9 dots controls
 
-
-  // data of quick access menu  start  
+  // data of quick access menu  start
   const menuItems = [
-    { name: 'Dashboard', link: '/dashboard', icon: '/assets/img/icons/qa_dashboard.png' },
-    { name: 'Property', link: '/propertydetails/' + propertyId, icon: '/assets/img/icons/qa_property.png' },
+    {
+      name: "Dashboard",
+      link: "/dashboard",
+      icon: "/assets/img/icons/qa_dashboard.png",
+    },
+    {
+      name: "Property",
+      link: "/propertydetails/" + propertyId,
+      icon: "/assets/img/icons/qa_property.png",
+    },
 
     // { name: 'Tenant', link: '/', icon: '/assets/img/icons/qa_tenant.png' },
     // { name: 'Document', link: '/', icon: '/assets/img/icons/qa_documentation.png' },
@@ -185,8 +242,6 @@ const PropertyDocuments = () => {
     // { name: 'Bills', link: '/', icon: '/assets/img/icons/qa_bilss.png' },
     // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
   ];
-  // data of quick access menu  end
-
 
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
@@ -220,9 +275,7 @@ const PropertyDocuments = () => {
 
             <Link to="" className="more-add-options-icons">
               <h1>Property Document</h1>
-              <span className="material-symbols-outlined">
-                holiday_village
-              </span>
+              <span className="material-symbols-outlined">holiday_village</span>
             </Link>
 
             <Link to="" className="more-add-options-icons">
@@ -273,7 +326,9 @@ const PropertyDocuments = () => {
                                 onChange={handleDocCatChange}
                                 checked={selectedDocCat === category.value}
                               />
-                              <label htmlFor={category.id}>{category.label}</label>
+                              <label htmlFor={category.id}>
+                                {category.label}
+                              </label>
                             </div>
                           ))}
                         </div>
@@ -330,8 +385,9 @@ const PropertyDocuments = () => {
                 </div>
                 <div className="col-sm-3">
                   <div
-                    className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
-                      }`}
+                    className={`theme_btn btn_fill text-center ${
+                      isUploading ? "disabled" : ""
+                    }`}
                     onClick={isUploading ? null : addPropertyDocuments}
                   >
                     {isUploading ? "Uploading..." : "Save"}
@@ -344,9 +400,15 @@ const PropertyDocuments = () => {
         <div className="theme_tab prop_doc_tab">
           <Tabs>
             <TabList className="tabs">
-              <Tab className="pointer">Property Document ({filteredPropDocLength})</Tab>
-              <Tab className="pointer">Maintainance Document ({filteredMaintainanceDocLength})</Tab>
-              <Tab className="pointer">Utility Document ({filteredUtilityDocLength})</Tab>
+              <Tab className="pointer">
+                Property Document ({filteredPropDocLength})
+              </Tab>
+              <Tab className="pointer">
+                Maintainance Document ({filteredMaintainanceDocLength})
+              </Tab>
+              <Tab className="pointer">
+                Utility Document ({filteredUtilityDocLength})
+              </Tab>
             </TabList>
             <TabPanel>
               <div className="blog_sect">
@@ -359,7 +421,10 @@ const PropertyDocuments = () => {
                       <div className="item card-container">
                         <div className="card-image relative">
                           {uploadingDocId !== doc.id && (
-                            <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                            <label
+                              htmlFor={`upload_img_${doc.id}`}
+                              className="upload_img click_text by_text"
+                            >
                               Upload PDF or Img
                               <input
                                 type="file"
@@ -370,10 +435,13 @@ const PropertyDocuments = () => {
                             </label>
                           )}
                           {uploadingDocId === doc.id ? (
-                            <div className="loader d-flex justify-content-center align-items-center" style={{
-                              width: "100%",
-                              height: "100%"
-                            }}>
+                            <div
+                              className="loader d-flex justify-content-center align-items-center"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                              }}
+                            >
                               <BeatLoader color={"#FF5733"} loading={true} />
                             </div>
                           ) : doc.mediaType === "pdf" ? (
@@ -387,28 +455,41 @@ const PropertyDocuments = () => {
                             ></iframe>
                           ) : (
                             <img
-                              src={doc.documentUrl || "https://via.placeholder.com/150"}
+                              src={
+                                doc.documentUrl ||
+                                "https://via.placeholder.com/150"
+                              }
                               alt="Document"
                             />
                           )}
                           {doc.docVerified && (
-                            <img className="verified_img" src="/assets/img/icons/verified_img2.jpg" alt="" />
+                            <img
+                              className="verified_img"
+                              src="/assets/img/icons/verified_img2.jpg"
+                              alt=""
+                            />
                           )}
-
                         </div>
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
                           <div className="card-author">
-                            <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
+                            <div
+                              onClick={() => deletePropertyDocument(doc.id)}
+                              className="learn-more pointer"
+                            >
                               Delete
                             </div>
                           </div>
                         </div>
+                        <Switch
+                          checked={checkedStates[doc.id] || false}
+                          onChange={(e) => handleToggleChange(e, doc.id)}
+                          inputProps={{ "aria-label": "controlled" }}
+                        />
                       </div>
                     </div>
                   ))}
-
                 </div>
               </div>
             </TabPanel>
@@ -423,7 +504,10 @@ const PropertyDocuments = () => {
                       <div className="item card-container">
                         <div className="card-image relative">
                           {uploadingDocId !== doc.id && (
-                            <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                            <label
+                              htmlFor={`upload_img_${doc.id}`}
+                              className="upload_img click_text by_text"
+                            >
                               Upload PDF or Img
                               <input
                                 type="file"
@@ -434,10 +518,13 @@ const PropertyDocuments = () => {
                             </label>
                           )}
                           {uploadingDocId === doc.id ? (
-                            <div className="loader d-flex justify-content-center align-items-center" style={{
-                              width: "100%",
-                              height: "100%"
-                            }}>
+                            <div
+                              className="loader d-flex justify-content-center align-items-center"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                              }}
+                            >
                               <BeatLoader color={"#FF5733"} loading={true} />
                             </div>
                           ) : doc.mediaType === "pdf" ? (
@@ -451,19 +538,29 @@ const PropertyDocuments = () => {
                             ></iframe>
                           ) : (
                             <img
-                              src={doc.documentUrl || "https://via.placeholder.com/150"}
+                              src={
+                                doc.documentUrl ||
+                                "https://via.placeholder.com/150"
+                              }
                               alt="Document"
                             />
                           )}
                           {doc.docVerified && (
-                            <img className="verified_img" src="/assets/img/icons/verified_img.jpg" alt="" />
+                            <img
+                              className="verified_img"
+                              src="/assets/img/icons/verified_img.jpg"
+                              alt=""
+                            />
                           )}
                         </div>
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
                           <div className="card-author">
-                            <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
+                            <div
+                              onClick={() => deletePropertyDocument(doc.id)}
+                              className="learn-more pointer"
+                            >
                               Delete
                             </div>
                           </div>
@@ -471,7 +568,6 @@ const PropertyDocuments = () => {
                       </div>
                     </div>
                   ))}
-
                 </div>
               </div>
             </TabPanel>
@@ -486,7 +582,10 @@ const PropertyDocuments = () => {
                       <div className="item card-container">
                         <div className="card-image relative">
                           {uploadingDocId !== doc.id && (
-                            <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                            <label
+                              htmlFor={`upload_img_${doc.id}`}
+                              className="upload_img click_text by_text"
+                            >
                               Upload PDF or Img
                               <input
                                 type="file"
@@ -497,10 +596,13 @@ const PropertyDocuments = () => {
                             </label>
                           )}
                           {uploadingDocId === doc.id ? (
-                            <div className="loader d-flex justify-content-center align-items-center" style={{
-                              width: "100%",
-                              height: "100%"
-                            }}>
+                            <div
+                              className="loader d-flex justify-content-center align-items-center"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                              }}
+                            >
                               <BeatLoader color={"#FF5733"} loading={true} />
                             </div>
                           ) : doc.mediaType === "pdf" ? (
@@ -514,19 +616,29 @@ const PropertyDocuments = () => {
                             ></iframe>
                           ) : (
                             <img
-                              src={doc.documentUrl || "https://via.placeholder.com/150"}
+                              src={
+                                doc.documentUrl ||
+                                "https://via.placeholder.com/150"
+                              }
                               alt="Document"
                             />
                           )}
                           {doc.docVerified && (
-                            <img className="verified_img" src="/assets/img/icons/verified_img.jpg" alt="" />
+                            <img
+                              className="verified_img"
+                              src="/assets/img/icons/verified_img.jpg"
+                              alt=""
+                            />
                           )}
                         </div>
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
                           <div className="card-author">
-                            <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
+                            <div
+                              onClick={() => deletePropertyDocument(doc.id)}
+                              className="learn-more pointer"
+                            >
                               Delete
                             </div>
                           </div>
@@ -534,15 +646,11 @@ const PropertyDocuments = () => {
                       </div>
                     </div>
                   ))}
-
                 </div>
               </div>
             </TabPanel>
-
           </Tabs>
         </div>
-
-
       </div>
     </div>
   );
