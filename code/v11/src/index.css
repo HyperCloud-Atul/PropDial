@@ -264,29 +264,7 @@ a.theme_btn.btn_white {
 .pop-up-div div p strong {
   color: var(--theme-blue);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* sanskar css start  */
-
-
-
-
-
-
 
 
 /* owl navigation css start  */
@@ -823,3 +801,29 @@ h2.card_title {
 }
 
 /* sanskar media query css end  */
+.done_btn {
+  padding: 10px 20px;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #00a8a8;
+  background: #00a8a8;
+  width: 30%;
+  text-align: center;
+  color: white;
+      letter-spacing: 0.5px;
+}
+.cancel_btn{
+  padding: 10px 20px;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #00a8a8;
+  background: transparent;
+  width: 30%;
+  text-align: center;
+  color: #00a8a8;
+      letter-spacing: 0.5px;
+}

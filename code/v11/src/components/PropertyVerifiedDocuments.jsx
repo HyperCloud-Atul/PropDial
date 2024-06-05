@@ -8,7 +8,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PropertyDocuments.scss";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 
-const PropertyDocuments = () => {
+const PropertyVerifiedDocuments = () => {
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
@@ -20,15 +20,14 @@ const PropertyDocuments = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
-  const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
-  const { documents: propertyDocument, errors: propertyDocError } = useCollection("docs", ["masterRefId", "==", propertyId]);
+  const { addDocument, updateDocument, deleteDocument, error } = useFirestore("verifiedDocs");
+  const { documents: propertyDocument, errors: propertyDocError } = useCollection("verifiedDocs", ["masterRefId", "==", propertyId]);
 
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const [selectedDocCat, setSelectedDocCat] = useState("Property Document");
   const [selectedIdType, setSelectedIdType] = useState("");
   const [idNumber, setIdNumber] = useState("");
-  const [docVerified, setDocVerified] = useState(false)
   const [isUploading, setIsUploading] = useState(false);
   const [documentFile, setDocumentFile] = useState(null);
   const [newDocId, setNewDocId] = useState("");
@@ -66,7 +65,6 @@ const PropertyDocuments = () => {
         idType: selectedIdType,
         idNumber: idNumber,
         mediaType: "",
-        docVerified: docVerified
       });
       setSelectedDocCat("");
       setSelectedIdType("");
@@ -78,6 +76,7 @@ const PropertyDocuments = () => {
       setIsUploading(false);
     }
   };
+  console.log("cat", selectedDocCat);
 
   useEffect(() => {
     if (newDocId && documentFile) {
@@ -90,7 +89,7 @@ const PropertyDocuments = () => {
       setIsUploading(true);
       setUploadingDocId(newDocId); // Set the uploading document ID
       const fileType = getFileType(documentFile);
-      const storageRef = projectStorage.ref(`docs/${newDocId}/${documentFile.name}`);
+      const storageRef = projectStorage.ref(`verifiedDocs/${newDocId}/${documentFile.name}`);
       await storageRef.put(documentFile);
 
       const fileURL = await storageRef.getDownloadURL();
@@ -391,10 +390,6 @@ const PropertyDocuments = () => {
                               alt="Document"
                             />
                           )}
-                          {doc.docVerified && (
-                            <img className="verified_img" src="/assets/img/icons/verified_img2.jpg" alt="" />
-                          )}
-
                         </div>
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
@@ -415,7 +410,7 @@ const PropertyDocuments = () => {
             <TabPanel>
               <div className="blog_sect">
                 <div className="row">
-                  {filteredMaintainanceDocLength === 0 && (
+                {filteredMaintainanceDocLength === 0 && (
                     <h5 className="m20 text_red mt-4">No data found</h5>
                   )}
                   {filteredPropertyMaintainanceDocuments.map((doc, index) => (
@@ -455,9 +450,6 @@ const PropertyDocuments = () => {
                               alt="Document"
                             />
                           )}
-                          {doc.docVerified && (
-                            <img className="verified_img" src="/assets/img/icons/verified_img.jpg" alt="" />
-                          )}
                         </div>
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
@@ -478,7 +470,7 @@ const PropertyDocuments = () => {
             <TabPanel>
               <div className="blog_sect">
                 <div className="row">
-                  {filteredUtilityDocLength === 0 && (
+                {filteredUtilityDocLength === 0 && (
                     <h5 className="m20 text_red mt-4">No data found</h5>
                   )}
                   {filteredPropertyUtilityDocuments.map((doc, index) => (
@@ -518,9 +510,6 @@ const PropertyDocuments = () => {
                               alt="Document"
                             />
                           )}
-                          {doc.docVerified && (
-                            <img className="verified_img" src="/assets/img/icons/verified_img.jpg" alt="" />
-                          )}
                         </div>
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
@@ -548,4 +537,4 @@ const PropertyDocuments = () => {
   );
 };
 
-export default PropertyDocuments;
+export default PropertyVerifiedDocuments

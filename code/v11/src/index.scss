@@ -209,23 +209,26 @@
   &.bottom_arrow_active {
     .theme_radio_container {
       input[type="radio"] + label {
-        border-radius: 8px !important;   
+        border-radius: 8px 8px 0px 0px !important;
+        border-color: var(--theme-grey);
+        border-bottom: none;
+        background: whitesmoke;
       }
       input[type="radio"]:checked + label {
-        background-color: transparent;
-        color: var(--theme-blue);
+        // background-color: transparent;
+        // color: var(--theme-blue);
         border-bottom: 3px solid var(--theme-blue);
       }
 
       input[type="radio"] + label::before {
-        content: none;       
+        content: none;
       }
       input[type="radio"] + label {
-      position: relative;     
+        position: relative;
       }
 
-      input[type="radio"]:checked + label::before {         
-        content: '';
+      input[type="radio"]:checked + label::before {
+        content: "";
         position: absolute;
         bottom: -9px;
         left: 0;

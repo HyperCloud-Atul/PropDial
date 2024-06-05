@@ -11,6 +11,16 @@
   background-size: cover;
   aspect-ratio: 3/2;
 }
+img.verified_img {
+  width: 65px !important;
+  position: 100px;
+  height: 65px;
+  position: absolute;
+  top: 35px;
+  z-index: 1;
+  left: 25px;
+  border-radius: 50%;
+}
 .blog_source img {
   height: 36px;
   width: auto !important;

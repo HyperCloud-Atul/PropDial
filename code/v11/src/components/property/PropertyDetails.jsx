@@ -1324,7 +1324,7 @@ const PropertyDetails = () => {
                           </div>
                         </Link>
                         {/* Verified Document */}
-                        <Link to="">
+                        <Link to={`/propertyverifieddocumentdetails/${propertyid}`}>
                           <div className="item eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
