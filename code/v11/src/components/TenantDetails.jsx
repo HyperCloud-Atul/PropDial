@@ -827,7 +827,7 @@ const TenantDetails = () => {
                     </div>
                   </div>
                   <div className="row mt-3">
-                    <div className="col-sm-1">
+                    <div className="col-sm-2">
                       <div
                         className="theme_btn btn_border text-center"
                         onClick={isUploading ? null : handleShowAIForm}

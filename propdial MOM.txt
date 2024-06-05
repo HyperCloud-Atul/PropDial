@@ -3,8 +3,6 @@ MOM Of Propdial (06-June-2024 Sunday)
 .. veryfied document wala bna hai or verygied single page pr upload krwana hai or property detail wale pr show krwana hai 
 jisme uska name hoga or photo hogi
 
-3. ab inspection ki baat krte hai ki ispection wala ek bna na hai jo form me inspection rhega usme filed rhegi inspection inpection date rhegi or usme restirciton 90 days ka rhega uske bad ek form aayega jisme yh konse room ka inspection hai wh wali filed or inspection ka photo bhi dalan hai
-
 8. yha pr ek or poa add krna hai  
 
 9. property layout wale me react wala carousel lgwana hai jisme
@@ -35,3 +33,5 @@ in kyc, addhar pan, police verification document type very doc, aggrement aayega
 niche tab me show honge all kyc police veri, aggremet
 
 5. property layout wala me bedroom or kitchen ka default icon lga dete hai 
+
+3. ab inspection ki baat krte hai ki ispection wala ek bna na hai jo form me inspection rhega usme filed rhegi inspection inpection date rhegi or usme restirciton 90 days ka rhega uske bad ek form aayega jisme yh konse room ka inspection hai wh wali filed or inspection ka photo bhi dalan hai

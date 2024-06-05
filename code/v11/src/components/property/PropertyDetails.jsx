@@ -1281,7 +1281,7 @@ const PropertyDetails = () => {
                           </div>
                         </Link>
                         {/* Inspection  */}
-                        <Link to="" >
+                        <Link to={`/propertyinspectiondocument/${propertyid}`} >
                           <div className="item eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
@@ -1324,7 +1324,7 @@ const PropertyDetails = () => {
                           </div>
                         </Link>
                         {/* Verified Document */}
-                        <Link to={`/propertyverifieddocumentdetails/${propertyid}`}>
+                        <Link to="">
                           <div className="item eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
@@ -2000,6 +2000,62 @@ const PropertyDetails = () => {
                                   >
                                     <div className="property_people_designation">
                                       POC
+                                    </div>
+                                    <div className="tcs_img_container" >
+                                      {propertyManagerDoc && (
+                                        <img
+                                          src={
+                                            propertyManagerDoc &&
+                                            propertyManagerDoc.photoURL
+                                          }
+                                          alt=""
+                                        />
+                                      )}
+                                    </div>
+                                    <div
+                                      className="tenant_detail"
+                                    >
+                                      <div className="edit_inputs">
+
+                                        <h5
+                                          className="t_name"
+                                        >
+                                          Rajiv kumar
+                                        </h5>
+                                        <h6 className="t_number">
+                                          +91 87705-34650
+                                        </h6>
+                                      </div>
+                                    </div>
+                                    <div className="wha_call_icon">
+                                      < Link
+                                        className="call_icon wc_single"
+                                        to="tel:+918770534650
+                                            "
+
+                                      >
+                                        <img
+                                          src="/assets/img/simple_call.png"
+                                          alt=""
+                                        />
+                                      </Link>
+                                      <Link
+                                        className="wha_icon wc_single"
+                                        to="https://wa.me/+918770534650"
+                                        target="_blank"
+                                      >
+                                        <img
+                                          src="/assets/img/whatsapp_simple.png"
+                                          alt=""
+                                        />
+                                      </Link>
+                                    </div>
+                                  </div>
+                                  <div
+                                    className="tc_single relative item"
+                                  >
+                                    <div className="property_people_designation">
+                                    POA
                                     </div>
                                     <div className="tcs_img_container" >
                                       {propertyManagerDoc && (

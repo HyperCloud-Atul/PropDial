@@ -88,7 +88,7 @@ import Payment from "./pdpages/payment/Payment";
 import PGTransactions from "./pdpages/property/PGTransactions";
 import PGRateCard from "./pdpages/roles/admin/master/PGRateCard";
 import PropertyDocuments from "./components/PropertyDocuments";
-import PropertyVerifiedDocuments from "./components/PropertyVerifiedDocuments";
+import PropertyInspectionDocuments from "./components/PropertyInspectionDocuments";
 
 // New component import end
 
@@ -235,8 +235,8 @@ function App() {
                     element={<PropertyDocuments />}
                   ></Route>
                   <Route
-                    path="/propertyverifieddocumentdetails/:propertyId"
-                    element={<PropertyVerifiedDocuments />}
+                    path="/propertyinspectiondocument/:propertyId"
+                    element={<PropertyInspectionDocuments />}
                   ></Route>
 
 
