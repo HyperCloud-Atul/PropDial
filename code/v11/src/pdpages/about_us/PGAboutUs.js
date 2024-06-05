@@ -24,7 +24,7 @@ const PGAboutUs = () => {
         pageTitle="About Us"
         pageSubTitle="Discover Our Story
         "
-        heroImage="./assets/img/about_us_banner.jpg"
+        heroImage="/assets/img/about_us_banner.jpg"
       ></Hero>
       <section className="about_content sect_padding">
         <div className="container">
