@@ -421,11 +421,11 @@ const PhoneLogin = () => {
                     {/* <input type="checkbox" id="agree_tcp" checked /> */}
                     <label htmlFor="agree_tcp">
                       By proceeding, I agree to Propdial{" "}
-                      <Link to="" className="click_text">
+                      <Link to="/terms" className="click_text">
                         T&C
                       </Link>{" "}
                       &{" "}
-                      <Link to="" className="click_text">
+                      <Link to="/privacypolicy" className="click_text">
                         Privacy Policy
                       </Link>
                     </label>

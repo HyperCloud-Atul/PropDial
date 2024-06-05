@@ -450,7 +450,7 @@ const PGMoreMenu = () => {
                   chevron_right
                 </span>
               </Link>
-              <Link className="mm_single" to="">
+              <Link className="mm_single" to="/terms">
                 <span className="material-symbols-outlined mms_icon">gavel</span>
                 <h5 className="dr16">Terms & Condition</h5>
                 <h6>guidelines for usage and conduct</h6>

@@ -14,6 +14,7 @@ import PGProfile from "./pdpages/profile/PGProfile";
 import PGNotification from "./pdpages/notification/PGNotification";
 import PGAboutUs from "./pdpages/about_us/PGAboutUs";
 import PGPriacyPolicy from "./pdpages/privacypolicy/PGPrivacyPolicy";
+import PGTerms from "./pdpages/terms/PGTerms";
 import PGContactUs from "./pdpages/contact_us/PGContactUs";
 import Faq from "./pdpages/faq/Faq";
 import Home from "./pdpages/home/Home";
@@ -218,6 +219,7 @@ function App() {
                     element={<PGNotification />}
                   ></Route>
                   <Route path="/privacypolicy" element={<PGPriacyPolicy />}></Route>
+                  <Route path="/terms" element={<PGTerms />}></Route>
                   <Route path="/about-us" element={<PGAboutUs />}></Route>
                   <Route path="/contact-us" element={<PGContactUs />}></Route>
                   <Route path="/faq" element={<Faq></Faq>}></Route>

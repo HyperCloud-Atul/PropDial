@@ -8,7 +8,7 @@ import './FooterBefore.css'
 const FooterBefore = () => {
   const location = useLocation(); // Get the current location
   // footer before display none Array 
-  const excludedPaths = ["/", "aboutus", "contactus", "more-menu", "/privacypolicy"];
+  const excludedPaths = ["/", "aboutus", "contactus", "more-menu", "/privacypolicy", "/terms"];
   const shouldHide = excludedPaths.includes(location.pathname);
   const className = `footer_before relative ${shouldHide ? "" : "d_none"}`;
   // footer before display none Array 
