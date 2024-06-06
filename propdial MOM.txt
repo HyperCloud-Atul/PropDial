@@ -3,8 +3,6 @@ MOM Of Propdial (06-June-2024 Sunday)
 .. veryfied document wala bna hai or verygied single page pr upload krwana hai or property detail wale pr show krwana hai 
 jisme uska name hoga or photo hogi
 
-
-
 9. property layout wale me react wala carousel lgwana hai jisme
 
 

@@ -13,52 +13,59 @@ import PropdialPropertyCard from "../../components/property/SearchProperty";
 import PropAgentPropertyCard from "../../components/property/SearchPropAgentProperty";
 
 const PGSearchProperty = () => {
-  const [activeOption, setActiveOption] = useState('Rent');
+  const [activeOption, setActiveOption] = useState("Rent");
   const [checked, setChecked] = useState(false);
-  const [activeCategory, setActiveCategory] = useState('Residential');
+  const [activeCategory, setActiveCategory] = useState("Residential");
+  const [favoritedProperties, setFavoritedProperties] = useState([]);
+  const [favoriteCount, setFavoriteCount] = useState(0);
 
-  const { documents: propdialProperties, error: propdialPropertieserror } = useCollection("properties", ["postedBy", "==", "Propdial"]);
-  const { documents: propagentProperties, error: propagentPropertieserror } = useCollection("properties", ["postedBy", "==", "Agent"]);
+  const { documents: propdialProperties, error: propdialPropertiesError } = useCollection("properties", ["postedBy", "==", "Propdial"]);
+  const { documents: propagentProperties, error: propagentPropertiesError } = useCollection("properties", ["postedBy", "==", "Agent"]);
 
-  // const { documents: dbticketdocuments, error: dbticketerror } = useCollection(
-  //   "tickets",
-  //   ["postedBy", "==", "Propdial"],
-  //   ["updatedAt", "desc"]
-  // );
+  useEffect(() => {
+    const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    setFavoritedProperties(savedFavorites);
+    setFavoriteCount(savedFavorites.length);
+  }, []);
 
-  // const filteredPropdialProperties = propdialProperties && propdialProperties.filter(function (property) {
-  //   return ((property.purpose === activeOption) && (property.category === activeCategory));
-  // });
-  const filteredPropdialProperties = propdialProperties && propdialProperties.filter(function (property) {
-    return ((activeOption === 'Rent' ? property.status === 'Available for Rent' : property.status === 'Available for Sale') && (property.category === activeCategory));
+  const handleUpdateFavorites = (updatedFavorites) => {
+    setFavoritedProperties(updatedFavorites);
+    setFavoriteCount(updatedFavorites.length);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  const filterFavoriteProperties = (properties) => {
+    return properties.filter((property) => favoritedProperties.includes(property.id));
+  };
+
+  const filteredPropdialProperties = propdialProperties && propdialProperties.filter((property) => {
+    return ((activeOption === "Rent" ? property.status === "Available for Rent" : property.status === "Available for Sale") && (property.category === activeCategory));
   });
-  const filteredPropAgentProperties = propagentProperties && propagentProperties.filter(function (property) {
-    return ((property.purpose === 'Available for Rent') || (property.purpose === 'Available for Sale'));
+
+
+ // Filter recent 10 properties
+ const filteredPropdialPropertiesRecent = propdialProperties && propdialProperties
+ .filter((property) => ((activeOption === "Rent" ? property.status === "Available for Rent" : property.status === "Available for Sale") && (property.category === activeCategory)))
+ .slice(0, 2);
+
+  const filteredPropAgentProperties = propagentProperties && propagentProperties.filter((property) => {
+    return property.purpose === "Available for Rent" || property.purpose === "Available for Sale";
   });
 
-  // Scroll to the top of the page whenever the location changes start
+  // Scroll to the top of the page whenever the location changes
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-  // Scroll to the top of the page whenever the location changes end
-
-  // switch 
 
   const handleChange = (checked) => {
-    console.log('checked:', checked)
-
-    checked === false ? setActiveCategory('Residential') : setActiveCategory('Commercial')
+    setActiveCategory(checked ? "Commercial" : "Residential");
     setChecked(checked);
   };
-  // switch
 
-  // rent and sale acitve 
   const handleOptionClick = (option) => {
     setActiveOption(option);
   };
-  // rent and buy acitve 
-
   return (
 
     <div className="pg_property aflbg">
@@ -153,7 +160,7 @@ const PGSearchProperty = () => {
               <div className="col-xl-9">
                 <TabList className="tabs">
                   <Tab className="pointer">Properties ({filteredPropdialProperties && filteredPropdialProperties.length})</Tab>
-                  <Tab className="pointer">Favorites</Tab>
+                  <Tab className="pointer">Favorites ({favoriteCount})</Tab>
                   <Tab className="pointer">Top Agents</Tab>
                 </TabList>
                 <TabPanel>
@@ -162,7 +169,16 @@ const PGSearchProperty = () => {
                   </div>
                 </TabPanel>
                 <TabPanel>
-                  No Data Found
+                <div className="property_card_left">
+                      {filterFavoriteProperties(propdialProperties || []).length > 0 ? (
+                        <PropdialPropertyCard
+                          propertiesdocuments={filterFavoriteProperties(propdialProperties)}
+                          onUpdateFavorites={handleUpdateFavorites}
+                        />
+                      ) : (
+                        <p>No favorite properties yet!</p>
+                      )}
+                    </div>
                 </TabPanel>
                 <TabPanel>
                   No Data Found
@@ -175,7 +191,7 @@ const PGSearchProperty = () => {
                 <div className="pp_sidebar">
                   <div className="pp_sidebar_cards">
                     <div className="pp_sidebarcard_single">
-                      {filteredPropAgentProperties && <PropAgentPropertyCard propagentProperties={filteredPropAgentProperties} />}
+                      {filteredPropdialPropertiesRecent && <PropAgentPropertyCard propagentProperties={filteredPropdialPropertiesRecent} />}
                     </div>
 
                     {/* <div className="pp_sidebarcard_single">

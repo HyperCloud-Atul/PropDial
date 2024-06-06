@@ -1,132 +1,119 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuthContext } from "../../hooks/useAuthContext";
 
-
-const SearchProperty = ({ propertiesdocuments }) => {
-
-  // console.log('properties: ', propertiesdocuments)
-
-  // Scroll to the top of the page whenever the location changes start
+const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-  // Scroll to the top of the page whenever the location changes end
 
-  const { user } = useAuthContext();
+  const [favorites, setFavorites] = useState(() => {
+    const savedFavorites = localStorage.getItem("favorites");
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
 
-  // read more read less
-  const [height, setHeight] = useState(true);
+  useEffect(() => {
+    if (onUpdateFavorites) {
+      onUpdateFavorites(favorites);
+    }
+  }, [favorites, onUpdateFavorites]);
 
-
-  const handleHeight = () => {
-    setHeight(!height);
+  const handleFavoriteClick = (propertyId) => {
+    let updatedFavorites = [];
+    if (favorites.includes(propertyId)) {
+      updatedFavorites = favorites.filter((id) => id !== propertyId);
+    } else {
+      updatedFavorites = [...favorites, propertyId];
+    }
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
-  // read more read less
-
 
   return (
     <>
-      {propertiesdocuments && propertiesdocuments.map((property) => (
-        <div className="property_card_single">
-          <Link className="pcs_inner pointer" to={`/propertydetails/${property.id}`} key={property.id}>
-            <div className="pcs_image_area">
-              <img src="/assets/img/property/p1.jpg" className="bigimage"></img>
-            </div>
-            <div className="pcs_main_detail">
-              <div className="pmd_top relative" >
-                <h4 className="property_name">
-                  {/* {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.unitNumber : ''} - {((user && user.role === 'owner') || (user && user.role === 'coowner')) ? property.society : ''} */}
-                  {/* <br></br> */}
-                  {property.bhk} | {property.furnishing === "" ? "" : property.furnishing + "Furnished | "} {property.status}
-                </h4>
-                <h6 className="property_location">{property.locality}, {property.city} |  {property.state}</h6>
-                <div className="fav_and_share">
-                  <span className="material-symbols-outlined mr-2 fav" style={{
-                    marginRight: "3px"
-                  }}>
+      {propertiesdocuments &&
+        propertiesdocuments.map((property) => (
+          <div className="property_card_single" key={property.id}>
+            <div className="left relative">
+              <Link className="pcs_inner pointer" to={`/propertydetails/${property.id}`}>
+                <div className="pcs_image_area">
+                  <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" />
+                </div>
+                <div className="pcs_main_detail">
+                  <div className="pmd_top relative">
+                    <h4 className="property_name">
+                      {property.bhk} | {property.furnishing === "" ? "" : property.furnishing + "Furnished | "} {property.status}
+                    </h4>
+                    <h6 className="property_location">{property.locality}, {property.city} |  {property.state}</h6>
+                  </div>
+                  <div className="pmd_body">
+                    <div className="property_information">
+                      <div className="pi_single">
+                        <h6>Bedrooms</h6>
+                        <h5>{property.numberOfBedrooms}</h5>
+                      </div>
+                      <div className="pi_single">
+                        <h6>Bathroom</h6>
+                        <h5>{property.numberOfBathrooms}</h5>
+                      </div>
+                      <div className="pi_single">
+                        <h6>Balcony</h6>
+                        <h5>{property.balcony}</h5>
+                      </div>
+                      <div className="pi_single">
+                        <h6>Floor number</h6>
+                        <h5>{property.floorNo}</h5>
+                      </div>
+                      <div className="pi_single">
+                        <h6>Lift</h6>
+                        <h5>{property.lift}</h5>
+                      </div>
+                      <div className="pi_single">
+                        <h6>Carpet area</h6>
+                        <h5>{property.carpetArea}</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+             
+              </Link>
+              <div className="fav_and_share">
+                  <span
+                    className={`material-symbols-outlined mr-2 fav ${favorites.includes(property.id) ? 'favorited' : ''}`}
+                    onClick={() => handleFavoriteClick(property.id)}
+                  >
                     favorite
                   </span>
-                  {/* <span className="material-symbols-outlined" >
-                    share
-                  </span> */}
+                  {/* <span className="material-symbols-outlined">share</span> */}
                 </div>
-              </div>
-              <div className="pmd_body">
-                <div className="property_information">
-                  <div className="pi_single">
-                    <h6>Bedrooms</h6>
-                    <h5>{property.numberOfBedrooms}</h5>
-                  </div>
-                  <div className="pi_single">
-                    <h6>Bathroom</h6>
-                    <h5>{property.numberOfBathrooms}</h5>
-                  </div>
-                  <div className="pi_single">
-                    <h6>Balcony</h6>
-                    <h5>{property.balcony}</h5>
-                  </div>
-
-                  <div className="pi_single">
-                    <h6>Floor number</h6>
-                    <h5>{property.floorNo}</h5>
-                  </div>
-                  <div className="pi_single">
-                    <h6>Lift</h6>
-                    <h5>{property.lift}</h5>
-                  </div>
-                  <div className="pi_single">
-                    <h6>Carpet area</h6>
-                    <h5>{property.carpetArea}</h5>
-                  </div>
-
-
-                </div>
-              </div>
-              {/* <div className="pmd_bottom">
-            <p className={`pshortdetail ${height ? "" : "readmore"}`}>
-              Grandeur is Kalpataru's first offering to the city of Indore. This
-              landmark address stands a class apart with its iconic design and
-              exquisite execution. With world renowned consultants appointed for
-              the design, landscaping, RCC and more, Kalpataru Grandeur
-              synergizes international design elements with regional taste, and
-              represents Kalpataru's strong legacy as a provider of high-end
-              luxury living spaces.
-            </p>
-            <div onClick={handleHeight} className="readml pointer">
-              {height ? "Read More" : "Read Less"}
             </div>
-          </div> */}
-            </div>
-          </Link>
-          <div className="pcs_other_info">
-            <div className="poi_inner">
-              <h6 className="value_per_sqf">Onwards</h6>
-              <h6 className="property_value">
-                <span>₹ </span> {property.demandPrice}
-              </h6>
-              <h6 className="value_per_sqf">
-                {property.carpetArea}  {property.carpetAreaUnit}
-              </h6>
-              {/* <Link to="/contact-us" className="theme_btn no_icon btn_fill"
-                style={{ padding: "5px 20px" }}>Contact Agent</Link> */}
-              <button className="theme_btn no_icon btn_fill" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                style={{ padding: "5px 20px" }}>Enquire Now</button>
-              {/* <h5 className="link">Check Loan Eligibility</h5> */}
+            <div className="pcs_other_info">
+              <div className="poi_inner">
+                <h6 className="value_per_sqf">Onwards</h6>
+                <h6 className="property_value">
+                  <span>₹ </span> {property.demandPrice}
+                </h6>
+                <h6 className="value_per_sqf">
+                  {property.carpetArea}  {property.carpetAreaUnit}
+                </h6>
+                <button
+                  className="theme_btn no_icon btn_fill"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  style={{ padding: "5px 20px" }}
+                >
+                  Enquire Now
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-
-      ))}
-      <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        ))}
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content relative">
             <span className="material-symbols-outlined close_modal" data-bs-dismiss="modal">
               close
             </span>
-
             <div className="modal-body">
               <form>
                 <div className="row">
@@ -141,7 +128,6 @@ const SearchProperty = ({ propertiesdocuments }) => {
                       <div className="field_inner select">
                         <select>
                           <option value="" disabled selected>I am</option>
-                          {/* <option>Owner</option> */}
                           <option>Tenant</option>
                           <option>Agent</option>
                         </select>
@@ -175,21 +161,15 @@ const SearchProperty = ({ propertiesdocuments }) => {
                     <div className="submit_btn mt-4">
                       <button type="submit" className="modal_btn theme_btn no_icon btn_fill">
                         Submit
-                        {/* <span className="material-symbols-outlined btn_arrow ba_animation">
-                          arrow_forward
-                        </span> */}
                       </button>
                     </div>
                   </div>
                 </div>
               </form>
             </div>
-
           </div>
         </div>
       </div>
-
-
     </>
   );
 };
