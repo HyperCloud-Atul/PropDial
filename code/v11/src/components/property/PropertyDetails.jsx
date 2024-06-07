@@ -171,9 +171,34 @@ const PropertyDetails = () => {
   };
   // add from field of additonal info code end
 
+  // attachments in property layout
+  const [attachments, setAttachments] = useState([]); //initialize array
+  const handleAttachments = () => {
+    setAttachments([...attachments, ""]);
+  };
+
+  // Function to add an item
+  var addAttachment = (item) => {
+    console.log('item for addAttachment;', item)
+    setAttachments([...attachments, item]);
+  };
+
+  // Function to remove an item by value
+  var removeAttachment = (item) => {
+    console.log('item for removeAttachment;', item)
+    setAttachments(attachments.filter(i => i !== item));
+  };
+
+  const handleAttachmentInputChange = (index, name, value, isChecked) => {
+    console.log('isChecked:', isChecked)
+    // console.log('index:', index)
+    // console.log('value:', value)
+    isChecked === true ? addAttachment(name) : removeAttachment(name)
+  };
+
   const handlePropertyLayout = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-
+    console.log("attachments:", attachments)
     const roomData = {
       propertyId: propertyid,
       roomType: propertyLayout.RoomType,
@@ -182,6 +207,7 @@ const PropertyDetails = () => {
       roomWidth: propertyLayout.RoomWidth.trim(),
       roomTotalArea: propertyLayout.RoomLength * propertyLayout.RoomWidth,
       roomFixtures: additionalInfos,
+      roomAttachments: attachments,
       roomImgUrl: "",
     };
     console.log('Room Data:', roomData)
@@ -1543,40 +1569,25 @@ const PropertyDetails = () => {
                             </h2>
                             <div className="form_field theme_checkbox">
                               <div className="theme_checkbox_container">
-                                <div className="checkbox_single">
-                                  <input
-                                    type="checkbox"
-                                    id="bathroom1"
-                                    name="attach_with"
-                                  />
-                                  <label htmlFor="bathroom1">bathroom 1</label>
-                                </div>
-                                <div className="checkbox_single">
-                                  <input
-                                    type="checkbox"
-                                    id="balcony1"
-                                    name="attach_with"
-
-                                  />
-                                  <label htmlFor="balcony1">balcony 1</label>
-                                </div>
-                                <div className="checkbox_single">
-                                  <input
-                                    type="checkbox"
-                                    id="bathroom2"
-                                    name="attach_with"
-                                  />
-                                  <label htmlFor="bathroom2">bathroom 2</label>
-                                </div>
-                                <div className="checkbox_single">
-                                  <input
-                                    type="checkbox"
-                                    id="balcony2"
-                                    name="attach_with"
-
-                                  />
-                                  <label htmlFor="balcony2">balcony 2</label>
-                                </div>
+                                {/* need to map all roomName of propertylayouts collection here */}
+                                {propertyLayouts.map((layout, index) => (
+                                  <div className="checkbox_single">
+                                    <input
+                                      type="checkbox"
+                                      id={layout.roomName}
+                                      name={layout.roomName}
+                                      onChange={(e) =>
+                                        handleAttachmentInputChange(
+                                          index,
+                                          layout.roomName,
+                                          e.target.value,
+                                          e.target.checked
+                                        )
+                                      }
+                                    />
+                                    <label htmlFor={layout.roomName}>{layout.roomName}</label>
+                                  </div>
+                                ))}
                               </div>
                             </div>
                           </div>
@@ -1700,6 +1711,18 @@ const PropertyDetails = () => {
 
                                     {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
                                       <span className="in_single">{fixture}</span>
+                                    ))}
+
+                                    {room.roomAttachments && (
+                                      <div>
+                                        Attached with:
+                                      </div>
+                                    )
+                                    }
+
+                                    {room.roomAttachments && room.roomAttachments.map((attachment, findex) => (
+                                      <span className="in_single">{attachment}</span>
+
                                     ))}
                                   </div>
                                 </div>
