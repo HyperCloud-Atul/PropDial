@@ -138,8 +138,8 @@ const PropertyDetails = () => {
     RoomLength: "",
     RoomWidth: "",
     RoomTotalArea: "",
-    RoomFixtures: [],
-    RoomAttachments: [],
+    // RoomFixtures: [],
+    // RoomAttachments: [],
     RoomImgUrl: "",
   });
 
@@ -173,20 +173,20 @@ const PropertyDetails = () => {
   // add from field of additonal info code end
 
   // attachments in property layout
-  // const [attachments, setAttachments] = useState([]); //initialize array
+  const [attachments, setAttachments] = useState([]); //initialize array
 
   // Function to add an item
   var addAttachment = (item) => {
     console.log('item for addAttachment;', item)
-    // setAttachments([...attachments, item]);
-    setPropertyLayout([...propertyLayout, item]);
+    setAttachments([...attachments, item]);
+    // setPropertyLayout([...propertyLayout.RoomAttachments, item]);
   };
 
   // Function to remove an item by value
   var removeAttachment = (item) => {
     console.log('item for removeAttachment;', item)
-    // setAttachments(attachments.filter(i => i !== item));
-    setPropertyLayout(propertyLayout.filter(i => i !== item));
+    setAttachments(attachments.filter(i => i !== item));
+    // setPropertyLayout(propertyLayout.RoomAttachments && propertyLayout.RoomAttachments.filter(i => i !== item));
   };
 
   const handleAttachmentInputChange = (index, name, value, isChecked) => {
@@ -202,12 +202,12 @@ const PropertyDetails = () => {
     const roomData = {
       propertyId: propertyid,
       roomType: propertyLayout.RoomType,
-      roomName: propertyLayout.RoomName.trim(),
-      roomLength: propertyLayout.RoomLength.trim(),
-      roomWidth: propertyLayout.RoomWidth.trim(),
+      roomName: propertyLayout.RoomName,
+      roomLength: propertyLayout.RoomLength,
+      roomWidth: propertyLayout.RoomWidth,
       roomTotalArea: propertyLayout.RoomLength * propertyLayout.RoomWidth,
       roomFixtures: additionalInfos,
-      roomAttachments: propertyLayout.RoomAttachments,
+      roomAttachments: attachments,
       roomImgUrl: "",
     };
     console.log('Room Data:', roomData)
