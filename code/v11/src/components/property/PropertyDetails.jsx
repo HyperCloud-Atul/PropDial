@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Gallery from "react-image-gallery";
 import { projectStorage } from "../../firebase/config";
@@ -33,7 +33,7 @@ const PropertyDetails = () => {
   // get user from useauthcontext
   const { propertyid } = useParams();
   const { user } = useAuthContext();
-
+  const navigate = useNavigate();
   const { document: propertyDocument, error: propertyDocError } = useDocument(
     "properties",
     propertyid
@@ -139,6 +139,7 @@ const PropertyDetails = () => {
     RoomWidth: "",
     RoomTotalArea: "",
     RoomFixtures: [],
+    RoomAttachments: [],
     RoomImgUrl: "",
   });
 
@@ -172,21 +173,20 @@ const PropertyDetails = () => {
   // add from field of additonal info code end
 
   // attachments in property layout
-  const [attachments, setAttachments] = useState([]); //initialize array
-  const handleAttachments = () => {
-    setAttachments([...attachments, ""]);
-  };
+  // const [attachments, setAttachments] = useState([]); //initialize array
 
   // Function to add an item
   var addAttachment = (item) => {
     console.log('item for addAttachment;', item)
-    setAttachments([...attachments, item]);
+    // setAttachments([...attachments, item]);
+    setPropertyLayout([...propertyLayout, item]);
   };
 
   // Function to remove an item by value
   var removeAttachment = (item) => {
     console.log('item for removeAttachment;', item)
-    setAttachments(attachments.filter(i => i !== item));
+    // setAttachments(attachments.filter(i => i !== item));
+    setPropertyLayout(propertyLayout.filter(i => i !== item));
   };
 
   const handleAttachmentInputChange = (index, name, value, isChecked) => {
@@ -198,7 +198,7 @@ const PropertyDetails = () => {
 
   const handlePropertyLayout = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-    console.log("attachments:", attachments)
+    // console.log("attachments:", attachments)
     const roomData = {
       propertyId: propertyid,
       roomType: propertyLayout.RoomType,
@@ -207,13 +207,21 @@ const PropertyDetails = () => {
       roomWidth: propertyLayout.RoomWidth.trim(),
       roomTotalArea: propertyLayout.RoomLength * propertyLayout.RoomWidth,
       roomFixtures: additionalInfos,
-      roomAttachments: attachments,
+      roomAttachments: propertyLayout.RoomAttachments,
       roomImgUrl: "",
     };
     console.log('Room Data:', roomData)
-    await propertyLayoutAddDocument(roomData);
+    try {
+      await propertyLayoutAddDocument(roomData);
+    }
+    catch (ex) {
+      console.log("response error:", ex.message);
+      navigate("/login")
+    }
+
     if (propertyLayoutAddDocumentError) {
-      console.log("response error");
+      console.log("response error:");
+      navigate("/login")
     }
   }
 
@@ -700,6 +708,42 @@ const PropertyDetails = () => {
     setIsEditingOwnerInstruction(false);
   };
   // END CODE FOR EDIT TEXT USING TEXT EDITOR
+
+  const { updateDocument: updatePropertyLayoutDocument, deleteDocument: deletePropertyLayoutDocument, error: propertyLayoutDocumentError } = useFirestore("propertylayouts");
+
+  const editPropertyLayout = async (layoutid) => {
+    // console.log('layout id: ', layoutid)
+    try {
+
+      const updatedPropertyLayout = {
+        propertyId: propertyid,
+        roomType: propertyLayout.RoomType,
+        roomName: propertyLayout.RoomName.trim(),
+        roomLength: propertyLayout.RoomLength.trim(),
+        roomWidth: propertyLayout.RoomWidth.trim(),
+        roomTotalArea: propertyLayout.RoomLength * propertyLayout.RoomWidth,
+        roomFixtures: additionalInfos,
+        roomAttachments: propertyLayout.RoomAttachments,
+        roomImgUrl: "",
+        updatedAt: timestamp.fromDate(new Date()),
+      };
+
+      // await updatePropertyLayoutDocument(layoutid, updatedPropertyLayout);
+      console.log('property layout document updated successfully')
+    } catch (error) {
+      console.error("Error updating property layout document:", error);
+    }
+  };
+
+  const deletePropertyLayout = async (layoutid) => {
+    // console.log('layout id: ', layoutid)
+    try {
+      await deletePropertyLayoutDocument(layoutid);
+      console.log('property layout document deleted successfully')
+    } catch (error) {
+      console.error("Error deleting property layout document:", error);
+    }
+  };
 
   return (
     <>
@@ -1613,7 +1657,7 @@ const PropertyDetails = () => {
                 )}
                 <section className="property_card_single full_width_sec with_blue">
                   <span className="verticall_title">
-                    Layout :  5
+                    Layout :  {propertyLayout && propertyLayout.length}
                   </span>
                   <div className="more_detail_card_inner">
                     <div className="row">
@@ -1726,6 +1770,8 @@ const PropertyDetails = () => {
                                     ))}
                                   </div>
                                 </div>
+                                <button onClick={() => editPropertyLayout(room.id)}>Edit</button>
+                                <button onClick={() => deletePropertyLayout(room.id)}>Delete</button>
                               </div>
                             ))}
                           </OwlCarousel>
