@@ -18,6 +18,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
 import { format } from "date-fns";
 import RichTextEditor from "react-rte";
+import PropertyLayoutComponent from "./PropertyLayoutComponent";
 
 import "./UserList.css";
 
@@ -61,6 +62,10 @@ const PropertyDetails = () => {
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } = useFirestore("tenants");
   const { addDocument: propertyLayoutAddDocument, error: propertyLayoutAddDocumentError } = useFirestore("propertylayouts");
+  const { updateDocument: updatePropertyLayoutDocument, deleteDocument: deletePropertyLayoutDocument, error: propertyLayoutDocumentError } = useFirestore("propertylayouts");
+
+
+
 
   // upload tenant code start
   const [tenantName, setTenantName] = useState("");
@@ -131,24 +136,32 @@ const PropertyDetails = () => {
   };
 
 
-  //Property Layout
-  const [propertyLayout, setPropertyLayout] = useState({
-    RoomType: "",
-    RoomName: "",
-    RoomLength: "",
-    RoomWidth: "",
-    RoomTotalArea: "",
-    // RoomFixtures: [],
-    // RoomAttachments: [],
-    RoomImgUrl: "",
-  });
-
-  // show add additional info form code start
-  const [showAIForm, setShowAIForm] = useState(false);
-  const handleShowAIForm = () => {
-    setShowAIForm(!showAIForm);
+  //Property Layout  
+  const [layoutid, setLayoutId] = useState(null);
+  const [showPropertyLayoutComponent, setShowPropertyLayoutComponent] = useState(false);
+  const handleShowPropertyLayoutComponent = () => {
+    setLayoutId(null)
+    setShowPropertyLayoutComponent(true);
   };
-  // show add additional info form code end
+
+  const editPropertyLayout = async (layoutid) => {
+    // console.log('layout id: ', layoutid)
+    setShowPropertyLayoutComponent(true);
+    setLayoutId(layoutid)
+  };
+
+  const deletePropertyLayout = async (layoutid) => {
+    // console.log('layout id: ', layoutid)
+    try {
+      await deletePropertyLayoutDocument(layoutid);
+      console.log('property layout document deleted successfully')
+    } catch (error) {
+      console.error("Error deleting property layout document:", error);
+    }
+  };
+
+
+
 
   // add from field of additonal info code start
   const [additionalInfos, setAdditionalInfos] = useState([""]); // Initialize with one field
@@ -195,35 +208,6 @@ const PropertyDetails = () => {
     // console.log('value:', value)
     isChecked === true ? addAttachment(name) : removeAttachment(name)
   };
-
-  const handlePropertyLayout = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-    // console.log("attachments:", attachments)
-    const roomData = {
-      propertyId: propertyid,
-      roomType: propertyLayout.RoomType,
-      roomName: propertyLayout.RoomName,
-      roomLength: propertyLayout.RoomLength,
-      roomWidth: propertyLayout.RoomWidth,
-      roomTotalArea: propertyLayout.RoomLength * propertyLayout.RoomWidth,
-      roomFixtures: additionalInfos,
-      roomAttachments: attachments,
-      roomImgUrl: "",
-    };
-    console.log('Room Data:', roomData)
-    try {
-      await propertyLayoutAddDocument(roomData);
-    }
-    catch (ex) {
-      console.log("response error:", ex.message);
-      navigate("/login")
-    }
-
-    if (propertyLayoutAddDocumentError) {
-      console.log("response error:");
-      navigate("/login")
-    }
-  }
 
 
   //Tenant Information
@@ -709,41 +693,8 @@ const PropertyDetails = () => {
   };
   // END CODE FOR EDIT TEXT USING TEXT EDITOR
 
-  const { updateDocument: updatePropertyLayoutDocument, deleteDocument: deletePropertyLayoutDocument, error: propertyLayoutDocumentError } = useFirestore("propertylayouts");
 
-  const editPropertyLayout = async (layoutid) => {
-    // console.log('layout id: ', layoutid)
-    try {
 
-      const updatedPropertyLayout = {
-        propertyId: propertyid,
-        roomType: propertyLayout.RoomType,
-        roomName: propertyLayout.RoomName.trim(),
-        roomLength: propertyLayout.RoomLength.trim(),
-        roomWidth: propertyLayout.RoomWidth.trim(),
-        roomTotalArea: propertyLayout.RoomLength * propertyLayout.RoomWidth,
-        roomFixtures: additionalInfos,
-        roomAttachments: propertyLayout.RoomAttachments,
-        roomImgUrl: "",
-        updatedAt: timestamp.fromDate(new Date()),
-      };
-
-      // await updatePropertyLayoutDocument(layoutid, updatedPropertyLayout);
-      console.log('property layout document updated successfully')
-    } catch (error) {
-      console.error("Error updating property layout document:", error);
-    }
-  };
-
-  const deletePropertyLayout = async (layoutid) => {
-    // console.log('layout id: ', layoutid)
-    try {
-      await deletePropertyLayoutDocument(layoutid);
-      console.log('property layout document deleted successfully')
-    } catch (error) {
-      console.error("Error deleting property layout document:", error);
-    }
-  };
 
   return (
     <>
@@ -1398,11 +1349,11 @@ const PropertyDetails = () => {
 
                   )}
                 {/* property layout section start */}
-                {showAIForm && (
+                {/* {!showAIForm && (
                   <section className="property_card_single add_aditional_form">
                     <div className="more_detail_card_inner relative">
                       <h2 className="card_title">
-                        Property Layout
+                        Property Layout Old
                       </h2>
                       <div className="aai_form">
                         <div
@@ -1519,19 +1470,7 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                           </div>
-                          {/* <div className="col-md-1">
-                            <div className="form_field_upload">
-                              <label htmlFor="upload">
-                                <div className="text-center">
-                                  <span class="material-symbols-outlined">
-                                    upload
-                                  </span>
-                                  <p>Upload image</p>
-                                </div>
-                              </label>
-                              <input type="file" id="upload" />
-                            </div>
-                          </div> */}
+                          
                           <div className="col-md-12">
                             <div className="add_info_text">
                               <div className="form_field">
@@ -1567,11 +1506,7 @@ const PropertyDetails = () => {
                                   value={propertyLayout && propertyLayout.RoomWidth}
                                 />
                               </div>
-                              {/* <div className="form_field">
-                                    <input type="text" placeholder="Total area"
-                                      value={propertyLayout.RoomLength * propertyLayout.RoomWidth}
-                                    />
-                                  </div> */}
+                              
                               {additionalInfos.map((info, index) => (
                                 <div className="form_field">
                                   <div className="relative" key={index}>
@@ -1612,8 +1547,7 @@ const PropertyDetails = () => {
                               Attached with
                             </h2>
                             <div className="form_field theme_checkbox">
-                              <div className="theme_checkbox_container">
-                                {/* need to map all roomName of propertylayouts collection here */}
+                              <div className="theme_checkbox_container">                                
                                 {propertyLayouts.map((layout, index) => (
                                   <div className="checkbox_single">
                                     <input
@@ -1654,23 +1588,28 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   </section>
-                )}
+                )} */}
+                {/* Show Property Layout Component */}
+                {showPropertyLayoutComponent && <PropertyLayoutComponent propertylayouts={propertyLayouts} propertyid={propertyid} layoutid={layoutid} setShowPropertyLayoutComponent={setShowPropertyLayoutComponent}></PropertyLayoutComponent>}
+
                 <section className="property_card_single full_width_sec with_blue">
                   <span className="verticall_title">
-                    Layout :  {propertyLayout && propertyLayout.length}
+                    Layout :  {propertyLayouts && propertyLayouts.length}
                   </span>
                   <div className="more_detail_card_inner">
                     <div className="row">
                       <div className="col-1">
-                        {!showAIForm && (
-                          <div className="plus_icon">
-                            <Link className="plus_icon_inner" onClick={handleShowAIForm}>
-                              <span class="material-symbols-outlined">
-                                add
-                              </span>
-                            </Link>
-                          </div>
-                        )}
+                        {/* {!showAIForm && ( */}
+                        <div className="plus_icon">
+                          <Link className="plus_icon_inner"
+                            onClick={handleShowPropertyLayoutComponent}
+                          >
+                            <span class="material-symbols-outlined">
+                              add
+                            </span>
+                          </Link>
+                        </div>
+                        {/* )} */}
 
                       </div>
                       <div className="col-11">
