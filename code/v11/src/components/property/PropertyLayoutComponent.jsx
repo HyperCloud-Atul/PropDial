@@ -142,10 +142,12 @@ export default function PropertyLayoutComponent(props) {
             if (props.layoutid === null || props.layoutid === "1234") {
                 // console.log('add layout')
                 await addPropertyLayoutDocument(roomData);
+                props.setShowPropertyLayoutComponent(false);
             }
             else {
                 // console.log('update layout: ', props.layoutid)
                 await updatePropertyLayoutDocument(props.layoutid, roomData)
+                props.setShowPropertyLayoutComponent(false);
             }
         }
         catch (ex) {
