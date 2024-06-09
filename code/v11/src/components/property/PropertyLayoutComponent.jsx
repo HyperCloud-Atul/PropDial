@@ -8,7 +8,7 @@ import { useCollection } from '../../hooks/useCollection';
 export default function PropertyLayoutComponent(props) {
     const navigate = useNavigate();
 
-    console.log('Property layouts: ', props.propertylayouts)
+    // console.log('Property layouts: ', props.propertylayouts)
     // console.log('Property ID: ', props.propertyid)
     // console.log('Layout ID: ', props.layoutid)
 
@@ -104,20 +104,20 @@ export default function PropertyLayoutComponent(props) {
 
     // Function to add an item
     var addAttachment = (item) => {
-        console.log('item for addAttachment;', item)
+        // console.log('item for addAttachment;', item)
         setAttachments([...attachments, item]);
         // setPropertyLayout([...propertyLayout.RoomAttachments, item]);
     };
 
     // Function to remove an item by value
     var removeAttachment = (item) => {
-        console.log('item for removeAttachment;', item)
+        // console.log('item for removeAttachment;', item)
         setAttachments(attachments.filter(i => i !== item));
         // setPropertyLayout(propertyLayout.RoomAttachments && propertyLayout.RoomAttachments.filter(i => i !== item));
     };
 
     const handleAttachmentInputChange = (index, name, value, isChecked) => {
-        console.log('isChecked:', isChecked)
+        // console.log('isChecked:', isChecked)
         // console.log('index:', index)
         // console.log('value:', value)
         isChecked === true ? addAttachment(name) : removeAttachment(name)
