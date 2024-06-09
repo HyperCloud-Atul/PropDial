@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useFirestore } from "../../hooks/useFirestore";
+
 
 const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
   const location = useLocation();
@@ -28,6 +30,53 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
     setFavorites(updatedFavorites);
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
+
+
+  // add enquiry with add document start
+  const { addDocument, updateDocument, deleteDocument, error } =
+    useFirestore("enquiry");
+
+  const [iAm, setIam] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [description, setDescription] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleChangeName = (event) => setName(event.target.value);
+  const handleChangeIam = (event) => setIam(event.target.value);
+  const handleChangePhone = (event) => setPhone(event.target.value);
+  const handleChangeDescription = (event) => setDescription(event.target.value);
+
+  const submitEnquiry = async (event) => {
+    event.preventDefault();
+
+    if (!iAm || !name || !phone || !description) {
+      alert("All fields are required!");
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const docRef = await addDocument({
+        iAm,
+        name,
+        phone,
+        description
+      });
+      setIam("");
+      setName("");
+      setPhone("");
+      setDescription("");
+      setIsUploading(false);
+    } catch (error) {
+      console.error("Error adding document:", error);
+      setIsUploading(false);
+    }
+  };
+// add enquiry with add document end
+
+
+
 
   return (
     <>
@@ -75,17 +124,17 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                     </div>
                   </div>
                 </div>
-             
+
               </Link>
               <div className="fav_and_share">
-                  <span
-                    className={`material-symbols-outlined mr-2 fav ${favorites.includes(property.id) ? 'favorited' : ''}`}
-                    onClick={() => handleFavoriteClick(property.id)}
-                  >
-                    favorite
-                  </span>
-                  {/* <span className="material-symbols-outlined">share</span> */}
-                </div>
+                <span
+                  className={`material-symbols-outlined mr-2 fav ${favorites.includes(property.id) ? 'favorited' : ''}`}
+                  onClick={() => handleFavoriteClick(property.id)}
+                >
+                  favorite
+                </span>
+                {/* <span className="material-symbols-outlined">share</span> */}
+              </div>
             </div>
             <div className="pcs_other_info">
               <div className="poi_inner">
@@ -115,7 +164,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
               close
             </span>
             <div className="modal-body">
-              <form>
+              <form onSubmit={submitEnquiry}>
                 <div className="row">
                   <div className="col-sm-12">
                     <div className="section_title mb-4">
@@ -126,10 +175,10 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                   <div className="col-sm-12">
                     <div className="form_field st-2">
                       <div className="field_inner select">
-                        <select>
-                          <option value="" disabled selected>I am</option>
-                          <option>Tenant</option>
-                          <option>Agent</option>
+                        <select value={iAm} onChange={handleChangeIam}>
+                          <option value="" disabled>I am</option>
+                          <option value="Tenant">Tenant</option>
+                          <option value="Agent">Agent</option>
                         </select>
                         <div className="field_icon">
                           <span className="material-symbols-outlined">person</span>
@@ -140,7 +189,10 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                   <div className="col-sm-12">
                     <div className="form_field st-2">
                       <div className="field_inner">
-                        <input type="text" placeholder="Name" />
+                        <input type="text"
+                          value={name}
+                          onChange={handleChangeName}
+                          placeholder="Name" />
                         <div className="field_icon">
                           <span className="material-symbols-outlined">person</span>
                         </div>
@@ -150,7 +202,10 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                   <div className="col-sm-12">
                     <div className="form_field st-2">
                       <div className="field_inner">
-                        <input type="text" placeholder="Phone Number" />
+                        <input type="number"
+                          value={phone}
+                          onChange={handleChangePhone}
+                          placeholder="Phone" />
                         <div className="field_icon">
                           <span className="material-symbols-outlined">call</span>
                         </div>
@@ -158,9 +213,22 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                     </div>
                   </div>
                   <div className="col-sm-12">
+                    <div className="form_field st-2">
+                      <div className="field_inner">
+                        <textarea
+                          value={description}
+                          onChange={handleChangeDescription}
+                          placeholder="Description" />
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">description</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-sm-12">
                     <div className="submit_btn mt-4">
-                      <button type="submit" className="modal_btn theme_btn no_icon btn_fill">
-                        Submit
+                      <button type="submit" className="modal_btn theme_btn no_icon btn_fill" disabled={isUploading}>
+                        {isUploading ? 'Submitting...' : 'Submit'}
                       </button>
                     </div>
                   </div>

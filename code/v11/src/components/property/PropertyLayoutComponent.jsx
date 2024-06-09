@@ -1,9 +1,7 @@
-import React from 'react'
-import { useState, useEffect } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { useDocument } from '../../hooks/useDocument';
 import { useFirestore } from '../../hooks/useFirestore';
-import { useCollection } from '../../hooks/useCollection';
 
 export default function PropertyLayoutComponent(props) {
     const navigate = useNavigate();
@@ -35,6 +33,10 @@ export default function PropertyLayoutComponent(props) {
         RoomImgUrl: "",
     });
 
+    // attachments in property layout
+    const [attachments, setAttachments] = useState([]); //initialize array
+
+
     useEffect(() => {
         // console.log("propertyLayoutDoc: ", propertyLayoutDoc)
         if (propertyLayoutDoc) {
@@ -47,9 +49,9 @@ export default function PropertyLayoutComponent(props) {
                 RoomFixtures: propertyLayoutDoc.roomFixtures,
                 RoomAttachments: propertyLayoutDoc.roomAttachments,
                 RoomImgUrl: propertyLayoutDoc.roomImgUrl,
-            }
-
-            )
+            });
+            setAttachments(propertyLayoutDoc.roomAttachments || []);
+             // Initialize attachments
 
             // console.log('propertyLayout:', propertyLayout)
         }
@@ -99,8 +101,7 @@ export default function PropertyLayoutComponent(props) {
     };
     // add from field of additonal info code end
 
-    // attachments in property layout
-    const [attachments, setAttachments] = useState([]); //initialize array
+
 
     // Function to add an item
     var addAttachment = (item) => {
@@ -193,6 +194,7 @@ export default function PropertyLayoutComponent(props) {
                                                         RoomType: "Bedroom",
                                                     })
                                                 }}
+                                                checked={propertyLayout.RoomType === "Bedroom"}
                                             />
                                             <label htmlFor="bedroom">Bedroom</label>
                                         </div>
@@ -208,18 +210,19 @@ export default function PropertyLayoutComponent(props) {
                                                         RoomType: "Bathroom",
                                                     })
                                                 }}
+                                                checked={propertyLayout.RoomType === "Bathroom"}
                                             />
                                             <label htmlFor="bathroom">
                                                 Bathroom
                                             </label>
                                         </div>
                                         <div
-                                            // className="radio_single"
-                                            className={
-                                                propertyLayout.RoomType === "Kitchen"
-                                                    ? "radio_single radiochecked"
-                                                    : "radio_single"
-                                            }
+                                            className="radio_single"
+                                            // className={
+                                            //     propertyLayout.RoomType === "Kitchen"
+                                            //         ? "radio_single radiochecked"
+                                            //         : "radio_single"
+                                            // }
                                         >
                                             <input
                                                 type="radio"
@@ -231,6 +234,8 @@ export default function PropertyLayoutComponent(props) {
                                                         RoomType: "Kitchen",
                                                     })
                                                 }}
+                                                checked={propertyLayout.RoomType === "Kitchen"}
+                                                
                                             />
                                             <label htmlFor="kitchen">Kitchen</label>
                                         </div>
@@ -245,6 +250,7 @@ export default function PropertyLayoutComponent(props) {
                                                         RoomType: "Living Room",
                                                     })
                                                 }}
+                                                checked={propertyLayout.RoomType === "Living Room"}
                                             />
                                             <label htmlFor="living">Living Room</label>
                                         </div>
@@ -259,6 +265,7 @@ export default function PropertyLayoutComponent(props) {
                                                         RoomType: "Dining Room",
                                                     })
                                                 }}
+                                                checked={propertyLayout.RoomType === "Dining Room"}
                                             />
                                             <label htmlFor="dining">Dining Room</label>
                                         </div>
@@ -273,6 +280,7 @@ export default function PropertyLayoutComponent(props) {
                                                         RoomType: "Balcony",
                                                     })
                                                 }}
+                                                checked={propertyLayout.RoomType === "Balcony"}
                                             />
                                             <label htmlFor="balcony">Balcony</label>
                                         </div>
@@ -287,6 +295,7 @@ export default function PropertyLayoutComponent(props) {
                                                         RoomType: "Basement",
                                                     })
                                                 }}
+                                                checked={propertyLayout.RoomType === "Basement"}
                                             />
                                             <label htmlFor="basement">Basement</label>
                                         </div>
@@ -321,7 +330,7 @@ export default function PropertyLayoutComponent(props) {
                                     />
                                 </div>
                                 <div className="form_field">
-                                    <input type="text" placeholder="Room Length"
+                                    <input type="text" placeholder="Length in feet"
                                         onChange={(e) =>
                                             setPropertyLayout({
                                                 ...propertyLayout,
@@ -332,7 +341,7 @@ export default function PropertyLayoutComponent(props) {
                                     />
                                 </div>
                                 <div className="form_field">
-                                    <input type="text" placeholder="Room Width"
+                                    <input type="text" placeholder="Width in feet"
                                         onChange={(e) =>
                                             setPropertyLayout({
                                                 ...propertyLayout,
@@ -388,9 +397,9 @@ export default function PropertyLayoutComponent(props) {
                             </h2>
                             <div className="form_field theme_checkbox">
                                 <div className="theme_checkbox_container">
-                                    {/* need to map all roomName of propertylayouts collection here */}
+                                    {/* need to map all roomName of propertylayouts collection here */}                                  
                                     {props.propertylayouts.map((layout, index) => (
-                                        <div className="checkbox_single">
+                                        <div className="checkbox_single" key={layout.roomName}>
                                             <input
                                                 type="checkbox"
                                                 id={layout.roomName}
@@ -403,6 +412,7 @@ export default function PropertyLayoutComponent(props) {
                                                         e.target.checked
                                                     )
                                                 }
+                                                checked={attachments.includes(layout.roomName)}
                                             />
                                             <label htmlFor={layout.roomName}>{layout.roomName}</label>
                                         </div>
