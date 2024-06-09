@@ -8,7 +8,7 @@ import { useCollection } from '../../hooks/useCollection';
 export default function PropertyLayoutComponent(props) {
     const navigate = useNavigate();
 
-    // console.log('Property layouts: ', props.propertylayouts)
+    console.log('Property layouts: ', props.propertylayouts)
     // console.log('Property ID: ', props.propertyid)
     // console.log('Layout ID: ', props.layoutid)
 
@@ -387,7 +387,7 @@ export default function PropertyLayoutComponent(props) {
                             <div className="form_field theme_checkbox">
                                 <div className="theme_checkbox_container">
                                     {/* need to map all roomName of propertylayouts collection here */}
-                                    {props.propertyLayouts && props.propertyLayouts.map((layout, index) => (
+                                    {props.propertylayouts.map((layout, index) => (
                                         <div className="checkbox_single">
                                             <input
                                                 type="checkbox"
