@@ -81,8 +81,8 @@ import CreateTicket from "./chatboard/CreateTicket";
 import TicketDetail from "./chatboard/TicketDetail";
 import PGSingleProperty from "./pages/property/PGSingleProperty";
 import PropertyDetails from "./components/property/PropertyDetails";
-import PGDaashboard from "./pdpages/dashboard/PGDashboard";
-import AdminUser from "./pdpages/roles/admin/AdminUser";
+import PGDashboard from "./pdpages/dashboard/PGDashboard";
+import UserList from "./pdpages/roles/admin/UserList";
 import PropdialAllProperties from "./components/property/PropdialAllProperties";
 import Stage4 from "./pdpages/property/Stage4";
 import Payment from "./pdpages/payment/Payment";
@@ -293,7 +293,13 @@ function App() {
                     path="/addnotification/:notificationid"
                     element={<AddNotification />}
                   ></Route>
-                  <Route path="/adminuser" element={<AdminUser />}></Route>
+                  <Route path="/userlist" element={
+                    user && user.role ? (
+                      <UserList />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }    ></Route>
                   <Route path="/ratecard" element={<PGRateCard />}></Route>
                   <Route
                     path="/transactions/:propertyid"
@@ -303,7 +309,7 @@ function App() {
                   {/* owner & co-owner */}
                   <Route
                     path="/dashboard"
-                    element={user ? <PGDaashboard /> : <PhoneLogin />}
+                    element={user ? <PGDashboard /> : <PhoneLogin />}
                   ></Route>
                   {/* *********************************** */}
                   {/* <Route

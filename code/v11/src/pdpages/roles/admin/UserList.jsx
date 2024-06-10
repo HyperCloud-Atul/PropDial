@@ -6,14 +6,14 @@ import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useLogout } from "../../../hooks/useLogout";
 
 // css import 
-import './AdminUser.css'
+import './UserList.css'
 
 // import filter 
 import Filters from "../../../components/Filters";
 import UserSinglecard from './UserSinglecard';
 const userFilter = ["All", "Admin", "Owner", "Frontdesk", "Inactive"];
 
-const AdminUser = () => {
+const UserList = () => {
   const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
   const { documents, error } = useCollection("users");
@@ -87,4 +87,4 @@ const AdminUser = () => {
   )
 }
 
-export default AdminUser
+export default UserList
