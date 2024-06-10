@@ -324,7 +324,7 @@ const PropertyCard = ({ propertydoc }) => {
             </div>} */}
             {/* Details: {property && (property.createdBy.fullName) && (property.createdBy.phoneNumber)} */}
 
-
+            {/* Property Manager, default is admin */}
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
               <div className="property_owner_detail">
                 <div className="img_container">
@@ -334,13 +334,13 @@ const PropertyCard = ({ propertydoc }) => {
                   <div>
                     {userDoc && (
                       <h5
-                      onClick={user && user.role === "admin" ? openChangeManager : undefined}
-                      className={user && user.role === "admin" ? "pointer" : ""}
+                        onClick={user && user.role === "admin" ? openChangeManager : undefined}
+                        className={user && user.role === "admin" ? "pointer" : ""}
                       >
                         {userDoc.fullName}
                         {user && user.role === "admin" && (
                           <span
-                            className="material-symbols-outlined click_icon text_near_icon"                            
+                            className="material-symbols-outlined click_icon text_near_icon"
                           >
                             edit
                           </span>

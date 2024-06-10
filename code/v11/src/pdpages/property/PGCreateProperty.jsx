@@ -199,8 +199,10 @@ const CreateProperty = () => {
     const [onboardingDate, setOnboardingDate] = useState(new Date());
     const [newProperty, setNewProperty] = useState(null);
 
-    const { addDocument, response: addDocumentResponse } =
+    const { addDocument: addNewPropertyDocument, response: addNewPropertyDocumentResponse } =
         useFirestore("properties");
+    const { addDocument: addPropertyUsersDocument, response: addPropertyUsersDocumentResponse } =
+        useFirestore("propertyusers");
 
     // Scroll to the top of the page whenever the location changes start
     const location = useLocation();
@@ -568,7 +570,7 @@ const CreateProperty = () => {
                 pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
             };
 
-            const newProperty = {
+            const _newProperty = {
                 ...property,
                 //other property fields
                 source: "",
@@ -616,13 +618,13 @@ const CreateProperty = () => {
                 vegNonVeg: "",
                 propertyDescription: "this is property description",
                 ownerInstructions: "this is owner instruction",
-                propertyManager: user.uid,
-                propertyCoManager: user.uid,
-                propertySalesManager: user.uid,
-                propertyOwner: user.uid,
-                propertyCoOwner: user.uid,
-                propertyPOC: user.uid,
-                tenantList: [],
+                // propertyManager: user.uid,
+                // propertyCoManager: user.uid,
+                // propertySalesManager: user.uid,
+                // propertyOwner: user.uid,
+                // propertyCoOwner: user.uid,
+                // propertyPOC: user.uid,
+                // tenantList: [],
                 postedBy: "Propdial",
                 isActiveInactiveReview: "In-Review",
                 onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
@@ -632,8 +634,8 @@ const CreateProperty = () => {
                 console.log(newProperty)
                 setFormSuccess("Property Created Successfully");
                 setFormError(null)
-                await addDocument(newProperty);
-                if (addDocumentResponse.error) {
+                await addNewPropertyDocument(_newProperty);
+                if (addNewPropertyDocumentResponse.error) {
                     navigate("/");
                 } else {
                     // var x = document.getElementById("btn_create").name;
@@ -642,9 +644,7 @@ const CreateProperty = () => {
                     // setNewProperty(newProperty);
                 }
             }
-
         }
-
     };
 
     const handleBackSubmit = (e) => {
