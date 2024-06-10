@@ -69,14 +69,6 @@ const PropertyDetails = () => {
     ["propertyId", "==", propertyid]
   );
 
-  // const filteredPropertyusers = dbUsers && dbUsers.filter((user) =>
-  //   // console.log('user: ', user);
-  //   // console.log("propertyUsers && propertyUsers.userId: ", propertyUsers)
-  //   // propertyUsers.map((propUser, index) => (
-  //   //   propUser.userId === user.id
-  //   // ))
-  //   (user.id === 'T2BDlKWQq9bUTMAIj7RJmn4TBnY2')
-  // );
   // Create a map from the selectedUsers array for quick lookup
   const selectedUsersMap = propertyUsers && propertyUsers.reduce((map, user) => {
     map[user.userId] = user;
@@ -92,21 +84,8 @@ const PropertyDetails = () => {
       ...selectedUsersMap[user.id]
     }));
 
-  // const filteredPropertyusers = dbUsers && dbUsers.filter(user => propertyUsers && propertyUsers[userId]).map(user => ({
-  //   ...user,
-  //   ...propertyUsers[user.id]
-  // }))
 
-  // const filteredPropertyusers = dbUsers && dbUsers.map((user, index) =>
-  //   // console.log('user: ', user);
-  //   // console.log("propertyUsers && propertyUsers.userId: ", propertyUsers)
-  //   propertyUsers.filter((propUser) => (
-  //     propUser.userId === user.id
-  //   ))
-  //   // (user.id === propertyUsers && propertyUsers.userId)
-  // );
-
-  console.log('filteredProperty Users: ', filteredPropertyusers)
+  // console.log('filteredProperty Users: ', filteredPropertyusers)
 
   const { documents: propertyDocList, errors: propertyDocListError } = useCollection("docs", ["masterRefId", "==", propertyid]);
 
@@ -1901,39 +1880,6 @@ const PropertyDetails = () => {
                                           }
                                           alt=""
                                         />
-
-                                        {/* {propUser.userId}
-                                    
-                                        {/* {dbUsers && dbUsers.find(user => (user.id === propUser.userId))} */}
-                                        {/* {/* {dbUsers && dbUsers
-                                          .filter(propUser => (
-                                            <div>data</div>
-                                            // <div key={propUser.userId}>
-                                            //   <ul>
-                                            //     {Object.entries(propUser.userId).map(([key, value]) => (
-                                            //       <li key={key}>{`${key}: ${value}`}</li>
-                                            //     ))}
-                                            //   </ul>
-                                            // </div>
-                                          )) */}
-
-
-
-                                        {/* {dbUsers && dbUsers.filter((propUser.userId) => (
-                                          user.id === propUser.userId ?
-                                            <img
-                                              src={
-                                                user.photoURL
-                                              }
-                                              alt=""
-                                            /> : <img
-                                              src={
-                                                "/assets/img/dummy_user.png"
-                                              }
-                                              alt=""
-                                            />
-                                        ))} */}
-
                                       </div>
                                       <div
                                         className="tenant_detail"
