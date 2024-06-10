@@ -10,7 +10,7 @@ import { timestamp } from "../../firebase/config";
 const PropertyCard = ({ propertydoc }) => {
 
   const { user } = useAuthContext();
-  const { document: userDoc, error: userDocError } = useDocument('users', propertydoc.propertyManager)
+  const { document: userDoc, error: userDocError } = useDocument('users', propertydoc.createdBy)
   const [toggleFlag, setToggleFlag] = useState(false);
 
   // expand more expand less start

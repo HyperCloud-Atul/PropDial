@@ -47,6 +47,8 @@ const PropertyDetails = () => {
   const [propertyOnboardingDateFormatted, setPropertyOnboardingDateFormatted] =
     useState();
 
+  const { documents: userDocs, errors: userDocsError } = useCollection("users");
+
   // add data of tenant in firebase start
   const { documents: tenantDocument, errors: tenantDocError } = useCollection(
     "tenants",
@@ -58,13 +60,18 @@ const PropertyDetails = () => {
     ["propertyId", "==", propertyid]
   );
 
+  const { documents: propertyUsers, errors: propertyUsersError } = useCollection(
+    "propertyusers",
+    ["propertyId", "==", propertyid]
+  );
+
   const { documents: propertyDocList, errors: propertyDocListError } = useCollection("docs", ["masterRefId", "==", propertyid]);
 
+
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } = useFirestore("tenants");
+  const { addDocument: addProperyUsersDocument, error: addProperyUsersDocumentError } = useFirestore("propertyusers");
   const { addDocument: propertyLayoutAddDocument, error: propertyLayoutAddDocumentError } = useFirestore("propertylayouts");
   const { updateDocument: updatePropertyLayoutDocument, deleteDocument: deletePropertyLayoutDocument, error: propertyLayoutDocumentError } = useFirestore("propertylayouts");
-
-
 
 
   // upload tenant code start
@@ -210,8 +217,22 @@ const PropertyDetails = () => {
   };
 
 
-  //Tenant Information
+  //Add Property Users
+  const handleAddPropertyUser = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior 
+    const propertyUserData = {
+      propertyId: propertyid,
+      userId: "",
+      userTag: ""
+    };
 
+    await addProperyUsersDocument(propertyUserData);
+    if (addProperyUsersDocumentError) {
+      console.log("response error");
+    }
+  }
+
+  //Tenant Information
   const handleAddTenant = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior   
 
@@ -1827,7 +1848,7 @@ const PropertyDetails = () => {
                           <div className="row">
                             <div className="col-1">
                               <div className="plus_icon">
-                                <Link className="plus_icon_inner">
+                                <Link className="plus_icon_inner" onClick={handleAddPropertyUser}>
                                   <span class="material-symbols-outlined">
                                     add
                                   </span>
@@ -1843,88 +1864,90 @@ const PropertyDetails = () => {
                                   gap: "15px",
                                 }}
                               >
-                                <div
-                                  className="tc_single relative item relative"
-                                >
-                                  <div className="property_people_designation">
-                                    Owner
-                                  </div>
-                                  <div className="tcs_img_container" >
-                                    {propertyManagerDoc && (
-                                      <img
-                                        src={
-                                          propertyManagerDoc &&
-                                          propertyManagerDoc.photoURL
-                                        }
-                                        alt=""
-                                      />
-                                    )}
-                                  </div>
-                                  <div
-                                    className="tenant_detail"
-                                  >
-                                    <div className="edit_inputs">
+                                {propertyUsers &&
+                                  propertyUsers.map((propUser, index) => (
+                                    <div className="tc_single relative item relative" >
+                                      <div className="property_people_designation">
+                                        {propUser.userTag}
+                                      </div>
+                                      <div className="tcs_img_container" >
 
-                                      <h5
-                                        onClick={
-                                          user && user.role === "admin"
-                                            ? () =>
-                                              openChangeUser("propertyManager")
-                                            : ""
-                                        }
-                                        className={`t_name ${user && user.role === "admin"
-                                          ? "pointer"
-                                          : ""
-                                          }`}
+                                        <img
+                                          src={
+                                            "/assets/img/dummy_user.png"
+                                          }
+                                          alt=""
+                                        />
+
+                                      </div>
+                                      <div
+                                        className="tenant_detail"
                                       >
-                                        {propertyManagerDoc &&
-                                          propertyManagerDoc.fullName}
-                                        {user && user.role === "admin" && (
-                                          <span className="material-symbols-outlined click_icon text_near_icon">
-                                            edit
-                                          </span>
-                                        )}
-                                      </h5>
-                                      <h6 className="t_number">
-                                        {propertyManagerDoc &&
-                                          propertyManagerDoc.phoneNumber.replace(
-                                            /(\d{2})(\d{5})(\d{5})/,
-                                            "+$1 $2-$3"
-                                          )}
-                                      </h6>
+                                        <div className="edit_inputs">
+
+                                          <h5
+                                            onClick={
+                                              user && user.role === "admin"
+                                                ? () =>
+                                                  openChangeUser("propertyManager")
+                                                : ""
+                                            }
+                                            className={`t_name ${user && user.role === "admin"
+                                              ? "pointer"
+                                              : ""
+                                              }`}
+                                          >
+                                            Full Name
+                                            {/* {user && user.role === "admin" && (
+                                              <span className="material-symbols-outlined click_icon text_near_icon">
+                                                edit
+                                              </span>
+                                            )} */}
+                                          </h5>
+                                          <h6 className="t_number">
+                                            Phone
+                                            {/* {propertyManagerDoc &&
+                                              propertyManagerDoc.phoneNumber.replace(
+                                                /(\d{2})(\d{5})(\d{5})/,
+                                                "+$1 $2-$3"
+                                              )} */}
+                                          </h6>
+                                        </div>
+                                      </div>
+                                      <div className="wha_call_icon">
+                                        < Link
+                                          className="call_icon wc_single"
+                                          to={
+                                            propertyManagerDoc
+                                              ? `tel:${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
+                                              : "#"
+                                          }
+                                        >
+                                          <img
+                                            src="/assets/img/simple_call.png"
+                                            alt=""
+                                          />
+                                        </Link>
+                                        <Link
+                                          className="wha_icon wc_single"
+                                          to={
+                                            propertyManagerDoc
+                                              ? `https://wa.me/${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
+                                              : "#"
+                                          }
+                                          target="_blank"
+                                        >
+                                          <img
+                                            src="/assets/img/whatsapp_simple.png"
+                                            alt=""
+                                          />
+                                        </Link>
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div className="wha_call_icon">
-                                    < Link
-                                      className="call_icon wc_single"
-                                      to={
-                                        propertyManagerDoc
-                                          ? `tel:${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
-                                          : "#"
-                                      }
-                                    >
-                                      <img
-                                        src="/assets/img/simple_call.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                    <Link
-                                      className="wha_icon wc_single"
-                                      to={
-                                        propertyManagerDoc
-                                          ? `https://wa.me/${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
-                                          : "#"
-                                      }
-                                      target="_blank"
-                                    >
-                                      <img
-                                        src="/assets/img/whatsapp_simple.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div
+                                  ))}
+
+
+                                {/* <div
                                   className="tc_single relative item"
                                 >
                                   <div className="property_people_designation">
@@ -1979,8 +2002,9 @@ const PropertyDetails = () => {
                                       />
                                     </Link>
                                   </div>
-                                </div>
-                                <div
+                                </div> */}
+
+                                {/* <div
                                   className="tc_single relative item"
                                 >
                                   <div className="property_people_designation">
@@ -2035,8 +2059,9 @@ const PropertyDetails = () => {
                                       />
                                     </Link>
                                   </div>
-                                </div>
-                                <div
+                                </div> */}
+
+                                {/* <div
                                   className="tc_single relative item"
                                 >
                                   <div className="property_people_designation">
@@ -2091,7 +2116,7 @@ const PropertyDetails = () => {
                                       />
                                     </Link>
                                   </div>
-                                </div>
+                                </div> */}
 
                               </div>
                             </div>
