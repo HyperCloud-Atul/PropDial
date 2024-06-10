@@ -1692,10 +1692,6 @@ const PropertyDetails = () => {
                                     }
 
                                   })()}
-
-
-
-
                                   <label htmlFor="imgupload" className="upload_img click_text by_text">
                                     Upload img
                                     <input
@@ -1711,27 +1707,33 @@ const PropertyDetails = () => {
                                       Area {room.roomTotalArea}sq/ft
                                     </span>
                                     <span className="in_single">Length {room.roomLength}ft</span>
-                                    <span className="in_single">Width {room.roomWidth}ft</span>
-
-                                    {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
-                                      <span className="in_single">{fixture}</span>
-                                    ))}
-
-                                    {room.roomAttachments && (
+                                    <span className="in_single">Width {room.roomWidth}ft</span>                              
+                                     
+                                        {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
+                                          <span className="in_single">{fixture}</span>
+                                        ))}
+                                     
+                                 
+                                    {/* {room.roomAttachments && (
                                       <div>
                                         Attached with:
                                       </div>
                                     )
-                                    }
+                                    } */}
 
-                                    {room.roomAttachments && room.roomAttachments.map((attachment, findex) => (
+                                    {/* {room.roomAttachments && room.roomAttachments.map((attachment, findex) => (
                                       <span className="in_single">{attachment}</span>
 
-                                    ))}
+                                    ))} */}
                                   </div>
-                                </div>
-                                <button onClick={() => editPropertyLayout(room.id)}>Edit</button>
-                                <button onClick={() => deletePropertyLayout(room.id)}>Delete</button>
+                                  <div className="view_edit d-flex justify-content-between mt-2" style={{
+                                    marginLeft: "7px"
+                                  }}>
+                                    <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
+                                    <span className="click_text pointer">View More</span>
+                                  </div>
+                                </div>                           
+                                {/* <button onClick={() => deletePropertyLayout(room.id)}>Delete</button> */}
                               </div>
                             ))}
                           </OwlCarousel>

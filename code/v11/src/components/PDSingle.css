@@ -433,6 +433,7 @@
     color: #303030;
     font-weight: 600;
     font-size: 16px;
+    text-transform: capitalize;
 }
 
 .ai_detail_show .right .in_single {
@@ -441,6 +442,9 @@
     font-size: 12px;
     margin-top: 2px;
     padding: 4px 12px;
+    text-transform: capitalize;
+    width: fit-content;
+    height: fit-content;
 }
 
 .ai_detail_show .in_detail {
@@ -448,6 +452,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
+    height: 66px;
+    overflow: hidden;
 }
 
 
