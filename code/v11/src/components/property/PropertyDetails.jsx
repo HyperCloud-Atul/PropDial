@@ -47,7 +47,11 @@ const PropertyDetails = () => {
   const [propertyOnboardingDateFormatted, setPropertyOnboardingDateFormatted] =
     useState();
 
-  const { documents: userDocs, errors: userDocsError } = useCollection("users");
+  const { documents: dbUsers, error: dbuserserror } = useCollection("users", [
+    "status",
+    "==",
+    "active",
+  ]);
 
   // add data of tenant in firebase start
   const { documents: tenantDocument, errors: tenantDocError } = useCollection(
@@ -64,6 +68,45 @@ const PropertyDetails = () => {
     "propertyusers",
     ["propertyId", "==", propertyid]
   );
+
+  // const filteredPropertyusers = dbUsers && dbUsers.filter((user) =>
+  //   // console.log('user: ', user);
+  //   // console.log("propertyUsers && propertyUsers.userId: ", propertyUsers)
+  //   // propertyUsers.map((propUser, index) => (
+  //   //   propUser.userId === user.id
+  //   // ))
+  //   (user.id === 'T2BDlKWQq9bUTMAIj7RJmn4TBnY2')
+  // );
+  // Create a map from the selectedUsers array for quick lookup
+  const selectedUsersMap = propertyUsers && propertyUsers.reduce((map, user) => {
+    map[user.userId] = user;
+    return map;
+  }, {});
+
+  console.log('selectedUsersMap: ', selectedUsersMap)
+
+  const filteredPropertyusers = dbUsers && dbUsers
+    .filter(user => selectedUsersMap[user.id])
+    .map(user => ({
+      ...user,
+      ...selectedUsersMap[user.id]
+    }));
+
+  // const filteredPropertyusers = dbUsers && dbUsers.filter(user => propertyUsers && propertyUsers[userId]).map(user => ({
+  //   ...user,
+  //   ...propertyUsers[user.id]
+  // }))
+
+  // const filteredPropertyusers = dbUsers && dbUsers.map((user, index) =>
+  //   // console.log('user: ', user);
+  //   // console.log("propertyUsers && propertyUsers.userId: ", propertyUsers)
+  //   propertyUsers.filter((propUser) => (
+  //     propUser.userId === user.id
+  //   ))
+  //   // (user.id === propertyUsers && propertyUsers.userId)
+  // );
+
+  console.log('filteredProperty Users: ', filteredPropertyusers)
 
   const { documents: propertyDocList, errors: propertyDocListError } = useCollection("docs", ["masterRefId", "==", propertyid]);
 
@@ -228,7 +271,7 @@ const PropertyDetails = () => {
 
     await addProperyUsersDocument(propertyUserData);
     if (addProperyUsersDocumentError) {
-      console.log("response error");
+      console.log("response error: ", addProperyUsersDocumentError);
     }
   }
 
@@ -413,85 +456,66 @@ const PropertyDetails = () => {
   //---------------- Change Property Manager ----------------------
   const { updateDocument, response: updateDocumentResponse } =
     useFirestore("properties");
+  const { updateDocument: updatePropertyUserDoc, response: updatePropertyUserDocResponse } =
+    useFirestore("propertyusers");
 
-  const { documents: dbUsers, error: dbuserserror } = useCollection("users", [
-    "status",
-    "==",
-    "active",
-  ]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(dbUsers);
   const [selectedUser, setSelectedUser] = useState(null);
   const [changeManagerPopup, setchangeManagerPopup] = useState(false);
   const [userdbFieldName, setUserdbFieldName] = useState();
+  const [updateDocId, setupdateDocId] = useState();
 
   // const openChangeUser = () => {
   //   console.log("Open Change Manager");
   //   setchangeManagerPopup(true);
   // }
-  const openChangeUser = (option) => {
+  const openChangeUser = (docId) => {
     console.log("Open Change User");
     setchangeManagerPopup(true);
-    setUserdbFieldName(option);
+    // setUserdbFieldName(option);
+    setupdateDocId(docId)
   };
 
   const closeChangeManager = () => {
     setchangeManagerPopup(false);
   };
 
-  // const confirmChangeManager = async () => {
-  //   console.log('In confirmChangeManager: ')
-  //   console.log('selectedUser: ', selectedUser)
-
-  //   const updatedProperty = {
-  //     propertyManager: selectedUser,
-  //     updatedAt: timestamp.fromDate(new Date()),
-  //     updatedBy: user.uid
-  //   };
-
-  //   // console.log('updatedProperty', updatedProperty)
-  //   // console.log('property id: ', property.id)
-
-  //   await updateDocument(id, updatedProperty);
-
-  //   setchangeManagerPopup(false);
-  // }
-
   const confirmChangeUser = async () => {
     let updatedProperty;
-    if (userdbFieldName === "propertyManager") {
-      updatedProperty = {
-        propertyManager: selectedUser,
-      };
-    }
-    if (userdbFieldName === "propertyOwner") {
-      updatedProperty = {
-        propertyOwner: selectedUser,
-      };
-    }
+    // if (userdbFieldName === "propertyManager") {
+    //   updatedProperty = {
+    //     propertyManager: selectedUser,
+    //   };
+    // }
+    // if (userdbFieldName === "propertyOwner") {
+    //   updatedProperty = {
+    //     propertyOwner: selectedUser,
+    //   };
+    // }
 
-    if (userdbFieldName === "propertyCoOwner") {
-      updatedProperty = {
-        propertyCoOwner: selectedUser,
-      };
-    }
+    // if (userdbFieldName === "propertyCoOwner") {
+    //   updatedProperty = {
+    //     propertyCoOwner: selectedUser,
+    //   };
+    // }
 
-    if (userdbFieldName === "propertyPOC") {
-      updatedProperty = {
-        propertyPOC: selectedUser,
-      };
-    }
+    // if (userdbFieldName === "propertyPOC") {
+    //   updatedProperty = {
+    //     propertyPOC: selectedUser,
+    //   };
+    // }
 
     updatedProperty = {
-      ...updatedProperty,
+      userId: selectedUser,
       updatedAt: timestamp.fromDate(new Date()),
       updatedBy: user.uid,
     };
 
     // console.log('updatedProperty', updatedProperty)
-    // console.log('property id: ', property.id)
+    console.log('updateDocId: ', updateDocId)
 
-    await updateDocument(propertyid, updatedProperty);
+    await updatePropertyUserDoc(updateDocId, updatedProperty);
 
     setchangeManagerPopup(false);
   };
@@ -854,9 +878,6 @@ const PropertyDetails = () => {
             </div>
           )}
           <div className="property_cards">
-
-
-
             {propertyDocument && (
               <div className="">
                 <div className="property_card_single quick_detail_show">
@@ -1707,13 +1728,13 @@ const PropertyDetails = () => {
                                       Area {room.roomTotalArea}sq/ft
                                     </span>
                                     <span className="in_single">Length {room.roomLength}ft</span>
-                                    <span className="in_single">Width {room.roomWidth}ft</span>                              
-                                     
-                                        {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
-                                          <span className="in_single">{fixture}</span>
-                                        ))}
-                                     
-                                 
+                                    <span className="in_single">Width {room.roomWidth}ft</span>
+
+                                    {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
+                                      <span className="in_single">{fixture}</span>
+                                    ))}
+
+
                                     {/* {room.roomAttachments && (
                                       <div>
                                         Attached with:
@@ -1732,7 +1753,7 @@ const PropertyDetails = () => {
                                     <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
                                     <span className="click_text pointer">View More</span>
                                   </div>
-                                </div>                           
+                                </div>
                                 {/* <button onClick={() => deletePropertyLayout(room.id)}>Delete</button> */}
                               </div>
                             ))}
@@ -1866,20 +1887,52 @@ const PropertyDetails = () => {
                                   gap: "15px",
                                 }}
                               >
-                                {propertyUsers &&
-                                  propertyUsers.map((propUser, index) => (
+                                {filteredPropertyusers &&
+                                  filteredPropertyusers.map((propUser, index) => (
                                     <div className="tc_single relative item relative" >
                                       <div className="property_people_designation">
                                         {propUser.userTag}
                                       </div>
                                       <div className="tcs_img_container" >
-
                                         <img
                                           src={
+                                            propUser.photoURL ||
                                             "/assets/img/dummy_user.png"
                                           }
                                           alt=""
                                         />
+
+                                        {/* {propUser.userId}
+                                    
+                                        {/* {dbUsers && dbUsers.find(user => (user.id === propUser.userId))} */}
+                                        {/* {/* {dbUsers && dbUsers
+                                          .filter(propUser => (
+                                            <div>data</div>
+                                            // <div key={propUser.userId}>
+                                            //   <ul>
+                                            //     {Object.entries(propUser.userId).map(([key, value]) => (
+                                            //       <li key={key}>{`${key}: ${value}`}</li>
+                                            //     ))}
+                                            //   </ul>
+                                            // </div>
+                                          )) */}
+
+
+
+                                        {/* {dbUsers && dbUsers.filter((propUser.userId) => (
+                                          user.id === propUser.userId ?
+                                            <img
+                                              src={
+                                                user.photoURL
+                                              }
+                                              alt=""
+                                            /> : <img
+                                              src={
+                                                "/assets/img/dummy_user.png"
+                                              }
+                                              alt=""
+                                            />
+                                        ))} */}
 
                                       </div>
                                       <div
@@ -1891,7 +1944,7 @@ const PropertyDetails = () => {
                                             onClick={
                                               user && user.role === "admin"
                                                 ? () =>
-                                                  openChangeUser("propertyManager")
+                                                  openChangeUser(propUser.id)
                                                 : ""
                                             }
                                             className={`t_name ${user && user.role === "admin"
@@ -1899,15 +1952,18 @@ const PropertyDetails = () => {
                                               : ""
                                               }`}
                                           >
-                                            Full Name
-                                            {/* {user && user.role === "admin" && (
+                                            {propUser.fullName}
+                                            {user && user.role === "admin" && (
                                               <span className="material-symbols-outlined click_icon text_near_icon">
                                                 edit
                                               </span>
-                                            )} */}
+                                            )}
                                           </h5>
                                           <h6 className="t_number">
-                                            Phone
+                                            {propUser.phoneNumber.replace(
+                                              /(\d{2})(\d{5})(\d{5})/,
+                                              "+$1 $2-$3"
+                                            )}
                                             {/* {propertyManagerDoc &&
                                               propertyManagerDoc.phoneNumber.replace(
                                                 /(\d{2})(\d{5})(\d{5})/,
