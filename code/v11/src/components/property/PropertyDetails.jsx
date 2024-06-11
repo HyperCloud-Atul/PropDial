@@ -69,26 +69,7 @@ const PropertyDetails = () => {
     ["propertyId", "==", propertyid]
   );
 
-  // // Create a map from the selectedUsers array for quick lookup
-  // const selectedUsersMap = propertyUsers && propertyUsers.reduce((map, user) => {
-  //   map[user.userId] = user;
-  //   return map;
-  // }, {});
-
-  // console.log('selectedUsersMap: ', selectedUsersMap)
-  // //Now create a list of users from all dbUser List as per the selected users map
-  // const filteredPropertyusers = dbUsers && dbUsers
-  //   .filter(user => selectedUsersMap[user.id])
-  //   .map(user => ({
-  //     ...user,
-  //     ...selectedUsersMap[user.userId]
-  //   }));
-
-
-  // console.log('filteredProperty Users: ', filteredPropertyusers)
-
   const { documents: propertyDocList, errors: propertyDocListError } = useCollection("docs", ["masterRefId", "==", propertyid]);
-
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } = useFirestore("tenants");
   const { addDocument: addProperyUsersDocument, error: addProperyUsersDocumentError } = useFirestore("propertyusers");
@@ -242,15 +223,26 @@ const PropertyDetails = () => {
   //Add Property Users
   const handleAddPropertyUser = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior 
-    const propertyUserData = {
-      propertyId: propertyid,
-      userId: propertyDocument.createdBy,
-      userTag: "Admin"
-    };
 
-    await addProperyUsersDocument(propertyUserData);
-    if (addProperyUsersDocumentError) {
-      console.log("response error: ", addProperyUsersDocumentError);
+    // const filtered = dbUsers && dbUsers.filter((user) =>
+    //   (user.fullName.toLowerCase().includes(query.toLowerCase()) || (user.phoneNumber.includes(query)))
+    // );
+    const isAlreadyExist = propertyUsers && propertyUsers.filter((propuser) =>
+      (propuser.userId === propertyDocument.createdBy))
+
+    // console.log('isAlreadyExist: ', isAlreadyExist)
+
+    if (isAlreadyExist.length === 0) {
+      const propertyUserData = {
+        propertyId: propertyid,
+        userId: propertyDocument.createdBy,
+        userTag: "Admin"
+      };
+
+      await addProperyUsersDocument(propertyUserData);
+      if (addProperyUsersDocumentError) {
+        console.log("response error: ", addProperyUsersDocumentError);
+      }
     }
   }
 
