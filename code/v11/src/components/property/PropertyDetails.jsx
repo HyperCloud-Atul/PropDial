@@ -69,20 +69,20 @@ const PropertyDetails = () => {
     ["propertyId", "==", propertyid]
   );
 
-  // Create a map from the selectedUsers array for quick lookup
-  const selectedUsersMap = propertyUsers && propertyUsers.reduce((map, user) => {
-    map[user.userId] = user;
-    return map;
-  }, {});
+  // // Create a map from the selectedUsers array for quick lookup
+  // const selectedUsersMap = propertyUsers && propertyUsers.reduce((map, user) => {
+  //   map[user.userId] = user;
+  //   return map;
+  // }, {});
 
-  console.log('selectedUsersMap: ', selectedUsersMap)
-
-  const filteredPropertyusers = dbUsers && dbUsers
-    .filter(user => selectedUsersMap[user.id])
-    .map(user => ({
-      ...user,
-      ...selectedUsersMap[user.id]
-    }));
+  // console.log('selectedUsersMap: ', selectedUsersMap)
+  // //Now create a list of users from all dbUser List as per the selected users map
+  // const filteredPropertyusers = dbUsers && dbUsers
+  //   .filter(user => selectedUsersMap[user.id])
+  //   .map(user => ({
+  //     ...user,
+  //     ...selectedUsersMap[user.userId]
+  //   }));
 
 
   // console.log('filteredProperty Users: ', filteredPropertyusers)
@@ -244,8 +244,8 @@ const PropertyDetails = () => {
     e.preventDefault(); // Prevent the default form submission behavior 
     const propertyUserData = {
       propertyId: propertyid,
-      userId: "",
-      userTag: ""
+      userId: propertyDocument.createdBy,
+      userTag: "Admin"
     };
 
     await addProperyUsersDocument(propertyUserData);
@@ -313,6 +313,31 @@ const PropertyDetails = () => {
   // upload tenant code end
 
   // add data of tenant in firebase end
+
+  const [filteredPropertyusers, setfilteredPropertyusers] = useState([]); //initialize array
+  useEffect(() => {
+    // Create a map from the selectedUsers array for quick lookup
+    const selectedUsersMap = propertyUsers && propertyUsers.reduce((map, user) => {
+      map[user.userId] = user;
+      return map;
+    }, {});
+
+    // console.log('selectedUsersMap: ', selectedUsersMap)
+
+    //Now create a list of users from all dbUser List as per the selected users map    
+    const filteredPropertyusers = selectedUsersMap && dbUsers && dbUsers
+      .filter(user => selectedUsersMap[user.id])
+      .map(user => ({
+        ...user,
+        ...selectedUsersMap[user.id]
+      }));
+
+    setfilteredPropertyusers(filteredPropertyusers)
+
+  }, [propertyUsers, dbUsers])
+
+  // console.log('filteredProperty Users: ', filteredPropertyusers)
+
 
   // let propertyOnboardingDateFormatted = "date";
   useEffect(() => {
@@ -462,28 +487,6 @@ const PropertyDetails = () => {
 
   const confirmChangeUser = async () => {
     let updatedProperty;
-    // if (userdbFieldName === "propertyManager") {
-    //   updatedProperty = {
-    //     propertyManager: selectedUser,
-    //   };
-    // }
-    // if (userdbFieldName === "propertyOwner") {
-    //   updatedProperty = {
-    //     propertyOwner: selectedUser,
-    //   };
-    // }
-
-    // if (userdbFieldName === "propertyCoOwner") {
-    //   updatedProperty = {
-    //     propertyCoOwner: selectedUser,
-    //   };
-    // }
-
-    // if (userdbFieldName === "propertyPOC") {
-    //   updatedProperty = {
-    //     propertyPOC: selectedUser,
-    //   };
-    // }
 
     updatedProperty = {
       userId: selectedUser,
@@ -1910,11 +1913,7 @@ const PropertyDetails = () => {
                                               /(\d{2})(\d{5})(\d{5})/,
                                               "+$1 $2-$3"
                                             )}
-                                            {/* {propertyManagerDoc &&
-                                              propertyManagerDoc.phoneNumber.replace(
-                                                /(\d{2})(\d{5})(\d{5})/,
-                                                "+$1 $2-$3"
-                                              )} */}
+
                                           </h6>
                                         </div>
                                       </div>
@@ -1949,178 +1948,6 @@ const PropertyDetails = () => {
                                       </div>
                                     </div>
                                   ))}
-
-
-                                {/* <div
-                                  className="tc_single relative item"
-                                >
-                                  <div className="property_people_designation">
-                                    Co-Owner
-                                  </div>
-                                  <div className="tcs_img_container" >
-                                    {propertyManagerDoc && (
-                                      <img
-                                        src={
-                                          propertyManagerDoc &&
-                                          propertyManagerDoc.photoURL
-                                        }
-                                        alt=""
-                                      />
-                                    )}
-                                  </div>
-                                  <div
-                                    className="tenant_detail"
-                                  >
-                                    <div className="edit_inputs">
-
-                                      <h5
-                                        className="t_name"
-                                      >
-                                        Amit tiwari
-                                      </h5>
-                                      <h6 className="t_number">
-                                        +91 87705-34650
-                                      </h6>
-                                    </div>
-                                  </div>
-                                  <div className="wha_call_icon">
-                                    < Link
-                                      className="call_icon wc_single"
-                                      to="tel:+918770534650
-                                            "
-
-                                    >
-                                      <img
-                                        src="/assets/img/simple_call.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                    <Link
-                                      className="wha_icon wc_single"
-                                      to="https://wa.me/+918770534650"
-                                      target="_blank"
-                                    >
-                                      <img
-                                        src="/assets/img/whatsapp_simple.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                  </div>
-                                </div> */}
-
-                                {/* <div
-                                  className="tc_single relative item"
-                                >
-                                  <div className="property_people_designation">
-                                    POC
-                                  </div>
-                                  <div className="tcs_img_container" >
-                                    {propertyManagerDoc && (
-                                      <img
-                                        src={
-                                          propertyManagerDoc &&
-                                          propertyManagerDoc.photoURL
-                                        }
-                                        alt=""
-                                      />
-                                    )}
-                                  </div>
-                                  <div
-                                    className="tenant_detail"
-                                  >
-                                    <div className="edit_inputs">
-
-                                      <h5
-                                        className="t_name"
-                                      >
-                                        Rajiv kumar
-                                      </h5>
-                                      <h6 className="t_number">
-                                        +91 87705-34650
-                                      </h6>
-                                    </div>
-                                  </div>
-                                  <div className="wha_call_icon">
-                                    < Link
-                                      className="call_icon wc_single"
-                                      to="tel:+918770534650
-                                            "
-
-                                    >
-                                      <img
-                                        src="/assets/img/simple_call.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                    <Link
-                                      className="wha_icon wc_single"
-                                      to="https://wa.me/+918770534650"
-                                      target="_blank"
-                                    >
-                                      <img
-                                        src="/assets/img/whatsapp_simple.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                  </div>
-                                </div> */}
-
-                                {/* <div
-                                  className="tc_single relative item"
-                                >
-                                  <div className="property_people_designation">
-                                    POA
-                                  </div>
-                                  <div className="tcs_img_container" >
-                                    {propertyManagerDoc && (
-                                      <img
-                                        src={
-                                          propertyManagerDoc &&
-                                          propertyManagerDoc.photoURL
-                                        }
-                                        alt=""
-                                      />
-                                    )}
-                                  </div>
-                                  <div
-                                    className="tenant_detail"
-                                  >
-                                    <div className="edit_inputs">
-
-                                      <h5
-                                        className="t_name"
-                                      >
-                                        Rajiv kumar
-                                      </h5>
-                                      <h6 className="t_number">
-                                        +91 87705-34650
-                                      </h6>
-                                    </div>
-                                  </div>
-                                  <div className="wha_call_icon">
-                                    < Link
-                                      className="call_icon wc_single"
-                                      to="tel:+918770534650
-                                            "
-
-                                    >
-                                      <img
-                                        src="/assets/img/simple_call.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                    <Link
-                                      className="wha_icon wc_single"
-                                      to="https://wa.me/+918770534650"
-                                      target="_blank"
-                                    >
-                                      <img
-                                        src="/assets/img/whatsapp_simple.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                  </div>
-                                </div> */}
 
                               </div>
                             </div>
