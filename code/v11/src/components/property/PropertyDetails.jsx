@@ -19,6 +19,8 @@ import { timestamp } from "../../firebase/config";
 import { format } from "date-fns";
 import RichTextEditor from "react-rte";
 import PropertyLayoutComponent from "./PropertyLayoutComponent";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 import "./UserList.css";
 
@@ -168,6 +170,7 @@ const PropertyDetails = () => {
     } catch (error) {
       console.error("Error deleting property layout document:", error);
     }
+    setShowConfirmModal(false);
   };
 
 
@@ -712,7 +715,25 @@ const PropertyDetails = () => {
   };
   // END CODE FOR EDIT TEXT USING TEXT EDITOR
 
+  // modal controls start 
+  // start modal for property layout in detail
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [showRoomModal, setShowRoomModal] = useState(false);
 
+  const handleRoomModalClose = () => setShowRoomModal(false);
+  const handleShowRoomModal = (room) => {
+    setSelectedRoom(room);
+    setShowRoomModal(true);
+  };
+  // confirm room delete 
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const handleConfirmClose = () => setShowConfirmModal(false);
+  const handleConfirmShow = () => {
+    setShowRoomModal(false);
+    setShowConfirmModal(true);
+  };
+  // end modal for property layout in detail
+  // modal controls end 
 
 
   return (
@@ -1632,7 +1653,7 @@ const PropertyDetails = () => {
                         <div className="property_layout_card">
                           <OwlCarousel className="owl-theme" {...optionsroom}>
                             {propertyLayouts && propertyLayouts.map((room, index) => (
-                              <div className="ai_detail_show item">
+                              <div className="ai_detail_show item" key={index}>
                                 <div className="left relative">
                                   {(() => {
                                     if (room.roomType === "Bedroom") {
@@ -1685,7 +1706,6 @@ const PropertyDetails = () => {
                                         />
                                       );
                                     }
-
                                   })()}
                                   <label htmlFor="imgupload" className="upload_img click_text by_text">
                                     Upload img
@@ -1698,40 +1718,166 @@ const PropertyDetails = () => {
                                 <div className="right">
                                   <h5>{room.roomName}</h5>
                                   <div className="in_detail">
-                                    <span className="in_single">
-                                      Area {room.roomTotalArea}sq/ft
-                                    </span>
+                                    <span className="in_single">Area {room.roomTotalArea}sq/ft</span>
                                     <span className="in_single">Length {room.roomLength}ft</span>
                                     <span className="in_single">Width {room.roomWidth}ft</span>
-
                                     {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
-                                      <span className="in_single">{fixture}</span>
+                                      <span className="in_single" key={findex}>{fixture}</span>
                                     ))}
-
-
-                                    {/* {room.roomAttachments && (
-                                      <div>
-                                        Attached with:
-                                      </div>
-                                    )
-                                    } */}
-
-                                    {/* {room.roomAttachments && room.roomAttachments.map((attachment, findex) => (
-                                      <span className="in_single">{attachment}</span>
-
-                                    ))} */}
                                   </div>
-                                  <div className="view_edit d-flex justify-content-between mt-2" style={{
-                                    marginLeft: "7px"
-                                  }}>
+                                  <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
                                     <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
-                                    <span className="click_text pointer">View More</span>
+                                    <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
                                   </div>
                                 </div>
-                                {/* <button onClick={() => deletePropertyLayout(room.id)}>Delete</button> */}
                               </div>
                             ))}
                           </OwlCarousel>
+
+                          {selectedRoom && (
+                            <>
+                              <Modal show={showRoomModal} onHide={handleRoomModalClose} className="detail_modal">
+                                <span class="material-symbols-outlined modal_close" onClick={handleRoomModalClose}>
+                                  close
+                                </span>
+                                <h5 className="modal_title text-center">
+                                  {selectedRoom.roomName}
+                                </h5>
+                                <div className="modal_body">
+                                  <div className="img_area">
+                                    {(() => {
+                                      if (selectedRoom.roomType === "Bedroom") {
+                                        return (
+                                          <img style={{
+                                            width: "100%"
+                                          }}
+                                            src="/assets/img/icons/illustrate_bedroom.jpg"
+                                            alt={selectedRoom.roomType}
+                                          />
+                                        );
+                                      } else if (selectedRoom.roomType === "Kitchen") {
+                                        return (
+                                          <img style={{
+                                            width: "100%"
+                                          }}
+                                            src="/assets/img/icons/illustrate_kitchen.jpg"
+                                            alt={selectedRoom.roomType}
+                                          />
+                                        );
+                                      } else if (selectedRoom.roomType === "Living Room") {
+                                        return (
+                                          <img style={{
+                                            width: "100%"
+                                          }}
+                                            src="/assets/img/icons/illustrate_livingroom.jpg"
+                                            alt={selectedRoom.roomType}
+                                          />
+                                        );
+                                      } else if (selectedRoom.roomType === "Bathroom") {
+                                        return (
+                                          <img style={{
+                                            width: "100%"
+                                          }}
+                                            src="/assets/img/icons/illustrate_bathroom.jpg"
+                                            alt={selectedRoom.roomType}
+                                          />
+                                        );
+                                      } else if (selectedRoom.roomType === "Dining Room") {
+                                        return (
+                                          <img style={{
+                                            width: "100%"
+                                          }}
+                                            src="/assets/img/icons/illustrate_dining.jpg"
+                                            alt={selectedRoom.roomType}
+                                          />
+                                        );
+                                      } else if (selectedRoom.roomType === "Balcony") {
+                                        return (
+                                          <img style={{
+                                            width: "100%"
+                                          }}
+                                            src="/assets/img/icons/illustrate_balcony.jpg"
+                                            alt={selectedRoom.roomType}
+                                          />
+                                        );
+                                      } else {
+                                        return (
+                                          <img style={{
+                                            width: "100%"
+                                          }}
+                                            src="/assets/img/icons/illustrate_basment.jpg"
+                                            alt={selectedRoom.roomType}
+                                          />
+                                        );
+                                      }
+                                    })()}
+                                  </div>
+                                  <div className="main_detail">
+                                    <div className="md_single">
+                                      Area : <span className="value">{selectedRoom.roomTotalArea}</span><span className="unit">sq/ft</span>
+                                    </div>
+                                    <div className="md_single">
+                                      Length : <span className="value">{selectedRoom.roomLength}</span><span className="unit">ft</span>
+                                    </div>
+                                    <div className="md_single">
+                                      Width : <span className="value">{selectedRoom.roomWidth}</span><span className="unit">ft</span>
+                                    </div>
+                                  </div>
+                                  <div className="more_detail">
+                                    {selectedRoom.roomFixtures && selectedRoom.roomFixtures.map((fixture, index) => (
+                                      <span className="more_detail_single" key={index}>{fixture}</span>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div className="attached_with">
+                                  {selectedRoom.roomAttachments && (
+                                    <h6 className="text-center text_black">Attached with</h6>
+                                  )
+                                  }
+                                  <div className="more_detail">                              
+                                      {selectedRoom.roomAttachments && selectedRoom.roomAttachments.map((attachment, findex) => (
+                                    <span className="more_detail_single">{attachment}</span>
+                                  ))}
+                                  </div>
+                                
+                                </div>
+                                <div className="modal_footer">
+                                  <div onClick={handleConfirmShow} className="delete_bottom">
+                                    <span className="material-symbols-outlined">delete</span>
+                                    <span>Delete</span>
+                                  </div>
+                                </div>
+                              </Modal>
+                              <Modal show={showConfirmModal} onHide={handleConfirmClose}>
+                                <Modal.Header className="justify-content-center" style={{
+                                  paddingBottom: "0px",
+                                  border: "none"
+                                }}>
+                                  <h5>
+                                    Alert
+                                  </h5>
+                                </Modal.Header>
+                                <Modal.Body className="text-center" style={{
+                                  color: "#FA6262",
+                                  fontSize: "20px",
+                                  border: "none"
+                                }}>Are you sure you want to delete?</Modal.Body>
+                                <Modal.Footer className="d-flex justify-content-between" style={{
+                                  border: "none",
+                                  gap: "15px"
+                                }}>
+                                  <div className="cancel_btn" onClick={() => deletePropertyLayout(selectedRoom.id)}  >
+                                    Yes
+                                  </div>
+                                  <div className="done_btn" onClick={handleConfirmClose}>
+                                    No
+                                  </div>
+                                </Modal.Footer>
+                              </Modal>
+                            </>
+
+                          )}
+
 
                         </div>
                       </div>
