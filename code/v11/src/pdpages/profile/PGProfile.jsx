@@ -369,7 +369,7 @@ export default function PGProfile() {
                   ...userDetails,
                   FullName: e.target.value
                 })}
-                value={userDetails && userDetails.DisplayName}
+                value={userDetails && userDetails.FullName}
                 style={{
                   width: "100%"
                 }}
