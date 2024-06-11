@@ -6,7 +6,7 @@ import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useLogout } from "../../../hooks/useLogout";
 
 // css import 
-import './UserList.css'
+import './UserList.scss'
 
 // import filter 
 import Filters from "../../../components/Filters";
@@ -58,27 +58,20 @@ const UserList = () => {
     <div className='top_header_pg pg_bg'>
       <div className='page_spacing'>
         {error && <p className="error">{error}</p>}
-        <div className="search_filter">
-          <div className="row">
-            <div className="col-3">
-              <div className="form_field">
-                <input type="text" placeholder='Search' />
-              </div>
-            </div>
-            <div className="col-9">
-              <div className="user_filters">
-                {documents && (
-                  <Filters
-                    changeFilter={changeFilter}
-                    filterList={userFilter}
-                    filterLength={users.length}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
+        <div className="user_filters">
+          {documents && (
+            <Filters
+              changeFilter={changeFilter}
+              filterList={userFilter}
+              filterLength={users.length}
+            />
+          )}
         </div>
-        <div className="userlist">
+        <div className="vg22"></div>
+        {users.length === 0 && <p className='text_red medium text-center' style={{
+          fontSize:"18px"
+        }}>No Users Yet!</p>}
+        <div className="propdial_users all_tenants">     
           {users && <UserSinglecard users={users} />}
         </div>
       </div>

@@ -25,21 +25,22 @@
 }
 
 .project-filter nav button span {
-    font-size: 0.6rem;
+    font-size: 14px;
     font-weight: normal;
     text-transform: capitalize;
 }
 
 .project-filter nav button.active {
-    border-bottom: 2px solid var(--red-color);
-    background: var(--yellow-color);
+    border-bottom: 2px solid var(--theme-blue);
+    background: var(--theme-blue-bg);
 }
 
 .project-filter nav button.active span {
-    font-size: 0.8rem;
-    font-weight: bolder;
+    font-size: 15px;
+    font-weight: 700;
     position: relative;
     top: 2px;
+    color: var(--theme-blue);
 }
 
 .project-filter nav button small {
