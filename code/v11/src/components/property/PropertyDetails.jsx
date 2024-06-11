@@ -19,8 +19,6 @@ import { timestamp } from "../../firebase/config";
 import { format } from "date-fns";
 import RichTextEditor from "react-rte";
 import PropertyLayoutComponent from "./PropertyLayoutComponent";
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 
 import "./UserList.css";
 
@@ -49,6 +47,12 @@ const PropertyDetails = () => {
   const [propertyOnboardingDateFormatted, setPropertyOnboardingDateFormatted] =
     useState();
 
+  const { documents: dbUsers, error: dbuserserror } = useCollection("users", [
+    "status",
+    "==",
+    "active",
+  ]);
+
   // add data of tenant in firebase start
   const { documents: tenantDocument, errors: tenantDocError } = useCollection(
     "tenants",
@@ -60,13 +64,17 @@ const PropertyDetails = () => {
     ["propertyId", "==", propertyid]
   );
 
+  const { documents: propertyUsers, errors: propertyUsersError } = useCollection(
+    "propertyusers",
+    ["propertyId", "==", propertyid]
+  );
+
   const { documents: propertyDocList, errors: propertyDocListError } = useCollection("docs", ["masterRefId", "==", propertyid]);
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } = useFirestore("tenants");
+  const { addDocument: addProperyUsersDocument, error: addProperyUsersDocumentError } = useFirestore("propertyusers");
   const { addDocument: propertyLayoutAddDocument, error: propertyLayoutAddDocumentError } = useFirestore("propertylayouts");
   const { updateDocument: updatePropertyLayoutDocument, deleteDocument: deletePropertyLayoutDocument, error: propertyLayoutDocumentError } = useFirestore("propertylayouts");
-
-
 
 
   // upload tenant code start
@@ -160,7 +168,6 @@ const PropertyDetails = () => {
     } catch (error) {
       console.error("Error deleting property layout document:", error);
     }
-    setShowConfirmModal(false);
   };
 
 
@@ -213,8 +220,33 @@ const PropertyDetails = () => {
   };
 
 
-  //Tenant Information
+  //Add Property Users
+  const handleAddPropertyUser = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior 
 
+    // const filtered = dbUsers && dbUsers.filter((user) =>
+    //   (user.fullName.toLowerCase().includes(query.toLowerCase()) || (user.phoneNumber.includes(query)))
+    // );
+    const isAlreadyExist = propertyUsers && propertyUsers.filter((propuser) =>
+      (propuser.userId === propertyDocument.createdBy))
+
+    // console.log('isAlreadyExist: ', isAlreadyExist)
+
+    if (isAlreadyExist.length === 0) {
+      const propertyUserData = {
+        propertyId: propertyid,
+        userId: propertyDocument.createdBy,
+        userTag: "Admin"
+      };
+
+      await addProperyUsersDocument(propertyUserData);
+      if (addProperyUsersDocumentError) {
+        console.log("response error: ", addProperyUsersDocumentError);
+      }
+    }
+  }
+
+  //Tenant Information
   const handleAddTenant = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior   
 
@@ -273,6 +305,31 @@ const PropertyDetails = () => {
   // upload tenant code end
 
   // add data of tenant in firebase end
+
+  const [filteredPropertyusers, setfilteredPropertyusers] = useState([]); //initialize array
+  useEffect(() => {
+    // Create a map from the selectedUsers array for quick lookup
+    const selectedUsersMap = propertyUsers && propertyUsers.reduce((map, user) => {
+      map[user.userId] = user;
+      return map;
+    }, {});
+
+    // console.log('selectedUsersMap: ', selectedUsersMap)
+
+    //Now create a list of users from all dbUser List as per the selected users map    
+    const filteredPropertyusers = selectedUsersMap && dbUsers && dbUsers
+      .filter(user => selectedUsersMap[user.id])
+      .map(user => ({
+        ...user,
+        ...selectedUsersMap[user.id]
+      }));
+
+    setfilteredPropertyusers(filteredPropertyusers)
+
+  }, [propertyUsers, dbUsers])
+
+  // console.log('filteredProperty Users: ', filteredPropertyusers)
+
 
   // let propertyOnboardingDateFormatted = "date";
   useEffect(() => {
@@ -395,85 +452,44 @@ const PropertyDetails = () => {
   //---------------- Change Property Manager ----------------------
   const { updateDocument, response: updateDocumentResponse } =
     useFirestore("properties");
+  const { updateDocument: updatePropertyUserDoc, response: updatePropertyUserDocResponse } =
+    useFirestore("propertyusers");
 
-  const { documents: dbUsers, error: dbuserserror } = useCollection("users", [
-    "status",
-    "==",
-    "active",
-  ]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(dbUsers);
   const [selectedUser, setSelectedUser] = useState(null);
   const [changeManagerPopup, setchangeManagerPopup] = useState(false);
   const [userdbFieldName, setUserdbFieldName] = useState();
+  const [updateDocId, setupdateDocId] = useState();
 
   // const openChangeUser = () => {
   //   console.log("Open Change Manager");
   //   setchangeManagerPopup(true);
   // }
-  const openChangeUser = (option) => {
+  const openChangeUser = (docId) => {
     console.log("Open Change User");
     setchangeManagerPopup(true);
-    setUserdbFieldName(option);
+    // setUserdbFieldName(option);
+    setupdateDocId(docId)
   };
 
   const closeChangeManager = () => {
     setchangeManagerPopup(false);
   };
 
-  // const confirmChangeManager = async () => {
-  //   console.log('In confirmChangeManager: ')
-  //   console.log('selectedUser: ', selectedUser)
-
-  //   const updatedProperty = {
-  //     propertyManager: selectedUser,
-  //     updatedAt: timestamp.fromDate(new Date()),
-  //     updatedBy: user.uid
-  //   };
-
-  //   // console.log('updatedProperty', updatedProperty)
-  //   // console.log('property id: ', property.id)
-
-  //   await updateDocument(id, updatedProperty);
-
-  //   setchangeManagerPopup(false);
-  // }
-
   const confirmChangeUser = async () => {
     let updatedProperty;
-    if (userdbFieldName === "propertyManager") {
-      updatedProperty = {
-        propertyManager: selectedUser,
-      };
-    }
-    if (userdbFieldName === "propertyOwner") {
-      updatedProperty = {
-        propertyOwner: selectedUser,
-      };
-    }
-
-    if (userdbFieldName === "propertyCoOwner") {
-      updatedProperty = {
-        propertyCoOwner: selectedUser,
-      };
-    }
-
-    if (userdbFieldName === "propertyPOC") {
-      updatedProperty = {
-        propertyPOC: selectedUser,
-      };
-    }
 
     updatedProperty = {
-      ...updatedProperty,
+      userId: selectedUser,
       updatedAt: timestamp.fromDate(new Date()),
       updatedBy: user.uid,
     };
 
     // console.log('updatedProperty', updatedProperty)
-    // console.log('property id: ', property.id)
+    console.log('updateDocId: ', updateDocId)
 
-    await updateDocument(propertyid, updatedProperty);
+    await updatePropertyUserDoc(updateDocId, updatedProperty);
 
     setchangeManagerPopup(false);
   };
@@ -697,28 +713,6 @@ const PropertyDetails = () => {
   // END CODE FOR EDIT TEXT USING TEXT EDITOR
 
 
-  // modal controls start 
-  // start modal for property layout in detail
-  const [selectedRoom, setSelectedRoom] = useState(null);
-  const [showRoomModal, setShowRoomModal] = useState(false);
-
-  const handleRoomModalClose = () => setShowRoomModal(false);
-  const handleShowRoomModal = (room) => {
-    setSelectedRoom(room);
-    setShowRoomModal(true);
-  };
-  // confirm room delete 
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const handleConfirmClose = () => setShowConfirmModal(false);
-  const handleConfirmShow = () => {
-    setShowRoomModal(false);
-    setShowConfirmModal(true);
-  };
-  // end modal for property layout in detail
-
-
-  // modal controls end 
-
 
 
   return (
@@ -858,9 +852,6 @@ const PropertyDetails = () => {
             </div>
           )}
           <div className="property_cards">
-
-
-
             {propertyDocument && (
               <div className="">
                 <div className="property_card_single quick_detail_show">
@@ -1641,7 +1632,7 @@ const PropertyDetails = () => {
                         <div className="property_layout_card">
                           <OwlCarousel className="owl-theme" {...optionsroom}>
                             {propertyLayouts && propertyLayouts.map((room, index) => (
-                              <div className="ai_detail_show item" key={index}>
+                              <div className="ai_detail_show item">
                                 <div className="left relative">
                                   {(() => {
                                     if (room.roomType === "Bedroom") {
@@ -1694,6 +1685,7 @@ const PropertyDetails = () => {
                                         />
                                       );
                                     }
+
                                   })()}
                                   <label htmlFor="imgupload" className="upload_img click_text by_text">
                                     Upload img
@@ -1706,151 +1698,40 @@ const PropertyDetails = () => {
                                 <div className="right">
                                   <h5>{room.roomName}</h5>
                                   <div className="in_detail">
-                                    <span className="in_single">Area {room.roomTotalArea}sq/ft</span>
+                                    <span className="in_single">
+                                      Area {room.roomTotalArea}sq/ft
+                                    </span>
                                     <span className="in_single">Length {room.roomLength}ft</span>
                                     <span className="in_single">Width {room.roomWidth}ft</span>
-                                    {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
-                                      <span className="in_single" key={findex}>{fixture}</span>
-                                    ))}
-                                  </div>
-                                  <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
-                                    <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
-                                    <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </OwlCarousel>
 
-                          {selectedRoom && (
-                            <>
-                              <Modal show={showRoomModal} onHide={handleRoomModalClose}>
-                                <Modal.Header closeButton>
-                                  <Modal.Title>{selectedRoom.roomName}</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                  {(() => {
-                                    if (selectedRoom.roomType === "Bedroom") {
-                                      return (
-                                        <img style={{
-                                          width: "100%"
-                                        }}
-                                          src="/assets/img/icons/illustrate_bedroom.jpg"
-                                          alt={selectedRoom.roomType}
-                                        />
-                                      );
-                                    } else if (selectedRoom.roomType === "Kitchen") {
-                                      return (
-                                        <img style={{
-                                          width: "100%"
-                                        }}
-                                          src="/assets/img/icons/illustrate_kitchen.jpg"
-                                          alt={selectedRoom.roomType}
-                                        />
-                                      );
-                                    } else if (selectedRoom.roomType === "Living Room") {
-                                      return (
-                                        <img style={{
-                                          width: "100%"
-                                        }}
-                                          src="/assets/img/icons/illustrate_livingroom.jpg"
-                                          alt={selectedRoom.roomType}
-                                        />
-                                      );
-                                    } else if (selectedRoom.roomType === "Bathroom") {
-                                      return (
-                                        <img style={{
-                                          width: "100%"
-                                        }}
-                                          src="/assets/img/icons/illustrate_bathroom.jpg"
-                                          alt={selectedRoom.roomType}
-                                        />
-                                      );
-                                    } else if (selectedRoom.roomType === "Dining Room") {
-                                      return (
-                                        <img style={{
-                                          width: "100%"
-                                        }}
-                                          src="/assets/img/icons/illustrate_dining.jpg"
-                                          alt={selectedRoom.roomType}
-                                        />
-                                      );
-                                    } else if (selectedRoom.roomType === "Balcony") {
-                                      return (
-                                        <img style={{
-                                          width: "100%"
-                                        }}
-                                          src="/assets/img/icons/illustrate_balcony.jpg"
-                                          alt={selectedRoom.roomType}
-                                        />
-                                      );
-                                    } else {
-                                      return (
-                                        <img style={{
-                                          width: "100%"
-                                        }}
-                                          src="/assets/img/icons/illustrate_basment.jpg"
-                                          alt={selectedRoom.roomType}
-                                        />
-                                      );
-                                    }
-                                  })()}
-                                  <div className="in_detail">
-                                    <span className="in_single">Area {selectedRoom.roomTotalArea}sq/ft</span>
-                                    <span className="in_single">Length {selectedRoom.roomLength}ft</span>
-                                    <span className="in_single">Width {selectedRoom.roomWidth}ft</span>
-                                    {selectedRoom.roomFixtures && selectedRoom.roomFixtures.map((fixture, index) => (
-                                      <span className="in_single" key={index}>{fixture}</span>
+                                    {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
+                                      <span className="in_single">{fixture}</span>
                                     ))}
-                                    {selectedRoom.roomAttachments && (
+
+
+                                    {/* {room.roomAttachments && (
                                       <div>
                                         Attached with:
                                       </div>
                                     )
-                                    }
-                                    {selectedRoom.roomAttachments && selectedRoom.roomAttachments.map((attachment, findex) => (
+                                    } */}
+
+                                    {/* {room.roomAttachments && room.roomAttachments.map((attachment, findex) => (
                                       <span className="in_single">{attachment}</span>
-                                    ))}
-                                    {/* <button onClick={() => deletePropertyLayout(selectedRoom.id)}>Delete</button> */}
-                                    <button onClick={handleConfirmShow}>Delete</button>
-                                  </div>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                  <Button variant="secondary" onClick={handleRoomModalClose}>
-                                    Close
-                                  </Button>
-                                </Modal.Footer>
-                              </Modal>
-                              <Modal show={showConfirmModal} onHide={handleConfirmClose}>                            
-                                <Modal.Header className="justify-content-center" style={{
-                                  paddingBottom: "0px",
-                                  border: "none"
-                                }}>
-                                  <h5>
-                                    Alert
-                                  </h5>
-                                </Modal.Header>
-                                <Modal.Body className="text-center" style={{
-                                  color: "#FA6262",
-                                  fontSize: "20px",
-                                  border: "none"
-                                }}>Are you sure you want to delete?</Modal.Body>
-                                <Modal.Footer className="d-flex justify-content-between" style={{
-                                  border: "none",
-                                  gap: "15px"
-                                }}>
-                                  <div className="cancel_btn" onClick={() => deletePropertyLayout(selectedRoom.id)}  >
-                                    Yes
-                                  </div>
-                                  <div className="done_btn" onClick={handleConfirmClose}>
-                                    No
-                                  </div>
-                                </Modal.Footer>
-                              </Modal>
-                            </>
 
-                          )}
-
+                                    ))} */}
+                                  </div>
+                                  <div className="view_edit d-flex justify-content-between mt-2" style={{
+                                    marginLeft: "7px"
+                                  }}>
+                                    <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
+                                    <span className="click_text pointer">View More</span>
+                                  </div>
+                                </div>
+                                {/* <button onClick={() => deletePropertyLayout(room.id)}>Delete</button> */}
+                              </div>
+                            ))}
+                          </OwlCarousel>
 
                         </div>
                       </div>
@@ -1964,7 +1845,7 @@ const PropertyDetails = () => {
                           <div className="row">
                             <div className="col-1">
                               <div className="plus_icon">
-                                <Link className="plus_icon_inner">
+                                <Link className="plus_icon_inner" onClick={handleAddPropertyUser}>
                                   <span class="material-symbols-outlined">
                                     add
                                   </span>
@@ -1980,255 +1861,85 @@ const PropertyDetails = () => {
                                   gap: "15px",
                                 }}
                               >
-                                <div
-                                  className="tc_single relative item relative"
-                                >
-                                  <div className="property_people_designation">
-                                    Owner
-                                  </div>
-                                  <div className="tcs_img_container" >
-                                    {propertyManagerDoc && (
-                                      <img
-                                        src={
-                                          propertyManagerDoc &&
-                                          propertyManagerDoc.photoURL
-                                        }
-                                        alt=""
-                                      />
-                                    )}
-                                  </div>
-                                  <div
-                                    className="tenant_detail"
-                                  >
-                                    <div className="edit_inputs">
-
-                                      <h5
-                                        onClick={
-                                          user && user.role === "admin"
-                                            ? () =>
-                                              openChangeUser("propertyManager")
-                                            : ""
-                                        }
-                                        className={`t_name ${user && user.role === "admin"
-                                          ? "pointer"
-                                          : ""
-                                          }`}
+                                {filteredPropertyusers &&
+                                  filteredPropertyusers.map((propUser, index) => (
+                                    <div className="tc_single relative item relative" >
+                                      <div className="property_people_designation">
+                                        {propUser.userTag}
+                                      </div>
+                                      <div className="tcs_img_container" >
+                                        <img
+                                          src={
+                                            propUser.photoURL ||
+                                            "/assets/img/dummy_user.png"
+                                          }
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div
+                                        className="tenant_detail"
                                       >
-                                        {propertyManagerDoc &&
-                                          propertyManagerDoc.fullName}
-                                        {user && user.role === "admin" && (
-                                          <span className="material-symbols-outlined click_icon text_near_icon">
-                                            edit
-                                          </span>
-                                        )}
-                                      </h5>
-                                      <h6 className="t_number">
-                                        {propertyManagerDoc &&
-                                          propertyManagerDoc.phoneNumber.replace(
-                                            /(\d{2})(\d{5})(\d{5})/,
-                                            "+$1 $2-$3"
-                                          )}
-                                      </h6>
+                                        <div className="edit_inputs">
+
+                                          <h5
+                                            onClick={
+                                              user && user.role === "admin"
+                                                ? () =>
+                                                  openChangeUser(propUser.id)
+                                                : ""
+                                            }
+                                            className={`t_name ${user && user.role === "admin"
+                                              ? "pointer"
+                                              : ""
+                                              }`}
+                                          >
+                                            {propUser.fullName}
+                                            {user && user.role === "admin" && (
+                                              <span className="material-symbols-outlined click_icon text_near_icon">
+                                                edit
+                                              </span>
+                                            )}
+                                          </h5>
+                                          <h6 className="t_number">
+                                            {propUser.phoneNumber.replace(
+                                              /(\d{2})(\d{5})(\d{5})/,
+                                              "+$1 $2-$3"
+                                            )}
+
+                                          </h6>
+                                        </div>
+                                      </div>
+                                      <div className="wha_call_icon">
+                                        < Link
+                                          className="call_icon wc_single"
+                                          to={
+                                            propertyManagerDoc
+                                              ? `tel:${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
+                                              : "#"
+                                          }
+                                        >
+                                          <img
+                                            src="/assets/img/simple_call.png"
+                                            alt=""
+                                          />
+                                        </Link>
+                                        <Link
+                                          className="wha_icon wc_single"
+                                          to={
+                                            propertyManagerDoc
+                                              ? `https://wa.me/${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
+                                              : "#"
+                                          }
+                                          target="_blank"
+                                        >
+                                          <img
+                                            src="/assets/img/whatsapp_simple.png"
+                                            alt=""
+                                          />
+                                        </Link>
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div className="wha_call_icon">
-                                    < Link
-                                      className="call_icon wc_single"
-                                      to={
-                                        propertyManagerDoc
-                                          ? `tel:${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
-                                          : "#"
-                                      }
-                                    >
-                                      <img
-                                        src="/assets/img/simple_call.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                    <Link
-                                      className="wha_icon wc_single"
-                                      to={
-                                        propertyManagerDoc
-                                          ? `https://wa.me/${propertyManagerDoc.phoneNumber.replace(/\D/g, '')}`
-                                          : "#"
-                                      }
-                                      target="_blank"
-                                    >
-                                      <img
-                                        src="/assets/img/whatsapp_simple.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div
-                                  className="tc_single relative item"
-                                >
-                                  <div className="property_people_designation">
-                                    Co-Owner
-                                  </div>
-                                  <div className="tcs_img_container" >
-                                    {propertyManagerDoc && (
-                                      <img
-                                        src={
-                                          propertyManagerDoc &&
-                                          propertyManagerDoc.photoURL
-                                        }
-                                        alt=""
-                                      />
-                                    )}
-                                  </div>
-                                  <div
-                                    className="tenant_detail"
-                                  >
-                                    <div className="edit_inputs">
-
-                                      <h5
-                                        className="t_name"
-                                      >
-                                        Amit tiwari
-                                      </h5>
-                                      <h6 className="t_number">
-                                        +91 87705-34650
-                                      </h6>
-                                    </div>
-                                  </div>
-                                  <div className="wha_call_icon">
-                                    < Link
-                                      className="call_icon wc_single"
-                                      to="tel:+918770534650
-                                            "
-
-                                    >
-                                      <img
-                                        src="/assets/img/simple_call.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                    <Link
-                                      className="wha_icon wc_single"
-                                      to="https://wa.me/+918770534650"
-                                      target="_blank"
-                                    >
-                                      <img
-                                        src="/assets/img/whatsapp_simple.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div
-                                  className="tc_single relative item"
-                                >
-                                  <div className="property_people_designation">
-                                    POC
-                                  </div>
-                                  <div className="tcs_img_container" >
-                                    {propertyManagerDoc && (
-                                      <img
-                                        src={
-                                          propertyManagerDoc &&
-                                          propertyManagerDoc.photoURL
-                                        }
-                                        alt=""
-                                      />
-                                    )}
-                                  </div>
-                                  <div
-                                    className="tenant_detail"
-                                  >
-                                    <div className="edit_inputs">
-
-                                      <h5
-                                        className="t_name"
-                                      >
-                                        Rajiv kumar
-                                      </h5>
-                                      <h6 className="t_number">
-                                        +91 87705-34650
-                                      </h6>
-                                    </div>
-                                  </div>
-                                  <div className="wha_call_icon">
-                                    < Link
-                                      className="call_icon wc_single"
-                                      to="tel:+918770534650
-                                            "
-
-                                    >
-                                      <img
-                                        src="/assets/img/simple_call.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                    <Link
-                                      className="wha_icon wc_single"
-                                      to="https://wa.me/+918770534650"
-                                      target="_blank"
-                                    >
-                                      <img
-                                        src="/assets/img/whatsapp_simple.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div
-                                  className="tc_single relative item"
-                                >
-                                  <div className="property_people_designation">
-                                    POA
-                                  </div>
-                                  <div className="tcs_img_container" >
-                                    {propertyManagerDoc && (
-                                      <img
-                                        src={
-                                          propertyManagerDoc &&
-                                          propertyManagerDoc.photoURL
-                                        }
-                                        alt=""
-                                      />
-                                    )}
-                                  </div>
-                                  <div
-                                    className="tenant_detail"
-                                  >
-                                    <div className="edit_inputs">
-
-                                      <h5
-                                        className="t_name"
-                                      >
-                                        Rajiv kumar
-                                      </h5>
-                                      <h6 className="t_number">
-                                        +91 87705-34650
-                                      </h6>
-                                    </div>
-                                  </div>
-                                  <div className="wha_call_icon">
-                                    < Link
-                                      className="call_icon wc_single"
-                                      to="tel:+918770534650
-                                            "
-
-                                    >
-                                      <img
-                                        src="/assets/img/simple_call.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                    <Link
-                                      className="wha_icon wc_single"
-                                      to="https://wa.me/+918770534650"
-                                      target="_blank"
-                                    >
-                                      <img
-                                        src="/assets/img/whatsapp_simple.png"
-                                        alt=""
-                                      />
-                                    </Link>
-                                  </div>
-                                </div>
+                                  ))}
 
                               </div>
                             </div>
