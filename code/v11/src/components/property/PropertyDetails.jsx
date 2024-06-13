@@ -79,7 +79,7 @@ const PropertyDetails = () => {
   const { documents: propertyDocList, errors: propertyDocListError } = useCollection("docs", ["masterRefId", "==", propertyid]);
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } = useFirestore("tenants");
-  const { addDocument: addProperyUsersDocument, error: addProperyUsersDocumentError } = useFirestore("propertyusers");
+  const { addDocument: addProperyUsersDocument, updateDocument: updateProperyUsersDocument, deleteDocument: deleteProperyUsersDocument, error: errProperyUsersDocument } = useFirestore("propertyusers");
   const { addDocument: propertyLayoutAddDocument, error: propertyLayoutAddDocumentError } = useFirestore("propertylayouts");
   const { updateDocument: updatePropertyLayoutDocument, deleteDocument: deletePropertyLayoutDocument, error: propertyLayoutDocumentError } = useFirestore("propertylayouts");
 
@@ -404,15 +404,13 @@ const PropertyDetails = () => {
   //---------------- Change Property Manager ----------------------
   const { updateDocument, response: updateDocumentResponse } =
     useFirestore("properties");
-  const { updateDocument: updatePropertyUserDoc, response: updatePropertyUserDocResponse } =
-    useFirestore("propertyusers");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(dbUsers);
   const [selectedUser, setSelectedUser] = useState(null);
   const [changeManagerPopup, setchangeManagerPopup] = useState(false);
   const [userdbFieldName, setUserdbFieldName] = useState();
-  const [updateDocId, setupdateDocId] = useState();
+  const [changedUser, setChangedUser] = useState();
 
   // const openChangeUser = () => {
   //   console.log("Open Change Manager");
@@ -422,7 +420,7 @@ const PropertyDetails = () => {
     console.log("Open Change User");
     setchangeManagerPopup(true);
     // setUserdbFieldName(option);
-    setupdateDocId(docId)
+    setChangedUser(docId)
   };
 
   const closeChangeManager = () => {
@@ -430,18 +428,15 @@ const PropertyDetails = () => {
   };
 
   const confirmChangeUser = async () => {
-    let updatedProperty;
-
-    updatedProperty = {
+    const updatedPropertyUser = {
       userId: selectedUser,
       updatedAt: timestamp.fromDate(new Date()),
       updatedBy: user.uid,
     };
 
-    // console.log('updatedProperty', updatedProperty)
-    console.log('updateDocId: ', updateDocId)
+    // console.log('updateDocId: ', changedUser)
 
-    await updatePropertyUserDoc(updateDocId, updatedProperty);
+    await updateProperyUsersDocument(changedUser, updatedPropertyUser);
 
     setchangeManagerPopup(false);
   };
@@ -678,8 +673,8 @@ const PropertyDetails = () => {
       };
 
       await addProperyUsersDocument(propertyUserData);
-      if (addProperyUsersDocumentError) {
-        console.log("response error: ", addProperyUsersDocumentError);
+      if (errProperyUsersDocument) {
+        console.log("response error: ", errProperyUsersDocument);
       }
     }
   }
@@ -765,18 +760,55 @@ const PropertyDetails = () => {
   // modal for change role of property user 
   //   modal code 
   const [selectedPropUser, setSelectedPropUser] = useState(null);
+  const [selectedUserTag, setSelectedUserTag] = useState(null);
   const [showPropUser, setShowPropUser] = useState(false);
 
-  const handleClosePropUser = () => setShowPropUser(false);
-  const handleShowPropUser = (propUser) => {
+  const handleUserTagChange = (_newtag) => {
+    setSelectedUserTag(_newtag)
+    console.log('in handleUserTagChange: ', _newtag)
+  };
+
+  const handleCloseOwnerTags = async (e, option) => {
+    // console.log('In handleCloseOwnerTags: ', option)
+    // console.log('In handleCloseOwnerTags selectedPropUser id: ', selectedPropUser.id)
+    if (option === 'save') {
+      const updatedTag = {
+        userTag: selectedUserTag,
+        updatedAt: timestamp.fromDate(new Date()),
+        updatedBy: user.uid,
+      };
+
+      // console.log('updatedTag: ', updatedTag)
+      await updateProperyUsersDocument(selectedPropUser.id, updatedTag);
+
+    }
+    //Cancel opion check Not Required
+    // if (option === 'cancel') {
+
+    // }
+    setShowPropUser(false);
+  }
+  const handleShowOwnerTags = (e, propUser) => {
+    console.log('In handleShowOwnerTags propUser: ', propUser)
     setSelectedPropUser(propUser);
     setShowPropUser(true);
   };
   const [showConfirmPropUser, setShowConfirmPropUser] = useState(false);
-  const handleCloseConfirmPropUser = () => setShowConfirmPropUser(false);
-  const handleShowConfirmPropUser = (propUser) => {
+
+  const handleCloseConfirmPropUser = async (e, _option) => {
+    //Delete Prop User if option is 'confirm'
+    if ('confirm') {
+      await deleteProperyUsersDocument(selectedPropUser.id);
+    }
+
+    setShowConfirmPropUser(false);
+  }
+
+  const handleDeletePropUser = (e, propUser) => {
+    console.log('propUser : ', propUser)
     setSelectedPropUser(propUser);
     setShowConfirmPropUser(true);
+
   };
   // modal controls end 
 
@@ -1392,7 +1424,7 @@ const PropertyDetails = () => {
                               </span>
                               <div className="text">
                                 <h6>0</h6>
-                                <h5>inspection</h5>
+                                <h5>Inspection</h5>
                               </div>
                             </div>
                           </div>
@@ -2056,7 +2088,7 @@ const PropertyDetails = () => {
                                         <div
                                           className="tc_single relative item"
                                           key={index}>
-                                          <div className="property_people_designation d-flex align-items-end justify-content-center pointer" onClick={() => handleShowPropUser(propUser)}>
+                                          <div className="property_people_designation d-flex align-items-end justify-content-center pointer" onClick={(e) => handleShowOwnerTags(e, propUser)}>
                                             {propUser.userTag}
                                             <span class="material-symbols-outlined click_icon text_near_icon" style={{
                                               fontSize: "10px"
@@ -2107,7 +2139,7 @@ const PropertyDetails = () => {
                                                 letterSpacing: "0.4px",
                                                 marginLeft: "3px"
                                               }}
-                                                onClick={() => handleShowConfirmPropUser(propUser)}>
+                                                onClick={(e) => handleDeletePropUser(e, propUser)}>
                                                 Delete
                                               </h6>
                                             </div>
@@ -2152,13 +2184,13 @@ const PropertyDetails = () => {
                         </div>
                       </section>
                       {selectedPropUser && (
-                        <Modal show={showPropUser} onHide={handleClosePropUser} className='my_modal'>
-                          <span class="material-symbols-outlined modal_close" onClick={handleClosePropUser}>
+                        <Modal show={showPropUser} onHide={(e) => handleCloseOwnerTags(e, 'cancel')} className='my_modal'>
+                          <span class="material-symbols-outlined modal_close" onClick={(e) => handleCloseOwnerTags(e, 'cancel')}>
                             close
                           </span>
                           <Modal.Body>
                             <h6 className="m18 lh22 mb-3">
-                              {selectedPropUser.fullName}
+                              Full Name: {selectedPropUser.fullName}
                             </h6>
                             <div className='form_field'>
                               <div className='field_box theme_radio_new'>
@@ -2167,33 +2199,39 @@ const PropertyDetails = () => {
                                   border: "none"
                                 }}>
                                   <div className="radio_single">
-                                    <input type="radio" name="prop_user" value="admin" id='admin' />
-                                    <label htmlFor="admin">admin</label>
+                                    <input type="radio" name="prop_user" value="Admin" id='Admin'
+                                      checked={selectedPropUser.userTag === "Admin"} onChange={() => handleUserTagChange("Admin")} />
+                                    <label htmlFor="Admin">Admin</label>
                                   </div>
                                   <div className="radio_single">
-                                    <input type="radio" name="prop_user" value="owner" id='owner' />
-
-                                    <label htmlFor="owner">owner</label>
+                                    <input type="radio" name="prop_user" value="Owner" id='Owner'
+                                      checked={selectedPropUser.userTag === "Owner"} onChange={() => handleUserTagChange("Owner")} />
+                                    <label htmlFor="Owner">Owner</label>
                                   </div>
                                   <div className="radio_single">
-                                    <input type="radio" name="prop_user" value="co-owner" id='co-owner' />
-
-                                    <label htmlFor="co-owner">co-owner</label>
+                                    <input type="radio" name="prop_user" value="Co-Owner" id='Co-Owner'
+                                      checked={selectedPropUser.userTag === "Co-Owner"} onChange={() => handleUserTagChange("Co-Owner")} />
+                                    <label htmlFor="Co-Owner">Co-Owner</label>
                                   </div>
                                   <div className="radio_single">
-                                    <input type="radio" name="prop_user" value="poc" id='poc' />
-
-                                    <label htmlFor="poc">poc</label>
+                                    <input type="radio" name="prop_user" value="POC" id='POC'
+                                      checked={selectedPropUser.userTag === "POC"} onChange={() => handleUserTagChange("POC")} />
+                                    <label htmlFor="POC">POC</label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input type="radio" name="prop_user" value="POA" id='POA'
+                                      checked={selectedPropUser.userTag === "POA"} onChange={() => handleUserTagChange("POA")} />
+                                    <label htmlFor="POA">POA</label>
                                   </div>
                                 </div>
                               </div>
                             </div>
                             <div className="vg22"></div>
                             <div className="d-flex align-items-center justify-content-between">
-                              <div className="cancel_btn" onClick={handleClosePropUser}  >
+                              <div className="cancel_btn" onClick={(e) => handleCloseOwnerTags(e, 'cancel')}  >
                                 Cancel
                               </div>
-                              <div className="done_btn" onClick={handleClosePropUser}>
+                              <div className="done_btn" onClick={(e) => handleCloseOwnerTags(e, 'save')}>
                                 Save Changes
                               </div>
                             </div>
@@ -2202,7 +2240,7 @@ const PropertyDetails = () => {
                         </Modal>
                       )}
                       {selectedPropUser && (
-                        <Modal show={showConfirmPropUser} onHide={handleCloseConfirmPropUser}>
+                        <Modal show={showConfirmPropUser} onHide={(e) => handleCloseConfirmPropUser(e, 'cancel')}>
                           <Modal.Header className="justify-content-center" style={{
                             paddingBottom: "0px",
                             border: "none"
@@ -2220,10 +2258,10 @@ const PropertyDetails = () => {
                             border: "none",
                             gap: "15px"
                           }}>
-                            <div className="cancel_btn" onClick={handleCloseConfirmPropUser}  >
+                            <div className="cancel_btn" onClick={(e) => handleCloseConfirmPropUser(e, 'confirm')}  >
                               Yes
                             </div>
-                            <div className="done_btn" onClick={handleCloseConfirmPropUser}>
+                            <div className="done_btn" onClick={(e) => handleCloseConfirmPropUser(e, 'cancel')}>
                               No
                             </div>
                           </Modal.Footer>

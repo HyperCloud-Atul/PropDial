@@ -154,6 +154,7 @@ const PropertyDocuments = () => {
       { id: "rentagreement", value: "Rent Agreement", label: "Rent Agreement" },
       { id: "layout", value: "Layout", label: "Layout" },
       { id: "blueprint", value: "Blue Print", label: "Blue Print" },
+      { id: "powerofattorney", value: "Power of Attorney", label: "Power of Attorney" },
     ],
     "Property Maintainance": [
       {
@@ -553,9 +554,9 @@ const PropertyDocuments = () => {
                             //   alt=""
                             // />
                             <div className="verified_batch">
-                            <span>
-                            Verified
-                            </span>
+                              <span>
+                                Verified
+                              </span>
                             </div>
                           )}
                         </div>
