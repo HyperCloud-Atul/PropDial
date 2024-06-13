@@ -761,17 +761,18 @@ const PropertyDetails = () => {
   //   modal code 
   const [selectedPropUser, setSelectedPropUser] = useState(null);
   const [selectedUserTag, setSelectedUserTag] = useState(null);
-  const [showPropUser, setShowPropUser] = useState(false);
+  const [showPropOwner, setShowPropOwner] = useState(false);
+  const [showPropManager, setShowPropManager] = useState(false);
 
   const handleUserTagChange = (_newtag) => {
     setSelectedUserTag(_newtag)
-    console.log('in handleUserTagChange: ', _newtag)
+    // console.log('in handleUserTagChange: ', _newtag)
   };
 
-  const handleCloseOwnerTags = async (e, option) => {
-    // console.log('In handleCloseOwnerTags: ', option)
-    // console.log('In handleCloseOwnerTags selectedPropUser id: ', selectedPropUser.id)
-    if (option === 'save') {
+  const handleClosePropUserTags = async (e, _option, _usertype) => {
+    // console.log('In handleClosePropUserTags: ', _option)
+    // console.log('In handleClosePropUserTags selectedPropUser id: ', selectedPropUser.id)
+    if (_option === 'save') {
       const updatedTag = {
         userTag: selectedUserTag,
         updatedAt: timestamp.fromDate(new Date()),
@@ -786,18 +787,20 @@ const PropertyDetails = () => {
     // if (option === 'cancel') {
 
     // }
-    setShowPropUser(false);
+    _usertype === 'propowner' ? setShowPropOwner(false) : setShowPropManager(false)
   }
-  const handleShowOwnerTags = (e, propUser) => {
-    console.log('In handleShowOwnerTags propUser: ', propUser)
-    setSelectedPropUser(propUser);
-    setShowPropUser(true);
+  const handleShowOwnerTags = (e, _propUser, _usertype) => {
+    console.log('In handleShowOwnerTags propUser: ', _propUser)
+    setSelectedPropUser(_propUser);
+
+    _usertype === 'propowner' ? setShowPropOwner(true) : setShowPropManager(true)
   };
   const [showConfirmPropUser, setShowConfirmPropUser] = useState(false);
 
   const handleCloseConfirmPropUser = async (e, _option) => {
+    // console.log('_option: ', _option)
     //Delete Prop User if option is 'confirm'
-    if ('confirm') {
+    if (_option === 'confirm') {
       await deleteProperyUsersDocument(selectedPropUser.id);
     }
 
@@ -2088,7 +2091,7 @@ const PropertyDetails = () => {
                                         <div
                                           className="tc_single relative item"
                                           key={index}>
-                                          <div className="property_people_designation d-flex align-items-end justify-content-center pointer" onClick={(e) => handleShowOwnerTags(e, propUser)}>
+                                          <div className="property_people_designation d-flex align-items-end justify-content-center pointer" onClick={(e) => handleShowOwnerTags(e, propUser, 'propowner')}>
                                             {propUser.userTag}
                                             <span class="material-symbols-outlined click_icon text_near_icon" style={{
                                               fontSize: "10px"
@@ -2184,8 +2187,8 @@ const PropertyDetails = () => {
                         </div>
                       </section>
                       {selectedPropUser && (
-                        <Modal show={showPropUser} onHide={(e) => handleCloseOwnerTags(e, 'cancel')} className='my_modal'>
-                          <span class="material-symbols-outlined modal_close" onClick={(e) => handleCloseOwnerTags(e, 'cancel')}>
+                        <Modal show={showPropOwner} onHide={(e) => handleClosePropUserTags(e, 'cancel', 'propowner')} className='my_modal'>
+                          <span class="material-symbols-outlined modal_close" onClick={(e) => handleClosePropUserTags(e, 'cancel', 'propowner')}>
                             close
                           </span>
                           <Modal.Body>
@@ -2228,10 +2231,10 @@ const PropertyDetails = () => {
                             </div>
                             <div className="vg22"></div>
                             <div className="d-flex align-items-center justify-content-between">
-                              <div className="cancel_btn" onClick={(e) => handleCloseOwnerTags(e, 'cancel')}  >
+                              <div className="cancel_btn" onClick={(e) => handleClosePropUserTags(e, 'cancel', 'propowner')}  >
                                 Cancel
                               </div>
-                              <div className="done_btn" onClick={(e) => handleCloseOwnerTags(e, 'save')}>
+                              <div className="done_btn" onClick={(e) => handleClosePropUserTags(e, 'save', 'propowner')}>
                                 Save Changes
                               </div>
                             </div>
@@ -2304,7 +2307,7 @@ const PropertyDetails = () => {
                                         <div
                                           className="tc_single relative item"
                                           key={index}>
-                                          <div className="property_people_designation d-flex align-items-end justify-content-center">
+                                          <div className="property_people_designation d-flex align-items-end justify-content-center" onClick={(e) => handleShowOwnerTags(e, propUser, 'propmanager')}>
                                             {propUser.userTag}
                                             <span class="material-symbols-outlined click_icon text_near_icon" style={{
                                               fontSize: "10px"
@@ -2353,7 +2356,7 @@ const PropertyDetails = () => {
                                                 fontSize: "10px",
                                                 letterSpacing: "0.4px",
                                                 marginLeft: "3px"
-                                              }}>
+                                              }} onClick={(e) => handleDeletePropUser(e, propUser)}>
                                                 Delete
                                               </h6>
                                             </div>
@@ -2397,6 +2400,51 @@ const PropertyDetails = () => {
                           </div>
                         </div>
                       </section>
+                      {selectedPropUser && (
+                        <Modal show={showPropManager} onHide={(e) => handleClosePropUserTags(e, 'cancel', 'propmanager')} className='my_modal'>
+                          <span class="material-symbols-outlined modal_close" onClick={(e) => handleClosePropUserTags(e, 'cancel', 'propmanager')}>
+                            close
+                          </span>
+                          <Modal.Body>
+                            <h6 className="m18 lh22 mb-3">
+                              Full Name: {selectedPropUser.fullName}
+                            </h6>
+                            <div className='form_field'>
+                              <div className='field_box theme_radio_new'>
+                                <div className="theme_radio_container" style={{
+                                  padding: "0px",
+                                  border: "none"
+                                }}>
+                                  <div className="radio_single">
+                                    <input type="radio" name="prop_user" value="Admin" id='Admin'
+                                      checked={selectedPropUser.userTag === "Admin"} onChange={() => handleUserTagChange("Admin")} />
+                                    <label htmlFor="Admin">Admin</label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input type="radio" name="prop_user" value="PropManager" id='PropManager'
+                                      checked={selectedPropUser.userTag === "Property Manager"} onChange={() => handleUserTagChange("Property Manager")} />
+                                    <label htmlFor="PropManager">Property Manager</label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input type="radio" name="prop_user" value="SalesManager" id='SalesManager'
+                                      checked={selectedPropUser.userTag === "Sales Manager"} onChange={() => handleUserTagChange("Sales Manager")} />
+                                    <label htmlFor="SalesManager">Sales Manager</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="vg22"></div>
+                            <div className="d-flex align-items-center justify-content-between">
+                              <div className="cancel_btn" onClick={(e) => handleClosePropUserTags(e, 'cancel', 'propmanager')}  >
+                                Cancel
+                              </div>
+                              <div className="done_btn" onClick={(e) => handleClosePropUserTags(e, 'save', 'propmanager')}>
+                                Save Changes
+                              </div>
+                            </div>
+                          </Modal.Body>
+                        </Modal>
+                      )}
                     </>
                   )}
                 {/* propdial managers / user card end  */}
