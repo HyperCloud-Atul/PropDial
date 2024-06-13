@@ -115,7 +115,12 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 .text_white {
     color: var(--white-color);
 }
-
+.text_blue{
+    color: var(--theme-blue);
+}
+.text_green2{
+    color: var(--success-color);
+}
 .click_text {
     color: var(--theme-green) !important;
     font-size: 14px;
@@ -224,7 +229,9 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     font-size: 20px;
     font-weight: 500;
 }
-
+.lh22{
+    line-height: 22px;
+}
 /* font css start  */
 
 .card_shadow {
@@ -286,6 +293,10 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 .otp_input div {
     justify-content: center;
 }
+img.excel_dowanload {
+    width: auto;
+    height: 35px;
+}
 
 /* verticall_gap css start  */
 .dvg22 {
@@ -293,6 +304,9 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 }
 
 .vg10 {
+    height: 10px;
+}
+.vg12 {
     height: 10px;
 }
 
@@ -316,7 +330,7 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 .my_modal .modal-content {
     border-radius: 22px;
     padding: 22px;
-    background: var(--white-color);
+    background: white;
 }
 
 .row_gap {

@@ -143,13 +143,13 @@ export default function ReactTable({ tableColumns, tableData }) {
                         </span>
                         <div className={`previous_click ${!canPreviousPage ? "disabled" : "pointer"}`} onClick={() => previousPage()}>
                             <div className="arrow">
-                            <span class="material-symbols-outlined">
-                                arrow_back_ios
-                            </span> <span class="material-symbols-outlined">
-                                arrow_back_ios
-                            </span>
+                                <span class="material-symbols-outlined">
+                                    arrow_back_ios
+                                </span> <span class="material-symbols-outlined">
+                                    arrow_back_ios
+                                </span>
                             </div>
-                           
+
 
                             <span>
                                 Previous

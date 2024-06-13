@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 /* color variables start */
-.light {
+:root {
   /* main color variable start  */
   /* --theme-green:#20b2aa; */
   /* --theme-orange: #e95733;  */
@@ -811,7 +811,8 @@ h2.card_title {
   cursor: pointer;
   border: 1px solid #00a8a8;
   background: #00a8a8;
-  width: 30%;
+  min-width: 30%;
+  width: fit-content;
   text-align: center;
   color: white;
       letter-spacing: 0.5px;
@@ -824,7 +825,8 @@ h2.card_title {
   cursor: pointer;
   border: 1px solid #00a8a8;
   background: transparent;
-  width: 30%;
+  min-width: 30%;
+  width: fit-content;
   text-align: center;
   color: #00a8a8;
       letter-spacing: 0.5px;

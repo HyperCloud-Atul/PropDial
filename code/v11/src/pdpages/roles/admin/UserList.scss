@@ -3,7 +3,13 @@
     grid-column-gap: 14px;
     grid-row-gap: 14px;
     grid-template-columns: repeat(4, 1fr);
-    .pu_single {
-      
+    .pu_single {  
+        border: 1px solid #dfdfdf;      
+        margin-top: 0px;
+        border-radius: 10px;  
+        background: var(--white-color);
+        .tc_single{
+            border: none;
+        }
     }
 }

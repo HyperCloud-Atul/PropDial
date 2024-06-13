@@ -762,6 +762,22 @@ const PropertyDetails = () => {
     setShowConfirmModal(true);
   };
   // end modal for property layout in detail
+  // modal for change role of property user 
+  //   modal code 
+  const [selectedPropUser, setSelectedPropUser] = useState(null);
+  const [showPropUser, setShowPropUser] = useState(false);
+
+  const handleClosePropUser = () => setShowPropUser(false);
+  const handleShowPropUser = (propUser) => {
+    setSelectedPropUser(propUser);
+    setShowPropUser(true);
+  };
+  const [showConfirmPropUser, setShowConfirmPropUser] = useState(false);
+  const handleCloseConfirmPropUser = () => setShowConfirmPropUser(false);
+  const handleShowConfirmPropUser = (propUser) => {
+    setSelectedPropUser(propUser);
+    setShowConfirmPropUser(true);
+  };
   // modal controls end 
 
 
@@ -2001,7 +2017,6 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                     </div>
-
                   </div>
                 </section>
                 {/* tenant card end  */}
@@ -2012,115 +2027,206 @@ const PropertyDetails = () => {
                   (user && user.role === "coowner") ||
                   (user && user.role === "admin")) && (
                     <>
-                      <section className="property_card_single full_width_sec with_blue">
+                      <section className="property_card_single full_width_sec with_blue property_user">
                         <span className="verticall_title">
                           Owners :  {filteredPropertyOwners && filteredPropertyOwners.length}
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
-                            {(user && user.role === "admin") && <div className="col-1">
-                              <div className="plus_icon">
-                                <Link className="plus_icon_inner" onClick={(e) => handleAddPropertyUser(e, 'propertyowner')}>
-                                  <span class="material-symbols-outlined">
-                                    add
-                                  </span>
-                                </Link>
+                            {(user && user.role === "admin") &&
+                              <div className="col-1">
+                                <div className="plus_icon">
+                                  <Link className="plus_icon_inner" onClick={(e) => handleAddPropertyUser(e, 'propertyowner')}>
+                                    <span class="material-symbols-outlined">
+                                      add
+                                    </span>
+                                  </Link>
+                                </div>
+
                               </div>
-                            </div>}
+                            }
+                            <div className="col-11">
+                              <div className="tenant_card">
+                                <div className="all_tenants">
+                                  <OwlCarousel className="owl-theme" {...optionstenant}>
+                                    {filteredPropertyOwners &&
+                                      filteredPropertyOwners.map((propUser, index) => (
+                                        <div
+                                          className="tc_single relative item"
+                                          key={index}>
+                                          <div className="property_people_designation d-flex align-items-end justify-content-center pointer" onClick={() => handleShowPropUser(propUser)}>
+                                            {propUser.userTag}
+                                            <span class="material-symbols-outlined click_icon text_near_icon" style={{
+                                              fontSize: "10px"
+                                            }}>edit</span>
+                                          </div>
+                                          <div className="left">
+                                            <div className="tcs_img_container" >
+                                              <img
+                                                src={
+                                                  propUser.photoURL ||
+                                                  "/assets/img/dummy_user.png"
+                                                }
+                                                alt="Preview"
+                                              />
+                                            </div>
+                                            <div
+                                              className="tenant_detail"
+                                            >
+                                              <h5
+                                                onClick={
+                                                  user && user.role === "admin"
+                                                    ? () =>
+                                                      openChangeUser(propUser.id)
+                                                    : ""
+                                                }
+                                                className={`t_name ${user && user.role === "admin"
+                                                  ? "pointer"
+                                                  : ""
+                                                  }`}
+                                              >
+                                                {propUser.fullName}
+                                                {user && user.role === "admin" && (
+                                                  <span className="material-symbols-outlined click_icon text_near_icon">
+                                                    edit
+                                                  </span>
+                                                )}
+                                              </h5>
+                                              <h6 className="t_number">
+                                                {propUser.phoneNumber.replace(
+                                                  /(\d{2})(\d{5})(\d{5})/,
+                                                  "+$1 $2-$3"
+                                                )}
 
-                            <div className="col-md-11">
-                              <div
-                                className="d-flex"
-                                style={{
-                                  gap: "15px",
-                                }}
-                              >
-                                {filteredPropertyOwners &&
-                                  filteredPropertyOwners.map((propUser, index) => (
-                                    <div className="tc_single relative item relative" >
-                                      <div className="property_people_designation">
-                                        {propUser.userTag}
-                                      </div>
-                                      <div className="tcs_img_container" >
-                                        <img
-                                          src={
-                                            propUser.photoURL ||
-                                            "/assets/img/dummy_user.png"
-                                          }
-                                          alt=""
-                                        />
-                                      </div>
-                                      <div
-                                        className="tenant_detail"
-                                      >
-                                        <div className="edit_inputs">
-
-                                          <h5
-                                            onClick={
-                                              user && user.role === "admin"
-                                                ? () =>
-                                                  openChangeUser(propUser.id)
-                                                : ""
-                                            }
-                                            className={`t_name ${user && user.role === "admin"
-                                              ? "pointer"
-                                              : ""
-                                              }`}
-                                          >
-                                            {propUser.fullName}
-                                            {user && user.role === "admin" && (
-                                              <span className="material-symbols-outlined click_icon text_near_icon">
-                                                edit
-                                              </span>
-                                            )}
-                                          </h5>
-                                          <h6 className="t_number">
-                                            {propUser.phoneNumber.replace(
-                                              /(\d{2})(\d{5})(\d{5})/,
-                                              "+$1 $2-$3"
-                                            )}
-
-                                          </h6>
+                                              </h6>
+                                              <h6 className="text_red pointer" style={{
+                                                width: "fit-content",
+                                                fontSize: "10px",
+                                                letterSpacing: "0.4px",
+                                                marginLeft: "3px"
+                                              }}
+                                                onClick={() => handleShowConfirmPropUser(propUser)}>
+                                                Delete
+                                              </h6>
+                                            </div>
+                                          </div>
+                                          <div className="wha_call_icon">
+                                            < Link
+                                              className="call_icon wc_single"
+                                              to={
+                                                propUser
+                                                  ? `tel:${propUser.phoneNumber.replace(/\D/g, '')}`
+                                                  : "#"
+                                              }
+                                            >
+                                              <img
+                                                src="/assets/img/simple_call.png"
+                                                alt=""
+                                              />
+                                            </Link>
+                                            <Link
+                                              className="wha_icon wc_single"
+                                              to={
+                                                propUser
+                                                  ? `https://wa.me/${propUser.phoneNumber.replace(/\D/g, '')}`
+                                                  : "#"
+                                              }
+                                              target="_blank"
+                                            >
+                                              <img
+                                                src="/assets/img/whatsapp_simple.png"
+                                                alt=""
+                                              />
+                                            </Link>
+                                          </div>
                                         </div>
-                                      </div>
-                                      <div className="wha_call_icon">
-                                        < Link
-                                          className="call_icon wc_single"
-                                          to={
-                                            propUser
-                                              ? `tel:${propUser.phoneNumber.replace(/\D/g, '')}`
-                                              : "#"
-                                          }
-                                        >
-                                          <img
-                                            src="/assets/img/simple_call.png"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <Link
-                                          className="wha_icon wc_single"
-                                          to={
-                                            propUser
-                                              ? `https://wa.me/${propUser.phoneNumber.replace(/\D/g, '')}`
-                                              : "#"
-                                          }
-                                          target="_blank"
-                                        >
-                                          <img
-                                            src="/assets/img/whatsapp_simple.png"
-                                            alt=""
-                                          />
-                                        </Link>
-                                      </div>
-                                    </div>
-                                  ))}
+                                      ))}
+                                  </OwlCarousel>
+                                </div>
 
                               </div>
                             </div>
                           </div>
-
                         </div>
                       </section>
+                      {selectedPropUser && (
+                        <Modal show={showPropUser} onHide={handleClosePropUser} className='my_modal'>
+                          <span class="material-symbols-outlined modal_close" onClick={handleClosePropUser}>
+                            close
+                          </span>
+                          <Modal.Body>
+                            <h6 className="m18 lh22 mb-3">
+                              {selectedPropUser.fullName}
+                            </h6>
+                            <div className='form_field'>
+                              <div className='field_box theme_radio_new'>
+                                <div className="theme_radio_container" style={{
+                                  padding: "0px",
+                                  border: "none"
+                                }}>
+                                  <div className="radio_single">
+                                    <input type="radio" name="prop_user" value="admin" id='admin' />
+                                    <label htmlFor="admin">admin</label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input type="radio" name="prop_user" value="owner" id='owner' />
+
+                                    <label htmlFor="owner">owner</label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input type="radio" name="prop_user" value="co-owner" id='co-owner' />
+
+                                    <label htmlFor="co-owner">co-owner</label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input type="radio" name="prop_user" value="poc" id='poc' />
+
+                                    <label htmlFor="poc">poc</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="vg22"></div>
+                            <div className="d-flex align-items-center justify-content-between">
+                              <div className="cancel_btn" onClick={handleClosePropUser}  >
+                                Cancel
+                              </div>
+                              <div className="done_btn" onClick={handleClosePropUser}>
+                                Save Changes
+                              </div>
+                            </div>
+
+                          </Modal.Body>
+                        </Modal>
+                      )}
+                      {selectedPropUser && (
+                        <Modal show={showConfirmPropUser} onHide={handleCloseConfirmPropUser}>
+                          <Modal.Header className="justify-content-center" style={{
+                            paddingBottom: "0px",
+                            border: "none"
+                          }}>
+                            <h5>
+                              Alert
+                            </h5>
+                          </Modal.Header>
+                          <Modal.Body className="text-center" style={{
+                            color: "#FA6262",
+                            fontSize: "20px",
+                            border: "none"
+                          }}>Are you sure you want to delete?</Modal.Body>
+                          <Modal.Footer className="d-flex justify-content-between" style={{
+                            border: "none",
+                            gap: "15px"
+                          }}>
+                            <div className="cancel_btn" onClick={handleCloseConfirmPropUser}  >
+                              Yes
+                            </div>
+                            <div className="done_btn" onClick={handleCloseConfirmPropUser}>
+                              No
+                            </div>
+                          </Modal.Footer>
+                        </Modal>
+                      )}
                     </>
                   )}
                 {/* property user card end  */}
@@ -2130,114 +2236,125 @@ const PropertyDetails = () => {
                   (user && user.role === "coowner") ||
                   (user && user.role === "admin")) && (
                     <>
-                      <section className="property_card_single full_width_sec with_blue">
+
+                      <section className="property_card_single full_width_sec with_orange property_user">
                         <span className="verticall_title">
                           Managers :  {filteredPropertyManagers && filteredPropertyManagers.length}
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
+                            {(user && user.role === "admin") &&
+                              <div className="col-1">
+                                <div className="plus_icon">
+                                  <Link className="plus_icon_inner" onClick={(e) => handleAddPropertyUser(e, 'propertymanager')}>
+                                    <span class="material-symbols-outlined">
+                                      add
+                                    </span>
+                                  </Link>
+                                </div>
 
-                            {(user && user.role === "admin") && <div className="col-1">
-                              <div className="plus_icon">
-                                <Link className="plus_icon_inner" onClick={(e) => handleAddPropertyUser(e, 'propertymanager')}>
-                                  <span class="material-symbols-outlined">
-                                    add
-                                  </span>
-                                </Link>
                               </div>
-                            </div>}
-
-                            <div className="col-md-11">
-                              <div
-                                className="d-flex"
-                                style={{
-                                  gap: "15px",
-                                }}
-                              >
-                                {filteredPropertyManagers &&
-                                  filteredPropertyManagers.map((propUser, index) => (
-                                    <div className="tc_single relative item relative" >
-                                      <div className="property_people_designation">
-                                        {propUser.userTag}
-                                      </div>
-                                      <div className="tcs_img_container" >
-                                        <img
-                                          src={
-                                            propUser.photoURL ||
-                                            "/assets/img/dummy_user.png"
-                                          }
-                                          alt=""
-                                        />
-                                      </div>
-                                      <div
-                                        className="tenant_detail"
-                                      >
-                                        <div className="edit_inputs">
-
-                                          <h5
-                                            onClick={
-                                              user && user.role === "admin"
-                                                ? () =>
-                                                  openChangeUser(propUser.id)
-                                                : ""
-                                            }
-                                            className={`t_name ${user && user.role === "admin"
-                                              ? "pointer"
-                                              : ""
-                                              }`}
-                                          >
-                                            {propUser.fullName}
-                                            {user && user.role === "admin" && (
-                                              <span className="material-symbols-outlined click_icon text_near_icon">
-                                                edit
-                                              </span>
-                                            )}
-                                          </h5>
-                                          <h6 className="t_number">
-                                            {propUser.phoneNumber.replace(
-                                              /(\d{2})(\d{5})(\d{5})/,
-                                              "+$1 $2-$3"
-                                            )}
-
-                                          </h6>
+                            }
+                            <div className="col-11">
+                              <div className="tenant_card">
+                                <div className="all_tenants">
+                                  <OwlCarousel className="owl-theme" {...optionstenant}>
+                                    {filteredPropertyManagers &&
+                                      filteredPropertyManagers.map((propUser, index) => (
+                                        <div
+                                          className="tc_single relative item"
+                                          key={index}>
+                                          <div className="property_people_designation d-flex align-items-end justify-content-center">
+                                            {propUser.userTag}
+                                            <span class="material-symbols-outlined click_icon text_near_icon" style={{
+                                              fontSize: "10px"
+                                            }}>edit</span>
+                                          </div>
+                                          <div className="left">
+                                            <div className="tcs_img_container" >
+                                              <img
+                                                src={
+                                                  propUser.photoURL ||
+                                                  "/assets/img/dummy_user.png"
+                                                }
+                                                alt=""
+                                              />
+                                            </div>
+                                            <div
+                                              className="tenant_detail"
+                                            >
+                                              <h5
+                                                onClick={
+                                                  user && user.role === "admin"
+                                                    ? () =>
+                                                      openChangeUser(propUser.id)
+                                                    : ""
+                                                }
+                                                className={`t_name ${user && user.role === "admin"
+                                                  ? "pointer"
+                                                  : ""
+                                                  }`}
+                                              >
+                                                {propUser.fullName}
+                                                {user && user.role === "admin" && (
+                                                  <span className="material-symbols-outlined click_icon text_near_icon">
+                                                    edit
+                                                  </span>
+                                                )}
+                                              </h5>
+                                              <h6 className="t_number">
+                                                {propUser.phoneNumber.replace(
+                                                  /(\d{2})(\d{5})(\d{5})/,
+                                                  "+$1 $2-$3"
+                                                )}
+                                              </h6>
+                                              <h6 className="text_red pointer" style={{
+                                                width: "fit-content",
+                                                fontSize: "10px",
+                                                letterSpacing: "0.4px",
+                                                marginLeft: "3px"
+                                              }}>
+                                                Delete
+                                              </h6>
+                                            </div>
+                                          </div>
+                                          <div className="wha_call_icon">
+                                            < Link
+                                              className="call_icon wc_single"
+                                              to={
+                                                propUser
+                                                  ? `tel:${propUser.phoneNumber.replace(/\D/g, '')}`
+                                                  : "#"
+                                              }
+                                            >
+                                              <img
+                                                src="/assets/img/simple_call.png"
+                                                alt=""
+                                              />
+                                            </Link>
+                                            <Link
+                                              className="wha_icon wc_single"
+                                              to={
+                                                propUser
+                                                  ? `https://wa.me/${propUser.phoneNumber.replace(/\D/g, '')}`
+                                                  : "#"
+                                              }
+                                              target="_blank"
+                                            >
+                                              <img
+                                                src="/assets/img/whatsapp_simple.png"
+                                                alt=""
+                                              />
+                                            </Link>
+                                          </div>
                                         </div>
-                                      </div>
-                                      <div className="wha_call_icon">
-                                        < Link
-                                          className="call_icon wc_single"
-                                          to={
-                                            propUser
-                                              ? `tel:${propUser.phoneNumber.replace(/\D/g, '')}`
-                                              : "#"
-                                          }
-                                        >
-                                          <img
-                                            src="/assets/img/simple_call.png"
-                                            alt=""
-                                          />
-                                        </Link>
-                                        <Link
-                                          className="wha_icon wc_single"
-                                          to={
-                                            propUser
-                                              ? `https://wa.me/${propUser.phoneNumber.replace(/\D/g, '')}`
-                                              : "#"
-                                          }
-                                          target="_blank"
-                                        >
-                                          <img
-                                            src="/assets/img/whatsapp_simple.png"
-                                            alt=""
-                                          />
-                                        </Link>
-                                      </div>
-                                    </div>
-                                  ))}
+                                      ))}
+                                  </OwlCarousel>
+                                </div>
 
                               </div>
                             </div>
                           </div>
-
                         </div>
                       </section>
                     </>
