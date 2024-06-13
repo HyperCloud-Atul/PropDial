@@ -1658,352 +1658,353 @@ const PropertyDetails = () => {
                 {/* Show Property Layout Component */}
                 {showPropertyLayoutComponent && <PropertyLayoutComponent propertylayouts={propertyLayouts} propertyid={propertyid} layoutid={layoutid} setShowPropertyLayoutComponent={setShowPropertyLayoutComponent}></PropertyLayoutComponent>}
 
-                <section className="property_card_single full_width_sec with_blue">
-                  <span className="verticall_title">
-                    Layout :  {propertyLayouts && propertyLayouts.length}
-                  </span>
-                  <div className="more_detail_card_inner">
-                    <div className="row">
-                      <div className="col-1">
-                        {/* {!showAIForm && ( */}
-                        <div className="plus_icon">
-                          <Link className="plus_icon_inner"
-                            onClick={handleShowPropertyLayoutComponent}
-                          >
-                            <span class="material-symbols-outlined">
-                              add
-                            </span>
-                          </Link>
-                        </div>
-                        {/* )} */}
-
-                      </div>
-                      <div className="col-11">
-                        <div className="property_layout_card">
-                          <OwlCarousel className="owl-theme" {...optionsroom}>
-                            {propertyLayouts && propertyLayouts.map((room, index) => (
-                              <div className="ai_detail_show item" key={index}>
-                                <div className="left relative">
-                                  {(() => {
-                                    if (room.roomType === "Bedroom") {
-                                      return (
-                                        <img
-                                          src="/assets/img/icons/illustrate_bedroom.jpg"
-                                          alt={room.roomType}
-                                        />
-                                      );
-                                    } else if (room.roomType === "Kitchen") {
-                                      return (
-                                        <img
-                                          src="/assets/img/icons/illustrate_kitchen.jpg"
-                                          alt={room.roomType}
-                                        />
-                                      );
-                                    } else if (room.roomType === "Living Room") {
-                                      return (
-                                        <img
-                                          src="/assets/img/icons/illustrate_livingroom.jpg"
-                                          alt={room.roomType}
-                                        />
-                                      );
-                                    } else if (room.roomType === "Bathroom") {
-                                      return (
-                                        <img
-                                          src="/assets/img/icons/illustrate_bathroom.jpg"
-                                          alt={room.roomType}
-                                        />
-                                      );
-                                    } else if (room.roomType === "Dining Room") {
-                                      return (
-                                        <img
-                                          src="/assets/img/icons/illustrate_dining.jpg"
-                                          alt={room.roomType}
-                                        />
-                                      );
-                                    } else if (room.roomType === "Balcony") {
-                                      return (
-                                        <img
-                                          src="/assets/img/icons/illustrate_balcony.jpg"
-                                          alt={room.roomType}
-                                        />
-                                      );
-                                    } else {
-                                      return (
-                                        <img
-                                          src="/assets/img/icons/illustrate_basment.jpg"
-                                          alt={room.roomType}
-                                        />
-                                      );
-                                    }
-                                  })()}
-                                  <label htmlFor="imgupload" className="upload_img click_text by_text">
-                                    Upload img
-                                    <input
-                                      type="file"
-                                      id="imgupload"
-                                    />
-                                  </label>
-                                </div>
-                                <div className="right">
-                                  <h5>{room.roomName}</h5>
-                                  <div className="in_detail">
-                                    <span className="in_single">Area {room.roomTotalArea}sq/ft</span>
-                                    <span className="in_single">Length {room.roomLength}ft</span>
-                                    <span className="in_single">Width {room.roomWidth}ft</span>
-                                    {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
-                                      <span className="in_single" key={findex}>{fixture}</span>
-                                    ))}
-                                  </div>
-                                  <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
-                                    <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
-                                    <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </OwlCarousel>
-
-                          {selectedRoom && (
-                            <>
-                              <Modal show={showRoomModal} onHide={handleRoomModalClose} className="detail_modal">
-                                <span class="material-symbols-outlined modal_close" onClick={handleRoomModalClose}>
-                                  close
+                {
+                  (<section className="property_card_single full_width_sec with_blue">
+                    <span className="verticall_title">
+                      Layout :  {propertyLayouts && propertyLayouts.length}
+                    </span>
+                    <div className="more_detail_card_inner">
+                      <div className="row">
+                        {(user && user.role === "admin") &&
+                          <div className="col-1">
+                            <div className="plus_icon">
+                              <Link className="plus_icon_inner"
+                                onClick={handleShowPropertyLayoutComponent}
+                              >
+                                <span class="material-symbols-outlined">
+                                  add
                                 </span>
-                                <h5 className="modal_title text-center">
-                                  {selectedRoom.roomName}
-                                </h5>
-                                <div className="modal_body">
-                                  <div className="img_area">
+                              </Link>
+                            </div>
+                          </div>}
+                        <div className="col-11">
+                          <div className="property_layout_card">
+                            <OwlCarousel className="owl-theme" {...optionsroom}>
+                              {propertyLayouts && propertyLayouts.map((room, index) => (
+                                <div className="ai_detail_show item" key={index}>
+                                  <div className="left relative">
                                     {(() => {
-                                      if (selectedRoom.roomType === "Bedroom") {
+                                      if (room.roomType === "Bedroom") {
                                         return (
-                                          <img style={{
-                                            width: "100%"
-                                          }}
+                                          <img
                                             src="/assets/img/icons/illustrate_bedroom.jpg"
-                                            alt={selectedRoom.roomType}
+                                            alt={room.roomType}
                                           />
                                         );
-                                      } else if (selectedRoom.roomType === "Kitchen") {
+                                      } else if (room.roomType === "Kitchen") {
                                         return (
-                                          <img style={{
-                                            width: "100%"
-                                          }}
+                                          <img
                                             src="/assets/img/icons/illustrate_kitchen.jpg"
-                                            alt={selectedRoom.roomType}
+                                            alt={room.roomType}
                                           />
                                         );
-                                      } else if (selectedRoom.roomType === "Living Room") {
+                                      } else if (room.roomType === "Living Room") {
                                         return (
-                                          <img style={{
-                                            width: "100%"
-                                          }}
+                                          <img
                                             src="/assets/img/icons/illustrate_livingroom.jpg"
-                                            alt={selectedRoom.roomType}
+                                            alt={room.roomType}
                                           />
                                         );
-                                      } else if (selectedRoom.roomType === "Bathroom") {
+                                      } else if (room.roomType === "Bathroom") {
                                         return (
-                                          <img style={{
-                                            width: "100%"
-                                          }}
+                                          <img
                                             src="/assets/img/icons/illustrate_bathroom.jpg"
-                                            alt={selectedRoom.roomType}
+                                            alt={room.roomType}
                                           />
                                         );
-                                      } else if (selectedRoom.roomType === "Dining Room") {
+                                      } else if (room.roomType === "Dining Room") {
                                         return (
-                                          <img style={{
-                                            width: "100%"
-                                          }}
+                                          <img
                                             src="/assets/img/icons/illustrate_dining.jpg"
-                                            alt={selectedRoom.roomType}
+                                            alt={room.roomType}
                                           />
                                         );
-                                      } else if (selectedRoom.roomType === "Balcony") {
+                                      } else if (room.roomType === "Balcony") {
                                         return (
-                                          <img style={{
-                                            width: "100%"
-                                          }}
+                                          <img
                                             src="/assets/img/icons/illustrate_balcony.jpg"
-                                            alt={selectedRoom.roomType}
+                                            alt={room.roomType}
                                           />
                                         );
                                       } else {
                                         return (
-                                          <img style={{
-                                            width: "100%"
-                                          }}
+                                          <img
                                             src="/assets/img/icons/illustrate_basment.jpg"
-                                            alt={selectedRoom.roomType}
+                                            alt={room.roomType}
                                           />
                                         );
                                       }
                                     })()}
+                                    <label htmlFor="imgupload" className="upload_img click_text by_text">
+                                      Upload img
+                                      <input
+                                        type="file"
+                                        id="imgupload"
+                                      />
+                                    </label>
                                   </div>
-                                  <div className="main_detail">
-                                    <div className="md_single">
-                                      Area : <span className="value">{selectedRoom.roomTotalArea}</span><span className="unit">sq/ft</span>
+                                  <div className="right">
+                                    <h5>{room.roomName}</h5>
+                                    <div className="in_detail">
+                                      <span className="in_single">Area {room.roomTotalArea}sq/ft</span>
+                                      <span className="in_single">Length {room.roomLength}ft</span>
+                                      <span className="in_single">Width {room.roomWidth}ft</span>
+                                      {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
+                                        <span className="in_single" key={findex}>{fixture}</span>
+                                      ))}
                                     </div>
-                                    <div className="md_single">
-                                      Length : <span className="value">{selectedRoom.roomLength}</span><span className="unit">ft</span>
+                                    <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
+                                      <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
+                                      <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
                                     </div>
-                                    <div className="md_single">
-                                      Width : <span className="value">{selectedRoom.roomWidth}</span><span className="unit">ft</span>
-                                    </div>
-                                  </div>
-                                  <div className="more_detail">
-                                    {selectedRoom.roomFixtures && selectedRoom.roomFixtures.map((fixture, index) => (
-                                      <span className="more_detail_single" key={index}>{fixture}</span>
-                                    ))}
                                   </div>
                                 </div>
-                                <div className="attached_with">
-                                  {selectedRoom.roomAttachments && (
-                                    <h6 className="text-center text_black">Attached with</h6>
-                                  )
-                                  }
-                                  <div className="more_detail">
-                                    {selectedRoom.roomAttachments && selectedRoom.roomAttachments.map((attachment, findex) => (
-                                      <span className="more_detail_single">{attachment}</span>
-                                    ))}
-                                  </div>
+                              ))}
+                            </OwlCarousel>
 
-                                </div>
-                                <div className="modal_footer">
-                                  <div onClick={handleConfirmShow} className="delete_bottom">
-                                    <span className="material-symbols-outlined">delete</span>
-                                    <span>Delete</span>
-                                  </div>
-                                </div>
-                              </Modal>
-                              <Modal show={showConfirmModal} onHide={handleConfirmClose}>
-                                <Modal.Header className="justify-content-center" style={{
-                                  paddingBottom: "0px",
-                                  border: "none"
-                                }}>
-                                  <h5>
-                                    Alert
+                            {selectedRoom && (
+                              <>
+                                <Modal show={showRoomModal} onHide={handleRoomModalClose} className="detail_modal">
+                                  <span class="material-symbols-outlined modal_close" onClick={handleRoomModalClose}>
+                                    close
+                                  </span>
+                                  <h5 className="modal_title text-center">
+                                    {selectedRoom.roomName}
                                   </h5>
-                                </Modal.Header>
-                                <Modal.Body className="text-center" style={{
-                                  color: "#FA6262",
-                                  fontSize: "20px",
-                                  border: "none"
-                                }}>Are you sure you want to delete?</Modal.Body>
-                                <Modal.Footer className="d-flex justify-content-between" style={{
-                                  border: "none",
-                                  gap: "15px"
-                                }}>
-                                  <div className="cancel_btn" onClick={() => deletePropertyLayout(selectedRoom.id)}  >
-                                    Yes
+                                  <div className="modal_body">
+                                    <div className="img_area">
+                                      {(() => {
+                                        if (selectedRoom.roomType === "Bedroom") {
+                                          return (
+                                            <img style={{
+                                              width: "100%"
+                                            }}
+                                              src="/assets/img/icons/illustrate_bedroom.jpg"
+                                              alt={selectedRoom.roomType}
+                                            />
+                                          );
+                                        } else if (selectedRoom.roomType === "Kitchen") {
+                                          return (
+                                            <img style={{
+                                              width: "100%"
+                                            }}
+                                              src="/assets/img/icons/illustrate_kitchen.jpg"
+                                              alt={selectedRoom.roomType}
+                                            />
+                                          );
+                                        } else if (selectedRoom.roomType === "Living Room") {
+                                          return (
+                                            <img style={{
+                                              width: "100%"
+                                            }}
+                                              src="/assets/img/icons/illustrate_livingroom.jpg"
+                                              alt={selectedRoom.roomType}
+                                            />
+                                          );
+                                        } else if (selectedRoom.roomType === "Bathroom") {
+                                          return (
+                                            <img style={{
+                                              width: "100%"
+                                            }}
+                                              src="/assets/img/icons/illustrate_bathroom.jpg"
+                                              alt={selectedRoom.roomType}
+                                            />
+                                          );
+                                        } else if (selectedRoom.roomType === "Dining Room") {
+                                          return (
+                                            <img style={{
+                                              width: "100%"
+                                            }}
+                                              src="/assets/img/icons/illustrate_dining.jpg"
+                                              alt={selectedRoom.roomType}
+                                            />
+                                          );
+                                        } else if (selectedRoom.roomType === "Balcony") {
+                                          return (
+                                            <img style={{
+                                              width: "100%"
+                                            }}
+                                              src="/assets/img/icons/illustrate_balcony.jpg"
+                                              alt={selectedRoom.roomType}
+                                            />
+                                          );
+                                        } else {
+                                          return (
+                                            <img style={{
+                                              width: "100%"
+                                            }}
+                                              src="/assets/img/icons/illustrate_basment.jpg"
+                                              alt={selectedRoom.roomType}
+                                            />
+                                          );
+                                        }
+                                      })()}
+                                    </div>
+                                    <div className="main_detail">
+                                      <div className="md_single">
+                                        Area : <span className="value">{selectedRoom.roomTotalArea}</span><span className="unit">sq/ft</span>
+                                      </div>
+                                      <div className="md_single">
+                                        Length : <span className="value">{selectedRoom.roomLength}</span><span className="unit">ft</span>
+                                      </div>
+                                      <div className="md_single">
+                                        Width : <span className="value">{selectedRoom.roomWidth}</span><span className="unit">ft</span>
+                                      </div>
+                                    </div>
+                                    <div className="more_detail">
+                                      {selectedRoom.roomFixtures && selectedRoom.roomFixtures.map((fixture, index) => (
+                                        <span className="more_detail_single" key={index}>{fixture}</span>
+                                      ))}
+                                    </div>
                                   </div>
-                                  <div className="done_btn" onClick={handleConfirmClose}>
-                                    No
+                                  <div className="attached_with">
+                                    {selectedRoom.roomAttachments && (
+                                      <h6 className="text-center text_black">Attached with</h6>
+                                    )
+                                    }
+                                    <div className="more_detail">
+                                      {selectedRoom.roomAttachments && selectedRoom.roomAttachments.map((attachment, findex) => (
+                                        <span className="more_detail_single">{attachment}</span>
+                                      ))}
+                                    </div>
+
                                   </div>
-                                </Modal.Footer>
-                              </Modal>
-                            </>
+                                  <div className="modal_footer">
+                                    <div onClick={handleConfirmShow} className="delete_bottom">
+                                      <span className="material-symbols-outlined">delete</span>
+                                      <span>Delete</span>
+                                    </div>
+                                  </div>
+                                </Modal>
+                                <Modal show={showConfirmModal} onHide={handleConfirmClose}>
+                                  <Modal.Header className="justify-content-center" style={{
+                                    paddingBottom: "0px",
+                                    border: "none"
+                                  }}>
+                                    <h5>
+                                      Alert
+                                    </h5>
+                                  </Modal.Header>
+                                  <Modal.Body className="text-center" style={{
+                                    color: "#FA6262",
+                                    fontSize: "20px",
+                                    border: "none"
+                                  }}>Are you sure you want to delete?</Modal.Body>
+                                  <Modal.Footer className="d-flex justify-content-between" style={{
+                                    border: "none",
+                                    gap: "15px"
+                                  }}>
+                                    <div className="cancel_btn" onClick={() => deletePropertyLayout(selectedRoom.id)}  >
+                                      Yes
+                                    </div>
+                                    <div className="done_btn" onClick={handleConfirmClose}>
+                                      No
+                                    </div>
+                                  </Modal.Footer>
+                                </Modal>
+                              </>
 
-                          )}
+                            )}
 
 
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                  </div>
-                </section>
+                    </div>
+                  </section>)}
                 {/* property layout section end  */}
 
                 {/* tenant card start */}
-                <section className="property_card_single full_width_sec with_orange">
-                  <span className="verticall_title">
-                    Tenants :  {tenantDocument && tenantDocument.length}
-                  </span>
-                  <div className="more_detail_card_inner">
-                    <div className="row">
-                      <div className="col-1">
-                        <div className="plus_icon">
-                          <Link className="plus_icon_inner" onClick={handleAddTenant}>
-                            <span class="material-symbols-outlined">
-                              add
-                            </span>
-                          </Link>
-                        </div>
-
-                      </div>
-                      <div className="col-11">
-                        <div className="tenant_card">
-                          <div className="all_tenants">
-                            <OwlCarousel className="owl-theme" {...optionstenant}>
-                              {tenantDocument &&
-                                tenantDocument.map((tenant, index) => (
-                                  <div
-                                    className={`tc_single relative item ${tenant.status === "inactive" ? "t_inactive" : ""}`}
-                                    key={index}>
-                                    <Link className="left" to={`/tenantdetails/${tenant.id}`}>
-                                      <div className="tcs_img_container" >
-                                        <img
-                                          src={
-                                            tenant.tenantImgUrl ||
-                                            "/assets/img/dummy_user.png"
-                                          }
-                                          alt="Preview"
-                                        />
-                                      </div>
-                                      <div
-                                        className={`tenant_detail ${editingTenantId === tenant.id
-                                          ? "td_edit"
-                                          : ""
-                                          }`}
-                                      >
-                                        <h6 className="t_name">
-                                          {
-                                            tenant.name ? tenant.name : "Tenant Name"
-
-                                          }
-                                        </h6>
-                                        <h6 className="t_number">
-                                          {tenant.mobile
-                                            ? tenant.mobile
-                                            : "Tenant Phone"}
-                                        </h6>
-                                      </div>
-                                    </Link>
-                                    <div className="wha_call_icon">
-                                      <Link
-                                        className="call_icon wc_single"
-                                        to={`tel:${tenant.mobile}`}
-                                        target="_blank"
-                                      >
-                                        <img
-                                          src="/assets/img/simple_call.png"
-                                          alt=""
-                                        />
-                                      </Link>
-                                      <Link
-                                        className="wha_icon wc_single"
-                                        to={`https://wa.me/${tenant.mobile}`}
-                                        target="_blank"
-                                      >
-                                        <img
-                                          src="/assets/img/whatsapp_simple.png"
-                                          alt=""
-                                        />
-                                      </Link>
-                                    </div>
-                                  </div>
-                                ))}
-                            </OwlCarousel>
+                {((user && user.role === "owner") ||
+                  (user && user.role === "coowner") ||
+                  (user && user.role === "admin")) && (<section className="property_card_single full_width_sec with_orange">
+                    <span className="verticall_title">
+                      Tenants :  {tenantDocument && tenantDocument.length}
+                    </span>
+                    <div className="more_detail_card_inner">
+                      <div className="row">
+                        <div className="col-1">
+                          <div className="plus_icon">
+                            <Link className="plus_icon_inner" onClick={handleAddTenant}>
+                              <span class="material-symbols-outlined">
+                                add
+                              </span>
+                            </Link>
                           </div>
 
                         </div>
-                      </div>
-                    </div>
+                        <div className="col-11">
+                          <div className="tenant_card">
+                            <div className="all_tenants">
+                              <OwlCarousel className="owl-theme" {...optionstenant}>
+                                {tenantDocument &&
+                                  tenantDocument.map((tenant, index) => (
+                                    <div
+                                      className={`tc_single relative item ${tenant.status === "inactive" ? "t_inactive" : ""}`}
+                                      key={index}>
+                                      <Link className="left" to={`/tenantdetails/${tenant.id}`}>
+                                        <div className="tcs_img_container" >
+                                          <img
+                                            src={
+                                              tenant.tenantImgUrl ||
+                                              "/assets/img/dummy_user.png"
+                                            }
+                                            alt="Preview"
+                                          />
+                                        </div>
+                                        <div
+                                          className={`tenant_detail ${editingTenantId === tenant.id
+                                            ? "td_edit"
+                                            : ""
+                                            }`}
+                                        >
+                                          <h6 className="t_name">
+                                            {
+                                              tenant.name ? tenant.name : "Tenant Name"
 
-                  </div>
-                </section>
+                                            }
+                                          </h6>
+                                          <h6 className="t_number">
+                                            {tenant.mobile
+                                              ? tenant.mobile
+                                              : "Tenant Phone"}
+                                          </h6>
+                                        </div>
+                                      </Link>
+                                      <div className="wha_call_icon">
+                                        <Link
+                                          className="call_icon wc_single"
+                                          to={`tel:${tenant.mobile}`}
+                                          target="_blank"
+                                        >
+                                          <img
+                                            src="/assets/img/simple_call.png"
+                                            alt=""
+                                          />
+                                        </Link>
+                                        <Link
+                                          className="wha_icon wc_single"
+                                          to={`https://wa.me/${tenant.mobile}`}
+                                          target="_blank"
+                                        >
+                                          <img
+                                            src="/assets/img/whatsapp_simple.png"
+                                            alt=""
+                                          />
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  ))}
+                              </OwlCarousel>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </section>)}
                 {/* tenant card end  */}
 
 
