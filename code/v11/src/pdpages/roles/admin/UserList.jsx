@@ -41,7 +41,7 @@ const UserList = () => {
         case "Owner":
           return (document.rolePropDial === "owner") || (document.rolePropDial === "coowner");
         case "Frontdesk":
-          return (document.rolePropDial === "frondesk");
+          return (document.rolePropDial === "frontdesk");
         case "TENANT":
           return document.rolePropDial === "tenant";
         case "PROPERTYMANAGER":

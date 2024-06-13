@@ -1,14 +1,13 @@
-import React from 'react'
-import { useEffect, useState } from "react";
-import { Navigate, Link } from "react-router-dom";
-import Button from 'react-bootstrap/Button';
+import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+import { format } from 'date-fns';
 import Modal from 'react-bootstrap/Modal';
-
-
+import { useFirestore } from "../../../hooks/useFirestore";
+import { useAuthContext } from "../../../hooks/useAuthContext";
+import Button from 'react-bootstrap/Button';
 
 const UserSinglecard = ({ users }) => {
-
-    //   modal code 
+    //   modal code start
     const [selectedUser, setSelectedUser] = useState(null);
     const [show, setShow] = useState(false);
 
@@ -18,6 +17,45 @@ const UserSinglecard = ({ users }) => {
         setShow(true);
     };
     console.log("In user single card");
+    //   modal code end
+
+
+    // update role and status 
+    const { user } = useAuthContext();
+    const { updateDocument } = useFirestore("users");
+    const handleSaveChanges = async () => {
+        if (!selectedUser) return;
+        try {
+            const updatedUser = {
+                ...selectedUser,
+                updatedAt: new Date(),
+                updatedBy: user.uid,
+
+            };
+
+            await updateDocument(selectedUser.id, updatedUser);
+            console.log('User role and status updated successfully');
+            handleClose(); // Close modal after successful update
+        } catch (error) {
+            console.error('Error updating user role and status:', error);
+            // Handle error as needed
+        }
+    };
+
+    const handleRoleChange = (newRole) => {
+        setSelectedUser(prevUser => ({
+            ...prevUser,
+            rolePropDial: newRole
+        }));
+    };
+
+    const handleStatusChange = (newStatus) => {
+        setSelectedUser(prevUser => ({
+            ...prevUser,
+            status: newStatus
+        }));
+    };
+    // update role and status 
 
 
     return (
@@ -81,10 +119,23 @@ const UserSinglecard = ({ users }) => {
                         </div>
                     </div>
                     <div className="dates">
+                        <div className="date_single">
+                            <strong>On-Boarded</strong>:{" "}
+                            <span>
+                                {format(userObj.createdAt.toDate(), 'dd-MMM-yy')}
+                            </span>
+                        </div>
+                        <div className="date_single">
+                            <strong>Last-Login</strong>:{" "}
+                            <span>
+                                {format(userObj.lastLoginTimestamp.toDate(), 'dd-MMM-yy hh:mm a')}
+                            </span>
+                        </div>
                     </div>
                 </div>
             ))}
             {selectedUser && (
+          
                 <Modal show={show} onHide={handleClose} className='my_modal'>
                     <Modal.Body>
                         <h6 className="r16 lh22 mb-3">
@@ -92,60 +143,62 @@ const UserSinglecard = ({ users }) => {
                         </h6>
                         <div className='form_field'>
                             <div className='field_box theme_radio_new'>
-                                <div className="theme_radio_container" style={{
-                                    padding: "0px",
-                                    border: "none"
-                                }}>
+                                <div className="theme_radio_container"
+                                    style={{
+                                        padding: "0px",
+                                        border: "none"
+                                    }}>
                                     <div className="radio_single">
                                         <input type="radio" name="user_role" value="owner" id='owner'
-                                            checked={selectedUser.rolePropDial === "owner"} />
-                                        <label htmlFor="owner">owner</label>
+                                            checked={selectedUser.rolePropDial === "owner"} onChange={() => handleRoleChange("owner")} />
+                                        <label htmlFor="owner">Owner</label>
                                     </div>
                                     <div className="radio_single">
                                         <input type="radio" name="user_role" value="frontdesk" id='frontdesk'
-                                            checked={selectedUser.rolePropDial === "frontdesk"} />
-                                        <label htmlFor="frontdesk">frontdesk</label>
+                                            checked={selectedUser.rolePropDial === "frontdesk"} onChange={() => handleRoleChange("frontdesk")} />
+                                        <label htmlFor="frontdesk">Frontdesk</label>
                                     </div>
                                     <div className="radio_single">
                                         <input type="radio" name="user_role" value="admin" id='admin'
-                                            checked={selectedUser.rolePropDial === "admin"} />
-                                        <label htmlFor="admin">admin</label>
+                                            checked={selectedUser.rolePropDial === "admin"} onChange={() => handleRoleChange("admin")} />
+                                        <label htmlFor="admin">Admin</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <hr></hr>
+                        <hr />
                         <h6 className="r16 lh22 mb-3">
-                            The status for <span className='m16'>{selectedUser.displayName}</span>  is currently set to <span className={`m16 text-capitalize ${selectedUser.status === "active" ? "text_green2" : "text_red"}`}>{selectedUser.status}</span>, You can change it here if needed.
-                        </h6>
+                          The status for <span className='m16'>{selectedUser.displayName}</span>  is currently set to <span className={`m16 text-capitalize ${selectedUser.status === "active" ? "text_green2" : "text_red"}`}>{selectedUser.status}</span>, You can change it here if needed.
+                       </h6>
                         <div className='form_field'>
                             <div className='field_box theme_radio_new'>
-                                <div className="theme_radio_container" style={{
-                                    padding: "0px",
-                                    border: "none"
-                                }}>
+                                <div className="theme_radio_container"
+                                    style={{
+                                        padding: "0px",
+                                        border: "none"
+                                    }}>
                                     <div className="radio_single">
-                                        <input type="radio" name="user_status" value="Active" id='Active' checked={selectedUser.status === "active"} />
-                                        <label htmlFor="Active">Active</label>
+                                        <input type="radio" name="user_status" value="active" id='active'
+                                            checked={selectedUser.status === "active"} onChange={() => handleStatusChange("active")} />
+                                        <label htmlFor="active">Active</label>
                                     </div>
                                     <div className="radio_single">
-                                        <input type="radio" name="user_status" value="Inactive" id='Inactive' checked={selectedUser.status === "inactive"} />
-                                        <label htmlFor="Inactive">Inactive</label>
+                                        <input type="radio" name="user_status" value="inactive" id='inactive'
+                                            checked={selectedUser.status === "inactive"} onChange={() => handleStatusChange("inactive")} />
+                                        <label htmlFor="inactive">Inactive</label>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                         <div className="vg22"></div>
-                        <div className="d-flex align-items-center justify-content-between">
+                        <div className="d-flex align-items-center justify-content-between">                         
                             <div className="cancel_btn" onClick={handleClose}  >
-                                Cancel
-                            </div>
-                            <div className="done_btn" onClick={handleClose}>
-                                Save Changes
+                               Cancel
+                           </div>
+                           <div className="done_btn" onClick={handleSaveChanges}>
+                               Save Changes
                             </div>
                         </div>
-
                     </Modal.Body>
                 </Modal>
             )}
