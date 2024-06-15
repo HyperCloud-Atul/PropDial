@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { format } from 'date-fns';
-import Modal from 'react-bootstrap/Modal';
 import { useFirestore } from "../../../hooks/useFirestore";
 import { useAuthContext } from "../../../hooks/useAuthContext";
-import Button from 'react-bootstrap/Button';
+import UserRoleStatusModal from './UserRoleStatusModal';
 
 const UserSinglecard = ({ users }) => {
     //   modal code start
@@ -61,7 +60,9 @@ const UserSinglecard = ({ users }) => {
     return (
         <>
             {users && users.map((userObj) => (
-                <div className='pu_single'>
+                <div className='pu_single' style={{
+                    opacity: userObj.status === "inactive" ? 0.4 : 1
+                }}>
                     <div
                         className="tc_single relative item"  >
                         <div className="left">
@@ -134,8 +135,7 @@ const UserSinglecard = ({ users }) => {
                     </div>
                 </div>
             ))}
-            {selectedUser && (
-          
+            {/* {selectedUser && (
                 <Modal show={show} onHide={handleClose} className='my_modal'>
                     <Modal.Body>
                         <h6 className="r16 lh22 mb-3">
@@ -168,8 +168,8 @@ const UserSinglecard = ({ users }) => {
                         </div>
                         <hr />
                         <h6 className="r16 lh22 mb-3">
-                          The status for <span className='m16'>{selectedUser.displayName}</span>  is currently set to <span className={`m16 text-capitalize ${selectedUser.status === "active" ? "text_green2" : "text_red"}`}>{selectedUser.status}</span>, You can change it here if needed.
-                       </h6>
+                            The status for <span className='m16'>{selectedUser.displayName}</span>  is currently set to <span className={`m16 text-capitalize ${selectedUser.status === "active" ? "text_green2" : "text_red"}`}>{selectedUser.status}</span>, You can change it here if needed.
+                        </h6>
                         <div className='form_field'>
                             <div className='field_box theme_radio_new'>
                                 <div className="theme_radio_container"
@@ -191,17 +191,25 @@ const UserSinglecard = ({ users }) => {
                             </div>
                         </div>
                         <div className="vg22"></div>
-                        <div className="d-flex align-items-center justify-content-between">                         
+                        <div className="d-flex align-items-center justify-content-between">
                             <div className="cancel_btn" onClick={handleClose}  >
-                               Cancel
-                           </div>
-                           <div className="done_btn" onClick={handleSaveChanges}>
-                               Save Changes
+                                Cancel
+                            </div>
+                            <div className="done_btn" onClick={handleSaveChanges}>
+                                Save Changes
                             </div>
                         </div>
                     </Modal.Body>
                 </Modal>
-            )}
+            )} */}
+            <UserRoleStatusModal
+                show={show}
+                handleClose={handleClose}
+                selectedUser={selectedUser}
+                handleRoleChange={handleRoleChange}
+                handleStatusChange={handleStatusChange}
+                handleSaveChanges={handleSaveChanges}
+            />
 
         </>
 

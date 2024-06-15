@@ -7,6 +7,7 @@ import { BeatLoader } from "react-spinners";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PropertyDocuments.scss";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
+import { format } from 'date-fns';
 
 const PropertyInspectionDocuments = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -59,11 +60,11 @@ const PropertyInspectionDocuments = () => {
         status: "active",
         masterRefId: propertyId,
         documentUrl: "",
-        inspectionDate:selectedInspectionDate,
-      inspectionArea:inspectionArea,
+        inspectionDate: selectedInspectionDate,
+        inspectionArea: inspectionArea,
         mediaType: "",
       });
-      setSelectedInspectionDate();   
+      setSelectedInspectionDate();
       setInspectionArea("");
       setIsUploading(false);
       setNewDocId(docRef.id);
@@ -73,7 +74,7 @@ const PropertyInspectionDocuments = () => {
     }
   };
   console.log("inspectionDate", selectedInspectionDate);
-  console.log("inspectionArea", inspectionArea );
+  console.log("inspectionArea", inspectionArea);
 
   useEffect(() => {
     if (newDocId && documentFile) {
@@ -131,7 +132,7 @@ const PropertyInspectionDocuments = () => {
   // data of quick access menu  start  
   const menuItems = [
     { name: 'Dashboard', link: '/dashboard', icon: '/assets/img/icons/qa_dashboard.png' },
-    { name: 'Property', link: '/propertydetails/' + propertyId, icon: '/assets/img/icons/qa_property.png' },  
+    { name: 'Property', link: '/propertydetails/' + propertyId, icon: '/assets/img/icons/qa_property.png' },
   ];
   // data of quick access menu  end
 
@@ -207,21 +208,21 @@ const PropertyInspectionDocuments = () => {
               {/* <h2 className="card_title">date</h2> */}
               <div className="aai_form">
                 <div className="row" style={{ rowGap: "18px" }}>
-                  <div className="col-2">                  
-                      <div className="form_field" style={{
-                        width:"100%"
-                      }}>
-                        <div className="relative">
-                          <input
-                            type="date"
-                            value={selectedInspectionDate}
-                            onChange={handleChangeInspectionDate}
-                            placeholder="dd/mm/yy"
-                          />
-                        </div>
+                  <div className="col-2">
+                    <div className="form_field" style={{
+                      width: "100%"
+                    }}>
+                      <div className="relative">
+                        <input
+                          type="date"
+                          value={selectedInspectionDate}
+                          onChange={handleChangeInspectionDate}
+                          placeholder="dd/mm/yy"
+                        />
                       </div>
-                    
-                  </div>              
+                    </div>
+
+                  </div>
                   <div className="col-4">
                     <div className="add_info_text">
                       <div className="form_field">
@@ -260,62 +261,70 @@ const PropertyInspectionDocuments = () => {
             </section>
           </>
         )}
-           <div className="blog_sect">
-                <div className="row">                
-                  {propertyDocument && propertyDocument.map((doc, index) => (
-                    <div className="col-md-4" key={index}>
-                      <div className="item card-container">
-                        <div className="card-image relative">
-                          {uploadingDocId !== doc.id && (
-                            <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
-                              Upload PDF or Img
-                              <input
-                                type="file"
-                                onChange={(e) => handleFileChange(e, doc.id)}
-                                ref={fileInputRef}
-                                id={`upload_img_${doc.id}`}
-                              />
-                            </label>
-                          )}
-                          {uploadingDocId === doc.id ? (
-                            <div className="loader d-flex justify-content-center align-items-center" style={{
-                              width: "100%",
-                              height: "100%"
-                            }}>
-                              <BeatLoader color={"#FF5733"} loading={true} />
-                            </div>
-                          ) : doc.mediaType === "pdf" ? (
-                            <iframe
-                              title="PDF Viewer"
-                              src={doc.documentUrl}
-                              style={{
-                                width: "100%",
-                                aspectRatio: "3/2",
-                              }}
-                            ></iframe>
-                          ) : (
-                            <img
-                              src={doc.documentUrl || "https://via.placeholder.com/150"}
-                              alt="Document"
-                            />
-                          )}
-                        </div>
-                        <div className="card-body">
-                          <h3>{doc.inspectionDate}</h3>
-                          <p className="card-subtitle">{doc.inspectionArea}</p>
-                          <div className="card-author">
-                            <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
-                              Delete
-                            </div>
-                          </div>
-                        </div>
+        <div className="blog_sect">
+          <div className="row">
+            {propertyDocument && propertyDocument.map((doc, index) => (
+              <div className="col-md-4" key={index}>
+                <div className="item card-container">
+                  <div className="card-image relative">
+                    {uploadingDocId !== doc.id && (
+                      <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                        Upload PDF or Img
+                        <input
+                          type="file"
+                          onChange={(e) => handleFileChange(e, doc.id)}
+                          ref={fileInputRef}
+                          id={`upload_img_${doc.id}`}
+                        />
+                      </label>
+                    )}
+                    {uploadingDocId === doc.id ? (
+                      <div className="loader d-flex justify-content-center align-items-center" style={{
+                        width: "100%",
+                        height: "100%"
+                      }}>
+                        <BeatLoader color={"#FF5733"} loading={true} />
+                      </div>
+                    ) : doc.mediaType === "pdf" ? (
+                      <iframe
+                        title="PDF Viewer"
+                        src={doc.documentUrl}
+                        style={{
+                          width: "100%",
+                          aspectRatio: "3/2",
+                        }}
+                      ></iframe>
+                    ) : (
+                      <img
+                        src={doc.documentUrl || "https://via.placeholder.com/150"}
+                        alt="Document"
+                      />
+                    )}
+                  </div>
+                  <div className="card-body">
+                    <h3>
+                      {new Date(doc.inspectionDate).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      }).replace(/ /g, '-')}
+                      {/* {doc.inspectionDate} */}
+                      {/* {format(userObj.createdAt.toDate(), 'dd-MMM-yy')} */}
+                    </h3>
+                    <p className="card-subtitle">{doc.inspectionArea}</p>
+                    <div className="card-author">
+                      <div onClick={() => deletePropertyDocument(doc.id)} className="learn-more pointer">
+                        Delete
                       </div>
                     </div>
-                  ))}
-
+                  </div>
                 </div>
               </div>
-      
+            ))}
+
+          </div>
+        </div>
+
 
 
       </div>

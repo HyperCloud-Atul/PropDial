@@ -21,6 +21,30 @@
     font-weight: 400;
     color: var(--light-black);
     text-align: left;
+    .contact_btn {
+      margin: -8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50%;
+      }
+    }
+    .contact_btn:after {
+      content: "";
+      height: 100%;
+      width: 1px;
+      background: #ddd;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      position: absolute;
+    }
   }
   tr:hover {
     background-color: #f5f5f5;

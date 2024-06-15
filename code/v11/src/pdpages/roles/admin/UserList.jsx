@@ -1,17 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect, useMemo } from 'react'; // Add useMemo
 import { Navigate, Link } from "react-router-dom";
 import { useCollection } from "../../../hooks/useCollection";
-import { useEffect, useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useLogout } from "../../../hooks/useLogout";
+
+// import component 
+import UserSinglecard from './UserSinglecard';
+import UserTable from './UserTable';
 
 // css import 
 import './UserList.scss'
 
 // import filter 
 import Filters from "../../../components/Filters";
-import UserSinglecard from './UserSinglecard';
-const userFilter = ["Owner", "Frontdesk", "Admin", "Inactive"];
+const userFilter = ["Owner", "Frontdesk", "Manager", "Admin", "Super Admin", "Inactive"];
 
 const UserList = () => {
   const { logout, isPending } = useLogout();
@@ -38,10 +40,14 @@ const UserList = () => {
           return true;
         case "Admin":
           return document.rolePropDial === "admin";
+        case "Super Admin":
+          return document.rolePropDial === "superAdmin";
         case "Owner":
           return (document.rolePropDial === "owner") || (document.rolePropDial === "coowner");
         case "Frontdesk":
           return (document.rolePropDial === "frontdesk");
+        case "Manager":
+          return (document.rolePropDial === "manager");
         case "TENANT":
           return document.rolePropDial === "tenant";
         case "PROPERTYMANAGER":
@@ -54,17 +60,26 @@ const UserList = () => {
     })
     : null;
 
+
+  // card and table view mode functionality start
+  const [viewMode, setviewMode] = useState('card_view'); // Initial mode is grid with 3 columns
+
+  const handleModeChange = (newViewMode) => {
+    setviewMode(newViewMode);
+  };
+  // card and table view mode functionality end
+
   return (
     <div className='top_header_pg pg_bg'>
       <div className='page_spacing'>
         <div className="pg_header d-flex justify-content-between">
-         <div className="left">
-         <h2 className="m22">User List {" "}
-            <span className="r14 light_black" >( All application users : {users && users.length} )</span>
-          </h2>
-         </div>
-          <div className="right">         
-             <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload" />         
+          <div className="left">
+            <h2 className="m22">User List {" "}
+              <span className="r14 light_black" >( All application users : {users && users.length} )</span>
+            </h2>
+          </div>
+          <div className="right">
+            <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload" />
           </div>
         </div>
         <div className="vg12"></div>
@@ -88,27 +103,31 @@ const UserList = () => {
               )}
             </div>
             <div className="button_filter diff_views">
-              <div className="bf_single active">
+              <div className={`bf_single ${viewMode === 'card_view' ? 'active' : ''}`} onClick={() => handleModeChange('card_view')}>
                 <span className="material-symbols-outlined">calendar_view_month</span>
               </div>
-              {/* <div className="bf_single">
-                <span className="material-symbols-outlined">grid_view</span>
-              </div> */}
-              <div className="bf_single">
+              <div className={`bf_single ${viewMode === 'table_view' ? 'active' : ''}`} onClick={() => handleModeChange('table_view')}>
                 <span className="material-symbols-outlined">view_list</span>
               </div>
             </div>
-          
           </div>
         </div>
-        <div className="vg22"></div>
-        {error && <p className="error">{error}</p>}   
+        <hr></hr>
+        {error && <p className="error">{error}</p>}
         {users && users.length === 0 && <p className='text_red medium text-center' style={{
           fontSize: "18px"
         }}>No Users Yet!</p>}
-        <div className="propdial_users all_tenants">
-          {users && <UserSinglecard users={users} />}
-        </div>
+
+        {viewMode === "card_view" && (
+          <div className="propdial_users all_tenants">
+            {users && <UserSinglecard users={users} />}
+          </div>
+        )}
+        {viewMode === "table_view" && (
+          <>
+            {users && <UserTable users={users} />}
+          </>
+        )}
       </div>
     </div>
 

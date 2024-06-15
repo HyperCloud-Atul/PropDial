@@ -119,6 +119,7 @@ export default function ReactTable({ tableColumns, tableData }) {
                     </tbody>
                 </table>
             </div>
+            {tableData.length > 25 && (
             <div className='react_pagination'>
                 <div className="left">
                     <div className="items_on_page">
@@ -187,6 +188,7 @@ export default function ReactTable({ tableColumns, tableData }) {
 
 
             </div >
+            )}
         </>
     )
 }

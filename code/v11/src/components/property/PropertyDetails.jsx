@@ -2203,29 +2203,34 @@ const PropertyDetails = () => {
                                 }}>
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="Admin" id='Admin'
-                                      checked={selectedPropUser.userTag === "Admin"} onChange={() => handleUserTagChange("Admin")} />
+                                   onChange={() => handleUserTagChange("Admin")} />
                                     <label htmlFor="Admin">Admin</label>
                                   </div>
+                                  {/* checked={selectedPropUser.userTag === "Admin"}  */}
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="Owner" id='Owner'
-                                      checked={selectedPropUser.userTag === "Owner"} onChange={() => handleUserTagChange("Owner")} />
+                                     onChange={() => handleUserTagChange("Owner")} />
                                     <label htmlFor="Owner">Owner</label>
                                   </div>
+                                  {/* checked={selectedPropUser.userTag === "Owner"}  */}
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="Co-Owner" id='Co-Owner'
-                                      checked={selectedPropUser.userTag === "Co-Owner"} onChange={() => handleUserTagChange("Co-Owner")} />
+                                    onChange={() => handleUserTagChange("Co-Owner")} />
                                     <label htmlFor="Co-Owner">Co-Owner</label>
                                   </div>
+                                  {/* checked={selectedPropUser.userTag === "Co-Owner"}  */}
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="POC" id='POC'
-                                      checked={selectedPropUser.userTag === "POC"} onChange={() => handleUserTagChange("POC")} />
+                                    onChange={() => handleUserTagChange("POC")} />
                                     <label htmlFor="POC">POC</label>
                                   </div>
+                                  {/* checked={selectedPropUser.userTag === "POC"}  */}
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="POA" id='POA'
-                                      checked={selectedPropUser.userTag === "POA"} onChange={() => handleUserTagChange("POA")} />
+                                     onChange={() => handleUserTagChange("POA")} />
                                     <label htmlFor="POA">POA</label>
                                   </div>
+                                  {/* checked={selectedPropUser.userTag === "POA"}  */}
                                 </div>
                               </div>
                             </div>
@@ -2241,6 +2246,7 @@ const PropertyDetails = () => {
 
                           </Modal.Body>
                         </Modal>
+                       
                       )}
                       {selectedPropUser && (
                         <Modal show={showConfirmPropUser} onHide={(e) => handleCloseConfirmPropUser(e, 'cancel')}>
