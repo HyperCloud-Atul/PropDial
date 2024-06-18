@@ -115,27 +115,8 @@ const UserTable = ({ users }) => {
             </Link>
           </div>
         ),
-      },
-      // {
-      //   Header: 'Role',
-      //   accessor: 'rolePropDial',
-      //   disableFilters: true,
-      //   Cell: ({ value }) => (
-      //     <span className="text-capitalize">
-      //       {value}
-      //     </span>
-      //   ),
-      // },
-      {
-        Header: 'Status',
-        accessor: 'status',
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <span className={`text-capitalize ${value === 'active' ? 'text_green2' : 'text_red'}`}>
-            {value}
-          </span>
-        ),
-      },
+      },   
+    
       {
         Header: 'On-Boarded',
         accessor: 'createdAt',
@@ -147,6 +128,16 @@ const UserTable = ({ users }) => {
         accessor: 'lastLoginTimestamp',
         Cell: ({ value }) => format(value.toDate(), 'dd-MMM-yy hh:mm a'),
         disableFilters: true,
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <span className={`text-capitalize ${value === 'active' ? 'text_green2' : 'text_red'}`}>
+            {value}
+          </span>
+        ),
       },
 
     ],

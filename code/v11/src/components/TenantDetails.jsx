@@ -910,9 +910,9 @@ const TenantDetails = () => {
             <div className="theme_tab prop_doc_tab">
               <Tabs>
                 <TabList className="tabs">
-                  <Tab className="pointer">Tenant Document ({filteredTenantDocLength})</Tab>
-                  <Tab className="pointer">Police Verification Document ({filteredPoliceVerificationDocLength})</Tab>
-                  <Tab className="pointer">Rent Agreement Document ({filteredRentAgreementDocLength})</Tab>
+                  <Tab className="pointer">Tenant KYC Document{" "}({filteredTenantDocLength})</Tab>
+                  <Tab className="pointer">Police Verification{" "}({filteredPoliceVerificationDocLength})</Tab>
+                  <Tab className="pointer">Rent Agreements{" "}({filteredRentAgreementDocLength})</Tab>
                 </TabList>
                 <TabPanel>             
                   <div className="blog_sect">

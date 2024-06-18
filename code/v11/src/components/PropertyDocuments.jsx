@@ -29,6 +29,7 @@ const PropertyDocuments = () => {
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const [selectedDocCat, setSelectedDocCat] = useState("Property Document");
+  const [selectedDocWhat, setSelectedDocWhat] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -39,6 +40,7 @@ const PropertyDocuments = () => {
   // const [checked, setChecked] = React.useState(true);
   const handleDocCatChange = (event) => setSelectedDocCat(event.target.value);
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
+  const handleDocWhatChange = (event) => setSelectedDocWhat(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
 
   const handleFileChange = (event, docId) => {
@@ -55,7 +57,7 @@ const PropertyDocuments = () => {
   };
 
   const addPropertyDocuments = async () => {
-    if (!selectedDocCat || !selectedIdType) {
+    if (!selectedDocCat || !selectedIdType || !selectedDocWhat) {
       alert("All fields are required!");
       return;
     }
@@ -67,12 +69,14 @@ const PropertyDocuments = () => {
         masterRefId: propertyId,
         documentUrl: "",
         docCat: selectedDocCat,
+        docWhat:selectedDocWhat,
         idType: selectedIdType,
         idNumber: idNumber,
         mediaType: "",
         docVerified: "false",
       });
       setSelectedDocCat("");
+      setSelectedDocWhat("");
       setSelectedIdType("");
       setIdNumber("");
       setIsUploading(false);
@@ -146,6 +150,7 @@ const PropertyDocuments = () => {
       label: "Property Maintainance",
     },
     { id: "utility_bill", value: "Utility Bills", label: "Utility Bills" },
+    { id: "property_tax", value: "Property Tax", label: "Property Tax" },
   ];
 
   const docTypes = {
@@ -168,6 +173,51 @@ const PropertyDocuments = () => {
         id: "utility_doc",
         value: "Utility Bill Document",
         label: "Utility Bill Document",
+      },
+    ],
+    "Property Tax": [
+      {
+        id: "property_tax",
+        value: "Property Tax Document",
+        label: "Property Tax Document",
+      },
+    ],
+  };  
+  const docWhat = {  
+    "Property Maintainance": [
+      {
+        id: "pm_receipt",
+        value: "Receipt",
+        label: "Receipt",
+      },
+      {
+        id: "pm_bill",
+        value: "Bill",
+        label: "Bill",
+      },
+    ],
+    "Utility Bills": [
+      {
+        id: "ub_receipt",
+        value: "Receipt",
+        label: "Receipt",
+      },
+      {
+        id: "ub_bill",
+        value: "Bill",
+        label: "Bill",
+      },
+    ],
+    "Property Tax": [
+      {
+        id: "pt_receipt",
+        value: "Receipt",
+        label: "Receipt",
+      },
+      {
+        id: "pt_bill",
+        value: "Bill",
+        label: "Bill",
       },
     ],
   };
@@ -350,6 +400,29 @@ const PropertyDocuments = () => {
                                   value={radio.value}
                                   onChange={handleRadioChange}
                                   checked={selectedIdType === radio.value}
+                                />
+                                <label htmlFor={radio.id}>{radio.label}</label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                   {docWhat[selectedDocCat] && (
+                    <div className="col-12">
+                      <div className="form_field">
+                        <div className="field_box theme_radio_new">
+                          <div className="theme_radio_container">
+                            {docWhat[selectedDocCat].map((radio) => (
+                              <div className="radio_single" key={radio.id}>
+                                <input
+                                  type="radio"
+                                  name="aai_type"
+                                  id={radio.id}
+                                  value={radio.value}
+                                  onChange={handleDocWhatChange}
+                                  checked={selectedDocWhat === radio.value}
                                 />
                                 <label htmlFor={radio.id}>{radio.label}</label>
                               </div>

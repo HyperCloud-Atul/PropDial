@@ -1,41 +1,39 @@
-MOM Of Propdial (06-June-2024 Sunday)
+Propdial MOM (15-June-2024, Saturday)
 
-.. veryfied document wala bna hai or verygied single page pr upload krwana hai or property detail wale pr show krwana hai 
-jisme uska name hoga or photo hogi
+1. Tenant Document Updates
+a. Replace "tenant document" with "tenant KYC document."
+b. Replace "police verification document" with "police verification."
+c. Replace "rent agreement document" with "rent agreements."
 
-9. property layout wale me react wala carousel lgwana hai jisme
+2. Enquiry Module Enhancements
+a. Online enquiries should be submitted by guest users.
+b. Enquiries can also be added manually by admin.
+c. Review the enquiry form on the old Propdial admin website for reference.
+d. Display enquiries separately for rent and sell.
+e. Each enquiry must be mapped to an existing property.
+f. Enquiries will be categorized as either for rent or for sell.
 
+3. Next Planned Inspection Date
+a. Add a field for the next planned inspection date.
+b. Allow the inspection date to be editable.
+c. Provide a reason for any edits made to the inspection date.
+d. Development:- (can be edit and give reason of edit)(ek section bnana hai or usme planed inspection date ka ek button rkh kr usme add krwa dena hai or phir niche ek drop down dena hai jisme sare dates rhegi or sath me add ka button bhi rhega)
 
+4. New Categories in Property Document
+a. Add a new category for "property tax."
+b. When a user selects "property maintenance" or "utility bill," display a new field named "bill or receipt."
 
+5. Prospective Tenants/Buyers
+a. Prospective tenants/buyers must log into the system.
+b. Once logged in, they can view all properties they have visited.
 
-atul sir 
+6. User list page 
+a. add more filter:- tenant, buyers, prospective tenant, prospective buyers (Done)
 
-4. property layout wala sir krte hai (atul sir)
+7. Property Layout on property detail page
+a. Add image carousel 
+b. Display fixtures on click on edit 
 
-7. jese hi rent date dalega usko bolna hai ki rent agrement dalo (atul sir)
+ 
 
-10. employe on boarding, herracy based role setup (atul sir)
-
-11. property flag based rules/depandancy (atul sir)
-
-------- done 
-12. tenant wale me plus ka sign lgana hai
-
-1.Need to create three cat in property document page first cat is property doc second is prop maintaincane and third is utility bill it shoul be readio button and after click it show documtent type and after document id or jo upper cat aaye uske wise hi niche document show honge to niche tab bna na hai
-
-2. porperty document me jo carousle lga hua hai usme first document, second inspection, enquiry , trascation , 
-
-6. tenant detail wale me form me cat rhegi kyc, police verfication, aggrement 
-in kyc, addhar pan, police verification document type very doc, aggrement aayega rent agreement(word doc), rent agreement pdf.
-niche tab me show honge all kyc police veri, aggremet
-
-5. property layout wala me bedroom or kitchen ka default icon lga dete hai 
-
-3. ab inspection ki baat krte hai ki ispection wala ek bna na hai jo form me inspection rhega usme filed rhegi inspection inpection date rhegi or usme restirciton 90 days ka rhega uske bad ek form aayega jisme yh konse room ka inspection hai wh wali filed or inspection ka photo bhi dalan hai
-
-14.  "cancle button me space aarhi hai left me wh thik krna hai"
-
-13. ui of sure delete popup
-
-8. yha pr ek or poa add krna hai  
 

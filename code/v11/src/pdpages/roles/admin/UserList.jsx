@@ -13,13 +13,14 @@ import './UserList.scss'
 
 // import filter 
 import Filters from "../../../components/Filters";
-const userFilter = ["Owner", "Frontdesk", "Manager", "Admin", "Super Admin", "Inactive"];
+const userFilter = ["Owner", "Frontdesk", "Manager", "Admin", "Super Admin", "Inactive", "Tenants", "Prospective Tenants", "Buyers", "Prospective Buyers"];
 
 const UserList = () => {
   const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
   const { documents, error } = useCollection("users");
-  const [filter, setFilter] = useState("Owner");
+  // const [filter, setFilter] = useState("Owner");
+  const [filter, setFilter] = useState(userFilter[0]);
   // const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,22 +39,26 @@ const UserList = () => {
       switch (filter) {
         case "All":
           return true;
-        case "Admin":
-          return document.rolePropDial === "admin";
-        case "Super Admin":
-          return document.rolePropDial === "superAdmin";
         case "Owner":
           return (document.rolePropDial === "owner") || (document.rolePropDial === "coowner");
         case "Frontdesk":
           return (document.rolePropDial === "frontdesk");
-        case "Manager":
-          return (document.rolePropDial === "manager");
-        case "TENANT":
-          return document.rolePropDial === "tenant";
-        case "PROPERTYMANAGER":
-          return document.rolePropDial === "propertymanager";
+          case "Manager":
+            return (document.rolePropDial === "manager");
+        case "Admin":
+          return document.rolePropDial === "admin";
+        case "Super Admin":
+          return document.rolePropDial === "superAdmin";
         case "Inactive":
-          return document.status === "inactive";
+          return document.status === "inactive";    
+        case "Tenants":
+          return document.rolePropDial === "tenant";
+        case "Prospective Tenants":
+          return document.rolePropDial === "prospectiveTenant";
+          case "Buyers":
+            return document.rolePropDial === "buyers";
+            case "Prospective Buyers":
+              return document.rolePropDial === "prospectiveBuyers";
         default:
           return true;
       }
