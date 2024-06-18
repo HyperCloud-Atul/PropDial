@@ -51,9 +51,10 @@ export default function PropertyLayoutComponent(props) {
                 RoomImgUrl: propertyLayoutDoc.roomImgUrl,
             });
             setAttachments(propertyLayoutDoc.roomAttachments || []);
-             // Initialize attachments
 
-            // console.log('propertyLayout:', propertyLayout)
+            setAdditionalInfos(propertyLayoutDoc.roomFixtures || []);
+
+            // console.log('propertyLayoutDoc:', propertyLayoutDoc)
         }
 
         // console.log('layout id: ', layoutid)
@@ -218,11 +219,11 @@ export default function PropertyLayoutComponent(props) {
                                         </div>
                                         <div
                                             className="radio_single"
-                                            // className={
-                                            //     propertyLayout.RoomType === "Kitchen"
-                                            //         ? "radio_single radiochecked"
-                                            //         : "radio_single"
-                                            // }
+                                        // className={
+                                        //     propertyLayout.RoomType === "Kitchen"
+                                        //         ? "radio_single radiochecked"
+                                        //         : "radio_single"
+                                        // }
                                         >
                                             <input
                                                 type="radio"
@@ -235,7 +236,7 @@ export default function PropertyLayoutComponent(props) {
                                                     })
                                                 }}
                                                 checked={propertyLayout.RoomType === "Kitchen"}
-                                                
+
                                             />
                                             <label htmlFor="kitchen">Kitchen</label>
                                         </div>
@@ -356,6 +357,7 @@ export default function PropertyLayoutComponent(props) {
                                       value={propertyLayout.RoomLength * propertyLayout.RoomWidth}
                                     />
                                   </div> */}
+
                                 {additionalInfos.map((info, index) => (
                                     <div className="form_field">
                                         <div className="relative" key={index}>
@@ -397,7 +399,7 @@ export default function PropertyLayoutComponent(props) {
                             </h2>
                             <div className="form_field theme_checkbox">
                                 <div className="theme_checkbox_container">
-                                    {/* need to map all roomName of propertylayouts collection here */}                                  
+                                    {/* need to map all roomName of propertylayouts collection here */}
                                     {props.propertylayouts.map((layout, index) => (
                                         <div className="checkbox_single" key={layout.roomName}>
                                             <input
