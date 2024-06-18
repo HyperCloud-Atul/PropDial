@@ -30,9 +30,15 @@ const PGOwnerDashboard = () => {
   // Scroll to the top of the page whenever the location changes end
 
   const { user } = useAuthContext();
-  const { documents: properties, error: propertieserror } = useCollection(
-    "properties"
+  console.log('user: ', user)
+  const { documents: myproperties, error: errMyProperties } = useCollection(
+    "propertyusers",
+    ["userId", "==", user.uid]
   );
+
+  console.log('myproperties: ', myproperties)
+
+  const { documents: properties, error: propertieserror } = useCollection("properties");
   // const { documents: properties, error: propertieserror } = useCollection(
   //   "properties",
   //   ["access", "array-contains", user.uid]
@@ -136,7 +142,7 @@ const PGOwnerDashboard = () => {
                           360&deg; Property Management Solutions
                         </h6>
                       </div>
-                      <div className="number">{properties && properties.length}</div>
+                      <div className="number">{myproperties && myproperties.length}</div>
                     </div>
                   </div>
                 </div>
@@ -224,24 +230,17 @@ const PGOwnerDashboard = () => {
               <hr />
               <div className="vg22"></div>
               <section className="property_cards_parent">
-                {properties && properties.map((property) => (
-                  <PropertyCard propertydoc={property} />))}
+                {myproperties && myproperties.map((property) => (
+                  <PropertyCard propertyid={property.propertyId} />))}
               </section>
               <div className="vg22"></div>
-              <hr />
+              {/* <hr /> */}
 
-              <div className="vg22"></div>
-              <section>
+              {/* <div className="vg22"></div> */}
+              {/* <section>
                 <div className="row">
                   <div className="col-md-6">
-                    <div className="payment_card">
-                      {/* <div className="top">
-                  <div className="left">
-                    <h4 className="m20 text_grey">Payments</h4>
-                    <h2 className="dashboard_number mt10">8,052</h2>
-                  </div>
-                  <div className="right"></div>
-                </div> */}
+                    <div className="payment_card">                      
                       <div className="all_payments">
                         <div className="payment_single my_big_card">
                           <div className="icon bg_orange">
@@ -308,7 +307,7 @@ const PGOwnerDashboard = () => {
                             <th>S.N.</th>
                             <th>Property Details</th>
                             <th>Remark</th>
-                            <th>Pay Amount</th>                          
+                            <th>Pay Amount</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -316,32 +315,32 @@ const PGOwnerDashboard = () => {
                             <td>1</td>
                             <td>G-25 | mp-nagar | kanipura road | ujjain</td>
                             <td>On-boarding Charges</td>
-                            <td>2000</td>                        
+                            <td>2000</td>
                           </tr>
                           <tr>
                             <td>2</td>
                             <td>G-25 | mp-nagar | kanipura road | ujjain</td>
                             <td>On-boarding Charges</td>
-                            <td>2000</td>                        
+                            <td>2000</td>
                           </tr>
                           <tr>
                             <td>3</td>
                             <td>G-25 | mp-nagar | kanipura road | ujjain</td>
                             <td>On-boarding Charges</td>
-                            <td>2000</td>                        
-                          </tr>                       
-                     
+                            <td>2000</td>
+                          </tr>
+
                         </tbody>
                       </Table>
-                    <div className="text-end">
-                    <Link className="click_text" to="/payment">
-                        view more
-                      </Link>
-                    </div>
+                      <div className="text-end">
+                        <Link className="click_text" to="/payment">
+                          view more
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </section>
+              </section> */}
               <div className="vg22"></div>
               <hr />
               <div className="vg22"></div>

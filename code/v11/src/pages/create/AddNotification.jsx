@@ -68,19 +68,11 @@ const AddNotification = () => {
         }
       }
     } else if (notificationid !== "new") {
-      const updatedBy = {
-        id: user.uid,
-        displayName: user.displayName + "(" + user.role + ")",
-        fullName: user.fullName,
-        phoneNumber: user.phoneNumber,
-        emailID: user.email,
-        photoURL: user.photoURL,
-      };
 
       const updatedNotification = {
         ...notification,
         updatedAt: timestamp.fromDate(new Date()),
-        updatedBy,
+        updatedBy: user.uid,
       };
 
       if (!errorFlag) {
@@ -130,7 +122,7 @@ const AddNotification = () => {
                       <option
                         defaultValue={
                           notificationFields &&
-                          notificationFields.Type === "App Updates"
+                            notificationFields.Type === "App Updates"
                             ? true
                             : false
                         }
@@ -140,7 +132,7 @@ const AddNotification = () => {
                       <option
                         defaultValue={
                           notificationFields &&
-                          notificationFields.Type === "Discount"
+                            notificationFields.Type === "Discount"
                             ? true
                             : false
                         }
@@ -150,7 +142,7 @@ const AddNotification = () => {
                       <option
                         defaultValue={
                           notificationFields &&
-                          notificationFields.Type === "Offer"
+                            notificationFields.Type === "Offer"
                             ? true
                             : false
                         }
@@ -213,7 +205,7 @@ const AddNotification = () => {
                         notificationFields && notificationFields.Description
                       }
                     ></textarea>
-                      <div className="field_icon">
+                    <div className="field_icon">
                       <span class="material-symbols-outlined">description</span>
                     </div>
                   </div>

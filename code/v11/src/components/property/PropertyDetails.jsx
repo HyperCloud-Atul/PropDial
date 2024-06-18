@@ -2085,100 +2085,100 @@ const PropertyDetails = () => {
                             <div className="col-11">
                               <div className="tenant_card">
                                 <div className="all_tenants">
-                                  <OwlCarousel className="owl-theme" {...optionstenant}>
-                                    {filteredPropertyOwners &&
-                                      filteredPropertyOwners.map((propUser, index) => (
-                                        <div
-                                          className="tc_single relative item"
-                                          key={index}>
-                                          <div className="property_people_designation d-flex align-items-end justify-content-center pointer" onClick={(e) => handleShowOwnerTags(e, propUser, 'propowner')}>
-                                            {propUser.userTag}
-                                            <span class="material-symbols-outlined click_icon text_near_icon" style={{
-                                              fontSize: "10px"
-                                            }}>edit</span>
+                                  {/* <OwlCarousel className="owl-theme" {...optionstenant}> */}
+                                  {filteredPropertyOwners &&
+                                    filteredPropertyOwners.map((propUser, index) => (
+                                      <div
+                                        className="tc_single relative item"
+                                        key={index}>
+                                        <div className="property_people_designation d-flex align-items-end justify-content-center pointer" onClick={(e) => handleShowOwnerTags(e, propUser, 'propowner')}>
+                                          {propUser.userTag}
+                                          <span class="material-symbols-outlined click_icon text_near_icon" style={{
+                                            fontSize: "10px"
+                                          }}>edit</span>
+                                        </div>
+                                        <div className="left">
+                                          <div className="tcs_img_container" >
+                                            <img
+                                              src={
+                                                propUser.photoURL ||
+                                                "/assets/img/dummy_user.png"
+                                              }
+                                              alt="Preview"
+                                            />
                                           </div>
-                                          <div className="left">
-                                            <div className="tcs_img_container" >
-                                              <img
-                                                src={
-                                                  propUser.photoURL ||
-                                                  "/assets/img/dummy_user.png"
-                                                }
-                                                alt="Preview"
-                                              />
-                                            </div>
-                                            <div
-                                              className="tenant_detail"
-                                            >
-                                              <h5
-                                                onClick={
-                                                  user && user.role === "admin"
-                                                    ? () =>
-                                                      openChangeUser(propUser.id)
-                                                    : ""
-                                                }
-                                                className={`t_name ${user && user.role === "admin"
-                                                  ? "pointer"
+                                          <div
+                                            className="tenant_detail"
+                                          >
+                                            <h5
+                                              onClick={
+                                                user && user.role === "admin"
+                                                  ? () =>
+                                                    openChangeUser(propUser.id)
                                                   : ""
-                                                  }`}
-                                              >
-                                                {propUser.fullName}
-                                                {user && user.role === "admin" && (
-                                                  <span className="material-symbols-outlined click_icon text_near_icon">
-                                                    edit
-                                                  </span>
-                                                )}
-                                              </h5>
-                                              <h6 className="t_number">
-                                                {propUser.phoneNumber.replace(
-                                                  /(\d{2})(\d{5})(\d{5})/,
-                                                  "+$1 $2-$3"
-                                                )}
+                                              }
+                                              className={`t_name ${user && user.role === "admin"
+                                                ? "pointer"
+                                                : ""
+                                                }`}
+                                            >
+                                              {propUser.fullName}
+                                              {user && user.role === "admin" && (
+                                                <span className="material-symbols-outlined click_icon text_near_icon">
+                                                  edit
+                                                </span>
+                                              )}
+                                            </h5>
+                                            <h6 className="t_number">
+                                              {propUser.phoneNumber.replace(
+                                                /(\d{2})(\d{5})(\d{5})/,
+                                                "+$1 $2-$3"
+                                              )}
 
-                                              </h6>
-                                              <h6 className="text_red pointer" style={{
-                                                width: "fit-content",
-                                                fontSize: "10px",
-                                                letterSpacing: "0.4px",
-                                                marginLeft: "3px"
-                                              }}
-                                                onClick={(e) => handleDeletePropUser(e, propUser)}>
-                                                Delete
-                                              </h6>
-                                            </div>
-                                          </div>
-                                          <div className="wha_call_icon">
-                                            < Link
-                                              className="call_icon wc_single"
-                                              to={
-                                                propUser
-                                                  ? `tel:${propUser.phoneNumber.replace(/\D/g, '')}`
-                                                  : "#"
-                                              }
-                                            >
-                                              <img
-                                                src="/assets/img/simple_call.png"
-                                                alt=""
-                                              />
-                                            </Link>
-                                            <Link
-                                              className="wha_icon wc_single"
-                                              to={
-                                                propUser
-                                                  ? `https://wa.me/${propUser.phoneNumber.replace(/\D/g, '')}`
-                                                  : "#"
-                                              }
-                                              target="_blank"
-                                            >
-                                              <img
-                                                src="/assets/img/whatsapp_simple.png"
-                                                alt=""
-                                              />
-                                            </Link>
+                                            </h6>
+                                            <h6 className="text_red pointer" style={{
+                                              width: "fit-content",
+                                              fontSize: "10px",
+                                              letterSpacing: "0.4px",
+                                              marginLeft: "3px"
+                                            }}
+                                              onClick={(e) => handleDeletePropUser(e, propUser)}>
+                                              Delete
+                                            </h6>
                                           </div>
                                         </div>
-                                      ))}
-                                  </OwlCarousel>
+                                        <div className="wha_call_icon">
+                                          < Link
+                                            className="call_icon wc_single"
+                                            to={
+                                              propUser
+                                                ? `tel:${propUser.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                          >
+                                            <img
+                                              src="/assets/img/simple_call.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                          <Link
+                                            className="wha_icon wc_single"
+                                            to={
+                                              propUser
+                                                ? `https://wa.me/${propUser.phoneNumber.replace(/\D/g, '')}`
+                                                : "#"
+                                            }
+                                            target="_blank"
+                                          >
+                                            <img
+                                              src="/assets/img/whatsapp_simple.png"
+                                              alt=""
+                                            />
+                                          </Link>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  {/* </OwlCarousel> */}
                                 </div>
 
                               </div>
@@ -2203,31 +2203,31 @@ const PropertyDetails = () => {
                                 }}>
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="Admin" id='Admin'
-                                   onChange={() => handleUserTagChange("Admin")} />
+                                      onChange={() => handleUserTagChange("Admin")} />
                                     <label htmlFor="Admin">Admin</label>
                                   </div>
                                   {/* checked={selectedPropUser.userTag === "Admin"}  */}
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="Owner" id='Owner'
-                                     onChange={() => handleUserTagChange("Owner")} />
+                                      onChange={() => handleUserTagChange("Owner")} />
                                     <label htmlFor="Owner">Owner</label>
                                   </div>
                                   {/* checked={selectedPropUser.userTag === "Owner"}  */}
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="Co-Owner" id='Co-Owner'
-                                    onChange={() => handleUserTagChange("Co-Owner")} />
+                                      onChange={() => handleUserTagChange("Co-Owner")} />
                                     <label htmlFor="Co-Owner">Co-Owner</label>
                                   </div>
                                   {/* checked={selectedPropUser.userTag === "Co-Owner"}  */}
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="POC" id='POC'
-                                    onChange={() => handleUserTagChange("POC")} />
+                                      onChange={() => handleUserTagChange("POC")} />
                                     <label htmlFor="POC">POC</label>
                                   </div>
                                   {/* checked={selectedPropUser.userTag === "POC"}  */}
                                   <div className="radio_single">
                                     <input type="radio" name="prop_user" value="POA" id='POA'
-                                     onChange={() => handleUserTagChange("POA")} />
+                                      onChange={() => handleUserTagChange("POA")} />
                                     <label htmlFor="POA">POA</label>
                                   </div>
                                   {/* checked={selectedPropUser.userTag === "POA"}  */}
@@ -2246,7 +2246,7 @@ const PropertyDetails = () => {
 
                           </Modal.Body>
                         </Modal>
-                       
+
                       )}
                       {selectedPropUser && (
                         <Modal show={showConfirmPropUser} onHide={(e) => handleCloseConfirmPropUser(e, 'cancel')}>

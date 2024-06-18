@@ -20,20 +20,10 @@ const SingleTicketChat = ({ ticket, backToChatList }) => {
 
     let responseArray = []
     responseArray = ticket.response ? ticket.response : [];
-
-    const createdBy = {
-      id: user.uid,
-      displayName: user.displayName + '(' + user.role + ')',
-      fullName: user.fullName,
-      phoneNumber: user.phoneNumber,
-      photoURL: user.photoURL,
-      role: user.role
-    }
-
     const response = {
       message: document.getElementById('id_message').value,
       createdAt: timestamp.fromDate(new Date()),
-      createdBy
+      createdBy: user.uid,
     }
 
     responseArray.push(response)
@@ -41,7 +31,7 @@ const SingleTicketChat = ({ ticket, backToChatList }) => {
     const ticketObj = {
       ...ticket,
       updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: createdBy,
+      updatedBy: user.uid,
       response: responseArray
 
     }

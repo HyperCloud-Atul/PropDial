@@ -503,7 +503,7 @@ const PGAdminDashboard = () => {
               <section className="property_cards_parent">
                 {properties &&
                   properties.map((property) => (
-                    <PropertyCard propertydoc={property} />
+                    <PropertyCard propertyid={property.id} />
                   ))}
               </section>
               <div className="vg22"></div>

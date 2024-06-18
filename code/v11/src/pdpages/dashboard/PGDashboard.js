@@ -23,7 +23,7 @@ const PGDaashboard = () => {
                 {!user && <PhoneLogin />}
             </div>
             <div>
-                {user && (user.role === 'owner' || user.role === 'coowner') && <PGOwnerDashboard />}
+                {user && (user.role === 'owner') && <PGOwnerDashboard />}
             </div>
             {/* <div>
                 {user && user.role === 'tenant' && <PGTenantDashboard />}

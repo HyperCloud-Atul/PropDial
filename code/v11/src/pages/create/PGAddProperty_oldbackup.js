@@ -311,17 +311,7 @@ export default function PGAddProperty_oldbackup({ propertyid }) {
             }
         })
 
-        // const createdBy = {
-        //     displayName: user.displayName + '(' + user.role + ')',
-        //     photoURL: user.photoURL,
-        //     id: user.uid
-        // }
 
-        // const updatedBy = {
-        //     displayName: user.displayName + '(' + user.role + ')',
-        //     photoURL: user.photoURL,
-        //     id: user.uid
-        // }
 
         const property = {
             unitNumber,

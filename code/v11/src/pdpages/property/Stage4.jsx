@@ -111,14 +111,10 @@ export default function Stage4(props) {
     // console.log('property:', property)
 
     if (propertyid !== "new") {
-      const updatedBy = {
-        id: user.uid,
-      };
-
       const updatedProperty = {
         ...property,
         updatedAt: timestamp.fromDate(new Date()),
-        updatedBy,
+        updatedBy: user.uid,
       };
       console.log('updatedProperty:', updatedProperty)
       // console.log('propertyid:', propertyid)
