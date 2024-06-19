@@ -1,9 +1,9 @@
 Propdial MOM (15-June-2024, Saturday)
 
-1. Tenant Document Updates
+1. Tenant Document Updates (Done)
 a. Replace "tenant document" with "tenant KYC document."
 b. Replace "police verification document" with "police verification."
-c. Replace "rent agreement document" with "rent agreements."
+c. Replace "rent agreement document" with "rent agreements." 
 
 2. Enquiry Module Enhancements
 a. Online enquiries should be submitted by guest users.
@@ -19,20 +19,20 @@ b. Allow the inspection date to be editable.
 c. Provide a reason for any edits made to the inspection date.
 d. Development:- (can be edit and give reason of edit)(ek section bnana hai or usme planed inspection date ka ek button rkh kr usme add krwa dena hai or phir niche ek drop down dena hai jisme sare dates rhegi or sath me add ka button bhi rhega)
 
-4. New Categories in Property Document
+4. New Categories in Property Document (Done) (On testing)
 a. Add a new category for "property tax."
 b. When a user selects "property maintenance" or "utility bill," display a new field named "bill or receipt."
 
-5. Prospective Tenants/Buyers
+5. Prospective Tenants/Buyers (Atul sir)
 a. Prospective tenants/buyers must log into the system.
 b. Once logged in, they can view all properties they have visited.
 
-6. User list page 
+6. User list page  (Done)
 a. add more filter:- tenant, buyers, prospective tenant, prospective buyers (Done)
 
-7. Property Layout on property detail page
-a. Add image carousel 
-b. Display fixtures on click on edit 
+7. Property Layout on property detail page 
+a. Add image carousel (Sans)
+b. Display fixtures on click on edit (Done)
 
  
 

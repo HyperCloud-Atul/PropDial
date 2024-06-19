@@ -539,6 +539,30 @@ const PropertyDetails = () => {
       },
     },
   };
+  const optionsowners = {
+    items: 4,
+    dots: false,
+    loop: false,
+    margin: 15,
+    nav: true,
+    smartSpeed: 1500,
+    autoplay: false,
+    autoplayTimeout: 10000,
+    responsive: {
+      // Define breakpoints and the number of items to show at each breakpoint
+      0: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+      992: {
+        items: 4,
+      },
+    },
+  };
+
+
   // owl carousel option end for rooms
 
   // 9 dots controls
@@ -2085,7 +2109,7 @@ const PropertyDetails = () => {
                             <div className="col-11">
                               <div className="tenant_card">
                                 <div className="all_tenants">
-                                  {/* <OwlCarousel className="owl-theme" {...optionstenant}> */}
+                                  <OwlCarousel className="owl-theme" {...optionsowners}>
                                   {filteredPropertyOwners &&
                                     filteredPropertyOwners.map((propUser, index) => (
                                       <div
@@ -2178,7 +2202,7 @@ const PropertyDetails = () => {
                                         </div>
                                       </div>
                                     ))}
-                                  {/* </OwlCarousel> */}
+                                  </OwlCarousel>
                                 </div>
 
                               </div>

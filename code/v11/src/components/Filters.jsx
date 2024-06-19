@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './Filters.css';
+import './Filters.scss';
 
 const defaultFilterList = ['ALL', 'ACTIVE', 'INACTIVE'];
 const defaultFilterLength = 0;
@@ -31,11 +31,15 @@ export default function Filters({ changeFilter, filterList, filterLength }) {
                     <select
                         onChange={(e) => handleClick(e.target.value)}
                         value={currentFilter}
-                        className="filter-dropdown"
+                        className={`filter-dropdown ${extraFilters.includes(currentFilter) ? 'active' : ''}`}
                     >
-                        <option value="">More</option>
+                        <option value="" selected disabled>More</option>
                         {extraFilters.map((f) => (
-                            <option key={f} value={f}>
+                            <option
+                                key={f}
+                                value={f}
+                                className={currentFilter === f ? 'active' : ''}
+                            >
                                 {f}
                             </option>
                         ))}
