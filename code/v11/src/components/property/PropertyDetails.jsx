@@ -1,10 +1,8 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Gallery from "react-image-gallery";
 import { projectStorage } from "../../firebase/config";
-import { useRef } from "react";
 import Switch from "react-switch";
 import { Navigate, Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
@@ -21,6 +19,12 @@ import RichTextEditor from "react-rte";
 import PropertyLayoutComponent from "./PropertyLayoutComponent";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+
+
 
 import "./UserList.css";
 
@@ -33,6 +37,10 @@ const PropertyDetails = () => {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
+
+  // install Swiper modules
+  SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
+
   // get user from useauthcontext
   const { propertyid } = useParams();
   const { user } = useAuthContext();
@@ -539,28 +547,6 @@ const PropertyDetails = () => {
       },
     },
   };
-  const optionsowners = {
-    items: 4,
-    dots: false,
-    loop: false,
-    margin: 15,
-    nav: true,
-    smartSpeed: 1500,
-    autoplay: false,
-    autoplayTimeout: 10000,
-    responsive: {
-      // Define breakpoints and the number of items to show at each breakpoint
-      0: {
-        items: 1,
-      },
-      768: {
-        items: 2,
-      },
-      992: {
-        items: 4,
-      },
-    },
-  };
 
 
   // owl carousel option end for rooms
@@ -838,7 +824,6 @@ const PropertyDetails = () => {
 
   };
   // modal controls end 
-
 
   return (
     <>
@@ -2010,14 +1995,20 @@ const PropertyDetails = () => {
 
                         </div>
                         <div className="col-11">
-                          <div className="tenant_card">
-                            <div className="all_tenants">
-                              <OwlCarousel className="owl-theme" {...optionstenant}>
-                                {tenantDocument &&
+                          <div className="tenant_card">                          
+                            <Swiper
+                                  spaceBetween={15}
+                                  slidesPerView={3.5}
+                                  pagination={{ clickable: true }}
+                                  freeMode={true}
+                                  className='all_tenants'
+                                >
+                                   {tenantDocument &&
                                   tenantDocument.map((tenant, index) => (
-                                    <div
+                                      <SwiperSlide key={index}>
+                                        <div
                                       className={`tc_single relative item ${tenant.status === "inactive" ? "t_inactive" : ""}`}
-                                      key={index}>
+                                      >
                                       <Link className="left" to={`/tenantdetails/${tenant.id}`}>
                                         <div className="tcs_img_container" >
                                           <img
@@ -2070,9 +2061,9 @@ const PropertyDetails = () => {
                                         </Link>
                                       </div>
                                     </div>
-                                  ))}
-                              </OwlCarousel>
-                            </div>
+                                      </SwiperSlide>
+                                    ))}
+                                </Swiper>
 
                           </div>
                         </div>
@@ -2108,102 +2099,91 @@ const PropertyDetails = () => {
                             }
                             <div className="col-11">
                               <div className="tenant_card">
-                                <div className="all_tenants">
-                                  <OwlCarousel className="owl-theme" {...optionsowners}>
+                                <Swiper
+                                  spaceBetween={15}
+                                  slidesPerView={3.5}
+                                  pagination={{ clickable: true }}
+                                  freeMode={true}
+                                  className='all_tenants'
+                                >
                                   {filteredPropertyOwners &&
                                     filteredPropertyOwners.map((propUser, index) => (
-                                      <div
-                                        className="tc_single relative item"
-                                        key={index}>
-                                        <div className="property_people_designation d-flex align-items-end justify-content-center pointer" onClick={(e) => handleShowOwnerTags(e, propUser, 'propowner')}>
-                                          {propUser.userTag}
-                                          <span class="material-symbols-outlined click_icon text_near_icon" style={{
-                                            fontSize: "10px"
-                                          }}>edit</span>
-                                        </div>
-                                        <div className="left">
-                                          <div className="tcs_img_container" >
-                                            <img
-                                              src={
-                                                propUser.photoURL ||
-                                                "/assets/img/dummy_user.png"
-                                              }
-                                              alt="Preview"
-                                            />
-                                          </div>
+                                      <SwiperSlide key={index}>
+                                        <div className="tc_single relative">
                                           <div
-                                            className="tenant_detail"
+                                            className="property_people_designation d-flex align-items-end justify-content-center pointer"
+                                            onClick={(e) => handleShowOwnerTags(e, propUser, 'propowner')}
                                           >
-                                            <h5
-                                              onClick={
-                                                user && user.role === "admin"
-                                                  ? () =>
-                                                    openChangeUser(propUser.id)
-                                                  : ""
-                                              }
-                                              className={`t_name ${user && user.role === "admin"
-                                                ? "pointer"
-                                                : ""
-                                                }`}
+                                            {propUser.userTag}
+                                            <span
+                                              className="material-symbols-outlined click_icon text_near_icon"
+                                              style={{ fontSize: "10px" }}
                                             >
-                                              {propUser.fullName}
-                                              {user && user.role === "admin" && (
-                                                <span className="material-symbols-outlined click_icon text_near_icon">
-                                                  edit
-                                                </span>
-                                              )}
-                                            </h5>
-                                            <h6 className="t_number">
-                                              {propUser.phoneNumber.replace(
-                                                /(\d{2})(\d{5})(\d{5})/,
-                                                "+$1 $2-$3"
-                                              )}
-
-                                            </h6>
-                                            <h6 className="text_red pointer" style={{
-                                              width: "fit-content",
-                                              fontSize: "10px",
-                                              letterSpacing: "0.4px",
-                                              marginLeft: "3px"
-                                            }}
-                                              onClick={(e) => handleDeletePropUser(e, propUser)}>
-                                              Delete
-                                            </h6>
+                                              edit
+                                            </span>
+                                          </div>
+                                          <div className="left">
+                                            <div className="tcs_img_container">
+                                              <img
+                                                src={propUser.photoURL || "/assets/img/dummy_user.png"}
+                                                alt="Preview"
+                                              />
+                                            </div>
+                                            <div className="tenant_detail">
+                                              <h5
+                                                onClick={
+                                                  user && user.role === "admin"
+                                                    ? () => openChangeUser(propUser.id)
+                                                    : ""
+                                                }
+                                                className={`t_name ${user && user.role === "admin" ? "pointer" : ""}`}
+                                              >
+                                                {propUser.fullName}
+                                                {user && user.role === "admin" && (
+                                                  <span className="material-symbols-outlined click_icon text_near_icon">
+                                                    edit
+                                                  </span>
+                                                )}
+                                              </h5>
+                                              <h6 className="t_number">
+                                                {propUser.phoneNumber.replace(
+                                                  /(\d{2})(\d{5})(\d{5})/,
+                                                  "+$1 $2-$3"
+                                                )}
+                                              </h6>
+                                              <h6
+                                                className="text_red pointer"
+                                                style={{
+                                                  width: "fit-content",
+                                                  fontSize: "10px",
+                                                  letterSpacing: "0.4px",
+                                                  marginLeft: "3px"
+                                                }}
+                                                onClick={(e) => handleDeletePropUser(e, propUser)}
+                                              >
+                                                Delete
+                                              </h6>
+                                            </div>
+                                          </div>
+                                          <div className="wha_call_icon">
+                                            <Link
+                                              className="call_icon wc_single"
+                                              to={propUser ? `tel:${propUser.phoneNumber.replace(/\D/g, '')}` : "#"}
+                                            >
+                                              <img src="/assets/img/simple_call.png" alt="" />
+                                            </Link>
+                                            <Link
+                                              className="wha_icon wc_single"
+                                              to={propUser ? `https://wa.me/${propUser.phoneNumber.replace(/\D/g, '')}` : "#"}
+                                              target="_blank"
+                                            >
+                                              <img src="/assets/img/whatsapp_simple.png" alt="" />
+                                            </Link>
                                           </div>
                                         </div>
-                                        <div className="wha_call_icon">
-                                          < Link
-                                            className="call_icon wc_single"
-                                            to={
-                                              propUser
-                                                ? `tel:${propUser.phoneNumber.replace(/\D/g, '')}`
-                                                : "#"
-                                            }
-                                          >
-                                            <img
-                                              src="/assets/img/simple_call.png"
-                                              alt=""
-                                            />
-                                          </Link>
-                                          <Link
-                                            className="wha_icon wc_single"
-                                            to={
-                                              propUser
-                                                ? `https://wa.me/${propUser.phoneNumber.replace(/\D/g, '')}`
-                                                : "#"
-                                            }
-                                            target="_blank"
-                                          >
-                                            <img
-                                              src="/assets/img/whatsapp_simple.png"
-                                              alt=""
-                                            />
-                                          </Link>
-                                        </div>
-                                      </div>
+                                      </SwiperSlide>
                                     ))}
-                                  </OwlCarousel>
-                                </div>
+                                </Swiper>
 
                               </div>
                             </div>
@@ -2330,13 +2310,19 @@ const PropertyDetails = () => {
                             }
                             <div className="col-11">
                               <div className="tenant_card">
-                                <div className="all_tenants">
-                                  <OwlCarousel className="owl-theme" {...optionstenant}>
-                                    {filteredPropertyManagers &&
-                                      filteredPropertyManagers.map((propUser, index) => (
+                              <Swiper
+                                  spaceBetween={15}
+                                  slidesPerView={3.5}
+                                  pagination={{ clickable: true }}
+                                  freeMode={true}
+                                  className='all_tenants'
+                                >
+                                  {filteredPropertyManagers &&
+                                  filteredPropertyManagers.map((propUser, index) => (
+                                      <SwiperSlide key={index}>
                                         <div
                                           className="tc_single relative item"
-                                          key={index}>
+                                         >
                                           <div className="property_people_designation d-flex align-items-end justify-content-center" onClick={(e) => handleShowOwnerTags(e, propUser, 'propmanager')}>
                                             {propUser.userTag}
                                             <span class="material-symbols-outlined click_icon text_near_icon" style={{
@@ -2421,10 +2407,10 @@ const PropertyDetails = () => {
                                             </Link>
                                           </div>
                                         </div>
-                                      ))}
-                                  </OwlCarousel>
-                                </div>
-
+                                      </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                             
                               </div>
                             </div>
                           </div>
