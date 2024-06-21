@@ -5,6 +5,7 @@ import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
 import { BeatLoader } from "react-spinners";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
+import SureDelete from "../pdpages/sureDelete/SureDelete";
 
 const PropertyInspectionDocuments = () => {
     // Scroll to the top of the page whenever the location changes start
@@ -13,7 +14,6 @@ const PropertyInspectionDocuments = () => {
         window.scrollTo(0, 0);
     }, [location]);
     // Scroll to the top of the page whenever the location changes start
-
     const { propertyId } = useParams();
     const navigate = useNavigate();
 
@@ -30,10 +30,18 @@ const PropertyInspectionDocuments = () => {
     const [uploadingDocId, setUploadingDocId] = useState(null);
     const fileInputRef = useRef(null);
 
+    const [showModal, setShowModal] = useState(false);
+    const [docToDelete, setDocToDelete] = useState(null);
+    const [inspectionId, setInspectionId] = useState(null);
+    const [isInspectionDelete, setIsInspectionDelete] = useState(false);
+
+    const [isUploading, setIsUploading] = useState(false); // New state for the loader   
+    const [uploadingDocName, setUploadingDocName] = useState(null);
     const handleChangeInspectionDate = (event) => setInspectionDate(event.target.value);
     const handleChangeFilterDate = (event) => setFilterDate(event.target.value);
     const handleChangeDocumentName = (event) => setDocumentName(event.target.value);
     const handleFileChange = (event) => setDocumentFile(event.target.files[0]);
+
     const getFileType = (file) => {
         const fileExtension = file.name.split(".").pop().toLowerCase();
         return fileExtension === "pdf" ? "pdf" : "image";
@@ -94,6 +102,7 @@ const PropertyInspectionDocuments = () => {
         }
         try {
             setUploadingDocId(docId);
+            setUploadingDocName(docName); // Set both docId and docName for more precise control
             const fileType = getFileType(documentFile);
             const storageRef = projectStorage.ref(`inspectionDocs/${docId}/${documentFile.name}`);
             await storageRef.put(documentFile);
@@ -102,43 +111,69 @@ const PropertyInspectionDocuments = () => {
 
             const selectedInspection = inspections.find(doc => doc.id === docId);
             const updatedDocuments = selectedInspection.documents.map(doc =>
-                doc.name === docName ? { ...doc, url: fileURL, mediaType:fileType } : doc
-            
+                doc.name === docName ? { ...doc, url: fileURL, mediaType: fileType } : doc
             );
 
             await updateDocument(docId, {
-                documents: updatedDocuments,                
+                documents: updatedDocuments,
             });
 
             setDocumentFile(null);
             setUploadingDocId(null);
+            setUploadingDocName(null);
             fileInputRef.current.value = "";
         } catch (error) {
             console.error("Error uploading document image:", error);
             setUploadingDocId(null);
+            setUploadingDocName(null);
         }
     };
 
-    const deleteInspection = async (docId) => {
+    const confirmDeleteInspection = (docId) => {
+        setInspectionId(docId);
+        setIsInspectionDelete(true);
+        setShowModal(true);
+    };
+
+    const deleteInspection = async () => {
+        if (!inspectionId) return;
+
         try {
-            await deleteDocument(docId);
+            await deleteDocument(inspectionId);
+            handleCloseModal();
         } catch (error) {
             console.error("Error deleting inspection:", error);
         }
     };
 
-    const deleteDocumentFromInspection = async (docId, documentToDelete) => {
+    const deleteDocumentFromInspection = async () => {
+        if (!inspectionId || !docToDelete) return;
+
         try {
-            const selectedInspection = inspections.find(doc => doc.id === docId);
-            const updatedDocuments = selectedInspection.documents.filter(doc => doc !== documentToDelete);
+            const selectedInspection = inspections.find(doc => doc.id === inspectionId);
+            const updatedDocuments = selectedInspection.documents.filter(doc => doc !== docToDelete);
 
-            await updateDocument(docId, {
+            await updateDocument(inspectionId, {
                 documents: updatedDocuments,
-
             });
+            handleCloseModal();
         } catch (error) {
             console.error("Error deleting document from inspection:", error);
         }
+    };
+
+    const handleShowModal = (docId, document) => {
+        setInspectionId(docId);
+        setDocToDelete(document);
+        setIsInspectionDelete(false);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setDocToDelete(null);
+        setInspectionId(null);
+        setIsInspectionDelete(false);
     };
 
     useEffect(() => {
@@ -169,6 +204,8 @@ const PropertyInspectionDocuments = () => {
         { name: 'Property', link: '/propertydetails/' + propertyId, icon: '/assets/img/icons/qa_property.png' },
     ];
     // data of quick access menu  end
+
+
 
 
     return (
@@ -311,63 +348,66 @@ const PropertyInspectionDocuments = () => {
                                                         type="file"
                                                         onChange={handleFileChange}
                                                         ref={fileInputRef}
+                                                        disabled={uploadingDocId === doc.id && uploadingDocName === document.name} // Disable input only for specific document
                                                     />
-                                                    <button onClick={() => uploadDocumentImage(doc.id, document.name)}>
+                                                    <button
+                                                        onClick={() => uploadDocumentImage(doc.id, document.name)}
+                                                        disabled={uploadingDocId === doc.id && uploadingDocName === document.name} // Disable button only for specific document
+                                                    >
                                                         Upload
                                                     </button>
                                                 </div>
-                                                {document.mediaType}
-                                                {document.mediaType && document.mediaType === "pdf" ? (<iframe
-                                                    title="PDF Viewer"
-                                                    src={document.url}
-                                                    style={{ width: "100%", aspectRatio: "3/2" }}
-                                                ></iframe>) : (<img
-                                                    src={document.url}
-                                                    alt="Document"
-                                                    style={{ width: "100%", aspectRatio: "3/2" }}
-                                                />)}
-
-                                                {/* {document.url ? (
-                                                    document.url.endsWith(".pdf") ? (
-                                                        <iframe
-                                                            title="PDF Viewer"
-                                                            src={document.url}
-                                                            style={{ width: "100%", aspectRatio: "3/2" }}
-                                                        ></iframe>
-                                                    ) : (
-                                                        <img
-                                                            src={document.url}
-                                                            alt="Document"
-                                                            style={{ width: "100%", aspectRatio: "3/2" }}
-                                                        />
-                                                    )
+                                                {uploadingDocId === doc.id && uploadingDocName === document.name ? (
+                                                     <div
+                                                     className="loader d-flex justify-content-center align-items-center"
+                                                     style={{
+                                                       width: "100%",
+                                                       height: "100%",
+                                                     }}>
+                                                        <BeatLoader color={"#FF5733"} loading={true} />
+                                                    </div>
                                                 ) : (
-                                                    ""
-                                                )} */}
+                                                    <>                                                      
+                                                        {document.mediaType && document.mediaType === "pdf" ? (
+                                                            <iframe
+                                                                title="PDF Viewer"
+                                                                src={document.url}
+                                                                style={{ width: "100%", aspectRatio: "3/2" }}
+                                                            ></iframe>
+                                                        ) : (
+                                                            <img
+                                                                src={document.url}
+                                                                alt="Document"
+                                                                style={{ width: "100%", aspectRatio: "3/2" }}
+                                                            />
+                                                        )}
+                                                    </>
+                                                )}
                                             </div>
 
                                             <div className="card-body">
                                                 <h3>{document.name}</h3>
                                                 <div className="card-author">
-                                                    <div onClick={() => deleteDocumentFromInspection(doc.id, document)} className="learn-more pointer">
+                                                    <div onClick={() => handleShowModal(doc.id, document)} className="learn-more pointer">
                                                         Delete
                                                     </div>
+                                                    <SureDelete
+                                                        show={showModal && docToDelete === document && !isInspectionDelete}
+                                                        handleClose={handleCloseModal}
+                                                        handleDelete={deleteDocumentFromInspection}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 ))}
                             </div>
                         ))}
                         {inspectionsError && <p>Error loading inspections: {inspectionsError}</p>}
-
-
-
                     </div>
                 </div>
 
-                <div className="delete_document">
+                {/* <div className="delete_document">
                     {filteredInspections && filteredInspections.map((doc) => (
                         <>  <div className="vg22"></div>
                             <div className="divider"></div>
@@ -382,7 +422,31 @@ const PropertyInspectionDocuments = () => {
                             </div>
                             <div className="vg22"></div>
                         </>))}
+                </div> */}
+                <div className="delete_document">
+                    {filteredInspections && filteredInspections.map((doc) => (
+                        <React.Fragment key={doc.id}>
+                            <div className="vg22"></div>
+                            <div className="divider"></div>
+                            <div className="vg10"></div>
+                            <div className="delete_bottom" onClick={() => confirmDeleteInspection(doc.id)}>
+                                <span className="material-symbols-outlined">delete</span>
+                                <span>Delete (all document of date {new Date(doc.inspectionDate).toLocaleDateString('en-GB', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric'
+                                }).replace(/ /g, '-')} )</span>
+                            </div>
+                            <div className="vg22"></div>
+                        </React.Fragment>
+                    ))}
                 </div>
+
+                <SureDelete
+                    show={showModal && isInspectionDelete}
+                    handleClose={handleCloseModal}
+                    handleDelete={deleteInspection}
+                />
 
             </div>
         </div>
