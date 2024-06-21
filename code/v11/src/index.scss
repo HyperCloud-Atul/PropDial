@@ -215,9 +215,9 @@
         background: whitesmoke;
       }
       input[type="radio"]:checked + label {
-        // background-color: transparent;
-        // color: var(--theme-blue);
-        border-bottom: 3px solid var(--theme-blue);
+        border-bottom: 3px solid var(--theme-orange);
+        background: whitesmoke;
+        color: var(--text-black);
       }
 
       input[type="radio"] + label::before {
@@ -233,7 +233,7 @@
         bottom: -9px;
         left: 0;
         right: 0;
-        background: var(--theme-blue);
+        background: var(--theme-orange);
         margin: auto;
         clip-path: polygon(0 0, 50% 100%, 100% 0);
         width: 8px;

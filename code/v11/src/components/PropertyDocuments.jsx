@@ -7,7 +7,7 @@ import { BeatLoader } from "react-spinners";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PropertyDocuments.scss";
 import Switch from "@mui/material/Switch";
-import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
+import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu"; 
 
 const PropertyDocuments = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -15,22 +15,20 @@ const PropertyDocuments = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+   // Scroll to the top of the page whenever the location changes end
 
-  const { propertyId } = useParams();
-
+   const { propertyId } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
-  const { addDocument, updateDocument, deleteDocument, error } =
-    useFirestore("docs");
-  const { documents: propertyDocument, errors: propertyDocError } =
-    useCollection("docs", ["masterRefId", "==", propertyId]);
+  const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
+  const { documents: propertyDocument, errors: propertyDocError } = useCollection("docs", ["masterRefId", "==", propertyId]);
 
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const [selectedDocCat, setSelectedDocCat] = useState("Property Document");
-  const [selectedDocWhat, setSelectedDocWhat] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("");
+  const [selectedDocWhat, setSelectedDocWhat] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [documentFile, setDocumentFile] = useState(null);
@@ -40,9 +38,8 @@ const PropertyDocuments = () => {
   // const [checked, setChecked] = React.useState(true);
   const handleDocCatChange = (event) => setSelectedDocCat(event.target.value);
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
-  const handleDocWhatChange = (event) => setSelectedDocWhat(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
-
+  const handleDocWhatChange = (event) => setSelectedDocWhat(event.target.value);
   const handleFileChange = (event, docId) => {
     const file = event.target.files[0];
     if (file) {
@@ -55,7 +52,7 @@ const PropertyDocuments = () => {
     const fileExtension = file.name.split(".").pop().toLowerCase();
     return fileExtension === "pdf" ? "pdf" : "image";
   };
-
+ 
   const addPropertyDocuments = async () => {
     if (!selectedDocCat || !selectedIdType || !selectedDocWhat) {
       alert("All fields are required!");
@@ -69,15 +66,15 @@ const PropertyDocuments = () => {
         masterRefId: propertyId,
         documentUrl: "",
         docCat: selectedDocCat,
-        docWhat:selectedDocWhat,
         idType: selectedIdType,
+        docWhat: selectedDocWhat,
         idNumber: idNumber,
         mediaType: "",
         docVerified: "false",
       });
       setSelectedDocCat("");
-      setSelectedDocWhat("");
       setSelectedIdType("");
+      setSelectedDocWhat("");
       setIdNumber("");
       setIsUploading(false);
       setNewDocId(docRef.id);
@@ -104,31 +101,26 @@ const PropertyDocuments = () => {
     }
   }, [propertyDocument]);
 
-  const uploadDocumentImage = async () => {
+   const uploadDocumentImage = async () => {
     try {
       setIsUploading(true);
-      setUploadingDocId(newDocId); // Set the uploading document ID
+      setUploadingDocId(newDocId);
       const fileType = getFileType(documentFile);
-      const storageRef = projectStorage.ref(
-        `docs/${newDocId}/${documentFile.name}`
-      );
+      const storageRef = projectStorage.ref(`docs/${newDocId}/${documentFile.name}`);
       await storageRef.put(documentFile);
-
       const fileURL = await storageRef.getDownloadURL();
-
       await updateDocument(newDocId, {
         documentUrl: fileURL,
         mediaType: fileType,
       });
-
       setDocumentFile(null);
       setIsUploading(false);
-      setUploadingDocId(null); // Reset the uploading document ID
+      setUploadingDocId(null);
       fileInputRef.current.value = "";
     } catch (error) {
       console.error("Error uploading document image:", error);
       setIsUploading(false);
-      setUploadingDocId(null); // Reset the uploading document ID in case of error
+      setUploadingDocId(null);
     }
   };
 
@@ -144,11 +136,7 @@ const PropertyDocuments = () => {
   // render jsx code in short form start
   const docCategories = [
     { id: "prop_doc", value: "Property Document", label: "Property Document" },
-    {
-      id: "prop_main",
-      value: "Property Maintainance",
-      label: "Property Maintainance",
-    },
+    { id: "prop_main", value: "Property Maintainance", label: "Property Maintainance" },
     { id: "utility_bill", value: "Utility Bills", label: "Utility Bills" },
     { id: "property_tax", value: "Property Tax", label: "Property Tax" },
   ];
@@ -162,63 +150,28 @@ const PropertyDocuments = () => {
       { id: "powerofattorney", value: "Power of Attorney", label: "Power of Attorney" },
     ],
     "Property Maintainance": [
-      {
-        id: "main_doc",
-        value: "Maintainance Document",
-        label: "Maintainance Document",
-      },
+      { id: "main_doc", value: "Maintainance Document", label: "Maintainance Document" },
     ],
     "Utility Bills": [
-      {
-        id: "utility_doc",
-        value: "Utility Bill Document",
-        label: "Utility Bill Document",
-      },
+      { id: "utility_doc", value: "Utility Bill Document", label: "Utility Bill Document" },
     ],
     "Property Tax": [
-      {
-        id: "property_tax",
-        value: "Property Tax Document",
-        label: "Property Tax Document",
-      },
+      { id: "property_tax_doc", value: "Property Tax Document", label: "Property Tax Document" },
     ],
-  };  
-  const docWhat = {  
+  };
+
+  const docWhat = {
     "Property Maintainance": [
-      {
-        id: "pm_receipt",
-        value: "Receipt",
-        label: "Receipt",
-      },
-      {
-        id: "pm_bill",
-        value: "Bill",
-        label: "Bill",
-      },
+      { id: "pm_bill", value: "Bill", label: "Bill" },
+      { id: "pm_receipt", value: "Receipt", label: "Receipt" },
     ],
     "Utility Bills": [
-      {
-        id: "ub_receipt",
-        value: "Receipt",
-        label: "Receipt",
-      },
-      {
-        id: "ub_bill",
-        value: "Bill",
-        label: "Bill",
-      },
+      { id: "ub_bill", value: "Bill", label: "Bill" },
+      { id: "ub_receipt", value: "Receipt", label: "Receipt" },
     ],
     "Property Tax": [
-      {
-        id: "pt_receipt",
-        value: "Receipt",
-        label: "Receipt",
-      },
-      {
-        id: "pt_bill",
-        value: "Bill",
-        label: "Bill",
-      },
+      { id: "pt_bill", value: "Bill", label: "Bill" },
+      { id: "pt_receipt", value: "Receipt", label: "Receipt" },
     ],
   };
   // render jsx code in short form end
@@ -244,9 +197,18 @@ const PropertyDocuments = () => {
     : [];
   const filteredUtilityDocLength = filteredPropertyUtilityDocuments.length;
   // filter for property utility document end
+  // filter for property utility document start
+  const filteredPropertyPropertyTax = propertyDocument
+    ? propertyDocument.filter((doc) => doc.docCat === "Property Tax")
+    : [];
+  const filteredPropertyTaxLength = filteredPropertyPropertyTax.length;
+  // filter for property utility document end
+
+
+
   // filters end
 
-  // data of quick access menu  end
+
   const handleToggleChange = async (event, id) => {
     const newCheckedState = event.target.checked;
     setCheckedStates((prevStates) => ({
@@ -285,14 +247,8 @@ const PropertyDocuments = () => {
       link: "/propertydetails/" + propertyId,
       icon: "/assets/img/icons/qa_property.png",
     },
-
-    // { name: 'Tenant', link: '/', icon: '/assets/img/icons/qa_tenant.png' },
-    // { name: 'Document', link: '/', icon: '/assets/img/icons/qa_documentation.png' },
-
-    // { name: 'Transaction', link: '/', icon: '/assets/img/icons/qa_transaction.png' },
-    // { name: 'Bills', link: '/', icon: '/assets/img/icons/qa_bilss.png' },
-    // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
   ];
+  // data of quick access menu  end
 
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
@@ -409,7 +365,7 @@ const PropertyDocuments = () => {
                       </div>
                     </div>
                   )}
-                   {docWhat[selectedDocCat] && (
+                  {docWhat[selectedDocCat] && (
                     <div className="col-12">
                       <div className="form_field">
                         <div className="field_box theme_radio_new">
@@ -418,10 +374,11 @@ const PropertyDocuments = () => {
                               <div className="radio_single" key={radio.id}>
                                 <input
                                   type="radio"
-                                  name="aai_type"
+                                  name="doc_what"
                                   id={radio.id}
                                   value={radio.value}
-                                  onChange={handleDocWhatChange}
+                                  onChange={handleDocWhatChange
+                                  }
                                   checked={selectedDocWhat === radio.value}
                                 />
                                 <label htmlFor={radio.id}>{radio.label}</label>
@@ -482,6 +439,10 @@ const PropertyDocuments = () => {
               <Tab className="pointer">
                 Utility Document ({filteredUtilityDocLength})
               </Tab>
+              <Tab className="pointer">
+                Property Tax ({filteredPropertyTaxLength})
+              </Tab>
+
             </TabList>
             <TabPanel>
               <div className="blog_sect">
@@ -663,6 +624,89 @@ const PropertyDocuments = () => {
                     <h5 className="m20 text_red mt-4">No data found</h5>
                   )}
                   {filteredPropertyUtilityDocuments.map((doc, index) => (
+                    <div className="col-md-4" key={index}>
+                      <div className="item card-container">
+                        <div className="card-image relative">
+                          {uploadingDocId !== doc.id && (
+                            <label
+                              htmlFor={`upload_img_${doc.id}`}
+                              className="upload_img click_text by_text"
+                            >
+                              Upload PDF or Img
+                              <input
+                                type="file"
+                                onChange={(e) => handleFileChange(e, doc.id)}
+                                ref={fileInputRef}
+                                id={`upload_img_${doc.id}`}
+                              />
+                            </label>
+                          )}
+                          {uploadingDocId === doc.id ? (
+                            <div
+                              className="loader d-flex justify-content-center align-items-center"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                              }}
+                            >
+                              <BeatLoader color={"#FF5733"} loading={true} />
+                            </div>
+                          ) : doc.mediaType === "pdf" ? (
+                            <iframe
+                              title="PDF Viewer"
+                              src={doc.documentUrl}
+                              style={{
+                                width: "100%",
+                                aspectRatio: "3/2",
+                              }}
+                            ></iframe>
+                          ) : (
+                            <img
+                              src={
+                                doc.documentUrl ||
+                                "https://via.placeholder.com/150"
+                              }
+                              alt="Document"
+                            />
+                          )}
+                          {doc.docVerified && (
+                            <img
+                              className="verified_img"
+                              src="/assets/img/icons/verified_img.jpg"
+                              alt=""
+                            />
+                          )}
+                        </div>
+                        <div className="card-body">
+                          <h3>{doc.idType}</h3>
+                          <p className="card-subtitle">{doc.idNumber}</p>
+                          <div className="card-author">
+                            <div
+                              onClick={() => deletePropertyDocument(doc.id)}
+                              className="learn-more pointer"
+                            >
+                              Delete
+                            </div>
+                          </div>
+                          <Switch
+                            checked={checkedStates[doc.id] || false}
+                            onChange={(e) => handleToggleChange(e, doc.id)}
+                            inputProps={{ "aria-label": "controlled" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className="blog_sect">
+                <div className="row">
+                  {filteredPropertyTaxLength === 0 && (
+                    <h5 className="m20 text_red mt-4">No data found</h5>
+                  )}
+                  {filteredPropertyPropertyTax.map((doc, index) => (
                     <div className="col-md-4" key={index}>
                       <div className="item card-container">
                         <div className="card-image relative">
