@@ -4,7 +4,29 @@ import { useCollection } from "../hooks/useCollection";
 import { useFirestore } from "../hooks/useFirestore";
 import { useDocument } from '../hooks/useDocument';
 import { projectStorage, projectFirestore } from "../firebase/config";
-import { BeatLoader } from "react-spinners";
+import {
+    BarLoader,
+    BeatLoader,
+    BounceLoader,
+    CircleLoader,
+    ClimbingBoxLoader,
+    ClipLoader,
+    ClockLoader,
+    DotLoader,
+    FadeLoader,
+    GridLoader,
+    HashLoader,
+    MoonLoader,
+    PacmanLoader,
+    PropagateLoader,
+    PuffLoader,
+    PulseLoader,
+    RingLoader,
+    RiseLoader,
+    RotateLoader,
+    ScaleLoader,
+    SyncLoader
+} from "react-spinners";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 import SureDelete from "../pdpages/sureDelete/SureDelete";
 
@@ -29,6 +51,7 @@ const PropertyInspectionDocuments = () => {
     const [documentName, setDocumentName] = useState("");
     const [documentFile, setDocumentFile] = useState(null);
     const [uploadingDocId, setUploadingDocId] = useState(null);
+    const [uploadingDocTag, setUploadingDocTag] = useState(null);
     const fileInputRef = useRef(null);
 
     const [showModal, setShowModal] = useState(false);
@@ -44,7 +67,7 @@ const PropertyInspectionDocuments = () => {
 
     // const handleFileChange = (event) => setDocumentFile(event.target.files[0]);
 
-    const handleFileChange = (event, docId, docName) => {
+    const handleFileChange = (event, docId, docName, docTag) => {
         console.log('docId: ', docId)
         console.log('docName: ', docName)
 
@@ -52,6 +75,7 @@ const PropertyInspectionDocuments = () => {
         if (file) {
             setDocumentFile(file);
             setUploadingDocId(docId);
+            setUploadingDocTag(docTag);
             setUploadingDocName(docName)
         }
     };
@@ -72,7 +96,6 @@ const PropertyInspectionDocuments = () => {
             alert("Inspection date is required!");
             return;
         }
-
         try {
             setIsAdding(true);
             await addDocument({
@@ -105,7 +128,7 @@ const PropertyInspectionDocuments = () => {
             await updateDocument(selectedInspection.id, {
                 documents: [
                     ...(selectedInspection.documents || []),
-                    { name: documentName, url: "", mediaType: "", }
+                    { name: documentName, url: "", mediaType: "", tag: documentName + new Date() }
                 ]
             });
             setDocumentName("");
@@ -133,7 +156,7 @@ const PropertyInspectionDocuments = () => {
             if (doc.exists) {
                 console.log('doc Data: ', doc.data())
                 updatedDocuments = doc.data().documents.map(doc =>
-                    doc.name === uploadingDocName ? { ...doc, url: fileURL, mediaType: fileType } : doc
+                    doc.tag === uploadingDocTag ? { ...doc, url: fileURL, mediaType: fileType } : doc
                 );
             }
             console.log('updatedDocuments: ', updatedDocuments)
@@ -144,11 +167,13 @@ const PropertyInspectionDocuments = () => {
             setDocumentFile(null);
             setUploadingDocId(null);
             setUploadingDocName(null);
+            setUploadingDocTag(null);
             // fileInputRef .current.value = "";
         } catch (error) {
             console.error("Error uploading document image:", error);
             setUploadingDocId(null);
             setUploadingDocName(null);
+            setUploadingDocTag(null);
         }
     };
 
@@ -364,30 +389,33 @@ const PropertyInspectionDocuments = () => {
                             <div key={doc.id} className="row">
                                 {doc.documents && doc.documents.map((document, index) => (
                                     <div key={index} className="col-md-4">
-                                        <h2>{document.name}</h2>
                                         <div className="item card-container">
                                             <div className="card-image relative">
-                                                {/* <label
-                                                    htmlFor={`upload_img_${doc.id}`}
-                                                    className="upload_img click_text by_text"
-                                                >
-                                                    Upload image or pdf
-                                                    <input
-                                                        type="file"
-                                                        onChange={(e) => handleFileChange(e, doc.id, document.name)}
-                                                        ref={fileInputRef}
-                                                        id={`upload_img_${doc.id}`}
-                                                        name={document.name}
-                                                    />
-                                                </label> */}
-                                                <input
 
+                                                {uploadingDocId === doc.id && uploadingDocTag === document.tag ? (
+                                                    ""
+                                                ) : (
+                                                    <label
+                                                        htmlFor={`upload_img_${document.tag}`}
+                                                        className="upload_img click_text by_text"
+                                                    >
+                                                        Upload image or pdf
+                                                        <input
+                                                            type="file"
+                                                            onChange={(e) => handleFileChange(e, doc.id, document.name, document.tag)}
+                                                            ref={fileInputRef}
+                                                            id={`upload_img_${document.tag}`}
+                                                        // name={document.name}
+                                                        />
+                                                    </label>
+                                                )}
+
+                                                {/* <input
                                                     type="file"
                                                     onChange={(e) => handleFileChange(e, doc.id, document.name)}
                                                     ref={fileInputRef}
-                                                    id={`upload_img_${doc.id}`}
-                                                // name={document.name}
-                                                />
+                                                    id={`upload_img_${doc.id}`}                                            
+                                                /> */}
 
 
                                                 {/* <div>
@@ -404,14 +432,35 @@ const PropertyInspectionDocuments = () => {
                                                         Upload
                                                     </button>
                                                 </div> */}
-                                                {uploadingDocId === doc.id && uploadingDocName === document.name ? (
+                                                {uploadingDocId === doc.id && uploadingDocTag === document.tag ? (
                                                     <div
                                                         className="loader d-flex justify-content-center align-items-center"
                                                         style={{
                                                             width: "100%",
                                                             height: "100%",
                                                         }}>
-                                                        <BeatLoader color={"#FF5733"} loading={true} />
+                                                        {/* <BarLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <BeatLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <BounceLoader color={"#FF5733"} loading={true} /> */}
+                                                      
+                                                        
+                                                        <ClipLoader color={"#00a8a8"} loading={true} />
+                                                        {/* <ClockLoader color={"#FF5733"} loading={true} /> */}
+                                                      
+                                                        {/* <FadeLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <GridLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <HashLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <MoonLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <PacmanLoader color={"#FF5733"} loading={true} /> */}
+                                                    
+                                                        {/* <PuffLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <PulseLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <RingLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <RiseLoader color={"#FF5733"} loading={true} />                                                        */}
+                                                        {/* <ScaleLoader color={"#FF5733"} loading={true} /> */}
+                                                        {/* <SyncLoader color={"#FF5733"} loading={true} /> */}
+
+
                                                     </div>
                                                 ) : (
                                                     <>
