@@ -45,7 +45,8 @@ const PropertyInspectionDocuments = () => {
     // const handleFileChange = (event) => setDocumentFile(event.target.files[0]);
 
     const handleFileChange = (event, docId, docName) => {
-        // console.log('docId: ', docId)
+        console.log('docId: ', docId)
+        console.log('docName: ', docName)
 
         const file = event.target.files[0];
         if (file) {
@@ -363,22 +364,32 @@ const PropertyInspectionDocuments = () => {
                             <div key={doc.id} className="row">
                                 {doc.documents && doc.documents.map((document, index) => (
                                     <div key={index} className="col-md-4">
+                                        <h2>{document.name}</h2>
                                         <div className="item card-container">
                                             <div className="card-image relative">
-                                                {uploadingDocId !== doc.id && (
-                                                    <label
-                                                        htmlFor={`upload_img_${doc.id}`}
-                                                        className="upload_img click_text by_text"
-                                                    >
-                                                        Upload PDF or Img
-                                                        <input
-                                                            type="file"
-                                                            onChange={(e) => handleFileChange(e, doc.id, document.name)}
-                                                            ref={fileInputRef}
-                                                            id={`upload_img_${doc.id}`}
-                                                        />
-                                                    </label>
-                                                )}
+                                                {/* <label
+                                                    htmlFor={`upload_img_${doc.id}`}
+                                                    className="upload_img click_text by_text"
+                                                >
+                                                    Upload image or pdf
+                                                    <input
+                                                        type="file"
+                                                        onChange={(e) => handleFileChange(e, doc.id, document.name)}
+                                                        ref={fileInputRef}
+                                                        id={`upload_img_${doc.id}`}
+                                                        name={document.name}
+                                                    />
+                                                </label> */}
+                                                <input
+
+                                                    type="file"
+                                                    onChange={(e) => handleFileChange(e, doc.id, document.name)}
+                                                    ref={fileInputRef}
+                                                    id={`upload_img_${doc.id}`}
+                                                // name={document.name}
+                                                />
+
+
                                                 {/* <div>
                                                     <input
                                                         type="file"
