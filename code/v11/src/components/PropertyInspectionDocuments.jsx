@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { useCollection } from "../hooks/useCollection";
 import { useFirestore } from "../hooks/useFirestore";
-import { projectStorage } from "../firebase/config";
+import { useDocument } from '../hooks/useDocument';
+import { projectStorage, projectFirestore } from "../firebase/config";
 import { BeatLoader } from "react-spinners";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 import SureDelete from "../pdpages/sureDelete/SureDelete";
@@ -40,7 +41,25 @@ const PropertyInspectionDocuments = () => {
     const handleChangeInspectionDate = (event) => setInspectionDate(event.target.value);
     const handleChangeFilterDate = (event) => setFilterDate(event.target.value);
     const handleChangeDocumentName = (event) => setDocumentName(event.target.value);
-    const handleFileChange = (event) => setDocumentFile(event.target.files[0]);
+
+    // const handleFileChange = (event) => setDocumentFile(event.target.files[0]);
+
+    const handleFileChange = (event, docId, docName) => {
+        // console.log('docId: ', docId)
+
+        const file = event.target.files[0];
+        if (file) {
+            setDocumentFile(file);
+            setUploadingDocId(docId);
+            setUploadingDocName(docName)
+        }
+    };
+
+    useEffect(() => {
+        if (uploadingDocId && documentFile) {
+            uploadDocumentImage();
+        }
+    }, [uploadingDocId, documentFile]);
 
     const getFileType = (file) => {
         const fileExtension = file.name.split(".").pop().toLowerCase();
@@ -95,33 +114,36 @@ const PropertyInspectionDocuments = () => {
         }
     };
 
-    const uploadDocumentImage = async (docId, docName) => {
+    const uploadDocumentImage = async () => {
         if (!documentFile) {
             alert("Please select a file to upload!");
             return;
         }
         try {
-            setUploadingDocId(docId);
-            setUploadingDocName(docName); // Set both docId and docName for more precise control
             const fileType = getFileType(documentFile);
-            const storageRef = projectStorage.ref(`inspectionDocs/${docId}/${documentFile.name}`);
+            const storageRef = projectStorage.ref(`inspectionDocs/${uploadingDocId}/${documentFile.name}`);
             await storageRef.put(documentFile);
 
             const fileURL = await storageRef.getDownloadURL();
-
-            const selectedInspection = inspections.find(doc => doc.id === docId);
-            const updatedDocuments = selectedInspection.documents.map(doc =>
-                doc.name === docName ? { ...doc, url: fileURL, mediaType: fileType } : doc
-            );
-
-            await updateDocument(docId, {
+            console.log('file storage URL: ', fileURL)
+            let updatedDocuments;
+            const docRef = projectFirestore.collection('inspection').doc(uploadingDocId); // Replace 'user-id' with the actual document ID
+            const doc = await docRef.get();
+            if (doc.exists) {
+                console.log('doc Data: ', doc.data())
+                updatedDocuments = doc.data().documents.map(doc =>
+                    doc.name === uploadingDocName ? { ...doc, url: fileURL, mediaType: fileType } : doc
+                );
+            }
+            console.log('updatedDocuments: ', updatedDocuments)
+            await updateDocument(uploadingDocId, {
                 documents: updatedDocuments,
             });
 
             setDocumentFile(null);
             setUploadingDocId(null);
             setUploadingDocName(null);
-            fileInputRef.current.value = "";
+            // fileInputRef .current.value = "";
         } catch (error) {
             console.error("Error uploading document image:", error);
             setUploadingDocId(null);
@@ -343,31 +365,45 @@ const PropertyInspectionDocuments = () => {
                                     <div key={index} className="col-md-4">
                                         <div className="item card-container">
                                             <div className="card-image relative">
-                                                <div>
+                                                {uploadingDocId !== doc.id && (
+                                                    <label
+                                                        htmlFor={`upload_img_${doc.id}`}
+                                                        className="upload_img click_text by_text"
+                                                    >
+                                                        Upload PDF or Img
+                                                        <input
+                                                            type="file"
+                                                            onChange={(e) => handleFileChange(e, doc.id, document.name)}
+                                                            ref={fileInputRef}
+                                                            id={`upload_img_${doc.id}`}
+                                                        />
+                                                    </label>
+                                                )}
+                                                {/* <div>
                                                     <input
                                                         type="file"
                                                         onChange={handleFileChange}
                                                         ref={fileInputRef}
-                                                        disabled={uploadingDocId === doc.id && uploadingDocName === document.name} // Disable input only for specific document
+                                                        disabled={uploadingDocId === doc.id && uploadingDocName === document.name}
                                                     />
                                                     <button
                                                         onClick={() => uploadDocumentImage(doc.id, document.name)}
-                                                        disabled={uploadingDocId === doc.id && uploadingDocName === document.name} // Disable button only for specific document
+                                                        disabled={uploadingDocId === doc.id && uploadingDocName === document.name} 
                                                     >
                                                         Upload
                                                     </button>
-                                                </div>
+                                                </div> */}
                                                 {uploadingDocId === doc.id && uploadingDocName === document.name ? (
-                                                     <div
-                                                     className="loader d-flex justify-content-center align-items-center"
-                                                     style={{
-                                                       width: "100%",
-                                                       height: "100%",
-                                                     }}>
+                                                    <div
+                                                        className="loader d-flex justify-content-center align-items-center"
+                                                        style={{
+                                                            width: "100%",
+                                                            height: "100%",
+                                                        }}>
                                                         <BeatLoader color={"#FF5733"} loading={true} />
                                                     </div>
                                                 ) : (
-                                                    <>                                                      
+                                                    <>
                                                         {document.mediaType && document.mediaType === "pdf" ? (
                                                             <iframe
                                                                 title="PDF Viewer"
