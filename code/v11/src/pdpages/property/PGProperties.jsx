@@ -25,11 +25,11 @@ const PGProperties = () => {
       </div>
       {/* <div>
         {user && user.role === 'owner' && <PGCustomerProperty />}
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         {user && user.role === 'admin' && <PGAdminProperty />}
       </div> */}
-
+     
     </>
   );
 };

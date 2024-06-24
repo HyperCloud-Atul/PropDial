@@ -44,7 +44,8 @@ export default function Navbar() {
       return; // Exit the function to prevent further checks
     }
     else {
-      navigate("/contact-us");
+      navigate("/allproperties");  
+      
     }
   };
 
@@ -75,8 +76,8 @@ export default function Navbar() {
   if (user && user.role === "admin") {
     secondMenuIcon = "dashboard";
     secondMenu = "Dashboard";
-    thirdMenuIcon = "headset_mic";
-    thirdMenu = "Contact";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Properties";
   }
   if (user && user.role === "owner") {
     secondMenuIcon = "dashboard";

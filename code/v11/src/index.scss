@@ -1123,6 +1123,12 @@
     gap: 22px;
   }
 }
+.table_filter_hide .filters .right {
+  display: none;
+}
+.table_filter_hide .filters{
+  width: fit-content;
+}
 
 @media only screen and (max-width: 991px) {
   section.graphs {

@@ -186,7 +186,8 @@ const PropertyCard = ({ propertyid }) => {
 
         <div className="property_single_card relative">
           {propertydoc && <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
-            {propertydoc.status === 'Available for Rent' || propertydoc.status === 'Rented Out' ? 'Rent' : 'Sale'}
+            {/* {propertydoc.status === 'Available for Rent' || propertydoc.status === 'Rented Out' ? 'Rent' : 'Sale'} */}
+            {propertydoc.purpose}
           </div>}
           {propertydoc && <Link to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="top relative">
             <div className="img_container">

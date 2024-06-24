@@ -346,10 +346,27 @@ const PropertyInspectionDocuments = () => {
                                     </option>
                                 ))}
                             </select>
-                            <button className="theme_btn btn_fill" onClick={() => setShowAddDocumentForm(true)} >
-                                Add Document
-                            </button>
                         </div>
+                    </section>
+
+                    <section className="my_big_card selected_date">
+                       <div>
+                       {filteredInspections && filteredInspections.map((doc) => (
+                            <h2 class="card_title mb-0" key={doc.id}>
+                                {new Date(doc.inspectionDate).toLocaleDateString('en-GB', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric'
+                                }).replace(/ /g, '-')}
+
+                            </h2>
+                        ))}
+                        <div className="vg12"></div>
+                        <button className="theme_btn btn_fill" onClick={() => setShowAddDocumentForm(true)} >
+                            Add Document
+                        </button>
+                       </div>
+
                     </section>
                     {showAddDocumentForm && (
                         <section className="my_big_card">
@@ -368,19 +385,6 @@ const PropertyInspectionDocuments = () => {
                             </div>
                         </section>
                     )}
-                    <section className="my_big_card selected_date">
-                        {filteredInspections && filteredInspections.map((doc) => (
-                            <h2 class="card_title mb-0" key={doc.id}>
-                                {new Date(doc.inspectionDate).toLocaleDateString('en-GB', {
-                                    day: '2-digit',
-                                    month: 'short',
-                                    year: 'numeric'
-                                }).replace(/ /g, '-')}
-
-                            </h2>
-                        ))}
-
-                    </section>
                 </div>
 
                 <div className="blog_sect">
@@ -442,17 +446,17 @@ const PropertyInspectionDocuments = () => {
                                                         {/* <BarLoader color={"#FF5733"} loading={true} /> */}
                                                         {/* <BeatLoader color={"#FF5733"} loading={true} /> */}
                                                         {/* <BounceLoader color={"#FF5733"} loading={true} /> */}
-                                                      
-                                                        
+
+
                                                         <ClipLoader color={"#00a8a8"} loading={true} />
                                                         {/* <ClockLoader color={"#FF5733"} loading={true} /> */}
-                                                      
+
                                                         {/* <FadeLoader color={"#FF5733"} loading={true} /> */}
                                                         {/* <GridLoader color={"#FF5733"} loading={true} /> */}
                                                         {/* <HashLoader color={"#FF5733"} loading={true} /> */}
                                                         {/* <MoonLoader color={"#FF5733"} loading={true} /> */}
                                                         {/* <PacmanLoader color={"#FF5733"} loading={true} /> */}
-                                                    
+
                                                         {/* <PuffLoader color={"#FF5733"} loading={true} /> */}
                                                         {/* <PulseLoader color={"#FF5733"} loading={true} /> */}
                                                         {/* <RingLoader color={"#FF5733"} loading={true} /> */}

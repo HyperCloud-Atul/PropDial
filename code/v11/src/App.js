@@ -90,6 +90,8 @@ import PGTransactions from "./pdpages/property/PGTransactions";
 import PGRateCard from "./pdpages/roles/admin/master/PGRateCard";
 import PropertyDocuments from "./components/PropertyDocuments";
 import PropertyInspectionDocuments from "./components/PropertyInspectionDocuments";
+import PGAdminProperty from "./pdpages/property/PGAdminProperty";
+
 
 // New component import end
 
@@ -240,7 +242,16 @@ function App() {
                     path="/propertyinspectiondocument/:propertyId"
                     element={<PropertyInspectionDocuments />}
                   ></Route>
-
+                  <Route
+                    path="/allproperties"
+                    element={
+                      user && user.role === "admin" ? (
+                        <PGAdminProperty />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
+                    }
+                  ></Route>
 
 
                   {/* <Route

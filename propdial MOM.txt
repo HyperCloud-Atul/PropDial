@@ -19,7 +19,7 @@ b. Allow the inspection date to be editable.
 c. Provide a reason for any edits made to the inspection date.
 d. Development:- (can be edit and give reason of edit)(ek section bnana hai or usme planed inspection date ka ek button rkh kr usme add krwa dena hai or phir niche ek drop down dena hai jisme sare dates rhegi or sath me add ka button bhi rhega)
 
-4. New Categories in Property Document (Done) (On testing)
+4. New Categories in Property Document (Done)
 a. Add a new category for "property tax."
 b. When a user selects "property maintenance" or "utility bill," display a new field named "bill or receipt."
 

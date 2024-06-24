@@ -144,7 +144,7 @@ const UserTable = ({ users }) => {
     []
   );
   return (
-    <div className="user-single-table">
+    <div className="user-single-table table_filter_hide">
       <ReactTable tableColumns={columns} tableData={users} />
 
       {selectedUser && (
