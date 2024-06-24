@@ -1126,6 +1126,13 @@
 .table_filter_hide .filters .right {
   display: none;
 }
+.table_filter_hide .filters .left{
+  position: relative;
+  margin-top: -101px;
+}
+.table_filter_hide .vg22{
+  height: 0px;
+}
 .table_filter_hide .filters{
   width: fit-content;
 }

@@ -90,12 +90,15 @@ const UserList = () => {
         <div className="vg12"></div>
         <div className="filters">
           <div className='left'>
-            <div className="rt_global_search search_field">
-              <input
-                placeholder='Search'
-              ></input>
-              <div class="field_icon"><span class="material-symbols-outlined">search</span></div>
-            </div>
+          {viewMode === "card_view" && (
+             <div className="rt_global_search search_field">
+             <input
+               placeholder='Search'
+             ></input>
+             <div class="field_icon"><span class="material-symbols-outlined">search</span></div>
+           </div>
+        )}
+        
           </div>
           <div className="right">
             <div className="user_filters new_inline">

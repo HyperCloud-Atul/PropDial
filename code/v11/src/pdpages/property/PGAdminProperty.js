@@ -5,9 +5,10 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
 import PropertyCard from "../../components/property/PropertyCard";
 import PropertyTable from '../../components/property/PropertyTable';
+import Switch from "react-switch";
 // import filter 
 import Filters from '../../components/Filters';
-const propertyFilter = ["Residential", "Commercial", "Rent", "Sale"];
+const propertyFilter = ["Residential", "Commercial"];
 
 const PGAdminProperty = () => {
 
@@ -21,27 +22,34 @@ const PGAdminProperty = () => {
     const changeFilter = (newFilter) => {
         setFilter(newFilter);
     };
+
+    // switch for Rent/Sale
+    const [rentSaleFilter, setRentSaleFilter] = useState("Rent");
+    const handleRentSaleChange = (checked) => {
+        setRentSaleFilter(checked ? "Sale" : "Rent");
+    };
+
     const filterProperties = properties
         ? properties.filter((document) => {
+            let categoryMatch = true;
+            let purposeMatch = true;
+
             switch (filter) {
-                case "All":
-                    return true;
                 case "Residential":
-                    return (document.category.toUpperCase() === "RESIDENTIAL");
+                    categoryMatch = (document.category.toUpperCase() === "RESIDENTIAL");
+                    break;
                 case "Commercial":
-                    return (document.category.toUpperCase() === "COMMERCIAL");
-                case "Rent":
-                    return (document.purpose.toUpperCase() === "RENT");
-                case "Sale":
-                    return (document.purpose.toUpperCase() === "SALE");
+                    categoryMatch = (document.category.toUpperCase() === "COMMERCIAL");
+                    break;
                 default:
-                    return true;
+                    categoryMatch = true;
             }
+            purposeMatch = (document.purpose.toUpperCase() === rentSaleFilter.toUpperCase());
+            return categoryMatch && purposeMatch;
         })
         : null;
     // filter code end 
-
-
+  
 
     // card and table view mode functionality start
     const [viewMode, setviewMode] = useState('card_view'); // Initial mode is grid with 3 columns
@@ -67,12 +75,14 @@ const PGAdminProperty = () => {
                 <div className="vg12"></div>
                 <div className="filters">
                     <div className='left'>
-                        <div className="rt_global_search search_field">
-                            <input
-                                placeholder='Search'
-                            ></input>
-                            <div class="field_icon"><span class="material-symbols-outlined">search</span></div>
-                        </div>
+                        {viewMode === "card_view" && (
+                            <div className="rt_global_search search_field">
+                                <input
+                                    placeholder='Search'
+                                ></input>
+                                <div className="field_icon"><span className="material-symbols-outlined">search</span></div>
+                            </div>
+                        )}
                     </div>
                     <div className="right">
                         <div className="user_filters new_inline">
@@ -83,6 +93,27 @@ const PGAdminProperty = () => {
                                     filterLength={filterProperties.length}
                                 />
                             )}
+                        </div>                      
+                        <div className="residentail_commercial rent_sale">
+                            <label className={rentSaleFilter === "Sale" ? "on" : "off"}>
+                                <div className="switch">
+                                    <span className={`rent ${rentSaleFilter === "Sale" ? "off" : "on"}`} >
+                                        Rent
+                                    </span>
+                                    <Switch
+                                        onChange={handleRentSaleChange}
+                                        checked={rentSaleFilter === "Sale"}
+                                        handleDiameter={20} // Set the handle diameter (optional)
+                                        uncheckedIcon={false} // Hide the wrong/right icon
+                                        checkedIcon={false} // Hide the wrong/right icon
+                                        className="pointer"
+                                    />
+                                    <span className={`sale ${rentSaleFilter === "Sale" ? "on" : "off"}`}
+                                    >
+                                        Sale
+                                    </span>
+                                </div>
+                            </label>
                         </div>
                         <div className="button_filter diff_views">
                             <div className={`bf_single ${viewMode === 'card_view' ? 'active' : ''}`} onClick={() => handleModeChange('card_view')}>
@@ -104,15 +135,12 @@ const PGAdminProperty = () => {
                                 ))}
                         </>
                     )}
-
-
                 </div>
                 {viewMode === "table_view" && (
                     <>
                         {properties && <PropertyTable properties={filterProperties} />}
                     </>
                 )}
-
             </div>
         </div>
     )

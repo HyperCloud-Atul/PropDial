@@ -103,9 +103,21 @@ h2.banner_heading {
 .on .react-switch-bg {
     background: var(--theme-orange) !important;
 }
+.rent_sale .on .react-switch-bg {
+    background: var(--theme-green) !important;
+}
+.rent_sale span.sale{
+    color: var(--theme-green);
+}
+.rent_sale span.rent{
+    color: var(--theme-purple);
+}
 
 .off .react-switch-bg {
-    background: var(--theme-green) !important;
+    background: var(--theme-blue) !important;
+}
+.rent_sale .off .react-switch-bg {
+    background: var(--theme-purple) !important;
 }
 
 .search_area_header {
@@ -184,7 +196,7 @@ h2.banner_heading {
 }
 
 .switch span.Residential {
-    color: var(--theme-green);
+    color: var(--theme-blue);
 }
 
 .switch span.Commercial {
