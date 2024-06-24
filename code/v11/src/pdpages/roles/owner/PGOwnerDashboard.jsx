@@ -5,6 +5,9 @@ import LinearProgressBar from "../../../pages/roles/owner/LinearProgressBar";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useCollection } from "../../../hooks/useCollection";
+import { useFirestore } from "../../../hooks/useFirestore";
+import { projectStorage, projectFirestore } from "../../../firebase/config";
+
 import Table from 'react-bootstrap/Table';
 import { Link } from "react-router-dom";
 
@@ -30,7 +33,7 @@ const PGOwnerDashboard = () => {
   // Scroll to the top of the page whenever the location changes end
 
   const { user } = useAuthContext();
-  console.log('user: ', user)
+  // console.log('user: ', user)
   const { documents: myproperties, error: errMyProperties } = useCollection(
     "propertyusers",
     ["userId", "==", user.uid]
@@ -44,23 +47,60 @@ const PGOwnerDashboard = () => {
   //   ["access", "array-contains", user.uid]
   // );
 
+
+  const filteredproperties = myproperties && myproperties.map((doc) => (
+    properties && properties.filter(propdoc => propdoc.id === doc.propertyId)
+  ))
+
+  console.log('filteredproperties: ', filteredproperties)
+
+  // const activeProperties =
+  //   filteredproperties && filteredproperties.map((propdoc) => (
+  //     console.log('active properties prop doc: ', propdoc)
+  //     // propdoc.filter((item) => item.isActiveInactiveReview.toUpperCase() === 'ACTIVE')
+  //   ))
+
   const activeProperties =
-    properties && properties.filter((item) => item.isActiveInactiveReview.toUpperCase() === 'ACTIVE');
+    filteredproperties && filteredproperties.map((propdoc) => (
+      propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
+    ))
+
+  const activePropertieslengthWithoutNulls = activeProperties && activeProperties.filter(element => element !== null).length;
 
   const pendingProperties =
-    properties && properties.filter((item) => item.isActiveInactiveReview.toUpperCase() === 'IN-REVIEW');
+    filteredproperties && filteredproperties.map((propdoc) => (
+      propdoc[0].isActiveInactiveReview.toUpperCase() === 'IN-REVIEW' ? propdoc[0] : null
+    ))
+
+  const pendingPropertieslengthWithoutNulls = pendingProperties && pendingProperties.filter(element => element !== null).length;
+  // console.log('pendingPropertieslengthWithoutNulls: ', pendingPropertieslengthWithoutNulls)
 
   const inactiveProperties =
-    properties && properties.filter((item) => item.isActiveInactiveReview.toUpperCase() === 'INACTIVE');
+    filteredproperties && filteredproperties.map((propdoc) => (
+      propdoc[0].isActiveInactiveReview.toUpperCase() === 'INACTIVE' ? propdoc[0] : null
+    ))
+
+  const inactivePropertieslengthWithoutNulls = inactiveProperties && inactiveProperties.filter(element => element !== null).length;
+
+  // const inactiveProperties =
+  //   filteredproperties && filteredproperties[0].filter((item) => item.isActiveInactiveReview.toUpperCase() === 'INACTIVE');
 
   const residentialProperties =
-    properties && properties.filter((item) => item.category.toUpperCase() === 'RESIDENTIAL');
+    filteredproperties && filteredproperties.map((propdoc) => (
+      propdoc[0].category.toUpperCase() === 'RESIDENTIAL' ? propdoc[0] : null
+    ))
 
+  const residentialPropertieslengthWithoutNulls = residentialProperties && residentialProperties.filter(element => element !== null).length;
 
   // commercialProperties
   const commercialProperties =
-    properties && properties.filter((item) => item.category.toUpperCase() === 'COMMERCIAL');
+    filteredproperties && filteredproperties.map((propdoc) => (
+      propdoc[0].category.toUpperCase() === 'COMMERCIAL' ? propdoc[0] : null
+    ))
+  const commercialPropertieslengthWithoutNulls = commercialProperties && commercialProperties.filter(element => element !== null).length;
 
+  // const commercialProperties =
+  //   filteredproperties && filteredproperties[0].filter((item) => item.category.toUpperCase() === 'COMMERCIAL');
 
   // advertisement img option in owl carousel
   const addImgOptions = {
@@ -151,15 +191,15 @@ const PGOwnerDashboard = () => {
                   <div className="vg22_1199"></div>
                   <div className="property_status">
                     <div className="ps_single pending">
-                      <h5>{pendingProperties && pendingProperties.length}</h5>
+                      <h5>{pendingProperties && pendingPropertieslengthWithoutNulls}</h5>
                       <h6>In-Review</h6>
                     </div>
                     <div className="ps_single active">
-                      <h5>{activeProperties && activeProperties.length}</h5>
+                      <h5>{activeProperties && activePropertieslengthWithoutNulls}</h5>
                       <h6>Active</h6>
                     </div>
                     <div className="ps_single inactive">
-                      <h5>{inactiveProperties && inactiveProperties.length}</h5>
+                      <h5>{inactiveProperties && inactivePropertieslengthWithoutNulls}</h5>
                       <h6>Inactive</h6>
                     </div>
                   </div>
@@ -175,7 +215,7 @@ const PGOwnerDashboard = () => {
                   </div>
                   <div className="right">
                     <h6>Residential</h6>
-                    <h5>{residentialProperties && residentialProperties.length}</h5>
+                    <h5>{residentialProperties && residentialPropertieslengthWithoutNulls}</h5>
                   </div>
                 </div>
                 <div className="spd_single">
@@ -184,7 +224,7 @@ const PGOwnerDashboard = () => {
                   </div>
                   <div className="right">
                     <h6>Commercial</h6>
-                    <h5>{commercialProperties && commercialProperties.length}</h5>
+                    <h5>{commercialProperties && commercialPropertieslengthWithoutNulls}</h5>
                   </div>
                 </div>
 
