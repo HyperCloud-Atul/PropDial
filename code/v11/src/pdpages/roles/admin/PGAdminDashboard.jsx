@@ -200,7 +200,7 @@ const PGAdminDashboard = () => {
       <div className="top_header_pg pg_bg propagent_dashboard">
         <div className="page_spacing">
           <div className="pg_header">
-            <h2 className="m22 mb-1">Dashboard</h2>
+            <h2 className="m22 mb-1">Admin Dashboard</h2>
             <h4 className="r18 light_black">
               Welcome <b> {user.displayName} </b>to Propdial
             </h4>

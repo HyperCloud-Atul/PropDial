@@ -6,6 +6,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import PhoneLogin from "../phonelogin/PhoneLogin";
 import PGOwnerDashboard from "../roles/owner/PGOwnerDashboard";
 import PGAdminDashboard from "../roles/admin/PGAdminDashboard";
+import PGManagerDashboard from "../roles/manager/PGManagerDashboard";
 
 const PGDaashboard = () => {
     // Scroll to the top of the page whenever the location changes start
@@ -23,13 +24,16 @@ const PGDaashboard = () => {
                 {!user && <PhoneLogin />}
             </div>
             <div>
-                {user && (user.role === 'owner') && <PGOwnerDashboard />}
+                {user && (user.role.toLowerCase() === 'owner') && <PGOwnerDashboard />}
             </div>
             {/* <div>
-                {user && user.role === 'tenant' && <PGTenantDashboard />}
+                {user && user.role.toLowerCase() === 'tenant' && <PGTenantDashboard />}
             </div> */}
             <div>
-                {user && user.role === 'admin' && <PGAdminDashboard />}
+                {user && user.role.toLowerCase() === 'manager' && <PGManagerDashboard />}
+            </div>
+            <div>
+                {user && user.role.toLowerCase() === 'admin' && <PGAdminDashboard />}
             </div>
 
         </>
