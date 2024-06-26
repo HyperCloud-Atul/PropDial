@@ -413,58 +413,15 @@ const PropertyInspectionDocuments = () => {
                                                         />
                                                     </label>
                                                 )}
-
-                                                {/* <input
-                                                    type="file"
-                                                    onChange={(e) => handleFileChange(e, doc.id, document.name)}
-                                                    ref={fileInputRef}
-                                                    id={`upload_img_${doc.id}`}                                            
-                                                /> */}
-
-
-                                                {/* <div>
-                                                    <input
-                                                        type="file"
-                                                        onChange={handleFileChange}
-                                                        ref={fileInputRef}
-                                                        disabled={uploadingDocId === doc.id && uploadingDocName === document.name}
-                                                    />
-                                                    <button
-                                                        onClick={() => uploadDocumentImage(doc.id, document.name)}
-                                                        disabled={uploadingDocId === doc.id && uploadingDocName === document.name} 
-                                                    >
-                                                        Upload
-                                                    </button>
-                                                </div> */}
+                                             
                                                 {uploadingDocId === doc.id && uploadingDocTag === document.tag ? (
                                                     <div
                                                         className="loader d-flex justify-content-center align-items-center"
                                                         style={{
                                                             width: "100%",
                                                             height: "100%",
-                                                        }}>
-                                                        {/* <BarLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <BeatLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <BounceLoader color={"#FF5733"} loading={true} /> */}
-
-
-                                                        <ClipLoader color={"#00a8a8"} loading={true} />
-                                                        {/* <ClockLoader color={"#FF5733"} loading={true} /> */}
-
-                                                        {/* <FadeLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <GridLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <HashLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <MoonLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <PacmanLoader color={"#FF5733"} loading={true} /> */}
-
-                                                        {/* <PuffLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <PulseLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <RingLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <RiseLoader color={"#FF5733"} loading={true} />                                                        */}
-                                                        {/* <ScaleLoader color={"#FF5733"} loading={true} /> */}
-                                                        {/* <SyncLoader color={"#FF5733"} loading={true} /> */}
-
-
+                                                        }}>                                                      
+                                                        <BeatLoader color={"#FF5733"} loading={true} />                                                      
                                                     </div>
                                                 ) : (
                                                     <>
@@ -506,23 +463,7 @@ const PropertyInspectionDocuments = () => {
                         {inspectionsError && <p>Error loading inspections: {inspectionsError}</p>}
                     </div>
                 </div>
-
-                {/* <div className="delete_document">
-                    {filteredInspections && filteredInspections.map((doc) => (
-                        <>  <div className="vg22"></div>
-                            <div className="divider"></div>
-                            <div className="vg10"></div>
-                            <div key={doc.id} className="delete_bottom" onClick={() => deleteInspection(doc.id)}>
-                                <span className="material-symbols-outlined">delete</span>
-                                <span>Delete (all document of date  {new Date(doc.inspectionDate).toLocaleDateString('en-GB', {
-                                    day: '2-digit',
-                                    month: 'short',
-                                    year: 'numeric'
-                                }).replace(/ /g, '-')} )</span>
-                            </div>
-                            <div className="vg22"></div>
-                        </>))}
-                </div> */}
+              
                 <div className="delete_document">
                     {filteredInspections && filteredInspections.map((doc) => (
                         <React.Fragment key={doc.id}>

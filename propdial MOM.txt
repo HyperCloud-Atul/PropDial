@@ -1,11 +1,103 @@
+Minutes of Meeting (MoM)
+Date: June 25, 2024 (Tuesday)
+
+Attendees:
+1. Vinay Sir
+2. Atul Sir
+3. Sanskar 
+
+Agenda:
+Enhancements and updates for Propdial system.
+
+----------------------------------------------
+
+Action Items:
+
+1. Property ID (PID) Display:
+a. Add Property ID (PID) and ensure it is displayed on both the card and table views.
+
+2. Manager Dashboard Enhancements:
+a. Include sections for Inspection, Rent Renewal, and Due Rent on the manager's dashboard.
+
+3. Property Detail Page Permissions:
+a. Ensure the property description is only editable by the admin.
+b. Ensure the owner instructions are only editable by the owner.
+
+4. Inspection Module Updates:
+i. Inspection Date:
+a. Automatically set the inspection date when a property is added.
+b. Display the default inspection date in the due section on the property inspection page.
+
+ii. Add Document Form:
+a. Include two new fields: Name and Reason for Late Inspection.
+b. Display the creation date on the card after a document is added.
+c. Fields to show on the card: Name, Picture, Uploaded Date, Reason (if provided).
+
+iii. Filters and Ordering:
+a. Remove the date filter; display all inspections in descending order.
+
+iv. Inspection Report Dependency:
+a. Ensure the next inspection date is saved before allowing the addition of a document. If not, prompt the user to save the next inspection date.
+
+v. Button Label:
+a. Rename the button to "Add Inspection Report".
+
+5. Rent Renewal Process:
+a. The rent end date will automatically be set to one year after the rent start date upon renewal.
+
+6. Property Document Form Updates:
+a. Remove unnecessary fields related to property maintenance.
+b. Change the placeholder text for "Document ID" to "Document Name".
+
+7. Label Update:
+a. Update the label "Only Owner Instruction" to "Owner Instruction for This Property".
+
+8. Property Detail Page Enhancements:
+a. Add a location field in the popup when adding a manager or owner.
+
+9. Home Page Notifications:
+a. For managers and admins, display upcoming rent renewals and upcoming inspection dates for properties in a popup upon login.
+
+10. Notifications for Rent and Inspection:
+a. Display upcoming rent renewals and upcoming inspection dates in the notification section.
+
+------------------------------------
+
+Dues from Previous MoM (June 15, 2024):
+
+1. Enquiry Module Enhancements:
+a. Online enquiries should be submitted by guest users.
+b. Enquiries can also be added manually by admin.
+c. Review the enquiry form on the old Propdial admin website for reference.
+d. Display enquiries separately for rent and sell.
+e. Each enquiry must be mapped to an existing property.
+f. Enquiries will be categorized as either for rent or for sell.
+
+2. Prospective Tenants/Buyers:
+a. Prospective tenants/buyers must log into the system. (Assigned to Atul sir)
+b. Once logged in, they can view all properties they have visited. (Assigned to Atul sir)
+
+3. Property Layout on Property Detail Page:
+a. Add image carousel. (Assigned to sanskar)
+
+-----------------------------------
+
+Next Steps:
+a. Implement the discussed changes and enhancements.
+b. Schedule a follow-up meeting to review the progress and address any issues.
+
+
+---------------------------------------------------------------------------
+
+
 Propdial MOM (15-June-2024, Saturday)
 
-1. Tenant Document Updates (Done)
-a. Replace "tenant document" with "tenant KYC document."
-b. Replace "police verification document" with "police verification."
-c. Replace "rent agreement document" with "rent agreements." 
+1. Tenant Document Updates 
+a. Replace "tenant document" with "tenant KYC document." (Done)
+b. Replace "police verification document" with "police verification." (Done)
+c. Replace "rent agreement document" with "rent agreements."  (Done)
 
-2. Enquiry Module Enhancements
+2. Enquiry Module Enhancements (Due) 
 a. Online enquiries should be submitted by guest users.
 b. Enquiries can also be added manually by admin.
 c. Review the enquiry form on the old Propdial admin website for reference.
@@ -19,21 +111,17 @@ b. Allow the inspection date to be editable.
 c. Provide a reason for any edits made to the inspection date.
 d. Development:- (can be edit and give reason of edit)(ek section bnana hai or usme planed inspection date ka ek button rkh kr usme add krwa dena hai or phir niche ek drop down dena hai jisme sare dates rhegi or sath me add ka button bhi rhega)
 
-4. New Categories in Property Document (Done)
-a. Add a new category for "property tax."
-b. When a user selects "property maintenance" or "utility bill," display a new field named "bill or receipt."
+4. New Categories in Property Document 
+a. Add a new category for "property tax." (Done)
+b. When a user selects "property maintenance" or "utility bill," display a new field named "bill or receipt." (Done)
 
-5. Prospective Tenants/Buyers (Atul sir)
-a. Prospective tenants/buyers must log into the system.
-b. Once logged in, they can view all properties they have visited.
+5. Prospective Tenants/Buyers 
+a. Prospective tenants/buyers must log into the system. (Atul sir due)
+b. Once logged in, they can view all properties they have visited. (Atul sir due)
 
 6. User list page  (Done)
 a. add more filter:- tenant, buyers, prospective tenant, prospective buyers (Done)
 
 7. Property Layout on property detail page 
-a. Add image carousel (Sans)
+a. Add image carousel (Due)
 b. Display fixtures on click on edit (Done)
-
- 
-
-
