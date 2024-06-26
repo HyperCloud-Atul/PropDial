@@ -14,16 +14,16 @@ Enhancements and updates for Propdial system.
 Action Items:
 
 1. Property ID (PID) Display:
-a. Add Property ID (PID) and ensure it is displayed on both the card and table views.
+a. Add Property ID (PID) and ensure it is displayed on both the card and table views. (Atul sir)
 
 2. Manager Dashboard Enhancements:
-a. Include sections for Inspection, Rent Renewal, and Due Rent on the manager's dashboard.
+a. Include sections for Inspection, Rent Renewal, and Due Rent on the manager's dashboard. (S)
 
 3. Property Detail Page Permissions:
-a. Ensure the property description is only editable by the admin.
-b. Ensure the owner instructions are only editable by the owner.
+a. Ensure the property description is only editable by the admin. (Atul sir)
+b. Ensure the owner instructions are only editable by the owner. (Atul sir)
 
-4. Inspection Module Updates:
+4. Inspection Module Updates: (Atul sir)
 i. Inspection Date:
 a. Automatically set the inspection date when a property is added.
 b. Display the default inspection date in the due section on the property inspection page.
@@ -45,20 +45,20 @@ a. Rename the button to "Add Inspection Report".
 5. Rent Renewal Process:
 a. The rent end date will automatically be set to one year after the rent start date upon renewal.
 
-6. Property Document Form Updates:
+6. Property Document Form Updates: (s)
 a. Remove unnecessary fields related to property maintenance.
 b. Change the placeholder text for "Document ID" to "Document Name".
 
-7. Label Update:
+7. Label Update: (Null)
 a. Update the label "Only Owner Instruction" to "Owner Instruction for This Property".
 
-8. Property Detail Page Enhancements:
+8. Property Detail Page Enhancements: (Atul sir)
 a. Add a location field in the popup when adding a manager or owner.
 
-9. Home Page Notifications:
+9. Home Page Notifications: (s)
 a. For managers and admins, display upcoming rent renewals and upcoming inspection dates for properties in a popup upon login.
 
-10. Notifications for Rent and Inspection:
+10. Notifications for Rent and Inspection: (s)
 a. Display upcoming rent renewals and upcoming inspection dates in the notification section.
 
 ------------------------------------
