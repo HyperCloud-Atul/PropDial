@@ -199,6 +199,8 @@ const CreateProperty = () => {
     const [onboardingDate, setOnboardingDate] = useState(new Date());
     const [newProperty, setNewProperty] = useState(null);
 
+    const { documents: propertiesdocs, error: propertiesdocserror } = useCollection("properties");
+
     const { addDocument: addNewPropertyDocument, response: addNewPropertyDocumentResponse } =
         useFirestore("properties");
     const { addDocument: addPropertyUsersDocument, response: addPropertyUsersDocumentResponse } =
@@ -634,7 +636,14 @@ const CreateProperty = () => {
                 console.log(newProperty)
                 setFormSuccess("Property Created Successfully");
                 setFormError(null)
-                await addNewPropertyDocument(_newProperty);
+                const propertiesCount = propertiesdocs && propertiesdocs.length;
+                const nextPropertySeqCounter = "PID" + (propertiesCount + 1)
+                console.log("nextPropertySeqCounter: ", nextPropertySeqCounter)
+                const _propertyWithSeqCounter = {
+                    ..._newProperty,
+                    pid: nextPropertySeqCounter
+                }
+                await addNewPropertyDocument(_propertyWithSeqCounter);
                 if (addNewPropertyDocumentResponse.error) {
                     navigate("/");
                 } else {

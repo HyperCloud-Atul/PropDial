@@ -464,6 +464,7 @@ const PropertyDetails = () => {
           user.fullName.toLowerCase().includes(query.toLowerCase()) ||
           user.phoneNumber.includes(query)
       );
+    console.log('filtered: ', filtered)
     setFilteredUsers(filtered);
   };
 
@@ -889,7 +890,7 @@ const PropertyDetails = () => {
                         /(\d{2})(\d{5})(\d{5})/,
                         "+$1 $2-$3"
                       )}
-                      )
+                      ) - {user.city}
                     </label>
                   </li>
                 ))}
@@ -1995,20 +1996,20 @@ const PropertyDetails = () => {
 
                         </div>
                         <div className="col-11">
-                          <div className="tenant_card">                          
+                          <div className="tenant_card">
                             <Swiper
-                                  spaceBetween={15}
-                                  slidesPerView={3.5}
-                                  pagination={{ clickable: true }}
-                                  freeMode={true}
-                                  className='all_tenants'
-                                >
-                                   {tenantDocument &&
-                                  tenantDocument.map((tenant, index) => (
-                                      <SwiperSlide key={index}>
-                                        <div
+                              spaceBetween={15}
+                              slidesPerView={3.5}
+                              pagination={{ clickable: true }}
+                              freeMode={true}
+                              className='all_tenants'
+                            >
+                              {tenantDocument &&
+                                tenantDocument.map((tenant, index) => (
+                                  <SwiperSlide key={index}>
+                                    <div
                                       className={`tc_single relative item ${tenant.status === "inactive" ? "t_inactive" : ""}`}
-                                      >
+                                    >
                                       <Link className="left" to={`/tenantdetails/${tenant.id}`}>
                                         <div className="tcs_img_container" >
                                           <img
@@ -2061,9 +2062,9 @@ const PropertyDetails = () => {
                                         </Link>
                                       </div>
                                     </div>
-                                      </SwiperSlide>
-                                    ))}
-                                </Swiper>
+                                  </SwiperSlide>
+                                ))}
+                            </Swiper>
 
                           </div>
                         </div>
@@ -2310,7 +2311,7 @@ const PropertyDetails = () => {
                             }
                             <div className="col-11">
                               <div className="tenant_card">
-                              <Swiper
+                                <Swiper
                                   spaceBetween={15}
                                   slidesPerView={3.5}
                                   pagination={{ clickable: true }}
@@ -2318,11 +2319,11 @@ const PropertyDetails = () => {
                                   className='all_tenants'
                                 >
                                   {filteredPropertyManagers &&
-                                  filteredPropertyManagers.map((propUser, index) => (
+                                    filteredPropertyManagers.map((propUser, index) => (
                                       <SwiperSlide key={index}>
                                         <div
                                           className="tc_single relative item"
-                                         >
+                                        >
                                           <div className="property_people_designation d-flex align-items-end justify-content-center" onClick={(e) => handleShowOwnerTags(e, propUser, 'propmanager')}>
                                             {propUser.userTag}
                                             <span class="material-symbols-outlined click_icon text_near_icon" style={{
@@ -2410,7 +2411,7 @@ const PropertyDetails = () => {
                                       </SwiperSlide>
                                     ))}
                                 </Swiper>
-                             
+
                               </div>
                             </div>
                           </div>

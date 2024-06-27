@@ -15,12 +15,22 @@ const PropertyCard = ({ propertyid }) => {
   const { document: propertydoc, error: errPropertyDoc } = useDocument("properties", propertyid);
   // const { document: userDoc, error: userDocError } = useDocument('users', propertydoc && propertydoc.createdBy)
 
+  // const { documents: myproperties, error: errMyProperties } = useCollection(
+  //   "propertyusers",
+  //   ["propertyId", "==", propertyid]
+  // );
+  // const { documents: myproperties, error: errMyProperties } = useCollection(
+  //   "propertyusers"
+  // );
+
+  // console.log('my properties: ', myproperties)
+
   const [toggleFlag, setToggleFlag] = useState(false);
 
   // expand more expand less start
   const [expanded, setExpanded] = useState(true);
 
-  console.log('propertydoc:', propertydoc)
+  // console.log('propertydoc:', propertydoc)
 
   const handleExpand = () => {
     setExpanded(!expanded);
@@ -202,6 +212,7 @@ const PropertyCard = ({ propertyid }) => {
                 >
                   <span className="material-symbols-outlined">edit_square</span>
                 </Link>}
+              <h6>{propertydoc.pid}</h6>
               <h5 className="demand">
                 <span>₹</span> {propertydoc.demandPrice}
                 {propertydoc.maintenancecharges !== '' && <span
