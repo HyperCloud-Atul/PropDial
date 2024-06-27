@@ -3311,7 +3311,7 @@ const PropertyDetails = () => {
                               ></p>
                               {!isPropDescEdit &&
                                 user &&
-                                user.role == "admin" && (
+                                (user.role === "owner" || user.role === "admin") && (
                                   <span
                                     class="material-symbols-outlined click_icon text_near_icon"
                                     onClick={() =>
