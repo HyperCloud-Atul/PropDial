@@ -3,12 +3,11 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Modal from 'react-bootstrap/Modal';
 
 // text 
 import { useFirestore } from "../../hooks/useFirestore";
 // text 
-
-
 
 // css
 import "./Home.css";
@@ -33,7 +32,19 @@ const Home = () => {
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
 
+  const [show, setShow] = useState(false);
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShow(true);
+    }, 6000);
+
+    // Cleanup the timer if the component is unmounted
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <>
       {/* <Helmet>
@@ -44,7 +55,6 @@ const Home = () => {
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
         <ProductCarousel></ProductCarousel>
-
         <section className="work_flow sect_padding">
           <div className="container">
             <div className="section_title">
@@ -511,6 +521,29 @@ const Home = () => {
 
         <Blog></Blog>
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reminder</Modal.Title>
+        </Modal.Header>
+        <div className="vg22"></div>
+        <section className="upcoming on_modal">
+          <div className="parent" style={{ gridTemplateColumns: "repeat(1, fr)" }}>
+            <div className="child one">
+              <div className="inner">
+                <h5>5</h5>
+                <h6>Upcoming Inspections</h6>
+              </div>
+            </div>
+            <div className="child two">
+              <div className="inner">
+                <h5>6</h5>
+                <h6>Upcoming Rent Renewal</h6>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </Modal>
     </>
 
   );

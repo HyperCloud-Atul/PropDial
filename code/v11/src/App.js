@@ -91,6 +91,7 @@ import PGRateCard from "./pdpages/roles/admin/master/PGRateCard";
 import PropertyDocuments from "./components/PropertyDocuments";
 import PropertyInspectionDocuments from "./components/PropertyInspectionDocuments";
 import PGAdminProperty from "./pdpages/property/PGAdminProperty";
+import PGEnquiry from "./pdpages/enquiry/PGEnquiry";
 
 
 // New component import end
@@ -225,6 +226,7 @@ function App() {
                   <Route path="/about-us" element={<PGAboutUs />}></Route>
                   <Route path="/contact-us" element={<PGContactUs />}></Route>
                   <Route path="/faq" element={<Faq></Faq>}></Route>
+                  <Route path="/enquiry" element={<PGEnquiry></PGEnquiry>}></Route>
                   <Route path="/properties" element={<PGProperties />}></Route>
                   <Route
                     path="/propertydetails/:propertyid"

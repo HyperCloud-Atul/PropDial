@@ -251,8 +251,23 @@ const PGAdminDashboard = () => {
                   </div>
                 </div>
               </section>
-
               <div className="vg22"></div>
+              <section className="upcoming">
+                <div className="parent">
+                  <div className="child">
+                    <div className="inner">
+                      <h5>5</h5>
+                      <h6>Upcoming Inspections</h6>
+                    </div>
+                  </div>
+                  <div className="child">
+                    <div className="inner">
+                      <h5>6</h5>
+                      <h6>Upcoming Rent Renewal</h6>
+                    </div>
+                  </div>
+                </div>
+              </section>
               <hr />
               <div className="vg22"></div>
               <div className="row row_reverse_991">

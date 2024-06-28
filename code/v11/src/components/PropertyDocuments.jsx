@@ -54,7 +54,7 @@ const PropertyDocuments = () => {
   };
  
   const addPropertyDocuments = async () => {
-    if (!selectedDocCat || !selectedIdType || !selectedDocWhat) {
+    if (!selectedDocCat  || !selectedDocWhat) {
       alert("All fields are required!");
       return;
     }
@@ -149,15 +149,15 @@ const PropertyDocuments = () => {
       { id: "blueprint", value: "Blue Print", label: "Blue Print" },
       { id: "powerofattorney", value: "Power of Attorney", label: "Power of Attorney" },
     ],
-    "Property Maintainance": [
-      { id: "main_doc", value: "Maintainance Document", label: "Maintainance Document" },
-    ],
-    "Utility Bills": [
-      { id: "utility_doc", value: "Utility Bill Document", label: "Utility Bill Document" },
-    ],
-    "Property Tax": [
-      { id: "property_tax_doc", value: "Property Tax Document", label: "Property Tax Document" },
-    ],
+    // "Property Maintainance": [
+    //   { id: "main_doc", value: "Maintainance Document", label: "Maintainance Document" },
+    // ],
+    // "Utility Bills": [
+    //   { id: "utility_doc", value: "Utility Bill Document", label: "Utility Bill Document" },
+    // ],
+    // "Property Tax": [
+    //   { id: "property_tax_doc", value: "Property Tax Document", label: "Property Tax Document" },
+    // ],
   };
 
   const docWhat = {
@@ -397,7 +397,7 @@ const PropertyDocuments = () => {
                             type="text"
                             value={idNumber}
                             onChange={handleIdNumberChange}
-                            placeholder="Document ID (optional)"
+                            placeholder="Document name (optional)"
                           />
                         </div>
                       </div>
@@ -595,7 +595,8 @@ const PropertyDocuments = () => {
                           )}
                         </div>
                         <div className="card-body">
-                          <h3>{doc.idType}</h3>
+                          {/* <h3>{doc.idType}</h3> */}
+                          <h3>Property Maintainance</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
                           <div className="card-author">
                             <div
@@ -678,7 +679,8 @@ const PropertyDocuments = () => {
                           )}
                         </div>
                         <div className="card-body">
-                          <h3>{doc.idType}</h3>
+                          {/* <h3>{doc.idType}</h3> */}
+                          <h3>Utility Bills</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
                           <div className="card-author">
                             <div
@@ -761,7 +763,8 @@ const PropertyDocuments = () => {
                           )}
                         </div>
                         <div className="card-body">
-                          <h3>{doc.idType}</h3>
+                          {/* <h3>{doc.idType}</h3> */}
+                          <h3>Property Tax</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
                           <div className="card-author">
                             <div

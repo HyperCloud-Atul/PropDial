@@ -17,7 +17,7 @@ Action Items:
 a. Add Property ID (PID) and ensure it is displayed on both the card and table views. (Atul sir)
 
 2. Manager Dashboard Enhancements:
-a. Include sections for Inspection, Rent Renewal, and Due Rent on the manager's dashboard. (S)
+a. Include sections for Inspection, Rent Renewal, and Due Rent on the manager's dashboard. (Sanskar Done)
 
 3. Property Detail Page Permissions:
 a. Ensure the property description is only editable by the admin. (Atul sir)
@@ -45,7 +45,7 @@ a. Rename the button to "Add Inspection Report".
 5. Rent Renewal Process:
 a. The rent end date will automatically be set to one year after the rent start date upon renewal.
 
-6. Property Document Form Updates: (s)
+6. Property Document Form Updates: (Sanskar Done)
 a. Remove unnecessary fields related to property maintenance.
 b. Change the placeholder text for "Document ID" to "Document Name".
 
@@ -55,11 +55,17 @@ a. Update the label "Only Owner Instruction" to "Owner Instruction for This Prop
 8. Property Detail Page Enhancements: (Atul sir)
 a. Add a location field in the popup when adding a manager or owner.
 
-9. Home Page Notifications: (s)
+9. Home Page Notifications: (sanskar Done)
 a. For managers and admins, display upcoming rent renewals and upcoming inspection dates for properties in a popup upon login.
 
 10. Notifications for Rent and Inspection: (s)
 a. Display upcoming rent renewals and upcoming inspection dates in the notification section.
+
+11. Referal Module Enhancement
+
+12. Display referals and enquiry to admin.
+
+
 
 ------------------------------------
 
