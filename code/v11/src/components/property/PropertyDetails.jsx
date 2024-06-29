@@ -49,6 +49,7 @@ const PropertyDetails = () => {
     "properties",
     propertyid
   );
+  const { documents: inspections, errors: inspectionsError } = useCollection("propertyinspections", ["propertyId", "==", propertyid]);
 
   const [propertyManagerDoc, setpropertyManagerDoc] = useState(null);
   const [propertyOwnerDoc, setpropertyOwnerDoc] = useState(null);
@@ -1474,8 +1475,8 @@ const PropertyDetails = () => {
                                 pageview
                               </span>
                               <div className="text">
-                                <h6>0</h6>
-                                <h5>Inspection</h5>
+                                <h6>{inspections && inspections.length}</h6>
+                                <h5>Inspections</h5>
                               </div>
                             </div>
                           </div>

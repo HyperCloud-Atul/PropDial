@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { useCollection } from "../hooks/useCollection";
 import { useFirestore } from "../hooks/useFirestore";
 import { useDocument } from '../hooks/useDocument';
+import { format, isSameDay } from "date-fns";
 import { projectStorage, projectFirestore } from "../firebase/config";
 import {
     BarLoader,
@@ -40,14 +41,24 @@ const PropertyInspectionDocuments = () => {
     const { propertyId } = useParams();
     const navigate = useNavigate();
 
-    const { addDocument, updateDocument, deleteDocument, error } = useFirestore("inspection");
-    const { documents: inspections, errors: inspectionsError } = useCollection("inspection", ["propertyId", "==", propertyId]);
+    const { addDocument, updateDocument, deleteDocument, error } = useFirestore("propertyinspections");
+    const { documents: inspections, errors: inspectionsError } = useCollection("propertyinspections",
+        ["propertyId", "==", propertyId],
+        ["createdAt", "desc"]);
+
+    console.log("inspections: ", inspections)
+
+    const todaydt = new Date();
+    const formattedTodayDate = format(todaydt, 'd MMM, yyyy');
+    console.log('formattedTodayDate: ', formattedTodayDate)
 
     const [inspectionDate, setInspectionDate] = useState("");
     const [isAdding, setIsAdding] = useState(false);
     const [filterDate, setFilterDate] = useState("");
+    const [inspectionSortedDates, setInspectionSortedDates] = useState("");
     const [uniqueDates, setUniqueDates] = useState([]);
     const [showAddDocumentForm, setShowAddDocumentForm] = useState(false);
+    const [showNextInspectionDateForm, setNextInsectionDateForm] = useState(false);
     const [documentName, setDocumentName] = useState("");
     const [documentFile, setDocumentFile] = useState(null);
     const [uploadingDocId, setUploadingDocId] = useState(null);
@@ -61,8 +72,22 @@ const PropertyInspectionDocuments = () => {
 
     const [isUploading, setIsUploading] = useState(false); // New state for the loader   
     const [uploadingDocName, setUploadingDocName] = useState(null);
-    const handleChangeInspectionDate = (event) => setInspectionDate(event.target.value);
-    const handleChangeFilterDate = (event) => setFilterDate(event.target.value);
+
+    const handleChangeInspectionDate = (event) => {
+        // console.log("handleChangeInspectionDate: ", event.target.value)
+        const selectedInspectiondt = new Date(event.target.value)
+        console.log("selectedInspectiondt: ", selectedInspectiondt)
+        const formateddt = format(selectedInspectiondt, "dd MMMM, yyyy")
+        console.log("formateddt selectedInspectiondt: ", formateddt)
+        // setInspectionDate(event.target.value);
+        setInspectionDate(formateddt);
+    }
+    const handleChangeFilterDate = (event) => {
+
+        console.log('event.target.value: ', event.target.value)
+
+        setFilterDate(event.target.value);
+    }
     const handleChangeDocumentName = (event) => setDocumentName(event.target.value);
 
     // const handleFileChange = (event) => setDocumentFile(event.target.files[0]);
@@ -85,6 +110,31 @@ const PropertyInspectionDocuments = () => {
             uploadDocumentImage();
         }
     }, [uploadingDocId, documentFile]);
+
+    useEffect(() => {
+        if (inspections) {
+            // const dates = [...new Set(inspections.map(doc => doc.inspectionDate))].sort((a, b) => new Date(b) - new Date(a));
+            const dates = [...new Set(inspections.map(doc => doc.inspectionDate))];
+            console.log('dates: ', dates)
+            setInspectionSortedDates(dates)
+
+            dates.length > 1 ? setInspectionDate(dates[dates.length - 1]) : setInspectionDate(dates[0])
+
+            // setUniqueDates(dates);
+            setFilterDate(prevFilterDate => (dates.includes(prevFilterDate) ? dates[0] : prevFilterDate || ""));
+
+        }
+    }, [inspections]);
+
+    //Today's date
+    // const todayDate = new Date()
+    // console.log('todays Date:', todayDate)
+    // const filteredInspections = inspections ? inspections.filter(doc => doc.nextInspectionDate !== "") : [];
+
+    const filteredInspections = inspections ? inspections.filter(doc => doc.inspectionDate === filterDate) : [];
+    // const filteredInspections = inspections ? inspections.filter(doc => isSameDay((new Date(inspections && inspections[0].inspectionDate.seconds * 1000)), (new Date(filterDate.seconds * 1000)))) : [];
+
+    console.log("filteredInspections: ", filteredInspections)
 
     const getFileType = (file) => {
         const fileExtension = file.name.split(".").pop().toLowerCase();
@@ -118,6 +168,7 @@ const PropertyInspectionDocuments = () => {
         }
 
         const selectedInspection = inspections.find(doc => doc.inspectionDate === filterDate);
+        console.log('selectedInspection: ', selectedInspection)
 
         if (!selectedInspection) {
             alert("No inspection found for the selected date!");
@@ -128,7 +179,7 @@ const PropertyInspectionDocuments = () => {
             await updateDocument(selectedInspection.id, {
                 documents: [
                     ...(selectedInspection.documents || []),
-                    { name: documentName, url: "", mediaType: "", tag: documentName + new Date() }
+                    { name: documentName, url: "", mediaType: "", tag: documentName + new Date(), addedDate: new Date(), inspectionDate: selectedInspection.inspectionDate }
                 ]
             });
             setDocumentName("");
@@ -224,15 +275,7 @@ const PropertyInspectionDocuments = () => {
         setIsInspectionDelete(false);
     };
 
-    useEffect(() => {
-        if (inspections) {
-            const dates = [...new Set(inspections.map(doc => doc.inspectionDate))].sort((a, b) => new Date(b) - new Date(a));
-            setUniqueDates(dates);
-            setFilterDate(prevFilterDate => (dates.includes(prevFilterDate) ? prevFilterDate : dates[0] || ""));
-        }
-    }, [inspections]);
 
-    const filteredInspections = inspections ? inspections.filter(doc => doc.inspectionDate === filterDate) : [];
 
 
     // 9 dots controls
@@ -318,55 +361,41 @@ const PropertyInspectionDocuments = () => {
                 </div>
                 <div className="vg22"></div>
                 <div className="add_select_date">
-                    <section className="my_big_card">
-                        <h2 class="card_title">Select inspection date</h2>
-                        <div className="inner">
-                            <input
-                                type="date"
-                                id="inspectionDate"
-                                value={inspectionDate}
-                                onChange={handleChangeInspectionDate}
-                            />
-                            <button className="theme_btn btn_fill" onClick={addInspection} disabled={isAdding}>
-                                {isAdding ? "Adding..." : "Add Inspection"}
-                            </button>
-                        </div>
-                    </section>
-                    <section className="my_big_card">
-                        <h2 class="card_title">Inspections by Date</h2>
-                        <div className="inner">
-                            <select id="filterDate" value={filterDate} onChange={handleChangeFilterDate}>
-                                {uniqueDates.map(date => (
-                                    <option key={date} value={date}>
-                                        {new Date(date).toLocaleDateString('en-GB', {
-                                            day: '2-digit',
-                                            month: 'short',
-                                            year: 'numeric'
-                                        }).replace(/ /g, '-')}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </section>
+
+
 
                     <section className="my_big_card selected_date">
-                       <div>
-                       {filteredInspections && filteredInspections.map((doc) => (
-                            <h2 class="card_title mb-0" key={doc.id}>
-                                {new Date(doc.inspectionDate).toLocaleDateString('en-GB', {
-                                    day: '2-digit',
-                                    month: 'short',
-                                    year: 'numeric'
-                                }).replace(/ /g, '-')}
+                        <div>Inspection Due Date:
+                            <h2 class="card_title mb-0">{inspectionDate} {inspectionSortedDates[0]} </h2>
+                            {/* <h2 class="card_title mb-0">{filterDate && format((new Date(
+                                filterDate.seconds * 1000
+                            )), "dd MMMM, yyyy")}</h2> */}
+                            {/* {filteredInspections && filteredInspections.map((doc) => (
+                                <h2 class="card_title mb-0" key={doc.id}>
+                                    {new Date(doc.inspectionDate).toLocaleDateString('en-GB', {
+                                        day: '2-digit',
+                                        month: 'short',
+                                        year: 'numeric'
+                                    }).replace(/ /g, '-')}
+                                </h2>
+                            ))} */}
+                            <div className="vg12"></div>
+                            {(new Date(inspectionDate) >= (new Date(formattedTodayDate))) && (new Date(inspectionSortedDates[0]) <= (new Date(formattedTodayDate))) && (<button className="theme_btn btn_fill" onClick={() => {
+                                setShowAddDocumentForm(true)
+                                setNextInsectionDateForm(false)
+                            }} >
+                                Add Document
+                            </button>)}
+                            {(new Date(inspectionDate) <= (new Date(formattedTodayDate))) &&
+                                (new Date(inspectionSortedDates[0]) <= (new Date(formattedTodayDate)))
+                                && (<button className="theme_btn btn_fill" onClick={() => {
+                                    setNextInsectionDateForm(true)
+                                    setShowAddDocumentForm(false)
 
-                            </h2>
-                        ))}
-                        <div className="vg12"></div>
-                        <button className="theme_btn btn_fill" onClick={() => setShowAddDocumentForm(true)} >
-                            Add Document
-                        </button>
-                       </div>
-
+                                }} >
+                                    Set Next Inspection Date
+                                </button>)}
+                        </div>
                     </section>
                     {showAddDocumentForm && (
                         <section className="my_big_card">
@@ -385,6 +414,39 @@ const PropertyInspectionDocuments = () => {
                             </div>
                         </section>
                     )}
+                    {showNextInspectionDateForm && (<section className="my_big_card">
+                        <h2 class="card_title">Add Next Inspection date</h2>
+                        <div className="inner">
+                            <input
+                                type="date"
+                                id="inspectionDate"
+                                value={inspectionDate}
+                                onChange={handleChangeInspectionDate}
+                            />
+                            <button className="theme_btn btn_fill" onClick={addInspection} disabled={isAdding}>
+                                {isAdding ? "Adding..." : "Add Inspection"}
+                            </button>
+                        </div>
+                    </section>)}
+                </div>
+                <div>
+                    Next Inspection Date: {inspectionSortedDates.length > 1 ? inspectionSortedDates[0] : "Not Available"}
+                </div>
+
+                <hr></hr>
+                <div>
+                    {/* <section className="my_big_card"> */}
+                    <h2 class="card_title">Inspections Documents</h2>
+                    <div className="inner">
+                        <select id="filterDate" value={filterDate} onChange={handleChangeFilterDate}>
+                            {inspections && inspections.map(doc => (
+                                <option key={doc.inspectionDate} value={doc.inspectionDate}>
+                                    {doc.inspectionDate}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    {/* </section> */}
                 </div>
 
                 <div className="blog_sect">
@@ -413,15 +475,15 @@ const PropertyInspectionDocuments = () => {
                                                         />
                                                     </label>
                                                 )}
-                                             
+
                                                 {uploadingDocId === doc.id && uploadingDocTag === document.tag ? (
                                                     <div
                                                         className="loader d-flex justify-content-center align-items-center"
                                                         style={{
                                                             width: "100%",
                                                             height: "100%",
-                                                        }}>                                                      
-                                                        <BeatLoader color={"#FF5733"} loading={true} />                                                      
+                                                        }}>
+                                                        <BeatLoader color={"#FF5733"} loading={true} />
                                                     </div>
                                                 ) : (
                                                     <>
@@ -444,6 +506,11 @@ const PropertyInspectionDocuments = () => {
 
                                             <div className="card-body">
                                                 <h3>{document.name}</h3>
+                                                <h6>Document Added Timestamp: <br></br>  {format((new Date(
+                                                    document.addedDate.seconds * 1000
+                                                )), "dd MMMM, yyyy HH:mm a")}</h6>
+                                                <h6>against Inspection Date: {document.inspectionDate} </h6>
+
                                                 <div className="card-author">
                                                     <div onClick={() => handleShowModal(doc.id, document)} className="learn-more pointer">
                                                         Delete
@@ -463,7 +530,7 @@ const PropertyInspectionDocuments = () => {
                         {inspectionsError && <p>Error loading inspections: {inspectionsError}</p>}
                     </div>
                 </div>
-              
+
                 <div className="delete_document">
                     {filteredInspections && filteredInspections.map((doc) => (
                         <React.Fragment key={doc.id}>
