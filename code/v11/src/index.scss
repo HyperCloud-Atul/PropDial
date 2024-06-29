@@ -796,17 +796,26 @@
       right: 10px;
       top: 6px;
     }
+    .top_left_content {
+      color: var(--theme-grey);
+      font-size: 12px;
+      font-weight: 400;
+      position: absolute;
+      left: 10px;
+      top: 6px;
+    }
 
     .title {
       font-size: 16px;
       font-weight: 500;
       word-break: break-all;
+      text-transform: capitalize;
     }
 
     .sub_title {
       font-size: 14px;
       color: var(--theme-grey);
-      margin-top: 2px !important;
+      margin-top: 4px !important;
       font-weight: 400;
       word-break: break-all;
     }

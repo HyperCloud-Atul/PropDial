@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'; // Add useMemo
-import { Navigate, Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import { useCollection } from "../../../hooks/useCollection";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useLogout } from "../../../hooks/useLogout";
@@ -19,9 +18,8 @@ const UserList = () => {
   const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
   const { documents, error } = useCollection("users");
-  // const [filter, setFilter] = useState("Owner");
   const [filter, setFilter] = useState(userFilter[0]);
-  // const navigate = useNavigate();
+
 
   useEffect(() => {
     let flag = user && user.role === "admin";
@@ -43,24 +41,24 @@ const UserList = () => {
           return (document.rolePropDial === "owner") || (document.rolePropDial === "coowner");
         case "Frontdesk":
           return (document.rolePropDial === "frontdesk");
-          case "Manager":
-            return (document.rolePropDial === "manager");
+        case "Manager":
+          return (document.rolePropDial === "manager");
         case "Admin":
           return document.rolePropDial === "admin";
         case "Super Admin":
           return document.rolePropDial === "superAdmin";
         case "Inactive":
-          return document.status === "inactive";    
+          return document.status === "inactive";
         case "Tenants":
           return document.rolePropDial === "tenant";
         case "Prospective Tenants":
           return document.rolePropDial === "prospectiveTenant";
-          case "Buyers":
-            return document.rolePropDial === "buyers";
-            case "Prospective Buyers":
-              return document.rolePropDial === "prospectiveBuyers";
+        case "Buyers":
+          return document.rolePropDial === "buyers";
+        case "Prospective Buyers":
+          return document.rolePropDial === "prospectiveBuyers";
         default:
-          return true;
+          return false;
       }
     })
     : null;
@@ -80,7 +78,7 @@ const UserList = () => {
         <div className="pg_header d-flex justify-content-between">
           <div className="left">
             <h2 className="m22">User List {" "}
-              <span className="r14 light_black" >( All application users : {users && users.length} )</span>
+              <span className="r14 light_black" >( Application's filtered users : {users && users.length} )</span>
             </h2>
           </div>
           <div className="right">
@@ -90,15 +88,15 @@ const UserList = () => {
         <div className="vg12"></div>
         <div className="filters">
           <div className='left'>
-          {viewMode === "card_view" && (
-             <div className="rt_global_search search_field">
-             <input
-               placeholder='Search'
-             ></input>
-             <div class="field_icon"><span class="material-symbols-outlined">search</span></div>
-           </div>
-        )}
-        
+            {viewMode === "card_view" && (
+              <div className="rt_global_search search_field">
+                <input
+                  placeholder='Search'
+                ></input>
+                <div class="field_icon"><span class="material-symbols-outlined">search</span></div>
+              </div>
+            )}
+
           </div>
           <div className="right">
             <div className="user_filters new_inline">

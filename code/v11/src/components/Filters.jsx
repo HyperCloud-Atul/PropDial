@@ -33,7 +33,7 @@ export default function Filters({ changeFilter, filterList, filterLength }) {
                         value={currentFilter}
                         className={`filter-dropdown ${extraFilters.includes(currentFilter) ? 'active' : ''}`}
                     >
-                        <option value="" selected disabled>More</option>
+                        <option value="" selected>More</option>
                         {extraFilters.map((f) => (
                             <option
                                 key={f}

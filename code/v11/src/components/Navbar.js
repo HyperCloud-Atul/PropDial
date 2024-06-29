@@ -178,7 +178,7 @@ export default function Navbar() {
 
               <div
                 onClick={showThirdPage}
-                className={`menu_single pointer ${location.pathname === "/contact-us" ? "active" : ""
+                className={`menu_single pointer ${location.pathname === "/contact-us" || location.pathname === "/allproperties" ? "active" : ""
                   }`}
               >
                 <span className="material-symbols-outlined">{thirdMenuIcon}</span>

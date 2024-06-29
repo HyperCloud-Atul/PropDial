@@ -39,6 +39,9 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
   const [iAm, setIam] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
   const [description, setDescription] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
@@ -61,11 +64,18 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
         iAm,
         name,
         phone,
-        description
+        description,
+        city,
+        country,
+        state,
+
       });
       setIam("");
       setName("");
       setPhone("");
+      setCity("");
+      setCountry("")
+      setState("")
       setDescription("");
       setIsUploading(false);
     } catch (error) {
@@ -212,7 +222,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-sm-12">
+                  <div className="col-sm-12 mt-3">
                     <div className="form_field st-2">
                       <div className="field_inner">
                         <textarea
