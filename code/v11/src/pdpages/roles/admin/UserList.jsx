@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useCollection } from "../../../hooks/useCollection";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useLogout } from "../../../hooks/useLogout";
+import { useExportToExcel } from '../../../hooks/useExportToExcel';
+import { format} from 'date-fns';
 
 // import component 
 import UserSinglecard from './UserSinglecard';
@@ -72,6 +74,31 @@ const UserList = () => {
   };
   // card and table view mode functionality end
 
+
+  const { exportToExcel, response: res } = useExportToExcel();
+
+  const exportUsers = async () => {
+    //create data
+    const subsetData = users.map(item => ({
+      Name: item.fullName,
+      Mobile: item.phoneNumber,
+      Role: item.rolePropDial,
+      Status: item.status,
+      LastLogin: format(item.lastLoginTimestamp.toDate(), 'dd-MMM-yy hh:mm a'),
+      OnboardedTimestamp: format(item.createdAt.toDate(), 'dd-MMM-yy')
+      // Add other fields as needed
+
+
+   
+      // Add other fields as needed
+    }));
+
+    let filename = 'UserList.xlsx'
+    exportToExcel(subsetData, filename)
+
+    // console.log(res)
+  }
+
   return (
     <div className='top_header_pg pg_bg'>
       <div className='page_spacing'>
@@ -82,7 +109,7 @@ const UserList = () => {
             </h2>
           </div>
           <div className="right">
-            <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload" />
+            <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload pointer" onClick={exportUsers} />
           </div>
         </div>
         <div className="vg12"></div>

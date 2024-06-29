@@ -3,6 +3,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import { useLogout } from '../../hooks/useLogout';
 import { useCollection } from '../../hooks/useCollection';
 import { format, isWithinInterval, addMonths, startOfMonth, startOfYear, endOfYear } from 'date-fns';
+import { useExportToExcel } from '../../hooks/useExportToExcel';
 
 // Import component 
 import EnquirySingle from './EnquirySingle';
@@ -81,6 +82,34 @@ const PGEnquiry = () => {
   };
   // card and table view mode functionality end
 
+  const { exportToExcel, response: res } = useExportToExcel();
+
+  const exportUsers = async () => {
+    //create data
+    const subsetData = enquiries.map(item => ({
+      Name: item.name,
+      IAm: item.iAm,
+      Date : format(item.createdAt.toDate(), 'dd-MMM-yy hh:mm a'),
+      PhoneNumbar : item.phone.replace(
+        /(\d{2})(\d{5})(\d{5})/,
+        "+$1 $2-$3"
+      ),
+      Country : item.country,
+      State : item.state,
+      City : item.city,
+      Description : item.description
+
+
+   
+      // Add other fields as needed
+    }));
+
+    let filename = 'EnquiryList.xlsx'
+    exportToExcel(subsetData, filename)
+
+    // console.log(res)
+  }
+
   return (
     <div className="top_header_pg pg_bg pg_enquiry">
       <div className="page_spacing">
@@ -91,7 +120,7 @@ const PGEnquiry = () => {
             </h2>
           </div>
           <div className="right">
-            <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload" />
+            <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload pointer" onClick={exportUsers} />
           </div>
         </div>
         <div className="vg12"></div>
