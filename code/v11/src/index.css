@@ -505,10 +505,10 @@ select {
 }
 
 .form_field.outline {
-  background: var(--theme-light-pink);
-  border: 1px solid #d7d7d7;
-  border-radius: 7px;
-  padding: 10px 10px;
+  background: #f0f5ff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
   width: 100%;
   height: 100%;
   position: relative;
@@ -591,10 +591,10 @@ select {
 }
 
 .form_field.st-2 .radio_group_single .radiochecked label {
-  background: var(--theme-green);
+  background: var(--theme-blue);
   color: white;
   /* font-size: 0.8rem; */
-  border-color: var(--theme-green);
+  border-color: var(--theme-blue);
 }
 
 .form_field.st-2 .radio_group_single label .radio_icon {

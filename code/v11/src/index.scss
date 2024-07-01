@@ -271,7 +271,10 @@
       background-color: var(--theme-blue);
       color: var(--white-color);
     }
-
+    .radio_label {
+      position: unset;
+      box-shadow: none;
+    }
     input[type="radio"] + label::before {
       content: "\002B";
       display: inline-block;
@@ -692,7 +695,6 @@
         }
       }
     }
-  
 
     .bottom {
       align-items: center;
@@ -1008,7 +1010,7 @@
           position: absolute;
           height: 100%;
           top: 0;
-          left: 0;              
+          left: 0;
         }
       }
     }
@@ -1269,4 +1271,5 @@
   font-size: 25px;
   color: #fa6262;
   cursor: pointer;
+  z-index: 2;
 }

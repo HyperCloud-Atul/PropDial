@@ -12,6 +12,11 @@ const PropertyTable = ({ properties }) => {
         disableFilters: true,
       },
       {
+        Header: 'PID',
+        accessor: 'pid',    
+      },
+      
+      {
         Header: 'City',
         accessor: 'city',    
       },

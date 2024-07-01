@@ -65,15 +65,15 @@
 /* page property banner css end  */
 
 
-
-
-
-
 /* tabs css start  */
 .theme_tab ul.tabs {
     margin: 20px 0px !IMPORTANT;
     display: flex;
     gap: 10px;
+}
+.pg_enquiry .theme_tab ul.tabs {
+    margin: 0px !IMPORTANT;
+   
 }
 
 .theme_tab ul.tabs li {

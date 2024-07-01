@@ -13,6 +13,9 @@ Enhancements and updates for Propdial system.
 
 Action Items:
 
+admin.propdial.com
+credential:- atulmani@gmail.com/9822752885
+
 1. Property ID (PID) Display:
 a. Add Property ID (PID) and ensure it is displayed on both the card and table views. (Atul sir)
 

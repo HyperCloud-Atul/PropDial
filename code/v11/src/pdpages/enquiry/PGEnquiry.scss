@@ -1,0 +1,125 @@
+.pg_enquiry {
+  .theme_radio_new .theme_radio_container {
+    padding: 0px;
+    padding-top: 9px;
+    border: none;
+  }
+
+  .form_field .with_icon {
+    input {
+      padding-right: 32px;
+    }
+    textarea {
+      padding-right: 32px;
+      padding-left: 10px;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+    textarea:focus {
+      outline: none;
+    }
+    .field_icon {
+      position: absolute;
+      top: 10px;
+      left: inherit;
+      right: 0;
+      color: var(--theme-grey);
+    }
+  }
+}
+.enquiry_modal {
+  .modal_left_content {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--theme-black);
+    margin: auto;
+    text-align: center;
+  }
+  ul.points {
+    margin-top: 26px;
+    display: grid;
+    justify-content: space-around;
+    padding: 0px;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 0;
+    li {
+      list-style-type: none;
+
+      width: fit-content;
+      margin: auto;
+      background: #dfdfdf;
+      border-radius: 30px;
+      font-size: 14px;
+      padding: 4px 12px;
+      text-transform: capitalize;
+      width: fit-content;
+      color: #303030;
+    }
+  }
+  .details ul {
+    padding: 0px;
+    margin-bottom: 0px;
+    display: grid;
+    gap: 5px;
+    li {
+      display: flex;
+      gap: 5px;
+      color: #303030;
+      .left {
+        width: 26%;
+      }
+      .middle {
+        width: 4%;
+      }
+      .right {
+        width: 70%;
+      }
+    }
+  }
+}
+.multi_steps.show_status {
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 12px;
+  .number {
+    background: var(--theme-blue);
+    width: 32px;
+    height: 32px;
+    span {
+      font-size: 17px;
+    }
+  }
+  .wait .number {
+    background: var(--theme-blue-bg);
+  }
+  .progress_bar {
+    background: var(--theme-blue-bg);
+    top: 16px;
+    .fill {
+      background: var(--theme-blue);
+    }
+  }
+  .step_single {
+    h6 {     
+      color: var(--theme-blue);   
+     font-size: 14px;
+    }
+    h5 {
+        font-weight: 400;
+        font-size: 12px;
+        color: var(--theme-blue);  
+    }
+    &.wait{
+        h6{
+            color: var(--theme-blue-bg);
+        }
+        h5{
+            color: var(--theme-blue-bg);
+        }
+    }
+  }
+}
