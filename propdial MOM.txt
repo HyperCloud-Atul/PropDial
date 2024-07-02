@@ -134,3 +134,16 @@ a. add more filter:- tenant, buyers, prospective tenant, prospective buyers (Don
 7. Property Layout on property detail page 
 a. Add image carousel (Due)
 b. Display fixtures on click on edit (Done)
+
+
+----------------------------
+1. enquiry type lo sbse phele
+2. rent and sale ke liye enquiry from prospective tenant of prospective buyers hoga 
+3. phir refered by me phele hoga owner,
+
+city society unitnumber pid or resedential nhi hoga
+
+Name label change krna hai upper jo likha hai us hisab se
+
+open working  
+

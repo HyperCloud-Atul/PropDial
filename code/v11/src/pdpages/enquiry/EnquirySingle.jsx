@@ -38,7 +38,7 @@ const EnquirySingle = ({ enquiries }) => {
           </div>
           <h4 className="top_right_content">
             <span>
-              {format(doc.createdAt.toDate(), 'dd-MMM-yy hh:mm a')}
+            {format(new Date(doc.date), 'dd-MMM-yy hh:mm a')}
             </span>
           </h4>
           {doc.iAm && (
@@ -64,7 +64,8 @@ const EnquirySingle = ({ enquiries }) => {
               close
             </span>
             <div className="modal_left_content">
-              {format(selectedEnquiry.createdAt.toDate(), 'dd-MMM-yy hh:mm a')}
+              {/* {format(selectedEnquiry.createdAt.toDate(), 'dd-MMM-yy hh:mm a')} */}
+              {format(new Date(selectedEnquiry.date), 'dd-MMM-yy hh:mm a')}
             </div>
             <ul className="points">
               {selectedEnquiry.enquiry && (
