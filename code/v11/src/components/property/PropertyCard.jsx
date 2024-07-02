@@ -189,16 +189,19 @@ const PropertyCard = ({ propertyid }) => {
 
 
       <div className="psc_parent relative">
-        {propertydoc && <div className={`category ${propertydoc.category === "Residential" ? "residential" : "commercial"}`}>
+        {/* {propertydoc && <div className={`category ${propertydoc.category === "Residential" ? "residential" : "commercial"}`}>
           {propertydoc.category}
+        </div>} */}
+        {propertydoc && <div className={`category ${propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT' ? "residential" : "commercial"}`}>
+          {propertydoc.status}
         </div>}
 
 
         <div className="property_single_card relative">
-          {propertydoc && <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
-            {/* {propertydoc.status === 'Available for Rent' || propertydoc.status === 'Rented Out' ? 'Rent' : 'Sale'} */}
+          {/* {propertydoc && <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
+            {propertydoc.status === 'Available for Rent' || propertydoc.status === 'Rented Out' ? 'Rent' : 'Sale'}
             {propertydoc.purpose}
-          </div>}
+          </div>} */}
           {propertydoc && <Link to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="top relative">
             <div className="img_container">
               <img src="./assets/img/admin_banner.jpg" alt="" />
@@ -211,8 +214,7 @@ const PropertyCard = ({ propertyid }) => {
                   key={propertydoc.propertyid}
                 >
                   <span className="material-symbols-outlined">edit_square</span>
-                </Link>}
-              <h6>{propertydoc.pid}</h6>
+                </Link>}              
               <h5 className="demand">
                 <span>₹</span> {propertydoc.demandPrice}
                 {propertydoc.maintenancecharges !== '' && <span
@@ -223,13 +225,22 @@ const PropertyCard = ({ propertyid }) => {
                   + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
                 </span>}
               </h5>
-              <div className="full_address">
-                <h6>
-                  {((propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT') || (propertydoc.status.toUpperCase() === 'AVAILABLE FOR SALE')) ? <span style={{ textAlign: 'center', color: 'white', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'red' }} > {propertydoc.status}</span> : <span style={{ textAlign: 'center', color: 'black', fontWeight: "bolder", padding: '2px 8px', borderRadius: '8px', background: 'lightgreen' }} > {propertydoc.status}</span>}
-                </h6>
+              <div className="full_address">              
                 <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
                 <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
                 <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+              </div>
+              <div className="more_row">
+                <div className="left">
+                <span className="card_badge">
+                {propertydoc.pid}
+                </span>
+                </div>
+                {/* <div className="right">
+                  <span className={`property_status card_badge ${propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT' ? "for_rent" : "for_sale"}`}>
+                  {propertydoc.status}
+                  </span>                
+                </div> */}
               </div>
             </div>
           </Link>}

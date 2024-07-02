@@ -548,19 +548,19 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
       0 2px 4px -1px rgba(0, 0, 0, 0.06);
     background: white;
-    border-radius: 0px 22px 22px 22px;
+    border-radius: 22px;
     overflow: hidden;
     position: relative;
 
-    &::before {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: var(--page-bg);
-      top: 0;
-      left: 0;
-    }
+    // &::before {
+    //   content: "";
+    //   position: absolute;
+    //   width: 20px;
+    //   height: 20px;
+    //   background-color: var(--page-bg);
+    //   top: 0;
+    //   left: 0;
+    // }
 
     .top {
       display: flex;
@@ -609,7 +609,27 @@
         }
       }
     }
-
+    .more_row {
+      display: flex;
+      gap: 8px; 
+      justify-content: space-between;   
+      margin-top: 3px;
+      .card_badge {
+        background: var(--theme-blue);
+        color: var(--white-color);
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: 400;
+        border-radius: 7px;
+        letter-spacing: 0.5px;
+    }
+    .card_badge.for_rent{
+      background: var(--theme-purple);
+    }
+    .card_badge.for_sale{
+      background: var(--theme-orange);
+    }
+    }
     .middle {
       .show_more_arrow {
         align-items: center;

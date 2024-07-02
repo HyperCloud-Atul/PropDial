@@ -209,13 +209,20 @@ const EnquirySingle = ({ enquiries }) => {
             <hr />
             <div className="enquiry_status d">
               <h6>Enquiry Status</h6>
-              <div className="multi_steps show_status">
+              <div className={`multi_steps show_status
+               ${selectedEnquiry.enquiryStatus === "open" ? "open" :
+                  selectedEnquiry.enquiryStatus === "working" ? "working" :
+                    selectedEnquiry.enquiryStatus === "successful" ? "successful" : selectedEnquiry.enquiryStatus === "dead" ? "dead" : ""}`}>
                 <div className="progress_bar">
                   <div className="fill" style={{
-                    width: "33.333%"
-                  }}></div>
+                    width:
+                      selectedEnquiry.enquiryStatus === "open" ? "33.333%" :
+                        selectedEnquiry.enquiryStatus === "working" ? "66.66%" :
+                          selectedEnquiry.enquiryStatus === "successful" || selectedEnquiry.enquiryStatus === "dead" ? "100%" : "0%"
+                  }}>
+                  </div>
                 </div>
-                <div className="step_single ">
+                <div className="step_single" >
                   <div className="number">
                     <span class="material-symbols-outlined">
                       open_in_new
@@ -228,7 +235,7 @@ const EnquirySingle = ({ enquiries }) => {
                     01-Jul-2024, 5:24 PM
                   </h5>
                 </div>
-                <div className="step_single wait">
+                <div className={`step_single ${selectedEnquiry.enquiryStatus === "open" ? "wait" : ""}`}>
                   <div className="number">
                     <span class="material-symbols-outlined">
                       autorenew
@@ -238,14 +245,15 @@ const EnquirySingle = ({ enquiries }) => {
                     Working
                   </h6>
                 </div>
-                <div className="step_single wait">
+                <div className={`step_single ${selectedEnquiry.enquiryStatus === "open" || selectedEnquiry.enquiryStatus === "working" ? "wait" : ""}`}>
                   <div className="number">
                     <span class="material-symbols-outlined">
-                      check_circle
+                      
+                      {selectedEnquiry.enquiryStatus === "successful" ? "check_circle" : "cancel"}
                     </span>
                   </div>
                   <h6>
-                    Successful
+                    {selectedEnquiry.enquiryStatus === "successful" ? "Successful" : "Dead"}
                   </h6>
                 </div>
               </div>

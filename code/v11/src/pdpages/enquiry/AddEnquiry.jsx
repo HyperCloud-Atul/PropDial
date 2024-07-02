@@ -17,7 +17,7 @@ const AddEnquiry = () => {
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [date, setDate] = useState("");
-    const [enquiryStatus, setEnquiryStatus] = useState("");
+    const [enquiryStatus, setEnquiryStatus] = useState("open");
     const [remark, setRemark] = useState("");
 
     const [isUploading, setIsUploading] = useState(false);
@@ -149,7 +149,7 @@ const AddEnquiry = () => {
                         </div>
                     </div>
                 )}
-                {enquiry === "byReference" && (
+                {enquiry === "By Reference" && (
                     <div className="col-md-4">
                         <div className="form_field st-2 label_top">
                             <label htmlFor="">
@@ -221,9 +221,7 @@ const AddEnquiry = () => {
                                     />
                                     <label htmlFor="sale" className="radio_label">sale</label>
                                 </div>
-                                
-
-                            </div>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -340,6 +338,7 @@ const AddEnquiry = () => {
                                         id="open"
                                         onClick={handleChangeEnquiryStatus}
                                         value="open"
+                                        checked={enquiryStatus === "open"}
                                     />
                                     <label htmlFor="open" className="radio_label">open</label>
                                 </div>

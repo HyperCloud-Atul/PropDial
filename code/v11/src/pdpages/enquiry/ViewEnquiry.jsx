@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCollection } from '../../hooks/useCollection';
 import { format, isWithinInterval, addMonths, startOfMonth, startOfYear, endOfYear } from 'date-fns';
 import { useExportToExcel } from '../../hooks/useExportToExcel';
-
+import Switch from 'react-switch';
 // Import component 
 import EnquirySingle from './EnquirySingle';
 import EnquiryTable from './EnquiryTable';
@@ -17,36 +17,76 @@ const ViewEnquiry = () => {
   const { documents, error } = useCollection("enquiry");
   const [filter, setFilter] = useState(enquiryFilter[0]);
   const [enquiries, setEnquiries] = useState([]);
+  const [rentSaleFilter, setRentSaleFilter] = useState("rent");
+  const handleRentSaleChange = (checked) => {
+    setRentSaleFilter(checked ? "sale" : "rent");
+  };
+
+
+  // useEffect(() => {
+  //   if (documents) {
+  //     // Filter documents based on filter
+  //     const filteredEnquiries = documents.filter((document) => {
+  //       const createdAt = document.createdAt.toDate();
+  //       switch (filter) {
+  //         case "This Month":
+  //           return isWithinInterval(createdAt, {
+  //             start: startOfMonth(new Date()),
+  //             end: new Date(),
+  //           });
+  //         case "Last 3 Months":
+  //           return isWithinInterval(createdAt, {
+  //             start: addMonths(new Date(), -3),
+  //             end: new Date(),
+  //           });
+  //         case "Last 6 Months":
+  //           return isWithinInterval(createdAt, {
+  //             start: addMonths(new Date(), -6),
+  //             end: new Date(),
+  //           });
+  //         default:
+  //           // Check if filter is a specific year
+  //           const selectedYear = parseInt(filter);
+  //           return createdAt.getFullYear() === selectedYear;
+  //       }
+  //     });
+  //     setEnquiries(filteredEnquiries);
+  //   }
+  // }, [documents, filter]);
+
   useEffect(() => {
     if (documents) {
-      // Filter documents based on filter
       const filteredEnquiries = documents.filter((document) => {
         const createdAt = document.createdAt.toDate();
-        switch (filter) {
-          case "This Month":
-            return isWithinInterval(createdAt, {
-              start: startOfMonth(new Date()),
-              end: new Date(),
-            });
-          case "Last 3 Months":
-            return isWithinInterval(createdAt, {
-              start: addMonths(new Date(), -3),
-              end: new Date(),
-            });
-          case "Last 6 Months":
-            return isWithinInterval(createdAt, {
-              start: addMonths(new Date(), -6),
-              end: new Date(),
-            });
-          default:
-            // Check if filter is a specific year
-            const selectedYear = parseInt(filter);
-            return createdAt.getFullYear() === selectedYear;
-        }
+        const matchesDateFilter = (() => {
+          switch (filter) {
+            case "This Month":
+              return isWithinInterval(createdAt, {
+                start: startOfMonth(new Date()),
+                end: new Date(),
+              });
+            case "Last 3 Months":
+              return isWithinInterval(createdAt, {
+                start: addMonths(new Date(), -3),
+                end: new Date(),
+              });
+            case "Last 6 Months":
+              return isWithinInterval(createdAt, {
+                start: addMonths(new Date(), -6),
+                end: new Date(),
+              });
+            default:
+              const selectedYear = parseInt(filter);
+              return createdAt.getFullYear() === selectedYear;
+          }
+        })();
+        const matchesEnquiryTypeFilter = document.enquiryType === rentSaleFilter;
+        return matchesDateFilter && matchesEnquiryTypeFilter;
       });
       setEnquiries(filteredEnquiries);
     }
-  }, [documents, filter]);
+  }, [documents, filter, rentSaleFilter]);
+
 
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
@@ -123,7 +163,28 @@ const ViewEnquiry = () => {
 
         </div>
         <div className="right">
+        <div className="residentail_commercial rent_sale">
+              <label className={rentSaleFilter === "sale" ? "on" : "off"}>
+                <div className="switch">
+                  <span className={`rent ${rentSaleFilter === "sale" ? "off" : "on"}`}>
+                    Rent
+                  </span>
+                  <Switch
+                    onChange={handleRentSaleChange}
+                    checked={rentSaleFilter === "sale"}
+                    handleDiameter={20}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    className="pointer"
+                  />
+                  <span className={`sale ${rentSaleFilter === "sale" ? "on" : "off"}`}>
+                    Sale
+                  </span>
+                </div>
+              </label>
+            </div>
           <div className="user_filters new_inline">
+         
             {documents && (
               <Filters
                 changeFilter={changeFilter}
