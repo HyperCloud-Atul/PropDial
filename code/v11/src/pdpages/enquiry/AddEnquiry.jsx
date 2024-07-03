@@ -307,7 +307,7 @@ const AddEnquiry = () => {
                             </div>
                         </div>
                     </div>
-                )}
+                )}                
                 <div className="row row_gap">
                 <div className="col-md-6">
                     <div className="form_field label_top">
@@ -368,7 +368,10 @@ const AddEnquiry = () => {
                 </div>
                 <div className="col-md-4">
                     <div className="form_field label_top">
-                        <label htmlFor="">Contact</label>
+                    <label htmlFor="">
+                            {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
+                            {" "}
+                            Contact</label>
                         <div className="form_field_inner with_icon">                       
                              <PhoneInput
                             country={"in"}
@@ -402,7 +405,10 @@ const AddEnquiry = () => {
                 </div>
                 <div className="col-md-4">
                     <div className="form_field label_top">
-                        <label htmlFor="">Email</label>
+                    <label htmlFor="">
+                            {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
+                            {" "}
+                            Email</label>
                         <div className="form_field_inner with_icon">
                             <input
                                 type="email"
@@ -418,61 +424,7 @@ const AddEnquiry = () => {
                         </div>
                     </div>
                 </div>
-                     {/* <div className="col-md-5">
-                    <div className="form_field st-2 label_top">
-                        <label htmlFor="">
-                            Enquiry Status</label>
-                        <div className="field_box theme_radio_new">
-                            <div className="theme_radio_container">
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="enquiryStatus"
-                                        id="open"
-                                        onClick={handleChangeEnquiryStatus}
-                                        value="open"
-                                        checked={enquiryStatus === "open"}
-                                    />
-                                    <label htmlFor="open" className="radio_label">open</label>
-                                </div>
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="enquiryStatus"
-                                        id="sucessful"
-                                        onClick={handleChangeEnquiryStatus}
-                                        value="successful"
-
-                                    />
-                                    <label htmlFor="sucessful" className="radio_label">sucessful</label>
-                                </div>
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="enquiryStatus"
-                                        id="dead"
-                                        onClick={handleChangeEnquiryStatus}
-                                        value="dead"
-
-                                    />
-                                    <label htmlFor="dead" className="radio_label">dead</label>
-                                </div>
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="enquiryStatus"
-                                        id="working"
-                                        onClick={handleChangeEnquiryStatus}
-                                        value="working"
-
-                                    />
-                                    <label htmlFor="working" className="radio_label">working</label>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
+                   
                 <div className="col-md-12">
                     <div className="form_field label_top">
                         <label htmlFor="">Remarks (For Internal Use Only)</label>
@@ -492,7 +444,7 @@ const AddEnquiry = () => {
                 </div>
 
                 <div className="col-md-12">
-                    <button className="theme_btn btn_fill" onClick={submitEnquiry}>
+                    <button className="theme_btn btn_fill" onClick={submitEnquiry} disabled={isUploading}>
                         {isUploading ? "Submiting....." : "Submit"}
                     </button>
                 </div>

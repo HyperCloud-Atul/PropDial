@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import Modal from 'react-bootstrap/Modal';
+import { Link } from 'react-router-dom';
 
 const EnquirySingle = ({ enquiries }) => {
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
@@ -11,14 +12,12 @@ const EnquirySingle = ({ enquiries }) => {
     setSelectedEnquiry(doc);
     setShowEnquriyModal(true);
   };
+
   return (
     <>
       {enquiries && enquiries.map((doc, index) => (
         <div className="my_small_card notification_card pointer" key={index} onClick={() => handleShowEnquriyModal(doc)}>
           <div className="left">
-            {/* <div className="img_div">
-     <img src="./assets/img/loudspeaker.jpg" alt="" />
-   </div>       */}
             <div className="right">
               <h5 className="title">{doc.name}</h5>
               <h6 className="sub_title">
@@ -33,12 +32,11 @@ const EnquirySingle = ({ enquiries }) => {
               {doc.remark && (
                 <h6 className="sub_title">{doc.remark} </h6>
               )}
-
             </div>
           </div>
           <h4 className="top_right_content">
             <span>
-            {format(new Date(doc.date), 'dd-MMM-yy hh:mm a')}
+              {format(new Date(doc.date), 'dd-MMM-yy hh:mm a')}
             </span>
           </h4>
           {doc.iAm && (
@@ -48,6 +46,12 @@ const EnquirySingle = ({ enquiries }) => {
               </span>
             </h4>
           )}
+           <Link 
+           to={`/edit-enquiry/${doc.id}`}
+            className="edit-button"          
+          >
+            Edit
+          </Link>
           {doc.referredBy && (
             <h4 className="top_left_content">
               <span>
@@ -64,7 +68,6 @@ const EnquirySingle = ({ enquiries }) => {
               close
             </span>
             <div className="modal_left_content">
-              {/* {format(selectedEnquiry.createdAt.toDate(), 'dd-MMM-yy hh:mm a')} */}
               {format(new Date(selectedEnquiry.date), 'dd-MMM-yy hh:mm a')}
             </div>
             <ul className="points">
@@ -189,8 +192,6 @@ const EnquirySingle = ({ enquiries }) => {
                     C-102<span> | </span>Hiranandani<span> | </span>9 BHK<span> | </span>Low Rise Apt (5-10 floor)<span> | </span>Devnahalli<span> | </span>Bangalore<span> | </span>Karnatak
                   </div>
                 </li>
-
-
                 <li>
                   <div className='left'>
                     Property Owner
@@ -202,13 +203,10 @@ const EnquirySingle = ({ enquiries }) => {
                     Raju Mohan Sharma
                   </div>
                 </li>
-
-
-
               </ul>
             </div>
             <hr />
-            <div className="enquiry_status d">
+            <div className="enquiry_status">
               <h6>Enquiry Status</h6>
               <div className={`multi_steps show_status
                ${selectedEnquiry.enquiryStatus === "open" ? "open" :
@@ -249,7 +247,7 @@ const EnquirySingle = ({ enquiries }) => {
                 <div className={`step_single ${selectedEnquiry.enquiryStatus === "open" || selectedEnquiry.enquiryStatus === "working" ? "wait" : ""}`}>
                   <div className="number">
                     <span class="material-symbols-outlined">
-                      
+
                       {selectedEnquiry.enquiryStatus === "successful" ? "check_circle" : "cancel"}
                     </span>
                   </div>
@@ -259,7 +257,6 @@ const EnquirySingle = ({ enquiries }) => {
                 </div>
               </div>
             </div>
-
           </Modal>
         </>
 

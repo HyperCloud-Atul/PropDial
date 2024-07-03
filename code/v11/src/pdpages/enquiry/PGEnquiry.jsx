@@ -33,10 +33,13 @@ const PGEnquiry = () => {
               <Tab className="pointer">
                 Add Enquiries
               </Tab>
-              <Tab className="pointer">
-                Enquiries Updates
+              <Tab className="pointer"
+                disabled style={{
+                  opacity: "0.5",
+                  cursor: "context-menu"
+                }}>
+                Update  Enquiry
               </Tab>
-
             </TabList>
             <TabPanel>
               <ViewEnquiry />
@@ -45,22 +48,10 @@ const PGEnquiry = () => {
               <AddEnquiry />
             </TabPanel>
             <TabPanel>
-              <div className="vg22"></div>
-              <h5 className="text_green ">
-                Comming Soon.....
-              </h5>
+              ""
             </TabPanel>
-
           </Tabs>
         </div>
-
-
-
-
-
-
-
-
       </div>
     </div>
   );
