@@ -88,17 +88,7 @@ const AddEnquiry = () => {
     };
     // add enquiry with add document end
     return (
-        <>
-            <div className="pg_header d-flex justify-content-between">
-                <div className="left d-flex align-items-center pointer">
-                    {/* <span class="material-symbols-outlined pointer" >
-                        arrow_back
-                    </span> */}
-                    <h2 className="m22 mb-1">Add Enquiry
-                    </h2>
-                </div>
-
-            </div>
+        <>           
             <hr />
             <div className="add_enquiry">
                 <div className="vg12">

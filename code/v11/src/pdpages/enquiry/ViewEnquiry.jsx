@@ -151,10 +151,10 @@ const ViewEnquiry = () => {
   const totalSalePercentage = totalDocsLength > 0 ? (totalSaleLength * 100) / totalDocsLength : 0;
 
   return (
-    <>      
+    <>
       <div className="pg_header d-flex justify-content-between">
         <div className="left">
-          <h2 className="m22 mb-1">Enquiry Dashboard  {" "}          
+          <h2 className="m22 mb-1">Enquiry Dashboard  {" "}
           </h2>
           <h6 className="r14 light_black" >( Application's filtered enquiries : {enquiries && enquiries.length} )</h6>
         </div>
@@ -162,7 +162,7 @@ const ViewEnquiry = () => {
           <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload pointer" onClick={exportUsers} />
         </div>
       </div>
-      <div className="vg22"></div>   
+      <div className="vg22"></div>
 
       {enquiryDocs && (
         <div className="card_filter">
@@ -192,7 +192,7 @@ const ViewEnquiry = () => {
                                     }}
                                   ></div>
                                 </div>
-                                
+
                                 <h6>Rent</h6>
                               </div>
                             </div>

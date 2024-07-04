@@ -119,7 +119,21 @@ const PGEnquiry = () => {
           <ViewEnquiry />
         )}
         {showForm && (
-          <AddEnquiry />
+          <>
+            <div className="pg_header d-flex justify-content-between">
+              <div className="left d-flex align-items-center pointer" style={{
+                gap: "5px"
+              }}>
+                <span class="material-symbols-outlined pointer" onClick={handelShowForm} >
+                  arrow_back
+                </span>
+                <h2 className="m22 mb-1">Add Enquiry
+                </h2>
+              </div>
+
+            </div>
+            <AddEnquiry />
+          </>
         )}
 
 
