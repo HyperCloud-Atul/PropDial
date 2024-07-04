@@ -10,28 +10,41 @@ import EnquiryTable from './EnquiryTable';
 import Filters from '../../components/Filters';
 
 const enquiryFilter = ["This Month", "Last 3 Months", "Last 6 Months"];
-const enquiryStatusFilter = ["All", "Open", "Working", "Successful", "Dead"];
+const enquiryStatusFilter = ["Total", "Open", "Working", "Successful", "Dead"];
 
 const ViewEnquiry = () => {
-  
+
   const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry");
   const [filter, setFilter] = useState(enquiryFilter[0]);
   const [enquiries, setEnquiries] = useState([]);
   const [rentSaleFilter, setRentSaleFilter] = useState("rent");
-  const [enquiryStatus, setEnquiryStatus] = useState("All");
+  const [enquiryStatus, setEnquiryStatus] = useState("Total");
+  const [currentFilter, setCurrentFilter] = useState(enquiryStatusFilter[0]);
+
+  // length useState start 
+  const [totalDocsLength, setTotalDocsLength] = useState(0);
+  const [totalRentLength, setTotalRentLength] = useState(0);
+  const [totalSaleLength, setTotalSaleLength] = useState(0);
+  const [openRentEnquiryLength, setOpenRentEnquiryLength] = useState(0);
+  const [openSaleEnquiryLength, setOpenSaleEnquiryLength] = useState(0);
+  const [workingRentEnquiryLength, setWorkingRentEnquiryLength] = useState(0);
+  const [workingSaleEnquiryLength, setWorkingSaleEnquiryLength] = useState(0);
+  const [successfulRentEnquiryLength, setSuccessfulRentEnquiryLength] = useState(0);
+  const [successfulSaleEnquiryLength, setSuccessfulSaleEnquiryLength] = useState(0);
+  const [deadRentEnquiryLength, setDeadRentEnquiryLength] = useState(0);
+  const [deadSaleEnquiryLength, setDeadSaleEnquiryLength] = useState(0);
+  // length useState end
 
   const handleRentSaleChange = (checked) => {
     setRentSaleFilter(checked ? "sale" : "rent");
   };
 
-  
-  // const workingRentEnquiry;
-  let openRentEnquiry;
+
+
 
   useEffect(() => {
     if (enquiryDocs) {
-      openRentEnquiry = enquiryDocs && enquiryDocs.filter((doc) => (doc.enquiryStatus.toLowerCase () === "open") && (doc.enquiryType.toLowerCase () === "rent") )
-      console.log("openRentEnquiry", openRentEnquiry.length);
+
       const filteredEnquiries = enquiryDocs.filter((document) => {
         const createdAt = document.createdAt.toDate();
         const matchesDateFilter = (() => {
@@ -59,14 +72,27 @@ const ViewEnquiry = () => {
         const matchesEnquiryTypeFilter = document.enquiryType === rentSaleFilter;
 
         // Filter based on enquiryStatus
-        const matchesEnquiryStatus = (enquiryStatus === "All") ||
-          (enquiryStatus === "Open" && document.enquiryStatus.toLowerCase () === "open") ||
-          (enquiryStatus === "Working" && document.enquiryStatus.toLowerCase () === "working") ||
-          (enquiryStatus === "Successful" && document.enquiryStatus.toLowerCase () === "successful") ||
-          (enquiryStatus === "Dead" && document.enquiryStatus.toLowerCase () === "dead");
+        const matchesEnquiryStatus = (enquiryStatus === "Total") ||
+          (enquiryStatus === "Open" && document.enquiryStatus.toLowerCase() === "open") ||
+          (enquiryStatus === "Working" && document.enquiryStatus.toLowerCase() === "working") ||
+          (enquiryStatus === "Successful" && document.enquiryStatus.toLowerCase() === "successful") ||
+          (enquiryStatus === "Dead" && document.enquiryStatus.toLowerCase() === "dead");
 
         return matchesDateFilter && matchesEnquiryTypeFilter && matchesEnquiryStatus;
       });
+
+      setTotalDocsLength(enquiryDocs.length);
+      setOpenRentEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "open") && (doc.enquiryType.toLowerCase() === "rent")).length);
+      setTotalRentLength(enquiryDocs.filter(doc => (doc.enquiryType.toLowerCase() === "rent")).length);
+      setTotalSaleLength(enquiryDocs.filter(doc => (doc.enquiryType.toLowerCase() === "sale")).length);
+      setOpenSaleEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "open") && (doc.enquiryType.toLowerCase() === "sale")).length);
+      setWorkingRentEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "working") && (doc.enquiryType.toLowerCase() === "rent")).length);
+      setWorkingSaleEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "working") && (doc.enquiryType.toLowerCase() === "sale")).length);
+      setSuccessfulRentEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "successful") && (doc.enquiryType.toLowerCase() === "rent")).length);
+      setSuccessfulSaleEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "successful") && (doc.enquiryType.toLowerCase() === "sale")).length);
+      setDeadRentEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "dead") && (doc.enquiryType.toLowerCase() === "rent")).length);
+      setDeadSaleEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "dead") && (doc.enquiryType.toLowerCase() === "sale")).length);
+
       setEnquiries(filteredEnquiries);
     }
   }, [enquiryDocs, filter, rentSaleFilter, enquiryStatus]);
@@ -77,6 +103,7 @@ const ViewEnquiry = () => {
 
   const changeEnquiryStatus = (newStatus) => {
     setEnquiryStatus(newStatus);
+    setCurrentFilter(newStatus);
   };
 
   useEffect(() => {
@@ -88,13 +115,15 @@ const ViewEnquiry = () => {
   const years = enquiryDocs ? [...new Set(enquiryDocs.map(doc => format(doc.createdAt.toDate(), 'yyyy')))].sort((a, b) => b - a) : [];
 
 
-  
+  // view mode control start 
   const [viewMode, setViewMode] = useState('card_view');
 
   const handleModeChange = (newViewMode) => {
     setViewMode(newViewMode);
   };
+  // view mode control end
 
+  // export data in excel 
   const { exportToExcel, response: res } = useExportToExcel();
   const exportUsers = async () => {
     const subsetData = enquiries.map(item => ({
@@ -114,30 +143,178 @@ const ViewEnquiry = () => {
     let filename = 'EnquiryList.xlsx';
     exportToExcel(subsetData, filename);
   };
+  // export data in excel 
+
+
+  // progress bar percentage 
+  const totalRentPercentage = totalDocsLength > 0 ? (totalRentLength * 100) / totalDocsLength : 0;
+  const totalSalePercentage = totalDocsLength > 0 ? (totalSaleLength * 100) / totalDocsLength : 0;
 
   return (
-    <>
-      <div className="vg22"></div>
+    <>      
       <div className="pg_header d-flex justify-content-between">
         <div className="left">
-          <h2 className="m22">Enquiry {" "}
-            <span className="r14 light_black" >( Application's filtered enquiries : {enquiries && enquiries.length} )</span>
+          <h2 className="m22 mb-1">Enquiry Dashboard  {" "}          
           </h2>
+          <h6 className="r14 light_black" >( Application's filtered enquiries : {enquiries && enquiries.length} )</h6>
         </div>
         <div className="right">
           <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload pointer" onClick={exportUsers} />
         </div>
       </div>
-      <div className="vg12"></div>
-      <div className="user_filters new_inline">
-        {enquiryDocs && (
-          <Filters
-            changeFilter={changeEnquiryStatus}
-            filterList={enquiryStatusFilter}
-            filterLength={enquiries.length}
-          />
-        )}
-      </div>
+      <div className="vg22"></div>   
+
+      {enquiryDocs && (
+        <div className="card_filter">
+          {enquiryStatusFilter.map((f) => {
+            if (f === "Total") {
+              return (
+                <div key={f}
+                  onClick={() => changeEnquiryStatus(f)}
+                  className={`cs_single_big ${currentFilter === f ? 'active' : ''} ${f.toLowerCase()}`}>
+                  <div className="inner">
+                    <div className="left">
+                      <div className="content">
+                        <div className="top">
+                          {f} Enquiry
+                        </div>
+                        <div className="card_upcoming">
+                          <div className="parent">
+                            <div className="child">
+                              <div className="left">
+                                <h5>{totalRentLength}</h5>
+                                <div className="line">
+                                  <div
+                                    className="line_fill"
+                                    style={{
+                                      width: `${totalRentPercentage}%`, // Ensure to add `%` for CSS width property
+                                      background: "#5A10D5"
+                                    }}
+                                  ></div>
+                                </div>
+                                
+                                <h6>Rent</h6>
+                              </div>
+                            </div>
+                            <div className="child">
+                              <div className="left">
+                                <h5>{totalSaleLength}</h5>
+                                <div className="line">
+                                  <div className="line_fill" style={{
+                                    width: `${totalSalePercentage}%`, // Ensure to add `%` for CSS width property
+                                    background: "#00a8a8"
+                                  }}>
+                                  </div>
+                                </div>
+                                <h6>Sale</h6>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="right">
+                      {totalDocsLength}
+                    </div>
+                  </div>
+                </div>
+              );
+            } else if (f === "Open") {
+              return (
+                <div key={f}
+                  onClick={() => changeEnquiryStatus(f)}
+                  className={`cf_single ${currentFilter === f ? 'active' : ''} ${f.toLowerCase()}`}>
+                  <div className="inner">
+                    <div className="top">
+                      <div className="left">
+                        <h5>{openRentEnquiryLength}</h5>
+                        <h6>Rent</h6>
+                      </div>
+                      <div className="right">
+                        <h5>{openSaleEnquiryLength}</h5>
+                        <h6>Sale</h6>
+                      </div>
+                    </div>
+                    <div className="bottom">
+                      <h6>{f}</h6>
+                    </div>
+                  </div>
+                </div>
+              );
+            } else if (f === "Working") {
+              return (
+                <div key={f}
+                  onClick={() => changeEnquiryStatus(f)}
+                  className={`cf_single ${currentFilter === f ? 'active' : ''} ${f.toLowerCase()}`}>
+                  <div className="inner">
+                    <div className="top">
+                      <div className="left">
+                        <h5>{workingRentEnquiryLength}</h5>
+                        <h6>Rent</h6>
+                      </div>
+                      <div className="right">
+                        <h5>{workingSaleEnquiryLength}</h5>
+                        <h6>Sale</h6>
+                      </div>
+                    </div>
+                    <div className="bottom">
+                      <h6>{f}</h6>
+                    </div>
+                  </div>
+                </div>
+              );
+            } else if (f === "Successful") {
+              return (
+                <div key={f}
+                  onClick={() => changeEnquiryStatus(f)}
+                  className={`cf_single ${currentFilter === f ? 'active' : ''} ${f.toLowerCase()}`}>
+                  <div className="inner">
+                    <div className="top">
+                      <div className="left">
+                        <h5>{successfulRentEnquiryLength}</h5>
+                        <h6>Rent</h6>
+                      </div>
+                      <div className="right">
+                        <h5>{successfulSaleEnquiryLength}</h5>
+                        <h6>Sale</h6>
+                      </div>
+                    </div>
+                    <div className="bottom">
+                      <h6>{f}</h6>
+                    </div>
+                  </div>
+                </div>
+              );
+            } else if (f === "Dead") {
+              return (
+                <div key={f}
+                  onClick={() => changeEnquiryStatus(f)}
+                  className={`cf_single ${currentFilter === f ? 'active' : ''} ${f.toLowerCase()}`}>
+                  <div className="inner">
+                    <div className="top">
+                      <div className="left">
+                        <h5>{deadRentEnquiryLength}</h5>
+                        <h6>Rent</h6>
+                      </div>
+                      <div className="right">
+                        <h5>{deadSaleEnquiryLength}</h5>
+                        <h6>Sale</h6>
+                      </div>
+                    </div>
+                    <div className="bottom">
+                      <h6>{f}</h6>
+                    </div>
+                  </div>
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </div>
+      )}
+
+      <div className="vg22"></div>
       <div className="vg12"></div>
       <div className="filters">
         <div className='left'>

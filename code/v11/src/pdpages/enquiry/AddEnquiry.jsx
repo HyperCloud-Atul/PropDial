@@ -88,373 +88,382 @@ const AddEnquiry = () => {
     };
     // add enquiry with add document end
     return (
+        <>
+            <div className="pg_header d-flex justify-content-between">
+                <div className="left d-flex align-items-center pointer">
+                    {/* <span class="material-symbols-outlined pointer" >
+                        arrow_back
+                    </span> */}
+                    <h2 className="m22 mb-1">Add Enquiry
+                    </h2>
+                </div>
 
-        <div className="add_enquiry">
-            <div className="vg22">
             </div>
-            <div className="vg12"></div>
-            <div className="row row_gap">
-                <div className="col-md-4">
-                    <div className="form_field label_top">
-                        <label htmlFor="">Click To Select Date</label>
-                        <div className="form_field_inner with_icon">                          
-                             <DatePicker
-                            selected={date}
-                            onChange={handleChangeDate}
-                            maxDate={new Date()}
-                            minDate={new Date(new Date().setDate(new Date().getDate() - 1))}
-                            dateFormat="dd/MM/yyyy"
-                        />
-                          <div className="field_icon">
-                                <span class="material-symbols-outlined">
-                                    calendar_month
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+            <hr />
+            <div className="add_enquiry">
+                <div className="vg12">
                 </div>
-                <div className="col-md-4">
-                    <div className="form_field st-2 label_top">
-                        <label htmlFor="">
-                            Enquiry Type</label>
-                        <div className="field_box theme_radio_new">
-                            <div className="theme_radio_container">
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="enquiryType"
-                                        id="rent"
-                                        onClick={handleChangeEnquiryType}
-                                        value="rent"
-                                    />
-                                    <label htmlFor="rent" className="radio_label">rent</label>
-                                </div>
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="enquiryType"
-                                        id="sale"
-                                        onClick={handleChangeEnquiryType}
-                                        value="sale"
-
-                                    />
-                                    <label htmlFor="sale" className="radio_label">sale</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <div className="form_field st-2 label_top">
-                        <label htmlFor="">
-                            Enquiry From</label>
-                        <div className="field_box theme_radio_new">
-                            <div className="theme_radio_container">
-                                {enquiryType.toLowerCase() === "rent" && (
-                                    <div className="radio_single" >
-                                        <input
-                                            type="radio"
-                                            name="enquiryFrom"
-                                            id="tenant"
-                                            onClick={handleChangeEnquiryFrom}
-                                            value="prospective tenant"
-                                        />
-                                        <label htmlFor="tenant" className="radio_label">prospective tenant</label>
-                                    </div>
-                                )}
-                                {enquiryType.toLowerCase() === "sale" && (
-                                    <div className="radio_single" >
-                                        <input
-                                            type="radio"
-                                            name="enquiryFrom"
-                                            id="tenant"
-                                            onClick={handleChangeEnquiryFrom}
-                                            value="prospective buyer"
-                                        />
-                                        <label htmlFor="tenant" className="radio_label">prospective buyer</label>
-                                    </div>
-                                )}
-
-
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="enquiryFrom"
-                                        id="agent"
-                                        onClick={handleChangeEnquiryFrom}
-                                        value="agent"
-
-                                    />
-                                    <label htmlFor="agent" className="radio_label">Agent</label>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <div className="form_field st-2 label_top">
-                        <label htmlFor="">
-                            Referred By</label>
-                        <div className="field_box theme_radio_new">
-                            <div className="theme_radio_container">
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="referredBy"
-                                        id="owner"
-                                        onClick={handleChangeReferredBy}
-                                        value="owner"
-                                    />
-                                    <label htmlFor="owner" className="radio_label">owner</label>
-                                </div>
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="referredBy"
-                                        id="propdial"
-                                        onClick={handleChangeReferredBy}
-                                        value="propdial"
-                                    />
-                                    <label htmlFor="propdial" className="radio_label">propdial</label>
-                                </div>
-                                <div className="radio_single" >
-                                    <input
-                                        type="radio"
-                                        name="referredBy"
-                                        id="employee"
-                                        onClick={handleChangeReferredBy}
-                                        value="employee"
-                                    />
-                                    <label htmlFor="employee" className="radio_label">employee</label>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {referredBy === "propdial" && (
-                    <div className="col-md-8">
-                        <div className="form_field st-2 label_top">
-                            <label htmlFor="">
-                                Source</label>
-                            <div className="field_box theme_radio_new">
-                                <div className="theme_radio_container">
-                                    <div className="radio_single" >
-                                        <input
-                                            type="radio"
-                                            name="source"
-                                            id="99acres"
-                                            onClick={handleChangeSource}
-                                            value="99acres"
-
-                                        />
-                                        <label htmlFor="99acres" className="radio_label">99acres</label>
-                                    </div>
-                                    <div className="radio_single" >
-                                        <input
-                                            type="radio"
-                                            name="source"
-                                            id="magicBricks"
-                                            onClick={handleChangeSource}
-                                            value="magicbricks"
-
-                                        />
-                                        <label htmlFor="magicBricks" className="radio_label">magicbricks</label>
-                                    </div>
-                                    <div className="radio_single" >
-                                        <input
-                                            type="radio"
-                                            name="source"
-                                            id="housing"
-                                            onClick={handleChangeSource}
-                                            value="housing"
-                                        />
-                                        <label htmlFor="housing" className="radio_label">housing</label>
-                                    </div>
-                                    <div className="radio_single" >
-                                        <input
-                                            type="radio"
-                                            name="source"
-                                            id="other"
-                                            onClick={handleChangeSource}
-                                            value="other"
-                                        />
-                                        <label htmlFor="other" className="radio_label">other</label>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                {referredBy === "employee" && (
-                    <div className="col-md-8">
+                <div className="vg12"></div>
+                <div className="row row_gap">
+                    <div className="col-md-4">
                         <div className="form_field label_top">
-                            <label htmlFor="">Employee Name</label>
+                            <label htmlFor="">Click To Select Date</label>
                             <div className="form_field_inner with_icon">
-                                <input
-                                    type="text"
-                                    placeholder="Select employee"
-                                    value={employeeName}
-                                    onChange={handleChangeEmployeeName}
+                                <DatePicker
+                                    selected={date}
+                                    onChange={handleChangeDate}
+                                    maxDate={new Date()}
+                                    minDate={new Date(new Date().setDate(new Date().getDate() - 1))}
+                                    dateFormat="dd/MM/yyyy"
                                 />
                                 <div className="field_icon">
                                     <span class="material-symbols-outlined">
-                                        search
+                                        calendar_month
                                     </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                )}                
-                <div className="row row_gap">
-                <div className="col-md-6">
-                    <div className="form_field label_top">
-                        <label htmlFor="">Property Name</label>
-                        <div className="form_field_inner with_icon">
-                            <input
-                                type="text"
-                                placeholder="Search property"
-                                value={propertyName}
-                                onChange={handleChangePropertyName}
-                            />
-                            <div className="field_icon">
-                                <span class="material-symbols-outlined">
-                                    search
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-6">
-                    <div className="form_field label_top">
-                        <label htmlFor="">Property Owner</label>
-                        <div className="form_field_inner with_icon">
-                            <input
-                                type="text"
-                                placeholder="Search owner"
-                                value={propertyOwner}
-                                onChange={handleChangePropertyOwner}
-                            />
-                            <div className="field_icon">
-                                <span class="material-symbols-outlined">
-                                    search
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <div className="form_field label_top">
-                        <label htmlFor="">
-                            {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
-                            {" "}
-                            Name</label>
-                        <div className="form_field_inner with_icon">
-                            <input
-                                type="text"
-                                placeholder="Enter name"
-                                value={name}
-                                onChange={handleChangeName}
-                            />
-                            <div className="field_icon">
-                                <span class="material-symbols-outlined">
-                                    draw
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <div className="form_field label_top">
-                    <label htmlFor="">
-                            {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
-                            {" "}
-                            Contact</label>
-                        <div className="form_field_inner with_icon">                       
-                             <PhoneInput
-                            country={"in"}
-                            onlyCountries={['in', 'us', 'ae']}
-                            value={phone}
-                            onChange={handleChangePhone}
-                            international
-                            keyboardType="phone-pad"
-                            countryCodeEditable={true}
-                            placeholder="Country code + mobile number"
-                            inputProps={{
-                                name: "phone",
-                                required: true,
-                                autoFocus: false,
-                            }}
-                            inputStyle={{
-                                width: '100%',                              
-                                paddingLeft: '45px',                               
-                            }}
-                            buttonStyle={{                               
-                                textAlign: 'left',                               
-                            }}
-                        />
-                            <div className="field_icon">
-                                <span class="material-symbols-outlined">
-                                    draw
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <div className="form_field label_top">
-                    <label htmlFor="">
-                            {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
-                            {" "}
-                            Email</label>
-                        <div className="form_field_inner with_icon">
-                            <input
-                                type="email"
-                                placeholder="Enter email"
-                                value={email}
-                                onChange={handleChangeEmail}
-                            />
-                            <div className="field_icon">
-                                <span class="material-symbols-outlined">
-                                    draw
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                   
-                <div className="col-md-12">
-                    <div className="form_field label_top">
-                        <label htmlFor="">Remarks (For Internal Use Only)</label>
-                        <div className="form_field_inner with_icon">
-                            <textarea
-                                placeholder="Enter remarks"
-                                value={remark}
-                                onChange={handleChangeRemark}
-                            />
-                            <div className="field_icon">
-                                <span class="material-symbols-outlined">
-                                    draw
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <div className="col-md-4">
+                        <div className="form_field st-2 label_top">
+                            <label htmlFor="">
+                                Enquiry Type</label>
+                            <div className="field_box theme_radio_new">
+                                <div className="theme_radio_container">
+                                    <div className="radio_single" >
+                                        <input
+                                            type="radio"
+                                            name="enquiryType"
+                                            id="rent"
+                                            onClick={handleChangeEnquiryType}
+                                            value="rent"
+                                        />
+                                        <label htmlFor="rent" className="radio_label">rent</label>
+                                    </div>
+                                    <div className="radio_single" >
+                                        <input
+                                            type="radio"
+                                            name="enquiryType"
+                                            id="sale"
+                                            onClick={handleChangeEnquiryType}
+                                            value="sale"
 
-                <div className="col-md-12">
-                    <button className="theme_btn btn_fill" onClick={submitEnquiry} disabled={isUploading}>
-                        {isUploading ? "Submiting....." : "Submit"}
-                    </button>
-                </div>
-                </div>
-               
+                                        />
+                                        <label htmlFor="sale" className="radio_label">sale</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-4">
+                        <div className="form_field st-2 label_top">
+                            <label htmlFor="">
+                                Enquiry From</label>
+                            <div className="field_box theme_radio_new">
+                                <div className="theme_radio_container">
+                                    {enquiryType.toLowerCase() === "rent" && (
+                                        <div className="radio_single" >
+                                            <input
+                                                type="radio"
+                                                name="enquiryFrom"
+                                                id="tenant"
+                                                onClick={handleChangeEnquiryFrom}
+                                                value="prospective tenant"
+                                            />
+                                            <label htmlFor="tenant" className="radio_label">prospective tenant</label>
+                                        </div>
+                                    )}
+                                    {enquiryType.toLowerCase() === "sale" && (
+                                        <div className="radio_single" >
+                                            <input
+                                                type="radio"
+                                                name="enquiryFrom"
+                                                id="tenant"
+                                                onClick={handleChangeEnquiryFrom}
+                                                value="prospective buyer"
+                                            />
+                                            <label htmlFor="tenant" className="radio_label">prospective buyer</label>
+                                        </div>
+                                    )}
 
-           
 
+                                    <div className="radio_single" >
+                                        <input
+                                            type="radio"
+                                            name="enquiryFrom"
+                                            id="agent"
+                                            onClick={handleChangeEnquiryFrom}
+                                            value="agent"
+
+                                        />
+                                        <label htmlFor="agent" className="radio_label">Agent</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-4">
+                        <div className="form_field st-2 label_top">
+                            <label htmlFor="">
+                                Referred By</label>
+                            <div className="field_box theme_radio_new">
+                                <div className="theme_radio_container">
+                                    <div className="radio_single" >
+                                        <input
+                                            type="radio"
+                                            name="referredBy"
+                                            id="owner"
+                                            onClick={handleChangeReferredBy}
+                                            value="owner"
+                                        />
+                                        <label htmlFor="owner" className="radio_label">owner</label>
+                                    </div>
+                                    <div className="radio_single" >
+                                        <input
+                                            type="radio"
+                                            name="referredBy"
+                                            id="propdial"
+                                            onClick={handleChangeReferredBy}
+                                            value="propdial"
+                                        />
+                                        <label htmlFor="propdial" className="radio_label">propdial</label>
+                                    </div>
+                                    <div className="radio_single" >
+                                        <input
+                                            type="radio"
+                                            name="referredBy"
+                                            id="employee"
+                                            onClick={handleChangeReferredBy}
+                                            value="employee"
+                                        />
+                                        <label htmlFor="employee" className="radio_label">employee</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {referredBy === "propdial" && (
+                        <div className="col-md-8">
+                            <div className="form_field st-2 label_top">
+                                <label htmlFor="">
+                                    Source</label>
+                                <div className="field_box theme_radio_new">
+                                    <div className="theme_radio_container">
+                                        <div className="radio_single" >
+                                            <input
+                                                type="radio"
+                                                name="source"
+                                                id="99acres"
+                                                onClick={handleChangeSource}
+                                                value="99acres"
+
+                                            />
+                                            <label htmlFor="99acres" className="radio_label">99acres</label>
+                                        </div>
+                                        <div className="radio_single" >
+                                            <input
+                                                type="radio"
+                                                name="source"
+                                                id="magicBricks"
+                                                onClick={handleChangeSource}
+                                                value="magicbricks"
+
+                                            />
+                                            <label htmlFor="magicBricks" className="radio_label">magicbricks</label>
+                                        </div>
+                                        <div className="radio_single" >
+                                            <input
+                                                type="radio"
+                                                name="source"
+                                                id="housing"
+                                                onClick={handleChangeSource}
+                                                value="housing"
+                                            />
+                                            <label htmlFor="housing" className="radio_label">housing</label>
+                                        </div>
+                                        <div className="radio_single" >
+                                            <input
+                                                type="radio"
+                                                name="source"
+                                                id="other"
+                                                onClick={handleChangeSource}
+                                                value="other"
+                                            />
+                                            <label htmlFor="other" className="radio_label">other</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    {referredBy === "employee" && (
+                        <div className="col-md-8">
+                            <div className="form_field label_top">
+                                <label htmlFor="">Employee Name</label>
+                                <div className="form_field_inner with_icon">
+                                    <input
+                                        type="text"
+                                        placeholder="Select employee"
+                                        value={employeeName}
+                                        onChange={handleChangeEmployeeName}
+                                    />
+                                    <div className="field_icon">
+                                        <span class="material-symbols-outlined">
+                                            search
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div className="row row_gap">
+                        <div className="col-md-6">
+                            <div className="form_field label_top">
+                                <label htmlFor="">Property Name</label>
+                                <div className="form_field_inner with_icon">
+                                    <input
+                                        type="text"
+                                        placeholder="Search property"
+                                        value={propertyName}
+                                        onChange={handleChangePropertyName}
+                                    />
+                                    <div className="field_icon">
+                                        <span class="material-symbols-outlined">
+                                            search
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form_field label_top">
+                                <label htmlFor="">Property Owner</label>
+                                <div className="form_field_inner with_icon">
+                                    <input
+                                        type="text"
+                                        placeholder="Search owner"
+                                        value={propertyOwner}
+                                        onChange={handleChangePropertyOwner}
+                                    />
+                                    <div className="field_icon">
+                                        <span class="material-symbols-outlined">
+                                            search
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="form_field label_top">
+                                <label htmlFor="">
+                                    {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
+                                    {" "}
+                                    Name</label>
+                                <div className="form_field_inner with_icon">
+                                    <input
+                                        type="text"
+                                        placeholder="Enter name"
+                                        value={name}
+                                        onChange={handleChangeName}
+                                    />
+                                    <div className="field_icon">
+                                        <span class="material-symbols-outlined">
+                                            draw
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="form_field label_top">
+                                <label htmlFor="">
+                                    {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
+                                    {" "}
+                                    Contact</label>
+                                <div className="form_field_inner with_icon">
+                                    <PhoneInput
+                                        country={"in"}
+                                        onlyCountries={['in', 'us', 'ae']}
+                                        value={phone}
+                                        onChange={handleChangePhone}
+                                        international
+                                        keyboardType="phone-pad"
+                                        countryCodeEditable={true}
+                                        placeholder="Country code + mobile number"
+                                        inputProps={{
+                                            name: "phone",
+                                            required: true,
+                                            autoFocus: false,
+                                        }}
+                                        inputStyle={{
+                                            width: '100%',
+                                            paddingLeft: '45px',
+                                        }}
+                                        buttonStyle={{
+                                            textAlign: 'left',
+                                        }}
+                                    />
+                                    <div className="field_icon">
+                                        <span class="material-symbols-outlined">
+                                            draw
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="form_field label_top">
+                                <label htmlFor="">
+                                    {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
+                                    {" "}
+                                    Email</label>
+                                <div className="form_field_inner with_icon">
+                                    <input
+                                        type="email"
+                                        placeholder="Enter email"
+                                        value={email}
+                                        onChange={handleChangeEmail}
+                                    />
+                                    <div className="field_icon">
+                                        <span class="material-symbols-outlined">
+                                            draw
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-12">
+                            <div className="form_field label_top">
+                                <label htmlFor="">Remarks (For Internal Use Only)</label>
+                                <div className="form_field_inner with_icon">
+                                    <textarea
+                                        placeholder="Enter remarks"
+                                        value={remark}
+                                        onChange={handleChangeRemark}
+                                    />
+                                    <div className="field_icon">
+                                        <span class="material-symbols-outlined">
+                                            draw
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-12">
+                            <button className="theme_btn btn_fill" onClick={submitEnquiry} disabled={isUploading}>
+                                {isUploading ? "Submiting....." : "Submit"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </>
+
     )
 }
 
