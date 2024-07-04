@@ -75,7 +75,8 @@ const UpdateEnquiry = () => {
 
             const newStatusUpdate = {
                 status: enquiryStatus,
-                timestamp: new Date().toISOString(),
+                // timestamp: new Date().toISOString(),
+                updatedAt: (new Date()),
             };
 
             const updatedDocument = {
@@ -104,7 +105,7 @@ const UpdateEnquiry = () => {
             }
             await updateDocument(id, updatedDocument);
             setIsUploading(false);
-            navigate("/enquiry");
+            navigate("/enquiry/all");
         } catch (error) {
             console.error("Error updating document:", error);
             setIsUploading(false);
@@ -137,7 +138,7 @@ const UpdateEnquiry = () => {
     // get enquiry status 
 
     const backViewEnquiry = () => {
-        navigate("/enquiry");
+        navigate("/enquiry/all");
     };
 
     return (
@@ -157,7 +158,7 @@ const UpdateEnquiry = () => {
                         <div className="d-flex align-items-center" style={{
                             gap:"22px"
                         }} >
-                            <Link to="/enquiry" className="theme_btn btn_border">
+                            <Link to="/enquiry/all" className="theme_btn btn_border">
                                 Cancel
                             </Link>
                             <button className="theme_btn btn_fill" onClick={submitEnquiry}
@@ -546,7 +547,7 @@ const UpdateEnquiry = () => {
                             <div className="col-12 d-flex justify-content-end" style={{
                                 gap:"22px"
                             }} >
-                                <Link to="/enquiry" className="theme_btn btn_border">
+                                <Link to="/enquiry/all" className="theme_btn btn_border">
                                     Cancel
                                 </Link>
                                 <button className="theme_btn btn_fill" onClick={submitEnquiry}
@@ -556,40 +557,8 @@ const UpdateEnquiry = () => {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-                {/* <div className="theme_tab prop_doc_tab">
-                    <Tabs defaultIndex={2}>
-                        <TabList className="tabs">
-                            <Tab className="pointer" disabled style={{
-                                opacity: "0.5",
-                                cursor: "context-menu"
-                            }}>
-                                View Enquiries
-                            </Tab>
-                            <Tab className="pointer" disabled style={{
-                                opacity: "0.5",
-                                cursor: "context-menu"
-                            }}>
-                                Add Enquiries
-                            </Tab>
-                            <Tab className="pointer">
-                                Update  Enquiry
-                            </Tab>
-                        </TabList>
-                        <TabPanel>
-                            ""
-                        </TabPanel>
-                        <TabPanel>
-                            ""
-                        </TabPanel>
-                        <TabPanel>
-                           ""
-
-                        </TabPanel>
-                    </Tabs>
-                </div> */}
+             
             </div>
         </div>
 

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useLogout } from '../../hooks/useLogout';
 import { Link } from 'react-router-dom';
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { useCollection } from '../../hooks/useCollection';
+import { useParams } from 'react-router-dom';
 
 // import component 
 import ViewEnquiry from './ViewEnquiry';
@@ -14,6 +15,12 @@ import './PGEnquiry.scss'
 const PGEnquiry = () => {
   const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
+  // render ViewEnquiry by url id start 
+  const { id } = useParams();
+  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry")
+  const enquiryDocsById = id === "all" ? enquiryDocs : (enquiryDocs && enquiryDocs.filter(doc => (doc.propId === id)));
+  console.log("enquiryDocsById", enquiryDocsById, id);
+  // render ViewEnquiry by url id end
 
   useEffect(() => {
     let flag = user && user.role === "admin";
@@ -33,15 +40,13 @@ const PGEnquiry = () => {
   };
   // 9 dots controls
 
-  // show and hide add payment form start
-
+  // show and hide form start
   const [showForm, setShowForm] = useState(false);
 
   const handelShowForm = () => {
     setShowForm(!showForm);
   };
-
-  // show and hide add payment form end
+  // show and hide form end
 
   return (
     <div className="top_header_pg pg_bg pg_enquiry">
@@ -87,36 +92,8 @@ const PGEnquiry = () => {
             {showForm ? "close" : "add"}
           </span>
         </Link>
-        {/* <div className="theme_tab prop_doc_tab">
-          <Tabs defaultIndex={0}>
-            <TabList className="tabs">
-              <Tab className="pointer">
-                View Enquiries
-              </Tab>
-              <Tab className="pointer">
-                Add Enquiries
-              </Tab>
-              <Tab className="pointer" disabled style={{
-                opacity: "0.5",
-                cursor: "context-menu"
-              }}>
-                Update  Enquiry
-              </Tab>
-            </TabList>
-            <TabPanel>
-              <ViewEnquiry />
-            </TabPanel>
-            <TabPanel>
-              <AddEnquiry />
-            </TabPanel>
-            <TabPanel>
-              ""
-
-            </TabPanel>
-          </Tabs>
-        </div> */}
         {!showForm && (
-          <ViewEnquiry />
+          <ViewEnquiry enquiryDocs={enquiryDocsById} enquiryDocsError={enquiryDocsError} />
         )}
         {showForm && (
           <>

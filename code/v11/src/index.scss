@@ -612,8 +612,8 @@
     }
     .more_row {
       display: flex;
-      gap: 8px; 
-      justify-content: space-between;   
+      gap: 8px;
+      justify-content: space-between;
       margin-top: 3px;
       .card_badge {
         background: var(--theme-blue);
@@ -623,13 +623,13 @@
         font-weight: 400;
         border-radius: 7px;
         letter-spacing: 0.5px;
-    }
-    .card_badge.for_rent{
-      background: var(--theme-purple);
-    }
-    .card_badge.for_sale{
-      background: var(--theme-orange);
-    }
+      }
+      .card_badge.for_rent {
+        background: var(--theme-purple);
+      }
+      .card_badge.for_sale {
+        background: var(--theme-orange);
+      }
     }
     .middle {
       .show_more_arrow {
@@ -776,7 +776,51 @@
     }
   }
 }
-
+.top_tag_left {
+  position: absolute;
+  top: -11px;
+  left: 18px;
+  color: var(--white-color);
+  padding: 3px 8px;
+  font-size: 12px;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  z-index: 5;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    width: 9px;
+    height: 13px;
+    left: -4px;
+    z-index: -1;
+    transform: rotate(24deg);
+  }
+  &.open {
+    background: var(--theme-green);
+    &::after {
+      background: var(--theme-green);
+    }
+  }
+  &.working {
+    background: var(--theme-blue);
+    &::after {
+      background: var(--theme-blue);
+    }
+  }
+  &.successful {
+    background: var(--success-color);
+    &::after {
+      background: var(--success-color);
+    }
+  }
+  &.dead {
+    background: red;
+    &::after {
+      background: red;
+    }
+  }
+}
 .my_small_card_parent {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -847,7 +891,65 @@
     }
   }
 }
-
+.pg_enquiry {
+  .my_small_card_parent {
+    grid-template-columns: repeat(4, 1fr);
+    .my_small_card {
+      display: block;
+      padding-right: 52px;
+      a.enq_edit {
+        position: absolute;
+        right: 75px;
+        bottom: 15px;
+        display: flex;
+        color: var(--theme-green);
+        span{
+          font-size: 22px;
+        }
+    }
+      .top_right_content {   
+        right: 52px;  
+        top: 4px;     
+    }
+      .wha_call_icon {
+        display: flex;
+        flex-direction: column;
+        border-left: 1px solid #dfdfdf;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        padding: 0px 10px;
+        &::after{
+          content: '';
+          position: absolute;
+          top: 50%;
+          width: 100%;
+          height: 1px;
+          left: 0;
+          transform: translateY(-50%);
+          background: #dfdfdf;
+        }
+        .wc_single{
+          height: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      .left {
+        margin-top: 6px;
+        width: auto;
+      }
+    }
+    .sub_title {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+}
 .my_big_card {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);

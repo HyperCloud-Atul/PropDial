@@ -28,6 +28,7 @@ const AddEnquiry = () => {
     const [isUploading, setIsUploading] = useState(false);
 
 
+
     const handleChangeEnquiryFrom = (event) => setEnquiryFrom(event.target.value);
     const handleChangeReferredBy = (event) => setReferredBy(event.target.value);
     const handleChangeEnquiryType = (event) => setEnquiryType(event.target.value);
@@ -52,6 +53,10 @@ const AddEnquiry = () => {
         }
         try {
             setIsUploading(true);
+            const newStatusUpdate = {
+                status: "open",
+                updatedAt: new Date(),
+            };
             const docRef = await addDocument({
                 enquiryFrom,
                 referredBy,
@@ -66,6 +71,8 @@ const AddEnquiry = () => {
                 employeeName,
                 propertyOwner,
                 propertyName,
+                propId:"",
+                statusUpdates: [newStatusUpdate], // Initialize statusUpdates with default status
             });
             setEnquiryFrom("");
             setReferredBy("");

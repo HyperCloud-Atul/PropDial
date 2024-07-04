@@ -210,7 +210,7 @@ const PGMoreMenu = () => {
                       chevron_right
                     </span>
                   </Link>
-                  <Link className="mm_single" to="/enquiry">
+                  <Link className="mm_single" to="/enquiry/all">
                     <span className="material-symbols-outlined mms_icon">
                       favorite
                     </span>

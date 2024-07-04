@@ -50,7 +50,7 @@ const PropertyDetails = () => {
     propertyid
   );
   const { documents: inspections, errors: inspectionsError } = useCollection("propertyinspections", ["propertyId", "==", propertyid]);
-
+  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry", ["propId", "==", propertyid])
   const [propertyManagerDoc, setpropertyManagerDoc] = useState(null);
   const [propertyOwnerDoc, setpropertyOwnerDoc] = useState(null);
   const [propertyCoOwnerDoc, setpropertyCoOwnerDoc] = useState(null);
@@ -1482,14 +1482,14 @@ const PropertyDetails = () => {
                           </div>
                         </Link>
                         {/* Enquiry  */}
-                        <Link to="" >
+                        <Link to={`/enquiry/${propertyid}`} >
                           <div className="item eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
                                 support_agent
                               </span>
                               <div className="text">
-                                <h6>0</h6>
+                                <h6>{enquiryDocs && enquiryDocs.length}</h6>
                                 <h5>Enquiries</h5>
                               </div>
                             </div>

@@ -12,9 +12,8 @@ import Filters from '../../components/Filters';
 const enquiryFilter = ["This Month", "Last 3 Months", "Last 6 Months"];
 const enquiryStatusFilter = ["Total", "Open", "Working", "Successful", "Dead"];
 
-const ViewEnquiry = () => {
-
-  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry");
+const ViewEnquiry = ( {enquiryDocs, enquiryDocsError} ) => {
+//  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry");  
   const [filter, setFilter] = useState(enquiryFilter[0]);
   const [enquiries, setEnquiries] = useState([]);
   const [rentSaleFilter, setRentSaleFilter] = useState("rent");
@@ -44,7 +43,6 @@ const ViewEnquiry = () => {
 
   useEffect(() => {
     if (enquiryDocs) {
-
       const filteredEnquiries = enquiryDocs.filter((document) => {
         const createdAt = document.createdAt.toDate();
         const matchesDateFilter = (() => {
@@ -159,7 +157,7 @@ const ViewEnquiry = () => {
           <h6 className="r14 light_black" >( Application's filtered enquiries : {enquiries && enquiries.length} )</h6>
         </div>
         <div className="right">
-          <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload pointer" onClick={exportUsers} />
+          <img src="/assets/img/icons/excel_logo.png" alt="" className="excel_dowanload pointer" onClick={exportUsers} />
         </div>
       </div>
       <div className="vg22"></div>
@@ -369,6 +367,7 @@ const ViewEnquiry = () => {
         </div>
       </div>
       <hr></hr>
+      <div className="vg12"></div>
       {enquiryDocsError && <p className="error">{enquiryDocsError}</p>}
       {enquiries && enquiries.length === 0 && <p className='text_red medium text-center' style={{
         fontSize: "18px"

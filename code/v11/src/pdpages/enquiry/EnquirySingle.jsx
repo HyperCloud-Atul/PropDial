@@ -17,8 +17,18 @@ const EnquirySingle = ({ enquiries }) => {
     <>
       {enquiries && enquiries.map((doc, index) => (
         <div className="my_small_card notification_card pointer" key={index} onClick={() => handleShowEnquriyModal(doc)}>
+          <h4 className="top_right_content">
+            <span>
+              {format(new Date(doc.date), 'dd-MMM-yy hh:mm a')}
+            </span>
+          </h4>
+          {doc.enquiryStatus && (
+            <div className={`top_tag_left ${doc.enquiryStatus.toLowerCase()}`}>
+              {doc.enquiryStatus}
+            </div>
+          )}
           <div className="left">
-            <div className="right">
+            <div className="inner">
               <h5 className="title">{doc.name}</h5>
               <h6 className="sub_title">
                 {doc.phone.replace(
@@ -26,39 +36,41 @@ const EnquirySingle = ({ enquiries }) => {
                   "+$1 $2-$3"
                 )}
               </h6>
-              {doc.description && (
+              {/* {doc.description && (
                 <h6 className="sub_title">{doc.description} </h6>
-              )}
-              {doc.remark && (
+              )} */}
+              {/* {doc.remark && (
                 <h6 className="sub_title">{doc.remark} </h6>
+              )} */}
+              {doc.referredBy && (
+                <h6 className="sub_title text-capitalize">Referred By :- {doc.referredBy} </h6>
               )}
             </div>
           </div>
-          <h4 className="top_right_content">
-            <span>
-              {format(new Date(doc.date), 'dd-MMM-yy hh:mm a')}
-            </span>
-          </h4>
-          {doc.iAm && (
-            <h4 className="top_left_content">
-              <span>
-                {doc.iAm}
-              </span>
-            </h4>
-          )}
-           <Link 
-           to={`/edit-enquiry/${doc.id}`}
-            className="edit-button"          
+          <div className="wha_call_icon">
+            <Link
+              className="call_icon wc_single"
+              to={`tel:${doc.phone && doc.phone}`}
+              target="_blank"
+            >
+              <img src="/assets/img/simple_call.png" alt="" />
+            </Link>
+            <Link
+              className="wha_icon wc_single"
+              to={`https://wa.me/${doc.phone && doc.phone}`}
+              target="_blank"            >
+              <img src="/assets/img/whatsapp_simple.png" alt="" />
+            </Link>
+          </div>
+          <Link
+            to={`/edit-enquiry/${doc.id}`}
+            className="enq_edit"
           >
-            Edit
+            <span class="material-symbols-outlined">edit_square</span>
           </Link>
-          {doc.referredBy && (
-            <h4 className="top_left_content">
-              <span>
-                {doc.referredBy}
-              </span>
-            </h4>
-          )}
+
+
+
         </div>
       ))}
       {selectedEnquiry && (
@@ -221,42 +233,88 @@ const EnquirySingle = ({ enquiries }) => {
                   }}>
                   </div>
                 </div>
-                <div className="step_single" >
-                  <div className="number">
-                    <span class="material-symbols-outlined">
-                      open_in_new
-                    </span>
-                  </div>
-                  <h6>
-                    Open
-                  </h6>
-                  <h5>
-                    01-Jul-2024, 5:24 PM
-                  </h5>
-                </div>
-                <div className={`step_single ${selectedEnquiry.enquiryStatus === "open" ? "wait" : ""}`}>
-                  <div className="number">
-                    <span class="material-symbols-outlined">
-                      autorenew
-                    </span>
-                  </div>
-                  <h6>
-                    Working
-                  </h6>
-                </div>
-                <div className={`step_single ${selectedEnquiry.enquiryStatus === "open" || selectedEnquiry.enquiryStatus === "working" ? "wait" : ""}`}>
-                  <div className="number">
-                    <span class="material-symbols-outlined">
+                {selectedEnquiry.statusUpdates.map((e) => {
+                  if (e.status === "open") {
+                    return (
+                      <div className="step_single" key={e} >
+                        <div className="number">
+                          <span class="material-symbols-outlined">
+                            open_in_new
+                          </span>
+                        </div>
+                        <h6 className='text-capitalize'>
+                          {e.status}
+                        </h6>
+                        {e.updatedAt && (
+                          <h5>
+                            {format(e.updatedAt.toDate(), 'dd-MMM-yy hh:mm a')}
+                          </h5>
+                        )}
 
-                      {selectedEnquiry.enquiryStatus === "successful" ? "check_circle" : "cancel"}
-                    </span>
-                  </div>
-                  <h6>
-                    {selectedEnquiry.enquiryStatus === "successful" ? "Successful" : "Dead"}
-                  </h6>
-                </div>
+                      </div>
+                    );
+                  } else if (e.status === "working") {
+                    return (
+                      <div className={`step_single ${selectedEnquiry.enquiryStatus === "open" ? "wait" : ""}`} key={e}>
+                        <div className="number">
+                          <span class="material-symbols-outlined">
+                            autorenew
+                          </span>
+                        </div>
+                        <h6 className='text-capitalize'>
+                          {e.status}
+                        </h6>
+                        {e.updatedAt && (
+                          <h5>
+                            {format(e.updatedAt.toDate(), 'dd-MMM-yy hh:mm a')}
+                          </h5>
+                        )}
+                      </div>
+                    );
+                  } else if (e.status === "successful") {
+                    return (
+                      <div className={`step_single ${selectedEnquiry.enquiryStatus === "open" || selectedEnquiry.enquiryStatus === "working" ? "wait" : ""}`} key={e}>
+                        <div className="number">
+                          <span class="material-symbols-outlined">
+                            check_circle
+                          </span>
+                        </div>
+                        <h6 className='text-capitalize'>
+                          {e.status}
+                        </h6>
+                        {e.updatedAt && (
+                          <h5>
+                            {format(e.updatedAt.toDate(), 'dd-MMM-yy hh:mm a')}
+                          </h5>
+                        )}
+                      </div>
+                    );
+                  } else if (e.status === "dead") {
+                    return (
+                      <div className={`step_single ${selectedEnquiry.enquiryStatus === "open" || selectedEnquiry.enquiryStatus === "working" ? "wait" : ""}`} key={e}>
+                        <div className="number">
+                          <span class="material-symbols-outlined">
+                            cancel
+                          </span>
+                        </div>
+                        <h6 className='text-capitalize'>
+                          {e.status}
+                        </h6>
+                        {e.updatedAt && (
+                          <h5>
+                            {format(e.updatedAt.toDate(), 'dd-MMM-yy hh:mm a')}
+                          </h5>
+                        )}
+                      </div>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}             
               </div>
             </div>
+       
+           
           </Modal>
         </>
 
