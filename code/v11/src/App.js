@@ -93,6 +93,7 @@ import PropertyInspectionDocuments from "./components/PropertyInspectionDocument
 import PGAdminProperty from "./pdpages/property/PGAdminProperty";
 import PGEnquiry from "./pdpages/enquiry/PGEnquiry";
 import UpdateEnquiry from "./pdpages/enquiry/UpdateEnquiry";
+import ScrollToTop from "./components/ScrollToTop";
 
 // New component import end
 
@@ -204,6 +205,7 @@ function App() {
                   </>
                 ) : null}
                 {/* PWA INSTALLATION CODE END */}
+                <ScrollToTop/>
                 <Navbar />
                 <Routes>
                   <Route path="/login" element={<PhoneLogin />}></Route>

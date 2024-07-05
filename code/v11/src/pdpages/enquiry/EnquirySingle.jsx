@@ -62,12 +62,15 @@ const EnquirySingle = ({ enquiries }) => {
               <img src="/assets/img/whatsapp_simple.png" alt="" />
             </Link>
           </div>
-          <Link
-            to={`/edit-enquiry/${doc.id}`}
-            className="enq_edit"
-          >
-            <span class="material-symbols-outlined">edit_square</span>
-          </Link>
+          {doc.enquiryStatus === "successful" || doc.enquiryStatus === "dead"  ? "" : (
+             <Link
+             to={`/edit-enquiry/${doc.id}`}
+             className="enq_edit"
+           >
+             <span class="material-symbols-outlined">edit_square</span>
+           </Link>
+          )}
+
 
 
 
@@ -79,32 +82,53 @@ const EnquirySingle = ({ enquiries }) => {
             <span class="material-symbols-outlined modal_close" onClick={handleEnquriyModalClose}>
               close
             </span>
-            <div className="modal_left_content">
-              {format(new Date(selectedEnquiry.date), 'dd-MMM-yy hh:mm a')}
+            <div className="modal_top_bar">
+              <div className="left">
+                <span class="material-symbols-outlined">
+                  calendar_month
+                </span>
+                <span class="material-symbols-outlined">
+                  schedule
+                </span>
+              </div>
+              <div className="right">
+                {format(new Date(selectedEnquiry.date), 'dd-MMM-yy, hh:mm a')}
+              </div>
             </div>
-            <ul className="points">
-              {selectedEnquiry.enquiry && (
-                <li className='text-capitalize'>
-                  {selectedEnquiry.enquiry}
-                </li>
-              )}
-
-              {selectedEnquiry.referredBy && (
-                <li className='text-capitalize'>
-                  {selectedEnquiry.referredBy}
-                </li>
+            <div className="one_word_info">
+              {selectedEnquiry.enquiryType && (
+                <div className="owi_single">
+                  <h6>Enquiry Type</h6>
+                  <h5>{selectedEnquiry.enquiryType}</h5>
+                </div>
               )}
               {selectedEnquiry.enquiryFrom && (
-                <li className='text-capitalize'>
-                  {selectedEnquiry.enquiryFrom}
-                </li>
+                <div className="owi_single">
+                  <h6>Enquiry From</h6>
+                  <h5> {selectedEnquiry.enquiryFrom}</h5>
+                </div>
               )}
-              {selectedEnquiry.enquiryType && (
-                <li className='text-capitalize'>
-                  {selectedEnquiry.enquiryType}
-                </li>
+              {selectedEnquiry.referredBy && (
+                <div className="owi_single">
+                  <h6>Referred By</h6>
+                  <h5>{selectedEnquiry.referredBy}</h5>
+                </div>
               )}
-            </ul>
+              {selectedEnquiry.referredBy.toLowerCase() === "propdial" && (
+                <div className="owi_single">
+                  <h6>Source</h6>
+                  <h5>{selectedEnquiry.source}</h5>
+                </div>
+              )}
+              {selectedEnquiry.referredBy.toLowerCase() === "employee" && (
+                <div className="owi_single">
+                  <h6>Employee Name</h6>
+                  <h5>{selectedEnquiry.employeeName}</h5>
+                </div>
+              )}
+
+
+            </div>
             <hr />
             <div className="details">
               <h6>Person Detail</h6>
@@ -117,7 +141,7 @@ const EnquirySingle = ({ enquiries }) => {
                     <div className="middle">
                       :-
                     </div>
-                    <div className="right">
+                    <div className="right text-capitalize">
                       {selectedEnquiry.name}
                     </div>
                   </li>
@@ -131,7 +155,10 @@ const EnquirySingle = ({ enquiries }) => {
                       :-
                     </div>
                     <div className="right">
-                      {selectedEnquiry.phone}
+                      {selectedEnquiry.phone.replace(
+                        /(\d{2})(\d{5})(\d{5})/,
+                        "+$1 $2-$3"
+                      )}
                     </div>
                   </li>
                 )}
@@ -157,7 +184,7 @@ const EnquirySingle = ({ enquiries }) => {
                     <div className="middle">
                       :-
                     </div>
-                    <div className="right">
+                    <div className="right text-capitalize">
                       {selectedEnquiry.description}
                     </div>
                   </li>
@@ -191,6 +218,7 @@ const EnquirySingle = ({ enquiries }) => {
                   </div>
                   <div className="right">
                     PID202201
+                    {/* {selectedEnquiry.propId} */}
                   </div>
                 </li>
                 <li>
@@ -202,6 +230,7 @@ const EnquirySingle = ({ enquiries }) => {
                   </div>
                   <div className="right">
                     C-102<span> | </span>Hiranandani<span> | </span>9 BHK<span> | </span>Low Rise Apt (5-10 floor)<span> | </span>Devnahalli<span> | </span>Bangalore<span> | </span>Karnatak
+                    {/* {selectedEnquiry.propertyName} */}
                   </div>
                 </li>
                 <li>
@@ -211,8 +240,9 @@ const EnquirySingle = ({ enquiries }) => {
                   <div className="middle">
                     :-
                   </div>
-                  <div className="right">
+                  <div className="right text-capitalize">
                     Raju Mohan Sharma
+                    {/* {selectedEnquiry.propertyOwner} */}
                   </div>
                 </li>
               </ul>
@@ -310,11 +340,11 @@ const EnquirySingle = ({ enquiries }) => {
                   } else {
                     return null;
                   }
-                })}             
+                })}
               </div>
             </div>
-       
-           
+
+
           </Modal>
         </>
 
