@@ -200,3 +200,13 @@
     }
   }
 }
+.pg_enquiry_update{
+  .filters{
+    .right{
+      display: none;
+    }
+  }
+}
+.no-drop-cursor{
+  cursor: no-drop !important;
+}

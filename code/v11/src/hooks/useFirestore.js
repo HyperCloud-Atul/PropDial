@@ -55,7 +55,7 @@ export const useFirestore = (collection) => {
     dispatch(action);
     // }
   };
-
+  console.log("user", user);
   // add a document
   const addDocument = async (doc) => {
     dispatch({ type: "IS_PENDING" });
@@ -68,8 +68,8 @@ export const useFirestore = (collection) => {
       //   phoneNumber: user.phoneNumber,
       //   emailID: user.email,
       //   photoURL: user.photoURL
-      // }
-      const createdBy = user.uid;
+      // }      
+      const createdBy = user ? user.uid : "guest" ;
       const createdAt = timestamp.fromDate(new Date());
       const addedDocument = await ref.add({ ...doc, createdAt, createdBy });
 

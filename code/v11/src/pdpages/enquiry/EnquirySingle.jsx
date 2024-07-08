@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import Modal from 'react-bootstrap/Modal';
 import { Link } from 'react-router-dom';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 const EnquirySingle = ({ enquiries }) => {
+  const { user } = useAuthContext();
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
   const [showEnquriyModal, setShowEnquriyModal] = useState(false);
 
@@ -62,14 +64,14 @@ const EnquirySingle = ({ enquiries }) => {
               <img src="/assets/img/whatsapp_simple.png" alt="" />
             </Link>
           </div>
-          {doc.enquiryStatus === "successful" || doc.enquiryStatus === "dead"  ? "" : (
-             <Link
-             to={`/edit-enquiry/${doc.id}`}
-             className="enq_edit"
-           >
-             <span class="material-symbols-outlined">edit_square</span>
-           </Link>
-          )}
+          {/* {doc.enquiryStatus === "successful" || doc.enquiryStatus === "dead" ? "" : ( */}
+            <Link
+              to={`/edit-enquiry/${doc.id}`}
+              className="enq_edit"
+            >
+              <span class="material-symbols-outlined">edit_square</span>
+            </Link>
+          {/* )} */}
 
 
 
@@ -155,10 +157,10 @@ const EnquirySingle = ({ enquiries }) => {
                       :-
                     </div>
                     <div className="right">
-                      {selectedEnquiry.phone.replace(
-                        /(\d{2})(\d{5})(\d{5})/,
-                        "+$1 $2-$3"
-                      )}
+                      {user && user.role === "owner"
+                        ? selectedEnquiry.phone.replace(/(\d{2})(\d{3})(\d{2})(\d{3})/, "+$1 *** $2 ***")
+                        : selectedEnquiry.phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")
+                      }
                     </div>
                   </li>
                 )}
@@ -172,7 +174,10 @@ const EnquirySingle = ({ enquiries }) => {
                       :-
                     </div>
                     <div className="right">
-                      {selectedEnquiry.email}
+                      {user && user.role === "owner"
+                        ? `${selectedEnquiry.email.split("@")[0].substring(0, 2)}***@${selectedEnquiry.email.split("@")[1]}`
+                        : selectedEnquiry.email
+                      }
                     </div>
                   </li>
                 )}

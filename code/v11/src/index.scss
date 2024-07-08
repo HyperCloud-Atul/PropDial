@@ -83,6 +83,17 @@
     }
   }
 }
+.field_error {
+  margin-top: 5px;
+  font-size: 13px;
+  color: red;
+  background: #ffe9e9;
+  margin-left: -12px;
+  margin-right: -12px;
+  margin-bottom: -6px;
+  padding: 3px 20px;
+}
+
 
 .form_field.label_top {
   background: #fff;

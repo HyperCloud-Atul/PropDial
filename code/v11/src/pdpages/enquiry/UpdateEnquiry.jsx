@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useFirestore } from "../../hooks/useFirestore";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { format } from 'date-fns';
 import { useDocument } from "../../hooks/useDocument";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import ReactTable from "../../components/ReactTable";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const UpdateEnquiry = () => {
     const { id } = useParams();
+    const { user } = useAuthContext();
     const navigate = useNavigate();
     const { updateDocument, error } = useFirestore("enquiry");
     const { document: enquiryDocument, error: enquiryDocError } = useDocument(
@@ -30,6 +34,9 @@ const UpdateEnquiry = () => {
     const [date, setDate] = useState(new Date());
     const [enquiryStatus, setEnquiryStatus] = useState("open");
     const [remark, setRemark] = useState("");
+    const [updateType, setUpdateType] = useState("");
+    const [updateForOwner, setUpdateForOwner] = useState("");
+    const [visitDate, setVisitDate] = useState("");
     const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
@@ -63,7 +70,11 @@ const UpdateEnquiry = () => {
     const handleChangeEmployeeName = (event) => setEmployeeName(event.target.value);
     const handleChangePropertyName = (event) => setPropertyName(event.target.value);
     const handleChangePropertyOwner = (event) => setPropertyOwner(event.target.value);
-
+    const handleChangeUpdateType = (event) => setUpdateType(event.target.value);
+    const handleChangeUpdateForOwner = (event) => setUpdateForOwner(event.target.value);
+    const handleChangeVisitDate = (date) => {
+        setVisitDate(date);
+    };
     const submitEnquiry = async (event) => {
         event.preventDefault();
         if (!name) {
@@ -77,6 +88,12 @@ const UpdateEnquiry = () => {
                 status: enquiryStatus,
                 // timestamp: new Date().toISOString(),
                 updatedAt: (new Date()),
+                remark,
+                updateType,
+                updateForOwner,
+                visitDate,
+                updatedBy: user.uid
+
             };
 
             const updatedDocument = {
@@ -141,8 +158,59 @@ const UpdateEnquiry = () => {
         navigate("/enquiry/all");
     };
 
+    // table data start 
+    const columns = useMemo(() => [
+        {
+            Header: 'S.No',
+            accessor: (row, i) => i + 1,
+            id: 'serialNumber',
+            Cell: ({ row }) => row.index + 1,
+            disableFilters: true,
+        },
+        {
+            Header: 'Details',
+            accessor: 'remark',
+            disableFilters: true,
+        },
+        {
+            Header: 'Status',
+            accessor: 'status',
+            disableFilters: true,
+        },
+        {
+            Header: 'Type',
+            accessor: 'updateType',
+            disableFilters: true,
+        },
+        {
+            Header: 'Visit Date',
+            accessor: 'visitDate',
+            disableFilters: true,
+        },
+        {
+            Header: 'Updated At',
+            accessor: 'updatedAt',
+            Cell: ({ value }) => format(new Date(value.seconds * 1000), 'dd-MMM-yy hh:mm a'),
+            disableFilters: true,
+        },
+        {
+            Header: 'Updated By',
+            accessor: 'updatedBy',
+            disableFilters: true,
+        },
+
+    ], []);
+
+    if (!enquiryDocument) {
+        return <div>Loading...</div>;
+    }
+    // table data end 
+
+    // field only in readonly mode 
+    const isReadOnly = user && user.role !== 'admin' && user.role !== 'super admin';
+
     return (
-        <div className="top_header_pg pg_bg pg_enquiry">
+        <div className="top_header_pg pg_bg pg_enquiry pg_enquiry_update">
             <div className="page_spacing">
                 <div className="pg_header d-flex justify-content-between">
                     <div className="left d-flex align-items-center pointer" style={{
@@ -156,7 +224,7 @@ const UpdateEnquiry = () => {
                     </div>
                     <div className="right">
                         <div className="d-flex align-items-center" style={{
-                            gap:"22px"
+                            gap: "22px"
                         }} >
                             <Link to="/enquiry/all" className="theme_btn btn_border">
                                 Cancel
@@ -182,6 +250,8 @@ const UpdateEnquiry = () => {
                                         maxDate={new Date()}
                                         minDate={new Date(new Date().setDate(new Date().getDate() - 1))}
                                         dateFormat="dd/MM/yyyy"
+                                        readOnly={isReadOnly}
+                                        className={isReadOnly ? "no-drop-cursor" : ""}
                                     />
                                     <div className="field_icon">
                                         <span className="material-symbols-outlined">calendar_month</span>
@@ -202,8 +272,9 @@ const UpdateEnquiry = () => {
                                                 onClick={handleChangeEnquiryType}
                                                 value="rent"
                                                 checked={enquiryType === "rent"}
+                                                disabled={isReadOnly}
                                             />
-                                            <label htmlFor="rent" className="radio_label">rent</label>
+                                            <label htmlFor="rent" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>rent</label>
                                         </div>
                                         <div className="radio_single">
                                             <input
@@ -213,8 +284,9 @@ const UpdateEnquiry = () => {
                                                 onClick={handleChangeEnquiryType}
                                                 value="sale"
                                                 checked={enquiryType === "sale"}
+                                                disabled={isReadOnly}
                                             />
-                                            <label htmlFor="sale" className="radio_label">sale</label>
+                                            <label htmlFor="sale" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>sale</label>
                                         </div>
                                     </div>
                                 </div>
@@ -234,8 +306,9 @@ const UpdateEnquiry = () => {
                                                     onClick={handleChangeEnquiryFrom}
                                                     value="prospective tenant"
                                                     checked={enquiryFrom === "prospective tenant"}
+                                                    disabled={isReadOnly}
                                                 />
-                                                <label htmlFor="tenant" className="radio_label">prospective tenant</label>
+                                                <label htmlFor="tenant" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>prospective tenant</label>
                                             </div>
                                         )}
                                         {enquiryType.toLowerCase() === "sale" && (
@@ -247,8 +320,9 @@ const UpdateEnquiry = () => {
                                                     onClick={handleChangeEnquiryFrom}
                                                     value="prospective buyer"
                                                     checked={enquiryFrom === "prospective buyer"}
+                                                    disabled={isReadOnly}
                                                 />
-                                                <label htmlFor="buyer" className="radio_label">prospective buyer</label>
+                                                <label htmlFor="buyer" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>prospective buyer</label>
                                             </div>
                                         )}
                                         <div className="radio_single">
@@ -259,8 +333,9 @@ const UpdateEnquiry = () => {
                                                 onClick={handleChangeEnquiryFrom}
                                                 value="agent"
                                                 checked={enquiryFrom === "agent"}
+                                                disabled={isReadOnly}
                                             />
-                                            <label htmlFor="agent" className="radio_label">Agent</label>
+                                            <label htmlFor="agent" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>Agent</label>
                                         </div>
                                     </div>
                                 </div>
@@ -279,8 +354,9 @@ const UpdateEnquiry = () => {
                                                 onClick={handleChangeReferredBy}
                                                 value="owner"
                                                 checked={referredBy === "owner"}
+                                                disabled={isReadOnly}
                                             />
-                                            <label htmlFor="owner" className="radio_label">owner</label>
+                                            <label htmlFor="owner" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>owner</label>
                                         </div>
                                         <div className="radio_single">
                                             <input
@@ -290,8 +366,9 @@ const UpdateEnquiry = () => {
                                                 onClick={handleChangeReferredBy}
                                                 value="propdial"
                                                 checked={referredBy === "propdial"}
+                                                disabled={isReadOnly}
                                             />
-                                            <label htmlFor="propdial" className="radio_label">propdial</label>
+                                            <label htmlFor="propdial" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>propdial</label>
                                         </div>
                                         <div className="radio_single">
                                             <input
@@ -301,8 +378,9 @@ const UpdateEnquiry = () => {
                                                 onClick={handleChangeReferredBy}
                                                 value="employee"
                                                 checked={referredBy === "employee"}
+                                                disabled={isReadOnly}
                                             />
-                                            <label htmlFor="employee" className="radio_label">employee</label>
+                                            <label htmlFor="employee" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>employee</label>
                                         </div>
                                     </div>
                                 </div>
@@ -323,9 +401,10 @@ const UpdateEnquiry = () => {
                                                     onClick={handleChangeSource}
                                                     value="99acres"
                                                     checked={source === "99acres"}
+                                                    disabled={isReadOnly}
 
                                                 />
-                                                <label htmlFor="99acres" className="radio_label">99acres</label>
+                                                <label htmlFor="99acres" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>99acres</label>
                                             </div>
                                             <div className="radio_single" >
                                                 <input
@@ -335,9 +414,10 @@ const UpdateEnquiry = () => {
                                                     onClick={handleChangeSource}
                                                     value="magicbricks"
                                                     checked={source === "magicbricks"}
+                                                    disabled={isReadOnly}
 
                                                 />
-                                                <label htmlFor="magicBricks" className="radio_label">magicbricks</label>
+                                                <label htmlFor="magicBricks" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>magicbricks</label>
                                             </div>
                                             <div className="radio_single" >
                                                 <input
@@ -347,8 +427,9 @@ const UpdateEnquiry = () => {
                                                     onClick={handleChangeSource}
                                                     value="housing"
                                                     checked={source === "housing"}
+                                                    disabled={isReadOnly}
                                                 />
-                                                <label htmlFor="housing" className="radio_label">housing</label>
+                                                <label htmlFor="housing" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>housing</label>
                                             </div>
                                             <div className="radio_single" >
                                                 <input
@@ -358,8 +439,9 @@ const UpdateEnquiry = () => {
                                                     onClick={handleChangeSource}
                                                     value="other"
                                                     checked={source === "other"}
+                                                    disabled={isReadOnly}
                                                 />
-                                                <label htmlFor="other" className="radio_label">other</label>
+                                                <label htmlFor="other" className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""}`}>other</label>
                                             </div>
 
                                         </div>
@@ -377,6 +459,8 @@ const UpdateEnquiry = () => {
                                             placeholder="Select employee"
                                             value={employeeName}
                                             onChange={handleChangeEmployeeName}
+                                            readOnly={isReadOnly}
+                                            className={isReadOnly ? "no-drop-cursor" : ""}
                                         />
                                         <div className="field_icon">
                                             <span class="material-symbols-outlined">
@@ -390,24 +474,38 @@ const UpdateEnquiry = () => {
                         <div className="row row_gap">
                             <div className="col-md-6">
                                 <div className="form_field st-2 label_top">
-                                    <label htmlFor="">Property Name</label>
-                                    <input
-                                        type="text"
-                                        className="input_field"
-                                        value={propertyName}
-                                        onChange={handleChangePropertyName}
-                                    />
+                                    <label htmlFor="">Property Owner</label>
+                                    <div className="form_field_inner with_icon">
+                                        <input
+                                            type="text"
+                                            value={propertyOwner}
+                                            onChange={handleChangePropertyOwner}
+                                            readOnly={isReadOnly}
+                                            className={isReadOnly ? "no-drop-cursor" : ""}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">
+                                                search
+                                            </span>
+                                        </div> </div>
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form_field st-2 label_top">
-                                    <label htmlFor="">Property Owner</label>
-                                    <input
-                                        type="text"
-                                        className="input_field"
-                                        value={propertyOwner}
-                                        onChange={handleChangePropertyOwner}
-                                    />
+                                    <label htmlFor="">Property Name</label>
+                                    <div className="form_field_inner with_icon">
+                                        <input
+                                            type="text"
+                                            value={propertyName}
+                                            onChange={handleChangePropertyName}
+                                            readOnly={isReadOnly}
+                                            className={isReadOnly ? "no-drop-cursor" : ""}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">
+                                                search
+                                            </span>
+                                        </div> </div>
                                 </div>
                             </div>
                             <div className="col-md-4">
@@ -416,12 +514,19 @@ const UpdateEnquiry = () => {
                                         {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
                                         {" "}
                                         Name</label>
-                                    <input
-                                        type="text"
-                                        className="input_field"
-                                        value={name}
-                                        onChange={handleChangeName}
-                                    />
+                                    <div className="form_field_inner with_icon">
+                                        <input
+                                            type="text"
+                                            readOnly={isReadOnly}
+                                            className={isReadOnly ? "no-drop-cursor" : ""}
+                                            value={name}
+                                            onChange={handleChangeName}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">
+                                                draw
+                                            </span>
+                                        </div> </div>
                                 </div>
                             </div>
                             <div className="col-md-4">
@@ -430,7 +535,7 @@ const UpdateEnquiry = () => {
                                         {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
                                         {" "}
                                         Contact</label>
-                                    <div className="form_field_inner with_flag">
+                                    <div className="form_field_inner with_icon">
                                         <PhoneInput
                                             country={"in"}
                                             onlyCountries={['in', 'us', 'ae']}
@@ -452,8 +557,15 @@ const UpdateEnquiry = () => {
                                             buttonStyle={{
                                                 textAlign: 'left',
                                             }}
+                                            disableAreaCodes={isReadOnly}
+                                            disabled={isReadOnly}
+                                            className={isReadOnly ? "no-drop-cursor" : ""}
                                         />
-
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">
+                                                draw
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -463,26 +575,22 @@ const UpdateEnquiry = () => {
                                         {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
                                         {" "}
                                         Email</label>
-                                    <input
-                                        type="email"
-                                        className="input_field"
-                                        value={email}
-                                        onChange={handleChangeEmail}
-                                    />
+                                    <div className="form_field_inner with_icon">
+                                        <input
+                                            type="email"
+                                            value={email}
+                                            onChange={handleChangeEmail}
+                                            readOnly={isReadOnly}
+                                            className={isReadOnly ? "no-drop-cursor" : ""}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">
+                                                draw
+                                            </span>
+                                        </div> </div>
                                 </div>
                             </div>
-                            <div className="col-md-8">
-                                <div className="form_field label_top">
-                                    <label htmlFor="">Remark</label>
-                                    <input
-                                        type="text"
-                                        className="input_field"
-                                        value={remark}
-                                        onChange={handleChangeRemark}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-4">
+                            <div className="col-md-6">
                                 <div className="form_field st-2 label_top">
                                     <label htmlFor="">Enquiry Status</label>
                                     <div className="field_box theme_radio_new">
@@ -543,9 +651,90 @@ const UpdateEnquiry = () => {
                                     </div>
                                 </div>
                             </div>
+                            <div className="col-md-6">
+                                <div className="form_field label_top">
+                                    <label htmlFor="">Remarks (For Office Use Only)</label>
+                                    <div className="form_field_inner with_icon">
+                                        <input
+                                            type="text"
+                                            className="input_field"
+                                            value={remark}
+                                            onChange={handleChangeRemark}
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">
+                                                draw
+                                            </span>
+                                        </div> </div>
+                                </div>
+                            </div>
+                            <div className="col-md-4">
+                                <div className="form_field st-2 label_top">
+                                    <label htmlFor="">Update Type</label>
+                                    <div className="field_box theme_radio_new">
+                                        <div className="theme_radio_container">
+                                            <div className="radio_single">
+                                                <input
+                                                    type="radio"
+                                                    name="updateType"
+                                                    id="general"
+                                                    onClick={handleChangeUpdateType}
+                                                    value="general"
 
-                            <div className="col-12 d-flex justify-content-end" style={{
-                                gap:"22px"
+                                                />
+                                                <label htmlFor="general" className="radio_label">general</label>
+                                            </div>
+                                            <div className="radio_single">
+                                                <input
+                                                    type="radio"
+                                                    name="updateType"
+                                                    id="visit"
+                                                    onClick={handleChangeUpdateType}
+                                                    value="visit"
+                                                />
+                                                <label htmlFor="visit" className="radio_label">visit</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {updateType === "visit" && (
+                                <div className="col-md-4">
+                                    <div className="form_field label_top">
+                                        <label htmlFor="">Visit Date</label>
+                                        <div className="form_field_inner with_icon">
+                                            <DatePicker
+                                                selected={visitDate}
+                                                onChange={handleChangeVisitDate}
+                                                minDate={new Date()} // Set the minimum date to the current date
+                                                dateFormat="dd/MM/yyyy"
+                                            />
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">calendar_month</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <div className="col-md-4">
+                                <div className="form_field label_top">
+                                    <label htmlFor="updateForOwner">Add Update for Owner</label>
+                                    <div className="form_field_inner with_icon">
+                                        <textarea
+                                            placeholder="Update for owner"
+                                            value={updateForOwner}
+                                            onChange={handleChangeUpdateForOwner}
+                                            id="updateForOwner"
+                                        />
+                                        <div className="field_icon">
+                                            <span class="material-symbols-outlined">
+                                                draw
+                                            </span>
+                                        </div> </div>
+                                </div>
+                            </div>
+                            {/* <div className="col-12 d-flex justify-content-end" style={{
+                                gap: "22px"
                             }} >
                                 <Link to="/enquiry/all" className="theme_btn btn_border">
                                     Cancel
@@ -554,11 +743,35 @@ const UpdateEnquiry = () => {
                                     disabled={isUploading}>
                                     {isUploading ? "Updating..." : "Update Enquiry"}
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
-             
+                {/* {enquiryDocument && enquiryDocument.statusUpdates && enquiryDocument.statusUpdates.map((update, index) => (
+                    <div className="step_single" key={index}>
+                        <div className="number">
+                            <span className="material-symbols-outlined">
+                                open_in_new
+                            </span>
+                        </div>
+                        <h6 className='text-capitalize'>
+                            {update.status}
+                        </h6>
+                        {update.updatedAt && (
+                            <h5>
+                                {format(new Date(update.updatedAt.seconds * 1000), 'dd-MMM-yy hh:mm a')}
+                            </h5>
+                        )}
+                    </div>
+                ))} */}
+                <div className="vg22"></div>
+                <hr />
+                <ReactTable tableColumns={columns} tableData={enquiryDocument.statusUpdates || []} />
+
+
+
+
+
             </div>
         </div>
 

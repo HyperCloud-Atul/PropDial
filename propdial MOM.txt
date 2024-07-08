@@ -68,7 +68,7 @@ a. Display upcoming rent renewals and upcoming inspection dates in the notificat
 
 12. Display referals and enquiry to admin.
 
-
+13. enquiry module:-  previous status can be modified any time by Admin/Super Admin 
 
 ------------------------------------
 
@@ -146,4 +146,22 @@ city society unitnumber pid or resedential nhi hoga
 Name label change krna hai upper jo likha hai us hisab se
 
 open working  
+
+
+Add enquiry: office use instead of internal use
+property owner & property name fields should be swapped
+update enquiry: remarks heading should be same like office use only
+Update enquiry: 50 chars is mandatory for remarks for visit or general
+email field should be optional
+conditions should be applied on all field accordingly
+
+
+View enquiry: 
+Contact no & email id should be masked
+update krte wqt jo new field add hogi unke bare me discuss krna hai 
+phir agr phir se whi enquiry aati hai to kese trace krenge
+
+
+
+
 

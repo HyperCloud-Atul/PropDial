@@ -38,9 +38,6 @@ const ViewEnquiry = ( {enquiryDocs, enquiryDocsError} ) => {
     setRentSaleFilter(checked ? "sale" : "rent");
   };
 
-
-
-
   useEffect(() => {
     if (enquiryDocs) {
       const filteredEnquiries = enquiryDocs.filter((document) => {

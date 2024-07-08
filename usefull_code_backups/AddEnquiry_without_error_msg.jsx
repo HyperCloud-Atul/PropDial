@@ -30,78 +30,27 @@ const AddEnquiry = () => {
     const [isUploading, setIsUploading] = useState(false);
 
 
-    const [errors, setErrors] = useState({});
 
-    const handleFieldChange = (setter) => (event) => {
-        const { name, value } = event.target;
-        setter(value);
-        setErrors((prevErrors) => {
-            const newErrors = { ...prevErrors };
-            if (newErrors[name]) delete newErrors[name];
-            return newErrors;
-        });
-    };
-
-    const handleChangeEnquiryFrom = handleFieldChange(setEnquiryFrom);
-    const handleChangeReferredBy = handleFieldChange(setReferredBy);
-    const handleChangeEnquiryType = handleFieldChange(setEnquiryType);
-    const handleChangeName = handleFieldChange(setName);
-    const handleChangeEmail = handleFieldChange(setEmail);
-    const handleChangeRemark = handleFieldChange(setRemark);
-    const handleChangeSource = handleFieldChange(setSource);
-    const handleChangeEmployeeName = handleFieldChange(setEmployeeName);
-    const handleChangePropertyName = handleFieldChange(setPropertyName);
-    const handleChangePropertyOwner = handleFieldChange(setPropertyOwner);
-
-    const handleChangePhone = (phone) => {
-        setPhone(phone);
-        setErrors((prevErrors) => {
-            const newErrors = { ...prevErrors };
-            if (newErrors.phone) delete newErrors.phone;
-            return newErrors;
-        });
-    };
-
-    const handleChangeDate = (date) => {
-        setDate(date);
-        setErrors((prevErrors) => {
-            const newErrors = { ...prevErrors };
-            if (newErrors.date) delete newErrors.date;
-            return newErrors;
-        });
-    };
-
-    const validateFields = () => {
-        let errors = {};
-
-        if (!enquiryType) errors.enquiryType = "Enquiry type is a required field";
-        if (!enquiryFrom) errors.enquiryFrom = "Enquiry from is required field";
-        if (!referredBy) errors.referredBy = "Referred by is a required field";
-        if (referredBy === "propdial" && !source) errors.source = "Source is a required field";
-        if (referredBy === "employee" && !employeeName) errors.employeeName = "Employee name is a required field";
-        if (!propertyOwner) errors.propertyOwner = "Property owner is a required field";
-        if (!propertyName) errors.propertyName = "Property name is a required field";
-        if (!name) errors.name = "Name is a required field";   
-        if (!phone) errors.phone = "Contact is a required field"; 
-        if (email && !/\S+@\S+\.\S+/.test(email)) errors.email = "Email is not in the correct format";
-        if (!remark) {
-            errors.remark = "Remark is a required field";
-        } else if (remark.length < 50) {
-            errors.remark = "Remark must be at least 50 characters long";
-        }
-
-     
-
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
+    const handleChangeEnquiryFrom = (event) => setEnquiryFrom(event.target.value);
+    const handleChangeReferredBy = (event) => setReferredBy(event.target.value);
+    const handleChangeEnquiryType = (event) => setEnquiryType(event.target.value);
+    const handleChangeName = (event) => setName(event.target.value);
+    const handleChangePhone = (phone) => setPhone(phone);
+    const handleChangeEmail = (event) => setEmail(event.target.value);
+    const handleChangeDate = (date) => setDate(date);
+    const handleChangeEnquiryStatus = (event) => setEnquiryStatus(event.target.value);
+    const handleChangeRemark = (event) => setRemark(event.target.value);
+    const handleChangeSource = (event) => setSource(event.target.value);
+    const handleChangeEmployeeName = (event) => setEmployeeName(event.target.value);
+    const handleChangePropertyName = (event) => setPropertyName(event.target.value);
+    const handleChangePropertyOwner = (event) => setPropertyOwner(event.target.value);
 
 
 
     const submitEnquiry = async (event) => {
         event.preventDefault();
-        if (!validateFields()) {
+        if (!name) {
+            alert("All fields are required!");
             return;
         }
         try {
@@ -124,7 +73,7 @@ const AddEnquiry = () => {
                 employeeName,
                 propertyOwner,
                 propertyName,
-                propId: "",
+                propId:"",
                 statusUpdates: [newStatusUpdate], // Initialize statusUpdates with default status
             });
             setEnquiryFrom("");
@@ -149,7 +98,7 @@ const AddEnquiry = () => {
     };
     // add enquiry with add document end
     return (
-        <>
+        <>           
             <hr />
             <div className="add_enquiry">
                 <div className="vg12">
@@ -158,7 +107,7 @@ const AddEnquiry = () => {
                 <div className="row row_gap">
                     <div className="col-md-4">
                         <div className="form_field label_top">
-                            <label htmlFor="date">Click To Select Date*</label>
+                            <label htmlFor="">Click To Select Date</label>
                             <div className="form_field_inner with_icon">
                                 <DatePicker
                                     selected={date}
@@ -166,7 +115,6 @@ const AddEnquiry = () => {
                                     maxDate={new Date()}
                                     minDate={new Date(new Date().setDate(new Date().getDate() - 1))}
                                     dateFormat="dd/MM/yyyy"
-                                    id="date"
                                 />
                                 <div className="field_icon">
                                     <span class="material-symbols-outlined">
@@ -178,8 +126,8 @@ const AddEnquiry = () => {
                     </div>
                     <div className="col-md-4">
                         <div className="form_field st-2 label_top">
-                            <label htmlFor="enqtype">
-                                Enquiry Type*</label>
+                            <label htmlFor="">
+                                Enquiry Type</label>
                             <div className="field_box theme_radio_new">
                                 <div className="theme_radio_container">
                                     <div className="radio_single" >
@@ -205,14 +153,12 @@ const AddEnquiry = () => {
                                     </div>
                                 </div>
                             </div>
-                            {errors.enquiryType && <div className="field_error">{errors.enquiryType }</div>}
-
                         </div>
                     </div>
                     <div className="col-md-4">
                         <div className="form_field st-2 label_top">
                             <label htmlFor="">
-                                Enquiry From*</label>
+                                Enquiry From</label>
                             <div className="field_box theme_radio_new">
                                 <div className="theme_radio_container">
                                     {enquiryType.toLowerCase() === "rent" && (
@@ -255,13 +201,12 @@ const AddEnquiry = () => {
 
                                 </div>
                             </div>
-                            {errors.enquiryFrom && <div className="field_error">{errors.enquiryFrom}</div>}
                         </div>
                     </div>
                     <div className="col-md-4">
                         <div className="form_field st-2 label_top">
                             <label htmlFor="">
-                                Referred By*</label>
+                                Referred By</label>
                             <div className="field_box theme_radio_new">
                                 <div className="theme_radio_container">
                                     <div className="radio_single" >
@@ -297,14 +242,13 @@ const AddEnquiry = () => {
 
                                 </div>
                             </div>
-                            {errors.referredBy && <div className="field_error">{errors.referredBy }</div>}
                         </div>
                     </div>
                     {referredBy === "propdial" && (
                         <div className="col-md-8">
                             <div className="form_field st-2 label_top">
                                 <label htmlFor="">
-                                    Source*</label>
+                                    Source</label>
                                 <div className="field_box theme_radio_new">
                                     <div className="theme_radio_container">
                                         <div className="radio_single" >
@@ -352,21 +296,19 @@ const AddEnquiry = () => {
 
                                     </div>
                                 </div>
-                                {errors.source && <div className="field_error">{errors.source}</div>}
                             </div>
                         </div>
                     )}
                     {referredBy === "employee" && (
                         <div className="col-md-8">
                             <div className="form_field label_top">
-                                <label htmlFor="empname">Employee Name*</label>
+                                <label htmlFor="">Employee Name</label>
                                 <div className="form_field_inner with_icon">
                                     <input
                                         type="text"
                                         placeholder="Select employee"
                                         value={employeeName}
                                         onChange={handleChangeEmployeeName}
-                                        id="empname"
                                     />
                                     <div className="field_icon">
                                         <span class="material-symbols-outlined">
@@ -374,21 +316,19 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                {errors.employeeName && <div className="field_error">{errors.employeeName}</div>}
                             </div>
                         </div>
                     )}
                     <div className="row row_gap">
-                        <div className="col-md-6">
+                    <div className="col-md-6">
                             <div className="form_field label_top">
-                                <label htmlFor="propowner">Property Owner*</label>
+                                <label htmlFor="">Property Owner</label>
                                 <div className="form_field_inner with_icon">
                                     <input
                                         type="text"
                                         placeholder="Search owner"
                                         value={propertyOwner}
                                         onChange={handleChangePropertyOwner}
-                                        id="propowner"
                                     />
                                     <div className="field_icon">
                                         <span class="material-symbols-outlined">
@@ -396,23 +336,17 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                {errors.propertyOwner && <div className="field_error">{errors.propertyOwner }</div>}
-                               
-                                
-                              
-                               
                             </div>
                         </div>
                         <div className="col-md-6">
                             <div className="form_field label_top">
-                                <label htmlFor="propname">Property Name*</label>
+                                <label htmlFor="">Property Name</label>
                                 <div className="form_field_inner with_icon">
                                     <input
                                         type="text"
                                         placeholder="Search property"
                                         value={propertyName}
                                         onChange={handleChangePropertyName}
-                                        id="propname"
                                     />
                                     <div className="field_icon">
                                         <span class="material-symbols-outlined">
@@ -420,23 +354,21 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                { errors.propertyName && <div className="field_error">{ errors.propertyName }</div>}
                             </div>
                         </div>
-
+                       
                         <div className="col-md-4">
                             <div className="form_field label_top">
-                                <label htmlFor="name">
+                                <label htmlFor="">
                                     {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
                                     {" "}
-                                    Name*</label>
+                                    Name</label>
                                 <div className="form_field_inner with_icon">
                                     <input
                                         type="text"
                                         placeholder="Enter name"
                                         value={name}
                                         onChange={handleChangeName}
-                                        id="name"
                                     />
                                     <div className="field_icon">
                                         <span class="material-symbols-outlined">
@@ -444,19 +376,17 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                { errors.name && <div className="field_error">{ errors.name }</div>}
                             </div>
                         </div>
                         <div className="col-md-4">
                             <div className="form_field label_top">
-                                <label htmlFor="contact">
+                                <label htmlFor="">
                                     {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
                                     {" "}
-                                    Contact*</label>
+                                    Contact</label>
                                 <div className="form_field_inner with_icon">
                                     <PhoneInput
                                         country={"in"}
-                                        id="contact"
                                         onlyCountries={['in', 'us', 'ae']}
                                         value={phone}
                                         onChange={handleChangePhone}
@@ -483,12 +413,11 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                {errors.phone && <div className="field_error">{errors.phone}</div>}
                             </div>
                         </div>
                         <div className="col-md-4">
                             <div className="form_field label_top">
-                                <label htmlFor="email">
+                                <label htmlFor="">
                                     {enquiryFrom === "agent" ? "agent" : enquiryFrom === "prospective tenant" ? "Prospective Tenant" : enquiryFrom === "prospective buyer" ? "Prospective Buyer" : ""}
                                     {" "}
                                     Email</label>
@@ -498,7 +427,6 @@ const AddEnquiry = () => {
                                         placeholder="Enter email"
                                         value={email}
                                         onChange={handleChangeEmail}
-                                        id="email"
                                     />
                                     <div className="field_icon">
                                         <span class="material-symbols-outlined">
@@ -506,19 +434,17 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                {errors.email && <div className="field_error">{errors.email}</div>}
                             </div>
                         </div>
 
                         <div className="col-md-12">
                             <div className="form_field label_top">
-                                <label htmlFor="remark">Remarks (For Office Use Only)*</label>
+                                <label htmlFor="">Remarks (For Office Use Only)</label>
                                 <div className="form_field_inner with_icon">
                                     <textarea
                                         placeholder="Enter remarks"
                                         value={remark}
                                         onChange={handleChangeRemark}
-                                        id="remark"
                                     />
                                     <div className="field_icon">
                                         <span class="material-symbols-outlined">
@@ -526,7 +452,6 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                {errors.remark && <div className="field_error">{errors.remark}</div>}
                             </div>
                         </div>
 
