@@ -16,7 +16,7 @@ import { projectAuth, projectAuthObj, projectFirestore, timestamp } from "../../
 
 // css
 import "./PhoneLogin.scss";
-const PhoneLogin = () => {
+const PhoneLogin_reCaptchaV2 = () => {
   const [showOtpInput, setShowOtpInput] = useState(false);
   const { user1 } = useAuthContext();
 
@@ -552,4 +552,4 @@ const PhoneLogin = () => {
   );
 };
 
-export default PhoneLogin;
+export default PhoneLogin_reCaptchaV2;

@@ -24,6 +24,8 @@ export const useSignupPhone = () => {
         // recaptchaVerifier.clear();
         return projectAuth.signInWithPhoneNumber(number, recaptchaVerifier);
     }
+
+
     function resendOTP(number) {
         console.log('In resendOTP: ', number)
         console.log('recaptchaVerifier:', recaptchaVerifier)

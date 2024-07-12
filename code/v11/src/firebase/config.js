@@ -5,6 +5,7 @@ import "firebase/storage";
 import "firebase/functions";
 import "firebase/messaging";
 // import { getFunctions, httpsCallable } from 'firebase/functions'
+// import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 // development keys
 const firebaseConfig = {
@@ -41,6 +42,12 @@ const projectID = app.options.projectId;
 // timestamp
 const timestamp = firebase.firestore.Timestamp;
 
+// Initialize App Check
+// const appCheck = initializeAppCheck(app, {
+//   provider: new ReCaptchaV3Provider("6LcyUg4qAAAAAKhxTjhvbILwgFw1FMKd-l2sUUi4"),
+//   isTokenAutoRefreshEnabled: true,
+// });
+
 export {
   projectFirestore,
   FieldValue,
@@ -51,4 +58,5 @@ export {
   projectMsg,
   timestamp,
   projectID,
+  // appCheck,
 };

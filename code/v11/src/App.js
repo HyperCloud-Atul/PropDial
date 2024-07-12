@@ -9,7 +9,7 @@ import Footer from "./components/Footer";
 import NavbarBottom from "./components/NavbarBottom";
 
 import "./App.css";
-import PhoneLogin from "./pdpages/phonelogin/PhoneLogin";
+import PhoneLogin from "./pdpages/phonelogin/PhoneLogin_reCaptchaV2";
 import PGProfile from "./pdpages/profile/PGProfile";
 import PGNotification from "./pdpages/notification/PGNotification";
 import PGAboutUs from "./pdpages/about_us/PGAboutUs";
@@ -205,7 +205,7 @@ function App() {
                   </>
                 ) : null}
                 {/* PWA INSTALLATION CODE END */}
-                <ScrollToTop/>
+                <ScrollToTop />
                 <Navbar />
                 <Routes>
                   <Route path="/login" element={<PhoneLogin />}></Route>
