@@ -42,7 +42,7 @@ const PhoneLogin_reCaptchaV3 = () => {
     const { updateDocument, response: responseUpdateDocument } =
         useFirestore("users");
 
-    const { documents: dbUsers, error: dbuserserror } = useCollection("users");
+    // const { documents: dbUsers, error: dbuserserror } = useCollection("users");
     // console.log('dbuser:', dbUsers)
 
     const handleWheel = (e) => {
