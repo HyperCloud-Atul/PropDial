@@ -207,7 +207,11 @@ export default function PGProfile() {
 
       const phoneProvider = new projectAuthObj.PhoneAuthProvider();
       // console.log('phoneProvider: ', phoneProvider)
-      const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container');
+      // const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container');
+      const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container', {
+        size: 'invisible'
+      });
+
       // console.log('recaptchaVerifier: ', recaptchaVerifier)
       var newPhoneNumberWithPlus = "+" + newPhoneNumber;
       const id = await phoneProvider.verifyPhoneNumber(
