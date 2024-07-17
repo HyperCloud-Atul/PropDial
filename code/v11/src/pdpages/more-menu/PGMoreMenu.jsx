@@ -168,6 +168,7 @@ const PGMoreMenu = () => {
             </section>
           )}
 
+          {/* Admin cards */}
           {user && user.role === "admin" && (
             <div className="admin_div">
               <div className="dvg22"></div>
@@ -373,8 +374,8 @@ const PGMoreMenu = () => {
             </div>
           )}
 
-          {user && user.role === "owner" && (
-
+          {/* Owner Cards */}
+          {/* {user && user.role === "owner" && (
             <div className="owner_div">
               <div className="dvg22"></div>
               <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
@@ -407,7 +408,8 @@ const PGMoreMenu = () => {
                 </div>
               </section>
             </div>
-          )}
+          )} */}
+
           <div className="dvg22"></div>
           <section className="more-menus_inner">
             <div className="mm_inner card_shadow card_border_radius bg_white">
