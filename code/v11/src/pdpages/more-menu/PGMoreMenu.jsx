@@ -5,6 +5,8 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
 import DarkModeToggle from "react-dark-mode-toggle";
+import { useLogout } from "../../hooks/useLogout";
+import Popup from "../../components/Popup";
 
 // css
 import "./PGMoreMenu.css";
@@ -19,11 +21,13 @@ const PGMoreMenu = () => {
 
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
+
   // Scroll to the top of the page whenever the location changes end
 
+  const { logout, isPending } = useLogout();
+  //Popup Flags
+  const [showPopupFlag, setShowPopupFlag] = useState(false);
+  const [popupReturn, setPopupReturn] = useState(false);
 
 
   const { document: appTypeDocument, error: appTypeDocumentError } =
@@ -33,6 +37,23 @@ const PGMoreMenu = () => {
     "mode"
   );
   const { updateDocument, deleteDocument } = useFirestore("settings");
+
+  useEffect(() => {
+    if (popupReturn) {
+      //Logout
+      logout();
+    }
+
+    window.scrollTo(0, 0);
+  }, [popupReturn, location]);
+
+  //Popup Flags
+  const showPopup = async (e) => {
+    e.preventDefault();
+    setShowPopupFlag(true);
+    setPopupReturn(false);
+  };
+
 
   // START CODE FOR LIGHT/DARK MODE
   const toggleDarkMode = async (productId, currentModeStatus) => {
@@ -68,6 +89,13 @@ const PGMoreMenu = () => {
 
   return (
     <div className="pgmoremenu pg_bg ">
+      {/* Popup Component */}
+      <Popup
+        showPopupFlag={showPopupFlag}
+        setShowPopupFlag={setShowPopupFlag}
+        setPopupReturn={setPopupReturn}
+        msg={"Are you sure you want to logout?"}
+      />
       <Hero
         pageTitle="Locate Everything"
         pageSubTitle="Explore more for better understanding"
@@ -220,7 +248,7 @@ const PGMoreMenu = () => {
                       chevron_right
                     </span>
                   </Link>
-                  
+
                 </div>
               </section>
               <div className="dvg22"></div>
@@ -469,14 +497,22 @@ const PGMoreMenu = () => {
                   chevron_right
                 </span>
               </Link>
-              <Link className="mm_single" to="">
+              {user ? (<Link className="mm_single" to="" onClick={showPopup}>
                 <span className="material-symbols-outlined mms_icon">gavel</span>
                 <h5 className="dr16">Logout</h5>
                 <h6>sign out to login with other mobile no</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
-              </Link>
+              </Link>) :
+                (<Link className="mm_single" to="/login">
+                  <span className="material-symbols-outlined mms_icon">gavel</span>
+                  <h5 className="dr16">Login</h5>
+                  <h6>sign in with your mobile no</h6>
+                  <span className="material-symbols-outlined mms_ra">
+                    chevron_right
+                  </span>
+                </Link>)}
             </div>
           </section>
         </div>

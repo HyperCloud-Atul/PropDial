@@ -206,7 +206,7 @@ const PhoneLogin_reCaptchaV2 = () => {
     console.log("In getOTP");
     setError("");
     if (phone === "" || phone === undefined || phone.length < 10) {
-      return setError("Please enter valid Phone Number");
+      return setError("Please enter valid mobile number");
     }
 
     try {
@@ -331,7 +331,7 @@ const PhoneLogin_reCaptchaV2 = () => {
       setTimeout(function () {
         setError("");
         setResendOTPFlag(true);
-      }, 3000);
+      }, 30000);
     }
   }
 
@@ -389,6 +389,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                         border: '1px solid #00A8A8',
                       }}
                     ></PhoneInput>
+                    {error && <div className="field_error">{error}</div>}
                   </div>
                 </div>
                 <div
@@ -523,6 +524,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                   />
                 )}
               />
+              {error && <div className="field_error">{error}</div>}
             </div>
             {/* <p className="resend_otp_timer">
                             Haven't received the OTP?{" "}
@@ -542,9 +544,11 @@ const PhoneLogin_reCaptchaV2 = () => {
                             )}
                           </p> */}
             <div className="vg10"></div>
-            <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
-              Confirm
-            </button>
+            <div>
+              <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
+                Confirm
+              </button>
+            </div>
           </div>
         )}
       </div>

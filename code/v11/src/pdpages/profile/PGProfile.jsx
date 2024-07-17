@@ -205,6 +205,7 @@ export default function PGProfile() {
       // id_sendotpButton
       document.getElementById('id_sendotpButton').style.display = 'none';
 
+
       const phoneProvider = new projectAuthObj.PhoneAuthProvider();
       // console.log('phoneProvider: ', phoneProvider)
       // const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container');
