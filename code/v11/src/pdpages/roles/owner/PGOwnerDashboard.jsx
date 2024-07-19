@@ -39,7 +39,7 @@ const PGOwnerDashboard = () => {
     ["userId", "==", user.uid]
   );
 
-  console.log('myproperties: ', myproperties)
+  // console.log('myproperties: ', myproperties)
 
   const { documents: properties, error: propertieserror } = useCollection("properties");
   // const { documents: properties, error: propertieserror } = useCollection(
@@ -52,7 +52,7 @@ const PGOwnerDashboard = () => {
     properties && properties.filter(propdoc => propdoc.id === doc.propertyId)
   ))
 
-  console.log('filteredproperties: ', filteredproperties)
+  // console.log('filteredproperties: ', filteredproperties)
 
   // const activeProperties =
   //   filteredproperties && filteredproperties.map((propdoc) => (

@@ -44,7 +44,11 @@ export default function Navbar() {
       return; // Exit the function to prevent further checks
     }
     else {
-      navigate("/allproperties");
+      console.log('showThirdPage')
+      if (user.role === 'admin')
+        navigate("/allproperties");
+      else
+        navigate('/contact-us')
 
     }
   };
