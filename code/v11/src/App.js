@@ -559,10 +559,10 @@ function App() {
                     path="/signup"
                     element={user ? <Navigate to="/" /> : <PGSignup />}
                   ></Route>
-                  <Route
+                  {/* <Route
                     path="/profile"
                     element={user ? <PGProfile /> : <PhoneLogin />}
-                  ></Route>
+                  ></Route> */}
                   <Route
                     path="/countrylist"
                     element={

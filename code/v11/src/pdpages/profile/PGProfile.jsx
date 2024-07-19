@@ -66,6 +66,7 @@ export default function PGProfile() {
       DisplayName: user && user.displayName,
       FullName: user && user.fullName ? user.fullName : user.displayName,
       PhoneNumber: user && user.phoneNumber ? user.phoneNumber : user.phoneNumber,
+      Country: user && user.country,
       Role: user && user.role ? user.role : 'owner',
       Roles: user && user.roles ? user.roles : ['owner']
     })
@@ -416,6 +417,9 @@ export default function PGProfile() {
                 </span>
               </div>
             </h5>
+            <div>
+              <h5><strong> Country:</strong> {userDetails.Country}</h5>
+            </div>
             <h5>
               {user.email} <br />
               <Link onClick={changeGoogleAccount} className="click_text">Unlink Google Account</Link>

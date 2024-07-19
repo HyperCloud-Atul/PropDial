@@ -891,7 +891,7 @@ const PropertyDetails = () => {
                         /(\d{2})(\d{5})(\d{5})/,
                         "+$1 $2-$3"
                       )}
-                      ) - {user.city}
+                      ) - {user.country}
                     </label>
                   </li>
                 ))}

@@ -13,6 +13,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectAuth, projectAuthObj, projectFirestore, timestamp } from "../../firebase/config";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
 
 // css
 import "./PhoneLogin.scss";
@@ -30,6 +31,10 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [otp, setOtp] = useState("");
   const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
+  const [address, setAddress] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+  const [country, setCountryName] = useState("");
   const [error, setError] = useState("");
   const [otptimer, setOtpTimer] = useState(20);
   const [isResendDisabled, setIsResendDisabled] = useState(false);
@@ -37,11 +42,15 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [confirmObj, setConfirmObj] = useState("");
   const [userName, setUserName] = useState("");
   const [otpSliderState, setotpSliderState] = useState(false);
+  const [newUserSlider, setnewUserSlider] = useState(false);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
   const [sendOTPFlag, setSendOTPFlag] = useState(true);
   const [flag, setFlag] = useState(false);
   const [resendOTPFlag, setResendOTPFlag] = useState(false);
+  const [isExistingUser, setIsExistingUser] = useState(false);
+
+
 
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("users");
@@ -125,9 +134,10 @@ const PhoneLogin_reCaptchaV2 = () => {
               // email,
               phoneNumber: phone,
               email: user.email,
-              city: "",
-              country: "",
-              address: "",
+              city,
+              address,
+              country,
+              countryCode,
               photoURL: imgUrl,
               rolePropAgent: "na",
               rolePropDial: "owner",
@@ -169,7 +179,7 @@ const PhoneLogin_reCaptchaV2 = () => {
 
         }
 
-        navigate("/profile");
+        // navigate("/profile");
 
       })
       .catch((error) => {
@@ -226,6 +236,13 @@ const PhoneLogin_reCaptchaV2 = () => {
     }
   }
 
+  // New User Form
+  const newUserForm = () => {
+    console.log("In New User Form ")
+    // navigate("/profile");
+  }
+
+
   // OTP verify
   const verifyOTP = async (e) => {
     e.preventDefault();
@@ -239,6 +256,7 @@ const PhoneLogin_reCaptchaV2 = () => {
         // Check if the user is new
         if (result.additionalUserInfo.isNewUser) {
           console.log("New user signed in with phone number");
+          setnewUserSlider(true)
           setUserName(user.displayName);
           // Split the full name by space
           let splitName = userName.split(" ");
@@ -263,9 +281,10 @@ const PhoneLogin_reCaptchaV2 = () => {
               fullName: userName,
               phoneNumber: phone,
               email: "",
-              city: "",
-              country: "",
-              address: "",
+              city,
+              address,
+              country,
+              countryCode,
               photoURL: imgUrl,
               rolePropAgent: "na",
               rolePropDial: "owner",
@@ -277,6 +296,8 @@ const PhoneLogin_reCaptchaV2 = () => {
             });
         } else {
           console.log("Existing user signed in with phone number");
+          setnewUserSlider(false)
+
           let role = 'owner';
           const docRef = projectFirestore.collection("users").doc(user.uid)
           // Get the document snapshot
@@ -318,7 +339,15 @@ const PhoneLogin_reCaptchaV2 = () => {
           }
         }
 
-        navigate("/profile");
+        if (result.additionalUserInfo.isNewUser) {
+
+          setnewUserSlider(true)
+        }
+        else {
+          console.log("Existing user")
+          setnewUserSlider(false)
+          // navigate("/profile");
+        }
 
       })
     }
@@ -334,6 +363,15 @@ const PhoneLogin_reCaptchaV2 = () => {
       }, 30000);
     }
   }
+
+  const handlePhoneChange = (value, countryData) => {
+    // setPhone(value);
+    // setCountry(countryData);
+    console.log("value: ", value + " country code: ", countryData.countryCode + ", country name: ", countryData.name)
+    setPhone(value)
+    setCountryCode(countryData.countryCode)
+    setCountryName(countryData.name)
+  };
 
   return (
     <div className="phone_login two_col_page top_header_pg">
@@ -363,7 +401,8 @@ const PhoneLogin_reCaptchaV2 = () => {
                       country={"in"}
                       onlyCountries={['in', 'us', 'ae']}
                       value={phone}
-                      onChange={setPhone}
+                      // onChange={setPhone}
+                      onChange={handlePhoneChange}
                       international
                       keyboardType="phone-pad"
                       // countryCallingCodeEditable={false}
@@ -487,46 +526,48 @@ const PhoneLogin_reCaptchaV2 = () => {
             </form>
           </div>
         )} */}
-        {otpSliderState && (
-          <div className="left_inner col_left_inner">
-            <div className="page_inner_logo">
-              <img src="/assets/img/logo_propdial.png" alt="" />
-            </div>
-            {/* <h5 className="m20 mt-3 mb-4">
+        {/* OTP Slider */}
+        <div>
+          {otpSliderState && (
+            <div className="left_inner col_left_inner">
+              <div className="page_inner_logo">
+                <img src="/assets/img/logo_propdial.png" alt="" />
+              </div>
+              {/* <h5 className="m20 mt-3 mb-4">
               Unlocking Your Property Prospects: PropDial - Where Realty Meets
               Security.
             </h5> */}
-            <div className="vg22"></div>
-            <div className="otp_input">
-              <label htmlFor="">Enter 6 digit OTP</label>
-              <OtpInput
+              <div className="vg22"></div>
+              <div className="otp_input">
+                <label htmlFor="">Enter 6 digit OTP</label>
+                <OtpInput
 
-                value={otp}
-                onChange={setOtp}
-                numInputs={6}
-                renderSeparator={
-                  <span style={{ margin: "10px 5px 20px 5px" }}> - </span>
-                }
-                renderInput={(props) => (
-                  <input
-                    {...props}
-                    type="number"
-                    onWheel={handleWheel}
-                    inputMode="numeric"
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      border: "1px solid gray",
-                      textAlign: "center",
-                      borderRadius: "5px",
-                      margin: "10px 0px 20px 0px",
-                    }}
-                  />
-                )}
-              />
-              {error && <div className="field_error">{error}</div>}
-            </div>
-            {/* <p className="resend_otp_timer">
+                  value={otp}
+                  onChange={setOtp}
+                  numInputs={6}
+                  renderSeparator={
+                    <span style={{ margin: "10px 5px 20px 5px" }}> - </span>
+                  }
+                  renderInput={(props) => (
+                    <input
+                      {...props}
+                      type="number"
+                      onWheel={handleWheel}
+                      inputMode="numeric"
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        border: "1px solid gray",
+                        textAlign: "center",
+                        borderRadius: "5px",
+                        margin: "10px 0px 20px 0px",
+                      }}
+                    />
+                  )}
+                />
+                {error && <div className="field_error">{error}</div>}
+              </div>
+              {/* <p className="resend_otp_timer">
                             Haven't received the OTP?{" "}
                             {otptimer > 0 ? (
                               <span>Resend In {otptimer} seconds</span>
@@ -543,14 +584,43 @@ const PhoneLogin_reCaptchaV2 = () => {
                               </span>
                             )}
                           </p> */}
-            <div className="vg10"></div>
-            <div>
-              <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
-                Confirm
-              </button>
+              <div className="vg10"></div>
+              <div>
+                <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
+                  Confirm
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        {/* New User Slider to provide Name & City and show Country */}
+        <div>
+          {newUserSlider &&
+            (
+              <>
+                <div className="left_inner col_left_inner">
+                  <div className="page_inner_logo">
+                    <img src="/assets/img/logo_propdial.png" alt="" />
+                  </div>
+                  {/* <h5 className="m20 mt-3 mb-4">
+              Unlocking Your Property Prospects: PropDial - Where Realty Meets
+              Security.
+            </h5> */}
+                  <div className="vg22"></div>
+                  <div className="otp_input">
+                    <label htmlFor="">New User Slider</label>
+                  </div>
+                </div>
+                <div className="vg10"></div>
+                <div>
+                  <button className="theme_btn btn_fill w_full" onClick={newUserForm}>
+                    Continue
+                  </button>
+                </div>
+              </>
+            )
+          }
+        </div>
       </div>
     </div>
   );
