@@ -1759,7 +1759,7 @@ const PropertyDetails = () => {
                 {showPropertyLayoutComponent && <PropertyLayoutComponent propertylayouts={propertyLayouts} propertyid={propertyid} layoutid={layoutid} setShowPropertyLayoutComponent={setShowPropertyLayoutComponent}></PropertyLayoutComponent>}
 
                 {
-                  (propertyLayouts && propertyLayouts.length > 0 &&
+                  (propertyLayouts &&
                     <section className="property_card_single full_width_sec with_blue">
                       <span className="verticall_title">
                         Layout :  {propertyLayouts && propertyLayouts.length}
