@@ -913,9 +913,9 @@ const PropertyDetails = () => {
       </div>
       {/* Change User Popup - End */}
       {/* 9 dots html  */}
-      <div onClick={openMoreAddOptions} className="property-list-add-property">
+      {user && user.role === 'admin' && <div onClick={openMoreAddOptions} className="property-list-add-property">
         <span className="material-symbols-outlined">apps</span>
-      </div>
+      </div>}
       <div
         className={
           handleMoreOptionsClick
@@ -3441,7 +3441,7 @@ const PropertyDetails = () => {
             )}
 
 
-            {(user && user.role === "owner") ||
+            {/* {(user && user.role === "owner") ||
               (user && user.role === "admin" && (
                 <div className="property_card_single">
                   <div className="more_detail_card_inner">
@@ -3536,7 +3536,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))} */}
 
 
 

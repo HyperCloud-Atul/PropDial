@@ -28,6 +28,7 @@ const PhoneLogin_reCaptchaV2 = () => {
 
   // login with phone code start
   // use states
+  const [user, setUser] = useState();
   const [activeTab, setActiveTab] = useState(1);
   const [otp, setOtp] = useState("");
   const [phone, setPhone] = useState("");
@@ -237,9 +238,14 @@ const PhoneLogin_reCaptchaV2 = () => {
   }
 
   // New User Form
-  const newUserForm = () => {
+  const newUserForm = async () => {
     console.log("In New User Form ")
-    // navigate("/profile");
+    console.log("User: ", user)
+    await updateDocument(user.uid, {
+      city,
+    });
+
+    navigate("/profile");
   }
 
 
@@ -253,6 +259,7 @@ const PhoneLogin_reCaptchaV2 = () => {
     try {
       await confirmObj.confirm(otp).then(async (result) => {
         const user = result.user;
+        setUser(user)
         // Check if the user is new
         if (result.additionalUserInfo.isNewUser) {
           console.log("New user signed in with phone number");
@@ -340,13 +347,14 @@ const PhoneLogin_reCaptchaV2 = () => {
         }
 
         if (result.additionalUserInfo.isNewUser) {
-
           setnewUserSlider(true)
+          setotpSliderState(false)
         }
         else {
           console.log("Existing user")
           setnewUserSlider(false)
-          // navigate("/profile");
+          setotpSliderState(false)
+          navigate("/profile");
         }
 
       })
@@ -372,6 +380,7 @@ const PhoneLogin_reCaptchaV2 = () => {
     setCountryCode(countryData.countryCode)
     setCountryName(countryData.name)
   };
+
 
   return (
     <div className="phone_login two_col_page top_header_pg">
@@ -437,19 +446,19 @@ const PhoneLogin_reCaptchaV2 = () => {
                     marginTop: "20px",
                   }}
                 ></div>
-                <div className="ordiv">
+                {/* <div className="ordiv">
                   <span>
                     Or
                   </span>
-                </div>
-                <div onClick={signInWithGoogle} className="theme_btn btn_border d-flex align-items-center justify-content-center mb-3">
+                </div> */}
+                {/* <div onClick={signInWithGoogle} className="theme_btn btn_border d-flex align-items-center justify-content-center mb-3">
                   <img src="./assets/img/icons/google.png" alt="google_img" style={{
                     height: "23px",
                     width: "auto",
                     marginRight: "7px"
                   }} />
                   Sign-in with Google
-                </div>
+                </div> */}
                 <div id='btn_sendotp'
                   className="theme_btn btn_fill w_full"
                   onClick={getOTP}
@@ -609,6 +618,15 @@ const PhoneLogin_reCaptchaV2 = () => {
                   <div className="vg22"></div>
                   <div className="otp_input">
                     <label htmlFor="">New User Slider</label>
+                    <input
+                      type="text"
+                      placeholder="Enter verification code"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      style={{
+                        background: "none"
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="vg10"></div>
