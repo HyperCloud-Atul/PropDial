@@ -1259,6 +1259,7 @@ const PropertyDetails = () => {
                           <h6>Furnishing</h6>
                         </div>
                       </div>
+                      <div className="vg22"></div>
                       <div className="pmd_section4">
                         <div className="left">
                           <span
@@ -1276,14 +1277,14 @@ const PropertyDetails = () => {
                             share
                           </span>
                         </div>
-
+                     
                         {!(
                           (user && user.role === "owner") ||
                           (user && user.role === "coowner") ||
                           (user && user.role === "admin")
                         ) && (
                             <div className="right">
-                              <a
+                              {/* <a
                                 href="."
                                 className="theme_btn no_icon btn_fill"
                                 style={{
@@ -1292,10 +1293,10 @@ const PropertyDetails = () => {
                               >
                                 {" "}
                                 Contact Agent
-                              </a>
+                              </a> */}
                               <a
                                 href="."
-                                className="theme_btn no_icon btn_border"
+                                className="theme_btn no_icon btn_fill"
                                 data-bs-toggle="modal"
                                 data-bs-target="#exampleModal"
                               >
@@ -1778,11 +1779,18 @@ const PropertyDetails = () => {
                                 </Link>
                               </div>
                             </div>}
-                          <div className="col-11">
+                          <div className={`${user && user.role === "admin" ? "col-11" : "col-12" }`}>
                             <div className="property_layout_card">
-                              <OwlCarousel className="owl-theme" {...optionsroom}>
+                            <Swiper
+                              spaceBetween={15}
+                              slidesPerView={2.5}
+                              pagination={false}
+                              freeMode={true}
+                              className='all_tenants'
+                            >
                                 {propertyLayouts && propertyLayouts.map((room, index) => (
-                                  <div className="ai_detail_show item" key={index}>
+                                   <SwiperSlide key={index}>
+   <div className="ai_detail_show">
                                     <div className="left relative">
                                       {(() => {
                                         if (room.roomType === "Bedroom") {
@@ -1860,8 +1868,10 @@ const PropertyDetails = () => {
                                       </div>
                                     </div>
                                   </div>
+                                   </SwiperSlide>
+                               
                                 ))}
-                              </OwlCarousel>
+                               </Swiper>
 
                               {selectedRoom && (
                                 <>

@@ -24,9 +24,9 @@ const PGUpdateProperty = () => {
           <div className="col-md-8">
             <div className="multi_steps">
               <div className="progress_bar">
-                <div className="fill" style={{ width: stageFlag === 'stage1' ? "25%" : stageFlag === 'stage2' ? "50%" : "100%" }}></div>
+                <div className="fill" style={{ width: stageFlag === 'stage1' ? "33.33%" : stageFlag === 'stage2' ? "66.66%" : "100%" }}></div>
               </div>
-              <div className={stageFlag === 'stage1' ? "step_single fill" : "step_single wait"}>
+              <div className="step_single fill">
                 <div className="number">
                   1
                 </div>
@@ -34,7 +34,7 @@ const PGUpdateProperty = () => {
                   Basic
                 </h6>
               </div>
-              <div className={stageFlag === 'stage2' ? "step_single fill" : "step_single wait"}>
+              <div className={`step_single ${stageFlag === 'stage1' ? "wait" : "fill"}`}>
                 <div className="number">
                   2
                 </div>
@@ -42,7 +42,7 @@ const PGUpdateProperty = () => {
                   Detail
                 </h6>
               </div>
-              <div className={stageFlag === 'stage3' ? "step_single " : "step_single wait"}>
+              <div className={`step_single ${stageFlag === 'stage3' ? "fill" : "wait"}`}>
                 <div className="number">
                   3
                 </div>

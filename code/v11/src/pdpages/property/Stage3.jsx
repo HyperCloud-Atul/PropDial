@@ -2134,23 +2134,16 @@ export default function Stage3(props) {
           </div>
         </div>
         <div className="verticall_gap"></div>
-        <div style={{ display: "flex", alignItems: "center" }} className='next_btn_back bottom_fixed_button'>
-          <div className="" style={{ width: "100%", padding: '0 20px 0 0' }}>
-            {formError && <p className="error">{formError}</p>}
-            <button className="theme_btn btn_fill" onClick={handleBackSubmit} style={{
-              width: "100%"
-            }}>
+        {formError && <p className="error">{formError}</p>}
+        <div style={{ display: "flex", alignItems: "center", gap:"22px" }} className='next_btn_back bottom_fixed_button'>         
+         
+            <button className="theme_btn btn_border full_width" onClick={handleBackSubmit}>
               {"<< Back"}
-            </button>
-          </div>
+            </button> 
 
-          <div className="" style={{ width: "100%", padding: '0 0 0 20px' }}>
-            <button className="theme_btn btn_fill" onClick={handleNextSubmit} style={{
-              width: "100%"
-            }}>
-              {"Submit"}
-            </button>
-          </div>
+          <button className="theme_btn btn_fill full_width" onClick={handleNextSubmit}>
+            Submit
+          </button>
 
         </div>
       </form >

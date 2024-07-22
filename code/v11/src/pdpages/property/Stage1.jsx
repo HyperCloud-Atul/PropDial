@@ -1626,37 +1626,27 @@ const Stage1 = (props) => {
           {formError && <p className="error">{formError}</p>}
           {formSuccess && <p className="success">{formSuccess}</p>}
 
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div className="" style={{ width: "100%", padding: "0 20px 0 0" }}>
+          <div style={{ display: "flex", alignItems: "center", gap:"22px" }}>
+            <button
+              className="theme_btn btn_border full_width"
+              onClick={handleBackSubmit}
+            >
+              {"<< Back"}
+            </button>
+            {propertyid !== "new" &&
               <button
-                className="theme_btn btn_fill"
-                onClick={handleBackSubmit}
-                style={{
-                  width: "100%",
-                }}
-              >
-                {"<< Back"}
-              </button>
-            </div>
-            {propertyid !== "new" && <div className="" style={{ width: "100%", padding: '0 0 0 0' }}>
-              <button
-                className="theme_btn full_width btn_border"
+                className="theme_btn btn_fill full_width"
                 onClick={(e) => handleSubmit(e, 'Save')}
               >
                 Save
               </button>
-            </div>}
-            <div className="" style={{ width: "100%", padding: "0 0 0 20px" }}>
-              <button
-                className="theme_btn btn_fill"
-                onClick={(e) => handleSubmit(e, 'Next')}
-                style={{
-                  width: "100%",
-                }}
-              >
-                {"Next >>"}
-              </button>
-            </div>
+            }
+            <button
+              className="theme_btn btn_border full_width"
+              onClick={(e) => handleSubmit(e, 'Next')}
+            >
+              {"Next >>"}
+            </button>
           </div>
         </div>
       </div>

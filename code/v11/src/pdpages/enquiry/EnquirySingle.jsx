@@ -157,7 +157,7 @@ const EnquirySingle = ({ enquiries }) => {
                       :-
                     </div>
                     <div className="right">
-                      {user && user.role === "owner"
+                      {user && user.role === "admin"
                         ? selectedEnquiry.phone.replace(/(\d{2})(\d{3})(\d{2})(\d{3})/, "+$1 *** $2 ***")
                         : selectedEnquiry.phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")
                       }
@@ -174,7 +174,7 @@ const EnquirySingle = ({ enquiries }) => {
                       :-
                     </div>
                     <div className="right">
-                      {user && user.role === "owner"
+                      {user && user.role === "admin"
                         ? `${selectedEnquiry.email.split("@")[0].substring(0, 2)}***@${selectedEnquiry.email.split("@")[1]}`
                         : selectedEnquiry.email
                       }

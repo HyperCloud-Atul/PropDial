@@ -733,7 +733,7 @@ const UpdateEnquiry = () => {
                                         </div> </div>
                                 </div>
                             </div>
-                            {/* <div className="col-12 d-flex justify-content-end" style={{
+                             <div className="col-12 d-flex justify-content-end" style={{
                                 gap: "22px"
                             }} >
                                 <Link to="/enquiry/all" className="theme_btn btn_border">
@@ -743,7 +743,7 @@ const UpdateEnquiry = () => {
                                     disabled={isUploading}>
                                     {isUploading ? "Updating..." : "Update Enquiry"}
                                 </button>
-                            </div> */}
+                            </div>
                         </div>
                     </div>
                 </div>

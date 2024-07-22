@@ -2472,31 +2472,22 @@ const CreateProperty = () => {
                         {formError && <p className="error">{formError}</p>}
                         {formSuccess && <p className="success">{formSuccess}</p>}
                         <br></br>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                            <div className="" style={{ width: "100%", padding: "0 20px 0 0" }}>
-                                <button
-                                    className="theme_btn btn_fill"
-                                    onClick={handleBackSubmit}
-                                    style={{
-                                        width: "100%",
-                                    }}
-                                >
-                                    {"<< Dashboard"}
-                                </button>
-                            </div>
+                        <div style={{ display: "flex", alignItems: "center", gap:"22px" }}>
+                            <button
+                                className="theme_btn btn_border full_width"
+                                onClick={handleBackSubmit}                              
+                            >
+                                {"<< Dashboard"}
+                            </button>
 
-                            <div className="" style={{ width: "100%", padding: "0 0 0 20px" }}>
-                                <button
+                            <button
                                     id="btn_create"
-                                    className="theme_btn btn_fill"
+                                    className="theme_btn btn_fill full_width"
                                     onClick={(e) => handleSubmit(e, 'Next')}
-                                    style={{
-                                        width: "100%",
-                                    }}
+                               
                                 >
                                     Create
                                 </button>
-                            </div>
                         </div>
                     </div>
                 </div>
