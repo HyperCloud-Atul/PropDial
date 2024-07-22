@@ -118,7 +118,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                       </div>
                       <div className="pi_single">
                         <h6>Balcony</h6>
-                        <h5>{property.balcony}</h5>
+                        <h5>{property.numberOfBalcony}</h5>
                       </div>
                       <div className="pi_single">
                         <h6>Floor number</h6>
@@ -126,12 +126,22 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                       </div>
                       <div className="pi_single">
                         <h6>Lift</h6>
-                        <h5>{property.lift}</h5>
+                        <h5>{property.numberOfLifts}</h5>
                       </div>
-                      <div className="pi_single">
-                        <h6>Carpet area</h6>
-                        <h5>{property.carpetArea}</h5>
-                      </div>
+
+                      {
+                        property.carpetArea !== "" ?
+
+                          <div className="pi_single">
+                            <h6>Carpet area</h6>
+                            <h5>{property.carpetArea} {property.carpetAreaUnit}</h5>
+                          </div> :
+                          <div className="pi_single">
+                            <h6>Super area</h6>
+                            <h5>{property.superArea} {property.superAreaUnit}</h5>
+                          </div>
+                      }
+
                     </div>
                   </div>
                 </div>
