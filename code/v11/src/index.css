@@ -24,7 +24,7 @@
   --theme-purple-bg: #efe5ff;
   --theme-blue-bg: #dae7ff;
   --theme-blue-light-bg: #eef3ff;
-  
+
   --theme-purple-bg-light: #f9f5ff80;
   --theme-orange-bg: #ffefe5;
   --page-bg: #f5f5f5;
@@ -90,9 +90,19 @@ body {
   cursor: pointer;
 }
 
-.theme_btn.no_icon {
-  /* padding-right: 0px; */
+.theme_btn.icon_left {
+  padding-right: 20px;
+}
+
+.theme_btn.no_icon { 
   padding: 10px 20px;
+}
+
+.theme_btn.with_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 .modal_btn.theme_btn {
@@ -136,9 +146,11 @@ a.theme_btn.btn_white {
   color: var(--black-color);
   border: 1px solid var(--theme-green);
 }
-.theme_btn.full_width{
+
+.theme_btn.full_width {
   width: 100%;
 }
+
 .theme_btn .btn_arrow {
   position: absolute;
   top: 14px;
@@ -268,6 +280,7 @@ a.theme_btn.btn_white {
 .pop-up-div div p strong {
   color: var(--theme-blue);
 }
+
 /* sanskar css start  */
 
 
@@ -365,6 +378,25 @@ form.auth-form .theme_btn {
     padding: 6px 12px;
     font-size: 14px;
     padding-right: 30px;
+  }
+  .theme_btn.no_icon { 
+    padding: 6px 12px;
+  }
+  .theme_btn.with_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+  .theme_btn.icon_left {
+    padding-right: 12px;
+  }
+
+  .theme_btn span.btn_icon {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
   }
 
   .theme_btn .btn_arrow {
@@ -702,6 +734,12 @@ h2.card_title {
   z-index: 9999;
 }
 
+.next_btn_back {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
 .add_property_fields {
   margin-bottom: 129px;
   min-height: calc(100vh - 350px);
@@ -817,9 +855,10 @@ h2.card_title {
   width: fit-content;
   text-align: center;
   color: white;
-      letter-spacing: 0.5px;
+  letter-spacing: 0.5px;
 }
-.cancel_btn{
+
+.cancel_btn {
   padding: 10px 20px;
   border-radius: 9px;
   font-size: 16px;
@@ -831,5 +870,16 @@ h2.card_title {
   width: fit-content;
   text-align: center;
   color: #00a8a8;
-      letter-spacing: 0.5px;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 767px) {
+  .bottom_fixed_button {
+    padding: 15px;
+
+  }
+
+  .next_btn_back {
+    gap: 15px;
+  }
 }

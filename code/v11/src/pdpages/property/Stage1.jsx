@@ -724,7 +724,7 @@ const Stage1 = (props) => {
     <>
       <div className="add_property_fields">
         <div className="row row_gap">
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">Unit Number</label>
               <div className="form_field_inner">
@@ -745,7 +745,7 @@ const Stage1 = (props) => {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">
                 Category</label>
@@ -826,7 +826,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">
                 Purpose</label>
@@ -908,7 +908,7 @@ const Stage1 = (props) => {
             </div>
           </div> */}
 
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Ownership</label>
               <div className="form_field_inner">
@@ -920,7 +920,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div> */}
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Select Owner Name</label>
               <div className="form_field_inner">
@@ -931,7 +931,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div> */}
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Co Owner Name</label>
               <div className="form_field_inner">
@@ -942,7 +942,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div> */}
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Select Employee</label>
               <div className="form_field_inner">
@@ -953,7 +953,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div> */}
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Select Supplementary Employee</label>
               <div className="form_field_inner">
@@ -964,7 +964,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div> */}
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Select Sales Employee</label>
               <div className="form_field_inner">
@@ -975,7 +975,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div> */}
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Property Source</label>
               <div className="form_field_inner">
@@ -994,7 +994,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div> */}
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Purpose</label>
               <div className="form_field_inner">
@@ -1074,7 +1074,7 @@ const Stage1 = (props) => {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Demand/Price</label>
               <div className="form_field_inner">
@@ -1105,7 +1105,7 @@ const Stage1 = (props) => {
             </div>
           </div>
 
-          {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-md-4">
+          {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Maintenance Status</label>
               <div className="form_field_inner">
@@ -1186,7 +1186,7 @@ const Stage1 = (props) => {
           </div>}
 
           {propertyDetails && propertyDetails.Purpose === "Rent" && (
-            <div className="col-md-4">
+            <div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                 <label>Maintenance fees</label>
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -1435,7 +1435,7 @@ const Stage1 = (props) => {
             </div>
           )}
 
-          {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-md-4">
+          {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-xl-4 col-lg-6">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Security Deposit</label>
               <div className="form_field_inner">
@@ -1466,7 +1466,7 @@ const Stage1 = (props) => {
             </div>
           </div>}
 
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Package</label>
               <div className="form_field_inner">
@@ -1485,7 +1485,7 @@ const Stage1 = (props) => {
             </div>
           </div> */}
 
-          {/* <div className="col-md-4">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Select Property Flag</label>
               <div className="form_field_inner">
@@ -1506,7 +1506,7 @@ const Stage1 = (props) => {
           </div> */}
 
 
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">State</label>
 
@@ -1532,7 +1532,7 @@ const Stage1 = (props) => {
             </div>
           </div>
 
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">City</label>
 
@@ -1559,7 +1559,7 @@ const Stage1 = (props) => {
           </div>
 
 
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">Locality</label>
               <div className="form_field_inner">
@@ -1579,7 +1579,7 @@ const Stage1 = (props) => {
             </div>
 
           </div>
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">Society</label>
               <div className="form_field_inner">
@@ -1598,7 +1598,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">Pincode number</label>
               <div className="form_field_inner">
@@ -1620,34 +1620,32 @@ const Stage1 = (props) => {
           </div>
         </div>
       </div>
-      <div className="bottom_fixed_button">
-        <div className="verticall_gap"></div>
+      <div className="bottom_fixed_button">       
+        {formError && <p className="error">{formError}</p>}
+        {formSuccess && <p className="success">{formSuccess}</p>}
         <div className="next_btn_back">
-          {formError && <p className="error">{formError}</p>}
-          {formSuccess && <p className="success">{formSuccess}</p>}
-
-          <div style={{ display: "flex", alignItems: "center", gap:"22px" }}>
-            <button
-              className="theme_btn btn_border full_width"
+        <button
+              className="theme_btn no_icon btn_border full_width"
               onClick={handleBackSubmit}
             >
               {"<< Back"}
             </button>
             {propertyid !== "new" &&
               <button
-                className="theme_btn btn_fill full_width"
+                className="theme_btn no_icon btn_fill full_width"
                 onClick={(e) => handleSubmit(e, 'Save')}
               >
                 Save
               </button>
             }
             <button
-              className="theme_btn btn_border full_width"
+              className="theme_btn no_icon btn_border full_width"
               onClick={(e) => handleSubmit(e, 'Next')}
             >
               {"Next >>"}
             </button>
-          </div>
+
+    
         </div>
       </div>
     </>

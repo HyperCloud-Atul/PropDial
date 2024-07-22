@@ -451,3 +451,22 @@ color: #ffd9c0;
   top: 0;
   
 }
+
+@media (max-width: 850px) {
+.multi_steps .number {
+    width: 32px;
+    height: 32px;
+    font-size: 17px;
+
+}
+.multi_steps .step_single h6 {
+    font-size: 14px;   
+}
+.multi_steps .progress_bar {  
+    top: 16px;  
+}
+.multi_steps {
+    margin-top: 16px;
+    margin-bottom: -14px;
+}
+}
