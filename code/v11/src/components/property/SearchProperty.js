@@ -97,7 +97,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
               <Link className="pcs_inner pointer" to={`/propertydetails/${property.id}`}>
                 <div className="pcs_image_area">
                   {/* <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" /> */}
-                  <img src={property.images[0]} className="bigimage" alt={property.bhk} />
+                  {property.images.length > 0 ? <img src={property.images[0]} className="bigimage" alt={property.bhk} /> : <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" />}
                 </div>
                 <div className="pcs_main_detail">
                   <div className="pmd_top relative">
