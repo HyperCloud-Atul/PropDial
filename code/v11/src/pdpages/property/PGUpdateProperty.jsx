@@ -24,11 +24,9 @@ const PGUpdateProperty = () => {
           <div className="col-md-8">
             <div className="multi_steps">
               <div className="progress_bar">
-                <div className="fill" style={{
-                  width: "25%"
-                }}></div>
+                <div className="fill" style={{ width: stageFlag === 'stage1' ? "25%" : stageFlag === 'stage2' ? "50%" : "100%" }}></div>
               </div>
-              <div className="step_single ">
+              <div className={stageFlag === 'stage1' ? "step_single fill" : "step_single wait"}>
                 <div className="number">
                   1
                 </div>
@@ -36,7 +34,7 @@ const PGUpdateProperty = () => {
                   Basic
                 </h6>
               </div>
-              <div className="step_single wait">
+              <div className={stageFlag === 'stage2' ? "step_single fill" : "step_single wait"}>
                 <div className="number">
                   2
                 </div>
@@ -44,7 +42,7 @@ const PGUpdateProperty = () => {
                   Detail
                 </h6>
               </div>
-              <div className="step_single wait">
+              <div className={stageFlag === 'stage3' ? "step_single " : "step_single wait"}>
                 <div className="number">
                   3
                 </div>
@@ -52,16 +50,16 @@ const PGUpdateProperty = () => {
                   More
                 </h6>
               </div>
-              <div className="step_single wait">
+              {/* <div className={stageFlag === 'stage4' ? "step_single " : "step_single wait"}>
                 <div className="number">
                   4
                 </div>
                 <h6>
                   Image
                 </h6>
-              </div>
+              </div> */}
             </div>
-          </div>  
+          </div>
         </div>
 
 
@@ -70,7 +68,7 @@ const PGUpdateProperty = () => {
         {stageFlag === 'stage1' && <Stage1 setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage1>}
         {stageFlag === 'stage2' && <Stage2 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage2>}
         {stageFlag === 'stage3' && <Stage3 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage3>}
-        {stageFlag === 'stage4' && <Stage4 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage4>}
+        {/* {stageFlag === 'stage4' && <Stage4 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage4>} */}
       </div>
     </div>
   )

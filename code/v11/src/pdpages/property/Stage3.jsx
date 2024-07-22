@@ -214,6 +214,7 @@ export default function Stage3(props) {
         navigate("/");
       } else {
         props.setStateFlag("stage4");
+        navigate("/propertydetails/" + propertyid)
       }
     }
   }
@@ -2147,7 +2148,7 @@ export default function Stage3(props) {
             <button className="theme_btn btn_fill" onClick={handleNextSubmit} style={{
               width: "100%"
             }}>
-              {"Next >>"}
+              {"Submit"}
             </button>
           </div>
 
