@@ -2790,21 +2790,21 @@ const Stage2 = (props) => {
 
       <div className="next_btn_back bottom_fixed_button">
         {formError && <p className="error">{formError}</p>}
-        <div style={{ display: "flex", alignItems: "center", gap:"22px" }}>
-        <button
-              className="theme_btn btn_border full_width"
-              onClick={handleBackSubmit}           
-            >
-              {"<< Back"}
-            </button>
-            <button
-              className="theme_btn btn_border next_btn full_width"
-              onClick={handleNextSubmit}
-         
-            >
-              {"Next >>"}
-            </button>
-         
+        <div style={{ display: "flex", alignItems: "center", gap: "22px" }}>
+          <button
+            className="theme_btn btn_border full_width"
+            onClick={handleBackSubmit}
+          >
+            {"<< Back"}
+          </button>
+          <button
+            className="theme_btn btn_border next_btn full_width"
+            onClick={handleNextSubmit}
+
+          >
+            {"Next >>"}
+          </button>
+
         </div>
       </div>
     </form>
