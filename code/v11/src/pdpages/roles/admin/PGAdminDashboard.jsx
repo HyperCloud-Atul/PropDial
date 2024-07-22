@@ -652,14 +652,14 @@ const PGAdminDashboard = () => {
                   <OwlCarousel className="owl-theme" {...addImgOptions2}>
                     <div className="item">
                       <img
-                        src="/assets/img/banner2.png"
+                        src="/assets/img/banner1.png"
                         alt=""
                         className="add_img"
                       />
                     </div>
                     <div className="item">
                       <img
-                        src="/assets/img/banner1.png"
+                        src="/assets/img/banner2.png"
                         alt=""
                         className="add_img"
                       />
@@ -670,14 +670,14 @@ const PGAdminDashboard = () => {
                   <OwlCarousel className="owl-theme" {...addImgOptions}>
                     <div className="item">
                       <img
-                        src="/assets/img/banner1.png"
+                        src="/assets/img/banner4.png"
                         alt=""
                         className="add_img"
                       />
                     </div>
                     <div className="item">
                       <img
-                        src="/assets/img/banner2.png"
+                        src="/assets/img/banner5.png"
                         alt=""
                         className="add_img"
                       />
