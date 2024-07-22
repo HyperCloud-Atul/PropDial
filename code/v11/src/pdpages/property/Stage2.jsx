@@ -2788,9 +2788,9 @@ const Stage2 = (props) => {
         </div>
       </div>
 
-      <div className="next_btn_back bottom_fixed_button">
+      <div className=" bottom_fixed_button">
         {formError && <p className="error">{formError}</p>}
-        <div style={{ display: "flex", alignItems: "center", gap: "22px" }}>
+        <div className="next_btn_back">
           <button
             className="theme_btn btn_border full_width"
             onClick={handleBackSubmit}

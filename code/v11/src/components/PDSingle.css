@@ -916,6 +916,7 @@ label.upload_img input {
     margin-right: -22px;
     position: relative;
     padding-left: 50px;
+    min-height: 88px;
 }
 
 .full_width_sec .verticall_title {
@@ -1013,6 +1014,22 @@ width: 100%;
         height: 28px !important; 
         width: 28px !important;
         background: #0000007d !important; 
+    }
+    .full_width_sec.with_blue {      
+        border-bottom: 1px solid var(--theme-blue);
+    }
+    .full_width_sec.with_orange{
+        border-bottom: 1px solid var(--theme-orange);
+    }
+    .extra_info_card_property {
+        box-shadow: none;
+        border-radius: 0px;
+        background: white;
+        padding: 15px;
+       border-bottom: 1px solid var(--theme-blue);
+    }
+    .card_upcoming .parent {       
+        grid-template-columns: repeat(2, 1fr);
     }
 
 }
@@ -1132,6 +1149,41 @@ width: 100%;
     .ai_detail_show .in_detail {      
         height: 52px;       
     }
+    .plus_icon .plus_icon_inner {
+        width: 40px;
+        height: 40px;        
+    }
+    .plus_icon span {
+        font-size: 25px;
+    }
+    .eicp_single {    
+        border-radius: 12px;
+        padding: 10px;
+    
+    }
+    .eicp_single .icon span {      
+        font-size: 22px;
+    }
+    .eicp_single .text h6 {
+        font-size: 18px;      
+    }
+    .eicp_single .text h5 {
+        font-size: 14px;       
+    }
+    .property-list-add-property {       
+        width: 38px;
+        height: 38px;       
+    }
+    .property-list-add-property span {
+        font-size: 22px;     
+    }
+    .more-add-options-div div .more-add-options-icons span {     
+        width: 38px;
+        height: 38px;     
+        font-size: 22px;  
+    }
+    
+    
 
 }
 @media only screen and (max-width: 575px) {

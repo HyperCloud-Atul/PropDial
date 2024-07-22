@@ -1036,7 +1036,7 @@ const PropertyDetails = () => {
                           <div className="d-flex flex-column align-items-center justify-content-center">
                             {!isUploading && (
                               <button
-                                className="btn_fill_add_property_images"
+                                className="theme_btn btn_fill no_icon"
                                 onClick={handleAddMoreImages}
                               >
                                 {isConfirmVisible
@@ -1047,7 +1047,7 @@ const PropertyDetails = () => {
 
                             {selectedImage && (
                               <button
-                                className="btn_fill_add_property_images"
+                                className="theme_btn btn_fill no_icon"
                                 onClick={handleConfirmUpload}
                                 disabled={!isConfirmVisible || isUploading} // Disable button when uploading
                               >
@@ -1350,7 +1350,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-                {user && <div className="extra_info_card_property">
+                {user && <div className="extra_info_card_property mobile_full_card">
                   <div className="card_upcoming">
                     <div className="parent">
                       <div className="child">
@@ -1395,8 +1395,29 @@ const PropertyDetails = () => {
                     user.role === "admin") && (
 
                     <div className="extra_info_card_property">
-                      <OwlCarousel className="owl-theme" {...options}>
+                      <Swiper
+                        spaceBetween={15}
+                        slidesPerView={5.5}
+                        pagination={false}
+                        freeMode={true}
+                        className='all_tenants'
+                        breakpoints={{
+                          320: {
+                            slidesPerView: 2.5,
+                            spaceBetween: 15,
+                          },
+                          767: {
+                            slidesPerView: 2.5,
+                            spaceBetween: 15,
+                          },
+                          991: {
+                            slidesPerView: 5.5,
+                            spaceBetween: 15,
+                          },
+                        }}
+                      >
                         {/* Documents */}
+                        <SwiperSlide>
                         <Link to={`/propertydocumentdetails/${propertyid}`} >
                           <div className="item eicp_single">
                             <div className="icon">
@@ -1410,7 +1431,9 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         </Link>
+                        </SwiperSlide>
                         {/* Inspection  */}
+                        <SwiperSlide>
                         <Link to={`/propertyinspectiondocument/${propertyid}`} >
                           <div className="item eicp_single">
                             <div className="icon">
@@ -1424,7 +1447,9 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         </Link>
+                        </SwiperSlide>
                         {/* Enquiry  */}
+                        <SwiperSlide>
                         <Link to={`/enquiry/${propertyid}`} >
                           <div className="item eicp_single">
                             <div className="icon">
@@ -1439,7 +1464,9 @@ const PropertyDetails = () => {
                           </div>
 
                         </Link>
+                        </SwiperSlide>
                         {/* Transactions */}
+                        <SwiperSlide>
                         <Link to={`/transactions/${propertyid}`}>
                           <div className="item eicp_single">
                             <div className="icon">
@@ -1453,7 +1480,8 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         </Link>
-                      </OwlCarousel>
+                        </SwiperSlide>
+                        </Swiper>
                     </div>
 
                   )}
@@ -1710,7 +1738,9 @@ const PropertyDetails = () => {
                       <div className="more_detail_card_inner">
                         <div className="row">
                           {(user && user.role === "admin") &&
-                            <div className="col-1">
+                            <div className="col-sm-1 col-2" style={{
+                              paddingRight: "0px"
+                            }}>
                               <div className="plus_icon">
                                 <Link className="plus_icon_inner"
                                   onClick={handleShowPropertyLayoutComponent}
@@ -1721,7 +1751,7 @@ const PropertyDetails = () => {
                                 </Link>
                               </div>
                             </div>}
-                          <div className={`${user && user.role === "admin" ? "col-11" : "col-12"}`}>
+                          <div className={`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
                             <div className="property_layout_card">
                               <Swiper
                                 spaceBetween={15}
@@ -1729,11 +1759,11 @@ const PropertyDetails = () => {
                                 pagination={false}
                                 freeMode={true}
                                 className='all_tenants'
-                                breakpoints={{                                 
+                                breakpoints={{
                                   320: {
                                     slidesPerView: 1,
                                     spaceBetween: 15,
-                                  },                                 
+                                  },
                                   767: {
                                     slidesPerView: 1.5,
                                     spaceBetween: 15,
@@ -1800,15 +1830,17 @@ const PropertyDetails = () => {
                                             );
                                           }
                                         })()}
-                                      {user && user.role === "admin" (
-                                          <label htmlFor="imgupload" className="upload_img click_text by_text">
+                                        {/* {user && user.role === "admin" && (
+                                        <label htmlFor="imgupload" className="upload_img click_text by_text">
                                           Upload img
                                           <input
                                             type="file"
                                             id="imgupload"
                                           />
                                         </label>
-                                      )}
+                                      )} */}
+
+
                                       </div>
                                       <div className="right">
                                         <h5>{room.roomName}</h5>
@@ -1821,9 +1853,9 @@ const PropertyDetails = () => {
                                           ))}
                                         </div>
                                         <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
-                                         {user && user.role === "admin" (
-                                           <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
-                                         )}
+                                          {user && user.role === "admin" && (
+                                            <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
+                                          )}
                                           <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
                                         </div>
                                       </div>
@@ -1995,7 +2027,9 @@ const PropertyDetails = () => {
                     </span>
                     <div className="more_detail_card_inner">
                       <div className="row">
-                        <div className="col-1">
+                        <div className="col-sm-1 col-2" style={{
+                          paddingRight: "0px"
+                        }}>
                           <div className="plus_icon">
                             <Link className="plus_icon_inner" onClick={handleAddTenant}>
                               <span class="material-symbols-outlined">
@@ -2005,14 +2039,28 @@ const PropertyDetails = () => {
                           </div>
 
                         </div>
-                        <div className="col-11">
+                        <div className="col-sm-11 col-10">
                           <div className="tenant_card">
                             <Swiper
                               spaceBetween={15}
-                              slidesPerView={3.5}
-                              pagination={{ clickable: true }}
+                              slidesPerView={2.5}
+                              pagination={false}
                               freeMode={true}
                               className='all_tenants'
+                              breakpoints={{
+                                320: {
+                                  slidesPerView: 1,
+                                  spaceBetween: 15,
+                                },
+                                767: {
+                                  slidesPerView: 1.5,
+                                  spaceBetween: 15,
+                                },
+                                991: {
+                                  slidesPerView: 2.5,
+                                  spaceBetween: 15,
+                                },
+                              }}
                             >
                               {tenantDocument &&
                                 tenantDocument.map((tenant, index) => (
@@ -2097,7 +2145,9 @@ const PropertyDetails = () => {
                         <div className="more_detail_card_inner">
                           <div className="row">
                             {(user && user.role === "admin") &&
-                              <div className="col-1">
+                              <div className="col-sm-1 col-2" style={{
+                                paddingRight: "0px"
+                              }}>
                                 <div className="plus_icon">
                                   <Link className="plus_icon_inner" onClick={(e) => handleAddPropertyUser(e, 'propertyowner')}>
                                     <span class="material-symbols-outlined">
@@ -2108,14 +2158,28 @@ const PropertyDetails = () => {
 
                               </div>
                             }
-                            <div className="col-11">
+                            <div className="col-sm-11 col-10">
                               <div className="tenant_card">
                                 <Swiper
                                   spaceBetween={15}
-                                  slidesPerView={3.5}
-                                  pagination={{ clickable: true }}
+                                  slidesPerView={2.5}
+                                  pagination={false}
                                   freeMode={true}
                                   className='all_tenants'
+                                  breakpoints={{
+                                    320: {
+                                      slidesPerView: 1,
+                                      spaceBetween: 15,
+                                    },
+                                    767: {
+                                      slidesPerView: 1.5,
+                                      spaceBetween: 15,
+                                    },
+                                    991: {
+                                      slidesPerView: 2.5,
+                                      spaceBetween: 15,
+                                    },
+                                  }}
                                 >
                                   {filteredPropertyOwners &&
                                     filteredPropertyOwners.map((propUser, index) => (
@@ -2308,7 +2372,9 @@ const PropertyDetails = () => {
                         <div className="more_detail_card_inner">
                           <div className="row">
                             {(user && user.role === "admin") &&
-                              <div className="col-1">
+                              <div className="col-sm-1 col-2" style={{
+                                paddingRight: "0px"
+                              }}>
                                 <div className="plus_icon">
                                   <Link className="plus_icon_inner" onClick={(e) => handleAddPropertyUser(e, 'propertymanager')}>
                                     <span class="material-symbols-outlined">
@@ -2319,14 +2385,28 @@ const PropertyDetails = () => {
 
                               </div>
                             }
-                            <div className="col-11">
+                            <div className="col-sm-11 col-10">
                               <div className="tenant_card">
                                 <Swiper
                                   spaceBetween={15}
-                                  slidesPerView={3.5}
-                                  pagination={{ clickable: true }}
+                                  slidesPerView={2.5}
+                                  pagination={false}
                                   freeMode={true}
                                   className='all_tenants'
+                                  breakpoints={{
+                                    320: {
+                                      slidesPerView: 1,
+                                      spaceBetween: 15,
+                                    },
+                                    767: {
+                                      slidesPerView: 1.5,
+                                      spaceBetween: 15,
+                                    },
+                                    991: {
+                                      slidesPerView: 2.5,
+                                      spaceBetween: 15,
+                                    },
+                                  }}
                                 >
                                   {filteredPropertyManagers &&
                                     filteredPropertyManagers.map((propUser, index) => (
