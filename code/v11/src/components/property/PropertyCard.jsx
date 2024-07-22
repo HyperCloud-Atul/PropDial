@@ -14,6 +14,7 @@ const PropertyCard = ({ propertyid }) => {
   const { user } = useAuthContext();
   const { document: propertydoc, error: errPropertyDoc } = useDocument("properties", propertyid);
   // const { document: userDoc, error: userDocError } = useDocument('users', propertydoc && propertydoc.createdBy)
+  console.log("property doc: ", propertydoc)
 
   // const { documents: myproperties, error: errMyProperties } = useCollection(
   //   "propertyusers",
@@ -204,7 +205,9 @@ const PropertyCard = ({ propertyid }) => {
           </div>} */}
           {propertydoc && <Link to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="top relative">
             <div className="img_container">
-              <img src="./assets/img/admin_banner.jpg" alt="" />
+              {/* <img src="/assets/img/admin_banner.jpg" alt="" /> */}
+              {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
+                : <img src="/assets/img/admin_banner.jpg" alt="" />}
             </div>
             <div className="left_side relative">
               {user && user.role === 'admin' &&
@@ -214,7 +217,7 @@ const PropertyCard = ({ propertyid }) => {
                   key={propertydoc.propertyid}
                 >
                   <span className="material-symbols-outlined">edit_square</span>
-                </Link>}              
+                </Link>}
               <h5 className="demand">
                 <span>₹</span> {propertydoc.demandPrice}
                 {propertydoc.maintenancecharges !== '' && <span
@@ -225,16 +228,16 @@ const PropertyCard = ({ propertyid }) => {
                   + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
                 </span>}
               </h5>
-              <div className="full_address">              
+              <div className="full_address">
                 <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
                 <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
                 <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
               </div>
               <div className="more_row">
                 <div className="left">
-                <span className="card_badge">
-                {propertydoc.pid}
-                </span>
+                  <span className="card_badge">
+                    {propertydoc.pid}
+                  </span>
                 </div>
                 {/* <div className="right">
                   <span className={`property_status card_badge ${propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT' ? "for_rent" : "for_sale"}`}>
@@ -340,8 +343,8 @@ const PropertyCard = ({ propertyid }) => {
                   <h5>25-June-2025</h5>
                   <div className="line">
                     <div className="line_fill" style={{
-                      width: "25%",                      
-                      background:"#00a300"
+                      width: "25%",
+                      background: "#00a300"
                     }}>
                     </div>
                   </div>
@@ -356,8 +359,8 @@ const PropertyCard = ({ propertyid }) => {
                   <h5>30-July-2024</h5>
                   <div className="line">
                     <div className="line_fill" style={{
-                      width: "92%",                    
-                      background:"#FA6262"
+                      width: "92%",
+                      background: "#FA6262"
                     }}>
                     </div>
                   </div>

@@ -604,6 +604,7 @@ const CreateProperty = () => {
                 builtupAreaUnit: "",
                 carpetArea: "",
                 carpetAreaUnit: "",
+                images: [],
                 imgURL: [],
                 yearOfConstruction: "",
                 // ageOfProperty: "",
@@ -2472,22 +2473,22 @@ const CreateProperty = () => {
                         {formError && <p className="error">{formError}</p>}
                         {formSuccess && <p className="success">{formSuccess}</p>}
                         <br></br>
-                        <div style={{ display: "flex", alignItems: "center", gap:"22px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "22px" }}>
                             <button
                                 className="theme_btn btn_border full_width"
-                                onClick={handleBackSubmit}                              
+                                onClick={handleBackSubmit}
                             >
                                 {"<< Dashboard"}
                             </button>
 
                             <button
-                                    id="btn_create"
-                                    className="theme_btn btn_fill full_width"
-                                    onClick={(e) => handleSubmit(e, 'Next')}
-                               
-                                >
-                                    Create
-                                </button>
+                                id="btn_create"
+                                className="theme_btn btn_fill full_width"
+                                onClick={(e) => handleSubmit(e, 'Next')}
+
+                            >
+                                Create
+                            </button>
                         </div>
                     </div>
                 </div>
