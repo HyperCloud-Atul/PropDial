@@ -83,7 +83,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
       setIsUploading(false);
     }
   };
-// add enquiry with add document end
+  // add enquiry with add document end
 
 
 
@@ -96,7 +96,8 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
             <div className="left relative">
               <Link className="pcs_inner pointer" to={`/propertydetails/${property.id}`}>
                 <div className="pcs_image_area">
-                  <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" />
+                  {/* <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" /> */}
+                  <img src={property.images[0]} className="bigimage" alt={property.bhk} />
                 </div>
                 <div className="pcs_main_detail">
                   <div className="pmd_top relative">

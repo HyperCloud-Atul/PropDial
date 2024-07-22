@@ -30,7 +30,8 @@ const SearchPropAgentProperty = ({ propagentProperties }) => {
             {propagentProperties.map((property) => (
                 <div className="pp_sidebarcard_single">
                     <div className="ppss_img">
-                        <img src="./assets/img/property/p2.jpg" alt="" />
+                        {/* <img src="./assets/img/property/p2.jpg" alt="" /> */}
+                        <img src={property.images[0]} alt={property.bhk} />
                     </div>
                     <div className="ppss_header">
                         <h5>{property.bhk} | {property.purpose}</h5>
