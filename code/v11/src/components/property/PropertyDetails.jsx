@@ -1729,15 +1729,17 @@ const PropertyDetails = () => {
                                 pagination={false}
                                 freeMode={true}
                                 className='all_tenants'
-                                breakpoints={{
-                                  // when window width is >= 320px
+                                breakpoints={{                                 
                                   320: {
                                     slidesPerView: 1,
                                     spaceBetween: 15,
+                                  },                                 
+                                  767: {
+                                    slidesPerView: 1.5,
+                                    spaceBetween: 15,
                                   },
-                                  // when window width is >= 640px
-                                  640: {
-                                    slidesPerView: 1,
+                                  991: {
+                                    slidesPerView: 2.5,
                                     spaceBetween: 15,
                                   },
                                 }}
@@ -1798,13 +1800,15 @@ const PropertyDetails = () => {
                                             );
                                           }
                                         })()}
-                                        <label htmlFor="imgupload" className="upload_img click_text by_text">
+                                      {user && user.role === "admin" (
+                                          <label htmlFor="imgupload" className="upload_img click_text by_text">
                                           Upload img
                                           <input
                                             type="file"
                                             id="imgupload"
                                           />
                                         </label>
+                                      )}
                                       </div>
                                       <div className="right">
                                         <h5>{room.roomName}</h5>
@@ -1817,7 +1821,9 @@ const PropertyDetails = () => {
                                           ))}
                                         </div>
                                         <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
-                                          <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
+                                         {user && user.role === "admin" (
+                                           <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
+                                         )}
                                           <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
                                         </div>
                                       </div>
