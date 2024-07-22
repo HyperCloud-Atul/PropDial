@@ -898,7 +898,7 @@ const CreateProperty = () => {
                         </div>
                         <hr></hr>
                         {/* Unit No */}
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Unit Number</label>
                                 <div className="form_field_inner">
@@ -919,7 +919,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
                         {/* Category */}
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field st-2 label_top">
                                 <label htmlFor="">
                                     Category</label>
@@ -1001,7 +1001,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
 
-                        {/* <div className="col-md-4">
+                        {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Property Source</label>
               <div className="form_field_inner">
@@ -1020,7 +1020,7 @@ const CreateProperty = () => {
               </div>
             </div>
           </div> */}
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field st-2 label_top">
                                 <label htmlFor="">Purpose</label>
                                 <div className="form_field_inner">
@@ -1100,7 +1100,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
 
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Property Type</label>
                                 <div className="form_field_inner">
@@ -1233,7 +1233,7 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">BHK</label>
                                 <div className="form_field_inner">
@@ -1408,7 +1408,7 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Floor No</label>
                                 <div className="form_field_inner">
@@ -1916,7 +1916,7 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div id="id_demand" className="form_field label_top">
                                 <label htmlFor="">Demand/Price</label>
                                 <div className="form_field_inner">
@@ -1947,7 +1947,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
 
-                        {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-md-4">
+                        {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-xl-4 col-lg-6">
                             <div className="form_field st-2 label_top">
                                 <label htmlFor="">Maintenance Status</label>
                                 <div className="form_field_inner">
@@ -2028,7 +2028,7 @@ const CreateProperty = () => {
                         </div>}
 
                         {propertyDetails && propertyDetails.Purpose === "Rent" && (
-                            <div className="col-md-4">
+                            <div className="col-xl-4 col-lg-6">
                                 <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                                     <label>Maintenance fees</label>
                                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -2277,7 +2277,7 @@ const CreateProperty = () => {
                             </div>
                         )}
 
-                        {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-md-4">
+                        {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-xl-4 col-lg-6">
                             <div id="id_demand" className="form_field label_top">
                                 <label htmlFor="">Security Deposit</label>
                                 <div className="form_field_inner">
@@ -2308,7 +2308,7 @@ const CreateProperty = () => {
                             </div>
                         </div>}
 
-                        {/* <div className="col-md-4">
+                        {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Package</label>
               <div className="form_field_inner">
@@ -2329,7 +2329,7 @@ const CreateProperty = () => {
 
 
 
-                        {/* <div className="col-md-4">
+                        {/* <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label>Property Status - Rent</label>
                                 <div className="form_field_inner">
@@ -2352,7 +2352,7 @@ const CreateProperty = () => {
 
 
 
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">State</label>
 
@@ -2378,7 +2378,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
 
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">City</label>
 
@@ -2405,7 +2405,7 @@ const CreateProperty = () => {
                         </div>
 
 
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Locality</label>
                                 <div className="form_field_inner">
@@ -2425,7 +2425,7 @@ const CreateProperty = () => {
                             </div>
 
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Society</label>
                                 <div className="form_field_inner">
@@ -2444,7 +2444,7 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Pincode number</label>
                                 <div className="form_field_inner">
@@ -2466,29 +2466,23 @@ const CreateProperty = () => {
                         </div>
                     </div>
                 </div>
-                <div className="bottom_fixed_button">
-                    <div className="verticall_gap"></div>
+                <div className="bottom_fixed_button">                
+                    {formError && <p className="error">{formError}</p>}
+                    {formSuccess && <p className="success">{formSuccess}</p>}
                     <div className="next_btn_back">
-                        {formError && <p className="error">{formError}</p>}
-                        {formSuccess && <p className="success">{formSuccess}</p>}
-                        <br></br>
-                        <div style={{ display: "flex", alignItems: "center", gap:"22px" }}>
-                            <button
-                                className="theme_btn btn_border full_width"
-                                onClick={handleBackSubmit}                              
-                            >
-                                {"<< Dashboard"}
-                            </button>
-
-                            <button
-                                    id="btn_create"
-                                    className="theme_btn btn_fill full_width"
-                                    onClick={(e) => handleSubmit(e, 'Next')}
-                               
-                                >
-                                    Create
-                                </button>
-                        </div>
+                        <button
+                            className="theme_btn btn_border full_width no_icon"
+                            onClick={handleBackSubmit}
+                        >
+                            {"<< Dashboard"}
+                        </button>
+                        <button
+                            id="btn_create"
+                            className="theme_btn btn_fill full_width no_icon"
+                            onClick={(e) => handleSubmit(e, 'Next')}
+                        >
+                            Create
+                        </button>
                     </div>
                 </div>
             </div>

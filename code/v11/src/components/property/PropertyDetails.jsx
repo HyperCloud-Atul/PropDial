@@ -953,7 +953,7 @@ const PropertyDetails = () => {
       </div>
 
       <div div className="pg_property pd_single pg_bg">
-        <div className="page_spacing full_card">
+        <div className="page_spacing full_card_width">
           {/* top search bar */}
           {!user && (
             <div className="top_search_bar">
@@ -966,10 +966,10 @@ const PropertyDetails = () => {
           <div className="property_cards">
             {propertyDocument && (
               <div className="">
-                {user && <div className="property_card_single quick_detail_show">
+                {user && <div className="property_card_single quick_detail_show mobile_full_card">
                   <div className="more_detail_card_inner">
                     <div className="row align-items-center">
-                      <div className="col-md-9">
+                      <div className="col-6 col-md-9">
                         <div className="left">
                           <div className="qd_single">
                             <span class="material-symbols-outlined">
@@ -982,7 +982,7 @@ const PropertyDetails = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-3">
+                      <div className="col-6 col-md-3">
                         <div className="right">
                           <div className="premium text-center">
                             <img src="/assets/img/premium_img.jpg" alt="" />
@@ -995,45 +995,8 @@ const PropertyDetails = () => {
                   </div>
                 </div>}
 
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="pcs_inner pointer" to="/pdsingle">
-                    {/* <div className="pcs_image_area relative">
-                          {filteredImages.length > 0 ? (
-                            <div className="bigimage_container">
-                              <Gallery
-                                items={filteredImages.map((url) => ({
-                                  original: url,
-                                  thumbnail: url,
-                                }))}
-                                slideDuration={1000}
-                              />
-                            </div>
-                          ) : (
-                            <img
-                              className="default_prop_img"
-                              src="/assets/img/admin_banner.jpg"
-                              alt=""
-                            />
-                          )}
-                          {user && user.role == "admin" && (
-                            <div className="upload_prop_img">
-                              <input
-                                type="file"
-                                accept="image/*"
-                                id="imageInput"
-                                multiple
-                                onChange={handleImageChange}
-                                style={{ display: "none" }}
-                                ref={fileInputRef}
-                              />
-                              <img
-                                src="/assets/img/upload_img_small.png"
-                                alt=""
-                                onClick={handleAddMoreImages}
-                              />
-                            </div>
-                          )}
-                        </div> */}
 
                     <div className="pcs_image_area relative">
                       {images.length > 0 ? (
@@ -1073,7 +1036,7 @@ const PropertyDetails = () => {
                           <div className="d-flex flex-column align-items-center justify-content-center">
                             {!isUploading && (
                               <button
-                                className="btn_fill_add_property_images mb-2" // Use mb-2 for spacing between buttons
+                                className="btn_fill_add_property_images"
                                 onClick={handleAddMoreImages}
                               >
                                 {isConfirmVisible
@@ -1110,7 +1073,7 @@ const PropertyDetails = () => {
                           {propertyDocument.unitNumber},{" "}
                           {propertyDocument.society}
                         </h4>
-                        <h6>
+                        {/* <h6>
                           {propertyDocument.status.toUpperCase() ===
                             "AVAILABLE FOR RENT" ||
                             propertyDocument.status.toUpperCase() ===
@@ -1143,7 +1106,7 @@ const PropertyDetails = () => {
                               {propertyDocument.status}
                             </span>
                           )}
-                        </h6>
+                        </h6> */}
                         <h4 className="property_name">
                           {propertyDocument.bhk} |{" "}
                           {propertyDocument.furnishing === ""
@@ -1159,8 +1122,8 @@ const PropertyDetails = () => {
                         </h6>
                       </div>
                       <div className="divider"></div>
-                      <div className="pmd_section2 row">
-                        <div className="pdms_single col-4">
+                      <div className="pmd_section2">
+                        <div className="pdms_single">
                           <h4>
                             <span className="currency">₹</span>
                             {propertyDocument.demandPrice}/-
@@ -1181,14 +1144,11 @@ const PropertyDetails = () => {
                         </div>
                         {propertyDocument.purpose.toUpperCase() ===
                           "RENT" && (
-                            <div className="pdms_single col-4">
+                            <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
-                                {propertyDocument.maintenanceCharges}/-{" "}
-                                <span style={{ fontSize: "0.8rem" }}>
-                                  {" "}
-                                  {propertyDocument.maintenanceFlag}
-                                </span>
+                                {propertyDocument.maintenanceCharges}/-{" "}  {propertyDocument.maintenanceFlag}
+
                               </h4>
                               <h6>
                                 {propertyDocument.maintenanceChargesFrequency}{" "}
@@ -1198,7 +1158,7 @@ const PropertyDetails = () => {
                           )}
                         {propertyDocument.purpose.toUpperCase() ===
                           "RENT" && (
-                            <div className="pdms_single col-4">
+                            <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
                                 {propertyDocument.securityDeposit}/-
@@ -1206,12 +1166,10 @@ const PropertyDetails = () => {
                               <h6>Security Deposit</h6>
                             </div>
                           )}
-
-                        <div className="pdms_single col-4"></div>
                       </div>
                       <div className="divider"></div>
-                      <div className="pmd_section2 pmd_section3 row">
-                        <div className="pdms_single col-4">
+                      <div className="pmd_section2 pmd_section3">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_carpet.png"></img>
                             {propertyDocument.superArea}{" "}
@@ -1219,14 +1177,14 @@ const PropertyDetails = () => {
                           </h4>
                           <h6>Super Area</h6>
                         </div>
-                        <div className="pdms_single col-4">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_bedroom.png"></img>
                             {propertyDocument.numberOfBedrooms}
                           </h4>
                           <h6>Bedrooms</h6>
                         </div>
-                        <div className="pdms_single col-4">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_bathroom.png"></img>
                             {propertyDocument.numberOfBathrooms}
@@ -1235,8 +1193,8 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                       <div className="divider"></div>
-                      <div className="pmd_section2 pmd_section3 row">
-                        <div className="pdms_single col-4">
+                      <div className="pmd_section2 pmd_section3">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_super_area.png"></img>
                             {propertyDocument.carpetArea}{" "}
@@ -1244,14 +1202,14 @@ const PropertyDetails = () => {
                           </h4>
                           <h6>Carpet Area</h6>
                         </div>
-                        <div className="pdms_single col-4">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_bhk.png"></img>
                             {propertyDocument.bhk}
                           </h4>
                           <h6>BHK</h6>
                         </div>
-                        <div className="pdms_single col-4">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_furniture.png"></img>
                             {propertyDocument.furnishing}
@@ -1259,41 +1217,25 @@ const PropertyDetails = () => {
                           <h6>Furnishing</h6>
                         </div>
                       </div>
-                      <div className="vg22"></div>
                       <div className="pmd_section4">
                         <div className="left">
-                          <span
-                            className="material-symbols-outlined mr-2"
-                            style={{
-                              marginRight: "3px",
-                            }}
-                          >
-                            favorite
-                          </span>
-                          <span
-                            className="material-symbols-outlined"
-                            onClick={handleShareClick}
-                          >
-                            share
-                          </span>
+                          <div className="theme_btn btn_border icon_left with_icon" onClick={handleShareClick}>
+                            <span
+                              className="material-symbols-outlined btn_icon"
+                            >
+                              share
+                            </span>
+                            Share
+                          </div>
+
                         </div>
-                     
+
                         {!(
                           (user && user.role === "owner") ||
                           (user && user.role === "coowner") ||
                           (user && user.role === "admin")
                         ) && (
                             <div className="right">
-                              {/* <a
-                                href="."
-                                className="theme_btn no_icon btn_fill"
-                                style={{
-                                  marginRight: "10px",
-                                }}
-                              >
-                                {" "}
-                                Contact Agent
-                              </a> */}
                               <a
                                 href="."
                                 className="theme_btn no_icon btn_fill"
@@ -1779,99 +1721,111 @@ const PropertyDetails = () => {
                                 </Link>
                               </div>
                             </div>}
-                          <div className={`${user && user.role === "admin" ? "col-11" : "col-12" }`}>
+                          <div className={`${user && user.role === "admin" ? "col-11" : "col-12"}`}>
                             <div className="property_layout_card">
-                            <Swiper
-                              spaceBetween={15}
-                              slidesPerView={2.5}
-                              pagination={false}
-                              freeMode={true}
-                              className='all_tenants'
-                            >
+                              <Swiper
+                                spaceBetween={15}
+                                slidesPerView={2.5}
+                                pagination={false}
+                                freeMode={true}
+                                className='all_tenants'
+                                breakpoints={{
+                                  // when window width is >= 320px
+                                  320: {
+                                    slidesPerView: 1,
+                                    spaceBetween: 15,
+                                  },
+                                  // when window width is >= 640px
+                                  640: {
+                                    slidesPerView: 1,
+                                    spaceBetween: 15,
+                                  },
+                                }}
+                              >
                                 {propertyLayouts && propertyLayouts.map((room, index) => (
-                                   <SwiperSlide key={index}>
-   <div className="ai_detail_show">
-                                    <div className="left relative">
-                                      {(() => {
-                                        if (room.roomType === "Bedroom") {
-                                          return (
-                                            <img
-                                              src="/assets/img/icons/illustrate_bedroom.jpg"
-                                              alt={room.roomType}
-                                            />
-                                          );
-                                        } else if (room.roomType === "Kitchen") {
-                                          return (
-                                            <img
-                                              src="/assets/img/icons/illustrate_kitchen.jpg"
-                                              alt={room.roomType}
-                                            />
-                                          );
-                                        } else if (room.roomType === "Living Room") {
-                                          return (
-                                            <img
-                                              src="/assets/img/icons/illustrate_livingroom.jpg"
-                                              alt={room.roomType}
-                                            />
-                                          );
-                                        } else if (room.roomType === "Bathroom") {
-                                          return (
-                                            <img
-                                              src="/assets/img/icons/illustrate_bathroom.jpg"
-                                              alt={room.roomType}
-                                            />
-                                          );
-                                        } else if (room.roomType === "Dining Room") {
-                                          return (
-                                            <img
-                                              src="/assets/img/icons/illustrate_dining.jpg"
-                                              alt={room.roomType}
-                                            />
-                                          );
-                                        } else if (room.roomType === "Balcony") {
-                                          return (
-                                            <img
-                                              src="/assets/img/icons/illustrate_balcony.jpg"
-                                              alt={room.roomType}
-                                            />
-                                          );
-                                        } else {
-                                          return (
-                                            <img
-                                              src="/assets/img/icons/illustrate_basment.jpg"
-                                              alt={room.roomType}
-                                            />
-                                          );
-                                        }
-                                      })()}
-                                      <label htmlFor="imgupload" className="upload_img click_text by_text">
-                                        Upload img
-                                        <input
-                                          type="file"
-                                          id="imgupload"
-                                        />
-                                      </label>
-                                    </div>
-                                    <div className="right">
-                                      <h5>{room.roomName}</h5>
-                                      <div className="in_detail">
-                                        <span className="in_single">Area {room.roomTotalArea}sq/ft</span>
-                                        <span className="in_single">Length {room.roomLength}ft</span>
-                                        <span className="in_single">Width {room.roomWidth}ft</span>
-                                        {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
-                                          <span className="in_single" key={findex}>{fixture}</span>
-                                        ))}
+                                  <SwiperSlide key={index}>
+                                    <div className="ai_detail_show">
+                                      <div className="left relative">
+                                        {(() => {
+                                          if (room.roomType === "Bedroom") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_bedroom.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Kitchen") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_kitchen.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Living Room") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_livingroom.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Bathroom") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_bathroom.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Dining Room") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_dining.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Balcony") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_balcony.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_basment.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          }
+                                        })()}
+                                        <label htmlFor="imgupload" className="upload_img click_text by_text">
+                                          Upload img
+                                          <input
+                                            type="file"
+                                            id="imgupload"
+                                          />
+                                        </label>
                                       </div>
-                                      <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
-                                        <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
-                                        <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
+                                      <div className="right">
+                                        <h5>{room.roomName}</h5>
+                                        <div className="in_detail">
+                                          <span className="in_single">Area {room.roomTotalArea}sq/ft</span>
+                                          <span className="in_single">Length {room.roomLength}ft</span>
+                                          <span className="in_single">Width {room.roomWidth}ft</span>
+                                          {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
+                                            <span className="in_single" key={findex}>{fixture}</span>
+                                          ))}
+                                        </div>
+                                        <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
+                                          <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
+                                          <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                   </SwiperSlide>
-                               
+                                  </SwiperSlide>
+
                                 ))}
-                               </Swiper>
+                              </Swiper>
 
                               {selectedRoom && (
                                 <>
@@ -2516,7 +2470,7 @@ const PropertyDetails = () => {
                   )}
                 {/* propdial managers / user card end  */}
 
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">About Property</h2>
                     <div className="p_info">
@@ -2616,7 +2570,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Property Type</h2>
                     <div className="p_info">
@@ -2854,7 +2808,7 @@ const PropertyDetails = () => {
                 {/* Additional Rooms */}
                 {propertyDocument &&
                   propertyDocument.additionalRooms.length > 0 && (
-                    <div className="property_card_single">
+                    <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Additional Rooms</h2>
                         <div className="p_info">
@@ -2907,7 +2861,7 @@ const PropertyDetails = () => {
                   )}
                 {propertyDocument &&
                   propertyDocument.additionalArea.length > 0 && (
-                    <div className="property_card_single">
+                    <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Additional Area</h2>
                         <div className="p_info">
@@ -2953,7 +2907,7 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   )}
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Property Size</h2>
                     <div className="p_info">
@@ -3036,7 +2990,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Parking</h2>
                     <div className="p_info">
@@ -3128,7 +3082,7 @@ const PropertyDetails = () => {
                         </div>
                       )} */}
 
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Building</h2>
                     <div className="p_info">
@@ -3195,7 +3149,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Additional Info</h2>
                     <div className="p_info">
@@ -3250,7 +3204,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Visiting Details</h2>
                     <div className="p_info">
@@ -3313,7 +3267,7 @@ const PropertyDetails = () => {
                 </div>
                 {user && (user.role !== 'guest') && <div className="row">
                   <div className="col-lg-6">
-                    <div className="property_card_single">
+                    <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Property Description</h2>
                         {isPropDescEdit ? (
@@ -3380,7 +3334,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                   <div className="col-lg-6">
-                    <div className="property_card_single">
+                    <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Owner Instruction</h2>
 
