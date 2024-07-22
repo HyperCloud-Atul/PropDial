@@ -97,7 +97,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
               <Link className="pcs_inner pointer" to={`/propertydetails/${property.id}`}>
                 <div className="pcs_image_area">
                   {/* <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" /> */}
-                  <img src={property.images[0]} className="bigimage" alt={property.bhk} />
+                  {property.images.length > 0 ? <img src={property.images[0]} className="bigimage" alt={property.bhk} /> : <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" />}
                 </div>
                 <div className="pcs_main_detail">
                   <div className="pmd_top relative">
@@ -118,7 +118,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                       </div>
                       <div className="pi_single">
                         <h6>Balcony</h6>
-                        <h5>{property.balcony}</h5>
+                        <h5>{property.numberOfBalcony}</h5>
                       </div>
                       <div className="pi_single">
                         <h6>Floor number</h6>
@@ -126,12 +126,22 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                       </div>
                       <div className="pi_single">
                         <h6>Lift</h6>
-                        <h5>{property.lift}</h5>
+                        <h5>{property.numberOfLifts}</h5>
                       </div>
-                      <div className="pi_single">
-                        <h6>Carpet area</h6>
-                        <h5>{property.carpetArea}</h5>
-                      </div>
+
+                      {
+                        property.carpetArea !== "" ?
+
+                          <div className="pi_single">
+                            <h6>Carpet area</h6>
+                            <h5>{property.carpetArea} {property.carpetAreaUnit}</h5>
+                          </div> :
+                          <div className="pi_single">
+                            <h6>Super area</h6>
+                            <h5>{property.superArea} {property.superAreaUnit}</h5>
+                          </div>
+                      }
+
                     </div>
                   </div>
                 </div>

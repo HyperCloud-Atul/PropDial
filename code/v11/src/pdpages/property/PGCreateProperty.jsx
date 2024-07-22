@@ -604,6 +604,7 @@ const CreateProperty = () => {
                 builtupAreaUnit: "",
                 carpetArea: "",
                 carpetAreaUnit: "",
+                images: [],
                 imgURL: [],
                 yearOfConstruction: "",
                 // ageOfProperty: "",
