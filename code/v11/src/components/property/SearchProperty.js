@@ -102,7 +102,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                 <div className="pcs_main_detail">
                   <div className="pmd_top relative">
                     <h4 className="property_name">
-                      {property.bhk} | {property.furnishing === "" ? "" : property.furnishing + "Furnished | "} {property.status}
+                      {property.bhk} | {property.furnishing === "" ? "" : property.furnishing + " Furnished | "} {property.status}
                     </h4>
                     <h6 className="property_location">{property.locality}, {property.city} |  {property.state}</h6>
                   </div>

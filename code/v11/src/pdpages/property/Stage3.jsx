@@ -2064,7 +2064,7 @@ export default function Stage3(props) {
                       <ReactQuill
                         theme="snow" // Specify the theme ('snow' for a clean, modern look)
                         placeholder="Type here..." // Add placeholder prop here
-                        value={propertyDetails.PropertyDescription}
+                        value={propertyDetails && propertyDetails.PropertyDescription}
                         // onChange={setValue} // Set the value state when the editor content changes
                         onChange={(e) => {
                           setPropertyDetails({
@@ -2133,19 +2133,19 @@ export default function Stage3(props) {
             </div>
           </div>
         </div>
-        <div className="bottom_fixed_button">
+        <div className="verticall_gap"></div>
         {formError && <p className="error">{formError}</p>}
-        <div className='next_btn_back'>         
-         
-            <button className="theme_btn btn_border full_width" onClick={handleBackSubmit}>
-              {"<< Back"}
-            </button> 
+        <div style={{ display: "flex", alignItems: "center", gap: "22px" }} className='next_btn_back bottom_fixed_button'>
+
+          <button className="theme_btn btn_border full_width" onClick={handleBackSubmit}>
+            {"<< Back"}
+          </button>
 
           <button className="theme_btn btn_fill full_width" onClick={handleNextSubmit}>
             Submit
           </button>
 
-        </div> </div>
+        </div>
       </form >
 
     </>
