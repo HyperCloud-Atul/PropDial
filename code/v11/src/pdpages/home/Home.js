@@ -521,7 +521,7 @@ const Home = () => {
 
         <Blog></Blog>
       </div>
-      <Modal show={show} onHide={handleClose}>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Reminder</Modal.Title>
         </Modal.Header>
@@ -543,7 +543,7 @@ const Home = () => {
           </div>
         </section>
 
-      </Modal>
+      </Modal> */}
     </>
 
   );
