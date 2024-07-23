@@ -285,6 +285,7 @@ const CreateProperty = () => {
         City: "",
         Locality: "",
         Society: "",
+        Pincode: ""
     });
 
     useEffect(() => {
