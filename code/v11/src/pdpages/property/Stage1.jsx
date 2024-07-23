@@ -274,8 +274,9 @@ const Stage1 = (props) => {
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
-    Package: "PMS Premium",
-    Category: "Residential",
+    Package: "",
+    Flag: "",
+    Category: "",
     UnitNumber: "",
     DemandPrice: "",
     MaintenanceCharges: "",
@@ -344,6 +345,7 @@ const Stage1 = (props) => {
       setPropertyDetails({
         // All select type
         Package: propertyDocument.package,
+        Flag: propertyDocument.flag,
         Category: propertyDocument.category
           ? propertyDocument.category
           : "Residential",
@@ -616,6 +618,7 @@ const Stage1 = (props) => {
 
     const property = {
       package: propertyDetails.Package,
+      flag: propertyDetails.Flag,
       category: propertyDetails.Category
         ? propertyDetails.Category
         : "Residential",
@@ -724,6 +727,451 @@ const Stage1 = (props) => {
     <>
       <div className="add_property_fields">
         <div className="row row_gap">
+          {/* Package */}
+          <div className="col-md-6">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">
+                Package</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Package === "PMS Premium"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="package_pmspremium"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Package: "PMS Premium",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="package_pmspremium"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          PMS Premium
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Package === "PMS Light"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="package_pmslight"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Package: "PMS Light",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="package_pmslight"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          PMS Light
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Package === "PMS Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="package_pmssale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Package: "PMS Sale",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="package_pmssale"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          PMS Sale
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Package === "Pre PMS"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="package_prepms"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Package: "Pre PMS",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="package_prepms"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Pre PMS
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Package === "Rent Only"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="package_rentonly"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Package: "Rent Only",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="package_rentonly"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Rent Only
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Package === "Rent Only"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="package_rentonly"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Package: "Rent Only",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="package_rentonly"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Rent Only
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Property Flags */}
+          <div className="col-md-6">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">
+                Flags</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Flag === "Available For Rent"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="flag_availableforrent"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Flag: "Available For Rent",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="flag_availableforrent"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Available For Rent
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Flag === "Rented Out"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="flag_rentedout"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Flag: "Rented Out",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="flag_rentedout"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Rented Out
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Flag === "Available For Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="flag_availableforsale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Flag: "Available For Sale",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="flag_availableforsale"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Available For Sale
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Flag === "Sold Out"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="flag_soldout"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Flag: "Sold Out",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="flag_soldout"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Sold Out
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Flag === "Rent or Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="flag_rentsale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Flag: "Rent or Sale",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="flag_rentsale"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Rent or Sale
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Flag === "Rented But Sale"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="flag_rentedbutsale"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Flag: "Rented But Sale",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="flag_rentedbutsale"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Rented But Sale
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr></hr>
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">Unit Number</label>
@@ -1620,32 +2068,32 @@ const Stage1 = (props) => {
           </div>
         </div>
       </div>
-      <div className="bottom_fixed_button">       
+      <div className="bottom_fixed_button">
         {formError && <p className="error">{formError}</p>}
         {formSuccess && <p className="success">{formSuccess}</p>}
         <div className="next_btn_back">
-        <button
-              className="theme_btn no_icon btn_border full_width"
-              onClick={handleBackSubmit}
-            >
-              {"<< Back"}
-            </button>
-            {propertyid !== "new" &&
-              <button
-                className="theme_btn no_icon btn_fill full_width"
-                onClick={(e) => handleSubmit(e, 'Save')}
-              >
-                Save
-              </button>
-            }
+          <button
+            className="theme_btn no_icon btn_border full_width"
+            onClick={handleBackSubmit}
+          >
+            {"<< Back"}
+          </button>
+          {propertyid !== "new" &&
             <button
-              className="theme_btn no_icon btn_border full_width"
-              onClick={(e) => handleSubmit(e, 'Next')}
+              className="theme_btn no_icon btn_fill full_width"
+              onClick={(e) => handleSubmit(e, 'Save')}
             >
-              {"Next >>"}
+              Save
             </button>
+          }
+          <button
+            className="theme_btn no_icon btn_border full_width"
+            onClick={(e) => handleSubmit(e, 'Next')}
+          >
+            {"Next >>"}
+          </button>
 
-    
+
         </div>
       </div>
     </>

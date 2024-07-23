@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
+import { useDocument } from "../../hooks/useDocument";
 import Stage1 from './Stage1'
 import Stage2 from './Stage2'
 import Stage3 from './Stage3'
@@ -9,8 +10,15 @@ import './PGUpdateProperty.css'
 
 const PGUpdateProperty = () => {
   const { propertyid } = useParams();
+  const { document: propertydoc, error: propertyerror } = useDocument(
+    "properties",
+    propertyid
+  );
   const [propertyObj, setPropertyObj] = useState(null)
   const [stageFlag, setStageFlag] = useState('stage1')
+
+  console.log("Property Object: ", propertyObj)
+
   return (
     <div className='top_header_pg pg_bg'>
       <div className="page_spacing">
@@ -61,10 +69,16 @@ const PGUpdateProperty = () => {
             </div>
           </div>
         </div>
+        <hr></hr>
+        <div className="row">
+          {propertydoc && <div className="full_address">
+            <h6>{propertydoc.unitNumber} | {propertydoc.society} | {propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + " Furnished"}</h6>
+            <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+          </div>}
+        </div>
+        <hr></hr>
 
-
-        <div className="vg22"></div>
-        <div className="vg22"></div>
+        {/* <div className="vg22"></div> */}
         {stageFlag === 'stage1' && <Stage1 setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage1>}
         {stageFlag === 'stage2' && <Stage2 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage2>}
         {stageFlag === 'stage3' && <Stage3 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage3>}

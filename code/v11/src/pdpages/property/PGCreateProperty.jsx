@@ -270,6 +270,7 @@ const CreateProperty = () => {
     const [propertyDetails, setPropertyDetails] = useState({
         // All select type
         Package: "PMS Premium",
+        Flag: "Available For Rent",
         Category: "Residential",
         UnitNumber: "",
         DemandPrice: "",
@@ -545,6 +546,7 @@ const CreateProperty = () => {
 
             const property = {
                 package: propertyDetails.Package,
+                flag: propertyDetails.Flag,
                 category: propertyDetails.Category
                     ? propertyDetails.Category
                     : "Residential",
@@ -582,7 +584,6 @@ const CreateProperty = () => {
                 //other property fields
                 source: "",
                 ownership: "",
-                flag: "",
                 numberOfBedrooms: 0,
                 numberOfBathrooms: 0,
                 numberOfBalcony: 0,
@@ -895,6 +896,228 @@ const CreateProperty = () => {
                                                             </span>
                                                         </div>
                                                         Rent Only
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Property Flags */}
+                        <div className="col-md-6">
+                            <div className="form_field st-2 label_top">
+                                <label htmlFor="">
+                                    Flags</label>
+                                <div className="form_field_inner">
+                                    <div className="form_field_container">
+                                        <div className="radio_group">
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Available For Rent"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_availableforrent"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Available For Rent",
+                                                            });
+                                                        }}
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_availableforrent"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Available For Rent
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Rented Out"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_rentedout"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Rented Out",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_rentedout"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Rented Out
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Available For Sale"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_availableforsale"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Available For Sale",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_availableforsale"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Available For Sale
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Sold Out"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_soldout"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Sold Out",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_soldout"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Sold Out
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Rent or Sale"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_rentsale"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Rent or Sale",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_rentsale"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Rent or Sale
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Rented But Sale"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_rentedbutsale"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Rented But Sale",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_rentedbutsale"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Rented But Sale
                                                     </label>
                                                 </div>
                                             </div>
