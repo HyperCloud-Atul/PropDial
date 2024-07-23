@@ -563,6 +563,8 @@ const Stage2 = (props) => {
       YearOfConstruction: option.value,
       // AgeOfProperty: ageOfProperty,
     });
+
+    setYearOfConstruction({ label: option.value, value: option.value })
   }
 
   return (

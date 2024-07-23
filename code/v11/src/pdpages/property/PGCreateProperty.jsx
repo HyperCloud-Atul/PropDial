@@ -436,6 +436,10 @@ const CreateProperty = () => {
         // console.log('e: ', e)
         // console.log('option: ', option)
 
+        if (!(user && user.role === 'admin')) {
+            navigate("/")
+        }
+
         setFormError(null);
         setFormSuccess(null);
 
@@ -619,8 +623,8 @@ const CreateProperty = () => {
                 bachlorsGirlsAllowed: "",
                 petsAllowed: "",
                 vegNonVeg: "",
-                propertyDescription: "this is property description",
-                ownerInstructions: "this is owner instruction",
+                propertyDescription: "",
+                ownerInstructions: "",
                 // propertyManager: user.uid,
                 // propertyCoManager: user.uid,
                 // propertySalesManager: user.uid,
@@ -644,6 +648,7 @@ const CreateProperty = () => {
                     ..._newProperty,
                     pid: nextPropertySeqCounter
                 }
+
                 await addNewPropertyDocument(_propertyWithSeqCounter);
                 if (addNewPropertyDocumentResponse.error) {
                     navigate("/");
@@ -2467,7 +2472,7 @@ const CreateProperty = () => {
                         </div>
                     </div>
                 </div>
-                <div className="bottom_fixed_button">                
+                <div className="bottom_fixed_button">
                     {formError && <p className="error">{formError}</p>}
                     {formSuccess && <p className="success">{formSuccess}</p>}
                     <div className="next_btn_back">
