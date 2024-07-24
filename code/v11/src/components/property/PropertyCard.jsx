@@ -194,7 +194,7 @@ const PropertyCard = ({ propertyid }) => {
           {propertydoc.category}
         </div>} */}
         {propertydoc && <div className={`category ${propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT' ? "residential" : "commercial"}`}>
-          {propertydoc.status}
+          {propertydoc.flag}
         </div>}
 
 
