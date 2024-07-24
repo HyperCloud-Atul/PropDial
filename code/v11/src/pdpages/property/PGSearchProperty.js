@@ -39,14 +39,14 @@ const PGSearchProperty = () => {
   };
 
   const filteredPropdialProperties = propdialProperties && propdialProperties.filter((property) => {
-    return ((activeOption === "Rent" ? property.status === "Available for Rent" : property.status === "Available for Sale") && (property.category === activeCategory));
+    return ((activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale") && (property.category === activeCategory));
   });
 
 
   // Filter recent 10 properties
   const filteredPropdialPropertiesRecent = propdialProperties && propdialProperties
-    .filter((property) => ((activeOption === "Rent" ? property.status === "Available for Rent" : property.status === "Available for Sale") && (property.category === activeCategory)))
-    .slice(0, 2);
+    .filter((property) => ((activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale") && (property.category === activeCategory)))
+    .slice(0, 3);
 
   // const filteredPropAgentProperties = propagentProperties && propagentProperties.filter((property) => {
   //   return property.purpose === "Available for Rent" || property.purpose === "Available for Sale";

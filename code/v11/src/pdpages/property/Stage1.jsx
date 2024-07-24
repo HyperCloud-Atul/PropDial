@@ -1170,8 +1170,7 @@ const Stage1 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
-          <hr></hr>
+          </div>    
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">Unit Number</label>

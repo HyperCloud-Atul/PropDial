@@ -426,9 +426,9 @@ const PropertyCard = ({ propertyid }) => {
                 </div>
               </div> */}
 
-              {propertydoc && <Link style={{ height: '25px', position: 'relative', top: '20px' }} to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
+              {/* {propertydoc && <Link style={{ height: '25px', position: 'relative', top: '20px' }} to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
                 view more
-              </Link>}
+              </Link>} */}
 
             </div>
 
