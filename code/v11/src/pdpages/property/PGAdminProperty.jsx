@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
 import PropertyCard from "../../components/property/PropertyCard";
@@ -49,7 +49,7 @@ const PGAdminProperty = () => {
         })
         : null;
     // filter code end 
-  
+
 
     // card and table view mode functionality start
     const [viewMode, setviewMode] = useState('card_view'); // Initial mode is grid with 3 columns
@@ -59,22 +59,66 @@ const PGAdminProperty = () => {
     };
     // card and table view mode functionality end
 
+      // 9 dots controls
+  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+  const openMoreAddOptions = () => {
+    setHandleMoreOptionsClick(true);
+  };
+  const closeMoreAddOptions = () => {
+    setHandleMoreOptionsClick(false);
+  };
+  // 9 dots controls
+
     return (
         <div className="top_header_pg pg_bg">
             <div className="page_spacing">
+                {/* 9 dots html  */}
+                <div onClick={openMoreAddOptions} className="property-list-add-property">
+                    <span className="material-symbols-outlined">apps</span>
+                </div>
+                <div
+                    className={
+                        handleMoreOptionsClick
+                            ? "more-add-options-div open"
+                            : "more-add-options-div"
+                    }
+                    onClick={closeMoreAddOptions}
+                    id="moreAddOptions"
+                >
+                    <div className="more-add-options-inner-div">
+                        <div className="more-add-options-icons">
+                            <h1>Close</h1>
+                            <span className="material-symbols-outlined">close</span>
+                        </div>
+
+                        <Link to="/newproperty" className="more-add-options-icons">
+                            <h1>Add property</h1>
+                            <span className="material-symbols-outlined">location_city</span>
+                        </Link>
+
+                        <Link to="/ratecard" className="more-add-options-icons">
+                            <h1>Rate Card</h1>
+                            <span class="material-symbols-outlined">receipt_long</span>
+                        </Link>
+
+
+                    </div>
+                </div>
+                {/* 9 dots html  */}
                 <div className="pg_header d-flex justify-content-between">
                     <div className="left">
-                        <h2 className="m22">All properties {" "}
-                            {/* <span className="r14 light_black" >( All application users : {users && users.length} )</span> */}
+                        <h2 className="m22">Filtered properties : {properties && (
+                            <span className='text_orange'>{filterProperties.length}</span>
+                        )}                           
                         </h2>
                     </div>
-                    <div className="right">
+                    <div className="right">                        
                         <img src="./assets/img/icons/excel_logo.png" alt="" className="excel_dowanload" />
                     </div>
                 </div>
                 <div className="vg12"></div>
                 <div className="filters">
-                    <div className='left'>
+                    <div className='left'>                        
                         {viewMode === "card_view" && (
                             <div className="rt_global_search search_field">
                                 <input
@@ -93,7 +137,7 @@ const PGAdminProperty = () => {
                                     filterLength={filterProperties.length}
                                 />
                             )}
-                        </div>                      
+                        </div>
                         <div className="residentail_commercial rent_sale">
                             <label className={rentSaleFilter === "Sale" ? "on" : "off"}>
                                 <div className="switch">
@@ -123,9 +167,13 @@ const PGAdminProperty = () => {
                                 <span className="material-symbols-outlined">view_list</span>
                             </div>
                         </div>
+                        <Link to="/newproperty" className="theme_btn btn_fill no_icon header_btn">
+                            Create Property
+                        </Link>
                     </div>
                 </div>
                 <hr></hr>
+                <div className="vg12"></div>
                 <div className="property_cards_parent">
                     {viewMode === "card_view" && (
                         <>

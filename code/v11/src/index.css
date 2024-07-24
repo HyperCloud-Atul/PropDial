@@ -89,7 +89,13 @@ body {
   border: none;
   cursor: pointer;
 }
-
+.theme_btn.header_btn {
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  padding: 5px 20px;
+}
 .theme_btn.icon_left {
   padding-right: 20px;
 }

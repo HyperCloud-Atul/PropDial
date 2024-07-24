@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import ReactTable from '../ReactTable';
+import { Link } from 'react-router-dom';
 
 const PropertyTable = ({ properties }) => {
   const columns = useMemo(
@@ -12,34 +13,61 @@ const PropertyTable = ({ properties }) => {
         disableFilters: true,
       },
       {
-        Header: 'PID',
-        accessor: 'pid',    
+        Header: 'Action',
+        accessor: 'id',
+        disableFilters: true,
+        Cell: ({ row }) => (
+          <div className='d-flex align-items-center'>
+            <Link to={`/propertydetails/${row.original.id}`}>
+              <span class="material-symbols-outlined click_icon pointer" style={{
+                fontSize: "20px",
+                marginRight: "8px"
+              }}>
+                visibility
+              </span>
+            </Link>
+            <Link to={`/updateproperty/${row.original.id}`}>
+              <span class="material-symbols-outlined click_icon pointer" style={{
+                fontSize: "20px",
+                marginRight: "8px"
+              }}>
+                border_color
+              </span>
+            </Link>       
+          </div>
+        ),
       },
-      
+
+
+      {
+        Header: 'PID',
+        accessor: 'pid',
+      },
+
       {
         Header: 'City',
-        accessor: 'city',    
+        accessor: 'city',
       },
       {
         Header: 'Locality',
-        accessor: 'locality',    
+        accessor: 'locality',
       },
       {
         Header: 'Society',
-        accessor: 'society',    
+        accessor: 'society',
       },
       {
         Header: 'Unit No',
-        accessor: 'unitNumber',    
+        accessor: 'unitNumber',
       },
       {
         Header: 'Type',
-        accessor: 'category',    
+        accessor: 'category',
       },
       {
         Header: 'Flag',
-        accessor: 'purpose',    
-      },    
+        accessor: 'purpose',
+      },
     ],
     []
   );
