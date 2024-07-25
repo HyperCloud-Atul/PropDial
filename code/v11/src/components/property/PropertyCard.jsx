@@ -219,13 +219,16 @@ const PropertyCard = ({ propertyid }) => {
                   <span className="material-symbols-outlined">edit_square</span>
                 </Link>}
               <h5 className="demand">
-                <span>₹</span> {propertydoc.demandPrice}
-                {propertydoc.maintenancecharges !== '' && <span
+                <span>₹</span>             
+                 {new Intl.NumberFormat('en-IN').format(propertydoc.demandPrice)}/-
+                {propertydoc.maintenancecharges !== '' &&
+                 <span
                   style={{
                     fontSize: "10px",
                   }}
                 >
-                  + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
+                  + ₹
+                  {new Intl.NumberFormat('en-IN').format(propertydoc.maintenancecharges)}/- ({propertydoc.maintenancechargesfrequency})
                 </span>}
               </h5>
               <div className="full_address">

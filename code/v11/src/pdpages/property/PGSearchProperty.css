@@ -70,6 +70,7 @@
     margin: 20px 0px !IMPORTANT;
     display: flex;
     gap: 10px;
+    padding-left: 0px;
 }
 .pg_enquiry .theme_tab ul.tabs {
     margin: 0px !IMPORTANT;
@@ -152,6 +153,19 @@ span.material-symbols-outlined.fav{
     gap: 16px;
     border-radius: 12px;
     background: white;
+    overflow: hidden;
+}
+.property_card_single .id_badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    background: #e6e6e6;
+    padding: 3px;
+    font-size: 15px;
+    color: var(--theme-orange);
+    font-weight: 500; 
 }
 
 .pcs_inner {
@@ -166,6 +180,7 @@ span.material-symbols-outlined.fav{
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .poi_inner {
@@ -301,6 +316,7 @@ h6.value_per_sqf {
     color: #303030;
     font-size: 14px;
     font-weight: 400;
+    margin-bottom: 2px;
 }
 
 .pcs_other_info h5.link {
@@ -325,7 +341,11 @@ h6.value_per_sqf {
     }
     .pcs_other_info {
         width: 100%;   
-        display: block;     
+        display: block;  
+        padding-top: 42px;   
+    }
+    .guest_property_card.property_card_single .left {
+        width: 100%;
     }
 }
 @media only screen and (max-width: 767px) {
@@ -340,6 +360,9 @@ h6.value_per_sqf {
     .pcs_inner .pcs_image_area img {       
         border-radius: 0px;
         aspect-ratio: 3/2;
+    }
+    .pcs_inner .pcs_image_area img.bigimage {      
+        border-radius: 12px 12px 0px 0px;
     }
     .property_card_left {
         display: flex;
@@ -386,24 +409,29 @@ h6.value_per_sqf {
         border-right: none !important;
     }    
     .poi_inner {     
+        
         position: relative;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        gap: 12px;
     } 
-    h6.property_value {
-        position: absolute;    
-        font-size: 24px;    
-        top: 0;
-        right: 0;
+    h6.value_per_sqf {     
+        font-size: 12px;   
+        margin-bottom: 1px;
+        text-align: end;        
     }
-    h6.value_per_sqf {       
-        position: absolute;
-        top: 30px;
-        right: 0;
+    h6.property_value {    
+        font-size: 18px;      
+        text-align: end;
     }
+  
     .poi_inner button {     
         max-width: 160px;
     }
     .pcs_other_info {    
         padding: 10px;    
+        padding-top: 42px;
     }
     .poi_inner button.theme_btn {
         padding: 2px 18px;     
@@ -411,6 +439,13 @@ h6.value_per_sqf {
     }
     .pcs_other_info h5.link {      
         font-size: 10px;
+    }
+    .pg_property .top_search_bar .search_area_header {
+        margin-bottom: 0px;
+        gap: 15px;
+        background: none;
+        padding: 0px;
+        border-radius: 0px;
     }
 }
 @media only screen and (max-width: 575px) {

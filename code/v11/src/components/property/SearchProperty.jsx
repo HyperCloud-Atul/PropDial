@@ -92,7 +92,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
     <>
       {propertiesdocuments &&
         propertiesdocuments.map((property) => (
-          <div className="property_card_single" key={property.id}>
+          <div className="guest_property_card property_card_single " key={property.id}>
             <div className="left relative">
               <Link className="pcs_inner pointer" to={`/propertydetails/${property.id}`}>
                 <div className="pcs_image_area">
@@ -158,14 +158,21 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
               </div>
             </div>
             <div className="pcs_other_info">
+              <div className="id_badge">
+                {property.pid}
+              </div>
               <div className="poi_inner">
-                <h6 className="value_per_sqf">Onwards</h6>
+              <div>
+              <h6 className="value_per_sqf">Demand</h6>
                 <h6 className="property_value">
-                  <span>₹ </span> {property.demandPrice}
+                  <span>₹ </span>
+                  {new Intl.NumberFormat('en-IN').format(property.demandPrice)}/-
+                 
                 </h6>
-                <h6 className="value_per_sqf">
-                  {property.carpetArea}  {property.carpetAreaUnit}
-                </h6>
+              </div>
+                {/* <h6 className="value_per_sqf">
+                  {property.carpetArea}  {property.carpetAreaUnit} 
+                </h6> */}
                 <button
                   className="theme_btn no_icon btn_fill"
                   data-bs-toggle="modal"

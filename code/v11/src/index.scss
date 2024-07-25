@@ -627,11 +627,11 @@
       justify-content: space-between;
       margin-top: 3px;
       .card_badge {
-        background: var(--theme-blue);
-        color: var(--white-color);
+        background: #f5f5f5;
+        color: var(--theme-orange);
         padding: 4px 8px;
         font-size: 12px;
-        font-weight: 400;
+        font-weight: 500;
         border-radius: 7px;
         letter-spacing: 0.5px;
       }

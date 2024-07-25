@@ -1120,13 +1120,16 @@ const PropertyDetails = () => {
                           {propertyDocument.locality},{" "}
                           {propertyDocument.city}, {propertyDocument.state}
                         </h6>
+                        <span className='pid_badge'>
+                          {propertyDocument.pid}
+                        </span>
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2">
                         <div className="pdms_single">
                           <h4>
                             <span className="currency">₹</span>
-                            {propertyDocument.demandPrice}/-
+                            {new Intl.NumberFormat('en-IN').format(propertyDocument.demandPrice)}/-
                             <span className="price"></span>
                           </h4>
                           <h6>Demand Price</h6>
@@ -1147,12 +1150,13 @@ const PropertyDetails = () => {
                             <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
-                                {propertyDocument.maintenanceCharges}/-{" "}  {propertyDocument.maintenanceFlag}
+                               
+                                {new Intl.NumberFormat('en-IN').format(propertyDocument.maintenanceCharges)}/-{" "}
+                                <span className="extra">({propertyDocument.maintenanceFlag})</span>
 
                               </h4>
                               <h6>
-                                {propertyDocument.maintenanceChargesFrequency}{" "}
-                                Maintenance
+                                Maintenance{" "}({propertyDocument.maintenanceChargesFrequency})
                               </h6>
                             </div>
                           )}
@@ -1160,8 +1164,8 @@ const PropertyDetails = () => {
                           "RENT" && (
                             <div className="pdms_single">
                               <h4>
-                                <span className="currency">₹</span>
-                                {propertyDocument.securityDeposit}/-
+                                <span className="currency">₹</span>                               
+                                {new Intl.NumberFormat('en-IN').format(propertyDocument.securityDeposit)}/-
                               </h4>
                               <h6>Security Deposit</h6>
                             </div>
@@ -1196,11 +1200,11 @@ const PropertyDetails = () => {
                       <div className="pmd_section2 pmd_section3">
                         <div className="pdms_single">
                           <h4>
-                            <img src="/assets/img/new_super_area.png"></img>
-                            {propertyDocument.carpetArea}{" "}
-                            {propertyDocument.carpetAreaUnit}
+                            <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
+                            {propertyDocument.floorNo} of {propertyDocument.numberOfFloors}
+
                           </h4>
-                          <h6>Carpet Area</h6>
+                          <h6>Floor no.</h6>
                         </div>
                         <div className="pdms_single">
                           <h4>
@@ -1418,70 +1422,70 @@ const PropertyDetails = () => {
                       >
                         {/* Documents */}
                         <SwiperSlide>
-                        <Link to={`/propertydocumentdetails/${propertyid}`} >
-                          <div className="item eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                                description
-                              </span>
-                              <div className="text">
-                                <h6>{propertyDocList && propertyDocList.length}</h6>
-                                <h5>Documents</h5>
+                          <Link to={`/propertydocumentdetails/${propertyid}`} >
+                            <div className="item eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  description
+                                </span>
+                                <div className="text">
+                                  <h6>{propertyDocList && propertyDocList.length}</h6>
+                                  <h5>Documents</h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
                         </SwiperSlide>
                         {/* Inspection  */}
                         <SwiperSlide>
-                        <Link to={`/propertyinspectiondocument/${propertyid}`} >
-                          <div className="item eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                                pageview
-                              </span>
-                              <div className="text">
-                                <h6>{inspections && inspections.length}</h6>
-                                <h5>Inspections</h5>
+                          <Link to={`/propertyinspectiondocument/${propertyid}`} >
+                            <div className="item eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  pageview
+                                </span>
+                                <div className="text">
+                                  <h6>{inspections && inspections.length}</h6>
+                                  <h5>Inspections</h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
                         </SwiperSlide>
                         {/* Enquiry  */}
                         <SwiperSlide>
-                        <Link to={`/enquiry/${propertyid}`} >
-                          <div className="item eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                                support_agent
-                              </span>
-                              <div className="text">
-                                <h6>{enquiryDocs && enquiryDocs.length}</h6>
-                                <h5>Enquiries</h5>
+                          <Link to={`/enquiry/${propertyid}`} >
+                            <div className="item eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  support_agent
+                                </span>
+                                <div className="text">
+                                  <h6>{enquiryDocs && enquiryDocs.length}</h6>
+                                  <h5>Enquiries</h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-                        </Link>
+                          </Link>
                         </SwiperSlide>
                         {/* Transactions */}
                         <SwiperSlide>
-                        <Link to={`/transactions/${propertyid}`}>
-                          <div className="item eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                                payments
-                              </span>
-                              <div className="text">
-                                <h6>5</h6>
-                                <h5>Transactions</h5>
+                          <Link to={`/transactions/${propertyid}`}>
+                            <div className="item eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  payments
+                                </span>
+                                <div className="text">
+                                  <h6>5</h6>
+                                  <h5>Transactions</h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
                         </SwiperSlide>
-                        </Swiper>
+                      </Swiper>
                     </div>
 
                   )}
@@ -1845,9 +1849,9 @@ const PropertyDetails = () => {
                                       <div className="right">
                                         <h5>{room.roomName}</h5>
                                         <div className="in_detail">
-                                          <span className="in_single">Area {room.roomTotalArea}sq/ft</span>
-                                          <span className="in_single">Length {room.roomLength}ft</span>
-                                          <span className="in_single">Width {room.roomWidth}ft</span>
+                                          <span className="in_single">Area: {room.roomTotalArea}{" "}SqFt</span>
+                                          <span className="in_single">Length: {room.roomLength}{" "}Ft</span>
+                                          <span className="in_single">Width: {room.roomWidth}{" "}Ft</span>
                                           {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
                                             <span className="in_single" key={findex}>{fixture}</span>
                                           ))}
@@ -1945,13 +1949,13 @@ const PropertyDetails = () => {
                                       </div>
                                       <div className="main_detail">
                                         <div className="md_single">
-                                          Area : <span className="value">{selectedRoom.roomTotalArea}</span><span className="unit">sq/ft</span>
+                                          Area: <span className="value">{selectedRoom.roomTotalArea}</span><span className="unit">{" "}SqFt</span>
                                         </div>
                                         <div className="md_single">
-                                          Length : <span className="value">{selectedRoom.roomLength}</span><span className="unit">ft</span>
+                                          Length: <span className="value">{selectedRoom.roomLength}</span><span className="unit">{" "}Ft</span>
                                         </div>
                                         <div className="md_single">
-                                          Width : <span className="value">{selectedRoom.roomWidth}</span><span className="unit">ft</span>
+                                          Width: <span className="value">{selectedRoom.roomWidth}</span><span className="unit">{" "}Ft</span>
                                         </div>
                                       </div>
                                       <div className="more_detail">
@@ -1972,12 +1976,17 @@ const PropertyDetails = () => {
                                       </div>
 
                                     </div>
-                                    <div className="modal_footer">
-                                      <div onClick={handleConfirmShow} className="delete_bottom">
-                                        <span className="material-symbols-outlined">delete</span>
-                                        <span>Delete</span>
+                                    {user && user.role === "admin" && (
+                                      <div className="modal_footer">
+                                        <div onClick={handleConfirmShow} className="delete_bottom">
+                                          <span className="material-symbols-outlined">delete</span>
+                                          <span>Delete</span>
+                                        </div>
                                       </div>
-                                    </div>
+                                    )
+
+                                    }
+
                                   </Modal>
                                   <Modal show={showConfirmModal} onHide={handleConfirmClose}>
                                     <Modal.Header className="justify-content-center" style={{
@@ -2023,7 +2032,8 @@ const PropertyDetails = () => {
                   (user && user.role === "coowner") ||
                   (user && user.role === "admin")) && (<section className="property_card_single full_width_sec with_orange">
                     <span className="verticall_title">
-                      Tenants :  {tenantDocument && tenantDocument.length}
+                      Tenants
+                       {/* {tenantDocument && tenantDocument.length} */}
                     </span>
                     <div className="more_detail_card_inner">
                       <div className="row">
@@ -2140,7 +2150,8 @@ const PropertyDetails = () => {
                     <>
                       <section className="property_card_single full_width_sec with_blue property_user">
                         <span className="verticall_title">
-                          Owners :  {filteredPropertyOwners && filteredPropertyOwners.length}
+                          Owners
+                            {/* {filteredPropertyOwners && filteredPropertyOwners.length} */}
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
@@ -2367,7 +2378,8 @@ const PropertyDetails = () => {
 
                       <section className="property_card_single full_width_sec with_orange property_user">
                         <span className="verticall_title">
-                          Managers :  {filteredPropertyManagers && filteredPropertyManagers.length}
+                        Property Managers 
+                            {/* {filteredPropertyManagers && filteredPropertyManagers.length} */}
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
@@ -2757,8 +2769,9 @@ const PropertyDetails = () => {
                           <h5>{propertyDocument.numberOfLivingArea}</h5>
                         </div>
                       </div>
-
-                      <div className="p_info_single">
+                      {propertyDocument.numberOfBasement !== "0" &&
+                      (
+                        <div className="p_info_single">
                         <div className="pd_icon">
                           <img
                             src="/assets/img/property-detail-icon/calendar.png"
@@ -2770,6 +2783,9 @@ const PropertyDetails = () => {
                           <h5>{propertyDocument.numberOfBasement}</h5>
                         </div>
                       </div>
+                      )
+                      }
+                     
 
                       <div className="p_info_single">
                         <div className="pd_icon">
@@ -3297,42 +3313,6 @@ const PropertyDetails = () => {
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
-                            src="/assets/img/property-detail-icon/VisitingHrsFrom.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Visiting Hours From</h6>
-                          <h5>
-                            {propertyDocument.visitingHrsFrom &&
-                              format(
-                                new Date(propertyDocument.visitingHrsFrom),
-                                "dd MMM,yy hh:mm aa"
-                              )}
-                          </h5>
-                        </div>
-                      </div>
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/VisitingHrsTo.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Visiting Hours To</h6>
-                          <h5>
-                            {propertyDocument.visitingHrsTo &&
-                              format(
-                                new Date(propertyDocument.visitingHrsTo),
-                                "dd MMM,yy hh:mm aa"
-                              )}
-                          </h5>
-                        </div>
-                      </div>
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
                             src="/assets/img/property-detail-icon/VisitingDays.png"
                             alt=""
                           />
@@ -3348,10 +3328,37 @@ const PropertyDetails = () => {
                           </h5>
                         </div>
                       </div>
+                      <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/VisitingHrsFrom.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Visiting Hours</h6>
+                          <h5>
+                            {propertyDocument.visitingHrsFrom &&
+                              format(
+                                new Date(propertyDocument.visitingHrsFrom),
+                                "dd MMM,yy hh:mm aa"
+                              )}
+                            {propertyDocument.visitingHrsTo && "to"}
+                            {propertyDocument.visitingHrsTo &&
+                              format(
+                                new Date(propertyDocument.visitingHrsTo),
+                                "dd MMM,yy hh:mm aa"
+                              )}
+                          </h5>
+                        </div>
+                      </div>
+
+
                     </div>
                   </div>
                 </div>
-                {user && (user.role !== 'guest') && <div className="row">
+
+                <div className="row">
                   <div className="col-lg-6">
                     <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
@@ -3419,74 +3426,76 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6">
-                    <div className="property_card_single mobile_full_card">
-                      <div className="more_detail_card_inner">
-                        <h2 className="card_title">Owner Instruction</h2>
+                  {user && (user.role !== 'guest') &&
+                    <div className="col-lg-6">
+                      <div className="property_card_single mobile_full_card">
+                        <div className="more_detail_card_inner">
+                          <h2 className="card_title">Owner Instruction</h2>
 
-                        {isEditingOwnerInstruction ? (
-                          <div>
+                          {isEditingOwnerInstruction ? (
                             <div>
-                              <RichTextEditor
-                                value={ownerInstructionvalue}
-                                onChange={setOwnerInstrucitonValue}
-                              />
-                            </div>
-                            <div className="vg10"></div>
-                            <div className="d-flex justify-content-between">
-                              <div
-                                className="theme_btn btn_border"
-                                onClick={handleCancelOwnerInstruction}
-                                style={{
-                                  width: "fit-content",
-                                }}
-                              >
-                                Cancel
+                              <div>
+                                <RichTextEditor
+                                  value={ownerInstructionvalue}
+                                  onChange={setOwnerInstrucitonValue}
+                                />
                               </div>
-                              <div
-                                className="theme_btn btn_fill"
-                                onClick={handleSaveOwnerInstruction}
-                                style={{
-                                  width: "fit-content",
-                                }}
-                              >
-                                Save
+                              <div className="vg10"></div>
+                              <div className="d-flex justify-content-between">
+                                <div
+                                  className="theme_btn btn_border"
+                                  onClick={handleCancelOwnerInstruction}
+                                  style={{
+                                    width: "fit-content",
+                                  }}
+                                >
+                                  Cancel
+                                </div>
+                                <div
+                                  className="theme_btn btn_fill"
+                                  onClick={handleSaveOwnerInstruction}
+                                  style={{
+                                    width: "fit-content",
+                                  }}
+                                >
+                                  Save
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="d-flex align-items-center">
-                              <p
-                                dangerouslySetInnerHTML={{
-                                  __html:
-                                    propertyDocument &&
-                                    propertyDocument.ownerInstructions.toString(
-                                      "html"
-                                    ),
-                                }}
-                              ></p>
-                              {!isEditingOwnerInstruction &&
-                                user &&
-                                user.role == "admin" && (
-                                  <span
-                                    class="material-symbols-outlined click_icon text_near_icon"
-                                    onClick={() =>
-                                      handleEditOwnerInstruction(
-                                        "ownerInstructions"
-                                      )
-                                    }
-                                  >
-                                    edit
-                                  </span>
-                                )}
-                            </div>
-                          </>
-                        )}
+                          ) : (
+                            <>
+                              <div className="d-flex align-items-center">
+                                <p
+                                  dangerouslySetInnerHTML={{
+                                    __html:
+                                      propertyDocument &&
+                                      propertyDocument.ownerInstructions.toString(
+                                        "html"
+                                      ),
+                                  }}
+                                ></p>
+                                {!isEditingOwnerInstruction &&
+                                  user &&
+                                  user.role == "admin" && (
+                                    <span
+                                      class="material-symbols-outlined click_icon text_near_icon"
+                                      onClick={() =>
+                                        handleEditOwnerInstruction(
+                                          "ownerInstructions"
+                                        )
+                                      }
+                                    >
+                                      edit
+                                    </span>
+                                  )}
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </div>}
+                    </div>}
+                </div>
+
               </div>
             )}
 
