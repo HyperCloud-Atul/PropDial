@@ -215,7 +215,7 @@ span.material-symbols-outlined.fav{
 
 .pmd_top {
     display: grid;
-    gap: 8px;
+    gap: 2px;
     padding-right: 56px;
 }
 
@@ -238,7 +238,7 @@ span.material-symbols-outlined.fav{
 }
 
 .pmd_body {
-    margin: 20px 0px;
+   margin-top: 15px;
 }
 
 .pi_single h6 {
@@ -349,6 +349,9 @@ h6.value_per_sqf {
     }
 }
 @media only screen and (max-width: 767px) {
+    .property_card_single .id_badge {
+        position: unset;       
+    }
     .pcs_inner {
         display: block;  
         padding: 0px; 
@@ -430,8 +433,7 @@ h6.value_per_sqf {
         max-width: 160px;
     }
     .pcs_other_info {    
-        padding: 10px;    
-        padding-top: 42px;
+        padding: 10px;          
     }
     .poi_inner button.theme_btn {
         padding: 2px 18px;     
@@ -446,6 +448,26 @@ h6.value_per_sqf {
         background: none;
         padding: 0px;
         border-radius: 0px;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .pg_property .top_search_bar .search_area_header  .residentail_commercial .switch {       
+        gap: 8px;
+    }
+    .pg_property .top_search_bar .search_area_header .switch span {        
+        font-size: 14px;
+    }
+    .pg_property .top_search_bar .search_area_header .react-switch-bg {
+        height: 20px !important;
+        width: 38px !important;
+    }
+    .pg_property .top_search_bar .search_area_header  .react-switch-handle {
+        height: 14px !important;
+        width: 14px !important;
+        top: 3px !important;
+    }
+    .pg_property .top_search_bar .search_area_header .on .react-switch-handle {
+        transform: translateX(19px) !important;       
     }
 }
 @media only screen and (max-width: 575px) {

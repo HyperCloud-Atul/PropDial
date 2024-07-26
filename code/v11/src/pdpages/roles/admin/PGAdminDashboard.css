@@ -79,6 +79,7 @@
     text-align: center;
     position: relative;
     overflow: hidden;   
+    border-bottom: 4px solid red;
 }
 .upcoming.on_modal .parent{
     grid-template-columns: repeat(1, 1fr);
@@ -100,24 +101,25 @@
 .upcoming .parent .child::before{
     content: '';
     position: absolute;
-    background: var(--page-bg);
+    background: red;
     width: 50px;
     height: 50px;
     left: -25px;
     border-radius: 50%;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0; 
+    opacity: 0.09;
 }
 .upcoming .parent .child::after{
     content: '';
     position: absolute;
-    background: var(--page-bg);
+    background: red;
     width: 50px;
     height: 50px;
     right: -25px;
     border-radius: 50%;
     top: 50%;
     transform: translateY(-50%);
+    opacity: 0.09;
 }
 
 .propagent_dashboard_inner .property_status {
@@ -370,6 +372,9 @@ background: white;
         font-size: 16px;
         text-align: center;
     }
+    .upcoming .parent {      
+        grid-template-columns: repeat(2, 1fr);       
+    }
     
 }
 
@@ -450,5 +455,48 @@ background: white;
     .propagent_dashboard_inner .ps_single h6 {
         font-size: 14px;
     }
+    .upcoming .parent .child h5 {
+        font-size: 22px;     
+        margin-bottom: 4px !important;      
+    }    
+    .upcoming .parent .child::before { 
+        width: 36px;
+        height: 36px;
+        left: -18px;   
+    }
+    .upcoming .parent .child::after { 
+        width: 36px;
+        height: 36px;
+        right: -18px;   
+    }
+    .upcoming .parent .child {
+        border-radius: 20px;
+        padding: 15px 20px;
+        border-bottom: 3px solid red;
+        box-shadow: none;
+    }
+    .upcoming .parent .child h6 {     
+        font-size: 14px;
+    }
+    .properties_map {       
+        border-radius: 20px;
+        padding: 15px;
+    }
+    .properties_map .p_title{
+        font-size: 18px !important;
+        margin-bottom: 0px !important;
+    }
+    .pi_cities_single h6 {    
+        font-size: 14px;
+    }
+    .pi_cities_single h5 {
+        font-size: 17px;   
+    }
+    .pi_cities_single .bar {     
+        width: 85%;
+        height: 5px;    
+    }
+ 
+    
 
 }

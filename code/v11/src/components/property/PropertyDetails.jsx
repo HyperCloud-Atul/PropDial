@@ -1070,7 +1070,12 @@ const PropertyDetails = () => {
                     <div className="pcs_main_detail">
                       <div className="pmd_top">
                         <h4>
-                          {propertyDocument.unitNumber},{" "}
+                          {user && user.role !== "guest" && (
+                            <>
+                              {propertyDocument.unitNumber},
+                            </>
+                          )}
+                          {" "}
                           {propertyDocument.society}
                         </h4>
                         {/* <h6>
@@ -1133,24 +1138,14 @@ const PropertyDetails = () => {
                             <span className="price"></span>
                           </h4>
                           <h6>Demand Price</h6>
-                          {propertyDocument.superArea !== "" ? (
-                            <h6>
-                              {propertyDocument.superArea}{" "}
-                              {propertyDocument.superAreaUnit}
-                            </h6>
-                          ) : (
-                            <h6>
-                              {propertyDocument.superArea}{" "}
-                              {propertyDocument.superAreaUnit}
-                            </h6>
-                          )}
+                        
                         </div>
                         {propertyDocument.purpose.toUpperCase() ===
                           "RENT" && (
                             <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
-                               
+
                                 {new Intl.NumberFormat('en-IN').format(propertyDocument.maintenanceCharges)}/-{" "}
                                 <span className="extra">({propertyDocument.maintenanceFlag})</span>
 
@@ -1164,7 +1159,7 @@ const PropertyDetails = () => {
                           "RENT" && (
                             <div className="pdms_single">
                               <h4>
-                                <span className="currency">₹</span>                               
+                                <span className="currency">₹</span>
                                 {new Intl.NumberFormat('en-IN').format(propertyDocument.securityDeposit)}/-
                               </h4>
                               <h6>Security Deposit</h6>
@@ -1173,7 +1168,7 @@ const PropertyDetails = () => {
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
-                        <div className="pdms_single">
+                        <div className="pdms_single">                       
                           <h4>
                             <img src="/assets/img/new_carpet.png"></img>
                             {propertyDocument.superArea}{" "}
@@ -2033,7 +2028,7 @@ const PropertyDetails = () => {
                   (user && user.role === "admin")) && (<section className="property_card_single full_width_sec with_orange">
                     <span className="verticall_title">
                       Tenants
-                       {/* {tenantDocument && tenantDocument.length} */}
+                      {/* {tenantDocument && tenantDocument.length} */}
                     </span>
                     <div className="more_detail_card_inner">
                       <div className="row">
@@ -2053,7 +2048,7 @@ const PropertyDetails = () => {
                           <div className="tenant_card">
                             <Swiper
                               spaceBetween={15}
-                              slidesPerView={2.5}
+                              slidesPerView={3.5}
                               pagination={false}
                               freeMode={true}
                               className='all_tenants'
@@ -2070,6 +2065,11 @@ const PropertyDetails = () => {
                                   slidesPerView: 2.5,
                                   spaceBetween: 15,
                                 },
+                                1199: {
+                                  slidesPerView: 3.5,
+                                  spaceBetween: 15,
+                                },
+                                
                               }}
                             >
                               {tenantDocument &&
@@ -2151,7 +2151,7 @@ const PropertyDetails = () => {
                       <section className="property_card_single full_width_sec with_blue property_user">
                         <span className="verticall_title">
                           Owners
-                            {/* {filteredPropertyOwners && filteredPropertyOwners.length} */}
+                          {/* {filteredPropertyOwners && filteredPropertyOwners.length} */}
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
@@ -2171,42 +2171,49 @@ const PropertyDetails = () => {
                             }
                             <div className="col-sm-11 col-10">
                               <div className="tenant_card">
-                                <Swiper
-                                  spaceBetween={15}
-                                  slidesPerView={2.5}
-                                  pagination={false}
-                                  freeMode={true}
-                                  className='all_tenants'
-                                  breakpoints={{
-                                    320: {
-                                      slidesPerView: 1,
-                                      spaceBetween: 15,
-                                    },
-                                    767: {
-                                      slidesPerView: 1.5,
-                                      spaceBetween: 15,
-                                    },
-                                    991: {
-                                      slidesPerView: 2.5,
-                                      spaceBetween: 15,
-                                    },
-                                  }}
-                                >
+                              <Swiper
+                              spaceBetween={15}
+                              slidesPerView={3.5}
+                              pagination={false}
+                              freeMode={true}
+                              className='all_tenants'
+                              breakpoints={{
+                                320: {
+                                  slidesPerView: 1,
+                                  spaceBetween: 15,
+                                },
+                                767: {
+                                  slidesPerView: 1.5,
+                                  spaceBetween: 15,
+                                },
+                                991: {
+                                  slidesPerView: 2.5,
+                                  spaceBetween: 15,
+                                },
+                                1199: {
+                                  slidesPerView: 3.5,
+                                  spaceBetween: 15,
+                                },
+                                
+                              }}
+                            >
                                   {filteredPropertyOwners &&
                                     filteredPropertyOwners.map((propUser, index) => (
                                       <SwiperSlide key={index}>
                                         <div className="tc_single relative">
                                           <div
                                             className="property_people_designation d-flex align-items-end justify-content-center pointer"
-                                            onClick={(e) => handleShowOwnerTags(e, propUser, 'propowner')}
+                                            onClick={user && user.role === "admin" ? (e) => handleShowOwnerTags(e, propUser, 'propowner') : null}
                                           >
                                             {propUser.userTag}
-                                            <span
-                                              className="material-symbols-outlined click_icon text_near_icon"
-                                              style={{ fontSize: "10px" }}
-                                            >
-                                              edit
-                                            </span>
+                                         {user && user.role === "admin" && (
+                                             <span
+                                             className="material-symbols-outlined click_icon text_near_icon"
+                                             style={{ fontSize: "10px" }}
+                                           >
+                                             edit
+                                           </span>
+                                         )}
                                           </div>
                                           <div className="left">
                                             <div className="tcs_img_container">
@@ -2237,7 +2244,8 @@ const PropertyDetails = () => {
                                                   "+$1 $2-$3"
                                                 )}
                                               </h6>
-                                              <h6
+                                              {user && user.role === "admin" && (
+                                                <h6
                                                 className="text_red pointer"
                                                 style={{
                                                   width: "fit-content",
@@ -2249,6 +2257,7 @@ const PropertyDetails = () => {
                                               >
                                                 Delete
                                               </h6>
+                                              )}
                                             </div>
                                           </div>
                                           <div className="wha_call_icon">
@@ -2378,8 +2387,8 @@ const PropertyDetails = () => {
 
                       <section className="property_card_single full_width_sec with_orange property_user">
                         <span className="verticall_title">
-                        Property Managers 
-                            {/* {filteredPropertyManagers && filteredPropertyManagers.length} */}
+                          Property Managers
+                          {/* {filteredPropertyManagers && filteredPropertyManagers.length} */}
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
@@ -2675,7 +2684,7 @@ const PropertyDetails = () => {
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
-                            src="/assets/img/property-detail-icon/calendar.png"
+                            src="/assets/img/property-detail-icon/twin-bed.png"
                             alt=""
                           />
                         </div>
@@ -2745,7 +2754,7 @@ const PropertyDetails = () => {
                           <h5>{propertyDocument.numberOfBalcony}</h5>
                         </div>
                       </div>
-                      <div className="p_info_single">
+                      {/* <div className="p_info_single">
                         <div className="pd_icon">
                           <img
                             src="/assets/img/property-detail-icon/kitchen.png"
@@ -2756,7 +2765,7 @@ const PropertyDetails = () => {
                           <h6>Kitchen</h6>
                           <h5>{propertyDocument.numberOfKitchen}</h5>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
@@ -2770,22 +2779,22 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                       {propertyDocument.numberOfBasement !== "0" &&
-                      (
-                        <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/calendar.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Basement</h6>
-                          <h5>{propertyDocument.numberOfBasement}</h5>
-                        </div>
-                      </div>
-                      )
+                        (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/calendar.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Basement</h6>
+                              <h5>{propertyDocument.numberOfBasement}</h5>
+                            </div>
+                          </div>
+                        )
                       }
-                     
+
 
                       <div className="p_info_single">
                         <div className="pd_icon">
@@ -2827,7 +2836,7 @@ const PropertyDetails = () => {
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
-                            src="/assets/img/property-detail-icon/entrance-gallery.png"
+                            src="/assets/img/property-detail-icon/browser.png"
                             alt=""
                           />
                         </div>
@@ -3294,7 +3303,7 @@ const PropertyDetails = () => {
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
-                            src="/assets/img/property-detail-icon/calendar.png"
+                            src="/assets/img/property-detail-icon/restaurant.png"
                             alt=""
                           />
                         </div>
@@ -3319,13 +3328,12 @@ const PropertyDetails = () => {
                         </div>
                         <div className="pis_content">
                           <h6>Visiting Days</h6>
-                          <h5>{propertyDocument.visitingDays}</h5>
-                          <h5>
+                          <h5>{propertyDocument.visitingDays.join(', ')}</h5>
+                          {/* <h5>
                             {propertyDocument.visitingDays.map((days) => (
-                              // <li key={user.id}>{user.fullName} ({user.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')})</li>
                               <span></span>
                             ))}
-                          </h5>
+                          </h5> */}
                         </div>
                       </div>
                       <div className="p_info_single">
@@ -3341,13 +3349,15 @@ const PropertyDetails = () => {
                             {propertyDocument.visitingHrsFrom &&
                               format(
                                 new Date(propertyDocument.visitingHrsFrom),
-                                "dd MMM,yy hh:mm aa"
+                                "hh:mm aa"
                               )}
+                            {" "}
                             {propertyDocument.visitingHrsTo && "to"}
+                            {" "}
                             {propertyDocument.visitingHrsTo &&
                               format(
                                 new Date(propertyDocument.visitingHrsTo),
-                                "dd MMM,yy hh:mm aa"
+                                "hh:mm aa"
                               )}
                           </h5>
                         </div>

@@ -99,8 +99,14 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                   {/* <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" /> */}
                   {property.images.length > 0 ? <img src={property.images[0]} className="bigimage" alt={property.bhk} /> : <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" />}
                 </div>
+                <div className="id_badge on_mobile_767">
+                {property.pid}
+              </div>
                 <div className="pcs_main_detail">
                   <div className="pmd_top relative">
+                    <h4 className="property_name">
+                      {property.society}
+                    </h4>
                     <h4 className="property_name">
                       {property.bhk} | {property.furnishing === "" ? "" : property.furnishing + " Furnished | "} {property.status}
                     </h4>
@@ -158,18 +164,18 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
               </div>
             </div>
             <div className="pcs_other_info">
-              <div className="id_badge">
+              <div className="id_badge on_desktop_hide_767">
                 {property.pid}
               </div>
               <div className="poi_inner">
-              <div>
-              <h6 className="value_per_sqf">Demand</h6>
-                <h6 className="property_value">
-                  <span>₹ </span>
-                  {new Intl.NumberFormat('en-IN').format(property.demandPrice)}/-
-                 
-                </h6>
-              </div>
+                <div>
+                  <h6 className="value_per_sqf">Demand</h6>
+                  <h6 className="property_value">
+                    <span>₹ </span>
+                    {new Intl.NumberFormat('en-IN').format(property.demandPrice)}/-
+
+                  </h6>
+                </div>
                 {/* <h6 className="value_per_sqf">
                   {property.carpetArea}  {property.carpetAreaUnit} 
                 </h6> */}

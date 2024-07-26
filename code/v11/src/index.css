@@ -348,7 +348,9 @@ form.auth-form .theme_btn {
   margin-left: auto;
   margin-right: auto;
 }
-
+.on_mobile_767{
+  display: none;
+}
 /* sanskar css end  */
 
 
@@ -375,7 +377,12 @@ form.auth-form .theme_btn {
   .d_none_767 {
     display: none !important;
   }
-
+  .on_desktop_hide_767{
+    display: none !important;
+  }
+  .on_mobile_767{
+    display: block !important;
+  }
   .d_block_767 {
     display: block !important;
   }

@@ -521,131 +521,135 @@ const PGAdminDashboard = () => {
                     <PropertyCard propertyid={property.id} />
                   ))}
               </section>
-              <div className="vg22"></div>
-              <hr />
-              <div className="vg22"></div>
-              <div className="filters">
-                <div className="button_filter">
-                  <div className="bf_single active">
-                    April
-                  </div>
-                  <div className="bf_single ">
-                    March
-                  </div>
-                  <div className="bf_single ">
-                    February
-                  </div>
-                </div>
-                <div className="icon_dropdown">
-                  <select name="months" id="months">
-                    <option value="" selected disabled>Select Month</option>
-                    <option value="1">January</option>
-                    <option value="2">February</option>
-                    <option value="3">March</option>
-                    <option value="4">April</option>
-                    <option value="5">May</option>
-                    <option value="6">June</option>
-                    <option value="7">July</option>
-                    <option value="8">August</option>
-                    <option value="9">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
-                  </select>
-
-                </div>
-              </div>
-              <div className="vg22"></div>
-              <section>
-                <div className="payment_card">
-                  {/* <div className="top">
-                  <div className="left">
-                    <h4 className="m20 text_grey">Payments</h4>
-                    <h2 className="dashboard_number mt10">8,052</h2>
-                  </div>
-                  <div className="right"></div>
-                </div> */}
-                  <div className="all_payments">
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_orange">
-                        <img
-                          src="./assets/img/brokreage_bill_icon.png"
-                          alt=""
-                        />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Brokerage Payment</h6>
-                        <h5 className="dashboard_number_small">₹ 1,000</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_blue">
-                        <img src="./assets/img/financial.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">PMS</h6>
-                        <h5 className="dashboard_number_small">₹ 2,500</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_green">
-                        <img src="./assets/img/electricity-bill.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Electricity Bill</h6>
-                        <h5 className="dashboard_number_small">₹ 875</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_orange">
-                        <img
-                          src="./assets/img/brokreage_bill_icon.png"
-                          alt=""
-                        />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Society Maintainance</h6>
-                        <h5 className="dashboard_number_small">₹ 2,000</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_blue">
-                        <img src="./assets/img/financial.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Water Bill</h6>
-                        <h5 className="dashboard_number_small">₹ 75</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_green">
-                        <img src="./assets/img/electricity-bill.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Others</h6>
-                        <h5 className="dashboard_number_small">₹ 875</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <div className="vg22"></div>
-              <section className="graphs">
-                <div className="graph_single">
-                  <MyLineGraph />
-                </div>
-                <div className="graph_single">
-                  <MyColumnChart />
-                </div>
-                <div className="graph_single">
-                  <MyPieChart />
-                </div>
 
 
-              </section>
+              {/* <>
+                <div className="vg22"></div>
+                <hr />
+                <div className="vg22"></div>
+                <div className="filters">
+                  <div className="button_filter">
+                    <div className="bf_single active">
+                      April
+                    </div>
+                    <div className="bf_single ">
+                      March
+                    </div>
+                    <div className="bf_single ">
+                      February
+                    </div>
+                  </div>
+                  <div className="icon_dropdown">
+                    <select name="months" id="months">
+                      <option value="" selected disabled>Select Month</option>
+                      <option value="1">January</option>
+                      <option value="2">February</option>
+                      <option value="3">March</option>
+                      <option value="4">April</option>
+                      <option value="5">May</option>
+                      <option value="6">June</option>
+                      <option value="7">July</option>
+                      <option value="8">August</option>
+                      <option value="9">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">December</option>
+                    </select>
 
-              <div className="vg22"></div>
-              <hr />
+                  </div>
+                </div>
+                <div className="vg22"></div>
+                <section>
+                  <div className="payment_card">
+                    <div className="top">
+                      <div className="left">
+                        <h4 className="m20 text_grey">Payments</h4>
+                        <h2 className="dashboard_number mt10">8,052</h2>
+                      </div>
+                      <div className="right"></div>
+                    </div>
+                    <div className="all_payments">
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_orange">
+                          <img
+                            src="./assets/img/brokreage_bill_icon.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Brokerage Payment</h6>
+                          <h5 className="dashboard_number_small">₹ 1,000</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_blue">
+                          <img src="./assets/img/financial.png" alt="" />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">PMS</h6>
+                          <h5 className="dashboard_number_small">₹ 2,500</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_green">
+                          <img src="./assets/img/electricity-bill.png" alt="" />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Electricity Bill</h6>
+                          <h5 className="dashboard_number_small">₹ 875</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_orange">
+                          <img
+                            src="./assets/img/brokreage_bill_icon.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Society Maintainance</h6>
+                          <h5 className="dashboard_number_small">₹ 2,000</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_blue">
+                          <img src="./assets/img/financial.png" alt="" />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Water Bill</h6>
+                          <h5 className="dashboard_number_small">₹ 75</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_green">
+                          <img src="./assets/img/electricity-bill.png" alt="" />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Others</h6>
+                          <h5 className="dashboard_number_small">₹ 875</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <div className="vg22"></div>
+                <section className="graphs">
+                  <div className="graph_single">
+                    <MyLineGraph />
+                  </div>
+                  <div className="graph_single">
+                    <MyColumnChart />
+                  </div>
+                  <div className="graph_single">
+                    <MyPieChart />
+                  </div>
+
+
+                </section>
+                <div className="vg22"></div>
+                <hr />
+              </> */}
+
               <div className="vg22"></div>
               <section className="add_section row">
                 <div className="add_single col-lg-6">

@@ -204,9 +204,8 @@ const PGOwnerDashboard = () => {
                     </div>
                   </div>
                 </div>
-              </section>
-              <div className="vg22"></div>
-              <hr />
+              </section>          
+         
               <div className="vg22"></div>
               <section className="self_property_detail">
                 <div className="spd_single">
@@ -266,18 +265,18 @@ const PGOwnerDashboard = () => {
                   </div>
                 </div> */}
               </section>
-              <div className="vg22"></div>
-              <hr />
+             <div className="vg12"></div>
               <div className="vg22"></div>
               <section className="property_cards_parent">
                 {myproperties && myproperties.map((property) => (
                   <PropertyCard propertyid={property.propertyId} />))}
               </section>
-              <div className="vg22"></div>
-              {/* <hr /> */}
+         {/* <>
+         <div className="vg22"></div>
+              <hr />
 
-              {/* <div className="vg22"></div> */}
-              {/* <section>
+              <div className="vg22"></div>
+              <section>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="payment_card">                      
@@ -380,9 +379,11 @@ const PGOwnerDashboard = () => {
                     </div>
                   </div>
                 </div>
-              </section> */}
+              </section>
               <div className="vg22"></div>
               <hr />
+         </> */}
+
               <div className="vg22"></div>
               <section className="add_section row">
                 <div className="add_single col-lg-6">
