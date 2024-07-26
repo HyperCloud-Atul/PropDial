@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { BeatLoader } from "react-spinners";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
 // import 'flag-icon-css/css/flag-icon.min.css';
@@ -50,6 +50,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [flag, setFlag] = useState(false);
   const [resendOTPFlag, setResendOTPFlag] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
 
 
@@ -212,6 +213,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   //   send opt
   const getOTP = async (e) => {
     e.preventDefault();
+    setIsLoading(true);  // Start the loader
     setOtpTimer(20);
     setIsResendDisabled(true);
     console.log("In getOTP");
@@ -234,6 +236,7 @@ const PhoneLogin_reCaptchaV2 = () => {
       await resendOTP("+" + phone);
       let obj_maintenance = document.getElementById("btn_sendotp");
       obj_maintenance.style.display = "block";
+      setIsLoading(false);  // Stop the loader
     }
   }
 
@@ -252,9 +255,10 @@ const PhoneLogin_reCaptchaV2 = () => {
   // OTP verify
   const verifyOTP = async (e) => {
     e.preventDefault();
-    setError("");
+    setIsLoading(true);  // Start the loader
+    setError(""); 
     console.log("in verifyOTP", otp);
-    // setLoading(true);
+  
     if (otp === "" || otp === undefined || otp === null) return;
     try {
       await confirmObj.confirm(otp).then(async (result) => {
@@ -303,6 +307,7 @@ const PhoneLogin_reCaptchaV2 = () => {
             });
         } else {
           console.log("Existing user signed in with phone number");
+          setIsLoading(false);  // Stop the loader
           setnewUserSlider(false)
 
           let role = 'owner';
@@ -459,32 +464,41 @@ const PhoneLogin_reCaptchaV2 = () => {
                   }} />
                   Sign-in with Google
                 </div> */}
-                <div id='btn_sendotp'
-                  className="theme_btn btn_fill w_full"
-                  onClick={getOTP}
-                >
-                  Continue
-                </div>
-                <div className="new_form_field">
-                  <div className="checkbox justify-content-center">
-                    {/* <input type="checkbox" id="agree_tcp" checked /> */}
-                    <label htmlFor="agree_tcp">
-                      By proceeding, I agree to Propdial{" "}
-                      <Link to="/terms" className="click_text">
-                        T&C
-                      </Link>{" "}
-                      &{" "}
-                      <Link to="/privacypolicy" className="click_text">
-                        Privacy Policy
-                      </Link>
-                    </label>
+                {!isLoading && (
+                  <>
+                    <div id='btn_sendotp'
+                      className="theme_btn btn_fill w_full"
+                      onClick={getOTP}
+                    >
+                      Continue
+                    </div>
+                    <div className="new_form_field">
+                      <div className="checkbox justify-content-center">
+                        {/* <input type="checkbox" id="agree_tcp" checked /> */}
+                        <label htmlFor="agree_tcp">
+                          By proceeding, I agree to Propdial{" "}
+                          <Link to="/terms" className="click_text">
+                            T&C
+                          </Link>{" "}
+                          &{" "}
+                          <Link to="/privacypolicy" className="click_text">
+                            Privacy Policy
+                          </Link>
+                        </label>
+                      </div>
+                    </div>
+                  </>
+                )}
+                {isLoading && (
+                  <div className="text-center">
+                    <h6 className="text_green mb-2">Sending OTP</h6>
+                    <BeatLoader color={"#00a8a8"} loading={true} />
                   </div>
-                </div>
+                )}
+
               </form>
 
             </div>
-
-
           </>
         )}
         {/* {otpSliderState && (
@@ -594,11 +608,17 @@ const PhoneLogin_reCaptchaV2 = () => {
                             )}
                           </p> */}
               <div className="vg10"></div>
-              <div>
+              {isLoading && (
                 <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
                   Confirm
                 </button>
-              </div>
+              )}
+              {!isLoading && (
+                <div className="text-center">
+                  <h6 className="text_green mb-2">Redirecting to profile</h6>
+                  <BeatLoader color={"#00a8a8"} loading={true} />
+                </div>
+              )}
             </div>
           )}
         </div>
