@@ -231,10 +231,10 @@ export default function Navbar() {
 
             </li>
             <li className="menu_social_media">
-              <Link to="/ticketdetail">
+              {/* <Link to="/ticketdetail">
                 <img src="./assets/img/home/ticketicon_navbar.png" alt=""
                   className="pointer" />
-              </Link>
+              </Link> */}
               <Link to="/notification">
                 <img src="./assets/img/home/notification.png" alt=""
                   className="pointer"

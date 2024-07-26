@@ -199,6 +199,8 @@ const PGSearchProperty = () => {
           </section>
         </Tabs>
       </div>
+      <div className="vg22"></div>
+
     </div>
   );
 };
