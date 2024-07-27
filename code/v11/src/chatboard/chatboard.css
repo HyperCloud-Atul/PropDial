@@ -86,7 +86,12 @@
   top: 3px;
   right: 8px;
 }
-
+.create_ticket_form .section_title, .create_ticket_form label {
+  color: var(--white-color);
+}
+.create_ticket_form input:disabled{
+  background: #ffffff9c;
+}
 .single_ticket .right .unread_chat {
   width: 20px;
   height: 20px;
