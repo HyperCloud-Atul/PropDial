@@ -134,7 +134,7 @@ export default function NavbarBottom() {
           <div className="menu_name">{secondMenu}</div>
         </div>
 
-        <Link
+        {user ? (<Link
           to="/profile"
           className={`b_menu_single profile ${location.pathname === "/profile" ? "b_menu_active" : ""
             }`}
@@ -155,7 +155,30 @@ export default function NavbarBottom() {
               )
             }
           </div>
-        </Link>
+        </Link>) :
+          (<Link
+            to="/login"
+            className={`b_menu_single profile ${location.pathname === "/profile" ? "b_menu_active" : ""
+              }`}
+          >
+            <div className="menu_icon">
+              {user ?
+                (user.photoURL === "" ? (
+                  <img
+                    src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2&_gl=1*1bbo31y*_ga*MTEyODU2MDU1MS4xNjc3ODEwNzQy*_ga_CW55HF8NVT*MTY4NjIzODcwMC42OS4xLjE2ODYyMzkwMjIuMC4wLjA."
+                    alt=""
+                  />
+                ) : (
+                  <img src={user.photoURL} alt="" />
+                ))
+                :
+                (
+                  <span className="material-symbols-outlined">person</span>
+                )
+              }
+            </div>
+          </Link>)
+        }
         <div
           className={`b_menu_single ${location.pathname === "/properties" ? "b_menu_active" : ""
             }`}

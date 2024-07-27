@@ -215,9 +215,13 @@ function App() {
                     element={<PGMoreMenu></PGMoreMenu>}
                   ></Route>
                   <Route path="/stage4" element={<Stage4 />}></Route>
-                  <Route
+                  {/* <Route
                     path="/profile"
                     element={user ? <PGProfile /> : <PhoneLogin />}
+                  ></Route> */}
+                  <Route
+                    path="/profile"
+                    element={<PGProfile />}
                   ></Route>
                   <Route
                     path="/notification"

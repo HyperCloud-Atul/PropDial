@@ -17,6 +17,30 @@ import { fetchSignInMethodsForEmail } from "firebase/auth";
 
 // css
 import "./PhoneLogin.scss";
+import { displayName } from "react-quill";
+
+
+function camelCase(str) {
+  return (
+    str
+      .replace(/\s(.)/g, function (a) {
+        return a.toUpperCase();
+      })
+      // .replace(/\s/g, '')
+      .replace(/^(.)/, function (b) {
+        return b.toUpperCase();
+      })
+  );
+}
+
+// Simple email validation regex
+const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
+};
+
+
+
 const PhoneLogin_reCaptchaV2 = () => {
   const [showOtpInput, setShowOtpInput] = useState(false);
   const { user1 } = useAuthContext();
@@ -32,18 +56,21 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [otp, setOtp] = useState("");
   const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
-  const [address, setAddress] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [country, setCountryName] = useState("");
+  const [address, setAddress] = useState("");
   const [error, setError] = useState("");
   const [otptimer, setOtpTimer] = useState(20);
   const [isResendDisabled, setIsResendDisabled] = useState(false);
   const { setUpRecapcha, resendOTP } = useSignupPhone();
   const [confirmObj, setConfirmObj] = useState("");
   const [userName, setUserName] = useState("");
+  const [mobilenoSliderState, setmobilenoSliderState] = useState(true);
   const [otpSliderState, setotpSliderState] = useState(false);
-  const [newUserSlider, setnewUserSlider] = useState(false);
+  const [newUserSliderState, setnewUserSliderState] = useState(false);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
   const [sendOTPFlag, setSendOTPFlag] = useState(true);
@@ -228,7 +255,9 @@ const PhoneLogin_reCaptchaV2 = () => {
       const respons = await setUpRecapcha("+" + phone);
       console.log("in try 2", respons);
       setConfirmObj(respons);
-      setotpSliderState(true);
+      setmobilenoSliderState(false)
+      setotpSliderState(true)
+      setnewUserSliderState(false)
     }
     catch (error) {
       console.log("2 error.message", error.message);
@@ -244,11 +273,43 @@ const PhoneLogin_reCaptchaV2 = () => {
   const newUserForm = async () => {
     console.log("In New User Form ")
     console.log("User: ", user)
-    await updateDocument(user.uid, {
-      city,
-    });
+    setmobilenoSliderState(false)
+    setotpSliderState(false)
+    setnewUserSliderState(true)
 
-    navigate("/profile");
+    let errFlag = false
+    // if (!validateEmail(email)) {
+    //   setError("Email format is not valid");
+    //   errFlag = true
+    // }
+    if (name === "" || email === "" || city === "") {
+      setError("All details are mandatory");
+      errFlag = true
+    }
+    else if (!validateEmail(email)) {
+      setError("Email format is not valid");
+      errFlag = true
+    }
+    else {
+      errFlag = false
+    }
+
+    if (!errFlag) {
+
+      let splitName = name.split(" ");
+
+      // Extract the first name
+      displayName = splitName.length > 0 ? splitName[0] : name;
+
+      await updateDocument(user.uid, {
+        displayName: camelCase(displayName.toLowerCase()),
+        fullName: camelCase(name.toLowerCase()),
+        email,
+        city: camelCase(city.toLowerCase()),
+      });
+
+      navigate("/profile");
+    }
   }
 
 
@@ -256,9 +317,9 @@ const PhoneLogin_reCaptchaV2 = () => {
   const verifyOTP = async (e) => {
     e.preventDefault();
     setIsLoading(true);  // Start the loader
-    setError(""); 
+    setError("");
     console.log("in verifyOTP", otp);
-  
+
     if (otp === "" || otp === undefined || otp === null) return;
     try {
       await confirmObj.confirm(otp).then(async (result) => {
@@ -267,7 +328,6 @@ const PhoneLogin_reCaptchaV2 = () => {
         // Check if the user is new
         if (result.additionalUserInfo.isNewUser) {
           console.log("New user signed in with phone number");
-          setnewUserSlider(true)
           setUserName(user.displayName);
           // Split the full name by space
           let splitName = userName.split(" ");
@@ -305,10 +365,17 @@ const PhoneLogin_reCaptchaV2 = () => {
               createdAt: timestamp.fromDate(new Date()),
               lastLoginTimestamp: timestamp.fromDate(new Date()),
             });
+
+          setnewUserSliderState(true)
+          setmobilenoSliderState(false)
+          setotpSliderState(false)
+
         } else {
           console.log("Existing user signed in with phone number");
-          setIsLoading(false);  // Stop the loader
-          setnewUserSlider(false)
+          setIsLoading(false);  // Stop the loader  
+          setmobilenoSliderState(false)
+          setotpSliderState(true)
+          setnewUserSliderState(false)
 
           let role = 'owner';
           const docRef = projectFirestore.collection("users").doc(user.uid)
@@ -335,32 +402,35 @@ const PhoneLogin_reCaptchaV2 = () => {
             online: true,
             lastLoginTimestamp: timestamp.fromDate(new Date()),
           });
-        }
 
-        if (user) {
-          const providerData = user.providerData;
-          const isLinkedWithGoogle = providerData.some(provider => provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID);
-
-          if (isLinkedWithGoogle) {
-            console.log("User is already linked with Google");
-            // setError("User is already linked with Google");
-          } else {
-            console.log("User is not linked with Google");
-            // Now link with Google account
-            linkGoogleAccount(user);
-          }
-        }
-
-        if (result.additionalUserInfo.isNewUser) {
-          setnewUserSlider(true)
-          setotpSliderState(false)
-        }
-        else {
-          console.log("Existing user")
-          setnewUserSlider(false)
-          setotpSliderState(false)
           navigate("/profile");
         }
+
+        // if (user) {
+        //   const providerData = user.providerData;
+        //   const isLinkedWithGoogle = providerData.some(provider => provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID);
+
+        //   if (isLinkedWithGoogle) {
+        //     console.log("User is already linked with Google");
+        //     // setError("User is already linked with Google");
+        //   } else {
+        //     console.log("User is not linked with Google");
+        //     // Now link with Google account
+        //     linkGoogleAccount(user);
+        //   }
+        // }
+
+        // if (result.additionalUserInfo.isNewUser) {
+        //   console.log('I am in ')
+        //   setnewUserSlider(true)
+        //   setotpSliderState(false)
+        // }
+        // else {
+        //   console.log("Existing user")
+        //   setnewUserSlider(false)
+        //   setotpSliderState(false)
+        //   navigate("/profile");
+        // }
 
       })
     }
@@ -393,7 +463,7 @@ const PhoneLogin_reCaptchaV2 = () => {
         <img src="./assets/img/login_img2.png" alt="" />
       </div>
       <div className="left col_left">
-        {!otpSliderState && (
+        {mobilenoSliderState && (
           <>
             <div className="left_inner col_left_inner">
               <div className="page_inner_logo">
@@ -622,9 +692,9 @@ const PhoneLogin_reCaptchaV2 = () => {
             </div>
           )}
         </div>
-        {/* New User Slider to provide Name & City and show Country */}
+        {/* New User Slider to provide Name & City and email */}
         <div>
-          {newUserSlider &&
+          {newUserSliderState &&
             (
               <>
                 <div className="left_inner col_left_inner">
@@ -636,11 +706,44 @@ const PhoneLogin_reCaptchaV2 = () => {
               Security.
             </h5> */}
                   <div className="vg22"></div>
-                  <div className="otp_input">
-                    <label htmlFor="">New User Slider</label>
+                  <div></div>
+
+                  <label htmlFor="" className="text-center">
+                    {/* <strong> Welcome to Propdial</strong> */}
+
+                    <h5>Congratulations and welcome aboard! 🎉</h5>
+
+                    Welcome to join the Propdial community.
+
+                  </label>
+                  <div className="vg22"></div>
+                  <div className="new_form_field with_icon">
                     <input
+                      required
                       type="text"
-                      placeholder="Enter verification code"
+                      placeholder="Your Full Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      style={{
+                        background: "none"
+                      }}
+                    />
+                    <div className="vg22"></div>
+                    <input
+                      required
+                      type="email"
+                      placeholder="Your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      style={{
+                        background: "none"
+                      }}
+                    />
+                    <div className="vg22"></div>
+                    <input
+                      required
+                      type="text"
+                      placeholder="Your Current City"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
                       style={{
@@ -649,10 +752,11 @@ const PhoneLogin_reCaptchaV2 = () => {
                     />
                   </div>
                 </div>
+                {error && <div className="field_error">{error}</div>}
                 <div className="vg10"></div>
                 <div>
                   <button className="theme_btn btn_fill w_full" onClick={newUserForm}>
-                    Continue
+                    Next
                   </button>
                 </div>
               </>

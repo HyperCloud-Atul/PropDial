@@ -73,6 +73,12 @@ export const useCommon = () => {
         );
     }
 
+    // Simple email validation regex
+    const validateEmail = async (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
+
 
     const amountToWords = async (amount) => {
         if (amount === 0) {
@@ -101,5 +107,5 @@ export const useCommon = () => {
         return chunkWords.reverse().join(' ').trim();
     }
 
-    return { formatPhoneNumber, formatAmount, camelCase, amountToWords, response }
+    return { formatPhoneNumber, formatAmount, camelCase, validateEmail, amountToWords, response }
 }
