@@ -308,7 +308,7 @@ const PhoneLogin_reCaptchaV2 = () => {
         city: camelCase(city.toLowerCase()),
       });
 
-      navigate("/profile");
+      navigate("/dashboard");
     }
   }
 
@@ -403,7 +403,7 @@ const PhoneLogin_reCaptchaV2 = () => {
             lastLoginTimestamp: timestamp.fromDate(new Date()),
           });
 
-          navigate("/profile");
+          navigate("/dashboard");
         }
 
         // if (user) {
@@ -685,7 +685,7 @@ const PhoneLogin_reCaptchaV2 = () => {
               )}
               {!isLoading && (
                 <div className="text-center">
-                  <h6 className="text_green mb-2">Redirecting to profile</h6>
+                  <h6 className="text_green mb-2">Redirecting to Dashboard</h6>
                   <BeatLoader color={"#00a8a8"} loading={true} />
                 </div>
               )}

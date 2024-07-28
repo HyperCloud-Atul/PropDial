@@ -1138,7 +1138,7 @@ const PropertyDetails = () => {
                             <span className="price"></span>
                           </h4>
                           <h6>Demand Price</h6>
-                        
+
                         </div>
                         {propertyDocument.purpose.toUpperCase() ===
                           "RENT" && (
@@ -1168,7 +1168,7 @@ const PropertyDetails = () => {
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
-                        <div className="pdms_single">                       
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_carpet.png"></img>
                             {propertyDocument.superArea}{" "}
@@ -2069,7 +2069,7 @@ const PropertyDetails = () => {
                                   slidesPerView: 3.5,
                                   spaceBetween: 15,
                                 },
-                                
+
                               }}
                             >
                               {tenantDocument &&
@@ -2171,32 +2171,32 @@ const PropertyDetails = () => {
                             }
                             <div className="col-sm-11 col-10">
                               <div className="tenant_card">
-                              <Swiper
-                              spaceBetween={15}
-                              slidesPerView={3.5}
-                              pagination={false}
-                              freeMode={true}
-                              className='all_tenants'
-                              breakpoints={{
-                                320: {
-                                  slidesPerView: 1,
-                                  spaceBetween: 15,
-                                },
-                                767: {
-                                  slidesPerView: 1.5,
-                                  spaceBetween: 15,
-                                },
-                                991: {
-                                  slidesPerView: 2.5,
-                                  spaceBetween: 15,
-                                },
-                                1199: {
-                                  slidesPerView: 3.5,
-                                  spaceBetween: 15,
-                                },
-                                
-                              }}
-                            >
+                                <Swiper
+                                  spaceBetween={15}
+                                  slidesPerView={3.5}
+                                  pagination={false}
+                                  freeMode={true}
+                                  className='all_tenants'
+                                  breakpoints={{
+                                    320: {
+                                      slidesPerView: 1,
+                                      spaceBetween: 15,
+                                    },
+                                    767: {
+                                      slidesPerView: 1.5,
+                                      spaceBetween: 15,
+                                    },
+                                    991: {
+                                      slidesPerView: 2.5,
+                                      spaceBetween: 15,
+                                    },
+                                    1199: {
+                                      slidesPerView: 3.5,
+                                      spaceBetween: 15,
+                                    },
+
+                                  }}
+                                >
                                   {filteredPropertyOwners &&
                                     filteredPropertyOwners.map((propUser, index) => (
                                       <SwiperSlide key={index}>
@@ -2206,14 +2206,14 @@ const PropertyDetails = () => {
                                             onClick={user && user.role === "admin" ? (e) => handleShowOwnerTags(e, propUser, 'propowner') : null}
                                           >
                                             {propUser.userTag}
-                                         {user && user.role === "admin" && (
-                                             <span
-                                             className="material-symbols-outlined click_icon text_near_icon"
-                                             style={{ fontSize: "10px" }}
-                                           >
-                                             edit
-                                           </span>
-                                         )}
+                                            {user && user.role === "admin" && (
+                                              <span
+                                                className="material-symbols-outlined click_icon text_near_icon"
+                                                style={{ fontSize: "10px" }}
+                                              >
+                                                edit
+                                              </span>
+                                            )}
                                           </div>
                                           <div className="left">
                                             <div className="tcs_img_container">
@@ -2246,17 +2246,17 @@ const PropertyDetails = () => {
                                               </h6>
                                               {user && user.role === "admin" && (
                                                 <h6
-                                                className="text_red pointer"
-                                                style={{
-                                                  width: "fit-content",
-                                                  fontSize: "10px",
-                                                  letterSpacing: "0.4px",
-                                                  marginLeft: "3px"
-                                                }}
-                                                onClick={(e) => handleDeletePropUser(e, propUser)}
-                                              >
-                                                Delete
-                                              </h6>
+                                                  className="text_red pointer"
+                                                  style={{
+                                                    width: "fit-content",
+                                                    fontSize: "10px",
+                                                    letterSpacing: "0.4px",
+                                                    marginLeft: "3px"
+                                                  }}
+                                                  onClick={(e) => handleDeletePropUser(e, propUser)}
+                                                >
+                                                  Delete
+                                                </h6>
                                               )}
                                             </div>
                                           </div>
@@ -2775,7 +2775,7 @@ const PropertyDetails = () => {
                         </div>
                         <div className="pis_content">
                           <h6>Living Area</h6>
-                          <h5>{propertyDocument.numberOfLivingArea}</h5>
+                          <h5>{propertyDocument.numberOfLivingArea === "0" ? "No" : "Yes"}</h5>
                         </div>
                       </div>
                       {propertyDocument.numberOfBasement !== "0" &&
@@ -3309,7 +3309,7 @@ const PropertyDetails = () => {
                         </div>
                         <div className="pis_content">
                           <h6>Food Habit</h6>
-                          <h5>{propertyDocument.vegNonVeg}</h5>
+                          <h5>{propertyDocument.vegNonVeg === 'Veg' ? "Vegetarian" : "No-Restrictions"}</h5>
                         </div>
                       </div>
                     </div>

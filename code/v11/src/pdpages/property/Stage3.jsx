@@ -2007,7 +2007,7 @@ export default function Stage3(props) {
                                   done
                                 </span>
                               </div>
-                              <h6>Veg</h6>
+                              <h6>Vegetarian</h6>
                             </label>
                           </div>
                         </div>
@@ -2042,7 +2042,7 @@ export default function Stage3(props) {
                                   done
                                 </span>
                               </div>
-                              <h6>Non-Veg</h6>
+                              <h6>No-Restrictions</h6>
                             </label>
                           </div>
                         </div>
