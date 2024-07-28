@@ -204,8 +204,8 @@ const PGOwnerDashboard = () => {
                     </div>
                   </div>
                 </div>
-              </section>          
-         
+              </section>
+
               <div className="vg22"></div>
               <section className="self_property_detail">
                 <div className="spd_single">
@@ -265,13 +265,13 @@ const PGOwnerDashboard = () => {
                   </div>
                 </div> */}
               </section>
-             <div className="vg12"></div>
+              <div className="vg12"></div>
               <div className="vg22"></div>
               <section className="property_cards_parent">
                 {myproperties && myproperties.map((property) => (
                   <PropertyCard propertyid={property.propertyId} />))}
               </section>
-         {/* <>
+              {/* <>
          <div className="vg22"></div>
               <hr />
 
@@ -383,6 +383,23 @@ const PGOwnerDashboard = () => {
               <div className="vg22"></div>
               <hr />
          </> */}
+              {myproperties && myproperties.length === "0" && (
+                <>
+                  <div className="vg22"></div>
+                  <div className="property_soon">
+                    <div className="inner">
+                      <div>
+                        <h2>
+                          Welcome! 🌹😊
+                        </h2>
+                        <h4>🏡 Your property is currently in the discovery phase and will be onboarded shortly. 🚀</h4>
+                      </div>
+                      <img src="./assets/img/wait.png" alt="" />
+                    </div>
+                  </div>
+                </>
+
+              )}
 
               <div className="vg22"></div>
               <section className="add_section row">
