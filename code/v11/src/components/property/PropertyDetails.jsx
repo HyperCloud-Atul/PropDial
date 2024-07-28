@@ -861,19 +861,19 @@ const PropertyDetails = () => {
                 <li key={user.id}>{user.fullName} ({user.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')})</li>
               ))}
             </ul> */}
-            <ul style={{ padding: "10px 0 10px 0" }}>
+            <ul style={{ padding: "10px 0 10px 0", textAlign: "right" }}>
               {filteredUsers &&
                 filteredUsers.map((user) => (
-                  <li style={{ padding: "10px 0 10px 0" }} key={user.id}>
+                  <li style={{ padding: "4px 0 4px 0" }} key={user.id}>
                     <label
                       style={{
-                        fontSize: "1rem",
-                        display: "flex",
-                        alignItems: "center",
+                        fontSize: "0.8rem",
+                        // display: "flex",
+                        // alignItems: "center",
                         position: "relative",
                         width: "100%",
                         background: "#efefef",
-                        padding: "10px 0 10px 0",
+                        padding: "4px 6px 4px 0",
                         margin: "0",
                       }}
                     >
@@ -886,12 +886,12 @@ const PropertyDetails = () => {
                         checked={selectedUser === user.id}
                         onChange={() => handleUserSelect(user.id)}
                       />
-                      {user.fullName} (
+                      <strong> {user.fullName} </strong> (
                       {user.phoneNumber.replace(
                         /(\d{2})(\d{5})(\d{5})/,
                         "+$1 $2-$3"
                       )}
-                      ) - {user.country}
+                      ) <br></br>{user.city}, {user.country}
                     </label>
                   </li>
                 ))}
