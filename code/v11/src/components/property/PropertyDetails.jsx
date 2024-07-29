@@ -86,6 +86,7 @@ const PropertyDetails = () => {
 
 
   const { documents: propertyDocList, errors: propertyDocListError } = useCollection("docs", ["masterRefId", "==", propertyid]);
+  console.log("documents: ", propertyDocList)
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } = useFirestore("tenants");
   const { addDocument: addProperyUsersDocument, updateDocument: updateProperyUsersDocument, deleteDocument: deleteProperyUsersDocument, error: errProperyUsersDocument } = useFirestore("propertyusers");
@@ -2479,14 +2480,15 @@ const PropertyDetails = () => {
                                                   "+$1 $2-$3"
                                                 )}
                                               </h6>
-                                              <h6 className="text_red pointer" style={{
-                                                width: "fit-content",
-                                                fontSize: "10px",
-                                                letterSpacing: "0.4px",
-                                                marginLeft: "3px"
-                                              }} onClick={(e) => handleDeletePropUser(e, propUser)}>
-                                                Delete
-                                              </h6>
+                                              {user.role === 'admin' &&
+                                                <h6 className="text_red pointer" style={{
+                                                  width: "fit-content",
+                                                  fontSize: "10px",
+                                                  letterSpacing: "0.4px",
+                                                  marginLeft: "3px"
+                                                }} onClick={(e) => handleDeletePropUser(e, propUser)}>
+                                                  Delete
+                                                </h6>}
                                             </div>
                                           </div>
                                           <div className="wha_call_icon">
