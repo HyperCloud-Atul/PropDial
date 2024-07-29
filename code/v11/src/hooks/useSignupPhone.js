@@ -18,7 +18,7 @@ export const useSignupPhone = () => {
         setMobileNo(number)
         // recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recapcha-container', {});
         recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recapcha-container', {
-            size: 'invisible',
+            'size': 'invisible',
             // 'callback': (response) => {
             //     // reCAPTCHA solved, allow signInWithPhoneNumber.
             //     handleSignIn();
