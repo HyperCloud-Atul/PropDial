@@ -1497,11 +1497,15 @@
 @media only screen and (max-width: 575px) {
   .property_cards_parent {
     .property_single_card {
-      padding: 10px;
+      padding: 0px;
       border-radius: 12px;
       .top {
         gap: 8px;
         flex-direction: column;
+        .img_container{
+          width: 100%;
+          border-radius: 12px 12px 0px 0px;
+        }
       }
     }
   }
