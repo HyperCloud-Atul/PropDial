@@ -14,7 +14,7 @@ import PropertyList from "../../../components/PropertyList";
 export default function ExecutiveDashboard() {
   const { user } = useAuthContext();
   const { logout, isPending } = useLogout();
-  const { documents, error } = useCollection("properties");
+  const { documents, error } = useCollection("properties", ["postedBy", "==", "Propdial"]);
   const [filter, setFilter] = useState("all");
   // const navigate = useNavigate();
 

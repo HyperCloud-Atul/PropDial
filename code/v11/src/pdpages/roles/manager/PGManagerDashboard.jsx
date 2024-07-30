@@ -41,7 +41,7 @@ const PGManagerDashboard = () => {
 
   console.log('myproperties: ', myproperties)
 
-  const { documents: properties, error: propertieserror } = useCollection("properties");
+  const { documents: properties, error: propertieserror } = useCollection("properties", ["postedBy", "==", "Propdial"]);
   // const { documents: properties, error: propertieserror } = useCollection(
   //   "properties",
   //   ["access", "array-contains", user.uid]
