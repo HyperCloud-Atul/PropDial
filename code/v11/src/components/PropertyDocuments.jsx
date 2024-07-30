@@ -7,7 +7,7 @@ import { BeatLoader } from "react-spinners";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PropertyDocuments.scss";
 import Switch from "@mui/material/Switch";
-import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu"; 
+import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 
 const PropertyDocuments = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -15,14 +15,16 @@ const PropertyDocuments = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-   // Scroll to the top of the page whenever the location changes end
+  // Scroll to the top of the page whenever the location changes end
 
-   const { propertyId } = useParams();
+  const { propertyId } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
-  const { addDocument, updateDocument, deleteDocument, error } = useFirestore("docs");
-  const { documents: propertyDocument, errors: propertyDocError } = useCollection("docs", ["masterRefId", "==", propertyId]);
+  const { addDocument, updateDocument, deleteDocument, error } =
+    useFirestore("docs");
+  const { documents: propertyDocument, errors: propertyDocError } =
+    useCollection("docs", ["masterRefId", "==", propertyId]);
 
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
@@ -52,9 +54,9 @@ const PropertyDocuments = () => {
     const fileExtension = file.name.split(".").pop().toLowerCase();
     return fileExtension === "pdf" ? "pdf" : "image";
   };
- 
+
   const addPropertyDocuments = async () => {
-    if (!selectedDocCat  || !selectedDocWhat) {
+    if (!selectedDocCat || !selectedDocWhat) {
       alert("All fields are required!");
       return;
     }
@@ -101,12 +103,14 @@ const PropertyDocuments = () => {
     }
   }, [propertyDocument]);
 
-   const uploadDocumentImage = async () => {
+  const uploadDocumentImage = async () => {
     try {
       setIsUploading(true);
       setUploadingDocId(newDocId);
       const fileType = getFileType(documentFile);
-      const storageRef = projectStorage.ref(`docs/${newDocId}/${documentFile.name}`);
+      const storageRef = projectStorage.ref(
+        `docs/${newDocId}/${documentFile.name}`
+      );
       await storageRef.put(documentFile);
       const fileURL = await storageRef.getDownloadURL();
       await updateDocument(newDocId, {
@@ -136,7 +140,11 @@ const PropertyDocuments = () => {
   // render jsx code in short form start
   const docCategories = [
     { id: "prop_doc", value: "Property Document", label: "Property Document" },
-    { id: "prop_main", value: "Property Maintainance", label: "Property Maintainance" },
+    {
+      id: "prop_main",
+      value: "Property Maintainance",
+      label: "Property Maintainance",
+    },
     { id: "utility_bill", value: "Utility Bills", label: "Utility Bills" },
     { id: "property_tax", value: "Property Tax", label: "Property Tax" },
   ];
@@ -147,7 +155,11 @@ const PropertyDocuments = () => {
       { id: "rentagreement", value: "Rent Agreement", label: "Rent Agreement" },
       { id: "layout", value: "Layout", label: "Layout" },
       { id: "blueprint", value: "Blue Print", label: "Blue Print" },
-      { id: "powerofattorney", value: "Power of Attorney", label: "Power of Attorney" },
+      {
+        id: "powerofattorney",
+        value: "Power of Attorney",
+        label: "Power of Attorney",
+      },
     ],
     // "Property Maintainance": [
     //   { id: "main_doc", value: "Maintainance Document", label: "Maintainance Document" },
@@ -204,10 +216,7 @@ const PropertyDocuments = () => {
   const filteredPropertyTaxLength = filteredPropertyPropertyTax.length;
   // filter for property utility document end
 
-
-
   // filters end
-
 
   const handleToggleChange = async (event, id) => {
     const newCheckedState = event.target.checked;
@@ -377,8 +386,7 @@ const PropertyDocuments = () => {
                                   name="doc_what"
                                   id={radio.id}
                                   value={radio.value}
-                                  onChange={handleDocWhatChange
-                                  }
+                                  onChange={handleDocWhatChange}
                                   checked={selectedDocWhat === radio.value}
                                 />
                                 <label htmlFor={radio.id}>{radio.label}</label>
@@ -416,8 +424,9 @@ const PropertyDocuments = () => {
                 </div>
                 <div className="col-sm-3">
                   <div
-                    className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
-                      }`}
+                    className={`theme_btn btn_fill text-center ${
+                      isUploading ? "disabled" : ""
+                    }`}
                     onClick={isUploading ? null : addPropertyDocuments}
                   >
                     {isUploading ? "Uploading..." : "Save"}
@@ -442,7 +451,6 @@ const PropertyDocuments = () => {
               <Tab className="pointer">
                 Property Tax ({filteredPropertyTaxLength})
               </Tab>
-
             </TabList>
             <TabPanel>
               <div className="blog_sect">
@@ -522,7 +530,6 @@ const PropertyDocuments = () => {
                             inputProps={{ "aria-label": "controlled" }}
                           />
                         </div>
-
                       </div>
                     </div>
                   ))}
@@ -588,9 +595,7 @@ const PropertyDocuments = () => {
                             //   alt=""
                             // />
                             <div className="verified_batch">
-                              <span>
-                                Verified
-                              </span>
+                              <span>Verified</span>
                             </div>
                           )}
                         </div>
