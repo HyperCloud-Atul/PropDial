@@ -56,7 +56,7 @@ const PropertyDocuments = () => {
   };
 
   const addPropertyDocuments = async () => {
-    if (!selectedDocCat || !selectedDocWhat) {
+    if ("") {
       alert("All fields are required!");
       return;
     }

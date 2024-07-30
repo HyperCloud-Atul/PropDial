@@ -124,7 +124,7 @@ const PGAdminProperty = () => {
         <div className="pg_header d-flex justify-content-between">
           <div className="left">
             <h2 className="m22">
-              Filtered properties :
+              Filtered properties:{" "}
               {properties && (
                 <span className="text_orange">{filterProperties.length}</span>
               )}
