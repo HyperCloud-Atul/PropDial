@@ -164,7 +164,7 @@ const PGAdminProperty = () => {
                 />
               )}
             </div>
-            <div className="residentail_commercial rent_sale">
+            <div className="mobile_size residentail_commercial rent_sale">
               <label className={rentSaleFilter === "Sale" ? "on" : "off"}>
                 <div className="switch">
                   <span

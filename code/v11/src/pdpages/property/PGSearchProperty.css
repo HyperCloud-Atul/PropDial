@@ -451,22 +451,22 @@ h6.value_per_sqf {
         justify-content: space-between;
         width: 100%;
     }
-    .pg_property .top_search_bar .search_area_header  .residentail_commercial .switch {       
+    .mobile_size.residentail_commercial .switch {       
         gap: 8px;
     }
-    .pg_property .top_search_bar .search_area_header .switch span {        
+    .mobile_size .switch span {        
         font-size: 14px;
     }
-    .pg_property .top_search_bar .search_area_header .react-switch-bg {
+    .mobile_size .react-switch-bg {
         height: 20px !important;
         width: 38px !important;
     }
-    .pg_property .top_search_bar .search_area_header  .react-switch-handle {
+    .mobile_size  .react-switch-handle {
         height: 14px !important;
         width: 14px !important;
         top: 3px !important;
     }
-    .pg_property .top_search_bar .search_area_header .on .react-switch-handle {
+    .mobile_size .on .react-switch-handle {
         transform: translateX(19px) !important;       
     }
 }

@@ -87,7 +87,7 @@ const PGSearchProperty = () => {
               Sale
             </div>
           </div>
-          <div className="residentail_commercial">
+          <div className="mobile_size residentail_commercial">
             <label className={checked ? "on" : "off"}>
               <div className="switch">
                 <span className={`Residential ${checked ? "off" : "on"}`} >
