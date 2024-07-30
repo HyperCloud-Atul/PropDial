@@ -114,8 +114,8 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     background: white;
     border-radius: 22px;
-    width: fit-content; 
-    margin: 0 auto;
+    /* width: fit-content; 
+    margin: 0 auto; */
     
 }
 .property_soon .inner {
@@ -348,6 +348,21 @@
     .propagent_dashboard_inner .ps_single h6 {      
         font-size: 14px;
     }
-    
+    .property_soon .inner h2 {
+        font-size: 16px;
+        margin-bottom: 4px;       
+    }
+    .property_soon .inner h4 {   
+             font-size: 14px;      
+        max-width: inherit;
+        line-height: normal;
+    }
+    .property_soon {
+        padding: 10px;      
+        border-radius: 12px;
+    }
+    .property_soon .inner img {
+        height: 75px;
+    }
 }
 

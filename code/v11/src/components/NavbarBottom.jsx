@@ -18,11 +18,11 @@ export default function NavbarBottom() {
   const showDashboard = () => {
     if (!user) {
       // User is not logged in, navigate to "/"
-      navigate("/search-property");
+      navigate("/");
       return; // Exit the function to prevent further checks
     }
     else {
-      navigate("/dashboard");
+      navigate("/");
     }
   };
 
@@ -98,7 +98,7 @@ export default function NavbarBottom() {
   }
 
   // more acitve class Array 
-  const moreActivePaths = ["/more-menu", "/about-us", "/contact-us", "/faq",
+  const moreActivePaths = ["/more-menu", "/faq",
     "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/newproperty"];
   const shouldMoreActive = moreActivePaths.includes(location.pathname);
   const moreActiveClass = `b_menu_single ${shouldMoreActive ? "b_menu_active" : ""}`;
@@ -124,7 +124,7 @@ export default function NavbarBottom() {
           <div className="menu_name">{firstMenu}</div>
         </div>
         <div
-          className={`b_menu_single ${location.pathname === "/ownerdashboard_new" ? "b_menu_active" : ""
+          className={`b_menu_single ${location.pathname === "/properties" || location.pathname === "/dashboard" ? "b_menu_active" : ""
             }`}
           onClick={showSecondPage}
         >
@@ -180,7 +180,7 @@ export default function NavbarBottom() {
           </Link>)
         }
         <div
-          className={`b_menu_single ${location.pathname === "/properties" ? "b_menu_active" : ""
+          className={`b_menu_single ${location.pathname === "/about-us" || location.pathname === "/contact-us" ? "b_menu_active" : ""
             }`}
           onClick={showThirdPage}
         >

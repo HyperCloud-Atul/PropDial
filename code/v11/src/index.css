@@ -420,6 +420,10 @@ form.auth-form .theme_btn {
   .sect_padding {
     padding: 35px 0px;
   }
+  .more-menus.sect_padding {
+    padding: 0px;
+}
+
 
   .section_title_effect {
     font-size: 35px;
