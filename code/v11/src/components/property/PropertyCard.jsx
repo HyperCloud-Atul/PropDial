@@ -8,13 +8,14 @@ import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
 
 const PropertyCard = ({ propertyid }) => {
-
   // console.log('property id: ', propertyid)
 
   const { user } = useAuthContext();
-  const { document: propertydoc, error: errPropertyDoc } = useDocument("properties", propertyid);
+  const { document: propertydoc, error: errPropertyDoc } = useDocument(
+    "properties",
+    propertyid
+  );
   // const { document: userDoc, error: userDocError } = useDocument('users', propertydoc && propertydoc.createdBy)
-  console.log("property doc: ", propertydoc)
 
   // const { documents: myproperties, error: errMyProperties } = useCollection(
   //   "propertyusers",
@@ -39,18 +40,22 @@ const PropertyCard = ({ propertyid }) => {
   // sexpand more expand less end
 
   useEffect(() => {
-
     if (propertydoc) {
-      if (propertydoc.isActiveInactiveReview.toUpperCase() === "ACTIVE") setToggleFlag(false);
+      if (propertydoc.isActiveInactiveReview.toUpperCase() === "ACTIVE")
+        setToggleFlag(false);
       else setToggleFlag(true);
     }
-
   }, [propertydoc]);
 
   //---------------- Start of Change User ----------------------
-  const { updateDocument, response: updateDocumentResponse } = useFirestore("properties");
-  const { documents: dbUsers, error: dbuserserror } = useCollection("users", ["status", "==", "active"]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const { updateDocument, response: updateDocumentResponse } =
+    useFirestore("properties");
+  const { documents: dbUsers, error: dbuserserror } = useCollection("users", [
+    "status",
+    "==",
+    "active",
+  ]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(dbUsers);
   const [selectedUser, setSelectedUser] = useState(null);
   const [changeManagerPopup, setchangeManagerPopup] = useState(false);
@@ -58,19 +63,19 @@ const PropertyCard = ({ propertyid }) => {
   const openChangeManager = () => {
     console.log("Open Change Manager");
     setchangeManagerPopup(true);
-  }
+  };
   const closeChangeManager = () => {
     setchangeManagerPopup(false);
-  }
+  };
 
   const confirmChangeManager = async () => {
-    console.log('In confirmChangeManager: ')
-    console.log('selectedUser: ', selectedUser)
+    console.log("In confirmChangeManager: ");
+    console.log("selectedUser: ", selectedUser);
 
     const updatedProperty = {
       propertyManager: selectedUser,
       updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid
+      updatedBy: user.uid,
     };
 
     // console.log('updatedProperty', updatedProperty)
@@ -79,7 +84,7 @@ const PropertyCard = ({ propertyid }) => {
     await updateDocument(propertydoc.id, updatedProperty);
 
     setchangeManagerPopup(false);
-  }
+  };
 
   const handleSearchChange = (event) => {
     const query = event.target.value;
@@ -89,9 +94,13 @@ const PropertyCard = ({ propertyid }) => {
 
   const filterUsers = (query) => {
     // console.log('query: ', query)
-    const filtered = dbUsers && dbUsers.filter((user) =>
-      (user.fullName.toLowerCase().includes(query.toLowerCase()) || (user.phoneNumber.includes(query)))
-    );
+    const filtered =
+      dbUsers &&
+      dbUsers.filter(
+        (user) =>
+          user.fullName.toLowerCase().includes(query.toLowerCase()) ||
+          user.phoneNumber.includes(query)
+      );
     setFilteredUsers(filtered);
   };
 
@@ -108,8 +117,9 @@ const PropertyCard = ({ propertyid }) => {
     if (toggleFlag) {
       userSwitch = "active";
     } else {
-      let review_inactive = document.getElementById("id_inactive_review").innerHTML;
-      console.log("review_inactive: ", review_inactive)
+      let review_inactive =
+        document.getElementById("id_inactive_review").innerHTML;
+      console.log("review_inactive: ", review_inactive);
       userSwitch = review_inactive;
     }
     setToggleFlag(!toggleFlag);
@@ -126,8 +136,6 @@ const PropertyCard = ({ propertyid }) => {
     // await updateDocument(propertydoc.id, updatedProperty);
   };
 
-
-
   //Manage In-Review | Active |Inactive
   const handleIsActiveInactiveReview = async (e, option) => {
     // console.log("In handleIsActiveInactiveReview")
@@ -143,201 +151,279 @@ const PropertyCard = ({ propertyid }) => {
     // console.log('property id: ', property.id)
 
     await updateDocument(propertydoc.id, updatedProperty);
-  }
+  };
 
   return (
     <>
       {/* Change User Popup - Start */}
-      <div className={changeManagerPopup ? 'pop-up-change-number-div open' : 'pop-up-change-number-div'}>
+      <div
+        className={
+          changeManagerPopup
+            ? "pop-up-change-number-div open"
+            : "pop-up-change-number-div"
+        }
+      >
         <div className="direct-div">
-          <span onClick={closeChangeManager} className="material-symbols-outlined close-button">
+          <span
+            onClick={closeChangeManager}
+            className="material-symbols-outlined close-button"
+          >
             close
           </span>
-          <h1 style={{ color: 'var(--theme-orange)', fontSize: '1.4rem' }}>Change Property Manager</h1>
+          <h1 style={{ color: "var(--theme-orange)", fontSize: "1.4rem" }}>
+            Change Property Manager
+          </h1>
           <br></br>
           <div>
-            <input style={{ background: '#efefef', height: '60px' }}
+            <input
+              style={{ background: "#efefef", height: "60px" }}
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder="Search users..."
             />
-            <ul style={{ padding: '10px 0 10px 0' }}>
-              {filteredUsers && filteredUsers.map((user) => (
-                <li style={{ padding: '10px 0 10px 0' }} key={user.id}>
-                  <label style={{
-                    fontSize: "1rem", display: 'flex', alignItems: 'center', position: 'relative', width: '100%', background: '#efefef', padding: '10px 0 10px 0', margin: '0'
-                  }}>
-                    <input style={{ width: '10%' }}
-                      name="selectedUser"
-                      type="radio"
-                      checked={selectedUser === user.id}
-                      onChange={() => handleUserSelect(user.id)}
-                    />
-                    {user.fullName} ({user.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')})
-                  </label>
-                </li>
-              ))}
+            <ul style={{ padding: "10px 0 10px 0" }}>
+              {filteredUsers &&
+                filteredUsers.map((user) => (
+                  <li style={{ padding: "10px 0 10px 0" }} key={user.id}>
+                    <label
+                      style={{
+                        fontSize: "1rem",
+                        display: "flex",
+                        alignItems: "center",
+                        position: "relative",
+                        width: "100%",
+                        background: "#efefef",
+                        padding: "10px 0 10px 0",
+                        margin: "0",
+                      }}
+                    >
+                      <input
+                        style={{ width: "10%" }}
+                        name="selectedUser"
+                        type="radio"
+                        checked={selectedUser === user.id}
+                        onChange={() => handleUserSelect(user.id)}
+                      />
+                      {user.fullName} (
+                      {user.phoneNumber.replace(
+                        /(\d{2})(\d{5})(\d{5})/,
+                        "+$1 $2-$3"
+                      )}
+                      )
+                    </label>
+                  </li>
+                ))}
             </ul>
           </div>
           <div id="id_sendotpButton" className="change-number-button-div">
-            <button onClick={closeChangeManager} className="mybutton button5" style={{ background: "#afafaf" }}>Cancel</button>
-            <button onClick={confirmChangeManager} className="mybutton button5">Confirm</button>
+            <button
+              onClick={closeChangeManager}
+              className="mybutton button5"
+              style={{ background: "#afafaf" }}
+            >
+              Cancel
+            </button>
+            <button onClick={confirmChangeManager} className="mybutton button5">
+              Confirm
+            </button>
           </div>
         </div>
-      </div >
+      </div>
       {/* Change User Popup - End */}
-
 
       <div className="psc_parent relative">
         {/* {propertydoc && <div className={`category ${propertydoc.category === "Residential" ? "residential" : "commercial"}`}>
           {propertydoc.category}
         </div>} */}
-        {propertydoc && <div className={`category ${propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT' ? "residential" : "commercial"}`}>
-          {propertydoc.flag}
-        </div>}
-
+        {propertydoc && (
+          <div
+            className={`category ${
+              propertydoc.status.toUpperCase() === "AVAILABLE FOR RENT"
+                ? "residential"
+                : "commercial"
+            }`}
+          >
+            {propertydoc.flag}
+          </div>
+        )}
 
         <div className="property_single_card relative">
           {/* {propertydoc && <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
             {propertydoc.status === 'Available for Rent' || propertydoc.status === 'Rented Out' ? 'Rent' : 'Sale'}
             {propertydoc.purpose}
           </div>} */}
-          {propertydoc && <Link to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="top relative">
-            <div className="img_container">
-              {/* <img src="/assets/img/admin_banner.jpg" alt="" /> */}
-              {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
-                : <img src="/assets/img/admin_banner.jpg" alt="" />}
-            </div>
-            <div className="left_side relative">
-              {user && user.role === 'admin' &&
-                <Link
-                  className="prop_edit"
-                  to={`/updateproperty/${propertydoc.id}`}
-                  key={propertydoc.propertyid}
-                >
-                  <span className="material-symbols-outlined">edit_square</span>
-                </Link>}
-              <h5 className="demand">
-                <span>₹</span>             
-                 {new Intl.NumberFormat('en-IN').format(propertydoc.demandPrice)}/-
-                {propertydoc.maintenancecharges !== '' &&
-                 <span
-                  style={{
-                    fontSize: "10px",
-                  }}
-                >
-                  + ₹
-                  {new Intl.NumberFormat('en-IN').format(propertydoc.maintenancecharges)}/- ({propertydoc.maintenancechargesfrequency})
-                </span>}
-              </h5>
-              <div className="full_address">
-                <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
-                <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
-                <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+          {propertydoc && (
+            <Link
+              to={`/propertydetails/${propertydoc.id}`}
+              key={propertydoc.id}
+              className="top relative"
+            >
+              <div className="img_container">
+                {/* <img src="/assets/img/admin_banner.jpg" alt="" /> */}
+                {propertydoc.images.length > 0 ? (
+                  <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
+                ) : (
+                  <img src="/assets/img/admin_banner.jpg" alt="" />
+                )}
               </div>
-              <div className="more_row">
-                <div className="left">
-                  <span className="card_badge">
-                    {propertydoc.pid}
-                  </span>
+              <div className="left_side relative">
+                {user && user.role === "admin" && (
+                  <Link
+                    className="prop_edit"
+                    to={`/updateproperty/${propertydoc.id}`}
+                    key={propertydoc.propertyid}
+                  >
+                    <span className="material-symbols-outlined">
+                      edit_square
+                    </span>
+                  </Link>
+                )}
+                <h5 className="demand">
+                  <span>₹</span>
+                  {new Intl.NumberFormat("en-IN").format(
+                    propertydoc.demandPrice
+                  )}
+                  /-
+                  {propertydoc.maintenancecharges !== "" && (
+                    <span
+                      style={{
+                        fontSize: "10px",
+                      }}
+                    >
+                      + ₹
+                      {new Intl.NumberFormat("en-IN").format(
+                        propertydoc.maintenancecharges
+                      )}
+                      /- ({propertydoc.maintenancechargesfrequency})
+                    </span>
+                  )}
+                </h5>
+                <div className="full_address">
+                  <h6>
+                    {propertydoc.unitNumber} | {propertydoc.society}{" "}
+                  </h6>
+                  <h6>
+                    {propertydoc.bhk} | {propertydoc.propertyType}{" "}
+                    {propertydoc.furnishing === ""
+                      ? ""
+                      : " | " + propertydoc.furnishing + "Furnished"}{" "}
+                  </h6>
+                  <h6>
+                    {propertydoc.locality}, {propertydoc.city} |{" "}
+                    {propertydoc.state}
+                  </h6>
                 </div>
-                {/* <div className="right">
+                <div className="more_row">
+                  <div className="left">
+                    <span className="card_badge">{propertydoc.pid}</span>
+                  </div>
+                  {/* <div className="right">
                   <span className={`property_status card_badge ${propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT' ? "for_rent" : "for_sale"}`}>
                   {propertydoc.status}
                   </span>                
                 </div> */}
+                </div>
               </div>
-            </div>
-          </Link>}
+            </Link>
+          )}
           <div className="middle relative">
             <div className="show_more_arrow" onClick={handleExpand}>
               <span className="material-symbols-outlined">
                 {expanded ? "keyboard_arrow_down" : "keyboard_arrow_up"}
               </span>
             </div>
-            {propertydoc && <div className="middle_single">
-              <div className="ms_child">
-                <div className="icon_container">
-                  <img src="/assets/img/new_carpet.png" alt="" />
-                </div>
-                <div className="left">
-                  <h6>Super Area</h6>
-                  <h5>{propertydoc.superArea} {propertydoc.superAreaUnit} </h5>
-                </div>
-              </div>
-              <div className="ms_child">
-                <div className="icon_container">
-                  <img src="/assets/img/new_bedroom.png" alt="" />
-                </div>
-                <div className="left">
-                  <h6>Bedroom</h6>
-                  <h5>{propertydoc.numberOfBedrooms}</h5>
-                </div>
-              </div>
-              <div className="ms_child">
-                <div className="icon_container">
-                  <img src="/assets/img/new_bathroom.png" alt="" />
-                </div>
-                <div className="left">
-                  <h6>Bathroom</h6>
-                  <h5>{propertydoc.numberOfBathrooms}</h5>
-                </div>
-              </div>
-            </div>}
-            {expanded ? (
-              ""
-            ) : (
-              propertydoc && <div className="middle_single">
+            {propertydoc && (
+              <div className="middle_single">
                 <div className="ms_child">
                   <div className="icon_container">
-                    <img src="/assets/img/new_super_area.png" alt="" />
+                    <img src="/assets/img/new_carpet.png" alt="" />
                   </div>
                   <div className="left">
-                    <h6>Carpet Area</h6>
-                    <h5>{propertydoc.carpetArea} {propertydoc.carpetAreaUnit}</h5>
-                  </div>
-                </div>
-                <div className="ms_child">
-                  <div className="icon_container">
-                    <img src="/assets/img/new_bhk.png" alt="" />
-                  </div>
-                  <div className="left">
-                    <h6>BHK</h6>
-                    <h5>{propertydoc.bhk}</h5>
-                  </div>
-                </div>
-                <div className="ms_child">
-                  <div className="icon_container">
-                    <img src="/assets/img/new_furniture.png" alt="" />
-                  </div>
-                  <div className="left">
-                    <h6>furnishing</h6>
-                    <h5>{propertydoc.furnishing}</h5>
-                  </div>
-                </div>
-              </div>
-            )}
-            {expanded ? (
-              ""
-            ) : (
-              propertydoc && <div className="middle_single addtional_rooms">
-                <div className="ms_child">
-                  <div className="icon_container">
-                    <img src="/assets/img/new_room.png" alt="" />
-                  </div>
-                  <div className="left">
-                    <h6>{propertydoc.displayName}</h6>
+                    <h6>Super Area</h6>
                     <h5>
-                      {propertydoc.additionalRooms.length > 0 ?
-                        (propertydoc.additionalRooms.map((additionalroom) => (
-                          <span>{additionalroom}</span>
-                        ))) : 'No Additional Rooms'}
+                      {propertydoc.superArea} {propertydoc.superAreaUnit}{" "}
                     </h5>
                   </div>
                 </div>
+                <div className="ms_child">
+                  <div className="icon_container">
+                    <img src="/assets/img/new_bedroom.png" alt="" />
+                  </div>
+                  <div className="left">
+                    <h6>Bedroom</h6>
+                    <h5>{propertydoc.numberOfBedrooms}</h5>
+                  </div>
+                </div>
+                <div className="ms_child">
+                  <div className="icon_container">
+                    <img src="/assets/img/new_bathroom.png" alt="" />
+                  </div>
+                  <div className="left">
+                    <h6>Bathroom</h6>
+                    <h5>{propertydoc.numberOfBathrooms}</h5>
+                  </div>
+                </div>
               </div>
             )}
+            {expanded
+              ? ""
+              : propertydoc && (
+                  <div className="middle_single">
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_super_area.png" alt="" />
+                      </div>
+                      <div className="left">
+                        <h6>Carpet Area</h6>
+                        <h5>
+                          {propertydoc.carpetArea} {propertydoc.carpetAreaUnit}
+                        </h5>
+                      </div>
+                    </div>
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_bhk.png" alt="" />
+                      </div>
+                      <div className="left">
+                        <h6>BHK</h6>
+                        <h5>{propertydoc.bhk}</h5>
+                      </div>
+                    </div>
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_furniture.png" alt="" />
+                      </div>
+                      <div className="left">
+                        <h6>furnishing</h6>
+                        <h5>{propertydoc.furnishing}</h5>
+                      </div>
+                    </div>
+                  </div>
+                )}
+            {expanded
+              ? ""
+              : propertydoc && (
+                  <div className="middle_single addtional_rooms">
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_room.png" alt="" />
+                      </div>
+                      <div className="left">
+                        <h6>{propertydoc.displayName}</h6>
+                        <h5>
+                          {propertydoc.additionalRooms.length > 0
+                            ? propertydoc.additionalRooms.map(
+                                (additionalroom) => (
+                                  <span>{additionalroom}</span>
+                                )
+                              )
+                            : "No Additional Rooms"}
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                )}
           </div>
           <div className="card_upcoming">
             <div className="parent">
@@ -345,11 +431,13 @@ const PropertyCard = ({ propertyid }) => {
                 <div className="left">
                   <h5>25-June-2025</h5>
                   <div className="line">
-                    <div className="line_fill" style={{
-                      width: "25%",
-                      background: "#00a300"
-                    }}>
-                    </div>
+                    <div
+                      className="line_fill"
+                      style={{
+                        width: "25%",
+                        background: "#00a300",
+                      }}
+                    ></div>
                   </div>
                   <h6>Inspection Date</h6>
                 </div>
@@ -361,11 +449,13 @@ const PropertyCard = ({ propertyid }) => {
                 <div className="left">
                   <h5>30-July-2024</h5>
                   <div className="line">
-                    <div className="line_fill" style={{
-                      width: "92%",
-                      background: "#FA6262"
-                    }}>
-                    </div>
+                    <div
+                      className="line_fill"
+                      style={{
+                        width: "92%",
+                        background: "#FA6262",
+                      }}
+                    ></div>
                   </div>
                   <h6>Rent Renewal</h6>
                 </div>
@@ -376,9 +466,17 @@ const PropertyCard = ({ propertyid }) => {
             </div>
           </div>
 
-
-          <div className="bottom" style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+          <div
+            className="bottom"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
               {/* <div className="property_owner_detail">
                 <div className="img_container">
                   {userDoc && <img src={userDoc && userDoc.photoURL} alt="" />}
@@ -432,107 +530,110 @@ const PropertyCard = ({ propertyid }) => {
               {/* {propertydoc && <Link style={{ height: '25px', position: 'relative', top: '20px' }} to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
                 view more
               </Link>} */}
-
             </div>
 
-
-
-            {user && user.role === "admin" && propertydoc && <div className="form_field st-2 outline">
-              <div className="radio_group">
-                <div className="radio_group_single">
-                  <div
-                    className={
-                      propertydoc.isActiveInactiveReview === "In-Review"
-                        ? "custom_radio_button radiochecked"
-                        : "custom_radio_button"
-                    }
-                  >
-                    <input
-                      type="checkbox"
-                      id="toggleFlag_inreview"
-                      onClick={(e) => handleIsActiveInactiveReview(e, 'In-Review')}
-                    />
-                    <label
-                      htmlFor="toggleFlag_inreview"
-                      style={{ paddingTop: "7px" }}
+            {user && user.role === "admin" && propertydoc && (
+              <div className="form_field st-2 outline">
+                <div className="radio_group">
+                  <div className="radio_group_single">
+                    <div
+                      className={
+                        propertydoc.isActiveInactiveReview === "In-Review"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
                     >
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      In-Review
-                    </label>
+                      <input
+                        type="checkbox"
+                        id="toggleFlag_inreview"
+                        onClick={(e) =>
+                          handleIsActiveInactiveReview(e, "In-Review")
+                        }
+                      />
+                      <label
+                        htmlFor="toggleFlag_inreview"
+                        style={{ paddingTop: "7px" }}
+                      >
+                        <div className="radio_icon">
+                          <span className="material-symbols-outlined add">
+                            add
+                          </span>
+                          <span className="material-symbols-outlined check">
+                            done
+                          </span>
+                        </div>
+                        In-Review
+                      </label>
+                    </div>
                   </div>
-                </div>
-                <div className="radio_group_single">
-                  <div
-                    className={
-                      propertydoc.isActiveInactiveReview === "Active"
-                        ? "custom_radio_button radiochecked"
-                        : "custom_radio_button"
-                    }
-                  >
-                    <input
-                      type="checkbox"
-                      id="toggleFlag_active"
-                      onClick={(e) => handleIsActiveInactiveReview(e, 'Active')}
-                    />
-                    <label
-                      htmlFor="toggleFlag_active"
-                      style={{ paddingTop: "7px" }}
+                  <div className="radio_group_single">
+                    <div
+                      className={
+                        propertydoc.isActiveInactiveReview === "Active"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
                     >
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      Active
-                    </label>
+                      <input
+                        type="checkbox"
+                        id="toggleFlag_active"
+                        onClick={(e) =>
+                          handleIsActiveInactiveReview(e, "Active")
+                        }
+                      />
+                      <label
+                        htmlFor="toggleFlag_active"
+                        style={{ paddingTop: "7px" }}
+                      >
+                        <div className="radio_icon">
+                          <span className="material-symbols-outlined add">
+                            add
+                          </span>
+                          <span className="material-symbols-outlined check">
+                            done
+                          </span>
+                        </div>
+                        Active
+                      </label>
+                    </div>
                   </div>
-                </div>
-                <div className="radio_group_single">
-                  <div
-                    className={
-                      propertydoc.isActiveInactiveReview === "Inactive"
-                        ? "custom_radio_button radiochecked"
-                        : "custom_radio_button"
-                    }
-                  >
-                    <input
-                      type="checkbox"
-                      id="toggleFlag_inactive"
-                      onClick={(e) => handleIsActiveInactiveReview(e, 'Inactive')}
-                    />
-                    <label
-                      htmlFor="toggleFlag_inactive"
-                      style={{ paddingTop: "7px" }}
+                  <div className="radio_group_single">
+                    <div
+                      className={
+                        propertydoc.isActiveInactiveReview === "Inactive"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
                     >
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      Inactive
-                    </label>
+                      <input
+                        type="checkbox"
+                        id="toggleFlag_inactive"
+                        onClick={(e) =>
+                          handleIsActiveInactiveReview(e, "Inactive")
+                        }
+                      />
+                      <label
+                        htmlFor="toggleFlag_inactive"
+                        style={{ paddingTop: "7px" }}
+                      >
+                        <div className="radio_icon">
+                          <span className="material-symbols-outlined add">
+                            add
+                          </span>
+                          <span className="material-symbols-outlined check">
+                            done
+                          </span>
+                        </div>
+                        Inactive
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>}
-
+            )}
           </div>
         </div>
       </div>
-
     </>
   );
 };
