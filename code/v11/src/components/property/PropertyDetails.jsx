@@ -2032,20 +2032,23 @@ const PropertyDetails = () => {
                       {/* {tenantDocument && tenantDocument.length} */}
                     </span>
                     <div className="more_detail_card_inner">
-                      <div className="row">
-                        <div className="col-sm-1 col-2" style={{
-                          paddingRight: "0px"
-                        }}>
-                          <div className="plus_icon">
-                            <Link className="plus_icon_inner" onClick={handleAddTenant}>
+                      <div className="row">                     
+                        {(user && user.role === "admin") &&
+                              <div className="col-sm-1 col-2" style={{
+                                paddingRight: "0px"
+                              }}>
+                                <div className="plus_icon">
+                                <Link className="plus_icon_inner" onClick={handleAddTenant}>
                               <span class="material-symbols-outlined">
                                 add
                               </span>
                             </Link>
-                          </div>
+                                </div>
 
-                        </div>
-                        <div className="col-sm-11 col-10">
+                              </div>
+                            }
+                        <div className=
+                        {`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
                           <div className="tenant_card">
                             <Swiper
                               spaceBetween={15}
@@ -2170,7 +2173,7 @@ const PropertyDetails = () => {
 
                               </div>
                             }
-                            <div className="col-sm-11 col-10">
+                            <div className={`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
                               <div className="tenant_card">
                                 <Swiper
                                   spaceBetween={15}
@@ -2407,11 +2410,11 @@ const PropertyDetails = () => {
 
                               </div>
                             }
-                            <div className="col-sm-11 col-10">
+                            <div className={`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
                               <div className="tenant_card">
-                                <Swiper
+                              <Swiper
                                   spaceBetween={15}
-                                  slidesPerView={2.5}
+                                  slidesPerView={3.5}
                                   pagination={false}
                                   freeMode={true}
                                   className='all_tenants'
@@ -2428,6 +2431,11 @@ const PropertyDetails = () => {
                                       slidesPerView: 2.5,
                                       spaceBetween: 15,
                                     },
+                                    1199: {
+                                      slidesPerView: 3.5,
+                                      spaceBetween: 15,
+                                    },
+
                                   }}
                                 >
                                   {filteredPropertyManagers &&
@@ -2436,11 +2444,20 @@ const PropertyDetails = () => {
                                         <div
                                           className="tc_single relative item"
                                         >
-                                          <div className="property_people_designation d-flex align-items-end justify-content-center" onClick={(e) => handleShowOwnerTags(e, propUser, 'propmanager')}>
+                                          <div className="property_people_designation d-flex align-items-end justify-content-center" 
+                                          onClick={(e) => {
+                                            if (user && user.role === 'admin') {
+                                              handleShowOwnerTags(e, propUser, 'propmanager');
+                                            }
+                                          }}
+                                            
+                                            >
                                             {propUser.userTag}
-                                            <span class="material-symbols-outlined click_icon text_near_icon" style={{
+                                           {user && user.role === "admin" && (
+                                             <span class="material-symbols-outlined click_icon text_near_icon" style={{
                                               fontSize: "10px"
                                             }}>edit</span>
+                                           )}
                                           </div>
                                           <div className="left">
                                             <div className="tcs_img_container" >

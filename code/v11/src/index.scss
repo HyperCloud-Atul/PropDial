@@ -1358,14 +1358,14 @@
   }
 }
 
-.table_filter_hide .filters .right {
+.table_filter_hide .filters .left{
+  display: none;
+}
+.table_filter_hide .filters .right{
   display: none;
 }
 
-.table_filter_hide .filters .left {
-  position: relative;
-  margin-top: -101px;
-}
+
 
 .table_filter_hide .vg22 {
   height: 0px;
@@ -1466,6 +1466,20 @@
   margin: auto;
 }
 
+@media only screen and (max-width: 991px) {
+  section.graphs {
+    grid-template-columns: repeat(1, 1fr) !important;
+    grid-row-gap: 22px;
+  }
+
+  .pg_adminproperty .filters {
+    flex-direction: column;
+    align-items: inherit;
+    gap: 12px;
+    margin-top: 7px;
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .my_big_card {
     border-radius: 20px;
@@ -1487,21 +1501,33 @@
   }
 }
 
-@media only screen and (max-width: 991px) {
-  section.graphs {
-    grid-template-columns: repeat(1, 1fr) !important;
-    grid-row-gap: 22px;
-  }
-}
-
 @media only screen and (max-width: 575px) {
   .property_cards_parent {
+    gap: 30px;
+
+    .prop_edit {
+      top: 8px;
+      right: 10px; 
+      span{
+        font-size: 21px;
+      } 
+    }
+
+    .form_field.st-2 .radio_group_single label {
+      height: auto;
+      border-radius: 12px;
+      padding: 4px;
+      font-size: 14px;
+      padding-left: 35px;
+    }
+
     .category {
       color: var(--white-color);
       padding: 3px 6px;
       font-size: 12px;
       letter-spacing: 0.8px;
     }
+
     .category::after {
       content: "";
       top: 1px;
@@ -1509,9 +1535,11 @@
       height: 14px;
       left: -3px;
     }
+
     .property_single_card {
       padding: 0px;
       border-radius: 12px;
+
       .top {
         gap: 0px;
         flex-direction: column;
@@ -1534,49 +1562,59 @@
           border-radius: 12px 12px 0px 0px;
         }
       }
+
       .middle {
-        .show_more_arrow {        
-          border-radius: 4px 0px 0px 4px;      
-          padding: 2px;        
-      }
+        .show_more_arrow {
+          border-radius: 4px 0px 0px 4px;
+          padding: 2px;
+        }
+
         .middle_single {
           border-radius: 0px 4px 4px 0px;
           gap: 6px;
           margin: 10px 29px 10px 0;
           padding: 8px;
+
           .ms_child {
             gap: 5px;
+
             .left {
               h6 {
                 font-size: 9px;
               }
-              h5 {               
-                font-size: 11px;               
+
+              h5 {
+                font-size: 11px;
+              }
             }
-            }
+
             .icon_container {
               img {
                 height: 20px;
                 width: 20px;
-              }           
+              }
             }
           }
         }
       }
+
       .card_upcoming {
-        .parent{
+        .parent {
           .child {
             border-radius: 4px;
-            h5{
+
+            h5 {
               font-size: 12px;
-            }  
-            h6 {              
+            }
+
+            h6 {
               font-size: 12px;
-          }    
-          .line {          
-            height: 5px;          
-        }   
-        }
+            }
+
+            .line {
+              height: 5px;
+            }
+          }
         }
       }
     }

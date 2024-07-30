@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
-import PhoneInput from "react-phone-input-2";
+import PhoneInput, { allCountries } from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 // import 'flag-icon-css/css/flag-icon.min.css';
 import OtpInput from "react-otp-input";
@@ -483,7 +483,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                   <div >
                     <PhoneInput
                       country={"in"}
-                      onlyCountries={['in', 'us', 'ae']}
+                      // onlyCountries={['in', 'us', 'ae']}                 
                       value={phone}
                       // onChange={setPhone}
                       onChange={handlePhoneChange}
