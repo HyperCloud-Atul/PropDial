@@ -87,7 +87,7 @@ const PGAdminProperty = () => {
   };
 
   return (
-    <div className="top_header_pg pg_bg">
+    <div className="top_header_pg pg_bg pg_adminproperty">
       <div className="page_spacing">
         {/* 9 dots html */}
         <div
@@ -141,7 +141,7 @@ const PGAdminProperty = () => {
         <div className="vg12"></div>
         <div className="filters">
           <div className="left">
-            {viewMode === "card_view" && (
+          
               <div className="rt_global_search search_field">
                 <input
                   placeholder="Search"
@@ -152,7 +152,7 @@ const PGAdminProperty = () => {
                   <span className="material-symbols-outlined">search</span>
                 </div>
               </div>
-            )}
+           
           </div>
           <div className="right">
             <div className="user_filters new_inline">
