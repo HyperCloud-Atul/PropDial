@@ -12,7 +12,7 @@ const propertyFilter = ["Residential", "Commercial"];
 const PGAdminProperty = () => {
   const { user } = useAuthContext();
   const { documents: properties, error: propertieserror } =
-    useCollection("properties");
+    useCollection("properties", ["postedBy", "==", "Propdial"]);
 
   // Filter state
   const [filter, setFilter] = useState(propertyFilter[0]);
@@ -36,37 +36,37 @@ const PGAdminProperty = () => {
   // Filter properties based on search input and other filters
   const filterProperties = properties
     ? properties.filter((document) => {
-        let categoryMatch = true;
-        let purposeMatch = true;
-        let searchMatch = true;
+      let categoryMatch = true;
+      let purposeMatch = true;
+      let searchMatch = true;
 
-        // Filter by category
-        switch (filter) {
-          case "Residential":
-            categoryMatch = document.category.toUpperCase() === "RESIDENTIAL";
-            break;
-          case "Commercial":
-            categoryMatch = document.category.toUpperCase() === "COMMERCIAL";
-            break;
-          default:
-            categoryMatch = true;
-        }
+      // Filter by category
+      switch (filter) {
+        case "Residential":
+          categoryMatch = document.category.toUpperCase() === "RESIDENTIAL";
+          break;
+        case "Commercial":
+          categoryMatch = document.category.toUpperCase() === "COMMERCIAL";
+          break;
+        default:
+          categoryMatch = true;
+      }
 
-        // Filter by purpose
-        purposeMatch =
-          document.purpose.toUpperCase() === rentSaleFilter.toUpperCase();
+      // Filter by purpose
+      purposeMatch =
+        document.purpose.toUpperCase() === rentSaleFilter.toUpperCase();
 
-        // Filter by search input
-        searchMatch = searchInput
-          ? Object.values(document).some(
-              (field) =>
-                typeof field === "string" &&
-                field.toUpperCase().includes(searchInput.toUpperCase())
-            )
-          : true;
+      // Filter by search input
+      searchMatch = searchInput
+        ? Object.values(document).some(
+          (field) =>
+            typeof field === "string" &&
+            field.toUpperCase().includes(searchInput.toUpperCase())
+        )
+        : true;
 
-        return categoryMatch && purposeMatch && searchMatch;
-      })
+      return categoryMatch && purposeMatch && searchMatch;
+    })
     : null;
 
   console.log("filterProperties", filterProperties);
@@ -168,9 +168,8 @@ const PGAdminProperty = () => {
               <label className={rentSaleFilter === "Sale" ? "on" : "off"}>
                 <div className="switch">
                   <span
-                    className={`rent ${
-                      rentSaleFilter === "Sale" ? "off" : "on"
-                    }`}
+                    className={`rent ${rentSaleFilter === "Sale" ? "off" : "on"
+                      }`}
                   >
                     Rent
                   </span>
@@ -183,9 +182,8 @@ const PGAdminProperty = () => {
                     className="pointer"
                   />
                   <span
-                    className={`sale ${
-                      rentSaleFilter === "Sale" ? "on" : "off"
-                    }`}
+                    className={`sale ${rentSaleFilter === "Sale" ? "on" : "off"
+                      }`}
                   >
                     Sale
                   </span>
@@ -194,9 +192,8 @@ const PGAdminProperty = () => {
             </div>
             <div className="button_filter diff_views">
               <div
-                className={`bf_single ${
-                  viewMode === "card_view" ? "active" : ""
-                }`}
+                className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                  }`}
                 onClick={() => handleModeChange("card_view")}
               >
                 <span className="material-symbols-outlined">
@@ -204,9 +201,8 @@ const PGAdminProperty = () => {
                 </span>
               </div>
               <div
-                className={`bf_single ${
-                  viewMode === "table_view" ? "active" : ""
-                }`}
+                className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                  }`}
                 onClick={() => handleModeChange("table_view")}
               >
                 <span className="material-symbols-outlined">view_list</span>

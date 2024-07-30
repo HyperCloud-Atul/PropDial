@@ -424,9 +424,8 @@ const PropertyDocuments = () => {
                 </div>
                 <div className="col-sm-3">
                   <div
-                    className={`theme_btn btn_fill text-center ${
-                      isUploading ? "disabled" : ""
-                    }`}
+                    className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
+                      }`}
                     onClick={isUploading ? null : addPropertyDocuments}
                   >
                     {isUploading ? "Uploading..." : "Save"}

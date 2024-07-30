@@ -199,7 +199,7 @@ const CreateProperty = () => {
     const [onboardingDate, setOnboardingDate] = useState(new Date());
     const [newProperty, setNewProperty] = useState(null);
 
-    const { documents: propertiesdocs, error: propertiesdocserror } = useCollection("properties");
+    const { documents: propertiesdocs, error: propertiesdocserror } = useCollection("properties", ["postedBy", "==", "Propdial"]);
 
     const { addDocument: addNewPropertyDocument, response: addNewPropertyDocumentResponse } =
         useFirestore("properties");
