@@ -21,7 +21,7 @@ const CollapsibleGroup = () => {
         <div className="row">
           {/* Left section */}
           <div className="col-lg-5 img-div">
-            <img src="./assets/img/home/coll-img.png" />
+            <img src="/assets/img/home/coll-img.png" />
           </div>
 
           {/* Right section */}

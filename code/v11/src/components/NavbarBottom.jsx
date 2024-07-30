@@ -38,14 +38,18 @@ export default function NavbarBottom() {
   };
   const showThirdPage = () => {
     if (!user) {
-      // User is not logged in, navigate to "/"
+      // User is not logged in, navigate to "/about-us"
       navigate("/about-us");
       return; // Exit the function to prevent further checks
-    }
-    else {
+    } else if (user.role === "admin") {
+      // User is logged in and role is admin, navigate to "/properties"
+      navigate("/allproperties");
+    } else {
+      // User is logged in but not an admin, navigate to "/contact-us"
       navigate("/contact-us");
     }
   };
+  
 
   const showFourthPage = () => {
     navigate("/more-menu");
@@ -75,8 +79,8 @@ export default function NavbarBottom() {
   if (user && user.role === "admin") {
     secondMenuIcon = "dashboard";
     secondMenu = "Dashboard";
-    thirdMenuIcon = "headset_mic";
-    thirdMenu = "Contact";
+    thirdMenuIcon = "real_estate_agent";
+    thirdMenu = "Properties";
   }
   if (user && user.role === "owner") {
     secondMenuIcon = "dashboard";
@@ -180,7 +184,7 @@ export default function NavbarBottom() {
           </Link>)
         }
         <div
-          className={`b_menu_single ${location.pathname === "/about-us" || location.pathname === "/contact-us" ? "b_menu_active" : ""
+          className={`b_menu_single ${location.pathname === "/about-us" || location.pathname === "/contact-us" || location.pathname === "/allproperties"  ? "b_menu_active" : ""
             }`}
           onClick={showThirdPage}
         >
