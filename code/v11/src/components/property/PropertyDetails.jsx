@@ -828,6 +828,60 @@ const PropertyDetails = () => {
   };
   // modal controls end 
 
+
+  // add enquiry with add document start
+  const { addDocument } =
+    useFirestore("enquiry");
+
+  const [iAm, setIam] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [description, setDescription] = useState("");
+  // const [isUploading, setIsUploading] = useState(false);
+
+  const handleChangeName = (event) => setName(event.target.value);
+  const handleChangeIam = (event) => setIam(event.target.value);
+  const handleChangePhone = (event) => setPhone(event.target.value);
+  const handleChangeDescription = (event) => setDescription(event.target.value);
+
+  const submitEnquiry = async (event) => {
+    event.preventDefault();
+
+    if (!iAm || !name || !phone || !description) {
+      alert("All fields are required!");
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const docRef = await addDocument({
+        iAm,
+        name,
+        phone,
+        description,
+        city,
+        country,
+        state,
+
+      });
+      setIam("");
+      setName("");
+      setPhone("");
+      setCity("");
+      setCountry("")
+      setState("")
+      setDescription("");
+      setIsUploading(false);
+    } catch (error) {
+      console.error("Error adding document:", error);
+      setIsUploading(false);
+    }
+  };
+  // add enquiry with add document end
+
   return (
     <>
       {/* Change User Popup - Start */}
@@ -1245,54 +1299,31 @@ const PropertyDetails = () => {
                                 {" "}
                                 Enquire Now
                               </a>
-                              <div
-                                className="modal fade"
-                                id="exampleModal"
-                                tabindex="-1"
-                                aria-labelledby="exampleModalLabel"
-                                aria-hidden="true"
-                              >
+                              <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div className="modal-dialog">
                                   <div className="modal-content relative">
-                                    <span
-                                      className="material-symbols-outlined close_modal"
-                                      data-bs-dismiss="modal"
-                                    >
+                                    <span className="material-symbols-outlined close_modal" data-bs-dismiss="modal">
                                       close
                                     </span>
                                     <div className="modal-body">
-                                      <form>
+                                      <form onSubmit={submitEnquiry}>
                                         <div className="row">
                                           <div className="col-sm-12">
                                             <div className="section_title mb-4">
                                               <h3>Enquiry</h3>
-                                              <h6 className="modal_subtitle">
-                                                Thank you for your interest in
-                                                reaching out to us. Please use
-                                                the form below to submit any
-                                                question.
-                                              </h6>
+                                              <h6 className="modal_subtitle">Thank you for your interest in reaching out to us. Please use the form below to submit any question.</h6>
                                             </div>
                                           </div>
                                           <div className="col-sm-12">
                                             <div className="form_field st-2">
                                               <div className="field_inner select">
-                                                <select>
-                                                  <option
-                                                    value=""
-                                                    disabled
-                                                    selected
-                                                  >
-                                                    I am
-                                                  </option>
-
-                                                  <option>Tenant</option>
-                                                  <option>Agent</option>
+                                                <select value={iAm} onChange={handleChangeIam}>
+                                                  <option value="" disabled>I am</option>
+                                                  <option value="Tenant">Tenant</option>
+                                                  <option value="Agent">Agent</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                  <span className="material-symbols-outlined">
-                                                    person
-                                                  </span>
+                                                  <span className="material-symbols-outlined">person</span>
                                                 </div>
                                               </div>
                                             </div>
@@ -1300,14 +1331,12 @@ const PropertyDetails = () => {
                                           <div className="col-sm-12">
                                             <div className="form_field st-2">
                                               <div className="field_inner">
-                                                <input
-                                                  type="text"
-                                                  placeholder="Name"
-                                                />
+                                                <input type="text"
+                                                  value={name}
+                                                  onChange={handleChangeName}
+                                                  placeholder="Name" />
                                                 <div className="field_icon">
-                                                  <span className="material-symbols-outlined">
-                                                    person
-                                                  </span>
+                                                  <span className="material-symbols-outlined">person</span>
                                                 </div>
                                               </div>
                                             </div>
@@ -1315,32 +1344,39 @@ const PropertyDetails = () => {
                                           <div className="col-sm-12">
                                             <div className="form_field st-2">
                                               <div className="field_inner">
-                                                <input
-                                                  type="text"
-                                                  placeholder="Phone Number"
-                                                />
+                                                <input type="number"
+                                                  value={phone}
+                                                  onChange={handleChangePhone}
+                                                  placeholder="Phone" />
                                                 <div className="field_icon">
-                                                  <span className="material-symbols-outlined">
-                                                    call
-                                                  </span>
+                                                  <span className="material-symbols-outlined">call</span>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div className="col-sm-12 mt-3">
+                                            <div className="form_field st-2">
+                                              <div className="field_inner">
+                                                <textarea
+                                                  value={description}
+                                                  onChange={handleChangeDescription}
+                                                  placeholder="Description" />
+                                                <div className="field_icon">
+                                                  <span className="material-symbols-outlined">description</span>
                                                 </div>
                                               </div>
                                             </div>
                                           </div>
                                           <div className="col-sm-12">
                                             <div className="submit_btn mt-4">
-                                              <button
-                                                type="submit"
-                                                className="modal_btn theme_btn no_icon btn_fill"
-                                              >
-                                                Submit
+                                              <button type="submit" className="modal_btn theme_btn no_icon btn_fill" disabled={isUploading}>
+                                                {isUploading ? 'Submitting...' : 'Submit'}
                                               </button>
                                             </div>
                                           </div>
                                         </div>
                                       </form>
                                     </div>
-                                    )
                                   </div>
                                 </div>
                               </div>
@@ -2032,23 +2068,23 @@ const PropertyDetails = () => {
                       {/* {tenantDocument && tenantDocument.length} */}
                     </span>
                     <div className="more_detail_card_inner">
-                      <div className="row">                     
+                      <div className="row">
                         {(user && user.role === "admin") &&
-                              <div className="col-sm-1 col-2" style={{
-                                paddingRight: "0px"
-                              }}>
-                                <div className="plus_icon">
-                                <Link className="plus_icon_inner" onClick={handleAddTenant}>
-                              <span class="material-symbols-outlined">
-                                add
-                              </span>
-                            </Link>
-                                </div>
+                          <div className="col-sm-1 col-2" style={{
+                            paddingRight: "0px"
+                          }}>
+                            <div className="plus_icon">
+                              <Link className="plus_icon_inner" onClick={handleAddTenant}>
+                                <span class="material-symbols-outlined">
+                                  add
+                                </span>
+                              </Link>
+                            </div>
 
-                              </div>
-                            }
+                          </div>
+                        }
                         <div className=
-                        {`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
+                          {`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
                           <div className="tenant_card">
                             <Swiper
                               spaceBetween={15}
@@ -2412,7 +2448,7 @@ const PropertyDetails = () => {
                             }
                             <div className={`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
                               <div className="tenant_card">
-                              <Swiper
+                                <Swiper
                                   spaceBetween={15}
                                   slidesPerView={3.5}
                                   pagination={false}
@@ -2444,20 +2480,20 @@ const PropertyDetails = () => {
                                         <div
                                           className="tc_single relative item"
                                         >
-                                          <div className="property_people_designation d-flex align-items-end justify-content-center" 
-                                          onClick={(e) => {
-                                            if (user && user.role === 'admin') {
-                                              handleShowOwnerTags(e, propUser, 'propmanager');
-                                            }
-                                          }}
-                                            
-                                            >
+                                          <div className="property_people_designation d-flex align-items-end justify-content-center"
+                                            onClick={(e) => {
+                                              if (user && user.role === 'admin') {
+                                                handleShowOwnerTags(e, propUser, 'propmanager');
+                                              }
+                                            }}
+
+                                          >
                                             {propUser.userTag}
-                                           {user && user.role === "admin" && (
-                                             <span class="material-symbols-outlined click_icon text_near_icon" style={{
-                                              fontSize: "10px"
-                                            }}>edit</span>
-                                           )}
+                                            {user && user.role === "admin" && (
+                                              <span class="material-symbols-outlined click_icon text_near_icon" style={{
+                                                fontSize: "10px"
+                                              }}>edit</span>
+                                            )}
                                           </div>
                                           <div className="left">
                                             <div className="tcs_img_container" >

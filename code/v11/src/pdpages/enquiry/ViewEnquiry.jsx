@@ -77,7 +77,7 @@ const ViewEnquiry = ( {enquiryDocs, enquiryDocsError} ) => {
       });
 
       setTotalDocsLength(enquiryDocs.length);
-      setOpenRentEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "open") && (doc.enquiryType.toLowerCase() === "rent")).length);
+      setOpenRentEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "open") && (doc.enquiryType.toLowerCase === "rent")).length);
       setTotalRentLength(enquiryDocs.filter(doc => (doc.enquiryType.toLowerCase() === "rent")).length);
       setTotalSaleLength(enquiryDocs.filter(doc => (doc.enquiryType.toLowerCase() === "sale")).length);
       setOpenSaleEnquiryLength(enquiryDocs.filter(doc => (doc.enquiryStatus.toLowerCase() === "open") && (doc.enquiryType.toLowerCase() === "sale")).length);

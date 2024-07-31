@@ -383,7 +383,7 @@ const PGOwnerDashboard = () => {
               <div className="vg22"></div>
               <hr />
          </> */}
-              {myproperties && myproperties.length === 1 && (
+              {myproperties && myproperties.length === 0 && (
                 <>
                   <div className="vg22"></div>
                   <div className="property_soon">

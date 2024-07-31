@@ -713,7 +713,9 @@ const PhoneLogin_reCaptchaV2 = () => {
 
                     <h5>Congratulations and welcome aboard! 🎉</h5>
 
-                    Welcome to join the Propdial community.
+                 <p style={{
+                  marginTop:"3px"
+                 }}>   Welcome to join the Propdial community.</p>
 
                   </label>
                   <div className="vg22"></div>
@@ -751,14 +753,15 @@ const PhoneLogin_reCaptchaV2 = () => {
                       }}
                     />
                   </div>
-                </div>
-                {error && <div className="field_error">{error}</div>}
+                  {error && <div className="field_error">{error}</div>}
                 <div className="vg10"></div>
                 <div>
                   <button className="theme_btn btn_fill w_full" onClick={newUserForm}>
                     Next
                   </button>
                 </div>
+                </div>
+              
               </>
             )
           }

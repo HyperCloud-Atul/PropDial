@@ -162,6 +162,7 @@ a.theme_btn.btn_white {
   top: 14px;
   right: 0px;
   font-size: 18px;
+  display: none !important;
 }
 
 .ba_animation {
