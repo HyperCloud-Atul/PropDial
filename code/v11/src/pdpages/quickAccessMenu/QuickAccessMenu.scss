@@ -1,5 +1,9 @@
 .qa_menu{
-  
+   
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    
     .qam_single{
         position: relative;
         display: flex;
