@@ -1389,7 +1389,7 @@ const PropertyDetails = () => {
                 {user && <div className="extra_info_card_property mobile_full_card">
                   <div className="card_upcoming">
                     <div className="parent">
-                      <div className="child">
+                      {/* <div className="child">
                         <div className="left">
                           <h5>25-June-2025</h5>
                           <div className="line">
@@ -1400,11 +1400,8 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                           <h6>Inspection Date</h6>
-                        </div>
-                        {/* <div className="right">
-              <img src="./assets/img/icons/inspection.png" alt="" className="cion" />
-              </div> */}
-                      </div>
+                        </div>          
+                      </div> */}
                       <div className="child">
                         <div className="left">
                           <h5>30-July-2024</h5>
@@ -1416,10 +1413,7 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                           <h6>Rent Renewal</h6>
-                        </div>
-                        {/* <div className="right">
-              <img src="./assets/img/icons/inspection.png" alt="" className="cion" />
-              </div> */}
+                        </div>                  
                       </div>
                     </div>
                   </div>
@@ -1455,7 +1449,7 @@ const PropertyDetails = () => {
                         {/* Documents */}
                         <SwiperSlide>
                           <Link to={`/propertydocumentdetails/${propertyid}`} >
-                            <div className="item eicp_single">
+                            <div className="eicp_single">
                               <div className="icon">
                                 <span class="material-symbols-outlined">
                                   description
@@ -1469,25 +1463,11 @@ const PropertyDetails = () => {
                           </Link>
                         </SwiperSlide>
                         {/* Inspection  */}
-                        <SwiperSlide>
-                          <Link to={`/propertyinspectiondocument/${propertyid}`} >
-                            <div className="item eicp_single">
-                              <div className="icon">
-                                <span class="material-symbols-outlined">
-                                  pageview
-                                </span>
-                                <div className="text">
-                                  <h6>{inspections && inspections.length}</h6>
-                                  <h5>Inspections</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </Link>
-                        </SwiperSlide>
+                     
                         {/* Enquiry  */}
                         <SwiperSlide>
                           <Link to={`/enquiry/${propertyid}`} >
-                            <div className="item eicp_single">
+                            <div className="eicp_single">
                               <div className="icon">
                                 <span class="material-symbols-outlined">
                                   support_agent
@@ -1501,10 +1481,25 @@ const PropertyDetails = () => {
 
                           </Link>
                         </SwiperSlide>
+                        <SwiperSlide>
+                          {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
+                            <div className="eicp_single coming_soon">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  pageview
+                                </span>
+                                <div className="text">
+                                  <h6>{inspections && inspections.length}</h6>
+                                  <h5>Inspections</h5>
+                                </div>
+                              </div>
+                            </div>
+                          {/* </Link> */}
+                        </SwiperSlide>
                         {/* Transactions */}
                         <SwiperSlide>
-                          <Link to={`/transactions/${propertyid}`}>
-                            <div className="item eicp_single">
+                          {/* <Link to={`/transactions/${propertyid}`}> */}
+                            <div className="eicp_single coming_soon">
                               <div className="icon">
                                 <span class="material-symbols-outlined">
                                   payments
@@ -1515,7 +1510,7 @@ const PropertyDetails = () => {
                                 </div>
                               </div>
                             </div>
-                          </Link>
+                          {/* </Link> */}
                         </SwiperSlide>
                       </Swiper>
                     </div>

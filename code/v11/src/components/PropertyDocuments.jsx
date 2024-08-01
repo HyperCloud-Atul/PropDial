@@ -8,6 +8,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PropertyDocuments.scss";
 import Switch from "@mui/material/Switch";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
+import { user } from "firebase-functions/v1/auth";
 
 const PropertyDocuments = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -83,6 +84,7 @@ const PropertyDocuments = () => {
     } catch (error) {
       console.error("Error adding document:", error);
       setIsUploading(false);
+      setShowAIForm(!showAIForm)
     }
   };
 
@@ -515,19 +517,25 @@ const PropertyDocuments = () => {
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
-                          <div className="card-author">
-                            <div
-                              onClick={() => deletePropertyDocument(doc.id)}
-                              className="learn-more pointer"
-                            >
-                              Delete
+                          {user && user.role === "admin" && (
+                            <div className="d-flex justify-content-between w-100">
+                              <div className="card-author">
+                                <div
+                                  onClick={() => deletePropertyDocument(doc.id)}
+                                  className="learn-more pointer"
+                                >
+                                  Delete
+                                </div>
+                              </div>
+                              <div>
+                                <Switch
+                                  checked={checkedStates[doc.id] || false}
+                                  onChange={(e) => handleToggleChange(e, doc.id)}
+                                  inputProps={{ "aria-label": "controlled" }}
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <Switch
-                            checked={checkedStates[doc.id] || false}
-                            onChange={(e) => handleToggleChange(e, doc.id)}
-                            inputProps={{ "aria-label": "controlled" }}
-                          />
+                          )}
                         </div>
                       </div>
                     </div>
