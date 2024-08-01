@@ -1166,11 +1166,46 @@ const Stage1 = (props) => {
                         </label>
                       </div>
                     </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Flag === "PMS Only"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="flag_pmsonly"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Flag: "PMS Only",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="flag_pmsonly"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          PMS Only
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>    
+          </div>
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">Unit Number</label>
