@@ -1389,9 +1389,9 @@ const PropertyDetails = () => {
                 {user && <div className="extra_info_card_property mobile_full_card">
                   <div className="card_upcoming">
                     <div className="parent">
-                      {/* <div className="child">
+                      <div className="child coming_soon">
                         <div className="left">
-                          <h5>25-June-2025</h5>
+                          <h5>0-0-0</h5>
                           <div className="line">
                             <div className="line_fill" style={{
                               width: "25%",
@@ -1401,10 +1401,10 @@ const PropertyDetails = () => {
                           </div>
                           <h6>Inspection Date</h6>
                         </div>          
-                      </div> */}
-                      <div className="child">
+                      </div>
+                      <div className="child coming_soon">
                         <div className="left">
-                          <h5>30-July-2024</h5>
+                          <h5>0-0-0</h5>
                           <div className="line">
                             <div className="line_fill" style={{
                               width: "92%",

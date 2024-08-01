@@ -506,11 +506,9 @@ const PropertyDocuments = () => {
                             />
                           )}
                           {doc.docVerified && (
-                            <img
-                              className="verified_img"
-                              src="/assets/img/icons/verified_img2.jpg"
-                              alt=""
-                            />
+                                  <div className="verified_batch">
+                                  <span>Verified</span>
+                                </div>
                           )}
                         </div>
 
@@ -535,7 +533,7 @@ const PropertyDocuments = () => {
                                 />
                               </div>
                             </div>
-                           )}
+                          )}
                         </div>
                       </div>
                     </div>
@@ -595,12 +593,7 @@ const PropertyDocuments = () => {
                               alt="Document"
                             />
                           )}
-                          {doc.docVerified && (
-                            // <img
-                            //   className="verified_img"
-                            //   src="/assets/img/icons/verified_img.jpg"
-                            //   alt=""
-                            // />
+                          {doc.docVerified && (                          
                             <div className="verified_batch">
                               <span>Verified</span>
                             </div>
@@ -610,19 +603,25 @@ const PropertyDocuments = () => {
                           {/* <h3>{doc.idType}</h3> */}
                           <h3>Property Maintainance</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
-                          <div className="card-author">
-                            <div
-                              onClick={() => deletePropertyDocument(doc.id)}
-                              className="learn-more pointer"
-                            >
-                              Delete
+                          {(user && user.role === "admin") && (
+                            <div className="d-flex justify-content-between w-100">
+                              <div className="card-author">
+                                <div
+                                  onClick={() => deletePropertyDocument(doc.id)}
+                                  className="learn-more pointer"
+                                >
+                                  Delete
+                                </div>
+                              </div>
+                              <div>
+                                <Switch
+                                  checked={checkedStates[doc.id] || false}
+                                  onChange={(e) => handleToggleChange(e, doc.id)}
+                                  inputProps={{ "aria-label": "controlled" }}
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <Switch
-                            checked={checkedStates[doc.id] || false}
-                            onChange={(e) => handleToggleChange(e, doc.id)}
-                            inputProps={{ "aria-label": "controlled" }}
-                          />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -683,30 +682,34 @@ const PropertyDocuments = () => {
                             />
                           )}
                           {doc.docVerified && (
-                            <img
-                              className="verified_img"
-                              src="/assets/img/icons/verified_img.jpg"
-                              alt=""
-                            />
+                               <div className="verified_batch">
+                               <span>Verified</span>
+                             </div>
                           )}
                         </div>
                         <div className="card-body">
                           {/* <h3>{doc.idType}</h3> */}
                           <h3>Utility Bills</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
-                          <div className="card-author">
-                            <div
-                              onClick={() => deletePropertyDocument(doc.id)}
-                              className="learn-more pointer"
-                            >
-                              Delete
+                          {(user && user.role === "admin") && (
+                            <div className="d-flex justify-content-between w-100">
+                              <div className="card-author">
+                                <div
+                                  onClick={() => deletePropertyDocument(doc.id)}
+                                  className="learn-more pointer"
+                                >
+                                  Delete
+                                </div>
+                              </div>
+                              <div>
+                                <Switch
+                                  checked={checkedStates[doc.id] || false}
+                                  onChange={(e) => handleToggleChange(e, doc.id)}
+                                  inputProps={{ "aria-label": "controlled" }}
+                                />
+                              </div>
                             </div>
-                          </div>
-                          <Switch
-                            checked={checkedStates[doc.id] || false}
-                            onChange={(e) => handleToggleChange(e, doc.id)}
-                            inputProps={{ "aria-label": "controlled" }}
-                          />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -767,18 +770,18 @@ const PropertyDocuments = () => {
                             />
                           )}
                           {doc.docVerified && (
-                            <img
-                              className="verified_img"
-                              src="/assets/img/icons/verified_img.jpg"
-                              alt=""
-                            />
+                               <div className="verified_batch">
+                               <span>Verified</span>
+                             </div>
                           )}
                         </div>
                         <div className="card-body">
                           {/* <h3>{doc.idType}</h3> */}
                           <h3>Property Tax</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
-                          <div className="card-author">
+                          {(user && user.role === "admin") && (
+                            <div className="d-flex justify-content-between w-100">
+                              <div className="card-author">
                             <div
                               onClick={() => deletePropertyDocument(doc.id)}
                               className="learn-more pointer"
@@ -786,11 +789,17 @@ const PropertyDocuments = () => {
                               Delete
                             </div>
                           </div>
-                          <Switch
+                              <div>
+                              <Switch
                             checked={checkedStates[doc.id] || false}
                             onChange={(e) => handleToggleChange(e, doc.id)}
                             inputProps={{ "aria-label": "controlled" }}
                           />
+                              </div>
+                            </div>
+                          )}
+                         
+                         
                         </div>
                       </div>
                     </div>

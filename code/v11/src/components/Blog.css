@@ -39,8 +39,9 @@ img.verified_img {
   position: relative;
   top: 15px;
   font-weight: 400;
-  opacity: 0.3;
+  opacity: 0.8;
   letter-spacing: 1.5px;
+  text-shadow: 2px 2px 4px rgb(255 255 255);
 
 }
 .blog_source img {

@@ -254,18 +254,23 @@ const PGAdminDashboard = () => {
               <div className="vg22"></div>
               <section className="upcoming">
                 <div className="parent">
+                  <div className="coming_soon">
                   <div className="child">
                     <div className="inner">
-                      <h5>5</h5>
+                      <h5>0</h5>
                       <h6>Upcoming Inspections</h6>
                     </div>
                   </div>
+                  </div>
+                  <div className="coming_soon">
                   <div className="child">
                     <div className="inner">
-                      <h5>6</h5>
+                      <h5>0</h5>
                       <h6>Upcoming Rent Renewal</h6>
                     </div>
                   </div>
+                  </div>
+                  
                 </div>
               </section>
               <hr />

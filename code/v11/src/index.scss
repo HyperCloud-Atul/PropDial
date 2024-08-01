@@ -590,6 +590,12 @@
     //   left: 0;
     // }
 
+    .form_field.st-2 .radio_group {
+      grid-template-columns: repeat(3, 1fr);
+      grid-column-gap: 10px;
+      grid-row-gap: 0px;
+    }
+
     .top {
       display: flex;
       gap: 8px;
@@ -1359,10 +1365,11 @@
   }
 }
 
-.table_filter_hide .filters .left{
+.table_filter_hide .filters .left {
   display: none;
 }
-.table_filter_hide .filters .right{
+
+.table_filter_hide .filters .right {
   display: none;
 }
 
@@ -1508,18 +1515,23 @@
 
     .prop_edit {
       top: 8px;
-      right: 10px; 
-      span{
+      right: 10px;
+
+      span {
         font-size: 21px;
-      } 
+      }
     }
 
     .form_field.st-2 .radio_group_single label {
       height: auto;
-      border-radius: 12px;
-      padding: 4px;
-      font-size: 14px;
-      padding-left: 35px;
+      border-radius: 12px;      
+      font-size: 14px !important;
+      padding-left: 26px;
+      .radio_icon{
+        span{
+          font-size: 18px;
+        }
+      }
     }
 
     .category {
@@ -1540,6 +1552,10 @@
     .property_single_card {
       padding: 0px;
       border-radius: 12px;
+
+      .form_field.st-2 .radio_group {      
+        grid-column-gap: 5px;
+      }
 
       .top {
         gap: 0px;
