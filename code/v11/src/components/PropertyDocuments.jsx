@@ -8,7 +8,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PropertyDocuments.scss";
 import Switch from "@mui/material/Switch";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
-import { user } from "firebase-functions/v1/auth";
+// import { user } from "firebase-functions/v1/auth";
 
 const PropertyDocuments = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -517,7 +517,7 @@ const PropertyDocuments = () => {
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
-                          {user && user.role === "admin" && (
+                          {/* {user && user.role === "admin" && ( */}
                             <div className="d-flex justify-content-between w-100">
                               <div className="card-author">
                                 <div
@@ -535,7 +535,7 @@ const PropertyDocuments = () => {
                                 />
                               </div>
                             </div>
-                          )}
+                          {/* )} */}
                         </div>
                       </div>
                     </div>
