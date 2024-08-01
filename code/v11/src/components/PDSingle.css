@@ -1072,11 +1072,13 @@ label.upload_img input {
     .full_card_width {
         padding-right: 0px;
         padding-left: 0px;
+        overflow: hidden;
     }
 
     .full_width_sec {
         margin-left: 0px;
         margin-right: 0px;
+        overflow: hidden;
 
     }
 
@@ -1084,6 +1086,7 @@ label.upload_img input {
         border-radius: 0px;
         border-bottom: 1px solid var(--theme-blue);
         box-shadow: none;
+     
     }
 
     .pd_single .property_card_single {
@@ -1165,7 +1168,7 @@ label.upload_img input {
     }
 
     .pd_single .property_card_single {
-        width: 100%;
+        width: 100%;       
     }
 
     .pmd_section2 {

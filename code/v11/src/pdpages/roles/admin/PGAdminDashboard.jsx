@@ -450,7 +450,7 @@ const PGAdminDashboard = () => {
                   <section className="self_property_detail" style={{
                     gridTemplateColumns: "repeat(1,1fr)"
                   }}>
-                    <Link className="theme_btn btn_fill" to="/newproperty" >
+                    <Link className="theme_btn btn_fill text-center no_icon" to="/newproperty" >
                       Add New Property
                     </Link>
                     <div className="spd_single">
