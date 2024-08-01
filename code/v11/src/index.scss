@@ -220,7 +220,7 @@
 }
 
 .theme_radio_new {
-  &.bottom_arrow_active {
+  &.tab_type_radio {
     .theme_radio_container {
       input[type="radio"]+label {
         border-radius: 8px 8px 0px 0px !important;
@@ -1507,6 +1507,27 @@
   .dashboard_number_small {
     font-size: 18px;
   }
+  .theme_radio_new {
+    &.tab_type_radio {
+      .theme_radio_container {
+        input[type="radio"]+label {
+         font-size: 12px;
+         padding: 8px;
+        }  
+      }
+    }    
+  }
+  .theme_radio_new {  
+    .theme_radio_container { 
+  
+      input[type="radio"]+label {       
+        padding: 3px 12px;       
+        font-size: 13px;
+    
+      } 
+    
+    }
+  }  
 }
 
 @media only screen and (max-width: 575px) {

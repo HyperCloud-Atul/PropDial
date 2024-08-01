@@ -766,7 +766,7 @@ const TenantDetails = () => {
                     <div className="row" style={{ rowGap: "18px" }}>
                       <div className="col-12">
                         <div className="form_field">
-                          <div className="field_box theme_radio_new bottom_arrow_active">
+                          <div className="field_box theme_radio_new tab_type_radio">
                             <div className="theme_radio_container">
                               {docCategories.map((category) => (
                                 <div className="radio_single" key={category.id}>

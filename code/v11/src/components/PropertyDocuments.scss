@@ -1,62 +1,94 @@
-.property_docs_pg{
-    .blog_sect .card-body {    
-        padding: 8px 22px;      
+.property_docs_pg {
+    .blog_sect .card-body {
+        padding: 8px 22px;
     }
+
     .blog_sect .card-body h3 {
-        font-size: 17px;       
+        font-size: 20px;
     }
+
     .blog_sect .card-body p {
-        font-size: 20px;        
+        font-size: 16px;
+        margin-bottom: 0px;
     }
+
     .learn-more {
-           color: var(--theme-red);       
+        color: var(--theme-red);
         text-transform: capitalize;
     }
 }
-.add_select_date{
+
+.add_select_date {
     display: flex;
     gap: 22px;
-    .my_big_card {     
+
+    .my_big_card {
         background: var(--white-color);
         border-radius: 10px;
         padding: 12px 24px;
         box-shadow: none;
         width: fit-content;
         border: 1px solid #d9d9d9;
-        h2.card_title{           
+
+        h2.card_title {
             text-align: center;
             margin-bottom: 10px !important;
         }
+
         .inner {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            input, select {
+
+            input,
+            select {
                 padding: 5px 8px;
                 border-radius: 9px;
                 border: 1px solid var(--theme-blue);
-                &:focus{
+
+                &:focus {
                     outline: none;
                 }
             }
         }
-       
-        .theme_btn.btn_fill{
+
+        .theme_btn.btn_fill {
             padding: 5px 8px;
             border-radius: 9px;
         }
+
         &.selected_date {
             display: flex;
             align-items: center;
             justify-content: center;
             background: var(--theme-blue-bg);
-            h2.card_title{          
-              
+
+            h2.card_title {
+
                 margin-bottom: 0px !important;
             }
         }
     }
 }
 
+@media only screen and (max-width: 575px) {
+    .property_docs_pg {
+        .pg_header {
+            flex-direction: column;
+            align-items: inherit !important;
+            gap: 15px;
+            .theme_btn{
+                text-align: center;
+            }
+        }
+        .my_big_card.add_doc_form {
+            margin-top: -22px;
+            margin-left: -15px;
+            margin-right: -15px;
+            border-radius: 0px;
+            border-bottom: 2px solid var(--theme-blue);
+        }
+    }
 
+}

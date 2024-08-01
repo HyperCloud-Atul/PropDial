@@ -108,9 +108,18 @@
     height: 12px;
 }
 @media only screen and (max-width: 767px) {
+    .theme_tab ul.tabs {
+        display: block !important;
+    white-space: nowrap !important;
+    overflow: auto !important;
+    min-height: 47px;
+    }
     .theme_tab ul.tabs li {
         padding: 8px !important;
         font-size: 12px;
+        display: inline-block;
+        white-space: normal;
+        margin-right: 12px;
     }
 }
 
@@ -469,6 +478,7 @@ h6.value_per_sqf {
     .mobile_size .on .react-switch-handle {
         transform: translateX(19px) !important;       
     }
+    
 }
 @media only screen and (max-width: 575px) {
     .property_card_single {

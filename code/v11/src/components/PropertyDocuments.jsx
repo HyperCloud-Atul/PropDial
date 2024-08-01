@@ -317,7 +317,7 @@ const PropertyDocuments = () => {
           </div>
           <div className="right">
             {!showAIForm && (
-              <div className="theme_btn btn_fill" onClick={handleShowAIForm}>
+              <div className="theme_btn btn_fill no_icon" onClick={handleShowAIForm}>
                 Add document
               </div>
             )}
@@ -326,13 +326,13 @@ const PropertyDocuments = () => {
         {showAIForm && (
           <>
             <div className="vg22"></div>
-            <section className="my_big_card">
+            <section className="my_big_card add_doc_form">
               <h2 className="card_title">Select any one document ID</h2>
               <div className="aai_form">
                 <div className="row" style={{ rowGap: "18px" }}>
                   <div className="col-12">
                     <div className="form_field">
-                      <div className="field_box theme_radio_new bottom_arrow_active">
+                      <div className="field_box theme_radio_new tab_type_radio">
                         <div className="theme_radio_container">
                           {docCategories.map((category) => (
                             <div className="radio_single" key={category.id}>
@@ -416,17 +416,17 @@ const PropertyDocuments = () => {
                 </div>
               </div>
               <div className="row mt-3">
-                <div className="col-sm-2">
+                <div className="col-sm-2 col-6">
                   <div
-                    className="theme_btn btn_border text-center"
+                    className="theme_btn btn_border text-center no_icon"
                     onClick={isUploading ? null : handleShowAIForm}
                   >
                     Cancel
                   </div>
                 </div>
-                <div className="col-sm-3">
+                <div className="col-sm-3 col-6">
                   <div
-                    className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
+                    className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
                       }`}
                     onClick={isUploading ? null : addPropertyDocuments}
                   >
@@ -460,7 +460,7 @@ const PropertyDocuments = () => {
                     <h5 className="m20 text_red mt-4">No data found</h5>
                   )}
                   {filteredPropertyDocuments.map((doc, index) => (
-                    <div className="col-md-4" key={index}>
+                    <div className="col-xl-4 col-md-6" key={index}>
                       <div className="item card-container">
                         <div className="card-image relative">
                           {uploadingDocId !== doc.id && (
@@ -548,7 +548,7 @@ const PropertyDocuments = () => {
                     <h5 className="m20 text_red mt-4">No data found</h5>
                   )}
                   {filteredPropertyMaintainanceDocuments.map((doc, index) => (
-                    <div className="col-md-4" key={index}>
+                    <div className="col-xl-4 col-md-6" key={index}>
                       <div className="item card-container">
                         <div className="card-image relative">
                           {uploadingDocId !== doc.id && (
@@ -636,7 +636,7 @@ const PropertyDocuments = () => {
                     <h5 className="m20 text_red mt-4">No data found</h5>
                   )}
                   {filteredPropertyUtilityDocuments.map((doc, index) => (
-                    <div className="col-md-4" key={index}>
+                    <div className="col-xl-4 col-md-6" key={index}>
                       <div className="item card-container">
                         <div className="card-image relative">
                           {uploadingDocId !== doc.id && (
@@ -724,7 +724,7 @@ const PropertyDocuments = () => {
                     <h5 className="m20 text_red mt-4">No data found</h5>
                   )}
                   {filteredPropertyPropertyTax.map((doc, index) => (
-                    <div className="col-md-4" key={index}>
+                    <div className="col-xl-4 col-md-6" key={index}>
                       <div className="item card-container">
                         <div className="card-image relative">
                           {uploadingDocId !== doc.id && (

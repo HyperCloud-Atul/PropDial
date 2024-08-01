@@ -7,7 +7,7 @@ const QuickAccessMenu = ({ menuItems }) => {
     return (
         <div className="qa_menu">          
                 {menuItems.map((item, index) => (
-                    <Link to={item.link} className="item qam_single" key={index}>
+                    <Link to={item.link} className="qam_single" key={index}>
                         <div className="icon">
                             <img src={item.icon} alt={item.name} />
                         </div>
