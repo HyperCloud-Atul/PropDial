@@ -172,7 +172,7 @@ const CollapsibleGroup = () => {
                 </div>
               </div>
               <Link to="/faq">
-                <button className="theme_btn btn_fill">More FAQ
+                <button className="theme_btn btn_fill no_icon">More FAQ
                   <span className="material-symbols-outlined btn_arrow ba_animation">
                     arrow_forward
                   </span></button>

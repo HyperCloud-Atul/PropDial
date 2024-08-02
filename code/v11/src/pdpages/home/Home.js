@@ -196,7 +196,7 @@ const Home = () => {
                     </li>
                   </ul>
                   <Link to="/about-us">
-                    <button className="theme_btn btn_fill">
+                    <button className="theme_btn btn_fill no_icon">
                       More About
                       <span className="material-symbols-outlined btn_arrow ba_animation">
                         arrow_forward

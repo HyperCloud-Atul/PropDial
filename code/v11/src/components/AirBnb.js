@@ -25,9 +25,11 @@ const AirBnb = () => {
       // Define breakpoints and the number of items to show at each breakpoint
       0: {
         items: 1,
+        nav: false,
       },
       768: {
         items: 2,
+        nav: false,
       },
       992: {
         items: 3,

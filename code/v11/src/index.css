@@ -419,7 +419,7 @@ form.auth-form .theme_btn {
   }
 
   .sect_padding {
-    padding: 35px 0px;
+    padding: 28px 0px;
   }
   .more-menus.sect_padding {
     padding: 0px;
@@ -427,12 +427,12 @@ form.auth-form .theme_btn {
 
 
   .section_title_effect {
-    font-size: 35px;
+    font-size: 26px;
     line-height: 35px;
   }
 
   .section_title h3 {
-    font-size: 22px;
+    font-size: 18px;
     margin-top: 0px !important;
   }
 
@@ -458,7 +458,9 @@ form.auth-form .theme_btn {
     justify-content: center;
     margin-top: 14px !important;
   }
-
+.logo_carousel .owl-nav{
+  display: none;
+}
   button.owl-prev,
   button.owl-next {
     position: unset;

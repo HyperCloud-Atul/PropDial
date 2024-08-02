@@ -13,14 +13,23 @@ import PropdialPropertyCard from "../../components/property/SearchProperty";
 import PropAgentPropertyCard from "../../components/property/SearchPropAgentProperty";
 
 const PGSearchProperty = () => {
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
+
   const [activeOption, setActiveOption] = useState("Rent");
   const [checked, setChecked] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Residential");
-  const [favoritedProperties, setFavoritedProperties] = useState([]);
-  const [favoriteCount, setFavoriteCount] = useState(0);
 
   const { documents: propdialProperties, error: propdialPropertiesError } = useCollection("properties", ["postedBy", "==", "Propdial"]);
   const { documents: propagentProperties, error: propagentPropertiesError } = useCollection("properties", ["postedBy", "==", "Agent"]);
+
+  // functionality for fav start 
+  const [favoritedProperties, setFavoritedProperties] = useState([]);
+  const [favoriteCount, setFavoriteCount] = useState(0);
 
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -37,26 +46,81 @@ const PGSearchProperty = () => {
   const filterFavoriteProperties = (properties) => {
     return properties.filter((property) => favoritedProperties.includes(property.id));
   };
+  // functionality for fav end 
 
-  const filteredPropdialProperties = propdialProperties && propdialProperties.filter((property) => {
-    return ((activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale") && (property.category === activeCategory));
-  });
+  // previous filter for rent and sale start
+  // const filteredPropdialProperties = propdialProperties && propdialProperties.filter((property) => {
+  //   return ((activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale") && (property.category === activeCategory));
+  // });
+  // previous filter for rent and sale end
 
-
-  // Filter recent 10 properties
+  // previous Filter for  recent properties start
   const filteredPropdialPropertiesRecent = propdialProperties && propdialProperties
     .filter((property) => ((activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale") && (property.category === activeCategory)))
     .slice(0, 3);
+  // previous Filter for  recent properties end
 
-  // const filteredPropAgentProperties = propagentProperties && propagentProperties.filter((property) => {
-  //   return property.purpose === "Available for Rent" || property.purpose === "Available for Sale";
-  // });
 
-  // Scroll to the top of the page whenever the location changes
-  const location = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+
+  // filterd propdial property with search  start
+  const filteredPropdialProperties = propdialProperties && propdialProperties.filter((property) => {
+    let categoryMatch = true;
+    let purposeMatch = true;
+    let searchMatch = true;
+
+    // Filter by category
+    categoryMatch = property.category.toUpperCase() === activeCategory.toUpperCase();
+
+    // Filter by purpose
+    purposeMatch = (activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale");
+
+    // Filter by search input
+    searchMatch = searchQuery
+      ? Object.values(property).some(
+        (field) =>
+          typeof field === "string" &&
+          field.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      : true;
+
+    return categoryMatch && purposeMatch && searchMatch;
+  });
+
+  // filter propdial property with search end 
+
+  // filter propdial recent property with search start 
+  // const filteredPropdialPropertiesRecent = propdialProperties && propdialProperties
+  //   .filter((property) => {
+  //     let categoryMatch = true;
+  //     let purposeMatch = true;
+  //     let searchMatch = true;
+
+  //     // Filter by category
+  //     categoryMatch = property.category.toUpperCase() === activeCategory.toUpperCase();
+
+  //     // Filter by purpose
+  //     purposeMatch = (activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale");
+
+  //     // Filter by search input
+  //     searchMatch = searchQuery
+  //       ? Object.values(property).some(
+  //         (field) =>
+  //           typeof field === "string" &&
+  //           field.toLowerCase().includes(searchQuery.toLowerCase())
+  //       )
+  //       : true;
+
+  //     return categoryMatch && purposeMatch && searchMatch;
+  //   })
+  //   .slice(0, 3);
+  // filtered propdial recent property with search end 
+
 
   const handleChange = (checked) => {
     setActiveCategory(checked ? "Commercial" : "Residential");
@@ -72,6 +136,14 @@ const PGSearchProperty = () => {
       {/* <Banner></Banner> */}
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <div className="top_search_bar">
+    <div className="property_search_parent">
+    <input type="search" value={searchQuery} className="property_search" onChange={handleSearchChange} placeholder="Search" />
+<div className="icon">
+<span class="material-symbols-outlined">
+search
+</span>
+</div>
+    </div>
         <div className="search_area_header">
           <div className="for_buy_rent">
             <div
@@ -153,15 +225,13 @@ const PGSearchProperty = () => {
       <div className="theme_tab">
         <Tabs>
           <div className="container-fluid"></div>
-
           <section className="property_cards">
             <div className="container-fluid">
               <div className="row">
                 <div className="col-xl-9">
                   <TabList className="tabs">
                     <Tab className="pointer">Properties ({filteredPropdialProperties && filteredPropdialProperties.length})</Tab>
-                    <Tab className="pointer">Favorites ({favoriteCount})</Tab>
-                    {/* <Tab className="pointer">Top Agents</Tab> */}
+                    <Tab className="pointer">Favorites ({favoriteCount})</Tab>                   
                   </TabList>
                   <TabPanel>
                     <div className="property_card_left">
@@ -179,21 +249,18 @@ const PGSearchProperty = () => {
                         <p>No favorite properties yet!</p>
                       )}
                     </div>
-                  </TabPanel>
-                  {/* <TabPanel>
-                    No Data Found
-                  </TabPanel> */}
+                  </TabPanel>                
                 </div>
 
-                {/* PropAgent Properties */}
-
+                {/* Recent Properties start */}
                 <div className="col-xl-3">
                   <div className="pp_sidebar">
-                    <div className="pp_sidebar_cards">                     
-                        {filteredPropdialPropertiesRecent && <PropAgentPropertyCard propagentProperties={filteredPropdialPropertiesRecent} />}                                    
+                    <div className="pp_sidebar_cards">
+                      {filteredPropdialPropertiesRecent && <PropAgentPropertyCard propagentProperties={filteredPropdialPropertiesRecent} />}
                     </div>
                   </div>
                 </div>
+                {/* Recent Properties end*/}
               </div>
             </div>
           </section>

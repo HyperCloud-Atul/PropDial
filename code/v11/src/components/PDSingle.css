@@ -574,6 +574,7 @@
     display: flex;
     gap: 6px;
     width: 85%;
+    align-items: center;
 }
 
 .all_tenants .tcs_img_container {
@@ -1340,4 +1341,23 @@ label.upload_img input {
     .coming_soon:after {     
         font-size: 10px;      
     }
+    .all_tenants .tcs_img_container {       
+        min-width: inherit;
+    
+    }
+    .tenant_detail .t_name {
+        font-size: 14px; 
+    }
+    .tenant_detail .t_number {
+        font-size: 12px;      
+    }
+    
+.all_tenants .tc_single .tenant_detail {
+    gap: 3px !important;
+  
+}
+.text_near_icon {
+    font-size: 10px;
+    top: 0px;
+}
 }

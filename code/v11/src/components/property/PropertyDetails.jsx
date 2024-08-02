@@ -1792,8 +1792,8 @@ const PropertyDetails = () => {
                                 className='all_tenants'
                                 breakpoints={{
                                   320: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 15,
+                                    slidesPerView: 1.1,
+                                    spaceBetween: 10,
                                   },
                                   767: {
                                     slidesPerView: 1.5,
@@ -2089,8 +2089,8 @@ const PropertyDetails = () => {
                               className='all_tenants'
                               breakpoints={{
                                 320: {
-                                  slidesPerView: 1,
-                                  spaceBetween: 15,
+                                  slidesPerView: 1.1,
+                                  spaceBetween: 10,
                                 },
                                 767: {
                                   slidesPerView: 1.5,
@@ -2214,8 +2214,8 @@ const PropertyDetails = () => {
                                   className='all_tenants'
                                   breakpoints={{
                                     320: {
-                                      slidesPerView: 1,
-                                      spaceBetween: 15,
+                                      slidesPerView: 1.1,
+                                      spaceBetween: 10,
                                     },
                                     767: {
                                       slidesPerView: 1.5,
@@ -2451,8 +2451,8 @@ const PropertyDetails = () => {
                                   className='all_tenants'
                                   breakpoints={{
                                     320: {
-                                      slidesPerView: 1,
-                                      spaceBetween: 15,
+                                      slidesPerView: 1.1,
+                                      spaceBetween: 10,
                                     },
                                     767: {
                                       slidesPerView: 1.5,
