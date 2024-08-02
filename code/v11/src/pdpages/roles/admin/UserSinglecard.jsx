@@ -91,8 +91,13 @@ const UserSinglecard = ({ users }) => {
                                         )}
                                     </h6>
                                 )}
+                                {userObj.email && (
+                                    <h6 className="t_number">
+                                        {userObj.email}
+                                    </h6>
+                                )}
                                 <h6 className="t_number">
-                                    Ujjain, India
+                                    {userObj.city},{" "}{userObj.country}
                                 </h6>
                             </div>
                         </div>

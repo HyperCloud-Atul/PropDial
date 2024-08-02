@@ -137,7 +137,7 @@ const PGSearchProperty = () => {
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <div className="top_search_bar">
     <div className="property_search_parent">
-    <input type="search" value={searchQuery} className="property_search" onChange={handleSearchChange} placeholder="Search" />
+    <input type="search" value={searchQuery} className="property_search" onChange={handleSearchChange} placeholder="Search By Society, Locality, City, State... " />
 <div className="icon">
 <span class="material-symbols-outlined">
 search
