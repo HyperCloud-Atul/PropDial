@@ -967,10 +967,12 @@ const PropertyDetails = () => {
         </div>
       </div>
       {/* Change User Popup - End */}
-      {/* 9 dots html  */}
-      {user && user.role === 'admin' && <div onClick={openMoreAddOptions} className="property-list-add-property">
-        <span className="material-symbols-outlined">apps</span>
-      </div>}
+      {/* 9 dots html start  */}
+      {user && user.role === 'admin' &&
+        <div onClick={openMoreAddOptions} className="property-list-add-property">
+          <span className="material-symbols-outlined">apps</span>
+        </div>
+      }
       <div
         className={
           handleMoreOptionsClick
@@ -1006,6 +1008,14 @@ const PropertyDetails = () => {
           </Link>
         </div>
       </div>
+      {/* 9 dots html end*/}
+      {user && user.role === 'admin' &&
+        <Link to={`/updateproperty/${propertyid}`} className="property-list-add-property with_9dot">
+          <span class="material-symbols-outlined">
+            edit_square
+          </span>
+        </Link>
+      }
 
       <div div className="pg_property pd_single pg_bg">
         <div className="page_spacing full_card_width">
@@ -1400,7 +1410,7 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                           <h6>Inspection Date</h6>
-                        </div>          
+                        </div>
                       </div>
                       <div className="child coming_soon">
                         <div className="left">
@@ -1413,7 +1423,7 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                           <h6>Rent Renewal</h6>
-                        </div>                  
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1463,7 +1473,7 @@ const PropertyDetails = () => {
                           </Link>
                         </SwiperSlide>
                         {/* Inspection  */}
-                     
+
                         {/* Enquiry  */}
                         <SwiperSlide>
                           <Link to={`/enquiry/${propertyid}`} >
@@ -1483,33 +1493,33 @@ const PropertyDetails = () => {
                         </SwiperSlide>
                         <SwiperSlide>
                           {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
-                            <div className="eicp_single coming_soon">
-                              <div className="icon">
-                                <span class="material-symbols-outlined">
-                                  pageview
-                                </span>
-                                <div className="text">
-                                  <h6>{inspections && inspections.length}</h6>
-                                  <h5>Inspections</h5>
-                                </div>
+                          <div className="eicp_single coming_soon">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                pageview
+                              </span>
+                              <div className="text">
+                                <h6>{inspections && inspections.length}</h6>
+                                <h5>Inspections</h5>
                               </div>
                             </div>
+                          </div>
                           {/* </Link> */}
                         </SwiperSlide>
                         {/* Transactions */}
                         <SwiperSlide>
                           {/* <Link to={`/transactions/${propertyid}`}> */}
-                            <div className="eicp_single coming_soon">
-                              <div className="icon">
-                                <span class="material-symbols-outlined">
-                                  payments
-                                </span>
-                                <div className="text">
-                                  <h6>5</h6>
-                                  <h5>Transactions</h5>
-                                </div>
+                          <div className="eicp_single coming_soon">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                payments
+                              </span>
+                              <div className="text">
+                                <h6>5</h6>
+                                <h5>Transactions</h5>
                               </div>
                             </div>
+                          </div>
                           {/* </Link> */}
                         </SwiperSlide>
                       </Swiper>
