@@ -1017,6 +1017,22 @@
   border-radius: 22px;
   padding: 20px;
 }
+.title_card{
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: var(--white-color);
+  border-radius: 22px;
+  padding: 12px;
+  h2{
+    font-size: 22px;
+    color: var(--light-black);
+  }
+  h6{
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--light-black);
+  }
+}
 
 .form_field {
   .form_field_inner {

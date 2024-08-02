@@ -401,7 +401,7 @@ input[type=number] {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--theme-orange);
+    background: var(--light-black);
     color: white;
     display: flex;
     align-items: center;
@@ -414,14 +414,14 @@ input[type=number] {
 
 .multi_steps .step_single h6 {
     font-size: 16px;
-    color: var(--theme-orange);
+    color: var(--light-black);
     margin-top: 4px;
 }
 .multi_steps .step_single.wait h6{
-color: #ffd9c0;
+color: #dedede;
 }
 .multi_steps .wait .number{
-    background: #ffd9c0;
+    background: #dedede;
 
 }
 .multi_steps .step_single{
@@ -439,14 +439,14 @@ color: #ffd9c0;
     border-radius: 15px;
     left: 0;
     top: 21px;
-    background: #ffd9c0;
+    background: #dedede;
 }
 
 
 .multi_steps .progress_bar .fill{
     position: absolute;  
     height: 2px;
-    background: var(--theme-orange);
+    background: var(--light-black);
     border-radius: 15px;
   top: 0;
   

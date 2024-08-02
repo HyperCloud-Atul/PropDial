@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { useCollection } from "../hooks/useCollection";
 import { projectFirestore, projectStorage } from "../firebase/config";
 import { useFirestore } from "../hooks/useFirestore";
+import { useDocument } from "../hooks/useDocument";
 import { BeatLoader } from "react-spinners";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./PropertyDocuments.scss";
@@ -26,7 +27,10 @@ const PropertyDocuments = () => {
     useFirestore("docs");
   const { documents: propertyDocument, errors: propertyDocError } =
     useCollection("docs", ["masterRefId", "==", propertyId]);
-
+  const { document: propertydoc, error: propertyerror } = useDocument(
+    "properties",
+    propertyId
+  );
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const [selectedDocCat, setSelectedDocCat] = useState("Property Document");
@@ -306,23 +310,58 @@ const PropertyDocuments = () => {
             </Link>
           </div>
         </div>
-        <QuickAccessMenu menuItems={menuItems} />
-        <hr />
-        <div className="pg_header d-flex align-items-center justify-content-between">
-          <div className="left">
-            <h2 className="m22 mb-1">Property Documents</h2>
-            <h4 className="r16 light_black">
-              Add new, show and download existing document{" "}
-            </h4>
-          </div>
-          <div className="right">
-            {!showAIForm && (
-              <div className="theme_btn btn_fill no_icon" onClick={handleShowAIForm}>
-                Add document
+        {/* <QuickAccessMenu menuItems={menuItems} /> */}
+
+        <div className="row">
+          <div className="col-md-6">
+            <div className="title_card h-100">
+              <h2 className="text-center mb-4">OnePlace for Property Documents</h2>
+              {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
+              {!showAIForm && (
+              <div className="theme_btn btn_fill no_icon text-center short_btn" onClick={handleShowAIForm}>
+                Add new document
               </div>
             )}
+            </div>
+          </div>
+          <div className="col-md-6">
+            {propertydoc &&
+              <Link className="my_big_card short_prop_summary" to={`/propertydetails/${propertyId}`}>
+                <div className="left">
+                  <div className="img">
+                    {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
+                      : <img src="/assets/img/admin_banner.jpg" alt="" />}
+                  </div>
+                  <div className="detail">
+                    <div>
+                      <span className="card_badge">
+                        {propertydoc.pid}
+                      </span>
+                      {" "}{" "}
+                      <span className="card_badge">
+                        {propertydoc.isActiveInactiveReview}
+                      </span>
+                    </div>
+                    <h6 className="demand">
+                      <span>₹</span> {propertydoc.demandPrice}
+                      {propertydoc.maintenancecharges !== '' && <span
+                        style={{
+                          fontSize: "10px",
+                        }}
+                      >
+                        + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
+                      </span>}
+                    </h6>
+                    <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
+                    <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
+                    <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+                  </div>
+                </div>               
+              </Link>
+            }
           </div>
         </div>
+       
         {showAIForm && (
           <>
             <div className="vg22"></div>
@@ -506,9 +545,9 @@ const PropertyDocuments = () => {
                             />
                           )}
                           {doc.docVerified && (
-                                  <div className="verified_batch">
-                                  <span>Verified</span>
-                                </div>
+                            <div className="verified_batch">
+                              <span>Verified</span>
+                            </div>
                           )}
                         </div>
 
@@ -593,7 +632,7 @@ const PropertyDocuments = () => {
                               alt="Document"
                             />
                           )}
-                          {doc.docVerified && (                          
+                          {doc.docVerified && (
                             <div className="verified_batch">
                               <span>Verified</span>
                             </div>
@@ -682,9 +721,9 @@ const PropertyDocuments = () => {
                             />
                           )}
                           {doc.docVerified && (
-                               <div className="verified_batch">
-                               <span>Verified</span>
-                             </div>
+                            <div className="verified_batch">
+                              <span>Verified</span>
+                            </div>
                           )}
                         </div>
                         <div className="card-body">
@@ -770,9 +809,9 @@ const PropertyDocuments = () => {
                             />
                           )}
                           {doc.docVerified && (
-                               <div className="verified_batch">
-                               <span>Verified</span>
-                             </div>
+                            <div className="verified_batch">
+                              <span>Verified</span>
+                            </div>
                           )}
                         </div>
                         <div className="card-body">
@@ -782,24 +821,24 @@ const PropertyDocuments = () => {
                           {(user && user.role === "admin") && (
                             <div className="d-flex justify-content-between w-100">
                               <div className="card-author">
-                            <div
-                              onClick={() => deletePropertyDocument(doc.id)}
-                              className="learn-more pointer"
-                            >
-                              Delete
-                            </div>
-                          </div>
+                                <div
+                                  onClick={() => deletePropertyDocument(doc.id)}
+                                  className="learn-more pointer"
+                                >
+                                  Delete
+                                </div>
+                              </div>
                               <div>
-                              <Switch
-                            checked={checkedStates[doc.id] || false}
-                            onChange={(e) => handleToggleChange(e, doc.id)}
-                            inputProps={{ "aria-label": "controlled" }}
-                          />
+                                <Switch
+                                  checked={checkedStates[doc.id] || false}
+                                  onChange={(e) => handleToggleChange(e, doc.id)}
+                                  inputProps={{ "aria-label": "controlled" }}
+                                />
                               </div>
                             </div>
                           )}
-                         
-                         
+
+
                         </div>
                       </div>
                     </div>
