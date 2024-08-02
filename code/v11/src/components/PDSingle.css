@@ -1018,7 +1018,7 @@ label.upload_img input {
 }
 
 .short_prop_summary {
-    display: flex;
+    display: block;
     align-items: center;
     border-radius: 18px;
     padding: 12px;
@@ -1052,9 +1052,9 @@ label.upload_img input {
 .short_prop_summary .left .detail h6.demand{
     margin-top: 2px;
 }
-.short_prop_summary .left .img img {
-    width: auto;
+.short_prop_summary .left .img img {    
     height: 100px;
+    aspect-ratio: 3/2;
     border-radius: 12px;
 }
 

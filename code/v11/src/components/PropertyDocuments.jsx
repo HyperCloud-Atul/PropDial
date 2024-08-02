@@ -265,6 +265,24 @@ const PropertyDocuments = () => {
   ];
   // data of quick access menu  end
 
+  // expand more expand less start
+  const [expanded, setExpanded] = useState(true);
+
+  const handleExpand = () => {
+    setExpanded(!expanded);
+  };
+  // sexpand more expand less end
+
+  // prop summary click start
+  const handleClick = (e) => {
+    if (window.innerWidth > 575) {
+      navigate(`/propertydetails/${propertyId}`);
+    } else {
+      e.preventDefault();
+    }
+  };
+  // prop summary click start
+
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
       <div className="page_spacing">
@@ -311,57 +329,109 @@ const PropertyDocuments = () => {
           </div>
         </div>
         {/* <QuickAccessMenu menuItems={menuItems} /> */}
-
-        <div className="row">
-          <div className="col-md-6">
-            <div className="title_card h-100">
+      
+        <div className="row row_reverse_991">
+          <div className="col-lg-6">
+            <div className="title_card mobile_full_575 mobile_gap h-100">
               <h2 className="text-center mb-4">OnePlace for Property Documents</h2>
               {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
               {!showAIForm && (
-              <div className="theme_btn btn_fill no_icon text-center short_btn" onClick={handleShowAIForm}>
-                Add new document
-              </div>
-            )}
+                <div className="theme_btn btn_fill no_icon text-center short_btn" onClick={handleShowAIForm}>
+                  Add new document
+                </div>
+              )}
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-lg-6">
             {propertydoc &&
-              <Link className="my_big_card short_prop_summary" to={`/propertydetails/${propertyId}`}>
-                <div className="left">
-                  <div className="img">
-                    {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
-                      : <img src="/assets/img/admin_banner.jpg" alt="" />}
+              <div className="title_card short_prop_summary relative pointer" onClick={handleClick}>
+                <div className="top on_mobile_575">
+                  <div >
+                    <span className="card_badge">
+                      {propertydoc.pid}
+                    </span>
+                    {" "}{" "}
+                    <span className="card_badge">
+                      {propertydoc.isActiveInactiveReview}
+                    </span>
                   </div>
-                  <div className="detail">
-                    <div>
-                      <span className="card_badge">
-                        {propertydoc.pid}
-                      </span>
-                      {" "}{" "}
-                      <span className="card_badge">
-                        {propertydoc.isActiveInactiveReview}
-                      </span>
+                </div>
+                <div className="on_desktop_hide_575">
+                  <div className="left">
+                    <div className="img">
+                      {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
+                        : <img src="/assets/img/admin_banner.jpg" alt="" />}
                     </div>
-                    <h6 className="demand">
-                      <span>₹</span> {propertydoc.demandPrice}
-                      {propertydoc.maintenancecharges !== '' && <span
-                        style={{
-                          fontSize: "10px",
-                        }}
-                      >
-                        + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
-                      </span>}
-                    </h6>
-                    <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
-                    <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
-                    <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+                    <div className="detail">
+                      <div>
+                        <span className="card_badge">
+                          {propertydoc.pid}
+                        </span>
+                        {" "}{" "}
+                        <span className="card_badge">
+                          {propertydoc.isActiveInactiveReview}
+                        </span>
+                      </div>
+                      <h6 className="demand">
+                        <span>₹</span> {propertydoc.demandPrice}
+                        {propertydoc.maintenancecharges !== '' && <span
+                          style={{
+                            fontSize: "10px",
+                          }}
+                        >
+                          + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
+                        </span>}
+                      </h6>
+                      <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
+                      <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
+                      <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+                    </div>
                   </div>
-                </div>               
-              </Link>
+                </div>
+                <div className="on_mobile_575">
+                  {!expanded && (
+                    <div className="left">
+                      <div className="img w-100 d-flex align-items-center">
+                        {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
+                          : <img src="/assets/img/admin_banner.jpg" alt="" />}
+                        <Link to={(`/propertydetails/${propertyId}`)} className='text_green text-center' style={{
+                          flexGrow: "1"
+                        }}>
+                          View Detail
+                        </Link>
+                      </div>
+                      <div className="detail">
+                        <h6 className="demand">
+                          <span>₹</span> {propertydoc.demandPrice}
+                          {propertydoc.maintenancecharges !== '' && <span
+                            style={{
+                              fontSize: "10px",
+                            }}
+                          >
+                            + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
+                          </span>}
+                        </h6>
+                        <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
+                        <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
+                        <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+
+
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="expand on_mobile_575" onClick={handleExpand}>
+                  <span className="material-symbols-outlined">
+                    {expanded ? "keyboard_arrow_down" : "keyboard_arrow_up"}
+                  </span>
+                </div>
+              </div>
             }
           </div>
+
         </div>
-       
+
         {showAIForm && (
           <>
             <div className="vg22"></div>

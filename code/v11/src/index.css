@@ -349,8 +349,11 @@ form.auth-form .theme_btn {
   margin-left: auto;
   margin-right: auto;
 }
-.on_mobile_767{
+.on_mobile_767, .on_mobile_575{
   display: none;
+}
+.on_desktop_hide_575{
+  display: block !important;
 }
 /* sanskar css end  */
 
@@ -466,7 +469,14 @@ form.auth-form .theme_btn {
     position: unset;
   }
 }
-
+@media (max-width: 575px) {
+.on_mobile_575{
+  display: block !important;
+}
+.on_desktop_hide_575{
+  display: none !important;
+}
+}
 /* form fields style 2 */
 .modal-header,
 .modal-body,
@@ -895,7 +905,8 @@ h2.card_title {
 
 @media (max-width: 767px) {
   .bottom_fixed_button {
-    padding: 15px;
+    padding: 25px 15px;
+  
 
   }
 

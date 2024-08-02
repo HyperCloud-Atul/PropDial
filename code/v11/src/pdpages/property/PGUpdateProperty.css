@@ -465,8 +465,50 @@ color: #dedede;
 .multi_steps .progress_bar {  
     top: 16px;  
 }
-.multi_steps {
-    margin-top: 16px;
-    margin-bottom: -14px;
+
+}
+@media (max-width: 991px) {
+.mobile_gap{
+    margin-top: 22px;
+}
+}
+@media (max-width: 575px) {
+    .mobile_gap{
+        margin-top: 15px;
+    }
+    .title_card h2 {
+        font-size: 18px;    
+    }
+    
+    
+.short_prop_summary {
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+    box-shadow: none;
+    border-bottom: 1px solid var(--theme-blue);
+    border-radius: 0px !important;
+    padding-right: 32px !important;
+}
+.short_prop_summary .left {
+    align-items: start !important;
+    gap: 6px !important;
+    flex-direction: column;
+    margin-top: 12px;
+}
+.expand{
+    align-items: center;
+    background: #e1e1e1;   
+    cursor: pointer;
+    display: flex !important;
+    height: 100%;
+    justify-content: center;   
+    padding: 2px 4px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.expand span{
+    color: #606060;
+    font-size: 18px;
 }
 }
