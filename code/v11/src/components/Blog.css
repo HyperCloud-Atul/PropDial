@@ -35,8 +35,7 @@ img.verified_img {
 }
 
 .verified_batch span {
-  font-size: 65px;
-  color: var(--success-color);
+  font-size: 52px;
   transform: rotate(-45deg);
   display: block;
   position: relative;
@@ -47,7 +46,27 @@ img.verified_img {
   text-shadow: 2px 2px 4px rgb(255 255 255);
 
 }
-
+.verified_batch.verified span {
+  color: var(--success-color);
+}
+.verified_batch.review span {
+  color: var( --theme-red);
+}
+.force_rotate {
+  transform: rotate(180deg);
+}
+.force_rotate .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked {
+  color: var(--theme-red);
+}
+.force_rotate .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track {
+  background-color: var(--theme-red);;
+}
+.force_rotate .css-1yjjitx-MuiSwitch-track{
+  background: var(--success-color);
+}
+.force_rotate .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase {
+  color: var(--success-color);
+}
 .blog_source img {
   height: 36px;
   width: auto !important;

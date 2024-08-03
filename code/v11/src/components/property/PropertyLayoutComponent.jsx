@@ -331,7 +331,9 @@ export default function PropertyLayoutComponent(props) {
                                     />
                                 </div>
                                 <div className="form_field">
-                                    <input type="text" placeholder="Length in feet"
+                                    <input type="text"
+                                        placeholder="Length in feet"
+                                        
                                         onChange={(e) =>
                                             setPropertyLayout({
                                                 ...propertyLayout,
@@ -339,10 +341,13 @@ export default function PropertyLayoutComponent(props) {
                                             })
                                         }
                                         value={propertyLayout && propertyLayout.RoomLength}
+                                        
                                     />
                                 </div>
                                 <div className="form_field">
-                                    <input type="text" placeholder="Width in feet"
+                                    <input type="text"
+                                        placeholder="Width in feet"
+                                 
                                         onChange={(e) =>
                                             setPropertyLayout({
                                                 ...propertyLayout,

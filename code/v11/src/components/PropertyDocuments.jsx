@@ -329,7 +329,7 @@ const PropertyDocuments = () => {
           </div>
         </div>
         {/* <QuickAccessMenu menuItems={menuItems} /> */}
-      
+
         <div className="row row_reverse_991">
           <div className="col-lg-6">
             <div className="title_card mobile_full_575 mobile_gap h-100">
@@ -613,14 +613,15 @@ const PropertyDocuments = () => {
                               }
                               alt="Document"
                             />
-                          )}
-                          {doc.docVerified && (
-                            <div className="verified_batch">
-                              <span>Verified</span>
+                          )}                          
+                           {doc.documentUrl && (
+                            <div className={`verified_batch ${doc.docVerified ? "review" : "verified"}`}>
+                              <span>
+                                {doc.docVerified ? "In Review" : "Verified"}
+                              </span>
                             </div>
                           )}
                         </div>
-
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
@@ -634,13 +635,15 @@ const PropertyDocuments = () => {
                                   Delete
                                 </div>
                               </div>
-                              <div>
-                                <Switch
-                                  checked={checkedStates[doc.id] || false}
-                                  onChange={(e) => handleToggleChange(e, doc.id)}
-                                  inputProps={{ "aria-label": "controlled" }}
-                                />
-                              </div>
+                              {doc.documentUrl && (
+                                <div className="force_rotate">
+                                  <Switch
+                                    checked={checkedStates[doc.id] || false}
+                                    onChange={(e) => handleToggleChange(e, doc.id)}
+                                    inputProps={{ "aria-label": "controlled" }}
+                                  />
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
@@ -702,11 +705,6 @@ const PropertyDocuments = () => {
                               alt="Document"
                             />
                           )}
-                          {doc.docVerified && (
-                            <div className="verified_batch">
-                              <span>Verified</span>
-                            </div>
-                          )}
                         </div>
                         <div className="card-body">
                           {/* <h3>{doc.idType}</h3> */}
@@ -721,13 +719,6 @@ const PropertyDocuments = () => {
                                 >
                                   Delete
                                 </div>
-                              </div>
-                              <div>
-                                <Switch
-                                  checked={checkedStates[doc.id] || false}
-                                  onChange={(e) => handleToggleChange(e, doc.id)}
-                                  inputProps={{ "aria-label": "controlled" }}
-                                />
                               </div>
                             </div>
                           )}
@@ -790,11 +781,6 @@ const PropertyDocuments = () => {
                               alt="Document"
                             />
                           )}
-                          {doc.docVerified && (
-                            <div className="verified_batch">
-                              <span>Verified</span>
-                            </div>
-                          )}
                         </div>
                         <div className="card-body">
                           {/* <h3>{doc.idType}</h3> */}
@@ -809,13 +795,6 @@ const PropertyDocuments = () => {
                                 >
                                   Delete
                                 </div>
-                              </div>
-                              <div>
-                                <Switch
-                                  checked={checkedStates[doc.id] || false}
-                                  onChange={(e) => handleToggleChange(e, doc.id)}
-                                  inputProps={{ "aria-label": "controlled" }}
-                                />
                               </div>
                             </div>
                           )}
@@ -878,11 +857,6 @@ const PropertyDocuments = () => {
                               alt="Document"
                             />
                           )}
-                          {doc.docVerified && (
-                            <div className="verified_batch">
-                              <span>Verified</span>
-                            </div>
-                          )}
                         </div>
                         <div className="card-body">
                           {/* <h3>{doc.idType}</h3> */}
@@ -897,13 +871,6 @@ const PropertyDocuments = () => {
                                 >
                                   Delete
                                 </div>
-                              </div>
-                              <div>
-                                <Switch
-                                  checked={checkedStates[doc.id] || false}
-                                  onChange={(e) => handleToggleChange(e, doc.id)}
-                                  inputProps={{ "aria-label": "controlled" }}
-                                />
                               </div>
                             </div>
                           )}

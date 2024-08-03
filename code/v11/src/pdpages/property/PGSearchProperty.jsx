@@ -136,14 +136,14 @@ const PGSearchProperty = () => {
       {/* <Banner></Banner> */}
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <div className="top_search_bar">
-    <div className="property_search_parent">
-    <input type="search" value={searchQuery} className="property_search" onChange={handleSearchChange} placeholder="Search By Society, Locality, City, State... " />
-<div className="icon">
-<span class="material-symbols-outlined">
-search
-</span>
-</div>
-    </div>
+        <div className="property_search_parent">
+          <input type="search" value={searchQuery} className="property_search" onChange={handleSearchChange} placeholder="Search By Society, Locality, City, State... " />
+          <div className="icon">
+            <span class="material-symbols-outlined">
+              search
+            </span>
+          </div>
+        </div>
         <div className="search_area_header">
           <div className="for_buy_rent">
             <div
@@ -231,7 +231,7 @@ search
                 <div className="col-xl-9">
                   <TabList className="tabs">
                     <Tab className="pointer">Properties ({filteredPropdialProperties && filteredPropdialProperties.length})</Tab>
-                    <Tab className="pointer">Favorites ({favoriteCount})</Tab>                   
+                    <Tab className="pointer">Favorites ({favoriteCount})</Tab>
                   </TabList>
                   <TabPanel>
                     <div className="property_card_left">
@@ -249,7 +249,7 @@ search
                         <p>No favorite properties yet!</p>
                       )}
                     </div>
-                  </TabPanel>                
+                  </TabPanel>
                 </div>
 
                 {/* Recent Properties start */}
