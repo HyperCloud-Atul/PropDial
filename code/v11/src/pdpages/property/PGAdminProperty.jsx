@@ -33,9 +33,33 @@ const PGAdminProperty = () => {
     setSearchInput(e.target.value);
   };
 
-  // Filter properties based on search input and other filters
-  const filterProperties = properties
+  //access level restriction
+  console.log('user accessType: ', user.accessType)
+  console.log('user accessValue: ', user.accessValue)
+
+  let caseFilter = user.accessType;
+  const accessedPropertyList = properties
     ? properties.filter((document) => {
+      switch (caseFilter) {
+        case "country":
+          return document.country && document.country.toLowerCase() === user.accessValue.toLowerCase()
+        case "region":
+          return document.region && document.region.toLowerCase() === user.accessValue.toLowerCase()
+        case "state":
+          return document.state && document.state.toLowerCase() === user.accessValue.toLowerCase()
+        case "city":
+          return document.city && document.city.toLowerCase() === user.accessValue.toLowerCase()
+
+        default: return true;
+      }
+    }) : null;
+
+  console.log("accessed PropertyList: ", accessedPropertyList)
+
+
+  // Filter properties based on search input and other filters
+  const filterProperties = accessedPropertyList
+    ? accessedPropertyList.filter((document) => {
       let categoryMatch = true;
       let purposeMatch = true;
       let searchMatch = true;
@@ -141,18 +165,18 @@ const PGAdminProperty = () => {
         <div className="vg12"></div>
         <div className="filters">
           <div className="left">
-          
-              <div className="rt_global_search search_field">
-                <input
-                  placeholder="Search"
-                  value={searchInput}
-                  onChange={handleSearchInputChange}
-                />
-                <div className="field_icon">
-                  <span className="material-symbols-outlined">search</span>
-                </div>
+
+            <div className="rt_global_search search_field">
+              <input
+                placeholder="Search"
+                value={searchInput}
+                onChange={handleSearchInputChange}
+              />
+              <div className="field_icon">
+                <span className="material-symbols-outlined">search</span>
               </div>
-           
+            </div>
+
           </div>
           <div className="right">
             <div className="user_filters new_inline">

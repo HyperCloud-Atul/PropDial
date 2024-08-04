@@ -274,6 +274,7 @@ const Stage1 = (props) => {
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
+    Region: "",
     Package: "",
     Flag: "",
     Category: "",
@@ -344,6 +345,7 @@ const Stage1 = (props) => {
     if (propertyDocument) {
       setPropertyDetails({
         // All select type
+        Region: propertyDocument.region,
         Package: propertyDocument.package,
         Flag: propertyDocument.flag,
         Category: propertyDocument.category
@@ -617,6 +619,7 @@ const Stage1 = (props) => {
     // console.log('propertyDetails.City:', propertyDetails.City)
 
     const property = {
+      region: propertyDetails.Region,
       package: propertyDetails.Package,
       flag: propertyDetails.Flag,
       category: propertyDetails.Category
@@ -727,6 +730,158 @@ const Stage1 = (props) => {
     <>
       <div className="add_property_fields">
         <div className="row row_gap">
+          {/* Region */}
+          <div className="col-md-12">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">
+                Region</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Region === "North India"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="region_northindia"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Region: "North India",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="region_northindia"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          North India
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Region === "South India"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="region_southindia"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Region: "South India",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="region_southindia"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          South India
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Region === "East India"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="region_eastindia"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Region: "East India",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="region_eastindia"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          East India
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Region === "West India"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="region_westindia"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Region: "West India",
+                            });
+                          }}
+
+                        />
+                        <label
+                          htmlFor="region_westindia"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          West India
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           {/* Package */}
           <div className="col-md-6">
             <div className="form_field st-2 label_top">

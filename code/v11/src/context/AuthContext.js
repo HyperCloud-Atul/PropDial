@@ -55,6 +55,8 @@ export const AuthContextProvider = ({ children }) => {
           if (snapshot.data()) {
             let role = snapshot.data().rolePropDial;
             let roles = snapshot.data().rolesPropDial;
+            let accessType = snapshot.data().accessType;
+            let accessValue = snapshot.data().accessValue;
             let online = snapshot.data().online;
             let displayName = snapshot.data().displayName;
             let fullName = snapshot.data().fullName;
@@ -74,6 +76,8 @@ export const AuthContextProvider = ({ children }) => {
               ...user,
               role,
               roles,
+              accessType,
+              accessValue,
               online,
               displayName,
               fullName,

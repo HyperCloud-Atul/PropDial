@@ -282,6 +282,7 @@ const CreateProperty = () => {
         Bhk: "",
         FloorNo: 0,
         Country: "",
+        Region: "",
         State: "",
         City: "",
         Locality: "",
@@ -582,6 +583,8 @@ const CreateProperty = () => {
             const _newProperty = {
                 ...property,
                 //other property fields
+                country: "India",
+                region: "India",
                 source: "",
                 ownership: "",
                 numberOfBedrooms: 0,
