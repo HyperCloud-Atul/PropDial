@@ -27,6 +27,31 @@ const UserRoleStatusModal = ({ show, handleClose, selectedUser, handleRoleChange
                                 <label htmlFor="frontdesk">Frontdesk</label>
                             </div>
                             <div className="radio_single">
+                                <input type="radio" name="user_role" value="manager" id='manager'
+                                    checked={selectedUser.rolePropDial === "manager"} onChange={() => handleRoleChange("manager")} />
+                                <label htmlFor="manager">manager</label>
+                            </div>
+                            <div className="radio_single">
+                                <input type="radio" name="user_role" value="tenant" id='tenant'
+                                    checked={selectedUser.rolePropDial === "tenant"} onChange={() => handleRoleChange("tenant")} />
+                                <label htmlFor="tenant">tenant</label>
+                            </div>
+                            <div className="radio_single">
+                                <input type="radio" name="user_role" value="prospectiveTenant" id='prospectiveTenant'
+                                    checked={selectedUser.rolePropDial === "prospectiveTenant"} onChange={() => handleRoleChange("prospectiveTenant")} />
+                                <label htmlFor="prospectiveTenant">prospective Tenant</label>
+                            </div>
+                            <div className="radio_single">
+                                <input type="radio" name="user_role" value="buyer" id='buyer'
+                                    checked={selectedUser.rolePropDial === "buyer"} onChange={() => handleRoleChange("buyer")} />
+                                <label htmlFor="buyer">buyer</label>
+                            </div>
+                            <div className="radio_single">
+                                <input type="radio" name="user_role" value="prospectiveBuyer" id='prospectiveBuyer'
+                                    checked={selectedUser.rolePropDial === "prospectiveBuyer"} onChange={() => handleRoleChange("prospectiveBuyer")} />
+                                <label htmlFor="prospectiveBuyer">prospective Buyer</label>
+                            </div>
+                            <div className="radio_single">
                                 <input type="radio" name="user_role" value="admin" id='admin'
                                     checked={selectedUser.rolePropDial === "admin"} onChange={() => handleRoleChange("admin")} />
                                 <label htmlFor="admin">Admin</label>
