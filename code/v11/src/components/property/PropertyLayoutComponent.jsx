@@ -134,7 +134,8 @@ export default function PropertyLayoutComponent(props) {
             roomName: propertyLayout.RoomName,
             roomLength: propertyLayout.RoomLength,
             roomWidth: propertyLayout.RoomWidth,
-            roomTotalArea: propertyLayout.RoomLength * propertyLayout.RoomWidth,
+            // roomTotalArea: propertyLayout.RoomLength * propertyLayout.RoomWidth,
+            roomTotalArea: (propertyLayout.RoomLength * propertyLayout.RoomWidth).toFixed(2),
             roomFixtures: additionalInfos,
             roomAttachments: attachments,
             roomImgUrl: "",
@@ -331,6 +332,42 @@ export default function PropertyLayoutComponent(props) {
                                     />
                                 </div>
                                 <div className="form_field">
+                                    <input
+                                        type="text"
+                                        placeholder="Length in feet"
+                                        onChange={(e) => {
+                                            const newValue = e.target.value;
+                                            const regex = /^\d*\.?\d{0,2}$/; // Regular expression to match numbers with up to 2 decimal places
+
+                                            if (regex.test(newValue)) {
+                                                setPropertyLayout({
+                                                    ...propertyLayout,
+                                                    RoomLength: newValue,
+                                                });
+                                            }
+                                        }}
+                                        value={propertyLayout.RoomLength}
+                                    />
+                                </div>
+                                <div className="form_field">
+                                    <input
+                                        type="text"
+                                        placeholder="Width in feet"
+                                        onChange={(e) => {
+                                            const newValue = e.target.value;
+                                            const regex = /^\d*\.?\d{0,2}$/; // Regular expression to match numbers with up to 2 decimal places
+
+                                            if (regex.test(newValue)) {
+                                                setPropertyLayout({
+                                                    ...propertyLayout,
+                                                    RoomWidth: newValue,
+                                                });
+                                            }
+                                        }}
+                                        value={propertyLayout.RoomWidth}
+                                    />
+                                </div>
+                                {/* <div className="form_field">
                                     <input type="text"
                                         placeholder="Length in feet"
                                         
@@ -343,8 +380,8 @@ export default function PropertyLayoutComponent(props) {
                                         value={propertyLayout && propertyLayout.RoomLength}
                                         
                                     />
-                                </div>
-                                <div className="form_field">
+                                </div> */}
+                                {/* <div className="form_field">
                                     <input type="text"
                                         placeholder="Width in feet"
                                  
@@ -356,7 +393,7 @@ export default function PropertyLayoutComponent(props) {
                                         }
                                         value={propertyLayout && propertyLayout.RoomWidth}
                                     />
-                                </div>
+                                </div> */}
                                 {/* <div className="form_field">
                                     <input type="text" placeholder="Total area"
                                       value={propertyLayout.RoomLength * propertyLayout.RoomWidth}

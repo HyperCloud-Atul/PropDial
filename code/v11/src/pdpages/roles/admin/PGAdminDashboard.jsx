@@ -188,9 +188,9 @@ const PGAdminDashboard = () => {
             <span className="material-symbols-outlined">location_city</span>
           </Link>
 
-          <Link to="/ratecard" className="more-add-options-icons">
-            <h1>Rate Card</h1>
-            <span class="material-symbols-outlined">receipt_long</span>
+          <Link to="/allproperties" className="more-add-options-icons">
+            <h1>Properties</h1>
+            <span class="material-symbols-outlined">real_estate_agent</span>
           </Link>
 
 

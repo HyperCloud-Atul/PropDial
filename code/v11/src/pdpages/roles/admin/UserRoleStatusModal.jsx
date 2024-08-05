@@ -61,6 +61,93 @@ const UserRoleStatusModal = ({ show, handleClose, selectedUser, handleRoleChange
                 </div>
                 <hr />
                 <h6 className="r16 lh22 mb-3">
+                    <span className='m16'>{selectedUser.displayName}</span> access managment
+                </h6>
+                <div className="access_manage">
+                    <div className="left">
+                        <div className="field_box theme_radio_new tab_type_radio active_right no_pd_bo">
+                            <div className="theme_radio_container">
+                                <div className="radio_single">
+                                    <input
+                                        type="radio"
+                                        name="access_type"
+                                        id="at_country"
+                                    // value={category.value}
+                                    // onChange={handleDocCatChange}
+                                    // checked={selectedDocCat === category.value}
+                                    />
+                                    <label htmlFor="at_country">
+                                        Country
+                                    </label>
+                                </div>
+                                <div className="radio_single">
+                                    <input
+                                        type="radio"
+                                        name="access_type"
+                                        id="at_city"
+                                    // value={category.value}
+                                    // onChange={handleDocCatChange}
+                                    // checked={selectedDocCat === category.value}
+                                    />
+                                    <label htmlFor="at_city">
+                                        City
+                                    </label>
+                                </div>
+                                <div className="radio_single">
+                                    <input
+                                        type="radio"
+                                        name="access_type"
+                                        id="at_region"
+                                    // value={category.value}
+                                    // onChange={handleDocCatChange}
+                                    // checked={selectedDocCat === category.value}
+                                    />
+                                    <label htmlFor="at_region">
+                                        Region
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div className="right">
+                        <div className="form_field theme_checkbox">
+                            <div className="theme_checkbox_container">                           
+                                    <div className="checkbox_single">                                        <input
+                                            type="checkbox"
+                                            id="pune"
+                                            name="access_value"                                        
+                                        />
+                                        <label htmlFor="pune">pune</label>
+                                    </div>
+                                    <div className="checkbox_single">                                        <input
+                                            type="checkbox"
+                                            id="Delhi"
+                                            name="access_value"                                        
+                                        />
+                                        <label htmlFor="Delhi">Delhi</label>
+                                    </div>
+                                    <div className="checkbox_single">                                        <input
+                                            type="checkbox"
+                                            id="mumbai"
+                                            name="access_value"                                        
+                                        />
+                                        <label htmlFor="mumbai">mumbai</label>
+                                    </div>
+                                    <div className="checkbox_single">                                        <input
+                                            type="checkbox"
+                                            id="gurugram"
+                                            name="access_value"                                        
+                                        />
+                                        <label htmlFor="gurugram">gurugram</label>
+                                    </div>
+                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <h6 className="r16 lh22 mb-3">
                     The status for <span className='m16'>{selectedUser.displayName}</span>  is currently set to <span className={`m16 text-capitalize ${selectedUser.status === "active" ? "text_green2" : "text_red"}`}>{selectedUser.status}</span>, You can change it here if needed.
                 </h6>
                 <div className='form_field'>

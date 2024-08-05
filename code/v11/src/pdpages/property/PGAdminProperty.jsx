@@ -138,9 +138,9 @@ const PGAdminProperty = () => {
               <h1>Add property</h1>
               <span className="material-symbols-outlined">location_city</span>
             </Link>
-            <Link to="/ratecard" className="more-add-options-icons">
-              <h1>Rate Card</h1>
-              <span class="material-symbols-outlined">receipt_long</span>
+            <Link to="/dashboard" className="more-add-options-icons">
+              <h1>Dashboard</h1>
+              <span class="material-symbols-outlined">Dashboard</span>
             </Link>
           </div>
         </div>

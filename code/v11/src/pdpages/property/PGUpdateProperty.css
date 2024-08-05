@@ -493,7 +493,6 @@ color: #dedede;
     align-items: start !important;
     gap: 6px !important;
     flex-direction: column;
-    margin-top: 12px;
 }
 .expand{
     align-items: center;

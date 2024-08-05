@@ -345,17 +345,18 @@ const PropertyDocuments = () => {
           <div className="col-lg-6">
             {propertydoc &&
               <div className="title_card short_prop_summary relative pointer" onClick={handleClick}>
-                <div className="top on_mobile_575">
-                  <div >
-                    <span className="card_badge">
-                      {propertydoc.pid}
-                    </span>
-                    {" "}{" "}
-                    <span className="card_badge">
-                      {propertydoc.isActiveInactiveReview}
-                    </span>
+                {expanded && (
+                  <div className="top on_mobile_575">
+                    <div className="d-flex align-items-center" style={{
+                      gap: "5px"
+                    }} >
+                      <h6 style={{
+                        fontSize: "14px",
+                        fontWeight: "400"
+                      }}>{propertydoc.unitNumber} | {propertydoc.society} </h6>
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className="on_desktop_hide_575">
                   <div className="left">
                     <div className="img">
@@ -401,6 +402,15 @@ const PropertyDocuments = () => {
                         </Link>
                       </div>
                       <div className="detail">
+                        <div>
+                          <span className="card_badge">
+                            {propertydoc.pid}
+                          </span>
+                          {" "}{" "}
+                          <span className="card_badge">
+                            {propertydoc.isActiveInactiveReview}
+                          </span>
+                        </div>
                         <h6 className="demand">
                           <span>₹</span> {propertydoc.demandPrice}
                           {propertydoc.maintenancecharges !== '' && <span
@@ -613,8 +623,8 @@ const PropertyDocuments = () => {
                               }
                               alt="Document"
                             />
-                          )}                          
-                           {doc.documentUrl && (
+                          )}
+                          {doc.documentUrl && (
                             <div className={`verified_batch ${doc.docVerified ? "review" : "verified"}`}>
                               <span>
                                 {doc.docVerified ? "In Review" : "Verified"}
