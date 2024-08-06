@@ -84,7 +84,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 registerRoute(
   ({ request }) => request.destination === "image",
   new CacheFirst({
-    cacheName: "dentamax-static-images-cache",
+    cacheName: "propdial-static-images-cache",
     plugins: [
       // You can add additional plugins here if needed
       new ExpirationPlugin({
@@ -99,7 +99,7 @@ registerRoute(
 registerRoute(
   ({ request }) => request.destination === "image",
   new StaleWhileRevalidate({
-    cacheName: "dentamax-dynamic-images-cache",
+    cacheName: "propdial-dynamic-images-cache",
     plugins: [
       // You can add additional plugins here if needed
     ],
@@ -111,7 +111,7 @@ registerRoute(
   ({ request }) =>
     request.destination === "style" || request.destination === "script",
   new CacheFirst({
-    cacheName: "dentamax-core-assets-cache",
+    cacheName: "propdial-core-assets-cache",
     plugins: [
       // You can add additional plugins here if needed
     ],
@@ -123,7 +123,7 @@ registerRoute(
   ({ request }) =>
     request.destination === "style" || request.destination === "script",
   new StaleWhileRevalidate({
-    cacheName: "dentamax-dynamic-assets-cache",
+    cacheName: "propdial-dynamic-assets-cache",
     plugins: [
       // You can add additional plugins here if needed
     ],
@@ -134,7 +134,7 @@ registerRoute(
 registerRoute(
   ({ url }) => url.origin === "https://firestore.googleapis.com",
   new NetworkFirst({
-    cacheName: "dentamax-firestore-real-time-data-cache",
+    cacheName: "propdial-firestore-real-time-data-cache",
     plugins: [
       // You can add additional plugins here if needed
     ],
@@ -145,7 +145,7 @@ registerRoute(
 registerRoute(
   ({ url }) => url.origin === "https://firebasestorage.googleapis.com",
   new StaleWhileRevalidate({
-    cacheName: "dentamax-fbstorage-data-cache",
+    cacheName: "propdial-fbstorage-data-cache",
     plugins: [
       // You can add additional plugins here if needed
     ],

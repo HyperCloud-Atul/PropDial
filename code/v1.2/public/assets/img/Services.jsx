@@ -239,9 +239,8 @@ const Services = () => {
               <div className="services_icon_div">
                 <div className="row">
                   <div
-                    className={`col col-md-6 col-sm-6 icon_top_row first_service_icon ${
-                      activeSection === "Dental" ? "active-service" : ""
-                    }`}
+                    className={`col col-md-6 col-sm-6 icon_top_row first_service_icon ${activeSection === "Dental" ? "active-service" : ""
+                      }`}
                     style={{
                       borderRight: "1px solid gray",
                       borderBottom: "1px solid gray",
@@ -257,9 +256,8 @@ const Services = () => {
                     <h5>Dental</h5>
                   </div>
                   <div
-                    className={`col col-md-6 col-sm-6 icon_top_row first_service_icon ${
-                      activeSection === "Dermatology" ? "active-service" : ""
-                    }`}
+                    className={`col col-md-6 col-sm-6 icon_top_row first_service_icon ${activeSection === "Dermatology" ? "active-service" : ""
+                      }`}
                     style={{
                       borderBottom: "1px solid gray",
                     }}
@@ -275,9 +273,8 @@ const Services = () => {
                 </div>
                 <div className="row">
                   <div
-                    className={`col col-md-6 col-sm-6 icon_top_row first_service_icon ${
-                      activeSection === "Homeopathy" ? "active-service" : ""
-                    }`}
+                    className={`col col-md-6 col-sm-6 icon_top_row first_service_icon ${activeSection === "Homeopathy" ? "active-service" : ""
+                      }`}
                     style={{
                       borderRight: "1px solid gray",
                     }}
@@ -291,9 +288,8 @@ const Services = () => {
                     <h5>Homeopathy</h5>
                   </div>
                   <div
-                    className={`col col-md-6 col-sm-6 icon_top_row first_service_icon ${
-                      activeSection === "Hijama" ? "active-service" : ""
-                    }`}
+                    className={`col col-md-6 col-sm-6 icon_top_row first_service_icon ${activeSection === "Hijama" ? "active-service" : ""
+                      }`}
                     onClick={() => handleServiceClick("Hijama")}
                   >
                     <img

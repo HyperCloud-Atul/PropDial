@@ -1,6 +1,6 @@
 {
-  "name": "dentamax",
-  "version": "0.1.3",
+  "name": "Propdial",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@emotion/cache": "^11.11.0",
