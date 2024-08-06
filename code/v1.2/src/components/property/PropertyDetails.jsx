@@ -86,6 +86,7 @@ const PropertyDetails = () => {
 
 
   const { documents: propertyDocList, errors: propertyDocListError } = useCollection("docs", ["masterRefId", "==", propertyid]);
+  console.log("documents: ", propertyDocList)
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } = useFirestore("tenants");
   const { addDocument: addProperyUsersDocument, updateDocument: updateProperyUsersDocument, deleteDocument: deleteProperyUsersDocument, error: errProperyUsersDocument } = useFirestore("propertyusers");
@@ -827,6 +828,60 @@ const PropertyDetails = () => {
   };
   // modal controls end 
 
+
+  // add enquiry with add document start
+  const { addDocument } =
+    useFirestore("enquiry");
+
+  const [iAm, setIam] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [description, setDescription] = useState("");
+  // const [isUploading, setIsUploading] = useState(false);
+
+  const handleChangeName = (event) => setName(event.target.value);
+  const handleChangeIam = (event) => setIam(event.target.value);
+  const handleChangePhone = (event) => setPhone(event.target.value);
+  const handleChangeDescription = (event) => setDescription(event.target.value);
+
+  const submitEnquiry = async (event) => {
+    event.preventDefault();
+
+    if (!iAm || !name || !phone || !description) {
+      alert("All fields are required!");
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const docRef = await addDocument({
+        iAm,
+        name,
+        phone,
+        description,
+        city,
+        country,
+        state,
+
+      });
+      setIam("");
+      setName("");
+      setPhone("");
+      setCity("");
+      setCountry("")
+      setState("")
+      setDescription("");
+      setIsUploading(false);
+    } catch (error) {
+      console.error("Error adding document:", error);
+      setIsUploading(false);
+    }
+  };
+  // add enquiry with add document end
+
   return (
     <>
       {/* Change User Popup - Start */}
@@ -861,19 +916,19 @@ const PropertyDetails = () => {
                 <li key={user.id}>{user.fullName} ({user.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')})</li>
               ))}
             </ul> */}
-            <ul style={{ padding: "10px 0 10px 0" }}>
+            <ul style={{ padding: "10px 0 10px 0", textAlign: "right" }}>
               {filteredUsers &&
                 filteredUsers.map((user) => (
-                  <li style={{ padding: "10px 0 10px 0" }} key={user.id}>
+                  <li style={{ padding: "4px 0 4px 0" }} key={user.id}>
                     <label
                       style={{
-                        fontSize: "1rem",
-                        display: "flex",
-                        alignItems: "center",
+                        fontSize: "0.8rem",
+                        // display: "flex",
+                        // alignItems: "center",
                         position: "relative",
                         width: "100%",
                         background: "#efefef",
-                        padding: "10px 0 10px 0",
+                        padding: "4px 6px 4px 0",
                         margin: "0",
                       }}
                     >
@@ -886,12 +941,12 @@ const PropertyDetails = () => {
                         checked={selectedUser === user.id}
                         onChange={() => handleUserSelect(user.id)}
                       />
-                      {user.fullName} (
+                      <strong> {user.fullName} </strong> (
                       {user.phoneNumber.replace(
                         /(\d{2})(\d{5})(\d{5})/,
                         "+$1 $2-$3"
                       )}
-                      ) - {user.city}
+                      ) <br></br>{user.city}, {user.country}
                     </label>
                   </li>
                 ))}
@@ -912,10 +967,12 @@ const PropertyDetails = () => {
         </div>
       </div>
       {/* Change User Popup - End */}
-      {/* 9 dots html  */}
-      <div onClick={openMoreAddOptions} className="property-list-add-property">
-        <span className="material-symbols-outlined">apps</span>
-      </div>
+      {/* 9 dots html start  */}
+      {user && user.role === 'admin' &&
+        <div onClick={openMoreAddOptions} className="property-list-add-property">
+          <span className="material-symbols-outlined">apps</span>
+        </div>
+      }
       <div
         className={
           handleMoreOptionsClick
@@ -951,9 +1008,17 @@ const PropertyDetails = () => {
           </Link>
         </div>
       </div>
+      {/* 9 dots html end*/}
+      {user && user.role === 'admin' &&
+        <Link to={`/updateproperty/${propertyid}`} className="property-list-add-property with_9dot">
+          <span class="material-symbols-outlined">
+            edit_square
+          </span>
+        </Link>
+      }
 
       <div div className="pg_property pd_single pg_bg">
-        <div className="page_spacing full_card">
+        <div className="page_spacing full_card_width">
           {/* top search bar */}
           {!user && (
             <div className="top_search_bar">
@@ -966,10 +1031,10 @@ const PropertyDetails = () => {
           <div className="property_cards">
             {propertyDocument && (
               <div className="">
-                <div className="property_card_single quick_detail_show">
+                {user && <div className="property_card_single quick_detail_show mobile_full_card">
                   <div className="more_detail_card_inner">
                     <div className="row align-items-center">
-                      <div className="col-md-9">
+                      <div className="col-6 col-md-9">
                         <div className="left">
                           <div className="qd_single">
                             <span class="material-symbols-outlined">
@@ -982,7 +1047,7 @@ const PropertyDetails = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-3">
+                      <div className="col-6 col-md-3">
                         <div className="right">
                           <div className="premium text-center">
                             <img src="/assets/img/premium_img.jpg" alt="" />
@@ -993,47 +1058,10 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>}
 
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="pcs_inner pointer" to="/pdsingle">
-                    {/* <div className="pcs_image_area relative">
-                          {filteredImages.length > 0 ? (
-                            <div className="bigimage_container">
-                              <Gallery
-                                items={filteredImages.map((url) => ({
-                                  original: url,
-                                  thumbnail: url,
-                                }))}
-                                slideDuration={1000}
-                              />
-                            </div>
-                          ) : (
-                            <img
-                              className="default_prop_img"
-                              src="/assets/img/admin_banner.jpg"
-                              alt=""
-                            />
-                          )}
-                          {user && user.role == "admin" && (
-                            <div className="upload_prop_img">
-                              <input
-                                type="file"
-                                accept="image/*"
-                                id="imageInput"
-                                multiple
-                                onChange={handleImageChange}
-                                style={{ display: "none" }}
-                                ref={fileInputRef}
-                              />
-                              <img
-                                src="/assets/img/upload_img_small.png"
-                                alt=""
-                                onClick={handleAddMoreImages}
-                              />
-                            </div>
-                          )}
-                        </div> */}
 
                     <div className="pcs_image_area relative">
                       {images.length > 0 ? (
@@ -1073,7 +1101,7 @@ const PropertyDetails = () => {
                           <div className="d-flex flex-column align-items-center justify-content-center">
                             {!isUploading && (
                               <button
-                                className="btn_fill_add_property_images mb-2" // Use mb-2 for spacing between buttons
+                                className="theme_btn btn_fill no_icon"
                                 onClick={handleAddMoreImages}
                               >
                                 {isConfirmVisible
@@ -1084,7 +1112,7 @@ const PropertyDetails = () => {
 
                             {selectedImage && (
                               <button
-                                className="btn_fill_add_property_images"
+                                className="theme_btn btn_fill no_icon"
                                 onClick={handleConfirmUpload}
                                 disabled={!isConfirmVisible || isUploading} // Disable button when uploading
                               >
@@ -1107,10 +1135,15 @@ const PropertyDetails = () => {
                     <div className="pcs_main_detail">
                       <div className="pmd_top">
                         <h4>
-                          {propertyDocument.unitNumber},{" "}
+                          {user && user.role !== "guest" && (
+                            <>
+                              {propertyDocument.unitNumber},
+                            </>
+                          )}
+                          {" "}
                           {propertyDocument.society}
                         </h4>
-                        <h6>
+                        {/* <h6>
                           {propertyDocument.status.toUpperCase() ===
                             "AVAILABLE FOR RENT" ||
                             propertyDocument.status.toUpperCase() ===
@@ -1143,7 +1176,7 @@ const PropertyDetails = () => {
                               {propertyDocument.status}
                             </span>
                           )}
-                        </h6>
+                        </h6> */}
                         <h4 className="property_name">
                           {propertyDocument.bhk} |{" "}
                           {propertyDocument.furnishing === ""
@@ -1157,61 +1190,50 @@ const PropertyDetails = () => {
                           {propertyDocument.locality},{" "}
                           {propertyDocument.city}, {propertyDocument.state}
                         </h6>
+                        <span className='pid_badge'>
+                          {propertyDocument.pid}
+                        </span>
                       </div>
                       <div className="divider"></div>
-                      <div className="pmd_section2 row">
-                        <div className="pdms_single col-4">
+                      <div className="pmd_section2">
+                        <div className="pdms_single">
                           <h4>
                             <span className="currency">₹</span>
-                            {propertyDocument.demandPrice}/-
+                            {new Intl.NumberFormat('en-IN').format(propertyDocument.demandPrice)}/-
                             <span className="price"></span>
                           </h4>
                           <h6>Demand Price</h6>
-                          {propertyDocument.superArea !== "" ? (
-                            <h6>
-                              {propertyDocument.superArea}{" "}
-                              {propertyDocument.superAreaUnit}
-                            </h6>
-                          ) : (
-                            <h6>
-                              {propertyDocument.superArea}{" "}
-                              {propertyDocument.superAreaUnit}
-                            </h6>
-                          )}
+
                         </div>
                         {propertyDocument.purpose.toUpperCase() ===
                           "RENT" && (
-                            <div className="pdms_single col-4">
+                            <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
-                                {propertyDocument.maintenanceCharges}/-{" "}
-                                <span style={{ fontSize: "0.8rem" }}>
-                                  {" "}
-                                  {propertyDocument.maintenanceFlag}
-                                </span>
+
+                                {new Intl.NumberFormat('en-IN').format(propertyDocument.maintenanceCharges)}/-{" "}
+                                <span className="extra">({propertyDocument.maintenanceFlag})</span>
+
                               </h4>
                               <h6>
-                                {propertyDocument.maintenanceChargesFrequency}{" "}
-                                Maintenance
+                                Maintenance{" "}({propertyDocument.maintenanceChargesFrequency})
                               </h6>
                             </div>
                           )}
                         {propertyDocument.purpose.toUpperCase() ===
                           "RENT" && (
-                            <div className="pdms_single col-4">
+                            <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
-                                {propertyDocument.securityDeposit}/-
+                                {new Intl.NumberFormat('en-IN').format(propertyDocument.securityDeposit)}/-
                               </h4>
                               <h6>Security Deposit</h6>
                             </div>
                           )}
-
-                        <div className="pdms_single col-4"></div>
                       </div>
                       <div className="divider"></div>
-                      <div className="pmd_section2 pmd_section3 row">
-                        <div className="pdms_single col-4">
+                      <div className="pmd_section2 pmd_section3">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_carpet.png"></img>
                             {propertyDocument.superArea}{" "}
@@ -1219,14 +1241,14 @@ const PropertyDetails = () => {
                           </h4>
                           <h6>Super Area</h6>
                         </div>
-                        <div className="pdms_single col-4">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_bedroom.png"></img>
                             {propertyDocument.numberOfBedrooms}
                           </h4>
                           <h6>Bedrooms</h6>
                         </div>
-                        <div className="pdms_single col-4">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_bathroom.png"></img>
                             {propertyDocument.numberOfBathrooms}
@@ -1235,23 +1257,23 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                       <div className="divider"></div>
-                      <div className="pmd_section2 pmd_section3 row">
-                        <div className="pdms_single col-4">
+                      <div className="pmd_section2 pmd_section3">
+                        <div className="pdms_single">
                           <h4>
-                            <img src="/assets/img/new_super_area.png"></img>
-                            {propertyDocument.carpetArea}{" "}
-                            {propertyDocument.carpetAreaUnit}
+                            <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
+                            {propertyDocument.floorNo} of {propertyDocument.numberOfFloors}
+
                           </h4>
-                          <h6>Carpet Area</h6>
+                          <h6>Floor no.</h6>
                         </div>
-                        <div className="pdms_single col-4">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_bhk.png"></img>
                             {propertyDocument.bhk}
                           </h4>
                           <h6>BHK</h6>
                         </div>
-                        <div className="pdms_single col-4">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_furniture.png"></img>
                             {propertyDocument.furnishing}
@@ -1261,20 +1283,15 @@ const PropertyDetails = () => {
                       </div>
                       <div className="pmd_section4">
                         <div className="left">
-                          <span
-                            className="material-symbols-outlined mr-2"
-                            style={{
-                              marginRight: "3px",
-                            }}
-                          >
-                            favorite
-                          </span>
-                          <span
-                            className="material-symbols-outlined"
-                            onClick={handleShareClick}
-                          >
-                            share
-                          </span>
+                          <div className="theme_btn btn_border icon_left with_icon" onClick={handleShareClick}>
+                            <span
+                              className="material-symbols-outlined btn_icon"
+                            >
+                              share
+                            </span>
+                            Share
+                          </div>
+
                         </div>
 
                         {!(
@@ -1286,70 +1303,37 @@ const PropertyDetails = () => {
                               <a
                                 href="."
                                 className="theme_btn no_icon btn_fill"
-                                style={{
-                                  marginRight: "10px",
-                                }}
-                              >
-                                {" "}
-                                Contact Agent
-                              </a>
-                              <a
-                                href="."
-                                className="theme_btn no_icon btn_border"
                                 data-bs-toggle="modal"
                                 data-bs-target="#exampleModal"
                               >
                                 {" "}
                                 Enquire Now
                               </a>
-                              <div
-                                className="modal fade"
-                                id="exampleModal"
-                                tabindex="-1"
-                                aria-labelledby="exampleModalLabel"
-                                aria-hidden="true"
-                              >
+                              <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div className="modal-dialog">
                                   <div className="modal-content relative">
-                                    <span
-                                      className="material-symbols-outlined close_modal"
-                                      data-bs-dismiss="modal"
-                                    >
+                                    <span className="material-symbols-outlined close_modal" data-bs-dismiss="modal">
                                       close
                                     </span>
                                     <div className="modal-body">
-                                      <form>
+                                      <form onSubmit={submitEnquiry}>
                                         <div className="row">
                                           <div className="col-sm-12">
                                             <div className="section_title mb-4">
                                               <h3>Enquiry</h3>
-                                              <h6 className="modal_subtitle">
-                                                Thank you for your interest in
-                                                reaching out to us. Please use
-                                                the form below to submit any
-                                                question.
-                                              </h6>
+                                              <h6 className="modal_subtitle">Thank you for your interest in reaching out to us. Please use the form below to submit any question.</h6>
                                             </div>
                                           </div>
                                           <div className="col-sm-12">
                                             <div className="form_field st-2">
                                               <div className="field_inner select">
-                                                <select>
-                                                  <option
-                                                    value=""
-                                                    disabled
-                                                    selected
-                                                  >
-                                                    I am
-                                                  </option>
-
-                                                  <option>Tenant</option>
-                                                  <option>Agent</option>
+                                                <select value={iAm} onChange={handleChangeIam}>
+                                                  <option value="" disabled>I am</option>
+                                                  <option value="Tenant">Tenant</option>
+                                                  <option value="Agent">Agent</option>
                                                 </select>
                                                 <div className="field_icon">
-                                                  <span className="material-symbols-outlined">
-                                                    person
-                                                  </span>
+                                                  <span className="material-symbols-outlined">person</span>
                                                 </div>
                                               </div>
                                             </div>
@@ -1357,14 +1341,12 @@ const PropertyDetails = () => {
                                           <div className="col-sm-12">
                                             <div className="form_field st-2">
                                               <div className="field_inner">
-                                                <input
-                                                  type="text"
-                                                  placeholder="Name"
-                                                />
+                                                <input type="text"
+                                                  value={name}
+                                                  onChange={handleChangeName}
+                                                  placeholder="Name" />
                                                 <div className="field_icon">
-                                                  <span className="material-symbols-outlined">
-                                                    person
-                                                  </span>
+                                                  <span className="material-symbols-outlined">person</span>
                                                 </div>
                                               </div>
                                             </div>
@@ -1372,32 +1354,39 @@ const PropertyDetails = () => {
                                           <div className="col-sm-12">
                                             <div className="form_field st-2">
                                               <div className="field_inner">
-                                                <input
-                                                  type="text"
-                                                  placeholder="Phone Number"
-                                                />
+                                                <input type="number"
+                                                  value={phone}
+                                                  onChange={handleChangePhone}
+                                                  placeholder="Phone" />
                                                 <div className="field_icon">
-                                                  <span className="material-symbols-outlined">
-                                                    call
-                                                  </span>
+                                                  <span className="material-symbols-outlined">call</span>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div className="col-sm-12 mt-3">
+                                            <div className="form_field st-2">
+                                              <div className="field_inner">
+                                                <textarea
+                                                  value={description}
+                                                  onChange={handleChangeDescription}
+                                                  placeholder="Description" />
+                                                <div className="field_icon">
+                                                  <span className="material-symbols-outlined">description</span>
                                                 </div>
                                               </div>
                                             </div>
                                           </div>
                                           <div className="col-sm-12">
                                             <div className="submit_btn mt-4">
-                                              <button
-                                                type="submit"
-                                                className="modal_btn theme_btn no_icon btn_fill"
-                                              >
-                                                Submit
+                                              <button type="submit" className="modal_btn theme_btn no_icon btn_fill" disabled={isUploading}>
+                                                {isUploading ? 'Submitting...' : 'Submit'}
                                               </button>
                                             </div>
                                           </div>
                                         </div>
                                       </form>
                                     </div>
-                                    )
                                   </div>
                                 </div>
                               </div>
@@ -1407,12 +1396,12 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-                <div className="extra_info_card_property">
+                {user && <div className="extra_info_card_property mobile_full_card">
                   <div className="card_upcoming">
                     <div className="parent">
-                      <div className="child">
+                      <div className="child coming_soon">
                         <div className="left">
-                          <h5>25-June-2025</h5>
+                          <h5>0-0-0</h5>
                           <div className="line">
                             <div className="line_fill" style={{
                               width: "25%",
@@ -1422,13 +1411,10 @@ const PropertyDetails = () => {
                           </div>
                           <h6>Inspection Date</h6>
                         </div>
-                        {/* <div className="right">
-              <img src="./assets/img/icons/inspection.png" alt="" className="cion" />
-              </div> */}
                       </div>
-                      <div className="child">
+                      <div className="child coming_soon">
                         <div className="left">
-                          <h5>30-July-2024</h5>
+                          <h5>0-0-0</h5>
                           <div className="line">
                             <div className="line_fill" style={{
                               width: "92%",
@@ -1438,13 +1424,10 @@ const PropertyDetails = () => {
                           </div>
                           <h6>Rent Renewal</h6>
                         </div>
-                        {/* <div className="right">
-              <img src="./assets/img/icons/inspection.png" alt="" className="cion" />
-              </div> */}
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>}
 
                 {user &&
                   (user.role === "owner" ||
@@ -1452,24 +1435,65 @@ const PropertyDetails = () => {
                     user.role === "admin") && (
 
                     <div className="extra_info_card_property">
-                      <OwlCarousel className="owl-theme" {...options}>
+                      <Swiper
+                        spaceBetween={15}
+                        slidesPerView={5.5}
+                        pagination={false}
+                        freeMode={true}
+                        className='all_tenants'
+                        breakpoints={{
+                          320: {
+                            slidesPerView: 2.5,
+                            spaceBetween: 15,
+                          },
+                          767: {
+                            slidesPerView: 2.5,
+                            spaceBetween: 15,
+                          },
+                          991: {
+                            slidesPerView: 5.5,
+                            spaceBetween: 15,
+                          },
+                        }}
+                      >
                         {/* Documents */}
-                        <Link to={`/propertydocumentdetails/${propertyid}`} >
-                          <div className="item eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                                description
-                              </span>
-                              <div className="text">
-                                <h6>{propertyDocList && propertyDocList.length}</h6>
-                                <h5>Documents</h5>
+                        <SwiperSlide>
+                          <Link to={`/propertydocumentdetails/${propertyid}`} >
+                            <div className="eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  description
+                                </span>
+                                <div className="text">
+                                  <h6>{propertyDocList && propertyDocList.length}</h6>
+                                  <h5>Documents</h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
+                        </SwiperSlide>
                         {/* Inspection  */}
-                        <Link to={`/propertyinspectiondocument/${propertyid}`} >
-                          <div className="item eicp_single">
+
+                        {/* Enquiry  */}
+                        <SwiperSlide>
+                          <Link to={`/enquiry/${propertyid}`} >
+                            <div className="eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  support_agent
+                                </span>
+                                <div className="text">
+                                  <h6>{enquiryDocs && enquiryDocs.length}</h6>
+                                  <h5>Enquiries</h5>
+                                </div>
+                              </div>
+                            </div>
+
+                          </Link>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                          {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
+                          <div className="eicp_single coming_soon">
                             <div className="icon">
                               <span class="material-symbols-outlined">
                                 pageview
@@ -1480,25 +1504,12 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                           </div>
-                        </Link>
-                        {/* Enquiry  */}
-                        <Link to={`/enquiry/${propertyid}`} >
-                          <div className="item eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                                support_agent
-                              </span>
-                              <div className="text">
-                                <h6>{enquiryDocs && enquiryDocs.length}</h6>
-                                <h5>Enquiries</h5>
-                              </div>
-                            </div>
-                          </div>
-
-                        </Link>
+                          {/* </Link> */}
+                        </SwiperSlide>
                         {/* Transactions */}
-                        <Link to={`/transactions/${propertyid}`}>
-                          <div className="item eicp_single">
+                        <SwiperSlide>
+                          {/* <Link to={`/transactions/${propertyid}`}> */}
+                          <div className="eicp_single coming_soon">
                             <div className="icon">
                               <span class="material-symbols-outlined">
                                 payments
@@ -1509,8 +1520,9 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                           </div>
-                        </Link>
-                      </OwlCarousel>
+                          {/* </Link> */}
+                        </SwiperSlide>
+                      </Swiper>
                     </div>
 
                   )}
@@ -1759,260 +1771,297 @@ const PropertyDetails = () => {
                 {showPropertyLayoutComponent && <PropertyLayoutComponent propertylayouts={propertyLayouts} propertyid={propertyid} layoutid={layoutid} setShowPropertyLayoutComponent={setShowPropertyLayoutComponent}></PropertyLayoutComponent>}
 
                 {
-                  (<section className="property_card_single full_width_sec with_blue">
-                    <span className="verticall_title">
-                      Layout :  {propertyLayouts && propertyLayouts.length}
-                    </span>
-                    <div className="more_detail_card_inner">
-                      <div className="row">
-                        {(user && user.role === "admin") &&
-                          <div className="col-1">
-                            <div className="plus_icon">
-                              <Link className="plus_icon_inner"
-                                onClick={handleShowPropertyLayoutComponent}
-                              >
-                                <span class="material-symbols-outlined">
-                                  add
-                                </span>
-                              </Link>
-                            </div>
-                          </div>}
-                        <div className="col-11">
-                          <div className="property_layout_card">
-                            <OwlCarousel className="owl-theme" {...optionsroom}>
-                              {propertyLayouts && propertyLayouts.map((room, index) => (
-                                <div className="ai_detail_show item" key={index}>
-                                  <div className="left relative">
-                                    {(() => {
-                                      if (room.roomType === "Bedroom") {
-                                        return (
-                                          <img
-                                            src="/assets/img/icons/illustrate_bedroom.jpg"
-                                            alt={room.roomType}
-                                          />
-                                        );
-                                      } else if (room.roomType === "Kitchen") {
-                                        return (
-                                          <img
-                                            src="/assets/img/icons/illustrate_kitchen.jpg"
-                                            alt={room.roomType}
-                                          />
-                                        );
-                                      } else if (room.roomType === "Living Room") {
-                                        return (
-                                          <img
-                                            src="/assets/img/icons/illustrate_livingroom.jpg"
-                                            alt={room.roomType}
-                                          />
-                                        );
-                                      } else if (room.roomType === "Bathroom") {
-                                        return (
-                                          <img
-                                            src="/assets/img/icons/illustrate_bathroom.jpg"
-                                            alt={room.roomType}
-                                          />
-                                        );
-                                      } else if (room.roomType === "Dining Room") {
-                                        return (
-                                          <img
-                                            src="/assets/img/icons/illustrate_dining.jpg"
-                                            alt={room.roomType}
-                                          />
-                                        );
-                                      } else if (room.roomType === "Balcony") {
-                                        return (
-                                          <img
-                                            src="/assets/img/icons/illustrate_balcony.jpg"
-                                            alt={room.roomType}
-                                          />
-                                        );
-                                      } else {
-                                        return (
-                                          <img
-                                            src="/assets/img/icons/illustrate_basment.jpg"
-                                            alt={room.roomType}
-                                          />
-                                        );
-                                      }
-                                    })()}
-                                    <label htmlFor="imgupload" className="upload_img click_text by_text">
-                                      Upload img
-                                      <input
-                                        type="file"
-                                        id="imgupload"
-                                      />
-                                    </label>
-                                  </div>
-                                  <div className="right">
-                                    <h5>{room.roomName}</h5>
-                                    <div className="in_detail">
-                                      <span className="in_single">Area {room.roomTotalArea}sq/ft</span>
-                                      <span className="in_single">Length {room.roomLength}ft</span>
-                                      <span className="in_single">Width {room.roomWidth}ft</span>
-                                      {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
-                                        <span className="in_single" key={findex}>{fixture}</span>
-                                      ))}
-                                    </div>
-                                    <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
-                                      <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
-                                      <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </OwlCarousel>
-
-                            {selectedRoom && (
-                              <>
-                                <Modal show={showRoomModal} onHide={handleRoomModalClose} className="detail_modal">
-                                  <span class="material-symbols-outlined modal_close" onClick={handleRoomModalClose}>
-                                    close
+                  (propertyLayouts &&
+                    <section className="property_card_single full_width_sec with_blue">
+                      <span className="verticall_title">
+                        Layout :  {propertyLayouts && propertyLayouts.length}
+                      </span>
+                      <div className="more_detail_card_inner">
+                        <div className="row">
+                          {(user && user.role === "admin") &&
+                            <div className="col-sm-1 col-2" style={{
+                              paddingRight: "0px"
+                            }}>
+                              <div className="plus_icon">
+                                <Link className="plus_icon_inner"
+                                  onClick={handleShowPropertyLayoutComponent}
+                                >
+                                  <span class="material-symbols-outlined">
+                                    add
                                   </span>
-                                  <h5 className="modal_title text-center">
-                                    {selectedRoom.roomName}
-                                  </h5>
-                                  <div className="modal_body">
-                                    <div className="img_area">
-                                      {(() => {
-                                        if (selectedRoom.roomType === "Bedroom") {
-                                          return (
-                                            <img style={{
-                                              width: "100%"
-                                            }}
-                                              src="/assets/img/icons/illustrate_bedroom.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (selectedRoom.roomType === "Kitchen") {
-                                          return (
-                                            <img style={{
-                                              width: "100%"
-                                            }}
-                                              src="/assets/img/icons/illustrate_kitchen.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (selectedRoom.roomType === "Living Room") {
-                                          return (
-                                            <img style={{
-                                              width: "100%"
-                                            }}
-                                              src="/assets/img/icons/illustrate_livingroom.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (selectedRoom.roomType === "Bathroom") {
-                                          return (
-                                            <img style={{
-                                              width: "100%"
-                                            }}
-                                              src="/assets/img/icons/illustrate_bathroom.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (selectedRoom.roomType === "Dining Room") {
-                                          return (
-                                            <img style={{
-                                              width: "100%"
-                                            }}
-                                              src="/assets/img/icons/illustrate_dining.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (selectedRoom.roomType === "Balcony") {
-                                          return (
-                                            <img style={{
-                                              width: "100%"
-                                            }}
-                                              src="/assets/img/icons/illustrate_balcony.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else {
-                                          return (
-                                            <img style={{
-                                              width: "100%"
-                                            }}
-                                              src="/assets/img/icons/illustrate_basment.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        }
-                                      })()}
-                                    </div>
-                                    <div className="main_detail">
-                                      <div className="md_single">
-                                        Area : <span className="value">{selectedRoom.roomTotalArea}</span><span className="unit">sq/ft</span>
-                                      </div>
-                                      <div className="md_single">
-                                        Length : <span className="value">{selectedRoom.roomLength}</span><span className="unit">ft</span>
-                                      </div>
-                                      <div className="md_single">
-                                        Width : <span className="value">{selectedRoom.roomWidth}</span><span className="unit">ft</span>
-                                      </div>
-                                    </div>
-                                    <div className="more_detail">
-                                      {selectedRoom.roomFixtures && selectedRoom.roomFixtures.map((fixture, index) => (
-                                        <span className="more_detail_single" key={index}>{fixture}</span>
-                                      ))}
-                                    </div>
-                                  </div>
-                                  <div className="attached_with">
-                                    {selectedRoom.roomAttachments && (
-                                      <h6 className="text-center text_black">Attached with</h6>
-                                    )
-                                    }
-                                    <div className="more_detail">
-                                      {selectedRoom.roomAttachments && selectedRoom.roomAttachments.map((attachment, findex) => (
-                                        <span className="more_detail_single">{attachment}</span>
-                                      ))}
-                                    </div>
+                                </Link>
+                              </div>
+                            </div>}
+                          <div className={`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
+                            <div className="property_layout_card">
+                              <Swiper
+                                spaceBetween={15}
+                                slidesPerView={2.5}
+                                pagination={false}
+                                freeMode={true}
+                                className='all_tenants'
+                                breakpoints={{
+                                  320: {
+                                    slidesPerView: 1.1,
+                                    spaceBetween: 10,
+                                  },
+                                  767: {
+                                    slidesPerView: 1.5,
+                                    spaceBetween: 15,
+                                  },
+                                  991: {
+                                    slidesPerView: 2.5,
+                                    spaceBetween: 15,
+                                  },
+                                }}
+                              >
+                                {propertyLayouts && propertyLayouts.map((room, index) => (
+                                  <SwiperSlide key={index}>
+                                    <div className="ai_detail_show">
+                                      <div className="left relative">
+                                        {(() => {
+                                          if (room.roomType === "Bedroom") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_bedroom.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Kitchen") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_kitchen.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Living Room") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_livingroom.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Bathroom") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_bathroom.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Dining Room") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_dining.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else if (room.roomType === "Balcony") {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_balcony.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          } else {
+                                            return (
+                                              <img
+                                                src="/assets/img/icons/illustrate_basment.jpg"
+                                                alt={room.roomType}
+                                              />
+                                            );
+                                          }
+                                        })()}
+                                        {/* {user && user.role === "admin" && (
+                                        <label htmlFor="imgupload" className="upload_img click_text by_text">
+                                          Upload img
+                                          <input
+                                            type="file"
+                                            id="imgupload"
+                                          />
+                                        </label>
+                                      )} */}
 
-                                  </div>
-                                  <div className="modal_footer">
-                                    <div onClick={handleConfirmShow} className="delete_bottom">
-                                      <span className="material-symbols-outlined">delete</span>
-                                      <span>Delete</span>
+
+                                      </div>
+                                      <div className="right">
+                                        <h5>{room.roomName}</h5>
+                                        <div className="in_detail">
+                                          <span className="in_single">Area: {room.roomTotalArea}{" "}SqFt</span>
+                                          <span className="in_single">Length: {room.roomLength}{" "}Ft</span>
+                                          <span className="in_single">Width: {room.roomWidth}{" "}Ft</span>
+                                          {room.roomFixtures && room.roomFixtures.map((fixture, findex) => (
+                                            <span className="in_single" key={findex}>{fixture}</span>
+                                          ))}
+                                        </div>
+                                        <div className="view_edit d-flex justify-content-between mt-2" style={{ marginLeft: "7px" }}>
+                                          {user && user.role === "admin" && (
+                                            <span className="click_text pointer" onClick={() => editPropertyLayout(room.id)}>Edit</span>
+                                          )}
+                                          <span className="click_text pointer" onClick={() => handleShowRoomModal(room)}>View More</span>
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
-                                </Modal>
-                                <Modal show={showConfirmModal} onHide={handleConfirmClose}>
-                                  <Modal.Header className="justify-content-center" style={{
-                                    paddingBottom: "0px",
-                                    border: "none"
-                                  }}>
-                                    <h5>
-                                      Alert
+                                  </SwiperSlide>
+
+                                ))}
+                              </Swiper>
+
+                              {selectedRoom && (
+                                <>
+                                  <Modal show={showRoomModal} onHide={handleRoomModalClose} className="detail_modal">
+                                    <span class="material-symbols-outlined modal_close" onClick={handleRoomModalClose}>
+                                      close
+                                    </span>
+                                    <h5 className="modal_title text-center">
+                                      {selectedRoom.roomName}
                                     </h5>
-                                  </Modal.Header>
-                                  <Modal.Body className="text-center" style={{
-                                    color: "#FA6262",
-                                    fontSize: "20px",
-                                    border: "none"
-                                  }}>Are you sure you want to delete?</Modal.Body>
-                                  <Modal.Footer className="d-flex justify-content-between" style={{
-                                    border: "none",
-                                    gap: "15px"
-                                  }}>
-                                    <div className="cancel_btn" onClick={() => deletePropertyLayout(selectedRoom.id)}  >
-                                      Yes
+                                    <div className="modal_body">
+                                      <div className="img_area">
+                                        {(() => {
+                                          if (selectedRoom.roomType === "Bedroom") {
+                                            return (
+                                              <img style={{
+                                                width: "100%"
+                                              }}
+                                                src="/assets/img/icons/illustrate_bedroom.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (selectedRoom.roomType === "Kitchen") {
+                                            return (
+                                              <img style={{
+                                                width: "100%"
+                                              }}
+                                                src="/assets/img/icons/illustrate_kitchen.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (selectedRoom.roomType === "Living Room") {
+                                            return (
+                                              <img style={{
+                                                width: "100%"
+                                              }}
+                                                src="/assets/img/icons/illustrate_livingroom.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (selectedRoom.roomType === "Bathroom") {
+                                            return (
+                                              <img style={{
+                                                width: "100%"
+                                              }}
+                                                src="/assets/img/icons/illustrate_bathroom.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (selectedRoom.roomType === "Dining Room") {
+                                            return (
+                                              <img style={{
+                                                width: "100%"
+                                              }}
+                                                src="/assets/img/icons/illustrate_dining.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (selectedRoom.roomType === "Balcony") {
+                                            return (
+                                              <img style={{
+                                                width: "100%"
+                                              }}
+                                                src="/assets/img/icons/illustrate_balcony.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else {
+                                            return (
+                                              <img style={{
+                                                width: "100%"
+                                              }}
+                                                src="/assets/img/icons/illustrate_basment.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          }
+                                        })()}
+                                      </div>
+                                      <div className="main_detail">
+                                        <div className="md_single">
+                                          Area: <span className="value">{selectedRoom.roomTotalArea}</span><span className="unit">{" "}SqFt</span>
+                                        </div>
+                                        <div className="md_single">
+                                          Length: <span className="value">{selectedRoom.roomLength}</span><span className="unit">{" "}Ft</span>
+                                        </div>
+                                        <div className="md_single">
+                                          Width: <span className="value">{selectedRoom.roomWidth}</span><span className="unit">{" "}Ft</span>
+                                        </div>
+                                      </div>
+                                      <div className="more_detail">
+                                        {selectedRoom.roomFixtures && selectedRoom.roomFixtures.map((fixture, index) => (
+                                          <span className="more_detail_single" key={index}>{fixture}</span>
+                                        ))}
+                                      </div>
                                     </div>
-                                    <div className="done_btn" onClick={handleConfirmClose}>
-                                      No
+                                    <div className="attached_with">
+                                      {selectedRoom.roomAttachments && (
+                                        <h6 className="text-center text_black">Attached with</h6>
+                                      )
+                                      }
+                                      <div className="more_detail">
+                                        {selectedRoom.roomAttachments && selectedRoom.roomAttachments.map((attachment, findex) => (
+                                          <span className="more_detail_single">{attachment}</span>
+                                        ))}
+                                      </div>
+
                                     </div>
-                                  </Modal.Footer>
-                                </Modal>
-                              </>
+                                    {user && user.role === "admin" && (
+                                      <div className="modal_footer">
+                                        <div onClick={handleConfirmShow} className="delete_bottom">
+                                          <span className="material-symbols-outlined">delete</span>
+                                          <span>Delete</span>
+                                        </div>
+                                      </div>
+                                    )
 
-                            )}
+                                    }
+
+                                  </Modal>
+                                  <Modal show={showConfirmModal} onHide={handleConfirmClose}>
+                                    <Modal.Header className="justify-content-center" style={{
+                                      paddingBottom: "0px",
+                                      border: "none"
+                                    }}>
+                                      <h5>
+                                        Alert
+                                      </h5>
+                                    </Modal.Header>
+                                    <Modal.Body className="text-center" style={{
+                                      color: "#FA6262",
+                                      fontSize: "20px",
+                                      border: "none"
+                                    }}>Are you sure you want to delete?</Modal.Body>
+                                    <Modal.Footer className="d-flex justify-content-between" style={{
+                                      border: "none",
+                                      gap: "15px"
+                                    }}>
+                                      <div className="cancel_btn" onClick={() => deletePropertyLayout(selectedRoom.id)}  >
+                                        Yes
+                                      </div>
+                                      <div className="done_btn" onClick={handleConfirmClose}>
+                                        No
+                                      </div>
+                                    </Modal.Footer>
+                                  </Modal>
+                                </>
+
+                              )}
 
 
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                    </div>
-                  </section>)}
+                      </div>
+                    </section>)}
                 {/* property layout section end  */}
 
                 {/* tenant card start */}
@@ -2020,28 +2069,53 @@ const PropertyDetails = () => {
                   (user && user.role === "coowner") ||
                   (user && user.role === "admin")) && (<section className="property_card_single full_width_sec with_orange">
                     <span className="verticall_title">
-                      Tenants :  {tenantDocument && tenantDocument.length}
+                      Tenants
+                      {/* {tenantDocument && tenantDocument.length} */}
                     </span>
                     <div className="more_detail_card_inner">
                       <div className="row">
-                        <div className="col-1">
-                          <div className="plus_icon">
-                            <Link className="plus_icon_inner" onClick={handleAddTenant}>
-                              <span class="material-symbols-outlined">
-                                add
-                              </span>
-                            </Link>
-                          </div>
+                        {(user && user.role === "admin") &&
+                          <div className="col-sm-1 col-2" style={{
+                            paddingRight: "0px"
+                          }}>
+                            <div className="plus_icon">
+                              <Link className="plus_icon_inner" onClick={handleAddTenant}>
+                                <span class="material-symbols-outlined">
+                                  add
+                                </span>
+                              </Link>
+                            </div>
 
-                        </div>
-                        <div className="col-11">
+                          </div>
+                        }
+                        <div className=
+                          {`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
                           <div className="tenant_card">
                             <Swiper
                               spaceBetween={15}
                               slidesPerView={3.5}
-                              pagination={{ clickable: true }}
+                              pagination={false}
                               freeMode={true}
                               className='all_tenants'
+                              breakpoints={{
+                                320: {
+                                  slidesPerView: 1.1,
+                                  spaceBetween: 10,
+                                },
+                                767: {
+                                  slidesPerView: 1.5,
+                                  spaceBetween: 15,
+                                },
+                                991: {
+                                  slidesPerView: 2.5,
+                                  spaceBetween: 15,
+                                },
+                                1199: {
+                                  slidesPerView: 3.5,
+                                  spaceBetween: 15,
+                                },
+
+                              }}
                             >
                               {tenantDocument &&
                                 tenantDocument.map((tenant, index) => (
@@ -2121,12 +2195,15 @@ const PropertyDetails = () => {
                     <>
                       <section className="property_card_single full_width_sec with_blue property_user">
                         <span className="verticall_title">
-                          Owners :  {filteredPropertyOwners && filteredPropertyOwners.length}
+                          Owners
+                          {/* {filteredPropertyOwners && filteredPropertyOwners.length} */}
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
                             {(user && user.role === "admin") &&
-                              <div className="col-1">
+                              <div className="col-sm-1 col-2" style={{
+                                paddingRight: "0px"
+                              }}>
                                 <div className="plus_icon">
                                   <Link className="plus_icon_inner" onClick={(e) => handleAddPropertyUser(e, 'propertyowner')}>
                                     <span class="material-symbols-outlined">
@@ -2137,14 +2214,33 @@ const PropertyDetails = () => {
 
                               </div>
                             }
-                            <div className="col-11">
+                            <div className={`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
                               <div className="tenant_card">
                                 <Swiper
                                   spaceBetween={15}
                                   slidesPerView={3.5}
-                                  pagination={{ clickable: true }}
+                                  pagination={false}
                                   freeMode={true}
                                   className='all_tenants'
+                                  breakpoints={{
+                                    320: {
+                                      slidesPerView: 1.1,
+                                      spaceBetween: 10,
+                                    },
+                                    767: {
+                                      slidesPerView: 1.5,
+                                      spaceBetween: 15,
+                                    },
+                                    991: {
+                                      slidesPerView: 2.5,
+                                      spaceBetween: 15,
+                                    },
+                                    1199: {
+                                      slidesPerView: 3.5,
+                                      spaceBetween: 15,
+                                    },
+
+                                  }}
                                 >
                                   {filteredPropertyOwners &&
                                     filteredPropertyOwners.map((propUser, index) => (
@@ -2152,15 +2248,17 @@ const PropertyDetails = () => {
                                         <div className="tc_single relative">
                                           <div
                                             className="property_people_designation d-flex align-items-end justify-content-center pointer"
-                                            onClick={(e) => handleShowOwnerTags(e, propUser, 'propowner')}
+                                            onClick={user && user.role === "admin" ? (e) => handleShowOwnerTags(e, propUser, 'propowner') : null}
                                           >
                                             {propUser.userTag}
-                                            <span
-                                              className="material-symbols-outlined click_icon text_near_icon"
-                                              style={{ fontSize: "10px" }}
-                                            >
-                                              edit
-                                            </span>
+                                            {user && user.role === "admin" && (
+                                              <span
+                                                className="material-symbols-outlined click_icon text_near_icon"
+                                                style={{ fontSize: "10px" }}
+                                              >
+                                                edit
+                                              </span>
+                                            )}
                                           </div>
                                           <div className="left">
                                             <div className="tcs_img_container">
@@ -2191,18 +2289,20 @@ const PropertyDetails = () => {
                                                   "+$1 $2-$3"
                                                 )}
                                               </h6>
-                                              <h6
-                                                className="text_red pointer"
-                                                style={{
-                                                  width: "fit-content",
-                                                  fontSize: "10px",
-                                                  letterSpacing: "0.4px",
-                                                  marginLeft: "3px"
-                                                }}
-                                                onClick={(e) => handleDeletePropUser(e, propUser)}
-                                              >
-                                                Delete
-                                              </h6>
+                                              {user && user.role === "admin" && (
+                                                <h6
+                                                  className="text_red pointer"
+                                                  style={{
+                                                    width: "fit-content",
+                                                    fontSize: "10px",
+                                                    letterSpacing: "0.4px",
+                                                    marginLeft: "3px"
+                                                  }}
+                                                  onClick={(e) => handleDeletePropUser(e, propUser)}
+                                                >
+                                                  Delete
+                                                </h6>
+                                              )}
                                             </div>
                                           </div>
                                           <div className="wha_call_icon">
@@ -2332,12 +2432,15 @@ const PropertyDetails = () => {
 
                       <section className="property_card_single full_width_sec with_orange property_user">
                         <span className="verticall_title">
-                          Managers :  {filteredPropertyManagers && filteredPropertyManagers.length}
+                          Property Managers
+                          {/* {filteredPropertyManagers && filteredPropertyManagers.length} */}
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
                             {(user && user.role === "admin") &&
-                              <div className="col-1">
+                              <div className="col-sm-1 col-2" style={{
+                                paddingRight: "0px"
+                              }}>
                                 <div className="plus_icon">
                                   <Link className="plus_icon_inner" onClick={(e) => handleAddPropertyUser(e, 'propertymanager')}>
                                     <span class="material-symbols-outlined">
@@ -2348,14 +2451,33 @@ const PropertyDetails = () => {
 
                               </div>
                             }
-                            <div className="col-11">
+                            <div className={`${user && user.role === "admin" ? "col-sm-11 col-10" : "col-12"}`}>
                               <div className="tenant_card">
                                 <Swiper
                                   spaceBetween={15}
                                   slidesPerView={3.5}
-                                  pagination={{ clickable: true }}
+                                  pagination={false}
                                   freeMode={true}
                                   className='all_tenants'
+                                  breakpoints={{
+                                    320: {
+                                      slidesPerView: 1.1,
+                                      spaceBetween: 10,
+                                    },
+                                    767: {
+                                      slidesPerView: 1.5,
+                                      spaceBetween: 15,
+                                    },
+                                    991: {
+                                      slidesPerView: 2.5,
+                                      spaceBetween: 15,
+                                    },
+                                    1199: {
+                                      slidesPerView: 3.5,
+                                      spaceBetween: 15,
+                                    },
+
+                                  }}
                                 >
                                   {filteredPropertyManagers &&
                                     filteredPropertyManagers.map((propUser, index) => (
@@ -2363,11 +2485,20 @@ const PropertyDetails = () => {
                                         <div
                                           className="tc_single relative item"
                                         >
-                                          <div className="property_people_designation d-flex align-items-end justify-content-center" onClick={(e) => handleShowOwnerTags(e, propUser, 'propmanager')}>
+                                          <div className="property_people_designation d-flex align-items-end justify-content-center"
+                                            onClick={(e) => {
+                                              if (user && user.role === 'admin') {
+                                                handleShowOwnerTags(e, propUser, 'propmanager');
+                                              }
+                                            }}
+
+                                          >
                                             {propUser.userTag}
-                                            <span class="material-symbols-outlined click_icon text_near_icon" style={{
-                                              fontSize: "10px"
-                                            }}>edit</span>
+                                            {user && user.role === "admin" && (
+                                              <span class="material-symbols-outlined click_icon text_near_icon" style={{
+                                                fontSize: "10px"
+                                              }}>edit</span>
+                                            )}
                                           </div>
                                           <div className="left">
                                             <div className="tcs_img_container" >
@@ -2407,14 +2538,15 @@ const PropertyDetails = () => {
                                                   "+$1 $2-$3"
                                                 )}
                                               </h6>
-                                              <h6 className="text_red pointer" style={{
-                                                width: "fit-content",
-                                                fontSize: "10px",
-                                                letterSpacing: "0.4px",
-                                                marginLeft: "3px"
-                                              }} onClick={(e) => handleDeletePropUser(e, propUser)}>
-                                                Delete
-                                              </h6>
+                                              {user.role === 'admin' &&
+                                                <h6 className="text_red pointer" style={{
+                                                  width: "fit-content",
+                                                  fontSize: "10px",
+                                                  letterSpacing: "0.4px",
+                                                  marginLeft: "3px"
+                                                }} onClick={(e) => handleDeletePropUser(e, propUser)}>
+                                                  Delete
+                                                </h6>}
                                             </div>
                                           </div>
                                           <div className="wha_call_icon">
@@ -2505,7 +2637,7 @@ const PropertyDetails = () => {
                   )}
                 {/* propdial managers / user card end  */}
 
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">About Property</h2>
                     <div className="p_info">
@@ -2605,14 +2737,14 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Property Type</h2>
                     <div className="p_info">
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
-                            src="/assets/img/property-detail-icon/calendar.png"
+                            src="/assets/img/property-detail-icon/twin-bed.png"
                             alt=""
                           />
                         </div>
@@ -2682,7 +2814,7 @@ const PropertyDetails = () => {
                           <h5>{propertyDocument.numberOfBalcony}</h5>
                         </div>
                       </div>
-                      <div className="p_info_single">
+                      {/* <div className="p_info_single">
                         <div className="pd_icon">
                           <img
                             src="/assets/img/property-detail-icon/kitchen.png"
@@ -2693,7 +2825,7 @@ const PropertyDetails = () => {
                           <h6>Kitchen</h6>
                           <h5>{propertyDocument.numberOfKitchen}</h5>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
@@ -2703,22 +2835,26 @@ const PropertyDetails = () => {
                         </div>
                         <div className="pis_content">
                           <h6>Living Area</h6>
-                          <h5>{propertyDocument.numberOfLivingArea}</h5>
+                          <h5>{propertyDocument.numberOfLivingArea === "0" ? "No" : "Yes"}</h5>
                         </div>
                       </div>
+                      {propertyDocument.numberOfBasement !== "0" &&
+                        (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/calendar.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Basement</h6>
+                              <h5>{propertyDocument.numberOfBasement}</h5>
+                            </div>
+                          </div>
+                        )
+                      }
 
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/calendar.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Basement</h6>
-                          <h5>{propertyDocument.numberOfBasement}</h5>
-                        </div>
-                      </div>
 
                       <div className="p_info_single">
                         <div className="pd_icon">
@@ -2760,7 +2896,7 @@ const PropertyDetails = () => {
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
-                            src="/assets/img/property-detail-icon/entrance-gallery.png"
+                            src="/assets/img/property-detail-icon/browser.png"
                             alt=""
                           />
                         </div>
@@ -2843,7 +2979,7 @@ const PropertyDetails = () => {
                 {/* Additional Rooms */}
                 {propertyDocument &&
                   propertyDocument.additionalRooms.length > 0 && (
-                    <div className="property_card_single">
+                    <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Additional Rooms</h2>
                         <div className="p_info">
@@ -2896,7 +3032,7 @@ const PropertyDetails = () => {
                   )}
                 {propertyDocument &&
                   propertyDocument.additionalArea.length > 0 && (
-                    <div className="property_card_single">
+                    <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Additional Area</h2>
                         <div className="p_info">
@@ -2942,7 +3078,7 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   )}
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Property Size</h2>
                     <div className="p_info">
@@ -3025,7 +3161,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Parking</h2>
                     <div className="p_info">
@@ -3117,7 +3253,7 @@ const PropertyDetails = () => {
                         </div>
                       )} */}
 
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Building</h2>
                     <div className="p_info">
@@ -3184,7 +3320,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Additional Info</h2>
                     <div className="p_info">
@@ -3227,58 +3363,22 @@ const PropertyDetails = () => {
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
-                            src="/assets/img/property-detail-icon/calendar.png"
+                            src="/assets/img/property-detail-icon/restaurant.png"
                             alt=""
                           />
                         </div>
                         <div className="pis_content">
                           <h6>Food Habit</h6>
-                          <h5>{propertyDocument.vegNonVeg}</h5>
+                          <h5>{propertyDocument.vegNonVeg === 'Veg' ? "Vegetarian" : "No-Restrictions"}</h5>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="property_card_single">
+                <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Visiting Details</h2>
                     <div className="p_info">
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/VisitingHrsFrom.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Visiting Hours From</h6>
-                          <h5>
-                            {propertyDocument.visitingHrsFrom &&
-                              format(
-                                new Date(propertyDocument.visitingHrsFrom),
-                                "dd MMM,yy hh:mm aa"
-                              )}
-                          </h5>
-                        </div>
-                      </div>
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/VisitingHrsTo.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Visiting Hours To</h6>
-                          <h5>
-                            {propertyDocument.visitingHrsTo &&
-                              format(
-                                new Date(propertyDocument.visitingHrsTo),
-                                "dd MMM,yy hh:mm aa"
-                              )}
-                          </h5>
-                        </div>
-                      </div>
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
@@ -3288,21 +3388,49 @@ const PropertyDetails = () => {
                         </div>
                         <div className="pis_content">
                           <h6>Visiting Days</h6>
-                          <h5>{propertyDocument.visitingDays}</h5>
-                          <h5>
+                          <h5>{propertyDocument.visitingDays.join(', ')}</h5>
+                          {/* <h5>
                             {propertyDocument.visitingDays.map((days) => (
-                              // <li key={user.id}>{user.fullName} ({user.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')})</li>
                               <span></span>
                             ))}
+                          </h5> */}
+                        </div>
+                      </div>
+                      <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/VisitingHrsFrom.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Visiting Hours</h6>
+                          <h5>
+                            {propertyDocument.visitingHrsFrom &&
+                              format(
+                                new Date(propertyDocument.visitingHrsFrom),
+                                "hh:mm aa"
+                              )}
+                            {" "}
+                            {propertyDocument.visitingHrsTo && "to"}
+                            {" "}
+                            {propertyDocument.visitingHrsTo &&
+                              format(
+                                new Date(propertyDocument.visitingHrsTo),
+                                "hh:mm aa"
+                              )}
                           </h5>
                         </div>
                       </div>
+
+
                     </div>
                   </div>
                 </div>
+
                 <div className="row">
                   <div className="col-lg-6">
-                    <div className="property_card_single">
+                    <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Property Description</h2>
                         {isPropDescEdit ? (
@@ -3368,79 +3496,81 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6">
-                    <div className="property_card_single">
-                      <div className="more_detail_card_inner">
-                        <h2 className="card_title">Owner Instruction</h2>
+                  {user && (user.role !== 'guest') &&
+                    <div className="col-lg-6">
+                      <div className="property_card_single mobile_full_card">
+                        <div className="more_detail_card_inner">
+                          <h2 className="card_title">Owner Instruction</h2>
 
-                        {isEditingOwnerInstruction ? (
-                          <div>
+                          {isEditingOwnerInstruction ? (
                             <div>
-                              <RichTextEditor
-                                value={ownerInstructionvalue}
-                                onChange={setOwnerInstrucitonValue}
-                              />
-                            </div>
-                            <div className="vg10"></div>
-                            <div className="d-flex justify-content-between">
-                              <div
-                                className="theme_btn btn_border"
-                                onClick={handleCancelOwnerInstruction}
-                                style={{
-                                  width: "fit-content",
-                                }}
-                              >
-                                Cancel
+                              <div>
+                                <RichTextEditor
+                                  value={ownerInstructionvalue}
+                                  onChange={setOwnerInstrucitonValue}
+                                />
                               </div>
-                              <div
-                                className="theme_btn btn_fill"
-                                onClick={handleSaveOwnerInstruction}
-                                style={{
-                                  width: "fit-content",
-                                }}
-                              >
-                                Save
+                              <div className="vg10"></div>
+                              <div className="d-flex justify-content-between">
+                                <div
+                                  className="theme_btn btn_border"
+                                  onClick={handleCancelOwnerInstruction}
+                                  style={{
+                                    width: "fit-content",
+                                  }}
+                                >
+                                  Cancel
+                                </div>
+                                <div
+                                  className="theme_btn btn_fill"
+                                  onClick={handleSaveOwnerInstruction}
+                                  style={{
+                                    width: "fit-content",
+                                  }}
+                                >
+                                  Save
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="d-flex align-items-center">
-                              <p
-                                dangerouslySetInnerHTML={{
-                                  __html:
-                                    propertyDocument &&
-                                    propertyDocument.ownerInstructions.toString(
-                                      "html"
-                                    ),
-                                }}
-                              ></p>
-                              {!isEditingOwnerInstruction &&
-                                user &&
-                                user.role == "admin" && (
-                                  <span
-                                    class="material-symbols-outlined click_icon text_near_icon"
-                                    onClick={() =>
-                                      handleEditOwnerInstruction(
-                                        "ownerInstructions"
-                                      )
-                                    }
-                                  >
-                                    edit
-                                  </span>
-                                )}
-                            </div>
-                          </>
-                        )}
+                          ) : (
+                            <>
+                              <div className="d-flex align-items-center">
+                                <p
+                                  dangerouslySetInnerHTML={{
+                                    __html:
+                                      propertyDocument &&
+                                      propertyDocument.ownerInstructions.toString(
+                                        "html"
+                                      ),
+                                  }}
+                                ></p>
+                                {!isEditingOwnerInstruction &&
+                                  user &&
+                                  user.role == "admin" && (
+                                    <span
+                                      class="material-symbols-outlined click_icon text_near_icon"
+                                      onClick={() =>
+                                        handleEditOwnerInstruction(
+                                          "ownerInstructions"
+                                        )
+                                      }
+                                    >
+                                      edit
+                                    </span>
+                                  )}
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    </div>}
                 </div>
+
               </div>
             )}
 
 
-            {(user && user.role === "owner") ||
+            {/* {(user && user.role === "owner") ||
               (user && user.role === "admin" && (
                 <div className="property_card_single">
                   <div className="more_detail_card_inner">
@@ -3535,7 +3665,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))} */}
 
 
 

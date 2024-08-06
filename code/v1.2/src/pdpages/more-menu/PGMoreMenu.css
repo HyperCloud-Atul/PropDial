@@ -83,9 +83,15 @@ a.mm_single span.mms_ra {
 
 
 @media screen and (max-width: 767px) {
-    .more-menus_inner, .mm_inner_full_width .inner {
+    .more-menus_inner{
         grid-template-columns: repeat(1, 1fr);
         grid-row-gap: 22px;
+    }
+
+
+    .mm_inner_full_width .inner {
+        grid-template-columns: repeat(1, 1fr);
+        grid-row-gap: 0px;
     } 
 
 }

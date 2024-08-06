@@ -14,7 +14,7 @@ import './UserList.scss'
 
 // import filter 
 import Filters from "../../../components/Filters";
-const userFilter = ["Owner", "Frontdesk", "Manager", "Admin", "Super Admin", "Inactive", "Tenants", "Prospective Tenants", "Buyers", "Prospective Buyers"];
+const userFilter = ["Owner", "Frontdesk", "Manager", "Admin", "Super Admin", "Inactive", "Tenant", "Prospective Tenant", "Buyer", "Prospective Buyer"];
 
 const UserList = () => {
   const { logout, isPending } = useLogout();
@@ -34,37 +34,65 @@ const UserList = () => {
     setFilter(newFilter);
   };
 
-  const users = documents
+  // Search input state
+  const [searchInput, setSearchInput] = useState("");
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+ const users = documents
     ? documents.filter((document) => {
+      let roleMatch = true;
+      let searchMatch = true;
+
+      // Filter by role
       switch (filter) {
-        case "All":
-          return true;
         case "Owner":
-          return (document.rolePropDial === "owner") || (document.rolePropDial === "coowner");
+          roleMatch = (document.rolePropDial === "owner") || (document.rolePropDial === "coowner");
+          break;
         case "Frontdesk":
-          return (document.rolePropDial === "frontdesk");
+          roleMatch = (document.rolePropDial === "frontdesk");
+          break;
         case "Manager":
-          return (document.rolePropDial === "manager");
+          roleMatch = (document.rolePropDial === "manager");
+          break;
         case "Admin":
-          return document.rolePropDial === "admin";
+          roleMatch = document.rolePropDial === "admin";
+          break;
         case "Super Admin":
-          return document.rolePropDial === "superAdmin";
+          roleMatch = document.rolePropDial === "superAdmin";
+          break;
         case "Inactive":
-          return document.status === "inactive";
-        case "Tenants":
-          return document.rolePropDial === "tenant";
-        case "Prospective Tenants":
-          return document.rolePropDial === "prospectiveTenant";
-        case "Buyers":
-          return document.rolePropDial === "buyers";
-        case "Prospective Buyers":
-          return document.rolePropDial === "prospectiveBuyers";
+          roleMatch = document.status === "inactive";
+          break;
+        case "Tenant":
+          roleMatch = document.rolePropDial === "tenant";
+          break;
+        case "Prospective Tenant":
+          roleMatch = document.rolePropDial === "prospectiveTenant";
+          break;
+        case "Buyer":
+          roleMatch = document.rolePropDial === "buyer";
+          break;
+        case "Prospective Buyer":
+          roleMatch = document.rolePropDial === "prospectiveBuyer";
+          break;
         default:
-          return false;
+          roleMatch = true;
       }
+
+      // Filter by search input
+      searchMatch = searchInput
+        ? Object.values(document).some(
+          (field) =>
+            typeof field === "string" &&
+            field.toUpperCase().includes(searchInput.toUpperCase())
+        )
+        : true;
+
+      return roleMatch && searchMatch;
     })
     : null;
-
 
   // card and table view mode functionality start
   const [viewMode, setviewMode] = useState('card_view'); // Initial mode is grid with 3 columns
@@ -114,15 +142,16 @@ const UserList = () => {
         </div>
         <div className="vg12"></div>
         <div className="filters">
-          <div className='left'>
-            {viewMode === "card_view" && (
+          <div className='left'>       
               <div className="rt_global_search search_field">
-                <input
-                  placeholder='Search'
-                ></input>
+              <input
+        type="text"
+        placeholder="Search..."
+        value={searchInput}
+        onChange={handleSearchInputChange}
+      />
                 <div class="field_icon"><span class="material-symbols-outlined">search</span></div>
-              </div>
-            )}
+              </div>        
 
           </div>
           <div className="right">

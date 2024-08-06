@@ -1,11 +1,10 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
-import "firebase/compat/auth";
-import "firebase/compat/storage";
-import "firebase/compat/functions";
-import "firebase/compat/messaging";
-import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-// Import other services you need, such as Storage, Analytics, etc.
+import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
+import "firebase/storage";
+import "firebase/functions";
+
+// import { getFunctions, httpsCallable } from 'firebase/functions'
 
 // development keys
 const firebaseConfig = {
@@ -17,47 +16,41 @@ const firebaseConfig = {
   appId: "1:529710611415:web:0a7ff10bb6101f986fa992",
 };
 
+// production keys
 // const firebaseConfig = {
-//     apiKey: process.env.REACT_APP_FIREBASE_KEY,
-//     authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
-//     projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-//     storageBucket: process.env.REACT_APP_FIREBASE_STORAGE,
-//     messagingSenderId: process.env.REACT_APP_FIREBASE_SENDERID,
-//     appId: process.env.REACT_APP_FIREBASE_APPID
+//   apiKey: "AIzaSyAHSLHwNrU95nb1ZYZ7Fgkr2ZIhguEBYks",
+//   authDomain: "propdial-prod-80faa.firebaseapp.com",
+//   projectId: "propdial-prod-80faa",
+//   storageBucket: "propdial-prod-80faa.appspot.com",
+//   messagingSenderId: "712362135422",
+//   appId: "1:712362135422:web:6ba46eaf02cbf95302ad2f",
+//   measurementId: "G-9XMJXP77SE"
 // };
 
-// ----------------------- Firebase 10.0 ----------------
 // initialize firebase
 const app = firebase.initializeApp(firebaseConfig);
 
-// Initialize Firebase services
+// initialize Services
 const projectFirestore = firebase.firestore();
+const FieldValue = firebase.FieldValue;
 const projectAuth = firebase.auth();
 const projectAuthObj = firebase.auth;
 const projectStorage = firebase.storage();
 const projectFunctions = firebase.functions();
-const projectMsg = firebase.messaging();
-const timestamp = firebase.firestore.Timestamp;
+// const projectMsg = firebase.messaging();
 const projectID = app.options.projectId;
-const FieldValue = firebase.FieldValue;
-// Initialize other services as needed
 
-// Initialize App Check
-const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider("6LcyUg4qAAAAAKhxTjhvbILwgFw1FMKd-l2sUUi4"),
-  isTokenAutoRefreshEnabled: true,
-});
+// timestamp
+const timestamp = firebase.firestore.Timestamp;
 
 export {
-  app,
   projectFirestore,
   FieldValue,
   projectAuth,
   projectAuthObj,
   projectStorage,
   projectFunctions,
-  projectMsg,
-  timestamp,
+  // projectMsg,
   projectID,
-  appCheck,
+  timestamp,
 };

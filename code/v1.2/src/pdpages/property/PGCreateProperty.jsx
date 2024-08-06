@@ -199,7 +199,7 @@ const CreateProperty = () => {
     const [onboardingDate, setOnboardingDate] = useState(new Date());
     const [newProperty, setNewProperty] = useState(null);
 
-    const { documents: propertiesdocs, error: propertiesdocserror } = useCollection("properties");
+    const { documents: propertiesdocs, error: propertiesdocserror } = useCollection("properties", ["postedBy", "==", "Propdial"]);
 
     const { addDocument: addNewPropertyDocument, response: addNewPropertyDocumentResponse } =
         useFirestore("properties");
@@ -270,6 +270,7 @@ const CreateProperty = () => {
     const [propertyDetails, setPropertyDetails] = useState({
         // All select type
         Package: "PMS Premium",
+        Flag: "Available For Rent",
         Category: "Residential",
         UnitNumber: "",
         DemandPrice: "",
@@ -281,10 +282,12 @@ const CreateProperty = () => {
         Bhk: "",
         FloorNo: 0,
         Country: "",
+        Region: "",
         State: "",
         City: "",
         Locality: "",
         Society: "",
+        Pincode: ""
     });
 
     useEffect(() => {
@@ -436,6 +439,10 @@ const CreateProperty = () => {
         // console.log('e: ', e)
         // console.log('option: ', option)
 
+        if (!(user && user.role === 'admin')) {
+            navigate("/")
+        }
+
         setFormError(null);
         setFormSuccess(null);
 
@@ -540,6 +547,7 @@ const CreateProperty = () => {
 
             const property = {
                 package: propertyDetails.Package,
+                flag: propertyDetails.Flag,
                 category: propertyDetails.Category
                     ? propertyDetails.Category
                     : "Residential",
@@ -575,9 +583,10 @@ const CreateProperty = () => {
             const _newProperty = {
                 ...property,
                 //other property fields
+                country: "India",
+                region: "India",
                 source: "",
                 ownership: "",
-                flag: "",
                 numberOfBedrooms: 0,
                 numberOfBathrooms: 0,
                 numberOfBalcony: 0,
@@ -604,6 +613,7 @@ const CreateProperty = () => {
                 builtupAreaUnit: "",
                 carpetArea: "",
                 carpetAreaUnit: "",
+                images: [],
                 imgURL: [],
                 yearOfConstruction: "",
                 // ageOfProperty: "",
@@ -618,8 +628,8 @@ const CreateProperty = () => {
                 bachlorsGirlsAllowed: "",
                 petsAllowed: "",
                 vegNonVeg: "",
-                propertyDescription: "this is property description",
-                ownerInstructions: "this is owner instruction",
+                propertyDescription: "",
+                ownerInstructions: "",
                 // propertyManager: user.uid,
                 // propertyCoManager: user.uid,
                 // propertySalesManager: user.uid,
@@ -643,6 +653,7 @@ const CreateProperty = () => {
                     ..._newProperty,
                     pid: nextPropertySeqCounter
                 }
+
                 await addNewPropertyDocument(_propertyWithSeqCounter);
                 if (addNewPropertyDocumentResponse.error) {
                     navigate("/");
@@ -896,9 +907,231 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
+                        {/* Property Flags */}
+                        <div className="col-md-6">
+                            <div className="form_field st-2 label_top">
+                                <label htmlFor="">
+                                    Flags</label>
+                                <div className="form_field_inner">
+                                    <div className="form_field_container">
+                                        <div className="radio_group">
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Available For Rent"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_availableforrent"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Available For Rent",
+                                                            });
+                                                        }}
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_availableforrent"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Available For Rent
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Rented Out"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_rentedout"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Rented Out",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_rentedout"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Rented Out
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Available For Sale"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_availableforsale"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Available For Sale",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_availableforsale"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Available For Sale
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Sold Out"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_soldout"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Sold Out",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_soldout"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Sold Out
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Rent or Sale"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_rentsale"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Rent or Sale",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_rentsale"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Rent or Sale
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="radio_group_single">
+                                                <div
+                                                    className={
+                                                        propertyDetails.Flag === "Rented But Sale"
+                                                            ? "custom_radio_button radiochecked"
+                                                            : "custom_radio_button"
+                                                    }
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        id="flag_rentedbutsale"
+                                                        onClick={(e) => {
+                                                            setPropertyDetails({
+                                                                ...propertyDetails,
+                                                                Flag: "Rented But Sale",
+                                                            });
+                                                        }}
+
+                                                    />
+                                                    <label
+                                                        htmlFor="flag_rentedbutsale"
+                                                        style={{ paddingTop: "7px" }}
+                                                    >
+                                                        <div className="radio_icon">
+                                                            <span className="material-symbols-outlined add">
+                                                                add
+                                                            </span>
+                                                            <span className="material-symbols-outlined check">
+                                                                done
+                                                            </span>
+                                                        </div>
+                                                        Rented But Sale
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <hr></hr>
                         {/* Unit No */}
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Unit Number</label>
                                 <div className="form_field_inner">
@@ -919,7 +1152,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
                         {/* Category */}
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field st-2 label_top">
                                 <label htmlFor="">
                                     Category</label>
@@ -1001,7 +1234,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
 
-                        {/* <div className="col-md-4">
+                        {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Property Source</label>
               <div className="form_field_inner">
@@ -1020,7 +1253,7 @@ const CreateProperty = () => {
               </div>
             </div>
           </div> */}
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field st-2 label_top">
                                 <label htmlFor="">Purpose</label>
                                 <div className="form_field_inner">
@@ -1100,7 +1333,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
 
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Property Type</label>
                                 <div className="form_field_inner">
@@ -1233,7 +1466,7 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">BHK</label>
                                 <div className="form_field_inner">
@@ -1408,7 +1641,7 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Floor No</label>
                                 <div className="form_field_inner">
@@ -1916,7 +2149,7 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div id="id_demand" className="form_field label_top">
                                 <label htmlFor="">Demand/Price</label>
                                 <div className="form_field_inner">
@@ -1947,7 +2180,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
 
-                        {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-md-4">
+                        {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-xl-4 col-lg-6">
                             <div className="form_field st-2 label_top">
                                 <label htmlFor="">Maintenance Status</label>
                                 <div className="form_field_inner">
@@ -2028,7 +2261,7 @@ const CreateProperty = () => {
                         </div>}
 
                         {propertyDetails && propertyDetails.Purpose === "Rent" && (
-                            <div className="col-md-4">
+                            <div className="col-xl-4 col-lg-6">
                                 <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                                     <label>Maintenance fees</label>
                                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -2277,7 +2510,7 @@ const CreateProperty = () => {
                             </div>
                         )}
 
-                        {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-md-4">
+                        {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-xl-4 col-lg-6">
                             <div id="id_demand" className="form_field label_top">
                                 <label htmlFor="">Security Deposit</label>
                                 <div className="form_field_inner">
@@ -2308,7 +2541,7 @@ const CreateProperty = () => {
                             </div>
                         </div>}
 
-                        {/* <div className="col-md-4">
+                        {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label>Package</label>
               <div className="form_field_inner">
@@ -2329,7 +2562,7 @@ const CreateProperty = () => {
 
 
 
-                        {/* <div className="col-md-4">
+                        {/* <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label>Property Status - Rent</label>
                                 <div className="form_field_inner">
@@ -2352,7 +2585,7 @@ const CreateProperty = () => {
 
 
 
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">State</label>
 
@@ -2378,7 +2611,7 @@ const CreateProperty = () => {
                             </div>
                         </div>
 
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">City</label>
 
@@ -2405,7 +2638,7 @@ const CreateProperty = () => {
                         </div>
 
 
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Locality</label>
                                 <div className="form_field_inner">
@@ -2425,7 +2658,7 @@ const CreateProperty = () => {
                             </div>
 
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Society</label>
                                 <div className="form_field_inner">
@@ -2444,7 +2677,7 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
                                 <label htmlFor="">Pincode number</label>
                                 <div className="form_field_inner">
@@ -2467,37 +2700,22 @@ const CreateProperty = () => {
                     </div>
                 </div>
                 <div className="bottom_fixed_button">
-                    <div className="verticall_gap"></div>
+                    {formError && <p className="error">{formError}</p>}
+                    {formSuccess && <p className="success">{formSuccess}</p>}
                     <div className="next_btn_back">
-                        {formError && <p className="error">{formError}</p>}
-                        {formSuccess && <p className="success">{formSuccess}</p>}
-                        <br></br>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                            <div className="" style={{ width: "100%", padding: "0 20px 0 0" }}>
-                                <button
-                                    className="theme_btn btn_fill"
-                                    onClick={handleBackSubmit}
-                                    style={{
-                                        width: "100%",
-                                    }}
-                                >
-                                    {"<< Dashboard"}
-                                </button>
-                            </div>
-
-                            <div className="" style={{ width: "100%", padding: "0 0 0 20px" }}>
-                                <button
-                                    id="btn_create"
-                                    className="theme_btn btn_fill"
-                                    onClick={(e) => handleSubmit(e, 'Next')}
-                                    style={{
-                                        width: "100%",
-                                    }}
-                                >
-                                    Create
-                                </button>
-                            </div>
-                        </div>
+                        <button
+                            className="theme_btn btn_border full_width no_icon"
+                            onClick={handleBackSubmit}
+                        >
+                            {"<< Dashboard"}
+                        </button>
+                        <button
+                            id="btn_create"
+                            className="theme_btn btn_fill full_width no_icon"
+                            onClick={(e) => handleSubmit(e, 'Next')}
+                        >
+                            Create
+                        </button>
                     </div>
                 </div>
             </div>

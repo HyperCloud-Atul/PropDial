@@ -29,8 +29,6 @@ const PhoneLogin_reCaptchaV3 = () => {
     const [isResendDisabled, setIsResendDisabled] = useState(false);
     // const { setUpRecapcha, resendOTP } = useSignupPhone();
     const [confirmObj, setConfirmObj] = useState("");
-    const [verificationCode, setVerificationCode] = useState("");
-    const [verificationId, setVerificationId] = useState("")
     const [userName, setUserName] = useState("");
     const [otpSliderState, setotpSliderState] = useState(false);
     const navigate = useNavigate();
@@ -42,7 +40,7 @@ const PhoneLogin_reCaptchaV3 = () => {
     const { updateDocument, response: responseUpdateDocument } =
         useFirestore("users");
 
-    // const { documents: dbUsers, error: dbuserserror } = useCollection("users");
+    const { documents: dbUsers, error: dbuserserror } = useCollection("users");
     // console.log('dbuser:', dbUsers)
 
     const handleWheel = (e) => {
@@ -205,46 +203,31 @@ const PhoneLogin_reCaptchaV3 = () => {
         );
     };
 
+    // function setUpRecapcha(number) {
+    //     console.log('in setUpRecapcha', number);
+    //     setMobileNo(number)
+    //     // recaptchaVerifier = new RecaptchaVerifier('recapcha-container', {}, auth);
+    //     recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recapcha-container', {});
+
+    //     // const recaptchaVerifier = new RecaptchaVerifier('recapcha-container', {}, auth);
+    //     recaptchaVerifier.render();
+    //     // recaptchaVerifier.clear();
+    //     return projectAuth.signInWithPhoneNumber(number, recaptchaVerifier);
+    // }
+
     const handleSignIn = () => {
-        // e.preventDefault();
-        //     setOtpTimer(20);
-        //     setIsResendDisabled(true);
-        //     console.log("In getOTP");
-        //     setError("");
-        if (phone === "" || phone === undefined || phone.length < 10) {
-            return setError("Please enter a valid mobile number");
-        }
+        setUpRecaptcha();
 
-        try {
-            let btnSendOTP = document.getElementById("btn_sendotp");
-            btnSendOTP.style.display = "none";
+        projectAuth.signInWithPhoneNumber("+" + phone, recaptchaVerifier);
 
-            setUpRecaptcha();
-
-            // projectAuth.signInWithPhoneNumber("+" + phone, recaptchaVerifier);
-
-            projectAuth.signInWithPhoneNumber("+" + phone, recaptchaVerifier)
-                .then((confirmationResult) => {
-                    setVerificationId(confirmationResult.verificationId);
-                    console.log('Verification id: ', confirmationResult.verificationId)
-                    // setConfirmObj(respons);
-                    setotpSliderState(true);
-
-                })
-                .catch((error) => {
-                    console.error("Error during sign in:", error);
-                });
-        }
-        catch (error) {
-            console.log("2 error.message", error.message);
-            setError(error.message);
-            //         await resendOTP("+" + phone);
-            let obj_maintenance = document.getElementById("btn_sendotp");
-            obj_maintenance.style.display = "block";
-        }
-
-
-
+        projectAuth.signInWithPhoneNumber("+" + phone, recaptchaVerifier)
+            .then((confirmationResult) => {
+                // setVerificationId(confirmationResult.verificationId);
+                console.log('Verification id: ', confirmationResult.verificationId)
+            })
+            .catch((error) => {
+                console.error("Error during sign in:", error);
+            });
 
         // signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
         //     .then((confirmationResult) => {
@@ -255,19 +238,47 @@ const PhoneLogin_reCaptchaV3 = () => {
         //     });
     };
 
-    const handleVerifyOTP = () => {
-        console.log("phone: ", "+" + phone)
-        const credential = projectAuthObj.PhoneAuthProvider.credential(verificationId, otp);
-        // console.log("credential: ", credential)
+    //   send opt
+    // const getOTP = async (e) => {
+    //     e.preventDefault();
+    //     setOtpTimer(20);
+    //     setIsResendDisabled(true);
+    //     console.log("In getOTP");
+    //     setError("");
+    //     if (phone === "" || phone === undefined || phone.length < 10) {
+    //         return setError("Please enter valid Phone Number");
+    //     }
 
-        projectAuth.signInWithCredential(credential)
-            .then(async (result) => {
-                console.log("User signed in successfully:", result.user);
+    //     try {
+    //         let btnSendOTP = document.getElementById("btn_sendotp");
+    //         btnSendOTP.style.display = "none";
+    //         const respons = await setUpRecapcha("+" + phone);
+    //         console.log("in try 2", respons);
+    //         setConfirmObj(respons);
+    //         setotpSliderState(true);
+    //     }
+    //     catch (error) {
+    //         console.log("2 error.message", error.message);
+    //         setError(error.message);
+    //         await resendOTP("+" + phone);
+    //         let obj_maintenance = document.getElementById("btn_sendotp");
+    //         obj_maintenance.style.display = "block";
+    //     }
+    // }
+
+    // OTP verify
+    const verifyOTP = async (e) => {
+        e.preventDefault();
+        setError("");
+        console.log("in verifyOTP", otp);
+        // setLoading(true);
+        if (otp === "" || otp === undefined || otp === null) return;
+        try {
+            await confirmObj.confirm(otp).then(async (result) => {
                 const user = result.user;
                 // Check if the user is new
-                if (result.additionalUserInfo.isNewUser) { //New User
-                    console.log("New user signing-in");
-                    setIsNewUser(true)
+                if (result.additionalUserInfo.isNewUser) {
+                    console.log("New user signed in with phone number");
                     setUserName(user.displayName);
                     // Split the full name by space
                     let splitName = userName.split(" ");
@@ -304,10 +315,8 @@ const PhoneLogin_reCaptchaV3 = () => {
                             createdAt: timestamp.fromDate(new Date()),
                             lastLoginTimestamp: timestamp.fromDate(new Date()),
                         });
-                }
-                else { //Existing user
-                    console.log("Existing user signing-in");
-                    setIsNewUser(false)
+                } else {
+                    console.log("Existing user signed in with phone number");
                     let role = 'owner';
                     const docRef = projectFirestore.collection("users").doc(user.uid)
                     // Get the document snapshot
@@ -350,130 +359,21 @@ const PhoneLogin_reCaptchaV3 = () => {
                 }
 
                 navigate("/profile");
+
             })
-            .catch((error) => {
-                console.log("Error during code verification:", error.message);
-                setError(
-                    "Given OTP is not valid, please enter the valid OTP sent to your mobile ", "+" + phone
-                );
+        }
+        catch (error) {
+            console.log("error.message", error.message);
+            setError(
+                "Given OTP is not valid, please enter the valid OTP sent to your mobile"
+            );
 
-                // setTimeout(function () {
-                //     setError("");
-                //     setResendOTPFlag(true);
-                // }, 3000);
-
-            });
-    };
-
-    // OLD Code
-    // OTP verify
-    // const verifyOTP = async (e) => {
-    //     e.preventDefault();
-    //     setError("");
-    //     console.log("in verifyOTP", otp);
-    //     // setLoading(true);
-    //     if (otp === "" || otp === undefined || otp === null) return;
-    //     try {
-    //         await confirmObj.confirm(otp).then(async (result) => {
-    //             const user = result.user;
-    //             // Check if the user is new
-    //             if (result.additionalUserInfo.isNewUser) {
-    //                 console.log("New user signed in with phone number");
-    //                 setUserName(user.displayName);
-    //                 // Split the full name by space
-    //                 let splitName = userName.split(" ");
-
-    //                 // Extract the first name
-    //                 let firstName = splitName[0];
-
-    //                 let imgUrl = "/assets/img/dummy_user.png";
-
-    //                 await user.updateProfile({
-    //                     phoneNumber: phone,
-    //                     displayName: firstName,
-    //                     photoURL: imgUrl,
-    //                 });
-
-    //                 projectFirestore
-    //                     .collection("users")
-    //                     .doc(user.uid)
-    //                     .set({
-    //                         online: true,
-    //                         displayName: firstName,
-    //                         fullName: userName,
-    //                         phoneNumber: phone,
-    //                         email: "",
-    //                         city: "",
-    //                         country: "",
-    //                         address: "",
-    //                         photoURL: imgUrl,
-    //                         rolePropAgent: "na",
-    //                         rolePropDial: "owner",
-    //                         rolesPropAgent: ["propagent"],
-    //                         rolesPropDial: ['owner'],
-    //                         status: "active",
-    //                         createdAt: timestamp.fromDate(new Date()),
-    //                         lastLoginTimestamp: timestamp.fromDate(new Date()),
-    //                     });
-    //             } else {
-    //                 console.log("Existing user signed in with phone number");
-    //                 let role = 'owner';
-    //                 const docRef = projectFirestore.collection("users").doc(user.uid)
-    //                 // Get the document snapshot
-    //                 const docSnapshot = await docRef.get();
-    //                 // Check if the document exists
-    //                 if (docSnapshot.exists) {
-    //                     // Extract the data from the document snapshot
-    //                     // const data = docSnapshot.data();
-    //                     if (docSnapshot.data().rolePropDial === 'na')
-    //                         role = 'owner'
-    //                     else
-    //                         role = docSnapshot.data().rolePropDial
-    //                 }
-
-    //                 // console.log('role: ', role)
-    //                 await updateDocument(user.uid, {
-    //                     rolePropDial: role,
-    //                     online: true,
-    //                     lastLoginTimestamp: timestamp.fromDate(new Date()),
-    //                 });
-
-    //                 await updateDocument(user.uid, {
-    //                     online: true,
-    //                     lastLoginTimestamp: timestamp.fromDate(new Date()),
-    //                 });
-    //             }
-
-    //             if (user) {
-    //                 const providerData = user.providerData;
-    //                 const isLinkedWithGoogle = providerData.some(provider => provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID);
-
-    //                 if (isLinkedWithGoogle) {
-    //                     console.log("User is already linked with Google");
-    //                     // setError("User is already linked with Google");
-    //                 } else {
-    //                     console.log("User is not linked with Google");
-    //                     // Now link with Google account
-    //                     linkGoogleAccount(user);
-    //                 }
-    //             }
-
-    //             navigate("/profile");
-
-    //         })
-    //     }
-    //     catch (error) {
-    //         console.log("error.message", error.message);
-    //         setError(
-    //             "Given OTP is not valid, please enter the valid OTP sent to your mobile"
-    //         );
-
-    //         setTimeout(function () {
-    //             setError("");
-    //             setResendOTPFlag(true);
-    //         }, 3000);
-    //     }
-    // }
+            setTimeout(function () {
+                setError("");
+                setResendOTPFlag(true);
+            }, 3000);
+        }
+    }
 
     return (
         <div className="phone_login two_col_page top_header_pg">
@@ -481,7 +381,6 @@ const PhoneLogin_reCaptchaV3 = () => {
                 <img src="./assets/img/login_img.jpeg" alt="" />
             </div>
             <div className="left col_left">
-
                 {!otpSliderState && (
                     <>
                         <div className="left_inner col_left_inner">
@@ -495,7 +394,6 @@ const PhoneLogin_reCaptchaV3 = () => {
            
               </h5> */}
                             <form action="">
-
                                 <div className="new_form_field with_icon phoneinput">
                                     <label htmlFor="" className="text-center">
                                         Mobile Number
@@ -532,7 +430,6 @@ const PhoneLogin_reCaptchaV3 = () => {
                                             }}
                                         ></PhoneInput>
                                     </div>
-                                    {error && <div className="field_error">{error}</div>}
                                 </div>
                                 <div
                                     id="recapcha-container"
@@ -646,22 +543,6 @@ const PhoneLogin_reCaptchaV3 = () => {
               Security.
             </h5> */}
                         <div className="vg22"></div>
-
-                        {isNewUser && (
-                            <div>
-                                <input
-                                    type="text"
-                                    onChange={(e) => setUserName(e.target.value)}
-                                    placeholder="Enter Your Name"
-                                    style={{
-                                        borderRadius: "5px",
-                                        border: "1px solid var(--grey-dark)",
-                                        padding: "5px",
-                                        margin: "10px 0px",
-                                    }}
-                                />
-                            </div>
-                        )}
                         <div className="otp_input">
                             <label htmlFor="">Enter 6 digit OTP</label>
                             <OtpInput
@@ -689,8 +570,6 @@ const PhoneLogin_reCaptchaV3 = () => {
                                     />
                                 )}
                             />
-
-
                         </div>
                         {/* <p className="resend_otp_timer">
                             Haven't received the OTP?{" "}
@@ -709,14 +588,8 @@ const PhoneLogin_reCaptchaV3 = () => {
                               </span>
                             )}
                           </p> */}
-                        {error && <div className="field_error">{error}</div>}
                         <div className="vg10"></div>
-                        <div className="vg10"></div>
-                        {/* <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
-                            Confirm
-                        </button> */}
-
-                        <button className="theme_btn btn_fill w_full" onClick={handleVerifyOTP}>
+                        <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
                             Confirm
                         </button>
                     </div>

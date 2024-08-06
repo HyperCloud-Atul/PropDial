@@ -2,8 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
-import PhoneInput from "react-phone-input-2";
+import { BeatLoader } from "react-spinners";
+import PhoneInput, { allCountries } from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 // import 'flag-icon-css/css/flag-icon.min.css';
 import OtpInput from "react-otp-input";
@@ -13,9 +13,34 @@ import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectAuth, projectAuthObj, projectFirestore, timestamp } from "../../firebase/config";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
 
 // css
 import "./PhoneLogin.scss";
+import { displayName } from "react-quill";
+
+
+function camelCase(str) {
+  return (
+    str
+      .replace(/\s(.)/g, function (a) {
+        return a.toUpperCase();
+      })
+      // .replace(/\s/g, '')
+      .replace(/^(.)/, function (b) {
+        return b.toUpperCase();
+      })
+  );
+}
+
+// Simple email validation regex
+const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
+};
+
+
+
 const PhoneLogin_reCaptchaV2 = () => {
   const [showOtpInput, setShowOtpInput] = useState(false);
   const { user1 } = useAuthContext();
@@ -27,21 +52,34 @@ const PhoneLogin_reCaptchaV2 = () => {
 
   // login with phone code start
   // use states
+  const [user, setUser] = useState();
   const [activeTab, setActiveTab] = useState(1);
   const [otp, setOtp] = useState("");
   const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+  const [country, setCountryName] = useState("");
+  const [address, setAddress] = useState("");
   const [error, setError] = useState("");
   const [otptimer, setOtpTimer] = useState(20);
   const [isResendDisabled, setIsResendDisabled] = useState(false);
   const { setUpRecapcha, resendOTP } = useSignupPhone();
   const [confirmObj, setConfirmObj] = useState("");
   const [userName, setUserName] = useState("");
+  const [mobilenoSliderState, setmobilenoSliderState] = useState(true);
   const [otpSliderState, setotpSliderState] = useState(false);
+  const [newUserSliderState, setnewUserSliderState] = useState(false);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
   const [sendOTPFlag, setSendOTPFlag] = useState(true);
   const [flag, setFlag] = useState(false);
   const [resendOTPFlag, setResendOTPFlag] = useState(false);
+  const [isExistingUser, setIsExistingUser] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+
 
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("users");
@@ -125,9 +163,10 @@ const PhoneLogin_reCaptchaV2 = () => {
               // email,
               phoneNumber: phone,
               email: user.email,
-              city: "",
-              country: "",
-              address: "",
+              city,
+              address,
+              country,
+              countryCode,
               photoURL: imgUrl,
               rolePropAgent: "na",
               rolePropDial: "owner",
@@ -169,7 +208,7 @@ const PhoneLogin_reCaptchaV2 = () => {
 
         }
 
-        navigate("/profile");
+        // navigate("/profile");
 
       })
       .catch((error) => {
@@ -201,12 +240,13 @@ const PhoneLogin_reCaptchaV2 = () => {
   //   send opt
   const getOTP = async (e) => {
     e.preventDefault();
+    setIsLoading(true);  // Start the loader
     setOtpTimer(20);
     setIsResendDisabled(true);
     console.log("In getOTP");
     setError("");
     if (phone === "" || phone === undefined || phone.length < 10) {
-      return setError("Please enter valid Phone Number");
+      return setError("Please enter valid mobile number");
     }
 
     try {
@@ -215,7 +255,9 @@ const PhoneLogin_reCaptchaV2 = () => {
       const respons = await setUpRecapcha("+" + phone);
       console.log("in try 2", respons);
       setConfirmObj(respons);
-      setotpSliderState(true);
+      setmobilenoSliderState(false)
+      setotpSliderState(true)
+      setnewUserSliderState(false)
     }
     catch (error) {
       console.log("2 error.message", error.message);
@@ -223,19 +265,66 @@ const PhoneLogin_reCaptchaV2 = () => {
       await resendOTP("+" + phone);
       let obj_maintenance = document.getElementById("btn_sendotp");
       obj_maintenance.style.display = "block";
+      setIsLoading(false);  // Stop the loader
     }
   }
+
+  // New User Form
+  const newUserForm = async () => {
+    console.log("In New User Form ")
+    console.log("User: ", user)
+    setmobilenoSliderState(false)
+    setotpSliderState(false)
+    setnewUserSliderState(true)
+
+    let errFlag = false
+    // if (!validateEmail(email)) {
+    //   setError("Email format is not valid");
+    //   errFlag = true
+    // }
+    if (name === "" || email === "" || city === "") {
+      setError("All details are mandatory");
+      errFlag = true
+    }
+    else if (!validateEmail(email)) {
+      setError("Email format is not valid");
+      errFlag = true
+    }
+    else {
+      errFlag = false
+    }
+
+    if (!errFlag) {
+
+      let splitName = name.split(" ");
+
+      // Extract the first name
+      displayName = splitName.length > 0 ? splitName[0] : name;
+
+      await updateDocument(user.uid, {
+        displayName: camelCase(displayName.toLowerCase()),
+        fullName: camelCase(name.toLowerCase()),
+        email,
+        city: camelCase(city.toLowerCase()),
+      });
+
+      navigate("/dashboard");
+    }
+  }
+
 
   // OTP verify
   const verifyOTP = async (e) => {
     e.preventDefault();
+    setIsLoading(true);  // Start the loader
     setError("");
     console.log("in verifyOTP", otp);
-    // setLoading(true);
+
     if (otp === "" || otp === undefined || otp === null) return;
     try {
       await confirmObj.confirm(otp).then(async (result) => {
         const user = result.user;
+        setUser(user)
         // Check if the user is new
         if (result.additionalUserInfo.isNewUser) {
           console.log("New user signed in with phone number");
@@ -263,20 +352,33 @@ const PhoneLogin_reCaptchaV2 = () => {
               fullName: userName,
               phoneNumber: phone,
               email: "",
-              city: "",
-              country: "",
-              address: "",
+              city,
+              address,
+              country,
+              countryCode,
               photoURL: imgUrl,
               rolePropAgent: "na",
               rolePropDial: "owner",
               rolesPropAgent: ["propagent"],
               rolesPropDial: ['owner'],
+              accessType: "country",
+              accessValue: "India",
               status: "active",
               createdAt: timestamp.fromDate(new Date()),
               lastLoginTimestamp: timestamp.fromDate(new Date()),
             });
+
+          setnewUserSliderState(true)
+          setmobilenoSliderState(false)
+          setotpSliderState(false)
+
         } else {
           console.log("Existing user signed in with phone number");
+          setIsLoading(false);  // Stop the loader  
+          setmobilenoSliderState(false)
+          setotpSliderState(true)
+          setnewUserSliderState(false)
+
           let role = 'owner';
           const docRef = projectFirestore.collection("users").doc(user.uid)
           // Get the document snapshot
@@ -302,23 +404,35 @@ const PhoneLogin_reCaptchaV2 = () => {
             online: true,
             lastLoginTimestamp: timestamp.fromDate(new Date()),
           });
+
+          navigate("/dashboard");
         }
 
-        if (user) {
-          const providerData = user.providerData;
-          const isLinkedWithGoogle = providerData.some(provider => provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID);
+        // if (user) {
+        //   const providerData = user.providerData;
+        //   const isLinkedWithGoogle = providerData.some(provider => provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID);
 
-          if (isLinkedWithGoogle) {
-            console.log("User is already linked with Google");
-            // setError("User is already linked with Google");
-          } else {
-            console.log("User is not linked with Google");
-            // Now link with Google account
-            linkGoogleAccount(user);
-          }
-        }
+        //   if (isLinkedWithGoogle) {
+        //     console.log("User is already linked with Google");
+        //     // setError("User is already linked with Google");
+        //   } else {
+        //     console.log("User is not linked with Google");
+        //     // Now link with Google account
+        //     linkGoogleAccount(user);
+        //   }
+        // }
 
-        navigate("/profile");
+        // if (result.additionalUserInfo.isNewUser) {
+        //   console.log('I am in ')
+        //   setnewUserSlider(true)
+        //   setotpSliderState(false)
+        // }
+        // else {
+        //   console.log("Existing user")
+        //   setnewUserSlider(false)
+        //   setotpSliderState(false)
+        //   navigate("/profile");
+        // }
 
       })
     }
@@ -331,17 +445,27 @@ const PhoneLogin_reCaptchaV2 = () => {
       setTimeout(function () {
         setError("");
         setResendOTPFlag(true);
-      }, 3000);
+      }, 30000);
     }
   }
+
+  const handlePhoneChange = (value, countryData) => {
+    // setPhone(value);
+    // setCountry(countryData);
+    console.log("value: ", value + " country code: ", countryData.countryCode + ", country name: ", countryData.name)
+    setPhone(value)
+    setCountryCode(countryData.countryCode)
+    setCountryName(countryData.name)
+  };
+
 
   return (
     <div className="phone_login two_col_page top_header_pg">
       <div className="right col_right">
-        <img src="./assets/img/login_img.jpeg" alt="" />
+        <img src="./assets/img/login_img2.png" alt="" />
       </div>
       <div className="left col_left">
-        {!otpSliderState && (
+        {mobilenoSliderState && (
           <>
             <div className="left_inner col_left_inner">
               <div className="page_inner_logo">
@@ -361,9 +485,10 @@ const PhoneLogin_reCaptchaV2 = () => {
                   <div >
                     <PhoneInput
                       country={"in"}
-                      onlyCountries={['in', 'us', 'ae']}
+                      // onlyCountries={['in', 'us', 'ae']}                 
                       value={phone}
-                      onChange={setPhone}
+                      // onChange={setPhone}
+                      onChange={handlePhoneChange}
                       international
                       keyboardType="phone-pad"
                       // countryCallingCodeEditable={false}
@@ -389,6 +514,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                         border: '1px solid #00A8A8',
                       }}
                     ></PhoneInput>
+                    {error && <div className="field_error">{error}</div>}
                   </div>
                 </div>
                 <div
@@ -397,45 +523,54 @@ const PhoneLogin_reCaptchaV2 = () => {
                     marginTop: "20px",
                   }}
                 ></div>
-                <div className="ordiv">
+                {/* <div className="ordiv">
                   <span>
                     Or
                   </span>
-                </div>
-                <div onClick={signInWithGoogle} className="theme_btn btn_border d-flex align-items-center justify-content-center mb-3">
+                </div> */}
+                {/* <div onClick={signInWithGoogle} className="theme_btn btn_border d-flex align-items-center justify-content-center mb-3">
                   <img src="./assets/img/icons/google.png" alt="google_img" style={{
                     height: "23px",
                     width: "auto",
                     marginRight: "7px"
                   }} />
                   Sign-in with Google
-                </div>
-                <div id='btn_sendotp'
-                  className="theme_btn btn_fill w_full"
-                  onClick={getOTP}
-                >
-                  Continue
-                </div>
-                <div className="new_form_field">
-                  <div className="checkbox justify-content-center">
-                    {/* <input type="checkbox" id="agree_tcp" checked /> */}
-                    <label htmlFor="agree_tcp">
-                      By proceeding, I agree to Propdial{" "}
-                      <Link to="/terms" className="click_text">
-                        T&C
-                      </Link>{" "}
-                      &{" "}
-                      <Link to="/privacypolicy" className="click_text">
-                        Privacy Policy
-                      </Link>
-                    </label>
+                </div> */}
+                {!isLoading && (
+                  <>
+                    <div id='btn_sendotp'
+                      className="theme_btn btn_fill w_full"
+                      onClick={getOTP}
+                    >
+                      Continue
+                    </div>
+                    <div className="new_form_field">
+                      <div className="checkbox justify-content-center">
+                        {/* <input type="checkbox" id="agree_tcp" checked /> */}
+                        <label htmlFor="agree_tcp">
+                          By proceeding, I agree to Propdial{" "}
+                          <Link to="/terms" className="click_text">
+                            T&C
+                          </Link>{" "}
+                          &{" "}
+                          <Link to="/privacypolicy" className="click_text">
+                            Privacy Policy
+                          </Link>
+                        </label>
+                      </div>
+                    </div>
+                  </>
+                )}
+                {isLoading && (
+                  <div className="text-center">
+                    <h6 className="text_green mb-2">Sending OTP</h6>
+                    <BeatLoader color={"#00a8a8"} loading={true} />
                   </div>
-                </div>
+                )}
+
               </form>
 
             </div>
-
-
           </>
         )}
         {/* {otpSliderState && (
@@ -486,45 +621,48 @@ const PhoneLogin_reCaptchaV2 = () => {
             </form>
           </div>
         )} */}
-        {otpSliderState && (
-          <div className="left_inner col_left_inner">
-            <div className="page_inner_logo">
-              <img src="/assets/img/logo_propdial.png" alt="" />
-            </div>
-            {/* <h5 className="m20 mt-3 mb-4">
+        {/* OTP Slider */}
+        <div>
+          {otpSliderState && (
+            <div className="left_inner col_left_inner">
+              <div className="page_inner_logo">
+                <img src="/assets/img/logo_propdial.png" alt="" />
+              </div>
+              {/* <h5 className="m20 mt-3 mb-4">
               Unlocking Your Property Prospects: PropDial - Where Realty Meets
               Security.
             </h5> */}
-            <div className="vg22"></div>
-            <div className="otp_input">
-              <label htmlFor="">Enter 6 digit OTP</label>
-              <OtpInput
+              <div className="vg22"></div>
+              <div className="otp_input">
+                <label htmlFor="">Enter 6 digit OTP</label>
+                <OtpInput
 
-                value={otp}
-                onChange={setOtp}
-                numInputs={6}
-                renderSeparator={
-                  <span style={{ margin: "10px 5px 20px 5px" }}> - </span>
-                }
-                renderInput={(props) => (
-                  <input
-                    {...props}
-                    type="number"
-                    onWheel={handleWheel}
-                    inputMode="numeric"
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      border: "1px solid gray",
-                      textAlign: "center",
-                      borderRadius: "5px",
-                      margin: "10px 0px 20px 0px",
-                    }}
-                  />
-                )}
-              />
-            </div>
-            {/* <p className="resend_otp_timer">
+                  value={otp}
+                  onChange={setOtp}
+                  numInputs={6}
+                  renderSeparator={
+                    <span style={{ margin: "10px 5px 20px 5px" }}> - </span>
+                  }
+                  renderInput={(props) => (
+                    <input
+                      {...props}
+                      type="number"
+                      onWheel={handleWheel}
+                      inputMode="numeric"
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        border: "1px solid gray",
+                        textAlign: "center",
+                        borderRadius: "5px",
+                        margin: "10px 0px 20px 0px",
+                      }}
+                    />
+                  )}
+                />
+                {error && <div className="field_error">{error}</div>}
+              </div>
+              {/* <p className="resend_otp_timer">
                             Haven't received the OTP?{" "}
                             {otptimer > 0 ? (
                               <span>Resend In {otptimer} seconds</span>
@@ -541,12 +679,95 @@ const PhoneLogin_reCaptchaV2 = () => {
                               </span>
                             )}
                           </p> */}
-            <div className="vg10"></div>
-            <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
-              Confirm
-            </button>
-          </div>
-        )}
+              <div className="vg10"></div>
+              {isLoading && (
+                <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
+                  Confirm
+                </button>
+              )}
+              {!isLoading && (
+                <div className="text-center">
+                  <h6 className="text_green mb-2">Redirecting to Dashboard</h6>
+                  <BeatLoader color={"#00a8a8"} loading={true} />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        {/* New User Slider to provide Name & City and email */}
+        <div>
+          {newUserSliderState &&
+            (
+              <>
+                <div className="left_inner col_left_inner">
+                  <div className="page_inner_logo">
+                    <img src="/assets/img/logo_propdial.png" alt="" />
+                  </div>
+                  {/* <h5 className="m20 mt-3 mb-4">
+              Unlocking Your Property Prospects: PropDial - Where Realty Meets
+              Security.
+            </h5> */}
+                  <div className="vg22"></div>
+                  <div></div>
+
+                  <label htmlFor="" className="text-center">
+                    {/* <strong> Welcome to Propdial</strong> */}
+
+                    <h5>Congratulations and welcome aboard! 🎉</h5>
+
+                    <p style={{
+                      marginTop: "3px"
+                    }}>   Welcome to join the Propdial community.</p>
+
+                  </label>
+                  <div className="vg22"></div>
+                  <div className="new_form_field with_icon">
+                    <input
+                      required
+                      type="text"
+                      placeholder="Your Full Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      style={{
+                        background: "none"
+                      }}
+                    />
+                    <div className="vg22"></div>
+                    <input
+                      required
+                      type="email"
+                      placeholder="Your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      style={{
+                        background: "none"
+                      }}
+                    />
+                    <div className="vg22"></div>
+                    <input
+                      required
+                      type="text"
+                      placeholder="Your Current City"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      style={{
+                        background: "none"
+                      }}
+                    />
+                  </div>
+                  {error && <div className="field_error">{error}</div>}
+                  <div className="vg10"></div>
+                  <div>
+                    <button className="theme_btn btn_fill w_full" onClick={newUserForm}>
+                      Next
+                    </button>
+                  </div>
+                </div>
+
+              </>
+            )
+          }
+        </div>
       </div>
     </div>
   );

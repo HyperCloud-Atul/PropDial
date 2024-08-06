@@ -31,7 +31,7 @@ const PGAdminDashboard = () => {
 
   const { user } = useAuthContext();
   const { documents: properties, error: propertieserror } =
-    useCollection("properties");
+    useCollection("properties", ["postedBy", "==", "Propdial"]);
 
   const activeProperties =
     properties &&
@@ -188,9 +188,9 @@ const PGAdminDashboard = () => {
             <span className="material-symbols-outlined">location_city</span>
           </Link>
 
-          <Link to="/ratecard" className="more-add-options-icons">
-            <h1>Rate Card</h1>
-            <span class="material-symbols-outlined">receipt_long</span>
+          <Link to="/allproperties" className="more-add-options-icons">
+            <h1>Properties</h1>
+            <span class="material-symbols-outlined">real_estate_agent</span>
           </Link>
 
 
@@ -254,18 +254,23 @@ const PGAdminDashboard = () => {
               <div className="vg22"></div>
               <section className="upcoming">
                 <div className="parent">
+                  <div className="coming_soon">
                   <div className="child">
                     <div className="inner">
-                      <h5>5</h5>
+                      <h5>0</h5>
                       <h6>Upcoming Inspections</h6>
                     </div>
                   </div>
+                  </div>
+                  <div className="coming_soon">
                   <div className="child">
                     <div className="inner">
-                      <h5>6</h5>
+                      <h5>0</h5>
                       <h6>Upcoming Rent Renewal</h6>
                     </div>
                   </div>
+                  </div>
+                  
                 </div>
               </section>
               <hr />
@@ -445,7 +450,7 @@ const PGAdminDashboard = () => {
                   <section className="self_property_detail" style={{
                     gridTemplateColumns: "repeat(1,1fr)"
                   }}>
-                    <Link className="theme_btn btn_fill" to="/newproperty" >
+                    <Link className="theme_btn btn_fill text-center no_icon" to="/newproperty" >
                       Add New Property
                     </Link>
                     <div className="spd_single">
@@ -521,145 +526,149 @@ const PGAdminDashboard = () => {
                     <PropertyCard propertyid={property.id} />
                   ))}
               </section>
-              <div className="vg22"></div>
-              <hr />
-              <div className="vg22"></div>
-              <div className="filters">
-                <div className="button_filter">
-                  <div className="bf_single active">
-                    April
-                  </div>
-                  <div className="bf_single ">
-                    March
-                  </div>
-                  <div className="bf_single ">
-                    February
-                  </div>
-                </div>
-                <div className="icon_dropdown">
-                  <select name="months" id="months">
-                    <option value="" selected disabled>Select Month</option>
-                    <option value="1">January</option>
-                    <option value="2">February</option>
-                    <option value="3">March</option>
-                    <option value="4">April</option>
-                    <option value="5">May</option>
-                    <option value="6">June</option>
-                    <option value="7">July</option>
-                    <option value="8">August</option>
-                    <option value="9">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
-                  </select>
-
-                </div>
-              </div>
-              <div className="vg22"></div>
-              <section>
-                <div className="payment_card">
-                  {/* <div className="top">
-                  <div className="left">
-                    <h4 className="m20 text_grey">Payments</h4>
-                    <h2 className="dashboard_number mt10">8,052</h2>
-                  </div>
-                  <div className="right"></div>
-                </div> */}
-                  <div className="all_payments">
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_orange">
-                        <img
-                          src="./assets/img/brokreage_bill_icon.png"
-                          alt=""
-                        />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Brokerage Payment</h6>
-                        <h5 className="dashboard_number_small">₹ 1,000</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_blue">
-                        <img src="./assets/img/financial.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">PMS</h6>
-                        <h5 className="dashboard_number_small">₹ 2,500</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_green">
-                        <img src="./assets/img/electricity-bill.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Electricity Bill</h6>
-                        <h5 className="dashboard_number_small">₹ 875</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_orange">
-                        <img
-                          src="./assets/img/brokreage_bill_icon.png"
-                          alt=""
-                        />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Society Maintainance</h6>
-                        <h5 className="dashboard_number_small">₹ 2,000</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_blue">
-                        <img src="./assets/img/financial.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Water Bill</h6>
-                        <h5 className="dashboard_number_small">₹ 75</h5>
-                      </div>
-                    </div>
-                    <div className="payment_single my_big_card">
-                      <div className="icon bg_green">
-                        <img src="./assets/img/electricity-bill.png" alt="" />
-                      </div>
-                      <div className="right">
-                        <h6 className="r14 text_grey">Others</h6>
-                        <h5 className="dashboard_number_small">₹ 875</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <div className="vg22"></div>
-              <section className="graphs">
-                <div className="graph_single">
-                  <MyLineGraph />
-                </div>
-                <div className="graph_single">
-                  <MyColumnChart />
-                </div>
-                <div className="graph_single">
-                  <MyPieChart />
-                </div>
 
 
-              </section>
+              {/* <>
+                <div className="vg22"></div>
+                <hr />
+                <div className="vg22"></div>
+                <div className="filters">
+                  <div className="button_filter">
+                    <div className="bf_single active">
+                      April
+                    </div>
+                    <div className="bf_single ">
+                      March
+                    </div>
+                    <div className="bf_single ">
+                      February
+                    </div>
+                  </div>
+                  <div className="icon_dropdown">
+                    <select name="months" id="months">
+                      <option value="" selected disabled>Select Month</option>
+                      <option value="1">January</option>
+                      <option value="2">February</option>
+                      <option value="3">March</option>
+                      <option value="4">April</option>
+                      <option value="5">May</option>
+                      <option value="6">June</option>
+                      <option value="7">July</option>
+                      <option value="8">August</option>
+                      <option value="9">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">December</option>
+                    </select>
 
-              <div className="vg22"></div>
-              <hr />
+                  </div>
+                </div>
+                <div className="vg22"></div>
+                <section>
+                  <div className="payment_card">
+                    <div className="top">
+                      <div className="left">
+                        <h4 className="m20 text_grey">Payments</h4>
+                        <h2 className="dashboard_number mt10">8,052</h2>
+                      </div>
+                      <div className="right"></div>
+                    </div>
+                    <div className="all_payments">
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_orange">
+                          <img
+                            src="./assets/img/brokreage_bill_icon.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Brokerage Payment</h6>
+                          <h5 className="dashboard_number_small">₹ 1,000</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_blue">
+                          <img src="./assets/img/financial.png" alt="" />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">PMS</h6>
+                          <h5 className="dashboard_number_small">₹ 2,500</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_green">
+                          <img src="./assets/img/electricity-bill.png" alt="" />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Electricity Bill</h6>
+                          <h5 className="dashboard_number_small">₹ 875</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_orange">
+                          <img
+                            src="./assets/img/brokreage_bill_icon.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Society Maintainance</h6>
+                          <h5 className="dashboard_number_small">₹ 2,000</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_blue">
+                          <img src="./assets/img/financial.png" alt="" />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Water Bill</h6>
+                          <h5 className="dashboard_number_small">₹ 75</h5>
+                        </div>
+                      </div>
+                      <div className="payment_single my_big_card">
+                        <div className="icon bg_green">
+                          <img src="./assets/img/electricity-bill.png" alt="" />
+                        </div>
+                        <div className="right">
+                          <h6 className="r14 text_grey">Others</h6>
+                          <h5 className="dashboard_number_small">₹ 875</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <div className="vg22"></div>
+                <section className="graphs">
+                  <div className="graph_single">
+                    <MyLineGraph />
+                  </div>
+                  <div className="graph_single">
+                    <MyColumnChart />
+                  </div>
+                  <div className="graph_single">
+                    <MyPieChart />
+                  </div>
+
+
+                </section>
+                <div className="vg22"></div>
+                <hr />
+              </> */}
+
               <div className="vg22"></div>
               <section className="add_section row">
                 <div className="add_single col-lg-6">
                   <OwlCarousel className="owl-theme" {...addImgOptions2}>
                     <div className="item">
                       <img
-                        src="/assets/img/banner2.png"
+                        src="/assets/img/banner1.png"
                         alt=""
                         className="add_img"
                       />
                     </div>
                     <div className="item">
                       <img
-                        src="/assets/img/banner1.png"
+                        src="/assets/img/banner2.png"
                         alt=""
                         className="add_img"
                       />
@@ -670,14 +679,14 @@ const PGAdminDashboard = () => {
                   <OwlCarousel className="owl-theme" {...addImgOptions}>
                     <div className="item">
                       <img
-                        src="/assets/img/banner1.png"
+                        src="/assets/img/banner4.png"
                         alt=""
                         className="add_img"
                       />
                     </div>
                     <div className="item">
                       <img
-                        src="/assets/img/banner2.png"
+                        src="/assets/img/banner5.png"
                         alt=""
                         className="add_img"
                       />

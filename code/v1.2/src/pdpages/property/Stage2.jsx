@@ -563,6 +563,8 @@ const Stage2 = (props) => {
       YearOfConstruction: option.value,
       // AgeOfProperty: ageOfProperty,
     });
+
+    setYearOfConstruction({ label: option.value, value: option.value })
   }
 
   return (
@@ -2788,33 +2790,24 @@ const Stage2 = (props) => {
         </div>
       </div>
 
-      <div className="next_btn_back bottom_fixed_button">
+      <div className=" bottom_fixed_button">
         {formError && <p className="error">{formError}</p>}
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <div className="" style={{ width: "100%", padding: "0 20px 0 0" }}>
-            <button
-              className="theme_btn btn_fill"
-              onClick={handleBackSubmit}
-              style={{
-                width: "100%",
-              }}
-            >
-              {"<< Back"}
-            </button>
-          </div>
+        <div className="next_btn_back">
+          <button
+            className="theme_btn btn_border full_width"
+            onClick={handleBackSubmit}
+          >
+            {"<< Back"}
+          </button>
+          <button
+            className="theme_btn btn_border next_btn full_width"
+            onClick={handleNextSubmit}
 
-          <div className="" style={{ width: "100%", padding: "0 0 0 20px" }}>
-            <button
-              className="theme_btn btn_fill next_btn"
-              onClick={handleNextSubmit}
-              style={{
-                width: "100%",
-              }}
-            >
-              {"Next >>"}
-            </button>
-          </div>
-        </div>{" "}
+          >
+            {"Next >>"}
+          </button>
+
+        </div>
       </div>
     </form>
   );

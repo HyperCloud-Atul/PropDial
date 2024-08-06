@@ -70,12 +70,12 @@ const UserTable = ({ users }) => {
         accessor: (row, i) => i + 1,
         id: 'serialNumber',
         Cell: ({ row }) => row.index + 1,
-        disableFilters: true,
+        disableFilters: true,      
       },
       {
         Header: 'Name',
         accessor: 'displayName',
-        disableFilters: true,
+  
         Cell: ({ row }) => (
           <div onClick={() => handleEdit(row.original)} className='pointer'>
             <span className='text-capitalize'>{row.original.displayName}</span>
@@ -90,13 +90,16 @@ const UserTable = ({ users }) => {
           <div className="phone-number">
             <span>{formatPhoneNumber(value)}</span>
           </div>
-        ),
-        disableFilters: true,
+        ),  
+      },
+      {
+        Header: 'Email',
+        accessor: 'email', 
       },
       {
         Header: 'Contact',
         accessor: 'actions',
-        disableFilters: true,
+  
         Cell: ({ row }) => (
           <div className="contact_btn">
             <Link
@@ -120,19 +123,19 @@ const UserTable = ({ users }) => {
       {
         Header: 'On-Boarded',
         accessor: 'createdAt',
-        Cell: ({ value }) => format(value.toDate(), 'dd-MMM-yy'),
-        disableFilters: true,
+        Cell: ({ value }) => format(value.toDate(), 'dd-MMM-yy hh:mm a'),
+  
       },
       {
         Header: 'Last Login',
         accessor: 'lastLoginTimestamp',
         Cell: ({ value }) => format(value.toDate(), 'dd-MMM-yy hh:mm a'),
-        disableFilters: true,
+  
       },
       {
         Header: 'Status',
         accessor: 'status',
-        disableFilters: true,
+  
         Cell: ({ value }) => (
           <span className={`text-capitalize ${value === 'active' ? 'text_green2' : 'text_red'}`}>
             {value}

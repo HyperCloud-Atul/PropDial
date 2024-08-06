@@ -39,9 +39,9 @@ const PGOwnerDashboard = () => {
     ["userId", "==", user.uid]
   );
 
-  console.log('myproperties: ', myproperties)
+  // console.log('myproperties: ', myproperties)
 
-  const { documents: properties, error: propertieserror } = useCollection("properties");
+  const { documents: properties, error: propertieserror } = useCollection("properties", ["postedBy", "==", "Propdial"]);
   // const { documents: properties, error: propertieserror } = useCollection(
   //   "properties",
   //   ["access", "array-contains", user.uid]
@@ -52,7 +52,7 @@ const PGOwnerDashboard = () => {
     properties && properties.filter(propdoc => propdoc.id === doc.propertyId)
   ))
 
-  console.log('filteredproperties: ', filteredproperties)
+  // console.log('filteredproperties: ', filteredproperties)
 
   // const activeProperties =
   //   filteredproperties && filteredproperties.map((propdoc) => (
@@ -154,7 +154,7 @@ const PGOwnerDashboard = () => {
       <div className="top_header_pg pg_bg propagent_dashboard">
         <div className="page_spacing">
           <div className="pg_header">
-            <h2 className="m22 mb-1">Owner Dashboard</h2>
+            <h2 className="m22 mb-1">Dashboard</h2>
             <h4 className="r18 light_black">
               Welcome <b> {user.displayName} </b>to Propdial
             </h4>
@@ -205,8 +205,7 @@ const PGOwnerDashboard = () => {
                   </div>
                 </div>
               </section>
-              <div className="vg22"></div>
-              <hr />
+
               <div className="vg22"></div>
               <section className="self_property_detail">
                 <div className="spd_single">
@@ -266,18 +265,18 @@ const PGOwnerDashboard = () => {
                   </div>
                 </div> */}
               </section>
-              <div className="vg22"></div>
-              <hr />
+              <div className="vg12"></div>
               <div className="vg22"></div>
               <section className="property_cards_parent">
                 {myproperties && myproperties.map((property) => (
                   <PropertyCard propertyid={property.propertyId} />))}
               </section>
-              <div className="vg22"></div>
-              {/* <hr /> */}
+              {/* <>
+         <div className="vg22"></div>
+              <hr />
 
-              {/* <div className="vg22"></div> */}
-              {/* <section>
+              <div className="vg22"></div>
+              <section>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="payment_card">                      
@@ -380,23 +379,42 @@ const PGOwnerDashboard = () => {
                     </div>
                   </div>
                 </div>
-              </section> */}
+              </section>
               <div className="vg22"></div>
               <hr />
+         </> */}
+              {myproperties && myproperties.length === 0 && (
+                <>
+                  <div className="vg22"></div>
+                  <div className="property_soon">
+                    <div className="inner">
+                      <div>
+                        <h2>
+                          Welcome! 🌹😊
+                        </h2>
+                        <h4>🏡 Your property is currently in the discovery phase and will be onboarded shortly. 🚀</h4>
+                      </div>
+                      <img src="./assets/img/wait.png" alt="" />
+                    </div>
+                  </div>
+                </>
+
+              )}
+
               <div className="vg22"></div>
               <section className="add_section row">
                 <div className="add_single col-lg-6">
                   <OwlCarousel className="owl-theme" {...addImgOptions2}>
                     <div className="item">
                       <img
-                        src="/assets/img/banner2.png"
+                        src="/assets/img/banner1.png"
                         alt=""
                         className="add_img"
                       />
                     </div>
                     <div className="item">
                       <img
-                        src="/assets/img/banner1.png"
+                        src="/assets/img/banner2.png"
                         alt=""
                         className="add_img"
                       />
@@ -407,14 +425,14 @@ const PGOwnerDashboard = () => {
                   <OwlCarousel className="owl-theme" {...addImgOptions}>
                     <div className="item">
                       <img
-                        src="/assets/img/banner1.png"
+                        src="/assets/img/banner4.png"
                         alt=""
                         className="add_img"
                       />
                     </div>
                     <div className="item">
                       <img
-                        src="/assets/img/banner2.png"
+                        src="/assets/img/banner5.png"
                         alt=""
                         className="add_img"
                       />

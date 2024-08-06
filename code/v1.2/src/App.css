@@ -1,6 +1,99 @@
-/* for add pwa in project we have to need apply code in three files app.css for css function code in app.js and a file name serviceworker in public
-Need to make a document in firebase setting - > name "PWA" field status equal to active
-*/
+.full-content.sidebar-open {
+    padding-left: 250px;
+    /* background: yellow; */
+}
+
+/* code for book upcoming bookings */
+.book_upcoming_booking_popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.book_upcoming_booking_popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.book_upcoming_booking_popup-content h5 {
+    /* font-size: 24px; */
+    font-weight: 700;
+}
+
+.book_upcoming_booking_popup-content .upcoming-booking-popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30%;
+    margin-top: -20px;
+}
+
+.upcoming-booking-popup-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.book_upcoming_booking_popup-content button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: var(--click-color);
+    color: var(--white-color);
+}
+
+/* Cancel Button */
+.book_upcoming_booking_popup-content button:nth-child(1) {
+    background-color: var(--pink);
+    color: var(--white-color);
+}
+
+.book_upcoming_booking_popup-content button:nth-child(1):hover {
+    transform: translateY(-2px);
+}
+
+/* Hover Effects for Buttons */
+.book_upcoming_booking_popup-content button:hover {
+    opacity: 0.8;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 992px) {
+    .full-content.sidebar-open {
+        padding-left: 40px;
+        /* background: yellow; */
+    }
+}
+
+.full-content.no-sidebar {
+    padding-left: 15px;
+    /* background: green; */
+}
 
 /* pwa pop up div installtation code start */
 .install-popup-div {
@@ -56,7 +149,7 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     position: absolute;
     top: 5px;
     right: 5px;
-    background: var(--theme-orange);
+    background: var(--click-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,7 +176,7 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 
 .install-popup-div div button {
     margin-top: 15px;
-    background: var(--theme-purple);
+    background: var(--click-color);
     border: none;
     outline: none;
     padding: 5px 30px;
@@ -93,381 +186,3 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 }
 
 /* pop up div installation button end */
-
-
-/* common css start  */
-
-/* color css start  */
-.text_light_black {
-    color: var(--light-black);
-}
-.text_red{
-    color: var(--theme-red);
-}
-.text_grey {
-    color: var(--theme-grey);
-}
-
-.text_orange {
-    color: var(--theme-orange);
-}
-
-.text_white {
-    color: var(--white-color);
-}
-.text_blue{
-    color: var(--theme-blue);
-}
-.text_green2{
-    color: var(--success-color);
-}
-.click_text {
-    color: var(--theme-green) !important;
-    font-size: 14px;
-    font-weight: 400;
-
-}
-.text_green{
-    color: var(--theme-green) !important;
-}
-
-.bg_orange {
-    background: #ffd6cb;
-}
-
-.bg_blue {
-    background: var(--theme-blue-bg);
-}
-
-.bg_green {
-    background: var(--theme-green-bg);
-}
-
-.bg_white {
-    background: var(--white-color);
-}
-
-.click_icon,
-.click_icon span {
-    color: var(--theme-green);
-    transition: 0.5s;
-    font-variation-settings:
-        'FILL' 0
-}
-.text_near_icon {
-    font-size: 14px;
-    cursor: pointer;
-    margin-left: 3px;
-    position: relative;
-    top: -2px;
-}
-.click_icon:hover,
-.click_icon span:hover {
-    transition: 0.5s;
-    font-variation-settings:
-        'FILL' 1
-}
-
-/* color css end  */
-
-/* font css start  */
-.m18 {
-    font-size: 18px;
-    font-weight: 500;
-}
-
-.m20 {
-    font-size: 20px;
-    font-weight: 500;
-}
-
-.m22 {
-    font-size: 22px;
-    font-weight: 500;
-
-}
-
-.r16 {
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.r14 {
-    font-size: 14px;
-    font-weight: 400;
-
-}
-
-.r18 {
-    font-size: 18px;
-    font-weight: 400;
-
-}
-
-.m16 {
-    font-size: 16px;
-    font-weight: 500;
-
-}
-
-.dm16 {
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.dr16 {
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.dr20 {
-    font-size: 20px;
-    font-weight: 400;
-}
-
-.dm20 {
-    font-size: 20px;
-    font-weight: 500;
-}
-.lh22{
-    line-height: 22px;
-}
-/* font css start  */
-
-.card_shadow {
-    box-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -1px #0000000f;
-}
-
-.card_border_radius {
-    border-radius: 22px;
-}
-
-.dashboard_number {
-    font-size: 30px;
-    font-weight: 500;
-    color: var(--light-black);
-}
-
-.dashboard_number_small {
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--light-black);
-}
-
-.page a {
-    text-decoration: none;
-}
-
-.page ul li {
-    list-style-type: none;
-}
-
-.page h1,
-.page h2,
-.page h3,
-.page h4,
-.page h5,
-.page h6,
-.page p {
-    margin: 0px;
-}
-
-.page_spacing {
-    padding: 22px;
-}
-
-.navbarhide,
-.page_footer_hide {
-    display: none;
-}
-
-.pg_bg {
-    background: var(--page-bg);
-}
-
-.page_inner_logo img {
-    width: 135px;
-    height: auto;
-}
-
-.otp_input div {
-    justify-content: center;
-}
-img.excel_dowanload {
-    width: auto;
-    height: 35px;
-}
-
-/* verticall_gap css start  */
-.dvg22 {
-    height: 22px;
-}
-
-.vg10 {
-    height: 10px;
-}
-.vg12 {
-    height: 10px;
-}
-
-.vg22 {
-    height: 22px;
-}
-
-.mt10 {
-    margin-top: 10px;
-}
-
-/* modal css start  */
-.modal-backdrop.show {
-    opacity: 0.3 !important;
-}
-
-.my_modal .modal-body {
-    padding: 0px;
-}
-
-.my_modal .modal-content {
-    border-radius: 22px;
-    padding: 22px;
-    background: white;
-}
-
-.row_gap {
-    row-gap: 30px;
-}
-
-.bottom_add_button {
-    position: fixed;
-    right: 3%;
-    bottom: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    color: #fff;
-    background: #EB542E;
-    box-shadow: 0 -5px 10px 0 rgba(0, 0, 0, 0.2);
-    z-index: 999;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.bottom_add_button span {
-    font-size: 26px;
-}
-.plus_icon {  
-    display: flex;
-    align-items: center;
-    justify-content: center;   
-    width: 100%;
-    height: 100%;
-}
-.plus_icon .plus_icon_inner {
-    width: 58px;
-    height: 58px;
-    margin: auto;
-    aspect-ratio: 1 / 1;
-    color: var(--light-black);
-    border: 1px solid;
-    display: block;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;   
-}
-.plus_icon span{
-    font-size: 32px;
-}
-/* common css end*/
-
-@media only screen and (max-width: 1199px) {
-    .vg22_1199 {
-        height: 22px;
-    }
-}
-
-@media only screen and (max-width: 991px) {
-    .row_reverse_991 {
-        flex-direction: column-reverse;
-    }
-
-    .propagent_dashboard_inner .all_payments,
-    .self_property_detail {
-        grid-template-columns: repeat(3, 1fr) !important;
-    }
-
-    .vg22_991 {
-        height: 22px;
-    }
-}
-
-@media only screen and (max-width: 767px) {
-    .row_reverse_767 {
-        flex-direction: column-reverse;
-    }
-    .page_spacing {
-        padding: 15px;
-    }
-
-    .m22 {
-        font-size: 18px;
-    }
-
-    .r18 {
-        font-size: 16px;
-    }
-}
-
-.editable_text .material-symbols-outlined {
-    font-size: 15px;
-    color: var(--theme-green);
-}
-
-.edit_status_popup {
-    .theme_btn {
-        padding: 4px 12px;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 400;
-
-    }
-
-    border: 1px solid var(--theme-grey);
-    background: var(--white-color);
-    position: absolute;
-    z-index: 9;
-    /* bottom: 0px; */
-    width: 186px;
-    height: auto;
-    left: -185px;
-    right: 0px;
-    margin: auto;
-    padding: 6px;
-
-    .close_form {
-        background: transparent;
-        color: var(--theme-orange);
-    }
-
-    .form_field .field_box.theme_radio_new .theme_radio_container {
-        padding: 0px;
-        padding-left: 0px;
-        border: none;
-        background: none;
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-
-    .form_field .field_box.theme_radio_new .theme_radio_container input[type="radio"]+label {
-        padding: 3px 6px;
-        border-radius: 6px;
-        font-size: 13px;
-        min-width: 0;
-    }
-}
-

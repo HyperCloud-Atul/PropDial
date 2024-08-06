@@ -27,9 +27,121 @@ const UserRoleStatusModal = ({ show, handleClose, selectedUser, handleRoleChange
                                 <label htmlFor="frontdesk">Frontdesk</label>
                             </div>
                             <div className="radio_single">
+                                <input type="radio" name="user_role" value="manager" id='manager'
+                                    checked={selectedUser.rolePropDial === "manager"} onChange={() => handleRoleChange("manager")} />
+                                <label htmlFor="manager">manager</label>
+                            </div>
+                            <div className="radio_single">
+                                <input type="radio" name="user_role" value="tenant" id='tenant'
+                                    checked={selectedUser.rolePropDial === "tenant"} onChange={() => handleRoleChange("tenant")} />
+                                <label htmlFor="tenant">tenant</label>
+                            </div>
+                            <div className="radio_single">
+                                <input type="radio" name="user_role" value="prospectiveTenant" id='prospectiveTenant'
+                                    checked={selectedUser.rolePropDial === "prospectiveTenant"} onChange={() => handleRoleChange("prospectiveTenant")} />
+                                <label htmlFor="prospectiveTenant">prospective Tenant</label>
+                            </div>
+                            <div className="radio_single">
+                                <input type="radio" name="user_role" value="buyer" id='buyer'
+                                    checked={selectedUser.rolePropDial === "buyer"} onChange={() => handleRoleChange("buyer")} />
+                                <label htmlFor="buyer">buyer</label>
+                            </div>
+                            <div className="radio_single">
+                                <input type="radio" name="user_role" value="prospectiveBuyer" id='prospectiveBuyer'
+                                    checked={selectedUser.rolePropDial === "prospectiveBuyer"} onChange={() => handleRoleChange("prospectiveBuyer")} />
+                                <label htmlFor="prospectiveBuyer">prospective Buyer</label>
+                            </div>
+                            <div className="radio_single">
                                 <input type="radio" name="user_role" value="admin" id='admin'
                                     checked={selectedUser.rolePropDial === "admin"} onChange={() => handleRoleChange("admin")} />
                                 <label htmlFor="admin">Admin</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <h6 className="r16 lh22 mb-3">
+                    <span className='m16'>{selectedUser.displayName}</span> access managment
+                </h6>
+                <div className="access_manage">
+                    <div className="left">
+                        <div className="field_box theme_radio_new tab_type_radio active_right no_pd_bo">
+                            <div className="theme_radio_container">
+                                <div className="radio_single">
+                                    <input
+                                        type="radio"
+                                        name="access_type"
+                                        id="at_country"
+                                    // value={category.value}
+                                    // onChange={handleDocCatChange}
+                                    // checked={selectedDocCat === category.value}
+                                    />
+                                    <label htmlFor="at_country">
+                                        Country
+                                    </label>
+                                </div>
+                                <div className="radio_single">
+                                    <input
+                                        type="radio"
+                                        name="access_type"
+                                        id="at_city"
+                                    // value={category.value}
+                                    // onChange={handleDocCatChange}
+                                    // checked={selectedDocCat === category.value}
+                                    />
+                                    <label htmlFor="at_city">
+                                        City
+                                    </label>
+                                </div>
+                                <div className="radio_single">
+                                    <input
+                                        type="radio"
+                                        name="access_type"
+                                        id="at_region"
+                                    // value={category.value}
+                                    // onChange={handleDocCatChange}
+                                    // checked={selectedDocCat === category.value}
+                                    />
+                                    <label htmlFor="at_region">
+                                        Region
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div className="right">
+                        <div className="form_field theme_checkbox">
+                            <div className="theme_checkbox_container">                           
+                                    <div className="checkbox_single">                                        <input
+                                            type="checkbox"
+                                            id="pune"
+                                            name="access_value"                                        
+                                        />
+                                        <label htmlFor="pune">pune</label>
+                                    </div>
+                                    <div className="checkbox_single">                                        <input
+                                            type="checkbox"
+                                            id="Delhi"
+                                            name="access_value"                                        
+                                        />
+                                        <label htmlFor="Delhi">Delhi</label>
+                                    </div>
+                                    <div className="checkbox_single">                                        <input
+                                            type="checkbox"
+                                            id="mumbai"
+                                            name="access_value"                                        
+                                        />
+                                        <label htmlFor="mumbai">mumbai</label>
+                                    </div>
+                                    <div className="checkbox_single">                                        <input
+                                            type="checkbox"
+                                            id="gurugram"
+                                            name="access_value"                                        
+                                        />
+                                        <label htmlFor="gurugram">gurugram</label>
+                                    </div>
+                        
                             </div>
                         </div>
                     </div>

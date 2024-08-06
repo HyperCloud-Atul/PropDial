@@ -214,6 +214,7 @@ export default function Stage3(props) {
         navigate("/");
       } else {
         props.setStateFlag("stage4");
+        navigate("/propertydetails/" + propertyid)
       }
     }
   }
@@ -2006,7 +2007,7 @@ export default function Stage3(props) {
                                   done
                                 </span>
                               </div>
-                              <h6>Veg</h6>
+                              <h6>Vegetarian</h6>
                             </label>
                           </div>
                         </div>
@@ -2041,7 +2042,7 @@ export default function Stage3(props) {
                                   done
                                 </span>
                               </div>
-                              <h6>Non-Veg</h6>
+                              <h6>No-Restrictions</h6>
                             </label>
                           </div>
                         </div>
@@ -2063,7 +2064,7 @@ export default function Stage3(props) {
                       <ReactQuill
                         theme="snow" // Specify the theme ('snow' for a clean, modern look)
                         placeholder="Type here..." // Add placeholder prop here
-                        value={propertyDetails.PropertyDescription}
+                        value={propertyDetails && propertyDetails.PropertyDescription}
                         // onChange={setValue} // Set the value state when the editor content changes
                         onChange={(e) => {
                           setPropertyDetails({
@@ -2133,23 +2134,16 @@ export default function Stage3(props) {
           </div>
         </div>
         <div className="verticall_gap"></div>
-        <div style={{ display: "flex", alignItems: "center" }} className='next_btn_back bottom_fixed_button'>
-          <div className="" style={{ width: "100%", padding: '0 20px 0 0' }}>
-            {formError && <p className="error">{formError}</p>}
-            <button className="theme_btn btn_fill" onClick={handleBackSubmit} style={{
-              width: "100%"
-            }}>
-              {"<< Back"}
-            </button>
-          </div>
+        {formError && <p className="error">{formError}</p>}
+        <div style={{ display: "flex", alignItems: "center", gap: "22px" }} className='next_btn_back bottom_fixed_button'>
 
-          <div className="" style={{ width: "100%", padding: '0 0 0 20px' }}>
-            <button className="theme_btn btn_fill" onClick={handleNextSubmit} style={{
-              width: "100%"
-            }}>
-              {"Next >>"}
-            </button>
-          </div>
+          <button className="theme_btn btn_border full_width" onClick={handleBackSubmit}>
+            {"<< Back"}
+          </button>
+
+          <button className="theme_btn btn_fill full_width" onClick={handleNextSubmit}>
+            Submit
+          </button>
 
         </div>
       </form >

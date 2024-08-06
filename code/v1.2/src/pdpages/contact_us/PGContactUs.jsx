@@ -4,11 +4,14 @@ import { useLocation } from "react-router-dom";
 // components
 import Hero from "../../components/Hero";
 import CreateTicket from "../../chatboard/CreateTicket";
+import EnquiryForm from '../../components/EnquiryForm';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 // css
 import "./PGContactUs.css";
 import BottomRightFixedIcon from "../../components/BottomRightFixedIcon";
 const PGContactUs = () => {
+  const { user } = useAuthContext();
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
@@ -155,7 +158,13 @@ const PGContactUs = () => {
             backgroundImage: "url('./assets/img/contact_from_right.jpg')",
           }}
         >
-          <CreateTicket />
+          {user && (
+            <CreateTicket />
+          )}
+          {!user && (
+            <EnquiryForm />
+          )}
+
         </div>
       </section>
     </div>

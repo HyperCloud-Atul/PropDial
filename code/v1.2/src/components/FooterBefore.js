@@ -24,8 +24,8 @@ const FooterBefore = () => {
             <h3>GET ACCESS TO THE BEST PROPERTY AROUND</h3>
             <h6>Listed Over 40K+ Properties Around You</h6>
             <div className='btn_group'>
-              <Link to="search-property">
-                <button className='theme_btn btn_white'>
+              <Link to="/properties">
+                <button className='theme_btn btn_white no_icon'>
                   <span className="material-symbols-outlined btn_arrow ba_animation">
                     arrow_forward
                   </span>

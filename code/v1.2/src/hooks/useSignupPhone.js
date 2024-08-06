@@ -16,10 +16,17 @@ export const useSignupPhone = () => {
     function setUpRecapcha(number) {
         console.log('in setUpRecapcha', number);
         setMobileNo(number)
-        // recaptchaVerifier = new RecaptchaVerifier('recapcha-container', {}, auth);
-        recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recapcha-container', {});
+        // recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recapcha-container', {});
+        recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recapcha-container', {
+            'size': 'invisible',
+            // 'callback': (response) => {
+            //     // reCAPTCHA solved, allow signInWithPhoneNumber.
+            //     handleSignIn();
+            // }
+        });
 
         // const recaptchaVerifier = new RecaptchaVerifier('recapcha-container', {}, auth);
+
         recaptchaVerifier.render();
         // recaptchaVerifier.clear();
         return projectAuth.signInWithPhoneNumber(number, recaptchaVerifier);

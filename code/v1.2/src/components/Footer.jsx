@@ -108,7 +108,7 @@ export default function Footer() {
             <div className="row">
               <div className="col-lg-3 col-md-12">
                 <div className="footer_site_logo pointer" onClick={logoClick}>
-                  <img src="./assets/img/home/footer_site_logo.png" alt="Propdial" />
+                  <img src="/assets/img/home/footer_site_logo.png" alt="Propdial" />
                   <p className="about_site">
                     Propdial, established in 2014, is a leading property
                     management services company. We specialize in offering
@@ -156,38 +156,38 @@ export default function Footer() {
               <div className="col-lg-3 col-md-4 col-sm-6">
                 <div className="footer_single_title">Quick Links</div>
                 <div className="footer_link">
-                  <Link>Property in Delhi</Link>
-                  <Link>Property in Noida</Link>
-                  <Link>Property in Gurugram</Link>
-                  <Link>Property in Pune</Link>
-                  <Link>Property in Mumbai</Link>
-                  <Link>Property in Bangalore</Link>
-                  <Link>Property in Hyderabad</Link>
+                  <Link to="properties">Property in Delhi</Link>
+                  <Link to="properties">Property in Noida</Link>
+                  <Link to="properties">Property in Gurugram</Link>
+                  <Link to="properties">Property in Pune</Link>
+                  <Link to="properties">Property in Mumbai</Link>
+                  <Link to="properties">Property in Bangalore</Link>
+                  <Link to="properties">Property in Hyderabad</Link>
                 </div>
               </div>
               <div className="col-lg-3 col-md-4 col-sm-12">
                 <div className="footer_single_title">Follow Us</div>
                 <div className="footer_social_icon">
                   <Link className="fsi_single" to="https://www.facebook.com/propdial">
-                    <img src="./assets/img/home/facebook_footer.png" alt="Facebook" />
+                    <img src="/assets/img/home/facebook_footer.png" alt="Facebook" />
                   </Link>
                   <Link
                     className="fsi_single"
                     to="https://www.youtube.com/channel/UC9cJZCtePKupvCVhRoimjlg"
                   >
-                    <img src="./assets/img/home/youtube_footer.png" alt="YouTube" />
+                    <img src="/assets/img/home/youtube_footer.png" alt="YouTube" />
                   </Link>
                   <Link
                     className="fsi_single"
                     to="https://www.linkedin.com/company/propdial-india-pvt-ltd-/"
                   >
-                    <img src="./assets/img/home/linkedin_footer.png" alt="LinkedIn" />
+                    <img src="/assets/img/home/linkedin_footer.png" alt="LinkedIn" />
                   </Link>
                   <Link
                     className="fsi_single"
                     to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial"
                   >
-                    <img src="./assets/img/home/twitter_footer.png" alt="Twitter" />
+                    <img src="/assets/img/home/twitter_footer.png" alt="Twitter" />
                   </Link>
                 </div>
               </div>

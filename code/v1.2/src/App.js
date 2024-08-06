@@ -9,7 +9,7 @@ import Footer from "./components/Footer";
 import NavbarBottom from "./components/NavbarBottom";
 
 import "./App.css";
-import PhoneLogin from "./pdpages/phonelogin/PhoneLogin_reCaptchaV3";
+import PhoneLogin from "./pdpages/phonelogin/PhoneLogin_reCaptchaV2";
 import PGProfile from "./pdpages/profile/PGProfile";
 import PGNotification from "./pdpages/notification/PGNotification";
 import PGAboutUs from "./pdpages/about_us/PGAboutUs";
@@ -215,9 +215,13 @@ function App() {
                     element={<PGMoreMenu></PGMoreMenu>}
                   ></Route>
                   <Route path="/stage4" element={<Stage4 />}></Route>
-                  <Route
+                  {/* <Route
                     path="/profile"
                     element={user ? <PGProfile /> : <PhoneLogin />}
+                  ></Route> */}
+                  <Route
+                    path="/profile"
+                    element={<PGProfile />}
                   ></Route>
                   <Route
                     path="/notification"
@@ -559,10 +563,10 @@ function App() {
                     path="/signup"
                     element={user ? <Navigate to="/" /> : <PGSignup />}
                   ></Route>
-                  <Route
+                  {/* <Route
                     path="/profile"
                     element={user ? <PGProfile /> : <PhoneLogin />}
-                  ></Route>
+                  ></Route> */}
                   <Route
                     path="/countrylist"
                     element={

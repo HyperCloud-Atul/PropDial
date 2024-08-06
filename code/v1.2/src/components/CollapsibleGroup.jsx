@@ -21,7 +21,7 @@ const CollapsibleGroup = () => {
         <div className="row">
           {/* Left section */}
           <div className="col-lg-5 img-div">
-            <img src="./assets/img/home/coll-img.png" />
+            <img src="/assets/img/home/coll-img.png" />
           </div>
 
           {/* Right section */}
@@ -172,7 +172,7 @@ const CollapsibleGroup = () => {
                 </div>
               </div>
               <Link to="/faq">
-                <button className="theme_btn btn_fill">More FAQ
+                <button className="theme_btn btn_fill no_icon">More FAQ
                   <span className="material-symbols-outlined btn_arrow ba_animation">
                     arrow_forward
                   </span></button>

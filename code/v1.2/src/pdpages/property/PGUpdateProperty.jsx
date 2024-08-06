@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useDocument } from "../../hooks/useDocument";
 import Stage1 from './Stage1'
 import Stage2 from './Stage2'
 import Stage3 from './Stage3'
@@ -9,68 +10,187 @@ import './PGUpdateProperty.css'
 
 const PGUpdateProperty = () => {
   const { propertyid } = useParams();
+  const { document: propertydoc, error: propertyerror } = useDocument(
+    "properties",
+    propertyid
+  );
   const [propertyObj, setPropertyObj] = useState(null)
   const [stageFlag, setStageFlag] = useState('stage1')
+
+  console.log("Property Object: ", propertyObj)
+
+  // expand more expand less start
+  const [expanded, setExpanded] = useState(true);
+
+  const handleExpand = () => {
+    setExpanded(!expanded);
+  };
+  // sexpand more expand less end
+
+// prop summary click start
+const navigate = useNavigate();
+
+const handleClick = (e) => {
+    if (window.innerWidth > 575) {
+        navigate(`/propertydetails/${propertyid}`);
+    } else {
+        e.preventDefault();
+    }
+};
+// prop summary click start
+
   return (
-    <div className='top_header_pg pg_bg'>
+    <div className='top_header_pg pg_bg pg_update_property'>
       <div className="page_spacing">
-        <div className="row">
-          <div className="col-md-4">
-            <div className="pg_header">
-              <h2 className="m22 mb-1">Update Property</h2>
-              <h4 className="r18 light_black">You can update the property here</h4>
-            </div>
-          </div>
-          <div className="col-md-8">
-            <div className="multi_steps">
-              <div className="progress_bar">
-                <div className="fill" style={{
-                  width: "25%"
-                }}></div>
-              </div>
-              <div className="step_single ">
-                <div className="number">
-                  1
+        <div className="row row_reverse_991">
+          <div className="col-lg-6">
+            <div className="title_card mobile_full_575 mobile_gap">
+              <h2 className="text-center">3-Steps Property Update</h2>
+              <div className="vg12"></div>
+              <div className="multi_steps">
+                <div className="progress_bar">
+                  <div className="fill" style={{ width: stageFlag === 'stage1' ? "33.33%" : stageFlag === 'stage2' ? "66.66%" : "100%" }}></div>
                 </div>
-                <h6>
-                  Basic
-                </h6>
-              </div>
-              <div className="step_single wait">
-                <div className="number">
-                  2
+                <div className="step_single fill">
+                  <div className="number">
+                    1
+                  </div>
+                  <h6>
+                    Basic
+                  </h6>
                 </div>
-                <h6>
-                  Detail
-                </h6>
-              </div>
-              <div className="step_single wait">
-                <div className="number">
-                  3
+                <div className={`step_single ${stageFlag === 'stage1' ? "wait" : "fill"}`}>
+                  <div className="number">
+                    2
+                  </div>
+                  <h6>
+                    Detail
+                  </h6>
                 </div>
-                <h6>
-                  More
-                </h6>
-              </div>
-              <div className="step_single wait">
+                <div className={`step_single ${stageFlag === 'stage3' ? "fill" : "wait"}`}>
+                  <div className="number">
+                    3
+                  </div>
+                  <h6>
+                    More
+                  </h6>
+                </div>
+                {/* <div className={stageFlag === 'stage4' ? "step_single " : "step_single wait"}>
                 <div className="number">
                   4
                 </div>
                 <h6>
                   Image
                 </h6>
+              </div> */}
               </div>
             </div>
-          </div>  
+          </div>
+          <div className="col-lg-6">
+            {propertydoc &&
+              <div className="title_card short_prop_summary relative pointer" onClick={handleClick}>
+                  {expanded && (
+                  <div className="top on_mobile_575">
+                    <div className="d-flex align-items-center" style={{
+                      gap: "5px"
+                    }} >
+                      <h6 style={{
+                        fontSize: "14px",
+                        fontWeight: "400"
+                      }}>{propertydoc.unitNumber} | {propertydoc.society} </h6>
+                    </div>
+                  </div>
+                )}
+                <div className="on_desktop_hide_575">                
+                    <div className="left">
+                      <div className="img">
+                        {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
+                          : <img src="/assets/img/admin_banner.jpg" alt="" />}
+                      </div>
+                      <div className="detail">
+                        <div>
+                          <span className="card_badge">
+                            {propertydoc.pid}
+                          </span>
+                          {" "}{" "}
+                          <span className="card_badge">
+                            {propertydoc.isActiveInactiveReview}
+                          </span>
+                        </div>
+                        <h6 className="demand">
+                          <span>₹</span> {propertydoc.demandPrice}
+                          {propertydoc.maintenancecharges !== '' && <span
+                            style={{
+                              fontSize: "10px",
+                            }}
+                          >
+                            + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
+                          </span>}
+                        </h6>
+                        <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
+                        <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
+                        <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+                      </div>
+                    </div>                
+                </div>
+                <div className="on_mobile_575">
+                  {!expanded && (
+                    <div className="left">
+                      <div className="img w-100 d-flex align-items-center">
+                        {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
+                          : <img src="/assets/img/admin_banner.jpg" alt="" />}
+                          <Link to={(`/propertydetails/${propertyid}`)} className='text_green text-center' style={{
+                            flexGrow:"1"
+                          }}>
+                          View Detail
+                          </Link>
+                      </div>
+                      <div className="detail">
+                      <div>
+                          <span className="card_badge">
+                            {propertydoc.pid}
+                          </span>
+                          {" "}{" "}
+                          <span className="card_badge">
+                            {propertydoc.isActiveInactiveReview}
+                          </span>
+                        </div>
+                        <h6 className="demand">
+                          <span>₹</span> {propertydoc.demandPrice}
+                          {propertydoc.maintenancecharges !== '' && <span
+                            style={{
+                              fontSize: "10px",
+                            }}
+                          >
+                            + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
+                          </span>}
+                        </h6>
+                        <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
+                        <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
+                        <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+
+
+                      </div>
+                    </div>
+                  )}
+                </div>
+             
+                <div className="expand on_mobile_575" onClick={handleExpand}>
+                  <span className="material-symbols-outlined">
+                    {expanded ? "keyboard_arrow_down" : "keyboard_arrow_up"}
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
+
         </div>
-
-
-        <div className="vg22"></div>
+        <div className="vg12"></div>
         <div className="vg22"></div>
         {stageFlag === 'stage1' && <Stage1 setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage1>}
         {stageFlag === 'stage2' && <Stage2 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage2>}
         {stageFlag === 'stage3' && <Stage3 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage3>}
-        {stageFlag === 'stage4' && <Stage4 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage4>}
+        {/* {stageFlag === 'stage4' && <Stage4 propertyObj={propertyObj} setPropertyObj={setPropertyObj} setStateFlag={setStageFlag}></Stage4>} */}
       </div>
     </div>
   )

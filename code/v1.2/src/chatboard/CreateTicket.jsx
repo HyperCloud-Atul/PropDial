@@ -62,7 +62,7 @@ const CreateTicket = () => {
             <div className="form_field">
               <label htmlFor="user_name" className="white">Name</label>
               <div className="form_field_inner">
-                <input type="text" value={user && user.fullName} id="user_name" />
+                <input type="text" value={user && user.fullName} id="user_name" readOnly disabled />
                 <div className="field_icon">
                   <span className="material-symbols-outlined">Person</span>
                 </div>
@@ -74,7 +74,7 @@ const CreateTicket = () => {
             <div className="form_field">
               <label htmlFor="user_number" className="white">Phone number</label>
               <div className="form_field_inner">
-                <input type="number" value={user && user.phoneNumber} id="user_number" />
+                <input type="number" value={user && user.phoneNumber} id="user_number" readOnly disabled/>
                 <div className="field_icon">
                   <span className="material-symbols-outlined">call</span>
                 </div>
@@ -93,9 +93,9 @@ const CreateTicket = () => {
                   id="ticket_for"
                 >
                   <option>General Inquiries</option>
-                  <option>Billing and Account Management</option>
+                  {/* <option>Billing and Account Management</option> */}
                   <option>Technical Issues</option>
-                  <option>Training Requests</option>
+                  {/* <option>Training Requests</option> */}
                 </select>
                 <div className="field_icon">
                   <span className="material-symbols-outlined">Person</span>

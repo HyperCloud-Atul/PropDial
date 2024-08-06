@@ -22,7 +22,7 @@ export default function PGAdminProperties() {
   // Scroll to the top of the page whenever the location changes end
   const { user } = useAuthContext();
   // const { logout, isPending } = useLogout()
-  const { documents: properties, error } = useCollection("properties");
+  const { documents: properties, error } = useCollection("properties", ["postedBy", "==", "Propdial"]);
   const [filter, setFilter] = useState("all");
   // const navigate = useNavigate();
 

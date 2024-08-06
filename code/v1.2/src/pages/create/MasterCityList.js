@@ -86,7 +86,7 @@ export default function MasterCityList() {
           // setStateList(stateOptionsSorted.current)
 
           if (countryname === "INDIA") {
-            setState({ label: "DELHI", value: "DELHI" });
+            setState({ label: "Delhi", value: "Delhi" });
           } else {
             setState({
               label: stateOptionsSorted.current[0].label,
@@ -109,7 +109,7 @@ export default function MasterCityList() {
     e.preventDefault();
     setFormError(null);
 
-    let cityname = city.trim().toUpperCase();
+    let cityname = city.trim();
     // console.log('cityname:', cityname)
 
     if (currentDocid) {

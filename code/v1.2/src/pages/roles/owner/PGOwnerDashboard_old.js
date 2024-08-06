@@ -24,7 +24,7 @@ export default function PGOwnerDashboardOld() {
   const { user } = useAuthContext();
   const { logout, isPending } = useLogout();
   const { documents: propertiesdocuments, error: propertieserror } =
-    useCollection("properties");
+    useCollection("properties", ["postedBy", "==", "Propdial"]);
 
   const [filter, setFilter] = useState("ALL");
 

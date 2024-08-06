@@ -16,10 +16,6 @@ import PhoneInput from "react-phone-input-2";
 import { Form, Button, Alert } from "react-bootstrap";
 
 
-
-
-
-
 export default function PGProfile() {
   // Scroll to the top of the page whenever the location changes start
 
@@ -29,12 +25,16 @@ export default function PGProfile() {
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
 
+
   const { user } = useAuthContext();
-  // console.log('user:', user)
+  console.log('user:', user)
+  const navigate = useNavigate();
+
+  if (!user) navigate("/login")
 
   const { updateDocument, response } = useFirestore("users");
 
-  const [userPhoneNumber, setUserPhoneNumber] = useState(user.phoneNumber);
+  const [userPhoneNumber, setUserPhoneNumber] = useState(user && user.phoneNumber);
 
   const [userDetails, setUserDetails] = useState({
     FullName: '',
@@ -51,7 +51,7 @@ export default function PGProfile() {
   const { imgUpload, isImgCompressPending, imgCompressedFile } =
     useImageUpload();
 
-  const navigate = useNavigate();
+
 
   //Popup Flags
   useEffect(() => {
@@ -60,14 +60,17 @@ export default function PGProfile() {
       logout();
     }
 
-    var formattedNumber = userPhoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
+    var formattedNumber = userPhoneNumber ? userPhoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3') : "";
     // console.log('userPhoneNumber formatted: ', formattedNumber)
     setUserPhoneNumber(formattedNumber)
 
     setUserDetails({
       DisplayName: user && user.displayName,
-      FullName: user && user.fullName ? user.fullName : user.displayName,
-      PhoneNumber: user && user.phoneNumber ? user.phoneNumber : user.phoneNumber,
+      FullName: user && user.fullName ? user.fullName : user && user.displayName,
+      PhoneNumber: user && user.phoneNumber,
+      Email: user && user.email,
+      City: user && user.city,
+      Country: user && user.country,
       Role: user && user.role ? user.role : 'owner',
       Roles: user && user.roles ? user.roles : ['owner']
     })
@@ -207,19 +210,13 @@ export default function PGProfile() {
       // id_sendotpButton
       document.getElementById('id_sendotpButton').style.display = 'none';
 
+
       const phoneProvider = new projectAuthObj.PhoneAuthProvider();
-      // const phoneProvider = new PhoneAuthProvider(projectAuth);
       // console.log('phoneProvider: ', phoneProvider)
       // const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container');
-      // const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container', {
-      //   size: 'invisible'
-      // });
       const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container', {
-        size: 'invisible',
-        callback: (response) => {
-          console.log('Recaptcha verified');
-        },
-      }, projectAuth);
+        size: 'invisible'
+      });
 
       // console.log('recaptchaVerifier: ', recaptchaVerifier)
       var newPhoneNumberWithPlus = "+" + newPhoneNumber;
@@ -353,7 +350,7 @@ export default function PGProfile() {
         <div className="container">
           <div className="sn_inner">
             <div className="user_img relative">
-              <img src={user.photoURL} alt=''></img>
+              <img src={user && user.photoURL} alt=''></img>
               <input
                 type="file"
                 onChange={handleFileChange}
@@ -424,10 +421,16 @@ export default function PGProfile() {
                 </span>
               </div>
             </h5>
-            <h5>
+            <div>
+              <h5> {userDetails.City + ", "} {userDetails.Country}</h5>
+            </div>
+            <div>
+              <h5>{userDetails.Email}</h5>
+            </div>
+            {/* <h5>
               {user.email} <br />
               <Link onClick={changeGoogleAccount} className="click_text">Unlink Google Account</Link>
-            </h5>
+            </h5> */}
             <div className={changeNumberDisplay ? 'pop-up-change-number-div open' : 'pop-up-change-number-div'} >
               <div className="direct-div">
                 <span onClick={closeChangeNumber} className="material-symbols-outlined close-button">

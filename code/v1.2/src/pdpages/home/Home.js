@@ -196,7 +196,7 @@ const Home = () => {
                     </li>
                   </ul>
                   <Link to="/about-us">
-                    <button className="theme_btn btn_fill">
+                    <button className="theme_btn btn_fill no_icon">
                       More About
                       <span className="material-symbols-outlined btn_arrow ba_animation">
                         arrow_forward
@@ -521,7 +521,7 @@ const Home = () => {
 
         <Blog></Blog>
       </div>
-      <Modal show={show} onHide={handleClose}>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Reminder</Modal.Title>
         </Modal.Header>
@@ -543,7 +543,7 @@ const Home = () => {
           </div>
         </section>
 
-      </Modal>
+      </Modal> */}
     </>
 
   );

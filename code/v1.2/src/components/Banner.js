@@ -129,7 +129,7 @@ function Banner() {
                 <br></br>
                 <div className="search_property pointer">
                   <Link to="/properties">
-                    <button className="theme_btn btn_fill">
+                    <button className="theme_btn btn_fill no_icon">
                       Search Properties
                       <span className="material-symbols-outlined btn_arrow ba_animation">
                         arrow_forward
