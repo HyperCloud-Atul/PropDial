@@ -295,7 +295,7 @@ const CreateProperty = () => {
             dbstatesdocuments &&
             dbstatesdocuments.map((stateData) => ({
                 label: stateData.state,
-                value: stateData.state,
+                value: stateData.statecode,
             }));
         // // console.log('statesOptions:', statesOptions)
         statesOptionsSorted.current =
@@ -646,8 +646,8 @@ const CreateProperty = () => {
                 console.log(newProperty)
                 setFormSuccess("Property Created Successfully");
                 setFormError(null)
-                const propertiesCount = propertiesdocs && propertiesdocs.length;
-                const nextPropertySeqCounter = "PID" + (propertiesCount + 1)
+                const propertiesCount = propertiesdocs && propertiesdocs.length + 1000000;
+                const nextPropertySeqCounter = "PID" + state.value + (propertiesCount + 1)
                 console.log("nextPropertySeqCounter: ", nextPropertySeqCounter)
                 const _propertyWithSeqCounter = {
                     ..._newProperty,
