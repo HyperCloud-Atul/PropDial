@@ -24,8 +24,6 @@ import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 
-
-
 import "./UserList.css";
 
 // component
@@ -946,7 +944,7 @@ const PropertyDetails = () => {
                         /(\d{2})(\d{5})(\d{5})/,
                         "+$1 $2-$3"
                       )}
-                      ) <br></br>{user.city}, {user.country}
+                      )<br></br> {user.email}, {user.city}, {user.country}
                     </label>
                   </li>
                 ))}
