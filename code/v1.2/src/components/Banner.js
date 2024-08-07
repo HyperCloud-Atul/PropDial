@@ -45,7 +45,7 @@ function Banner() {
                   <span>Find Your Best House</span>
                   <AutoTypingEffect className="auto_typing_text"></AutoTypingEffect>
                 </h1>
-                <h6>We Have Million Properties For You</h6>
+                <h6>Discover Your Perfect Property Among Our Million Options</h6>
 
                 {/* <div className="search_area">
                   <div className="search_area_header">
