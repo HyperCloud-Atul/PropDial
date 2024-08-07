@@ -599,6 +599,7 @@ const CreateProperty = () => {
                 numberOfOpenCarParking: 0,
                 numberOfClosedCarParking: 0,
                 twoWheelarParking: "",
+                lockinPeriod: 0,
                 diningArea: "",
                 livingAndDining: "",
                 entranceGallery: "",

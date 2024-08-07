@@ -91,6 +91,7 @@ const Stage2 = (props) => {
     NumberOfOpenCarParking: 0,
     NumberOfClosedCarParking: 0,
     TwoWheelarParking: "",
+    LockinPeriod: 0,
     YearOfConstruction: { label: 0, value: 0 },
     // AgeOfProperty: 0,
   });
@@ -223,6 +224,7 @@ const Stage2 = (props) => {
         NumberOfOpenCarParking: propertyDocument.numberOfOpenCarParking ? propertyDocument.numberOfOpenCarParking : 0,
         NumberOfClosedCarParking: propertyDocument.numberOfClosedCarParking ? propertyDocument.numberOfClosedCarParking : 0,
         TwoWheelarParking: propertyDocument.twoWheelarParking ? propertyDocument.twoWheelarParking : 0,
+        LockinPeriod: propertyDocument.lockinPeriod ? propertyDocument.lockinPeriod : 0,
         YearOfConstruction: propertyDocument.yearOfConstruction ? propertyDocument.yearOfConstruction : "Year of Construction",
         // AgeOfProperty: propertyDocument.ageOfProperty ? propertyDocument.ageOfProperty : ""
 
@@ -313,7 +315,12 @@ const Stage2 = (props) => {
           NumberOfClosedCarParking: inputValue,
         });
       }
-
+      else if (input === "lockinperiodInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          LockinPeriod: inputValue,
+        });
+      }
     }
   }
 
@@ -392,6 +399,12 @@ const Stage2 = (props) => {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfClosedCarParking: inputValue,
+        });
+      }
+      else if (input === "lockinperiodInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          LockinPeriod: inputValue,
         });
       }
     }
@@ -498,7 +511,9 @@ const Stage2 = (props) => {
       numberOfLifts: propertyDetails.NumberOfLifts ? propertyDetails.NumberOfLifts : 0,
       numberOfOpenCarParking: propertyDetails.NumberOfOpenCarParking ? propertyDetails.NumberOfOpenCarParking : 0,
       numberOfClosedCarParking: propertyDetails.NumberOfClosedCarParking ? propertyDetails.NumberOfClosedCarParking : 0,
+
       twoWheelarParking: propertyDetails.TwoWheelarParking ? propertyDetails.TwoWheelarParking : "",
+      lockinPeriod: propertyDetails.LockinPeriod ? propertyDetails.LockinPeriod : 0,
       yearOfConstruction: propertyDetails.YearOfConstruction,
       // ageOfProperty: propertyDetails.AgeOfProperty ? propertyDetails.AgeOfProperty : document.getElementById('ageOfPropertyCount'),
     };
@@ -2786,6 +2801,40 @@ const Stage2 = (props) => {
               </div>
             </div>
 
+          </div>
+          {/* Lock-in Period */}
+          <div className="col-md-4">
+            <div className="form_field label_top">
+              <label htmlFor="">Lock-in Period</label>
+              <div className="plus_minus_input_wrapper">
+                <span className="pmi_label">#Lock-In Period</span>
+                <div className="plus_minus_input">
+                  <div
+                    className="left-minus-button pmbutton"
+                    onClick={() => {
+                      decrementInput("lockinperiodInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">remove</span>
+                  </div>
+
+                  <input
+                    id="lockinperiodInput"
+                    type="number"
+                    disabled
+                    value={propertyDetails && propertyDetails.LockinPeriod}
+                  />
+                  <div
+                    className="right-plus-button pmbutton"
+                    onClick={() => {
+                      incrementInput("lockinperiodInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">add</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
