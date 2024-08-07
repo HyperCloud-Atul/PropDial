@@ -38,9 +38,9 @@ export const AuthContextProvider = ({ children }) => {
             let displayName = snapshot.data().displayName;
             let fullName = snapshot.data().fullName;
             let phoneNumber = snapshot.data().phoneNumber;
+            let email = snapshot.data().email;
             let country = snapshot.data().country;
             let countryCode = snapshot.data().countryCode;
-            let email = snapshot.data().email;
             let city = snapshot.data().city;
             let address = snapshot.data().address;
             let photoURL = snapshot.data().photoURL;
@@ -58,9 +58,9 @@ export const AuthContextProvider = ({ children }) => {
               displayName,
               fullName,
               phoneNumber,
+              email,
               country,
               countryCode,
-              email,
               city,
               address,
               photoURL,
