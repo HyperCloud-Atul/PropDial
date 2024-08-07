@@ -111,6 +111,8 @@ const AddEnquiry = () => {
                 updatedAt: new Date(),
             };
             const docRef = await addDocument({
+                iAm:"",
+                description:"",
                 enquiryFrom,
                 referredBy,
                 enquiryType,

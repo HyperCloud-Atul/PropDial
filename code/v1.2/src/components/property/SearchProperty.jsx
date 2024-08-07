@@ -62,14 +62,24 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
       setIsUploading(true);
       const docRef = await addDocument({
         iAm,
-        name,
-        phone,
         description,
-        city,
-        country,
-        state,
+        name,
+        phone,   
 
-      });
+        enquiryFrom:"",
+        referredBy:"",
+        enquiryType:"rent",    
+        email:"",
+        date: new Date().toISOString(), // save as ISO string including time
+        enquiryStatus:"",
+        remark:"",
+        source:"",
+        employeeName:"",
+        propertyOwner:"",
+        propertyName:"",
+        propId: "",
+        statusUpdates:"",
+    });  
       setIam("");
       setName("");
       setPhone("");
