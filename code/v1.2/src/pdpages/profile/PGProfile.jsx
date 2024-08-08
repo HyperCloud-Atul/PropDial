@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
 import Avatar from "../../components/Avatar";
+import {BeatLoader,} from "react-spinners";
 import { useLogout } from "../../hooks/useLogout";
 import Popup from "../../components/Popup";
 import { useImageUpload } from "../../hooks/useImageUpload";
@@ -47,6 +48,7 @@ export default function PGProfile() {
   const [popupReturn, setPopupReturn] = useState(false);
 
   const [thumbnail, setThumbnail] = useState(null);
+  const [imgUploading, setImgUploading] = useState(false);
   const [thumbnailError, setThumbnailError] = useState(null);
   const { imgUpload, isImgCompressPending, imgCompressedFile } =
     useImageUpload();
@@ -91,6 +93,7 @@ export default function PGProfile() {
 
   const handleFileChange = async (e) => {
     // setThumbnail(null)
+    setImgUploading(true);
     let file = e.target.files[0];
     // console.log('file original selected:', file)
     // console.log('file size original selected:', file.size)
@@ -129,7 +132,7 @@ export default function PGProfile() {
       //user3.png
       // imgUrl = 'https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/thumbnails%2Fthumbnail3.png?alt=media&token=36ebeeff-a6a3-4180-a269-61a23cbc3632';
     }
-
+    setImgUploading(false);
     // console.log('thumbnail updated')
   };
 
@@ -357,14 +360,29 @@ export default function PGProfile() {
                 id="profile-upload-input"
                 className="profile-upload-input"
               />
-              <label
-                htmlFor="profile-upload-input"
-                className="profile-upload-label pointer"
-              >
-                <span className="material-symbols-outlined">
-                  photo_camera
-                </span>
-              </label>
+              {!imgUploading && (
+                <label
+                  htmlFor="profile-upload-input"
+                  className="profile-upload-label pointer"
+                >
+                  <span className="material-symbols-outlined">
+                    photo_camera
+                  </span>
+                </label>
+              )}
+              {imgUploading && (
+                <div
+                  className="loader d-flex justify-content-center align-items-center"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    position:"absolute",
+                    top:"0",                
+                  }}
+                >
+                  <BeatLoader color={"#FF5733"} loading={true} />
+                </div>
+              )}
             </div>
             <div className="vg22"></div>
 
