@@ -374,6 +374,10 @@
     opacity: 0.6;
     z-index: 1;
 }
+.coming_soon.r0::after{
+    left: inherit;
+    right: 0;
+}
 .eicp_single .icon span {
     color: var(--theme-blue);
     font-size: 28px;

@@ -32,7 +32,12 @@ const PGNotification = () => {
 
   return (
     <div className="top_header_pg pg_bg">
-      <div className="page_spacing">
+      <div className={`page_spacing ${activeNotifications && activeNotifications.length === 0 ? "pg_min_height" : ""}`}>
+        {activeNotifications && activeNotifications.length === 0 && (
+          <div className="pg_msg">
+            No notifications available at this time
+          </div>
+        )}
         {user && user.role === "propagentadmin" && (
           <div className="brf_icon">
             <Link to="/propagentaddnotification/new">
@@ -42,11 +47,15 @@ const PGNotification = () => {
             </Link>
           </div>
         )}
-        <div className="pg_header">
-          <h2 className="m22 mb-1">Alert Center!</h2>
-          <h4 className="r16 light_black">Your Notifications, Stay Updated</h4>
-        </div>
-        <div className="vg22"></div>
+        {activeNotifications && activeNotifications.length !== 0 && (
+          <>
+            <div className="pg_header">
+              <h2 className="m22 mb-1">Alert Center!</h2>
+              <h4 className="r16 light_black">Your Notifications, Stay Updated</h4>
+            </div>
+            <div className="vg22"></div>
+          </>
+        )}
         <div className="my_small_card_parent">
           {activeNotifications &&
             activeNotifications.map((notification) => (

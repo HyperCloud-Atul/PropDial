@@ -178,7 +178,7 @@ const PGMoreMenu = () => {
                   <Link className="mm_single" to="/newproperty">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16">add property</h5>
-                    <h6>set your current location</h6>
+                    <h6>Easily list your property</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -186,25 +186,25 @@ const PGMoreMenu = () => {
                   <Link className="mm_single" to="/addnotification/new">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16"> add notification</h5>
-                    <h6>set your current location</h6>
+                    <h6>Create and manage your custom alerts and notifications</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
                   </Link>
-                  <Link className="mm_single" to="">
+                  <Link className="mm_single coming_soon r0" to="">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16">  add bills </h5>
-                    <h6>set your current location</h6>
+                    <h6>Enter and manage your billing information and payments</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
                   </Link>
-                  <Link className="mm_single" to="">
+                  <Link className="mm_single" to="/allproperties">
                     <span className="material-symbols-outlined mms_icon">
                       favorite
                     </span>
-                    <h5 className="dr16">property list</h5>
-                    <h6>All The Trips You Can Track Here</h6>
+                    <h5 className="dr16">property lists</h5>
+                    <h6>View and manage the complete list of available properties</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -214,27 +214,27 @@ const PGMoreMenu = () => {
                       favorite
                     </span>
                     <h5 className="dr16">user list</h5>
-                    <h6>update your app password</h6>
+                    <h6>View and manage all registered users</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
                   </Link>
-                  <Link className="mm_single" to="">
+                  <Link className="mm_single coming_soon r0" to="">
                     <span className="material-symbols-outlined mms_icon">
                       favorite
                     </span>
                     <h5 className="dr16">Manage tickets</h5>
-                    <h6>All The Trips You Can Track Here</h6>
+                    <h6>Oversee and respond to all support tickets and inquiries</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
                   </Link>
-                  <Link className="mm_single" to="">
+                  <Link className="mm_single coming_soon r0" to="">
                     <span className="material-symbols-outlined mms_icon">
                       favorite
                     </span>
                     <h5 className="dr16">PMS Payment</h5>
-                    <h6>update your app password</h6>
+                    <h6> Manage and process your PMS payments.</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -244,7 +244,7 @@ const PGMoreMenu = () => {
                       favorite
                     </span>
                     <h5 className="dr16">Enquiry</h5>
-                    <h6>discover all enquiry</h6>
+                    <h6>View and respond to all customer enquiries and leads</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -259,7 +259,7 @@ const PGMoreMenu = () => {
                   <Link className="mm_single" to="/countrylist">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16">Add Country</h5>
-                    <h6>set your current location</h6>
+                    <h6>Add and manage countries for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -269,7 +269,7 @@ const PGMoreMenu = () => {
                       g_translate
                     </span>
                     <h5 className="dr16">Add State</h5>
-                    <h6>All The Trips You Can Track Here</h6>
+                    <h6>Add and manage states for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -279,7 +279,7 @@ const PGMoreMenu = () => {
                       favorite
                     </span>
                     <h5 className="dr16">Add City</h5>
-                    <h6>All The Trips You Can Track Here</h6>
+                    <h6>Add and manage cites for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -289,7 +289,7 @@ const PGMoreMenu = () => {
                       favorite
                     </span>
                     <h5 className="dr16">Add Locality</h5>
-                    <h6>update your app password</h6>
+                    <h6>Add and manage localites for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -299,7 +299,7 @@ const PGMoreMenu = () => {
                       favorite
                     </span>
                     <h5 className="dr16">Add Society</h5>
-                    <h6>update your app password</h6>
+                    <h6>Add and manage societies for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -307,7 +307,7 @@ const PGMoreMenu = () => {
                 </div>
               </section>
               <div className="dvg22"></div>
-              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
+              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white coming_soon r0">
                 <h6 className="title dm20 light_black">setting</h6>
                 <div className="inner">
                   <Link className="mm_single" to="/adminsettings">
@@ -321,7 +321,7 @@ const PGMoreMenu = () => {
                   <Link className="mm_single" to="/adminsettings">
                     <span className="material-symbols-outlined mms_icon">flag</span>
                     <h5 className="dr16">Logo</h5>
-                    <h6>set your current location</h6>
+                    <h6>Upload and update the logo displayed on your site</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -331,7 +331,7 @@ const PGMoreMenu = () => {
                       favorite
                     </span>
                     <h5 className="dr16">Theme</h5>
-                    <h6>All The Trips You Can Track Here</h6>
+                    <h6>Choose and apply a new theme for your site's appearance</h6>
                     <span className="material-symbols-outlined mms_ra">
                       <DarkModeToggle
                         onChange={() =>
@@ -354,7 +354,7 @@ const PGMoreMenu = () => {
                       favorite
                     </span>
                     <h5 className="dr16">Site Language</h5>
-                    <h6>All The Trips You Can Track Here</h6>
+                    <h6>Select and set the preferred language for your website</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -364,7 +364,7 @@ const PGMoreMenu = () => {
                       favorite
                     </span>
                     <h5 className="dr16">Payment Gateway</h5>
-                    <h6>update your app password</h6>
+                    <h6>Configure and switch your payment processing provider</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -425,7 +425,7 @@ const PGMoreMenu = () => {
               <Link className="mm_single" to="/notification">
                 <span className="material-symbols-outlined mms_icon">notifications_active</span>
                 <h5 className="dr16">notification</h5>
-                <h6>stay updated: important message inside!</h6>
+                <h6>Review your recent alerts and updates</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
@@ -461,7 +461,7 @@ const PGMoreMenu = () => {
             </div>
             <div className="mm_inner card_shadow card_border_radius bg_white">
               <h6 className="title">Others</h6>
-              <Link className="mm_single" to="/ticketdetail">
+              <Link className="mm_single coming_soon r0" to="/ticketdetail">
                 <span className="material-symbols-outlined mms_icon">help</span>
                 <h5 className="dr16">Help & Support</h5>
                 <h6>assistance and support resources</h6>
@@ -469,7 +469,7 @@ const PGMoreMenu = () => {
                   chevron_right
                 </span>
               </Link>
-              <Link className="mm_single">
+              <Link className="mm_single coming_soon r0" to=" ">
                 <span className="material-symbols-outlined mms_icon">help</span>
                 <h5 className="dr16">Display mode</h5>
                 <h6>change your app mode to dark & light</h6>
