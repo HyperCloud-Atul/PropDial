@@ -37,18 +37,24 @@ const PGAdminProperty = () => {
   console.log('user accessType: ', user.accessType)
   console.log('user accessValue: ', user.accessValue)
 
+
+
   let caseFilter = user.accessType;
   const accessedPropertyList = properties
     ? properties.filter((document) => {
       switch (caseFilter) {
         case "country":
-          return document.country && document.country.toLowerCase() === user.accessValue.toLowerCase()
+          const lowerCaseCountryArray = user.accessValue.map(element => element.toLowerCase());
+          return document.country && lowerCaseCountryArray.includes(document.country.toLowerCase())
         case "region":
-          return document.region && document.region.toLowerCase() === user.accessValue.toLowerCase()
+          const lowerCaseRegionArray = user.accessValue.map(element => element.toLowerCase());
+          return document.region && lowerCaseRegionArray.includes(document.region.toLowerCase())
         case "state":
-          return document.state && document.state.toLowerCase() === user.accessValue.toLowerCase()
+          const lowerCaseStateArray = user.accessValue.map(element => element.toLowerCase());
+          return document.state && lowerCaseStateArray.includes(document.state.toLowerCase())
         case "city":
-          return document.city && document.city.toLowerCase() === user.accessValue.toLowerCase()
+          const lowerCaseCityArray = user.accessValue.map(element => element.toLowerCase());
+          return document.city && lowerCaseCityArray.includes(document.city.toLowerCase())
 
         default: return true;
       }
