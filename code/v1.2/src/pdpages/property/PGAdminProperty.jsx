@@ -34,8 +34,8 @@ const PGAdminProperty = () => {
   };
 
   //access level restriction
-  console.log('user accessType: ', user.accessType)
-  console.log('user accessValue: ', user.accessValue)
+  // console.log('user accessType: ', user.accessType)
+  // console.log('user accessValue: ', user.accessValue)
 
 
 
@@ -60,7 +60,7 @@ const PGAdminProperty = () => {
       }
     }) : null;
 
-  console.log("accessed PropertyList: ", accessedPropertyList)
+  // console.log("accessed PropertyList: ", accessedPropertyList)
 
 
   // Filter properties based on search input and other filters
@@ -99,7 +99,7 @@ const PGAdminProperty = () => {
     })
     : null;
 
-  console.log("filterProperties", filterProperties);
+  // console.log("filterProperties", filterProperties);
 
   // View mode state
   const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns

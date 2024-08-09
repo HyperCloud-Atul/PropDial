@@ -243,7 +243,7 @@ const PhoneLogin_reCaptchaV2 = () => {
     setIsLoading(true);  // Start the loader
     setOtpTimer(20);
     setIsResendDisabled(true);
-    console.log("In getOTP");
+    // console.log("In getOTP");
     setError("");
     if (phone === "" || phone === undefined || phone.length < 10) {
       return setError("Please enter valid mobile number");
@@ -253,7 +253,7 @@ const PhoneLogin_reCaptchaV2 = () => {
       let btnSendOTP = document.getElementById("btn_sendotp");
       btnSendOTP.style.display = "none";
       const respons = await setUpRecapcha("+" + phone);
-      console.log("in try 2", respons);
+      // console.log("in try 2", respons);
       setConfirmObj(respons);
       setmobilenoSliderState(false)
       setotpSliderState(true)
@@ -271,8 +271,8 @@ const PhoneLogin_reCaptchaV2 = () => {
 
   // New User Form
   const newUserForm = async () => {
-    console.log("In New User Form ")
-    console.log("User: ", user)
+    // console.log("In New User Form ")
+    // console.log("User: ", user)
     setmobilenoSliderState(false)
     setotpSliderState(false)
     setnewUserSliderState(true)
@@ -318,7 +318,7 @@ const PhoneLogin_reCaptchaV2 = () => {
     e.preventDefault();
     setIsLoading(true);  // Start the loader
     setError("");
-    console.log("in verifyOTP", otp);
+    // console.log("in verifyOTP", otp);
 
     if (otp === "" || otp === undefined || otp === null) return;
     try {
@@ -373,7 +373,7 @@ const PhoneLogin_reCaptchaV2 = () => {
           setotpSliderState(false)
 
         } else {
-          console.log("Existing user signed in with phone number");
+          // console.log("Existing user signed in with phone number");
           setIsLoading(false);  // Stop the loader  
           setmobilenoSliderState(false)
           setotpSliderState(true)
@@ -452,7 +452,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   const handlePhoneChange = (value, countryData) => {
     // setPhone(value);
     // setCountry(countryData);
-    console.log("value: ", value + " country code: ", countryData.countryCode + ", country name: ", countryData.name)
+    // console.log("value: ", value + " country code: ", countryData.countryCode + ", country name: ", countryData.name)
     setPhone(value)
     setCountryCode(countryData.countryCode)
     setCountryName(countryData.name)

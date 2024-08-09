@@ -14,7 +14,7 @@ export const useSignupPhone = () => {
     const navigate = useNavigate();
 
     function setUpRecapcha(number) {
-        console.log('in setUpRecapcha', number);
+        // console.log('in setUpRecapcha', number);
         setMobileNo(number)
         // recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recapcha-container', {});
         recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recapcha-container', {

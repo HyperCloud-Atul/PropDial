@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
 import Avatar from "../../components/Avatar";
-import {BeatLoader,} from "react-spinners";
+import { BeatLoader, } from "react-spinners";
 import { useLogout } from "../../hooks/useLogout";
 import Popup from "../../components/Popup";
 import { useImageUpload } from "../../hooks/useImageUpload";
@@ -28,7 +28,7 @@ export default function PGProfile() {
 
 
   const { user } = useAuthContext();
-  console.log('user:', user)
+  // console.log('user:', user)
   const navigate = useNavigate();
 
   if (!user) navigate("/login")
@@ -376,8 +376,8 @@ export default function PGProfile() {
                   style={{
                     width: "100%",
                     height: "100%",
-                    position:"absolute",
-                    top:"0",                
+                    position: "absolute",
+                    top: "0",
                   }}
                 >
                   <BeatLoader color={"#FF5733"} loading={true} />

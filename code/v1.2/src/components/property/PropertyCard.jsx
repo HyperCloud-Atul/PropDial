@@ -110,35 +110,37 @@ const PropertyCard = ({ propertyid }) => {
 
   //------------ End of Change User ---------
 
-  const toggleBtnClick_Active_Inactive = async () => {
-    let userSwitch = "";
-    // e.preventDefault()
+  // const toggleBtnClick_Active_Inactive = async () => {
+  //   let userSwitch = "";
+  //   // e.preventDefault()
 
-    if (toggleFlag) {
-      userSwitch = "active";
-    } else {
-      let review_inactive =
-        document.getElementById("id_inactive_review").innerHTML;
-      console.log("review_inactive: ", review_inactive);
-      userSwitch = review_inactive;
-    }
-    setToggleFlag(!toggleFlag);
+  //   if (toggleFlag) {
+  //     userSwitch = "active";
+  //   } else {
+  //     let review_inactive =
+  //       document.getElementById("id_inactive_review").innerHTML;
+  //     console.log("review_inactive: ", review_inactive);
+  //     userSwitch = review_inactive;
+  //   }
+  //   setToggleFlag(!toggleFlag);
 
-    const updatedProperty = {
-      status: userSwitch,
-      updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
-    };
+  //   const updatedProperty = {
+  //     status: userSwitch,
+  //     updatedAt: timestamp.fromDate(new Date()),
+  //     updatedBy: user.uid,
+  //   };
 
-    // console.log("updatedProperty", updatedProperty);
-    // console.log('property id: ', property.id)
+  //   // console.log("updatedProperty", updatedProperty);
+  //   // console.log('property id: ', property.id)
 
-    // await updateDocument(propertydoc.id, updatedProperty);
-  };
+  //   // await updateDocument(propertydoc.id, updatedProperty);
+  // };
 
   //Manage In-Review | Active |Inactive
   const handleIsActiveInactiveReview = async (e, option) => {
     // console.log("In handleIsActiveInactiveReview")
+    console.log("option: ", option)
+
     e.preventDefault();
 
     const updatedProperty = {
@@ -439,7 +441,7 @@ const PropertyCard = ({ propertyid }) => {
                     ></div>
                   </div>
                   <h6>Inspection Date</h6>
-                </div>                
+                </div>
               </div>
               <div className="child coming_soon">
                 <div className="left">
@@ -454,7 +456,7 @@ const PropertyCard = ({ propertyid }) => {
                     ></div>
                   </div>
                   <h6>Rent Renewal</h6>
-                </div>               
+                </div>
               </div>
             </div>
           </div>
