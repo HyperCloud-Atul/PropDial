@@ -276,6 +276,10 @@
         }
       }
     }
+
+    .my_small_card_parent {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 }
 
@@ -301,6 +305,10 @@
         }
       }
     }
+
+    .my_small_card_parent {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
 
@@ -322,15 +330,13 @@
             }
           }
 
-          .right {           
-            font-size: 38px;           
+          .right {
+            font-size: 38px;
           }
         }
       }
 
       .cf_single {
-
-
         &.open {
           width: 47%;
           min-height: inherit;
@@ -338,19 +344,108 @@
 
         &.working {
           width: 47%;
-                  min-height: inherit;
+          min-height: inherit;
         }
 
         &.successful {
           width: 47%;
-                  min-height: inherit;
+          min-height: inherit;
         }
 
         &.dead {
           width: 47%;
-                  min-height: inherit;
+          min-height: inherit;
+        }
+
+        .top {
+          .left {
+            h5 {
+              font-size: 20px;
+            }
+
+            h6 {
+              font-size: 14px;
+            }
+          }
+
+          .right {
+            h5 {
+              font-size: 20px;
+            }
+
+            h6 {
+              font-size: 14px;
+            }
+          }
+        }
+
+        .bottom {
+          h6 {
+            font-size: 14px;
+          }
         }
       }
     }
+
+    .my_small_card_parent {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
+}
+
+@media screen and (max-width: 575px) {
+  .enquiry_modal {
+    .modal_top_bar {
+      padding: 15px 10px;
+      .left {
+        span {
+          font-size: 20px;
+        }
+      }
+      .right{
+        font-size: 14px
+      }
+    }
+    .one_word_info {  
+    justify-content: inherit;  
+    flex-wrap: wrap;
+      .owi_single{
+        h6 {
+          font-size: 10px;       
+      }
+      h5{
+        font-size: 12px;
+      }
+      }
+    }
+    .details{
+h6{
+  font-size: 14px;
+}
+ul {
+  li {
+    .left {   
+      font-size: 14px;     
+    }
+    .right {   
+      font-size: 14px;     
+    }
+  }
+}
+    } 
+  }
+  .multi_steps{
+    &.show_status{
+      .step_single {
+        h5 {        
+          font-size: 9px;        
+      }
+      h6{
+        margin-bottom: 3px;
+        font-size: 12px;
+      }
+      }
+    }
+  }
+
 }

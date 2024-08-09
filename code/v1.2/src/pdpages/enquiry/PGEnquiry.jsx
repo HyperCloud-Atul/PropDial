@@ -87,7 +87,7 @@ const PGEnquiry = () => {
           </div>
         </div>
         {/* 9 dots html  */}
-        <Link className="bottom_add_button">
+        <Link className="property-list-add-property with_9dot">
           <span class="material-symbols-outlined" onClick={handelShowForm}>
             {showForm ? "close" : "add"}
           </span>

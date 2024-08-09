@@ -1,16 +1,19 @@
-.propdial_users{
+.propdial_users {
     display: grid;
     grid-column-gap: 14px;
     grid-row-gap: 14px;
     grid-template-columns: repeat(4, 1fr);
-    .pu_single {  
-        border: 1px solid #dfdfdf;      
+
+    .pu_single {
+        border: 1px solid #dfdfdf;
         margin-top: 0px;
-        border-radius: 10px;  
+        border-radius: 10px;
         background: var(--white-color);
-        .tc_single{
+
+        .tc_single {
             border: none;
         }
+
         .dates {
             display: flex;
             align-items: center;
@@ -25,32 +28,43 @@
         }
     }
 }
+
 .access_manage {
-    display: grid;   
+    display: grid;
     grid-template-columns: 30% 70%;
-.left{
-    padding-right: 11px;
-    border-right: 1px solid var(--theme-grey);
+
+    .left {
+        padding-right: 11px;
+        border-right: 1px solid var(--theme-grey);
+    }
+
+    .right {
+        padding-left: 11px;
+        max-height: 165px;
+        overflow-y: auto;
+
+    }
+
+    .theme_checkbox .theme_checkbox_container input[type=checkbox]+label {
+        min-width: inherit;
+    }
+
 }
-.right{
-    padding-left: 11px;
-}
-.theme_checkbox .theme_checkbox_container input[type=checkbox] + label{
-    min-width: inherit;
-}
- 
-}
+
 @media only screen and (max-width: 1199px) {
-    .propdial_users{       
+    .propdial_users {
         grid-template-columns: repeat(3, 1fr);
-        .pu_single {  
-            border: 1px solid #dfdfdf;      
+
+        .pu_single {
+            border: 1px solid #dfdfdf;
             margin-top: 0px;
-            border-radius: 10px;  
+            border-radius: 10px;
             background: var(--white-color);
-            .tc_single{
+
+            .tc_single {
                 border: none;
             }
+
             .dates {
                 display: flex;
                 align-items: center;
@@ -66,15 +80,17 @@
         }
     }
 }
+
 @media only screen and (max-width: 991px) {
-    .propdial_users{       
+    .propdial_users {
         grid-template-columns: repeat(2, 1fr);
-   
+
     }
 }
+
 @media only screen and (max-width: 575px) {
-    .propdial_users{       
+    .propdial_users {
         grid-template-columns: repeat(1, 1fr);
-   
+
     }
 }

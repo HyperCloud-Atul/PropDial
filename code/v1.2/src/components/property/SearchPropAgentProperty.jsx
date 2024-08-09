@@ -28,7 +28,7 @@ const SearchPropAgentProperty = ({ propagentProperties }) => {
     return (
         <>
             {propagentProperties.map((property) => (
-                <div className="pp_sidebarcard_single">
+                <Link className="pp_sidebarcard_single" to={`/propertydetails/${property.id}`}>
                     <div className="ppss_img">
                         {/* <img src="./assets/img/property/p2.jpg" alt="" /> */}
                         {property.images.length > 0 ? <img src={property.images[0]} alt={property.bhk} /> : <img src="/assets/img/property/p2.jpg" alt="" />}
@@ -45,7 +45,7 @@ const SearchPropAgentProperty = ({ propagentProperties }) => {
                         </h6>
                         <h6>Marketed by {property.postedBy}</h6>
                     </div>
-                </div>
+                </Link>
 
             ))}
         </>

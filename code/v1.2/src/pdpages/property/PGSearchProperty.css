@@ -578,6 +578,7 @@ h6.value_per_sqf {
         padding: 7px 15px;
         border-radius: 8px;
         padding-left: 38px;
+        min-width: inherit;
 
     }
 

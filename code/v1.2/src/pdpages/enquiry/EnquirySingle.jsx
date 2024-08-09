@@ -80,7 +80,7 @@ const EnquirySingle = ({ enquiries }) => {
       ))}
       {selectedEnquiry && (
         <>
-          <Modal show={showEnquriyModal} onHide={handleEnquriyModalClose} className="enquiry_modal">
+          <Modal show={showEnquriyModal} onHide={handleEnquriyModalClose} className="enquiry_modal margin_top">
             <span class="material-symbols-outlined modal_close" onClick={handleEnquriyModalClose}>
               close
             </span>
@@ -157,10 +157,11 @@ const EnquirySingle = ({ enquiries }) => {
                       :-
                     </div>
                     <div className="right">
-                      {user && user.role === "admin"
-                        ? selectedEnquiry.phone.replace(/(\d{2})(\d{3})(\d{2})(\d{3})/, "+$1 *** $2 ***")
-                        : selectedEnquiry.phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")
-                      }
+                    {user && user.role === "admin"
+  ? selectedEnquiry.phone.replace(/(\d{2})(\d{6})(\d{4})/, "+$1 ****** $3")
+  : selectedEnquiry.phone.replace(/(\d{2})(\d{6})(\d{4})/, "+$1 ****** $3")
+}
+              
                     </div>
                   </li>
                 )}
@@ -173,7 +174,9 @@ const EnquirySingle = ({ enquiries }) => {
                     <div className="middle">
                       :-
                     </div>
-                    <div className="right">
+                    <div className="right" style={{
+                      wordBreak:"break-all"
+                    }}>
                       {user && user.role === "admin"
                         ? `${selectedEnquiry.email.split("@")[0].substring(0, 2)}***@${selectedEnquiry.email.split("@")[1]}`
                         : selectedEnquiry.email
@@ -189,7 +192,9 @@ const EnquirySingle = ({ enquiries }) => {
                     <div className="middle">
                       :-
                     </div>
-                    <div className="right text-capitalize">
+                    <div className="right text-capitalize" style={{
+                      wordBreak:"break-all"
+                    }}>
                       {selectedEnquiry.description}
                     </div>
                   </li>

@@ -324,7 +324,7 @@ const ViewEnquiry = ( {enquiryDocs, enquiryDocsError} ) => {
 
         </div>
         <div className="right">
-          <div className="residentail_commercial rent_sale">
+          <div className="mobile_size residentail_commercial rent_sale">
             <label className={rentSaleFilter === "sale" ? "on" : "off"}>
               <div className="switch">
                 <span className={`rent ${rentSaleFilter === "sale" ? "off" : "on"}`}>

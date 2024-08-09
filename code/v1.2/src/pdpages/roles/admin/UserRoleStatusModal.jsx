@@ -67,20 +67,7 @@ const UserRoleStatusModal = ({ show, handleClose, selectedUser, handleRoleChange
                     <div className="left">
                         <div className="field_box theme_radio_new tab_type_radio active_right no_pd_bo">
                             <div className="theme_radio_container">
-                                <div className="radio_single">
-                                    <input
-                                        type="radio"
-                                        name="access_type"
-                                        id="at_country"
-                                    // value={category.value}
-                                    // onChange={handleDocCatChange}
-                                    // checked={selectedDocCat === category.value}
-                                    />
-                                    <label htmlFor="at_country">
-                                        Country
-                                    </label>
-                                </div>
-                                <div className="radio_single">
+                            <div className="radio_single">
                                     <input
                                         type="radio"
                                         name="access_type"
@@ -97,6 +84,20 @@ const UserRoleStatusModal = ({ show, handleClose, selectedUser, handleRoleChange
                                     <input
                                         type="radio"
                                         name="access_type"
+                                        id="at_state"
+                                    // value={category.value}
+                                    // onChange={handleDocCatChange}
+                                    // checked={selectedDocCat === category.value}
+                                    />
+                                    <label htmlFor="at_state">
+                                        state
+                                    </label>
+                                </div>
+                              
+                                <div className="radio_single">
+                                    <input
+                                        type="radio"
+                                        name="access_type"
                                         id="at_region"
                                     // value={category.value}
                                     // onChange={handleDocCatChange}
@@ -104,6 +105,19 @@ const UserRoleStatusModal = ({ show, handleClose, selectedUser, handleRoleChange
                                     />
                                     <label htmlFor="at_region">
                                         Region
+                                    </label>
+                                </div>
+                                <div className="radio_single">
+                                    <input
+                                        type="radio"
+                                        name="access_type"
+                                        id="at_country"
+                                    // value={category.value}
+                                    // onChange={handleDocCatChange}
+                                    // checked={selectedDocCat === category.value}
+                                    />
+                                    <label htmlFor="at_country">
+                                        Country
                                     </label>
                                 </div>
 
