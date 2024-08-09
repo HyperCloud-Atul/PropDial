@@ -79,7 +79,7 @@ const PropertyCard = ({ propertyid }) => {
     };
 
     // console.log('updatedProperty', updatedProperty)
-    // console.log('property id: ', property.id)
+    // console.log('propertydoc id: ', propertydoc.id)
 
     await updateDocument(propertydoc.id, updatedProperty);
 
@@ -140,6 +140,10 @@ const PropertyCard = ({ propertyid }) => {
   const handleIsActiveInactiveReview = async (e, option) => {
     // console.log("In handleIsActiveInactiveReview")
     console.log("option: ", option)
+    // console.log("selectedpropertyid: ", selectedpropertyid)
+    // const propid = document.getElementById("propertydocid")
+    // console.log("propid: ", propid)
+    console.log("propertyid: ", propertyid)
 
     e.preventDefault();
 
@@ -150,9 +154,9 @@ const PropertyCard = ({ propertyid }) => {
     };
 
     // console.log("updatedProperty", updatedProperty);
-    // console.log('property id: ', property.id)
+    // console.log('propertydoc: ', propertydoc)
 
-    await updateDocument(propertydoc.id, updatedProperty);
+    await updateDocument(propertyid, updatedProperty);
   };
 
   return (
@@ -529,6 +533,7 @@ const PropertyCard = ({ propertyid }) => {
 
             {user && user.role === "admin" && propertydoc && (
               <div className="form_field st-2 outline">
+                <div>{propertydoc.id}</div>
                 <div className="radio_group">
                   <div className="radio_group_single">
                     <div
@@ -540,13 +545,13 @@ const PropertyCard = ({ propertyid }) => {
                     >
                       <input
                         type="checkbox"
-                        id="toggleFlag_inreview"
+                        id={"toggleFlag_inreview" + propertydoc.id}
                         onClick={(e) =>
                           handleIsActiveInactiveReview(e, "In-Review")
                         }
                       />
                       <label
-                        htmlFor="toggleFlag_inreview"
+                        htmlFor={"toggleFlag_inreview" + propertydoc.id}
                         style={{ paddingTop: "7px" }}
                       >
                         <div className="radio_icon">
@@ -571,13 +576,13 @@ const PropertyCard = ({ propertyid }) => {
                     >
                       <input
                         type="checkbox"
-                        id="toggleFlag_active"
+                        id={"toggleFlag_active" + propertydoc.id}
                         onClick={(e) =>
                           handleIsActiveInactiveReview(e, "Active")
                         }
                       />
                       <label
-                        htmlFor="toggleFlag_active"
+                        htmlFor={"toggleFlag_active" + propertydoc.id}
                         style={{ paddingTop: "7px" }}
                       >
                         <div className="radio_icon">
@@ -602,13 +607,13 @@ const PropertyCard = ({ propertyid }) => {
                     >
                       <input
                         type="checkbox"
-                        id="toggleFlag_inactive"
+                        id={"toggleFlag_inactive" + propertydoc.id}
                         onClick={(e) =>
                           handleIsActiveInactiveReview(e, "Inactive")
                         }
                       />
                       <label
-                        htmlFor="toggleFlag_inactive"
+                        htmlFor={"toggleFlag_inactive" + propertydoc.id}
                         style={{ paddingTop: "7px" }}
                       >
                         <div className="radio_icon">
