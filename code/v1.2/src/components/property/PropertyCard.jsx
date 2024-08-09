@@ -533,7 +533,6 @@ const PropertyCard = ({ propertyid }) => {
 
             {user && user.role === "admin" && propertydoc && (
               <div className="form_field st-2 outline">
-                <div>{propertydoc.id}</div>
                 <div className="radio_group">
                   <div className="radio_group_single">
                     <div
