@@ -647,7 +647,7 @@ const CreateProperty = () => {
                 console.log(newProperty)
                 setFormSuccess("Property Created Successfully");
                 setFormError(null)
-                const propertiesCount = propertiesdocs && propertiesdocs.length + 1;
+                const propertiesCount = propertiesdocs && propertiesdocs.length + 2101;
                 // const nextPropertySeqCounter = "PID: " + state.value + "-" + (propertiesCount + 1)
                 // console.log("nextPropertySeqCounter: ", nextPropertySeqCounter)
 
