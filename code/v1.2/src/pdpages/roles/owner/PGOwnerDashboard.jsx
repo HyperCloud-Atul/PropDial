@@ -39,31 +39,52 @@ const PGOwnerDashboard = () => {
     ["userId", "==", user.uid]
   );
 
-  // console.log('myproperties: ', myproperties)
-
   const { documents: properties, error: propertieserror } = useCollection("properties", ["postedBy", "==", "Propdial"]);
   // const { documents: properties, error: propertieserror } = useCollection(
   //   "properties",
   //   ["access", "array-contains", user.uid]
   // );
 
+  const [filteredproperties, setFilteredproperties] = useState(null);
+  const [activeProperties, setActiveProperties] = useState(null);
 
-  const filteredproperties = myproperties && myproperties.map((doc) => (
-    properties && properties.filter(propdoc => propdoc.id === doc.propertyId)
-  ))
+  useEffect(() => {
+
+    try {
+      console.log('myproperties: ', myproperties)
+      console.log('all properties: ', properties)
+
+      if (myproperties && properties) {
+        const _filteredproperties = myproperties && myproperties.map((doc) => (
+          properties.filter(propdoc => propdoc.id === doc.propertyId)
+        ))
+        console.log("_filteredproperties: ", _filteredproperties)
+
+        setFilteredproperties(_filteredproperties)
+
+        const _activeProperties =
+          _filteredproperties && _filteredproperties.map((propdoc) => (
+            propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
+          ))
+
+        setActiveProperties(_activeProperties)
+      }
+    } catch (ex) {
+      console.error("Error: ", ex);
+    }
+
+  }, [myproperties, properties]);
+
+  // const filteredproperties = myproperties && myproperties.map((doc) => (
+  //   properties && properties.filter(propdoc => propdoc.id === doc.propertyId)
+  // ))
 
   // console.log('filteredproperties: ', filteredproperties)
 
   // const activeProperties =
   //   filteredproperties && filteredproperties.map((propdoc) => (
-  //     console.log('active properties prop doc: ', propdoc)
-  //     // propdoc.filter((item) => item.isActiveInactiveReview.toUpperCase() === 'ACTIVE')
+  //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
   //   ))
-
-  const activeProperties =
-    filteredproperties && filteredproperties.map((propdoc) => (
-      propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
-    ))
 
   const activePropertieslengthWithoutNulls = activeProperties && activeProperties.filter(element => element !== null).length;
 
