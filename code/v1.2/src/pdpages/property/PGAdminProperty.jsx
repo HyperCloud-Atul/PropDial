@@ -12,7 +12,7 @@ const propertyFilter = ["Residential", "Commercial"];
 const PGAdminProperty = () => {
   const { user } = useAuthContext();
   const { documents: properties, error: propertieserror } =
-    useCollection("properties", ["postedBy", "==", "Propdial"]);
+    useCollection("properties", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
 
   // Filter state
   const [filter, setFilter] = useState(propertyFilter[0]);

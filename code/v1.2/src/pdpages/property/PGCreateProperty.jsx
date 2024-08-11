@@ -647,12 +647,16 @@ const CreateProperty = () => {
                 console.log(newProperty)
                 setFormSuccess("Property Created Successfully");
                 setFormError(null)
-                const propertiesCount = propertiesdocs && propertiesdocs.length + 1000000;
-                const nextPropertySeqCounter = "PID" + state.value + (propertiesCount + 1)
-                console.log("nextPropertySeqCounter: ", nextPropertySeqCounter)
+                const propertiesCount = propertiesdocs && propertiesdocs.length + 1;
+                // const nextPropertySeqCounter = "PID: " + state.value + "-" + (propertiesCount + 1)
+                // console.log("nextPropertySeqCounter: ", nextPropertySeqCounter)
+
+                const formattedId = `PID: ${state.value}-${String(propertiesCount).padStart(5, '0')}`;
+                // console.log("formattedId: ", formattedId)
+
                 const _propertyWithSeqCounter = {
                     ..._newProperty,
-                    pid: nextPropertySeqCounter
+                    pid: formattedId
                 }
 
                 await addNewPropertyDocument(_propertyWithSeqCounter);
