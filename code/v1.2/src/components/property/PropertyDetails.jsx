@@ -1407,6 +1407,45 @@ const PropertyDetails = () => {
                             }}>
                             </div>
                           </div>
+                          <h6>Keys</h6>
+                        </div>
+                      </div>
+                      <div className="child coming_soon">
+                        <div className="left">
+                          <h5>0-0-0</h5>
+                          <div className="line">
+                            <div className="line_fill" style={{
+                              width: "25%",
+                              background: "#00a300"
+                            }}>
+                            </div>
+                          </div>
+                          <h6>Utility Bills</h6>
+                        </div>
+                      </div>
+                      <div className="child coming_soon">
+                        <div className="left">
+                          <h5>0-0-0</h5>
+                          <div className="line">
+                            <div className="line_fill" style={{
+                              width: "25%",
+                              background: "#00a300"
+                            }}>
+                            </div>
+                          </div>
+                          <h6>Advertisement</h6>
+                        </div>
+                      </div>
+                      <div className="child coming_soon">
+                        <div className="left">
+                          <h5>0-0-0</h5>
+                          <div className="line">
+                            <div className="line_fill" style={{
+                              width: "25%",
+                              background: "#00a300"
+                            }}>
+                            </div>
+                          </div>
                           <h6>Inspection Date</h6>
                         </div>
                       </div>
@@ -1488,6 +1527,51 @@ const PropertyDetails = () => {
                             </div>
 
                           </Link>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                          {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
+                          <div className="eicp_single coming_soon">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                pageview
+                              </span>
+                              <div className="text">
+                                <h6>{inspections && inspections.length}</h6>
+                                <h5>Keys</h5>
+                              </div>
+                            </div>
+                          </div>
+                          {/* </Link> */}
+                        </SwiperSlide>
+                        <SwiperSlide>
+                          {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
+                          <div className="eicp_single coming_soon">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                pageview
+                              </span>
+                              <div className="text">
+                                <h6>{inspections && inspections.length}</h6>
+                                <h5>Utility Bills</h5>
+                              </div>
+                            </div>
+                          </div>
+                          {/* </Link> */}
+                        </SwiperSlide>
+                        <SwiperSlide>
+                          {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
+                          <div className="eicp_single coming_soon">
+                            <div className="icon">
+                              <span class="material-symbols-outlined">
+                                pageview
+                              </span>
+                              <div className="text">
+                                <h6>{inspections && inspections.length}</h6>
+                                <h5>Advertisements</h5>
+                              </div>
+                            </div>
+                          </div>
+                          {/* </Link> */}
                         </SwiperSlide>
                         <SwiperSlide>
                           {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
