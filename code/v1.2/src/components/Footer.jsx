@@ -30,7 +30,7 @@ export default function Footer() {
     "/updateproperty/:propertyid",
     "/addproperty_quick",
     "/updateproperty",
-    "/newproperty",
+    // "/newproperty",
   ];
   const shouldPageFooterHide = pageFooterHidePaths.includes(location.pathname);
   const pageFooterClassName = `${shouldPageFooterHide ? "page_footer_hide" : ""}`;

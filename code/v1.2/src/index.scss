@@ -96,7 +96,6 @@
   padding: 3px 20px;
 }
 
-
 .form_field.label_top {
   background: #fff;
   border: 1px solid #d7d7d7;
@@ -193,7 +192,7 @@
     gap: 8px;
     position: relative;
     margin-bottom: 0px;
-    padding-left: 38px;
+    padding-left: 32px;
     background: #efefef;
     left: 0px;
     top: 0px;
@@ -222,28 +221,28 @@
 .theme_radio_new {
   &.tab_type_radio {
     .theme_radio_container {
-      input[type="radio"]+label {
+      input[type="radio"] + label {
         border-radius: 8px 8px 0px 0px !important;
         border-color: var(--theme-grey);
         border-bottom: none;
         background: whitesmoke;
       }
 
-      input[type="radio"]:checked+label {
+      input[type="radio"]:checked + label {
         border-bottom: 3px solid var(--theme-orange);
         background: whitesmoke;
         color: var(--text-black);
       }
 
-      input[type="radio"]+label::before {
+      input[type="radio"] + label::before {
         content: none;
       }
 
-      input[type="radio"]+label {
+      input[type="radio"] + label {
         position: relative;
       }
 
-      input[type="radio"]:checked+label::before {
+      input[type="radio"]:checked + label::before {
         content: "";
         position: absolute;
         bottom: -9px;
@@ -272,7 +271,7 @@
       display: none;
     }
 
-    input[type="radio"]+label {
+    input[type="radio"] + label {
       cursor: pointer;
       padding: 3px 10px;
       border: 1px solid #498fff;
@@ -284,7 +283,7 @@
       text-transform: capitalize;
     }
 
-    input[type="radio"]:checked+label {
+    input[type="radio"]:checked + label {
       background-color: var(--theme-blue);
       color: var(--white-color);
     }
@@ -294,14 +293,14 @@
       box-shadow: none;
     }
 
-    input[type="radio"]+label::before {
+    input[type="radio"] + label::before {
       content: "\002B";
       display: inline-block;
       margin-right: 5px;
       font-size: 15px;
     }
 
-    input[type="radio"]:checked+label::before {
+    input[type="radio"]:checked + label::before {
       content: "\2713";
       /* Check mark icon */
       display: inline-block;
@@ -326,20 +325,20 @@
 
   &.active_right {
     .theme_radio_container {
-      input[type="radio"]+label {
+      input[type="radio"] + label {
         border-radius: 8px 0px 0px 8px !important;
         border-bottom: 1px solid;
         border-right: 3px solid transparent;
       }
 
-      input[type="radio"]:checked+label {
+      input[type="radio"]:checked + label {
         border-bottom: 1px solid;
         border-right: 3px solid var(--theme-orange);
         background: whitesmoke;
         color: var(--text-black);
       }
 
-      input[type="radio"]:checked+label::before {
+      input[type="radio"]:checked + label::before {
         bottom: inherit;
         right: -10px;
         top: 50%;
@@ -352,7 +351,6 @@
       }
     }
   }
-
 }
 
 /* // css for custom checkbox start */
@@ -380,7 +378,7 @@
       display: none;
     }
 
-    input[type="checkbox"]+label {
+    input[type="checkbox"] + label {
       cursor: pointer;
       padding: 3px 10px;
       border: 1px solid #498fff;
@@ -392,19 +390,19 @@
       text-transform: capitalize;
     }
 
-    input[type="checkbox"]:checked+label {
+    input[type="checkbox"]:checked + label {
       background-color: var(--theme-blue);
       color: var(--white-color);
     }
 
-    input[type="checkbox"]+label::before {
+    input[type="checkbox"] + label::before {
       content: "\002B";
       display: inline-block;
       margin-right: 5px;
       font-size: 15px;
     }
 
-    input[type="checkbox"]:checked+label::before {
+    input[type="checkbox"]:checked + label::before {
       content: "\2713";
       /* Check mark icon */
       display: inline-block;
@@ -981,7 +979,8 @@
       word-break: break-all;
     }
 
-    .left {}
+    .left {
+    }
   }
 }
 
@@ -1021,7 +1020,7 @@
         padding: 0px 10px;
 
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           top: 50%;
           width: 100%;
@@ -1436,8 +1435,6 @@
   display: none;
 }
 
-
-
 .table_filter_hide .vg22 {
   height: 0px;
 }
@@ -1557,7 +1554,6 @@
     padding: 15px;
   }
 
-
   .page .propagent_dashboard_inner .all_payments {
     grid-template-columns: repeat(2, 1fr) !important;
     grid-column-gap: 15px;
@@ -1575,7 +1571,7 @@
   .theme_radio_new {
     &.tab_type_radio {
       .theme_radio_container {
-        input[type="radio"]+label {
+        input[type="radio"] + label {
           font-size: 12px;
           padding: 8px;
         }
@@ -1585,29 +1581,26 @@
 
   .theme_radio_new {
     .theme_radio_container {
-
-      input[type="radio"]+label {
+      input[type="radio"] + label {
         padding: 3px 12px;
         font-size: 13px;
-
       }
-
     }
   }
 }
 
 @media only screen and (max-width: 575px) {
   .margin_top {
-    .modal-dialog{
+    .modal-dialog {
       margin-top: 20px;
     }
   }
   .modal_close {
     top: -14px;
-    font-size: 16px;  
+    font-size: 16px;
     width: 28px;
-    height: 28px; 
-}
+    height: 28px;
+  }
   .mobile_full_575 {
     margin-left: -15px;
     margin-right: -15px;
@@ -1740,6 +1733,31 @@
             }
           }
         }
+      }
+    }
+  }
+  .row.form_full>*{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .form_field {
+    &.label_top {
+      border-radius: 0px;
+      border: none;
+      border-bottom: 2px solid var(--theme-blue);
+      padding: 15px;
+      padding-top: 26px;
+      .radio_group{
+        padding-top: 0px;
+      }
+      label {
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .radio_group_single label {  
+        border-radius: 8px !important;    
+        font-size: 12px !important;
+         
       }
     }
   }

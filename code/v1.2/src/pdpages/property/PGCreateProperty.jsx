@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
 // import { useCommon } from "../../hooks/useCommon";
 import { useDocument } from "../../hooks/useDocument";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -681,15 +681,56 @@ const CreateProperty = () => {
         //   },
         // });
     };
+
+      // 9 dots controls state
+  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+  const openMoreAddOptions = () => {
+    setHandleMoreOptionsClick(true);
+  };
+  const closeMoreAddOptions = () => {
+    setHandleMoreOptionsClick(false);
+  };
     return (
 
         <div className='top_header_pg pg_bg'>
             <div className="page_spacing">
+                  {/* 9 dots html */}
+        <div
+          onClick={openMoreAddOptions}
+          className="property-list-add-property"
+        >
+          <span className="material-symbols-outlined">apps</span>
+        </div>
+        <div
+          className={
+            handleMoreOptionsClick
+              ? "more-add-options-div open"
+              : "more-add-options-div"
+          }
+          onClick={closeMoreAddOptions}
+          id="moreAddOptions"
+        >
+          <div className="more-add-options-inner-div">
+            <div className="more-add-options-icons">
+              <h1>Close</h1>
+              <span className="material-symbols-outlined">close</span>
+            </div>
+            <Link to="/allproperties" className="more-add-options-icons">
+              <h1>Properties</h1>
+              <span className="material-symbols-outlined">real_estate_agent</span>
+            </Link>
+            <Link to="/dashboard" className="more-add-options-icons">
+              <h1>Dashboard</h1>
+              <span class="material-symbols-outlined">Dashboard</span>
+            </Link>
+          </div>
+        </div>
+        {/* 9 dots html */}
                 <Back pageTitle="Create Property" />
                 <hr />
                 <div className="vg22"></div>
-                <div className="add_property_fields">
-                    <div className="row row_gap">
+                <div className="">
+                    <div className="row row_gap form_full">
                         {/* Package */}
                         <div className="col-md-6">
                             <div className="form_field st-2 label_top">
@@ -718,7 +759,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="package_pmspremium"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -753,7 +794,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="package_pmslight"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -788,7 +829,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="package_pmssale"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -823,7 +864,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="package_prepms"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -858,7 +899,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="package_rentonly"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -893,7 +934,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="package_rentonly"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -940,7 +981,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="flag_availableforrent"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -975,7 +1016,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="flag_rentedout"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -1010,7 +1051,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="flag_availableforsale"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -1045,7 +1086,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="flag_soldout"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -1080,7 +1121,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="flag_rentsale"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -1115,7 +1156,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="flag_rentedbutsale"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -1133,8 +1174,7 @@ const CreateProperty = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <hr></hr>
+                        </div>                      
                         {/* Unit No */}
                         <div className="col-xl-4 col-lg-6">
                             <div className="form_field label_top">
@@ -1184,7 +1224,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="category_residential"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -1219,7 +1259,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="category_commercial"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -1284,7 +1324,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="purpose_rent"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -1318,7 +1358,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="purpose_sale"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -2211,7 +2251,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="maintenanceflag_included"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -2245,7 +2285,7 @@ const CreateProperty = () => {
                                                     />
                                                     <label
                                                         htmlFor="maintenanceflag_excluded"
-                                                        style={{ paddingTop: "7px" }}
+                                                        
                                                     >
                                                         <div className="radio_icon">
                                                             <span className="material-symbols-outlined add">
@@ -2702,18 +2742,9 @@ const CreateProperty = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div className="bottom_fixed_button">
-                    {formError && <p className="error">{formError}</p>}
-                    {formSuccess && <p className="success">{formSuccess}</p>}
-                    <div className="next_btn_back">
-                        <button
-                            className="theme_btn btn_border full_width no_icon"
-                            onClick={handleBackSubmit}
-                        >
-                            {"<< Dashboard"}
-                        </button>
+                        {formError && <p className="error">{formError}</p>}
+                        {formSuccess && <p className="success">{formSuccess}</p>}
+                        <div className="col-12">
                         <button
                             id="btn_create"
                             className="theme_btn btn_fill full_width no_icon"
@@ -2721,8 +2752,9 @@ const CreateProperty = () => {
                         >
                             Create
                         </button>
+                        </div>
                     </div>
-                </div>
+                </div>            
             </div>
         </div>
 
