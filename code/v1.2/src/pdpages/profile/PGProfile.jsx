@@ -19,7 +19,6 @@ import { Form, Button, Alert } from "react-bootstrap";
 
 export default function PGProfile() {
   // Scroll to the top of the page whenever the location changes start
-
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -52,8 +51,6 @@ export default function PGProfile() {
   const [thumbnailError, setThumbnailError] = useState(null);
   const { imgUpload, isImgCompressPending, imgCompressedFile } =
     useImageUpload();
-
-
 
   //Popup Flags
   useEffect(() => {

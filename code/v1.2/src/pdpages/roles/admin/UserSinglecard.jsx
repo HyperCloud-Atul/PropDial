@@ -92,7 +92,7 @@ const UserSinglecard = ({ users }) => {
                             >
                                 <h6 className="t_name pointer"
                                     onClick={() => handleShow(userObj)}>
-                                    {userObj.displayName}
+                                    {userObj.fullName}
                                     <span class="material-symbols-outlined click_icon text_near_icon">edit</span>
                                 </h6>
                                 {userObj.phoneNumber && (
