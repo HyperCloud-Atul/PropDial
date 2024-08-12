@@ -74,11 +74,11 @@ const UserTable = ({ users }) => {
       },
       {
         Header: 'Name',
-        accessor: 'displayName',
+        accessor: 'fullName',
   
         Cell: ({ row }) => (
           <div onClick={() => handleEdit(row.original)} className='pointer'>
-            <span className='text-capitalize'>{row.original.displayName}</span>
+            <span className='text-capitalize'>{row.original.fullName}</span>
             <span className="material-symbols-outlined click_icon text_near_icon">edit</span>
           </div>
         ),
