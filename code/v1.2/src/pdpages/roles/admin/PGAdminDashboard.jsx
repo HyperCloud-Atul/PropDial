@@ -30,8 +30,11 @@ const PGAdminDashboard = () => {
   // Scroll to the top of the page whenever the location changes end
 
   const { user } = useAuthContext();
+  // const { documents: properties, error: propertieserror } =
+  //   useCollection("properties", ["postedBy", "==", "Propdial"]);
+
   const { documents: properties, error: propertieserror } =
-    useCollection("properties", ["postedBy", "==", "Propdial"]);
+    useCollection("properties", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
 
   const activeProperties =
     properties &&
@@ -255,22 +258,22 @@ const PGAdminDashboard = () => {
               <section className="upcoming">
                 <div className="parent">
                   <div className="coming_soon">
-                  <div className="child">
-                    <div className="inner">
-                      <h5>0</h5>
-                      <h6>Upcoming Inspections</h6>
+                    <div className="child">
+                      <div className="inner">
+                        <h5>0</h5>
+                        <h6>Upcoming Inspections</h6>
+                      </div>
                     </div>
-                  </div>
                   </div>
                   <div className="coming_soon">
-                  <div className="child">
-                    <div className="inner">
-                      <h5>0</h5>
-                      <h6>Upcoming Rent Renewal</h6>
+                    <div className="child">
+                      <div className="inner">
+                        <h5>0</h5>
+                        <h6>Upcoming Rent Renewal</h6>
+                      </div>
                     </div>
                   </div>
-                  </div>
-                  
+
                 </div>
               </section>
               <hr />
