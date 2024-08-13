@@ -990,7 +990,12 @@
 
     .my_small_card {
       display: block;
-      padding-right: 52px;
+      &.right_gap{
+        padding-right: 52px;
+        .top_right_content {
+          right: 52px;          
+        }
+      }  
 
       a.enq_edit {
         position: absolute;
@@ -1005,8 +1010,8 @@
       }
 
       .top_right_content {
-        right: 52px;
-        top: 4px;
+        right: 15px;
+        top: 4px;       
       }
 
       .wha_call_icon {

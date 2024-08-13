@@ -20,7 +20,7 @@ const EnquirySingle = ({ enquiries }) => {
       {enquiries &&
         enquiries.map((doc, index) => (
           <div
-            className="my_small_card notification_card pointer"
+            className={`my_small_card notification_card pointer ${user && user.role === "admin" ? "right_gap" : ""}`}
             key={index}
             onClick={() => handleShowEnquriyModal(doc)}
           >
@@ -38,40 +38,49 @@ const EnquirySingle = ({ enquiries }) => {
               <div className="inner">
                 <h5 className="title">{doc.name}</h5>
                 <h6 className="sub_title">
-                  {doc.phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")}
-                </h6>        
+                  {user && user.role === "owner"
+                    ? doc.phone.replace(
+                        /(\d{2})(\d{6})(\d{4})/,
+                        "+$1 ****** $3"
+                      )
+                    : doc.phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")}
+                </h6>
                 {doc.referredBy && doc.referredBy !== "none" && (
                   <h6 className="sub_title text-capitalize">
                     Referred By :- {doc.referredBy}{" "}
                   </h6>
                 )}
-                  {doc.source && doc.referredBy === "none" && (
+                {doc.source && doc.referredBy === "none" && (
                   <h6 className="sub_title text-capitalize">
                     Source :- {doc.source}{" "}
                   </h6>
-                )}                
+                )}
               </div>
             </div>
-            <div className="wha_call_icon">
-              <Link
-                className="call_icon wc_single"
-                to={`tel:${doc.phone && doc.phone}`}
-                target="_blank"
-              >
-                <img src="/assets/img/simple_call.png" alt="" />
-              </Link>
-              <Link
-                className="wha_icon wc_single"
-                to={`https://wa.me/${doc.phone && doc.phone}`}
-                target="_blank"
-              >
-                <img src="/assets/img/whatsapp_simple.png" alt="" />
-              </Link>
-            </div>
+            {user && user.role === "admin" && (
+              <div className="wha_call_icon">
+                <Link
+                  className="call_icon wc_single"
+                  to={`tel:${doc.phone && doc.phone}`}
+                  target="_blank"
+                >
+                  <img src="/assets/img/simple_call.png" alt="" />
+                </Link>
+                <Link
+                  className="wha_icon wc_single"
+                  to={`https://wa.me/${doc.phone && doc.phone}`}
+                  target="_blank"
+                >
+                  <img src="/assets/img/whatsapp_simple.png" alt="" />
+                </Link>
+              </div>
+            )}
             {/* {doc.enquiryStatus === "successful" || doc.enquiryStatus === "dead" ? "" : ( */}
-            <Link to={`/edit-enquiry/${doc.id}`} className="enq_edit">
-              <span class="material-symbols-outlined">edit_square</span>
-            </Link>
+            {user && user.role === "admin" && (
+              <Link to={`/edit-enquiry/${doc.id}`} className="enq_edit">
+                <span class="material-symbols-outlined">edit_square</span>
+              </Link>
+            )}
             {/* )} */}
           </div>
         ))}
