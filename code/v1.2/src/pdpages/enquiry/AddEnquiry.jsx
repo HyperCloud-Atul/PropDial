@@ -126,7 +126,7 @@ const AddEnquiry = () => {
                 employeeName,
                 propertyOwner,
                 propertyName,
-                propId: "",
+                pid: "",
                 statusUpdates: [newStatusUpdate], // Initialize statusUpdates with default status
             });
             setEnquiryFrom("");

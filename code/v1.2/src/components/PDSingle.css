@@ -1041,6 +1041,7 @@ label.upload_img input {
     width: fit-content;
     color: var(--theme-orange);
     font-weight: 500;
+    margin-top: 5px;
 }
 .short_prop_summary .left .detail {
     display: grid;

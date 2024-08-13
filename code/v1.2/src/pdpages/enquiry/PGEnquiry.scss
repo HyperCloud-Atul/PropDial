@@ -246,6 +246,30 @@
   cursor: no-drop !important;
 }
 
+.enq_fields{
+  display: grid;
+  gap: 8px;
+  .form_field{
+    border: 1px solid rgb(0, 168, 168);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .form_field.st-2 select, .form_field.st-2 input {  
+    border: none;
+   
+}
+.form_field.st-2 textarea {  
+  border: 1px solid rgb(0, 168, 168);
+  border-radius: 5px;
+  overflow: hidden; 
+  font-size: 14px;
+    color: #444;
+}
+.form_field.st-2 textarea:focus {  
+  border: 1px solid rgb(0, 168, 168);
+outline: none;
+}
+}
 @media screen and (max-width: 1199px) {
   .pg_enquiry {
     .card_filter {
