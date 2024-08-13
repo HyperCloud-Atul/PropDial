@@ -78,7 +78,10 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
                       /(\d{2})(\d{6})(\d{4})/,
                       "+$1 ****** $3"
                     )
-                  : selectedEnquiry.phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")}
+                  : selectedEnquiry.phone.replace(
+                      /(\d{2})(\d{5})(\d{5})/,
+                      "+$1 $2-$3"
+                    )}
               </div>
             </li>
           )}
@@ -120,37 +123,41 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
         </ul>
       </div>
       <hr />
-      <div className="details">
-        <h6>Property Detail</h6>
-        <ul>
-          <li>
-            <div className="left">PID</div>
-            <div className="middle">:-</div>
-            <div className="right">{selectedEnquiry.pid}</div>
-          </li>
-          <li>
-            <div className="left">Property</div>
-            <div className="middle">:-</div>
-            <div className="right">
-              {/* C-102<span> | </span>Hiranandani<span> | </span>9 BHK
+      {selectedEnquiry.source && selectedEnquiry.source.toLowerCase() !== "contact us page" && (
+      <>
+        <div className="details">
+          <h6>Property Detail</h6>
+          <ul>
+            <li>
+              <div className="left">PID</div>
+              <div className="middle">:-</div>
+              <div className="right">{selectedEnquiry.pid}</div>
+            </li>
+            <li>
+              <div className="left">Property</div>
+              <div className="middle">:-</div>
+              <div className="right">
+                {/* C-102<span> | </span>Hiranandani<span> | </span>9 BHK
               <span> | </span>Low Rise Apt (5-10 floor)<span> | </span>
               Devnahalli<span> | </span>Bangalore<span> | </span>Karnatak */}
-              {selectedEnquiry.propertyName}
-            </div>
-          </li>
-          <li>
-            <div className="left">Property Owner</div>
-            <div className="middle">:-</div>
-            <div className="right text-capitalize">
-              {/* Raju Mohan Sharma */}
-              {selectedEnquiry.propertyOwner}
-            </div>
-          </li>
-        </ul>
-      </div>
-      <hr />
-    {user && user.role === "admin" && (
-          <>
+                {selectedEnquiry.propertyName}
+              </div>
+            </li>
+            <li>
+              <div className="left">Property Owner</div>
+              <div className="middle">:-</div>
+              <div className="right text-capitalize">
+                {/* Raju Mohan Sharma */}
+                {selectedEnquiry.propertyOwner}
+              </div>
+            </li>
+          </ul>
+        </div>
+        <hr />
+      </>
+        )}
+      {user && user.role === "admin" && selectedEnquiry.remark &&  (
+        <>
           <div className="details">
             <h6>Office Uses</h6>
             <ul>
@@ -158,14 +165,16 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
                 <li>
                   <div className="left">Remark</div>
                   <div className="middle">:-</div>
-                  <div className="right text-break">{selectedEnquiry.remark}</div>
+                  <div className="right text-break">
+                    {selectedEnquiry.remark}
+                  </div>
                 </li>
               )}
             </ul>
           </div>
           <hr />
         </>
-    )}
+      )}
       <div className="enquiry_status">
         <h6>Enquiry Status</h6>
         <div

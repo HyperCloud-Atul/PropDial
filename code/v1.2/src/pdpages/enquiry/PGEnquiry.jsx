@@ -17,7 +17,7 @@ const PGEnquiry = () => {
   const { user } = useAuthContext();
   // render ViewEnquiry by url id start 
   const { id } = useParams();
-  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry")
+  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry",["postedBy", "==", "Propdial"], ["date", "desc"]);  
   const enquiryDocsById = id === "all" ? enquiryDocs : (enquiryDocs && enquiryDocs.filter(doc => (doc.propId === id)));
   console.log("enquiryDocsById", enquiryDocsById, id);
   // render ViewEnquiry by url id end

@@ -41,6 +41,8 @@ const EnquiryAddModal = ({ show, handleClose, selectedProperty }) => {
         pid: selectedProperty.pid, // Add the selected property ID here
         enquiryFrom: iAm,
         referredBy: "none",
+        postedBy: "Propdial",
+        propId: selectedProperty.id,
         enquiryType: selectedProperty.purpose.toLowerCase(),
         date: new Date().toISOString(),
         enquiryStatus: "open",
