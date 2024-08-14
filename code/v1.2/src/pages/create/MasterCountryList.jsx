@@ -97,6 +97,7 @@ export default function MasterCountryList() {
 
   const handleEditCard = (docid, doccountry) => {
     // console.log('docid in handleEditCard:', docid)
+    window.scrollTo(0, 0);
     setFormError(null);
     setCountry(doccountry);   
     sethandleAddSectionFlag(!handleAddSectionFlag);

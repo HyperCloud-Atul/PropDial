@@ -3,45 +3,45 @@ import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import Select from "react-select";
-import Filters from "../../components/Filters";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import "./Create.css";
+// component
 import NineDots from "../../components/NineDots";
 
-const dataFilter = ["INDIA", "USA", "OTHERS", "INACTIVE"];
-export default function MasterCityList() {
+export default function MasterSocietyList() {
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
-  const { addDocument, response: responseAddDocument } =
-    useFirestore("m_cities");
+  const { addDocument, response } = useFirestore("m_societies");
   const { updateDocument, response: responseUpdateDocument } =
-    useFirestore("m_cities");
-  const { documents: masterCity, error: masterCityerror } =
-    useCollection("m_cities");
+    useFirestore("m_societies");
+  const { documents: masterSociety, error: masterSocietyerror } =
+    useCollection("m_societies");
   // const { documents: masterState, error: masterStateerror } = useCollection('m_states')
   const { documents: masterCountry, error: masterCountryerror } =
     useCollection("m_countries");
   // console.log('masterCountry:', masterCountry)
-
   const [country, setCountry] = useState({ label: "INDIA", value: "INDIA" });
   const [countryList, setCountryList] = useState();
   const [state, setState] = useState();
-  // const [stateList, setStateList] = useState()
   const [city, setCity] = useState();
+  const [locality, setLocality] = useState();
+  const [society, setSociety] = useState();
   const [formError, setFormError] = useState(null);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
-  const [filter, setFilter] = useState("INDIA");
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
   let countryOptions = useRef([]);
   let countryOptionsSorted = useRef([]);
   let stateOptions = useRef([]);
   let stateOptionsSorted = useRef([]);
+  let cityOptions = useRef([]);
+  let cityOptionsSorted = useRef([]);
+  let localityOptions = useRef([]);
+  let localityOptionsSorted = useRef([]);
 
   useEffect(() => {
     // console.log('in useeffect')
@@ -82,16 +82,96 @@ export default function MasterCityList() {
           );
 
           // console.log('stateOptionsSorted.current:', stateOptionsSorted.current)
-          // setStateList(stateOptionsSorted.current)
-
           if (countryname === "INDIA") {
-            setState({ label: "Delhi", value: "Delhi" });
+            setState({ label: "DELHI", value: "DELHI" });
+            handleStateChange({ label: "DELHI", value: "DELHI" });
           } else {
             setState({
               label: stateOptionsSorted.current[0].label,
               value: stateOptionsSorted.current[0].value,
             });
+            handleStateChange({
+              label: stateOptionsSorted.current[0].label,
+              value: stateOptionsSorted.current[0].value,
+            });
           }
+        } else {
+          // setError('No such document exists')
+        }
+      },
+      (err) => {
+        console.log(err.message);
+        // setError('failed to get document')
+      }
+    );
+  };
+
+  //Stae select onchange
+  const handleStateChange = async (option) => {
+    setState(option);
+    // console.log('option.label:', option.label)
+    let statename = option.label;
+
+    const ref = await projectFirestore
+      .collection("m_cities")
+      .where("state", "==", statename);
+    ref.onSnapshot(
+      async (snapshot) => {
+        if (snapshot.docs) {
+          cityOptions.current = snapshot.docs.map((cityData) => ({
+            label: cityData.data().city,
+            value: cityData.data().city,
+          }));
+          cityOptionsSorted.current = cityOptions.current.sort((a, b) =>
+            a.label.localeCompare(b.label)
+          );
+
+          if (statename === "DELHI") {
+            setCity({ label: "DELHI", value: "DELHI" });
+            handleCityChange({ label: "DELHI", value: "DELHI" });
+          } else {
+            setCity({
+              label: cityOptionsSorted.current[0].label,
+              value: cityOptionsSorted.current[0].value,
+            });
+            handleCityChange({
+              label: cityOptionsSorted.current[0].label,
+              value: cityOptionsSorted.current[0].value,
+            });
+          }
+        } else {
+          // setError('No such document exists')
+        }
+      },
+      (err) => {
+        console.log(err.message);
+        // setError('failed to get document')
+      }
+    );
+  };
+  //City select onchange
+  const handleCityChange = async (option) => {
+    setCity(option);
+    let cityname = option.label;
+    // console.log('statename:', statename)
+    const ref = await projectFirestore
+      .collection("m_localities")
+      .where("city", "==", cityname);
+    ref.onSnapshot(
+      async (snapshot) => {
+        if (snapshot.docs) {
+          localityOptions.current = snapshot.docs.map((localityData) => ({
+            label: localityData.data().locality,
+            value: localityData.data().locality,
+          }));
+          localityOptionsSorted.current = localityOptions.current.sort((a, b) =>
+            a.label.localeCompare(b.label)
+          );
+
+          setLocality({
+            label: localityOptionsSorted.current[0].label,
+            value: localityOptionsSorted.current[0].value,
+          });
         } else {
           // setError('No such document exists')
         }
@@ -108,19 +188,21 @@ export default function MasterCityList() {
     e.preventDefault();
     setFormError(null);
 
-    let cityname = city.trim();
-    // console.log('cityname:', cityname)
+    let societyname = society.trim().toUpperCase();
 
     if (currentDocid) {
       await updateDocument(currentDocid, {
         country: country.label,
         state: state.label,
-        city: cityname,
+        city: city.label,
+        locality: locality.label,
+        society: societyname,
       });
+      setFormError("Successfully updated");
     } else {
       let ref = projectFirestore
-        .collection("m_cities")
-        .where("city", "==", cityname);
+        .collection("m_societies")
+        .where("society", "==", societyname);
       const unsubscribe = ref.onSnapshot(async (snapshot) => {
         snapshot.docs.forEach((doc) => {
           results.push({ ...doc.data(), id: doc.id });
@@ -130,7 +212,9 @@ export default function MasterCityList() {
           const dataSet = {
             country: country.label,
             state: state.label,
-            city: cityname,
+            city: city.label,
+            locality: locality.label,
+            society: societyname,
             status: "active",
           };
           await addDocument(dataSet);
@@ -143,17 +227,22 @@ export default function MasterCityList() {
       });
     }
   };
-  const changeFilter = (newFilter) => {
-    setFilter(newFilter);
-  };
 
+  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+
+  const openMoreAddOptions = () => {
+    setHandleMoreOptionsClick(true);
+  };
+  const closeMoreAddOptions = () => {
+    setHandleMoreOptionsClick(false);
+  };
   
   const handleAddSection = () => {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
-    setFormBtnText("Add");
+    setFormBtnText("Add Society");
     handleCountryChange(country);
-    setCity("");
+    setSociety("");
     setCurrentDocid(null);
   };
 
@@ -167,67 +256,26 @@ export default function MasterCityList() {
     });
   };
 
-  const handleEditCard = (docid, doccountry, docstate, doccity) => {
+  const handleEditCard = (
+    docid,
+    doccountry,
+    docstate,
+    doccity,
+    doclocality,
+    docsociety
+  ) => {
     // console.log('data:', data)
     window.scrollTo(0, 0);
     setFormError(null);
     setCountry({ label: doccountry, value: doccountry });
     setState({ label: docstate, value: docstate });
-    setCity(doccity);
+    setCity({ label: doccity, value: doccity });
+    setLocality({ label: doclocality, value: doclocality });
+    setSociety(docsociety);
     sethandleAddSectionFlag(!handleAddSectionFlag);
-    setFormBtnText("Update City");
+    setFormBtnText("Update Society");
     setCurrentDocid(docid);
   };
-
-  const [searchInput, setSearchInput] = useState("");
-
-  const handleSearchInputChange = (e) => {
-    setSearchInput(e.target.value);
-  };
-  
-  const filteredData = masterCity
-    ? masterCity.filter((document) => {
-        let isFiltered = false;
-  
-        // Role and country-based filtering
-        switch (filter) {
-          case "INDIA":
-            if (document.country === "INDIA") {
-              isFiltered = true;
-            }
-            break;
-          case "USA":
-            if (document.country === "USA") {
-              isFiltered = true;
-            }
-            break;
-          case "OTHERS":
-            if (document.country !== "INDIA" && document.country !== "USA") {
-              isFiltered = true;
-            }
-            break;
-          case "INACTIVE":
-            if (document.status.toLowerCase() === "inactive") {
-              isFiltered = true;
-            }
-            break;
-          default:
-            isFiltered = true;
-        }
-  
-        // Search input filtering
-        const searchMatch = searchInput
-          ? Object.values(document).some(
-              (field) =>
-                typeof field === "string" &&
-                field.toUpperCase().includes(searchInput.toUpperCase())
-            )
-          : true;
-  
-        return isFiltered && searchMatch;
-      })
-    : null;
-  
 
   // nine dots menu start
   const nineDotsMenu = [
@@ -238,7 +286,7 @@ export default function MasterCityList() {
       link: "/localitylist",
       icon: "holiday_village",
     },
-    { title: "Society's List", link: "/societylist", icon: "home" },
+    { title: "City's List", link: "/citylist", icon: "location_city" },
   ];
   // nine dots menu end
 
@@ -250,18 +298,19 @@ export default function MasterCityList() {
   // View mode end
 
   return (
-    <div className="top_header_pg pg_bg pg_adminproperty">
+    <> 
+      <div className="top_header_pg pg_bg pg_adminproperty">
       <div
         className={`page_spacing ${
-          masterCity && masterCity.length === 0 && "pg_min_height"
+          masterSociety && masterSociety.length === 0 && "pg_min_height"
         }`}
       >
         <NineDots nineDotsMenu={nineDotsMenu} />
 
-        {masterCity && masterCity.length === 0 && (
+        {masterSociety && masterSociety.length === 0 && (
           <div className={`pg_msg ${handleAddSectionFlag && "d-none"}`}>
             <div>
-              No City Yet!
+              No Society Yet!
               <div
                 onClick={handleAddSection}
                 className={`theme_btn no_icon header_btn mt-3 ${
@@ -273,14 +322,14 @@ export default function MasterCityList() {
             </div>
           </div>
         )}
-        {masterCity && masterCity.length !== 0 && (
+        {masterSociety && masterSociety.length !== 0 && (
           <>
             <div className="pg_header d-flex justify-content-between">
               <div className="left">
                 <h2 className="m22">
-                  Total City:{" "}
-                  {masterCity && (
-                    <span className="text_orange">{masterCity.length}</span>
+                  Total Society:{" "}
+                  {masterSociety && (
+                    <span className="text_orange">{masterSociety.length}</span>
                   )}
                 </h2>
               </div>
@@ -296,26 +345,17 @@ export default function MasterCityList() {
             <div className="filters">
               <div className="left">
                 <div className="rt_global_search search_field">
-                <input
-                      placeholder="Search"
-                      value={searchInput}
-                      onChange={handleSearchInputChange}
-                    />
+                  <input
+                    placeholder="Search"
+                    // value={searchInput}
+                    // onChange={handleSearchInputChange}
+                  />
                   <div className="field_icon">
                     <span className="material-symbols-outlined">search</span>
                   </div>
                 </div>
               </div>
-              <div className="right">
-                <div className="user_filters new_inline">
-                  {filteredData && (
-                    <Filters
-                      changeFilter={changeFilter}
-                      filterList={dataFilter}
-                      filterLength={filteredData.length}
-                    />
-                  )}
-                </div>
+              <div className="right">               
                 <div className="button_filter diff_views">
                   <div
                     className={`bf_single ${
@@ -364,7 +404,7 @@ export default function MasterCityList() {
                 <div className="form_field label_top">
                   <label htmlFor="">Country</label>
                   <div className="form_field_inner">
-                    <Select
+                  <Select
                       className=""
                       onChange={handleCountryChange}
                       // options={countryOptionsSorted.current}
@@ -386,12 +426,58 @@ export default function MasterCityList() {
                 <div className="form_field label_top">
                   <label htmlFor="">State</label>
                   <div className="form_field_inner">
-                    <Select
+                  <Select
                       className=""
-                      onChange={(option) => setState(option)}
+                      onChange={handleStateChange}
                       options={stateOptionsSorted.current}
                       // options={stateList}
                       value={state}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                        }),
+                      }}
+                    />                     
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-4 col-lg-6">
+                <div className="form_field label_top">
+                  <label htmlFor="">City</label>
+                  <div className="form_field_inner">
+                 
+                     <Select
+                      className=""
+                      onChange={handleCityChange}
+                      options={cityOptionsSorted.current}
+                      // options={stateList}
+                      value={city}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                        }),
+                      }}
+                    />                      
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-4 col-lg-6">
+                <div className="form_field label_top">
+                  <label htmlFor="">Locality</label>
+                  <div className="form_field_inner">
+                 
+                       <Select
+                      className=""
+                      onChange={(option) => setLocality(option)}
+                      options={localityOptionsSorted.current}
+                      // options={stateList}
+                      value={locality}
                       styles={{
                         control: (baseStyles, state) => ({
                           ...baseStyles,
@@ -406,14 +492,18 @@ export default function MasterCityList() {
               </div>
               <div className="col-xl-4 col-lg-6">
                 <div className="form_field label_top">
-                  <label htmlFor="">City</label>
+                  <label htmlFor="">New Society</label>
                   <div className="form_field_inner">
-                    <input
+                  <input
                       required
                       type="text"
-                      placeholder="Entry City Name"
-                      onChange={(e) => setCity(e.target.value)}
-                      value={city}
+                      placeholder="Entry Locality Name"
+                      onChange={(e) => setSociety(e.target.value)}
+                      value={society}
+                      styles={{
+                        backgroundColor: "red",
+                        borderBottom: " 5px solid var(--theme-blue)",
+                      }}
                     />
                   </div>
                 </div>
@@ -456,109 +546,110 @@ export default function MasterCityList() {
           </form>
           <hr />
         </div>
-        {masterCity && masterCity.length !== 0 && (
+        {masterSociety && masterSociety.length !== 0 && (
           <>
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>
-                  {filteredData &&
-                    filteredData.map((data) => (
+                   {masterSociety &&
+              masterSociety.map((data) => (
                       <div className="property-status-padding-div">
+                      <div
+                        className="profile-card-div"
+                        style={{ position: "relative" }}
+                      >
                         <div
-                          className="profile-card-div"
-                          style={{ position: "relative" }}
+                          className="address-div"
+                          style={{ paddingBottom: "5px" }}
                         >
                           <div
-                            className="address-div"
-                            style={{ paddingBottom: "5px" }}
+                            className="icon"
+                            style={{ position: "relative", top: "-1px" }}
                           >
-                            <div
-                              className="icon"
-                              style={{ position: "relative", top: "-1px" }}
+                            <span
+                              className="material-symbols-outlined"
+                              style={{ color: "var(--darkgrey-color)" }}
                             >
-                              <span
-                                className="material-symbols-outlined"
-                                style={{ color: "var(--darkgrey-color)" }}
+                              flag
+                            </span>
+                          </div>
+                          <div className="address-text">
+                            <div
+                              onClick={() =>
+                                handleEditCard(
+                                  data.id,
+                                  data.country,
+                                  data.state,
+                                  data.city,
+                                  data.locality,
+                                  data.society
+                                )
+                              }
+                              style={{
+                                width: "80%",
+                                height: "170%",
+                                textAlign: "left",
+                                display: "flex",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                transform: "translateY(-7px)",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <h5
+                                style={{
+                                  margin: "0",
+                                  transform: "translateY(5px)",
+                                }}
                               >
-                                flag
-                              </span>
+                                {data.society}{" "}
+                              </h5>
+                              <small
+                                style={{
+                                  margin: "0",
+                                  transform: "translateY(5px)",
+                                }}
+                              >
+                                {data.locality}, {data.city}, {data.state},{" "}
+                                {data.country}
+                              </small>
                             </div>
-                            <div className="address-text">
-                              <div
-                                onClick={() =>
-                                  handleEditCard(
-                                    data.id,
-                                    data.country,
-                                    data.state,
-                                    data.city
-                                  )
-                                }
+                            <div
+                              className=""
+                              onClick={() =>
+                                handleChangeStatus(data.id, data.status)
+                              }
+                              style={{
+                                width: "20%",
+                                height: "calc(100% - -20px)",
+                                position: "relative",
+                                top: "-8px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <small
                                 style={{
-                                  width: "80%",
-                                  height: "170%",
-                                  textAlign: "left",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  flexDirection: "column",
-                                  transform: "translateY(-7px)",
-                                  cursor: "pointer",
+                                  margin: "0",
+                                  background:
+                                    data.status === "active" ? "green" : "red",
+                                  color: "#fff",
+                                  padding: "3px 10px 3px 10px",
+                                  borderRadius: "4px",
                                 }}
                               >
-                                <h5
-                                  style={{
-                                    margin: "0",
-                                    transform: "translateY(5px)",
-                                  }}
-                                >
-                                  {data.city}
-                                </h5>
-                                <small
-                                  style={{
-                                    margin: "0",
-                                    transform: "translateY(5px)",
-                                  }}
-                                >
-                                  {data.state}, {data.country}
-                                </small>
-                              </div>
-                              <div
-                                className=""
-                                onClick={() =>
-                                  handleChangeStatus(data.id, data.status)
-                                }
-                                style={{
-                                  width: "20%",
-                                  height: "calc(100% - -20px)",
-                                  position: "relative",
-                                  top: "-8px",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "flex-end",
-                                  cursor: "pointer",
-                                }}
-                              >
-                                <small
-                                  style={{
-                                    margin: "0",
-                                    background:
-                                      data.status === "active"
-                                        ? "green"
-                                        : "red",
-                                    color: "#fff",
-                                    padding: "3px 10px 3px 10px",
-                                    borderRadius: "4px",
-                                  }}
-                                >
-                                  {data.status}
-                                </small>
-                                {/* <span className="material-symbols-outlined">
-                                                chevron_right
-                                            </span> */}
-                              </div>
+                                {data.status}
+                              </small>
+                              {/* <span className="material-symbols-outlined">
+                                          chevron_right
+                                      </span> */}
                             </div>
                           </div>
                         </div>
                       </div>
+                    </div>
                     ))}
                 </>
               )}
@@ -572,5 +663,6 @@ export default function MasterCityList() {
         )}
       </div>
     </div>
+    </>
   );
 }
