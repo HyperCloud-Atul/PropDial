@@ -39,13 +39,16 @@
 a.mm_single {
     display: block;
     padding: 15px 50px;
-    background: var(--theme-blue-bg-light);
+    /* background: #f8fff9; */
     position: relative;
     margin-top: 15px;
-    color: var(--theme-purple);
+    color: var(--theme-green);
+    border-bottom: 1px solid;
+    border-radius: 15px;
 }
 a.mm_single h5{
     text-transform: capitalize;
+    font-weight: 500;
 }
 a.mm_single h6 {
     font-size: 12px;
@@ -78,7 +81,7 @@ a.mm_single span.mms_ra {
 .mm_inner_full_width .inner{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-column-gap: 15px;
+    grid-column-gap: 15px;   
 }
 
 

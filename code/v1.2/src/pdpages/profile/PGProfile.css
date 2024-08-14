@@ -370,8 +370,25 @@ h4.user_name input {
     font-size: 18px;
     font-weight: 500;
 }
-
+.master_data_card {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+@media (max-width: 1199px) {
+    .master_data_card {     
+        grid-template-columns: repeat(3, 1fr);       
+    }
+}
+@media (max-width: 991px) {
+    .master_data_card {     
+        grid-template-columns: repeat(2, 1fr);       
+    }
+}
 @media (max-width: 767px) {
+    .master_data_card {     
+        grid-template-columns: repeat(1, 1fr);       
+    }
     .visit_dashboard {
         padding: 10px;
         flex-direction: column;

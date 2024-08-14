@@ -260,7 +260,7 @@ notification_important
                 <div className="inner">
                   <Link className="mm_single" to="/countrylist">
                     <span className="material-symbols-outlined mms_icon">flag</span>
-                    <h5 className="dr16">Add Country</h5>
+                    <h5 className="dr16">Country's list</h5>
                     <h6>Add and manage countries for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
@@ -270,7 +270,7 @@ notification_important
                     <span className="material-symbols-outlined mms_icon">
                      emoji_transportation
                     </span>
-                    <h5 className="dr16">Add State</h5>
+                    <h5 className="dr16">State's list</h5>
                     <h6>Add and manage states for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
@@ -280,7 +280,7 @@ notification_important
                     <span className="material-symbols-outlined mms_icon">
                 holiday_village
                     </span>
-                    <h5 className="dr16">Add City</h5>
+                    <h5 className="dr16">City's list</h5>
                     <h6>Add and manage cites for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
@@ -290,7 +290,7 @@ notification_important
                     <span className="material-symbols-outlined mms_icon">
                     location_city
                     </span>
-                    <h5 className="dr16">Add Locality</h5>
+                    <h5 className="dr16">Locality's list</h5>
                     <h6>Add and manage localites for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
@@ -300,7 +300,7 @@ notification_important
                     <span className="material-symbols-outlined mms_icon">
                       location_home
                     </span>
-                    <h5 className="dr16">Add Society</h5>
+                    <h5 className="dr16">Society's list</h5>
                     <h6>Add and manage societies for your listings and settings</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
