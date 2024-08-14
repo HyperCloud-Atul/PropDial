@@ -231,12 +231,8 @@ export default function Stage3(props) {
       /> */}
       <form>
         <div className='add_property_fields'>
-
-
-
-          <div className="stage4form">
-            <br /><br /><br />
-            <div className="row row_gap">
+          <div className="stage4form">           
+            <div className="row row_gap form_full">
               {/* Maindoor Facing */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
@@ -1323,7 +1319,7 @@ export default function Stage3(props) {
                 </div>
               </div>
 
-              <hr></hr>
+              
               {/* Visiting Hours From */}
               <div className="col-md-6">
                 <div className="form_field label_top">
@@ -1720,7 +1716,7 @@ export default function Stage3(props) {
                   </div>
                 </div>
               </div>
-              <hr></hr>
+              
               {/* Bachelor Boys Allowed */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
@@ -2053,7 +2049,7 @@ export default function Stage3(props) {
 
               </div>
 
-              <hr></hr>
+              
               {/* Property Description */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
@@ -2137,11 +2133,11 @@ export default function Stage3(props) {
         {formError && <p className="error">{formError}</p>}
         <div style={{ display: "flex", alignItems: "center", gap: "22px" }} className='next_btn_back bottom_fixed_button'>
 
-          <button className="theme_btn btn_border full_width" onClick={handleBackSubmit}>
+          <button className="theme_btn btn_border full_width no_icon" onClick={handleBackSubmit}>
             {"<< Back"}
           </button>
 
-          <button className="theme_btn btn_fill full_width" onClick={handleNextSubmit}>
+          <button className="theme_btn btn_fill full_width no_icon" onClick={handleNextSubmit}>
             Submit
           </button>
 

@@ -1592,6 +1592,29 @@
       }
     }
   }
+  .form_field.label_top{
+    .increase_input_parent {
+      grid-template-columns: repeat(1, 1fr);
+      gap: 15px;
+    }
+    .plus_minus_input {   
+      width: 110px;     
+  }
+    .plus_minus_input_wrapper {
+      span.pmi_label {
+        font-size: 16px;
+        font-weight: 500;   
+    }
+    .pmbutton {  
+      width: 30px;
+      span{
+        font-size: 18px;
+      }
+    
+  }
+    }
+  }
+ 
 }
 
 @media only screen and (max-width: 575px) {

@@ -585,8 +585,7 @@ const Stage2 = (props) => {
   return (
     <form>
       <div className="add_property_fields">
-        <div className="row row_gap">
-          <hr></hr>
+        <div className="row row_gap form_full">
           {/* Property Type */}
           <div className="col-md-4">
             <div className="form_field label_top">
@@ -1001,7 +1000,6 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-          <hr></hr>
           {/* Rooms */}
           <div className="col-md-6">
             <div className="form_field label_top">
@@ -1887,7 +1885,6 @@ const Stage2 = (props) => {
             </div>
 
           </div>
-          <hr></hr>
           {/* Additional Area */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
@@ -2843,13 +2840,13 @@ const Stage2 = (props) => {
         {formError && <p className="error">{formError}</p>}
         <div className="next_btn_back">
           <button
-            className="theme_btn btn_border full_width"
+            className="theme_btn btn_border full_width no_icon"
             onClick={handleBackSubmit}
           >
             {"<< Back"}
           </button>
           <button
-            className="theme_btn btn_border next_btn full_width"
+            className="theme_btn btn_border next_btn full_width no_icon"
             onClick={handleNextSubmit}
 
           >

@@ -191,7 +191,6 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
     font-size: 16px;
     font-weight: 400;
 }
-
 .r14 {
     font-size: 14px;
     font-weight: 400;
@@ -394,7 +393,9 @@ img.excel_dowanload {
     font-size: 32px;
 }
 /* common css end*/
-
+.my_modal{
+    padding-left: 0px !important;
+}
 @media only screen and (max-width: 1199px) {
     .vg22_1199 {
         height: 22px;
@@ -432,6 +433,16 @@ img.excel_dowanload {
 
     .r18 {
         font-size: 16px;
+    }
+    .my_modal .modal-content {
+        border-radius: 12px;
+        padding: 15px;   
+    }
+    .r16.r16-14-m {
+        font-size: 14px;    
+    }
+    .m16.m16-14-m {
+        font-size: 14px;      
     }
 }
 

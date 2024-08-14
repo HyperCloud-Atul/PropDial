@@ -729,7 +729,7 @@ const Stage1 = (props) => {
   return (
     <>
       <div className="add_property_fields">
-        <div className="row row_gap">
+        <div className="row row_gap form_full">
           {/* Region */}
           <div className="col-md-12">
             <div className="form_field st-2 label_top">

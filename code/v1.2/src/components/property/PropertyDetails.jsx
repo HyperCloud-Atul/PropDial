@@ -1101,8 +1101,7 @@ const PropertyDetails = () => {
                             onChange={handleImageChange}
                             style={{ display: "none" }}
                             ref={fileInputRef}
-                          />
-                          <div className="d-flex flex-column align-items-center justify-content-center">
+                          />                         
                             {!isUploading && (
                               <button
                                 className="theme_btn btn_fill no_icon"
@@ -1112,9 +1111,18 @@ const PropertyDetails = () => {
                                   ? "Replace Image"
                                   : "Add More Images"}
                               </button>
-                            )}
-
-                            {selectedImage && (
+                            )}                        
+                         
+                          {selectedImage && (
+                          
+                              <img
+                                src={selectedImage}
+                                alt="Selected img"
+                                style={{ maxWidth: "100px", maxHeight:"100px", borderRadius:"10px" }}
+                              />
+                       
+                          )}
+                             {selectedImage && (
                               <button
                                 className="theme_btn btn_fill no_icon"
                                 onClick={handleConfirmUpload}
@@ -1123,16 +1131,6 @@ const PropertyDetails = () => {
                                 {isUploading ? "Uploading..." : "Confirm"}
                               </button>
                             )}
-                          </div>
-                          {selectedImage && (
-                            <div>
-                              <img
-                                src={selectedImage}
-                                alt="Selected img"
-                                style={{ maxWidth: "100px" }}
-                              />
-                            </div>
-                          )}
                         </div>
                       )}
                     </div>

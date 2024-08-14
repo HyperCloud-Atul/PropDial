@@ -4,10 +4,13 @@ import Modal from 'react-bootstrap/Modal';
 const UserRoleStatusModal = ({ show, handleClose, selectedUser, handleRoleChange, handleStatusChange, handleSaveChanges }) => {
     if (!selectedUser) return null;
     return (
-        <Modal show={show} onHide={handleClose} className='my_modal'>
+        <Modal show={show} onHide={handleClose} className='my_modal margin_top'>
+             <span class="material-symbols-outlined modal_close" onClick={handleClose}>
+        close
+      </span>
             <Modal.Body>
-                <h6 className="r16 lh22 mb-3">
-                    The <span className='m16'>{selectedUser.displayName}</span> role is currently set to <span className='m16 text_blue text-capitalize'>{selectedUser.rolePropDial}</span>. You can change it here if needed.
+                <h6 className="r16 r16-14-m lh22 mb-3">
+                    The <span className='m16 m16-14-m'>{selectedUser.displayName}</span> role is currently set to <span className='m16 m16-14-m text_blue text-capitalize'>{selectedUser.rolePropDial}</span>. You can change it here if needed.
                 </h6>
                 <div className='form_field'>
                     <div className='field_box theme_radio_new'>
@@ -60,8 +63,8 @@ const UserRoleStatusModal = ({ show, handleClose, selectedUser, handleRoleChange
                     </div>
                 </div>
                 <hr />
-                <h6 className="r16 lh22 mb-3">
-                    <span className='m16'>{selectedUser.displayName}</span> access managment
+                <h6 className="r16 r16-14-m lh22 mb-3">
+                    <span className='m16 m16-14-m'>{selectedUser.displayName}</span> access managment
                 </h6>
                 <div className="access_manage">
                     <div className="left">
@@ -161,8 +164,8 @@ const UserRoleStatusModal = ({ show, handleClose, selectedUser, handleRoleChange
                     </div>
                 </div>
                 <hr />
-                <h6 className="r16 lh22 mb-3">
-                    The status for <span className='m16'>{selectedUser.displayName}</span>  is currently set to <span className={`m16 text-capitalize ${selectedUser.status === "active" ? "text_green2" : "text_red"}`}>{selectedUser.status}</span>, You can change it here if needed.
+                <h6 className="r16 r16-14-m lh22 mb-3">
+                    The status for <span className='m16 m16-14-m'>{selectedUser.displayName}</span>  is currently set to <span className={`m16 m16-14-m text-capitalize ${selectedUser.status === "active" ? "text_green2" : "text_red"}`}>{selectedUser.status}</span>, You can change it here if needed.
                 </h6>
                 <div className='form_field'>
                     <div className='field_box theme_radio_new'>
