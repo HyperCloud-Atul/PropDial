@@ -176,7 +176,7 @@ const PGMoreMenu = () => {
                 <h6 className="title dm20 light_black">Admin</h6>
                 <div className="inner">
                   <Link className="mm_single" to="/newproperty">
-                    <span className="material-symbols-outlined mms_icon">flag</span>
+                    <span className="material-symbols-outlined mms_icon">add</span>
                     <h5 className="dr16">add property</h5>
                     <h6>Easily list your property</h6>
                     <span className="material-symbols-outlined mms_ra">
@@ -184,7 +184,9 @@ const PGMoreMenu = () => {
                     </span>
                   </Link>
                   <Link className="mm_single" to="/addnotification/new">
-                    <span className="material-symbols-outlined mms_icon">flag</span>
+                    <span className="material-symbols-outlined mms_icon">
+notification_important
+</span>
                     <h5 className="dr16"> add notification</h5>
                     <h6>Create and manage your custom alerts and notifications</h6>
                     <span className="material-symbols-outlined mms_ra">
@@ -192,7 +194,7 @@ const PGMoreMenu = () => {
                     </span>
                   </Link>
                   <Link className="mm_single coming_soon r0" to="">
-                    <span className="material-symbols-outlined mms_icon">flag</span>
+                    <span className="material-symbols-outlined mms_icon">receipt_long</span>
                     <h5 className="dr16">  add bills </h5>
                     <h6>Enter and manage your billing information and payments</h6>
                     <span className="material-symbols-outlined mms_ra">
@@ -201,7 +203,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="/allproperties">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                  real_estate_agent
                     </span>
                     <h5 className="dr16">property lists</h5>
                     <h6>View and manage the complete list of available properties</h6>
@@ -211,7 +213,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="/userlist">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                    group
                     </span>
                     <h5 className="dr16">user list</h5>
                     <h6>View and manage all registered users</h6>
@@ -221,7 +223,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single coming_soon r0" to="">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                  confirmation_number
                     </span>
                     <h5 className="dr16">Manage tickets</h5>
                     <h6>Oversee and respond to all support tickets and inquiries</h6>
@@ -231,7 +233,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single coming_soon r0" to="">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                 payments
                     </span>
                     <h5 className="dr16">PMS Payment</h5>
                     <h6> Manage and process your PMS payments.</h6>
@@ -241,7 +243,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="/enquiry/all">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                    headphones
                     </span>
                     <h5 className="dr16">Enquiry</h5>
                     <h6>View and respond to all customer enquiries and leads</h6>
@@ -266,7 +268,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="/statelist">
                     <span className="material-symbols-outlined mms_icon">
-                      g_translate
+                     emoji_transportation
                     </span>
                     <h5 className="dr16">Add State</h5>
                     <h6>Add and manage states for your listings and settings</h6>
@@ -276,7 +278,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="/citylist">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                holiday_village
                     </span>
                     <h5 className="dr16">Add City</h5>
                     <h6>Add and manage cites for your listings and settings</h6>
@@ -286,7 +288,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="/localitylist">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                    location_city
                     </span>
                     <h5 className="dr16">Add Locality</h5>
                     <h6>Add and manage localites for your listings and settings</h6>
@@ -296,7 +298,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="/societylist">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                      location_home
                     </span>
                     <h5 className="dr16">Add Society</h5>
                     <h6>Add and manage societies for your listings and settings</h6>
@@ -319,7 +321,7 @@ const PGMoreMenu = () => {
                     </span>
                   </Link>
                   <Link className="mm_single" to="/adminsettings">
-                    <span className="material-symbols-outlined mms_icon">flag</span>
+                    <span className="material-symbols-outlined mms_icon">diamond</span>
                     <h5 className="dr16">Logo</h5>
                     <h6>Upload and update the logo displayed on your site</h6>
                     <span className="material-symbols-outlined mms_ra">
@@ -328,7 +330,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                      contrast
                     </span>
                     <h5 className="dr16">Theme</h5>
                     <h6>Choose and apply a new theme for your site's appearance</h6>
@@ -351,7 +353,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                  g_translate
                     </span>
                     <h5 className="dr16">Site Language</h5>
                     <h6>Select and set the preferred language for your website</h6>
@@ -361,7 +363,7 @@ const PGMoreMenu = () => {
                   </Link>
                   <Link className="mm_single" to="">
                     <span className="material-symbols-outlined mms_icon">
-                      favorite
+                  credit_card
                     </span>
                     <h5 className="dr16">Payment Gateway</h5>
                     <h6>Configure and switch your payment processing provider</h6>
@@ -470,7 +472,7 @@ const PGMoreMenu = () => {
                 </span>
               </Link>
               <Link className="mm_single coming_soon r0" to=" ">
-                <span className="material-symbols-outlined mms_icon">help</span>
+                <span className="material-symbols-outlined mms_icon">contrast</span>
                 <h5 className="dr16">Display mode</h5>
                 <h6>change your app mode to dark & light</h6>
                 <span className="mms_ra">
@@ -500,7 +502,7 @@ const PGMoreMenu = () => {
                 </span>
               </Link>
               {user ? (<Link className="mm_single" to="" onClick={showPopup}>
-                <span className="material-symbols-outlined mms_icon">gavel</span>
+                <span className="material-symbols-outlined mms_icon">logout</span>
                 <h5 className="dr16">Logout</h5>
                 <h6>sign out to login with other mobile no</h6>
                 <span className="material-symbols-outlined mms_ra">
@@ -508,7 +510,7 @@ const PGMoreMenu = () => {
                 </span>
               </Link>) :
                 (<Link className="mm_single" to="/login">
-                  <span className="material-symbols-outlined mms_icon">gavel</span>
+                  <span className="material-symbols-outlined mms_icon">login</span>
                   <h5 className="dr16">Login</h5>
                   <h6>sign in with your mobile no</h6>
                   <span className="material-symbols-outlined mms_ra">
