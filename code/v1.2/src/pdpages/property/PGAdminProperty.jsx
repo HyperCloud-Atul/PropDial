@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
@@ -13,6 +13,46 @@ const PGAdminProperty = () => {
   const { user } = useAuthContext();
   const { documents: properties, error: propertieserror } =
     useCollection("properties", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
+
+  const { documents: assignedPopertyUserList, error: errassignedPopertyUserList } = useCollection(
+    "propertyusers"
+  );
+
+  const { documents: userList, error: erruserList } = useCollection(
+    "users"
+  );
+
+  const [propertyListWithUsers, setPropertyListWithUsers] = useState();
+
+  useEffect(() => {
+    let _propertyListWithUsers = []
+    properties && properties.forEach(prop => {
+      let assigneduserList = assignedPopertyUserList && assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id)
+      let userDetails = ''
+
+      // console.log('assigneduserList : ', assigneduserList)
+      assigneduserList.forEach(user => {
+        let userObt = userList.filter(userDoc => userDoc.id === user.userId)
+        // console.log('userObt :', userObt)
+
+        userDetails = userDetails + (userObt && userObt[0] && (' ' + userObt[0].fullName + ' ' + userObt[0].phoneNumber))
+
+      });
+
+      prop = {
+        ...prop,
+        userList: userDetails
+      }
+
+      _propertyListWithUsers.push(prop)
+
+    });
+
+    setPropertyListWithUsers(_propertyListWithUsers)
+
+  }, [assignedPopertyUserList, properties, userList]);
+
+  // console.log('propertyListWithUsers: ', propertyListWithUsers)
 
   // Filter state
   const [filter, setFilter] = useState(propertyFilter[0]);
@@ -40,8 +80,8 @@ const PGAdminProperty = () => {
 
 
   let caseFilter = user.accessType;
-  const accessedPropertyList = properties
-    ? properties.filter((document) => {
+  const accessedPropertyList = propertyListWithUsers
+    ? propertyListWithUsers.filter((document) => {
       switch (caseFilter) {
         case "country":
           const lowerCaseCountryArray = user.accessValue.map(element => element.toLowerCase());
@@ -66,9 +106,12 @@ const PGAdminProperty = () => {
   // Filter properties based on search input and other filters
   const filterProperties = accessedPropertyList
     ? accessedPropertyList.filter((document) => {
+      // console.log("property document: ", document)
       let categoryMatch = true;
       let purposeMatch = true;
       let searchMatch = true;
+
+
 
       // Filter by category
       switch (filter) {
