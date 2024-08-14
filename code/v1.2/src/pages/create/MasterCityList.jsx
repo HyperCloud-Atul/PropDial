@@ -37,7 +37,7 @@ export default function MasterCityList() {
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [filter, setFilter] = useState("INDIA");
-
+  const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
   let countryOptions = useRef([]);
   let countryOptionsSorted = useRef([]);
   let stateOptions = useRef([]);
@@ -147,7 +147,7 @@ export default function MasterCityList() {
     setFilter(newFilter);
   };
 
-  const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
+  
   const handleAddSection = () => {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);

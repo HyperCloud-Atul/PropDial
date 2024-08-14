@@ -23,7 +23,7 @@ export default function MasterCountryList() {
   const [formError, setFormError] = useState(null);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
-
+  const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
   useEffect(() => {
     // console.log('in useeffect')
   }, []);
@@ -76,7 +76,7 @@ export default function MasterCountryList() {
     setHandleMoreOptionsClick(false);
   };
 
-  const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
+
   const handleAddSection = () => {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
@@ -125,7 +125,7 @@ export default function MasterCountryList() {
   // View mode end
 
   return (
-    <>  
+   
 
       <div className="top_header_pg pg_bg pg_adminproperty">
         <div
@@ -382,6 +382,6 @@ export default function MasterCountryList() {
           )}
         </div>
       </div>
-    </>
+   
   );
 }

@@ -402,7 +402,7 @@ export default function MasterLocalityList() {
         </div>
         <br />
         <div className="row no-gutters">
-          {masterLocality && masterLocality.length === 0 && <p>No City Yet!</p>}
+          {masterLocality && masterLocality.length === 0 && <p>No Locality Yet!</p>}
           {masterLocality &&
             masterLocality.map((data) => (
               <>
