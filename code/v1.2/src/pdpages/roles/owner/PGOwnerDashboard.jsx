@@ -59,7 +59,7 @@ const PGOwnerDashboard = () => {
       // console.log('all properties: ', properties)
 
       if (myproperties && properties) {
-        //Filtered Properties
+        //Filtered Properties   
         const _filteredproperties = myproperties && myproperties.map((doc) => (
           properties.filter(propdoc => propdoc.id === doc.propertyId)
         ))
