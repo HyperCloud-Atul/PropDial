@@ -27,7 +27,7 @@ const PGAdminProperty = () => {
   useEffect(() => {
     let _propertyListWithUsers = []
     properties && properties.forEach(prop => {
-      let assigneduserList = assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id)
+      let assigneduserList = assignedPopertyUserList && assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id)
       let userDetails = ''
 
       // console.log('assigneduserList : ', assigneduserList)
