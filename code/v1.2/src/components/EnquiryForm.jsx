@@ -8,6 +8,7 @@ const EnquiryForm = () => {
     useFirestore("enquiry");
 
   const [iAm, setIam] = useState("");
+  const [enquiryType, setEnquiryType] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -19,6 +20,7 @@ const EnquiryForm = () => {
 
   const handleChangeName = (event) => setName(event.target.value);
   const handleChangeIam = (event) => setIam(event.target.value);
+  const handleChangeEnquiryType = (event) => setEnquiryType(event.target.value);
   const handleChangeEmail = (event) => setEmail(event.target.value);
   const handleChangePhone = (value) => setPhone(value);
   const handleChangeDescription = (event) => setDescription(event.target.value);
@@ -48,7 +50,7 @@ const EnquiryForm = () => {
         postedBy: "Propdial",
         propId:"",
         referredBy: "none",
-        enquiryType: "rent",
+        enquiryType,
         date: new Date().toISOString(),
         enquiryStatus: "open",
         source: "contact us page",
@@ -58,6 +60,7 @@ const EnquiryForm = () => {
         statusUpdates: [newStatusUpdate], // Initialize statusUpdates with default status
       });
       setIam("");
+      setEnquiryType("");
       setName("");
       setPhone("");
       setCity("");
@@ -79,8 +82,7 @@ const EnquiryForm = () => {
           <div className="col-12">
             <h3 className="section_title mb-4 orange">Enquiry</h3>
           </div>
-
-          <div className="col-md-6">
+          <div className="col-md-12">
             <div className="form_field">
               <label htmlFor="user_name" className="white">
                 Name
@@ -98,26 +100,7 @@ const EnquiryForm = () => {
               </div>
             </div>
             <div className="ff_gap"></div>
-          </div>
-          <div className="col-md-6">
-            <div className="form_field">
-              <label htmlFor="user_name" className="white">
-                Email
-              </label>
-              <div className="form_field_inner">
-                <input
-                  type="text"
-                  value={email}
-                  onChange={handleChangeEmail}
-                  placeholder="Email"
-                />
-                <div className="field_icon">
-                  <span className="material-symbols-outlined">email</span>
-                </div>
-              </div>
-            </div>
-            <div className="ff_gap"></div>
-          </div>
+          </div>          
           <div className="col-md-6">
             <div className="form_field">
               <label htmlFor="user_number" className="white">
@@ -159,13 +142,32 @@ const EnquiryForm = () => {
           </div>
           <div className="col-md-6">
             <div className="form_field">
+              <label htmlFor="user_name" className="white">
+                Email
+              </label>
+              <div className="form_field_inner">
+                <input
+                  type="text"
+                  value={email}
+                  onChange={handleChangeEmail}
+                  placeholder="Email"
+                />
+                <div className="field_icon">
+                  <span className="material-symbols-outlined">email</span>
+                </div>
+              </div>
+            </div>
+            <div className="ff_gap"></div>
+          </div>
+          <div className="col-md-6">
+            <div className="form_field">
               <label htmlFor="ticket_for" className="white">
-                For
+                I am
               </label>
               <div className="form_field_inner">
                 <select value={iAm} onChange={handleChangeIam}>
                   <option value="" disabled>
-                    I am
+                    Select
                   </option>
                   <option value="Tenant">Tenant</option>
                   <option value="Agent">Agent</option>
@@ -176,8 +178,27 @@ const EnquiryForm = () => {
               </div>
               <div className="ff_gap"></div>
             </div>
+          </div>              
+          <div className="col-md-6">
+            <div className="form_field">
+              <label htmlFor="ticket_for" className="white">
+             For
+              </label>
+              <div className="form_field_inner">
+                <select value={enquiryType} onChange={handleChangeEnquiryType}>
+                  <option value="" disabled>
+                    Select
+                  </option>
+                  <option value="rent">Rent</option>
+                  <option value="sale">Sale</option>
+                </select>
+                <div className="field_icon">
+                  <span className="material-symbols-outlined">person</span>
+                </div>
+              </div>
+              <div className="ff_gap"></div>
+            </div>
           </div>
-
           <div className="col-12">
             <div className="form_field">
               <label htmlFor="id_message" className="white">

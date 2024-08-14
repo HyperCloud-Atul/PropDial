@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
   if (!selectedEnquiry) return null;
@@ -131,7 +132,13 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
             <li>
               <div className="left">PID</div>
               <div className="middle">:-</div>
-              <div className="right">{selectedEnquiry.pid}</div>
+              <div className="right">
+                <Link className="click_text"
+                 to={`/propertydetails/${selectedEnquiry.propId}`}>
+                {selectedEnquiry.pid}
+                </Link>
+              </div>
+           
             </li>
             <li>
               <div className="left">Property</div>
@@ -143,14 +150,13 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
                 {selectedEnquiry.propertyName}
               </div>
             </li>
-            <li>
+            {/* <li>
               <div className="left">Property Owner</div>
               <div className="middle">:-</div>
-              <div className="right text-capitalize">
-                {/* Raju Mohan Sharma */}
+              <div className="right text-capitalize">              
                 {selectedEnquiry.propertyOwner}
               </div>
-            </li>
+            </li> */}
           </ul>
         </div>
         <hr />

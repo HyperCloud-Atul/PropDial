@@ -97,7 +97,8 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
   //   }
   // }, [enquiryDocs, filter, rentSaleFilter, enquiryStatus]);
   // old useeffect code without search start
-
+  const [filteredRentCount, setFilteredRentCount] = useState(0);
+  const [filteredSaleCount, setFilteredSaleCount] = useState(0);
 
   useEffect(() => {
     if (enquiryDocs) {
@@ -121,10 +122,11 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
                 end: new Date(),
               });
             default:
-              const selectedYear = parseInt(filter);
+              const selectedYear = parseInt(filter);              
               return createdAt.getFullYear() === selectedYear;
           }
         })();
+        
         const matchesEnquiryTypeFilter =
           document.enquiryType === rentSaleFilter;
 
@@ -149,6 +151,9 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
 
       return matchesDateFilter && matchesEnquiryTypeFilter && matchesEnquiryStatus && matchesSearchTerm;
     });
+
+    setFilteredRentCount(filteredEnquiries.filter(doc => doc.enquiryType.toLowerCase() === "rent").length);
+  setFilteredSaleCount(filteredEnquiries.filter(doc => doc.enquiryType.toLowerCase() === "sale").length);
 
       setTotalDocsLength(enquiryDocs.length);
       setOpenRentEnquiryLength(
@@ -219,7 +224,7 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
       setEnquiries(filteredEnquiries);
     }
   }, [enquiryDocs, filter, rentSaleFilter, enquiryStatus, searchTerm]);
-  
+
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
   };
@@ -488,7 +493,7 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
                 <span
                   className={`rent ${rentSaleFilter === "sale" ? "off" : "on"}`}
                 >
-                  Rent
+                  Rent ({filteredRentCount})
                 </span>
                 <Switch
                   onChange={handleRentSaleChange}
@@ -501,7 +506,7 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
                 <span
                   className={`sale ${rentSaleFilter === "sale" ? "on" : "off"}`}
                 >
-                  Sale
+                  Sale ({filteredSaleCount})
                 </span>
               </div>
             </label>

@@ -78,7 +78,7 @@ section.ari_bnb h4.property_price {
 .ab_p_carousel .owl-prev {
     width: 50px;
     height: 50px;
-    left: -70px;
+    left: -32px;
     top: -38px;
 }
 .ab_p_carousel .owl-next span{
@@ -87,7 +87,7 @@ section.ari_bnb h4.property_price {
 .ab_p_carousel .owl-next {
     width: 50px;
     height: 50px;
-    right: -70px;
+    right: -32px;
     top: -38px;
 }
 .ab_p_carousel .owl-carousel .owl-item li img {

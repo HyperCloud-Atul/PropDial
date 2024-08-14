@@ -13,7 +13,7 @@ import AddEnquiry from './AddEnquiry';
 import './PGEnquiry.scss'
 
 const PGEnquiry = () => {
-  const { logout, isPending } = useLogout();
+  // const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
   // render ViewEnquiry by url id start 
   const { id } = useParams();
@@ -22,12 +22,12 @@ const PGEnquiry = () => {
   console.log("enquiryDocsById", enquiryDocsById, id);
   // render ViewEnquiry by url id end
 
-  useEffect(() => {
-    let flag = user && user.role === "admin";
-    if (!flag) {
-      logout();
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   let flag = user && user.role === "admin";
+  //   if (!flag) { 
+  //     logout();
+  //   }
+  // }, [user]);
 
 
   // 9 dots controls
