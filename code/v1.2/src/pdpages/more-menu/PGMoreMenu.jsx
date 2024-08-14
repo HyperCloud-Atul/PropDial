@@ -463,7 +463,7 @@ notification_important
             </div>
             <div className="mm_inner card_shadow card_border_radius bg_white">
               <h6 className="title">Others</h6>
-              <Link className="mm_single coming_soon r0" to="/ticketdetail">
+              <Link className="mm_single coming_soon r0" to="">
                 <span className="material-symbols-outlined mms_icon">help</span>
                 <h5 className="dr16">Help & Support</h5>
                 <h6>assistance and support resources</h6>
