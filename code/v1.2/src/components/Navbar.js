@@ -44,7 +44,7 @@ export default function Navbar() {
       return; // Exit the function to prevent further checks
     }
     else {
-      console.log('showThirdPage')
+      // console.log('showThirdPage')
       if (user.role === 'admin')
         navigate("/allproperties");
       else

@@ -17,7 +17,7 @@ const PGUpdateProperty = () => {
   const [propertyObj, setPropertyObj] = useState(null)
   const [stageFlag, setStageFlag] = useState('stage1')
 
-  console.log("Property Object: ", propertyObj)
+  // console.log("Property Object: ", propertyObj)
 
   // expand more expand less start
   const [expanded, setExpanded] = useState(true);
@@ -27,17 +27,17 @@ const PGUpdateProperty = () => {
   };
   // sexpand more expand less end
 
-// prop summary click start
-const navigate = useNavigate();
+  // prop summary click start
+  const navigate = useNavigate();
 
-const handleClick = (e) => {
+  const handleClick = (e) => {
     if (window.innerWidth > 575) {
-        navigate(`/propertydetails/${propertyid}`);
+      navigate(`/propertydetails/${propertyid}`);
     } else {
-        e.preventDefault();
+      e.preventDefault();
     }
-};
-// prop summary click start
+  };
+  // prop summary click start
 
   return (
     <div className='top_header_pg pg_bg pg_update_property'>
@@ -89,7 +89,7 @@ const handleClick = (e) => {
           <div className="col-lg-6">
             {propertydoc &&
               <div className="title_card short_prop_summary relative pointer" onClick={handleClick}>
-                  {expanded && (
+                {expanded && (
                   <div className="top on_mobile_575">
                     <div className="d-flex align-items-center" style={{
                       gap: "5px"
@@ -101,37 +101,37 @@ const handleClick = (e) => {
                     </div>
                   </div>
                 )}
-                <div className="on_desktop_hide_575">                
-                    <div className="left">
-                      <div className="img">
-                        {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
-                          : <img src="/assets/img/admin_banner.jpg" alt="" />}
+                <div className="on_desktop_hide_575">
+                  <div className="left">
+                    <div className="img">
+                      {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
+                        : <img src="/assets/img/admin_banner.jpg" alt="" />}
+                    </div>
+                    <div className="detail">
+                      <div>
+                        <span className="card_badge">
+                          {propertydoc.pid}
+                        </span>
+                        {" "}{" "}
+                        <span className="card_badge">
+                          {propertydoc.isActiveInactiveReview}
+                        </span>
                       </div>
-                      <div className="detail">
-                        <div>
-                          <span className="card_badge">
-                            {propertydoc.pid}
-                          </span>
-                          {" "}{" "}
-                          <span className="card_badge">
-                            {propertydoc.isActiveInactiveReview}
-                          </span>
-                        </div>
-                        <h6 className="demand">
-                          <span>₹</span> {propertydoc.demandPrice}
-                          {propertydoc.maintenancecharges !== '' && <span
-                            style={{
-                              fontSize: "10px",
-                            }}
-                          >
-                            + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
-                          </span>}
-                        </h6>
-                        <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
-                        <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
-                        <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
-                      </div>
-                    </div>                
+                      <h6 className="demand">
+                        <span>₹</span> {propertydoc.demandPrice}
+                        {propertydoc.maintenancecharges !== '' && <span
+                          style={{
+                            fontSize: "10px",
+                          }}
+                        >
+                          + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
+                        </span>}
+                      </h6>
+                      <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
+                      <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
+                      <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+                    </div>
+                  </div>
                 </div>
                 <div className="on_mobile_575">
                   {!expanded && (
@@ -139,14 +139,14 @@ const handleClick = (e) => {
                       <div className="img w-100 d-flex align-items-center">
                         {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
                           : <img src="/assets/img/admin_banner.jpg" alt="" />}
-                          <Link to={(`/propertydetails/${propertyid}`)} className='text_green text-center' style={{
-                            flexGrow:"1"
-                          }}>
+                        <Link to={(`/propertydetails/${propertyid}`)} className='text_green text-center' style={{
+                          flexGrow: "1"
+                        }}>
                           View Detail
-                          </Link>
+                        </Link>
                       </div>
                       <div className="detail">
-                      <div>
+                        <div>
                           <span className="card_badge">
                             {propertydoc.pid}
                           </span>
@@ -174,7 +174,7 @@ const handleClick = (e) => {
                     </div>
                   )}
                 </div>
-             
+
                 <div className="expand on_mobile_575" onClick={handleExpand}>
                   <span className="material-symbols-outlined">
                     {expanded ? "keyboard_arrow_down" : "keyboard_arrow_up"}
