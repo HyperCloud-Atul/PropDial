@@ -207,7 +207,7 @@ const CreateProperty = () => {
   const { documents: dbpropertiesdocuments, error: propertieserror } =
     useCollection("properties", ["postedBy", "==", "Propdial"]);
 
-  console.log("dbpropertiesdocuments: ", dbpropertiesdocuments)
+  // console.log("dbpropertiesdocuments: ", dbpropertiesdocuments)
 
   const {
     addDocument: addNewPropertyDocument,
@@ -446,7 +446,7 @@ const CreateProperty = () => {
   // }
 
   const handleSubmit = async (e, option) => {
-    console.log("In handleSubmit");
+    // console.log("In handleSubmit");
     e.preventDefault();
     // console.log('e: ', e)
     // console.log('option: ', option)
@@ -459,7 +459,7 @@ const CreateProperty = () => {
     setFormSuccess(null);
 
     var btnProperties = document.getElementById("btn_create").innerHTML;
-    console.log("btnName: ", btnProperties);
+    // console.log("btnName: ", btnProperties);
     if (btnProperties === "Properties") {
       // console.log("btnName: ", btnProperties)
       navigate("/dashboard");
@@ -544,7 +544,7 @@ const CreateProperty = () => {
         }
       }
 
-      console.log("state:", state);
+      // console.log("state:", state);
       if (
         state.label === "" ||
         state === undefined ||
