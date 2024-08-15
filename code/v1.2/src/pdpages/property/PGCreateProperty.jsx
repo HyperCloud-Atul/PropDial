@@ -236,49 +236,7 @@ const CreateProperty = () => {
     ["status", "==", "active"]
   );
 
-  //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active
-  dbcitiesdocuments &&
-    dbcitiesdocuments.map((doc) => {
-      // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
-      if (!distinctCityList.find((e) => e.city === doc.city)) {
-        distinctCityList.push({
-          state: doc.state,
-          city: doc.city,
-        });
-      }
-    });
 
-  // dbpropertiesdocuments &&
-  //   dbpropertiesdocuments.map((doc) => {
-  //     console.log("pro doc: ", doc)
-  //     // if (!distinctCityList.find((e) => e.city === doc.city)) {
-  //     //     distinctCityList.push({
-  //     //         state: doc.state,
-  //     //         city: doc.city,
-  //     //     });
-  //     // }
-  //   });
-
-  dbpropertiesdocuments &&
-    dbpropertiesdocuments.map((doc) => {
-      if (!distinctLocalityList.find((e) => e.locality === doc.locality)) {
-        distinctLocalityList.push({
-          city: doc.city,
-          locality: doc.locality,
-        });
-      }
-    });
-  // console.log('distinctLocalityList: ', distinctLocalityList)
-
-  dbpropertiesdocuments &&
-    dbpropertiesdocuments.map((doc) => {
-      if (!distinctSocietyList.find((e) => e.society === doc.society)) {
-        distinctSocietyList.push({
-          locality: doc.locality,
-          society: doc.society,
-        });
-      }
-    });
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
@@ -304,6 +262,12 @@ const CreateProperty = () => {
   });
 
   useEffect(() => {
+
+
+
+
+
+
     statesOptions.current =
       dbstatesdocuments &&
       dbstatesdocuments.map((stateData) => ({
@@ -321,8 +285,41 @@ const CreateProperty = () => {
         value: "Select State",
       });
 
+    //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active
+    dbcitiesdocuments &&
+      dbcitiesdocuments.map((doc) => {
+        // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
+        if (!distinctCityList.find((e) => e.city === doc.city)) {
+          distinctCityList.push({
+            state: doc.state,
+            city: doc.city,
+          });
+        }
+      });
 
-  }, [dbstatesdocuments]);
+    dbpropertiesdocuments &&
+      dbpropertiesdocuments.map((doc) => {
+        if (!distinctLocalityList.find((e) => e.locality === doc.locality)) {
+          distinctLocalityList.push({
+            city: doc.city,
+            locality: doc.locality,
+          });
+        }
+      });
+    // console.log('distinctLocalityList: ', distinctLocalityList)
+
+    dbpropertiesdocuments &&
+      dbpropertiesdocuments.map((doc) => {
+        if (!distinctSocietyList.find((e) => e.society === doc.society)) {
+          distinctSocietyList.push({
+            locality: doc.locality,
+            society: doc.society,
+          });
+        }
+      });
+
+
+  }, [dbstatesdocuments, dbpropertiesdocuments, dbcitiesdocuments, distinctCityList, distinctLocalityList, distinctSocietyList]);
 
   const setPurpose = (option) => {
     // console.log("setPurpose e.target.value:", option);
