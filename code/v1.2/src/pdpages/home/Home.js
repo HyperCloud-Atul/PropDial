@@ -213,7 +213,7 @@ const Home = () => {
         </section>
 
         <TopCitiesInIndia />
-        <AirBnb />
+        {/* <AirBnb /> */}
         <section
           className="why_us sect_padding"
         >

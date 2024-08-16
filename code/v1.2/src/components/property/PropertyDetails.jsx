@@ -1533,8 +1533,8 @@ const PropertyDetails = () => {
                           {/* </Link> */}
                         </SwiperSlide>
                         {/* Transactions */}
-                        <SwiperSlide>
-                          {/* <Link to={`/transactions/${propertyid}`}> */}
+                        {/* <SwiperSlide>
+                          <Link to={`/transactions/${propertyid}`}>
                           <div className="eicp_single coming_soon">
                             <div className="icon">
                               <span class="material-symbols-outlined">
@@ -1546,8 +1546,8 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                           </div>
-                          {/* </Link> */}
-                        </SwiperSlide>
+                          </Link>
+                        </SwiperSlide> */}
                       </Swiper>
                     </div>
                   )}
