@@ -22,8 +22,13 @@ export default function MasterStateList() {
   const { addDocument, response } = useFirestore("m_states");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_states");
-  const { documents: masterState, error: masterStateerror } =
-    useCollection("m_states");
+  // const { documents: masterState, error: masterStateerror } =
+  //   useCollection("m_states");
+  const { documents: masterState, error: masterStateerror } = useCollection(
+    "m_states",
+    "",
+    ["state", "asc"]
+  );
   const { documents: masterCountry, error: masterCountryerror } =
     useCollection("m_countries");
 
@@ -99,50 +104,50 @@ export default function MasterStateList() {
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
-  
+
   const filteredData = masterState
     ? masterState.filter((document) => {
-        let isFiltered = false;
-  
-        // Role and country-based filtering
-        switch (filter) {
-          case "INDIA":
-            if (document.country === "INDIA") {
-              isFiltered = true;
-            }
-            break;
-          case "USA":
-            if (document.country === "USA") {
-              isFiltered = true;
-            }
-            break;
-          case "OTHERS":
-            if (document.country !== "INDIA" && document.country !== "USA") {
-              isFiltered = true;
-            }
-            break;
-          case "INACTIVE":
-            if (document.status.toLowerCase() === "inactive") {
-              isFiltered = true;
-            }
-            break;
-          default:
+      let isFiltered = false;
+
+      // Role and country-based filtering
+      switch (filter) {
+        case "INDIA":
+          if (document.country === "INDIA") {
             isFiltered = true;
-        }
-  
-        // Search input filtering
-        const searchMatch = searchInput
-          ? Object.values(document).some(
-              (field) =>
-                typeof field === "string" &&
-                field.toUpperCase().includes(searchInput.toUpperCase())
-            )
-          : true;
-  
-        return isFiltered && searchMatch;
-      })
+          }
+          break;
+        case "USA":
+          if (document.country === "USA") {
+            isFiltered = true;
+          }
+          break;
+        case "OTHERS":
+          if (document.country !== "INDIA" && document.country !== "USA") {
+            isFiltered = true;
+          }
+          break;
+        case "INACTIVE":
+          if (document.status.toLowerCase() === "inactive") {
+            isFiltered = true;
+          }
+          break;
+        default:
+          isFiltered = true;
+      }
+
+      // Search input filtering
+      const searchMatch = searchInput
+        ? Object.values(document).some(
+          (field) =>
+            typeof field === "string" &&
+            field.toUpperCase().includes(searchInput.toUpperCase())
+        )
+        : true;
+
+      return isFiltered && searchMatch;
+    })
     : null;
-  
+
 
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
 
@@ -203,12 +208,11 @@ export default function MasterStateList() {
   // View mode end
 
   return (
-    <>   
+    <>
       <div className="top_header_pg pg_bg pg_adminproperty">
         <div
-          className={`page_spacing ${
-            masterState && masterState.length === 0 && "pg_min_height"
-          }`}
+          className={`page_spacing ${masterState && masterState.length === 0 && "pg_min_height"
+            }`}
         >
           <NineDots nineDotsMenu={nineDotsMenu} />
 
@@ -218,9 +222,8 @@ export default function MasterStateList() {
                 No State Yet!
                 <div
                   onClick={handleAddSection}
-                  className={`theme_btn no_icon header_btn mt-3 ${
-                    handleAddSectionFlag ? "btn_border" : "btn_fill"
-                  }`}
+                  className={`theme_btn no_icon header_btn mt-3 ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                    }`}
                 >
                   {handleAddSectionFlag ? "Cancel" : "Add New"}
                 </div>
@@ -272,9 +275,8 @@ export default function MasterStateList() {
                   </div>
                   <div className="button_filter diff_views">
                     <div
-                      className={`bf_single ${
-                        viewMode === "card_view" ? "active" : ""
-                      }`}
+                      className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                        }`}
                       onClick={() => handleModeChange("card_view")}
                     >
                       <span className="material-symbols-outlined">
@@ -282,9 +284,8 @@ export default function MasterStateList() {
                       </span>
                     </div>
                     <div
-                      className={`bf_single ${
-                        viewMode === "table_view" ? "active" : ""
-                      }`}
+                      className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                        }`}
                       onClick={() => handleModeChange("table_view")}
                     >
                       <span className="material-symbols-outlined">
@@ -294,9 +295,8 @@ export default function MasterStateList() {
                   </div>
                   <div
                     onClick={handleAddSection}
-                    className={`theme_btn no_icon header_btn ${
-                      handleAddSectionFlag ? "btn_border" : "btn_fill"
-                    }`}
+                    className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                      }`}
                   >
                     {handleAddSectionFlag ? "Cancel" : "Add New"}
                   </div>
@@ -320,34 +320,34 @@ export default function MasterStateList() {
                   <div className="form_field label_top">
                     <label htmlFor="">Country</label>
                     <div className="form_field_inner">
-                    <Select
-                      className=""
-                      onChange={(option) => setCountry(option)}
-                      options={countryOptionsSorted.current}
-                      value={country}
-                      styles={{
-                        control: (baseStyles, state) => ({
-                          ...baseStyles,
-                          outline: "none",
-                          background: "#eee",
-                          borderBottom: " 1px solid var(--theme-blue)",
-                        }),
-                      }}
-                    />               
+                      <Select
+                        className=""
+                        onChange={(option) => setCountry(option)}
+                        options={countryOptionsSorted.current}
+                        value={country}
+                        styles={{
+                          control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            outline: "none",
+                            background: "#eee",
+                            borderBottom: " 1px solid var(--theme-blue)",
+                          }),
+                        }}
+                      />
                     </div>
                   </div>
-                </div>             
+                </div>
                 <div className="col-xl-6 col-lg-6">
                   <div className="form_field label_top">
                     <label htmlFor="">State</label>
                     <div className="form_field_inner">
-                    <input
-                      required
-                      type="text"
-                      placeholder="Entry State Name"
-                      onChange={(e) => setState(e.target.value)}
-                      value={state}
-                    />
+                      <input
+                        required
+                        type="text"
+                        placeholder="Entry State Name"
+                        onChange={(e) => setState(e.target.value)}
+                        value={state}
+                      />
                     </div>
                   </div>
                 </div>

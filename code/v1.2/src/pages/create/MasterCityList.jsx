@@ -21,8 +21,13 @@ export default function MasterCityList() {
     useFirestore("m_cities");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_cities");
-  const { documents: masterCity, error: masterCityerror } =
-    useCollection("m_cities");
+  // const { documents: masterCity, error: masterCityerror } =
+  //   useCollection("m_cities");
+  const { documents: masterCity, error: masterCityerror } = useCollection(
+    "m_cities",
+    "",
+    ["city", "asc"]
+  );
   // const { documents: masterState, error: masterStateerror } = useCollection('m_states')
   const { documents: masterCountry, error: masterCountryerror } =
     useCollection("m_countries");
@@ -147,7 +152,7 @@ export default function MasterCityList() {
     setFilter(newFilter);
   };
 
-  
+
   const handleAddSection = () => {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
@@ -184,50 +189,50 @@ export default function MasterCityList() {
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
-  
+
   const filteredData = masterCity
     ? masterCity.filter((document) => {
-        let isFiltered = false;
-  
-        // Role and country-based filtering
-        switch (filter) {
-          case "INDIA":
-            if (document.country === "INDIA") {
-              isFiltered = true;
-            }
-            break;
-          case "USA":
-            if (document.country === "USA") {
-              isFiltered = true;
-            }
-            break;
-          case "OTHERS":
-            if (document.country !== "INDIA" && document.country !== "USA") {
-              isFiltered = true;
-            }
-            break;
-          case "INACTIVE":
-            if (document.status.toLowerCase() === "inactive") {
-              isFiltered = true;
-            }
-            break;
-          default:
+      let isFiltered = false;
+
+      // Role and country-based filtering
+      switch (filter) {
+        case "INDIA":
+          if (document.country === "INDIA") {
             isFiltered = true;
-        }
-  
-        // Search input filtering
-        const searchMatch = searchInput
-          ? Object.values(document).some(
-              (field) =>
-                typeof field === "string" &&
-                field.toUpperCase().includes(searchInput.toUpperCase())
-            )
-          : true;
-  
-        return isFiltered && searchMatch;
-      })
+          }
+          break;
+        case "USA":
+          if (document.country === "USA") {
+            isFiltered = true;
+          }
+          break;
+        case "OTHERS":
+          if (document.country !== "INDIA" && document.country !== "USA") {
+            isFiltered = true;
+          }
+          break;
+        case "INACTIVE":
+          if (document.status.toLowerCase() === "inactive") {
+            isFiltered = true;
+          }
+          break;
+        default:
+          isFiltered = true;
+      }
+
+      // Search input filtering
+      const searchMatch = searchInput
+        ? Object.values(document).some(
+          (field) =>
+            typeof field === "string" &&
+            field.toUpperCase().includes(searchInput.toUpperCase())
+        )
+        : true;
+
+      return isFiltered && searchMatch;
+    })
     : null;
-  
+
 
   // nine dots menu start
   const nineDotsMenu = [
@@ -252,9 +257,8 @@ export default function MasterCityList() {
   return (
     <div className="top_header_pg pg_bg pg_adminproperty">
       <div
-        className={`page_spacing ${
-          masterCity && masterCity.length === 0 && "pg_min_height"
-        }`}
+        className={`page_spacing ${masterCity && masterCity.length === 0 && "pg_min_height"
+          }`}
       >
         <NineDots nineDotsMenu={nineDotsMenu} />
 
@@ -264,9 +268,8 @@ export default function MasterCityList() {
               No City Yet!
               <div
                 onClick={handleAddSection}
-                className={`theme_btn no_icon header_btn mt-3 ${
-                  handleAddSectionFlag ? "btn_border" : "btn_fill"
-                }`}
+                className={`theme_btn no_icon header_btn mt-3 ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                  }`}
               >
                 {handleAddSectionFlag ? "Cancel" : "Add New"}
               </div>
@@ -296,11 +299,11 @@ export default function MasterCityList() {
             <div className="filters">
               <div className="left">
                 <div className="rt_global_search search_field">
-                <input
-                      placeholder="Search"
-                      value={searchInput}
-                      onChange={handleSearchInputChange}
-                    />
+                  <input
+                    placeholder="Search"
+                    value={searchInput}
+                    onChange={handleSearchInputChange}
+                  />
                   <div className="field_icon">
                     <span className="material-symbols-outlined">search</span>
                   </div>
@@ -318,9 +321,8 @@ export default function MasterCityList() {
                 </div>
                 <div className="button_filter diff_views">
                   <div
-                    className={`bf_single ${
-                      viewMode === "card_view" ? "active" : ""
-                    }`}
+                    className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                      }`}
                     onClick={() => handleModeChange("card_view")}
                   >
                     <span className="material-symbols-outlined">
@@ -328,9 +330,8 @@ export default function MasterCityList() {
                     </span>
                   </div>
                   <div
-                    className={`bf_single ${
-                      viewMode === "table_view" ? "active" : ""
-                    }`}
+                    className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                      }`}
                     onClick={() => handleModeChange("table_view")}
                   >
                     <span className="material-symbols-outlined">view_list</span>
@@ -338,9 +339,8 @@ export default function MasterCityList() {
                 </div>
                 <div
                   onClick={handleAddSection}
-                  className={`theme_btn no_icon header_btn ${
-                    handleAddSectionFlag ? "btn_border" : "btn_fill"
-                  }`}
+                  className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                    }`}
                 >
                   {handleAddSectionFlag ? "Cancel" : "Add New"}
                 </div>

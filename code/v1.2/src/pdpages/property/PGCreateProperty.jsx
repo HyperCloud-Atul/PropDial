@@ -174,7 +174,7 @@ function camelCase(inputStr) {
 }
 
 const CreateProperty = () => {
-  function setRedirectFlag(flag, key) {}
+  function setRedirectFlag(flag, key) { }
   const { user } = useAuthContext();
 
   let statesOptions = useRef([]);
@@ -204,8 +204,10 @@ const CreateProperty = () => {
   const [onboardingDate, setOnboardingDate] = useState(new Date());
   const [newProperty, setNewProperty] = useState(null);
 
-  const { documents: propertiesdocs, error: propertiesdocserror } =
+  const { documents: dbpropertiesdocuments, error: propertieserror } =
     useCollection("properties", ["postedBy", "==", "Propdial"]);
+
+  // console.log("dbpropertiesdocuments: ", dbpropertiesdocuments)
 
   const {
     addDocument: addNewPropertyDocument,
@@ -234,48 +236,7 @@ const CreateProperty = () => {
     ["status", "==", "active"]
   );
 
-  //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active
-  dbcitiesdocuments &&
-    dbcitiesdocuments.map((doc) => {
-      // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
-      if (!distinctCityList.find((e) => e.city === doc.city)) {
-        distinctCityList.push({
-          state: doc.state,
-          city: doc.city,
-        });
-      }
-    });
 
-  // dbpropertiesdocuments &&
-  //     dbpropertiesdocuments.map((doc) => {
-  //         if (!distinctCityList.find((e) => e.city === doc.city)) {
-  //             distinctCityList.push({
-  //                 state: doc.state,
-  //                 city: doc.city,
-  //             });
-  //         }
-  //     });
-
-  // dbpropertiesdocuments &&
-  //     dbpropertiesdocuments.map((doc) => {
-  //         if (!distinctLocalityList.find((e) => e.locality === doc.locality)) {
-  //             distinctLocalityList.push({
-  //                 city: doc.city,
-  //                 locality: doc.locality,
-  //             });
-  //         }
-  //     });
-  // console.log('distinctLocalityList: ', distinctLocalityList)
-
-  // dbpropertiesdocuments &&
-  //     dbpropertiesdocuments.map((doc) => {
-  //         if (!distinctSocietyList.find((e) => e.society === doc.society)) {
-  //             distinctSocietyList.push({
-  //                 locality: doc.locality,
-  //                 society: doc.society,
-  //             });
-  //         }
-  //     });
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
@@ -301,6 +262,12 @@ const CreateProperty = () => {
   });
 
   useEffect(() => {
+
+
+
+
+
+
     statesOptions.current =
       dbstatesdocuments &&
       dbstatesdocuments.map((stateData) => ({
@@ -317,7 +284,42 @@ const CreateProperty = () => {
         label: "Select State",
         value: "Select State",
       });
-  }, [dbstatesdocuments]);
+
+    //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active
+    dbcitiesdocuments &&
+      dbcitiesdocuments.map((doc) => {
+        // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
+        if (!distinctCityList.find((e) => e.city === doc.city)) {
+          distinctCityList.push({
+            state: doc.state,
+            city: doc.city,
+          });
+        }
+      });
+
+    dbpropertiesdocuments &&
+      dbpropertiesdocuments.map((doc) => {
+        if (!distinctLocalityList.find((e) => e.locality === doc.locality)) {
+          distinctLocalityList.push({
+            city: doc.city,
+            locality: doc.locality,
+          });
+        }
+      });
+    // console.log('distinctLocalityList: ', distinctLocalityList)
+
+    dbpropertiesdocuments &&
+      dbpropertiesdocuments.map((doc) => {
+        if (!distinctSocietyList.find((e) => e.society === doc.society)) {
+          distinctSocietyList.push({
+            locality: doc.locality,
+            society: doc.society,
+          });
+        }
+      });
+
+
+  }, [dbstatesdocuments, dbpropertiesdocuments, dbcitiesdocuments, distinctCityList, distinctLocalityList, distinctSocietyList]);
 
   const setPurpose = (option) => {
     // console.log("setPurpose e.target.value:", option);
@@ -441,7 +443,7 @@ const CreateProperty = () => {
   // }
 
   const handleSubmit = async (e, option) => {
-    console.log("In handleSubmit");
+    // console.log("In handleSubmit");
     e.preventDefault();
     // console.log('e: ', e)
     // console.log('option: ', option)
@@ -454,7 +456,7 @@ const CreateProperty = () => {
     setFormSuccess(null);
 
     var btnProperties = document.getElementById("btn_create").innerHTML;
-    console.log("btnName: ", btnProperties);
+    // console.log("btnName: ", btnProperties);
     if (btnProperties === "Properties") {
       // console.log("btnName: ", btnProperties)
       navigate("/dashboard");
@@ -539,7 +541,7 @@ const CreateProperty = () => {
         }
       }
 
-      console.log("state:", state);
+      // console.log("state:", state);
       if (
         state.label === "" ||
         state === undefined ||
@@ -685,7 +687,7 @@ const CreateProperty = () => {
         console.log(newProperty);
         setFormSuccess("Property Created Successfully");
         setFormError(null);
-        const propertiesCount = propertiesdocs && propertiesdocs.length + 2101;
+        const propertiesCount = dbpropertiesdocuments && dbpropertiesdocuments.length + 2101;
         // const nextPropertySeqCounter = "PID: " + state.value + "-" + (propertiesCount + 1)
         // console.log("nextPropertySeqCounter: ", nextPropertySeqCounter)
 
@@ -1373,7 +1375,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType.toUpperCase ===
+                          propertyDetails.PropertyType.toUpperCase ===
                           "SELECT PROPERTY TYPE"
                           ? true
                           : false
@@ -1384,7 +1386,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "High Rise Apt"
+                          propertyDetails.PropertyType === "High Rise Apt"
                           ? true
                           : false
                       }
@@ -1394,7 +1396,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "Low Rise Apt"
+                          propertyDetails.PropertyType === "Low Rise Apt"
                           ? true
                           : false
                       }
@@ -1404,7 +1406,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "Builder Floor"
+                          propertyDetails.PropertyType === "Builder Floor"
                           ? true
                           : false
                       }
@@ -1414,7 +1416,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "Kothi"
+                          propertyDetails.PropertyType === "Kothi"
                           ? true
                           : false
                       }
@@ -1424,7 +1426,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "Villa - Simplex"
+                          propertyDetails.PropertyType === "Villa - Simplex"
                           ? true
                           : false
                       }
@@ -1434,7 +1436,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "Villa - Duplex"
+                          propertyDetails.PropertyType === "Villa - Duplex"
                           ? true
                           : false
                       }
@@ -1444,7 +1446,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "Row House - Simplex"
+                          propertyDetails.PropertyType === "Row House - Simplex"
                           ? true
                           : false
                       }
@@ -1454,7 +1456,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "Row House - Duplex"
+                          propertyDetails.PropertyType === "Row House - Duplex"
                           ? true
                           : false
                       }
@@ -1464,7 +1466,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "Pent House - Simplex"
+                          propertyDetails.PropertyType === "Pent House - Simplex"
                           ? true
                           : false
                       }
@@ -1474,7 +1476,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.PropertyType === "Pent House - Duplex"
+                          propertyDetails.PropertyType === "Pent House - Duplex"
                           ? true
                           : false
                       }
@@ -1681,7 +1683,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.FloorNo === "Select Floor No"
+                          propertyDetails.FloorNo === "Select Floor No"
                           ? true
                           : false
                       }
@@ -1691,7 +1693,7 @@ const CreateProperty = () => {
                     <option
                       defaultValue={
                         propertyDetails &&
-                        propertyDetails.FloorNo === "Basement"
+                          propertyDetails.FloorNo === "Basement"
                           ? true
                           : false
                       }
@@ -2321,7 +2323,7 @@ const CreateProperty = () => {
                           <div
                             className={
                               propertyDetails.MaintenanceChargesFrequency ===
-                              "Monthly"
+                                "Monthly"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
@@ -2371,7 +2373,7 @@ const CreateProperty = () => {
                           <div
                             className={
                               propertyDetails.MaintenanceChargesFrequency ===
-                              "Quarterly"
+                                "Quarterly"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
@@ -2422,7 +2424,7 @@ const CreateProperty = () => {
                           <div
                             className={
                               propertyDetails.MaintenanceChargesFrequency ===
-                              "Half Yearly"
+                                "Half Yearly"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
@@ -2474,7 +2476,7 @@ const CreateProperty = () => {
                           <div
                             className={
                               propertyDetails.MaintenanceChargesFrequency ===
-                              "Yearly"
+                                "Yearly"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }

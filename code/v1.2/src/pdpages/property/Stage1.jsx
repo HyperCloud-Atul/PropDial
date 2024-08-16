@@ -229,6 +229,26 @@ const Stage1 = (props) => {
     ["status", "==", "active"]
   );
 
+
+
+  const [propertyDetails, setPropertyDetails] = useState({
+    // All select type
+    Region: "",
+    Package: "",
+    Flag: "",
+    Category: "",
+    UnitNumber: "",
+    DemandPrice: "",
+    MaintenanceCharges: "",
+    MaintenanceChargesFrequency: "",
+    Purpose: "",
+    Country: "",
+    State: "",
+    City: "",
+    Locality: "",
+    Society: "",
+  });
+
   //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active 
   dbcitiesdocuments &&
     dbcitiesdocuments.map((doc) => {
@@ -241,15 +261,15 @@ const Stage1 = (props) => {
       }
     });
 
-  dbpropertiesdocuments &&
-    dbpropertiesdocuments.map((doc) => {
-      if (!distinctCityList.find((e) => e.city === doc.city)) {
-        distinctCityList.push({
-          state: doc.state,
-          city: doc.city,
-        });
-      }
-    });
+  // dbpropertiesdocuments &&
+  //   dbpropertiesdocuments.map((doc) => {
+  //     if (!distinctCityList.find((e) => e.city === doc.city)) {
+  //       distinctCityList.push({
+  //         state: doc.state,
+  //         city: doc.city,
+  //       });
+  //     }
+  //   });
 
   dbpropertiesdocuments &&
     dbpropertiesdocuments.map((doc) => {
@@ -272,25 +292,8 @@ const Stage1 = (props) => {
       }
     });
 
-  const [propertyDetails, setPropertyDetails] = useState({
-    // All select type
-    Region: "",
-    Package: "",
-    Flag: "",
-    Category: "",
-    UnitNumber: "",
-    DemandPrice: "",
-    MaintenanceCharges: "",
-    MaintenanceChargesFrequency: "",
-    Purpose: "",
-    Country: "",
-    State: "",
-    City: "",
-    Locality: "",
-    Society: "",
-  });
-
   useEffect(() => {
+
     statesOptions.current =
       dbstatesdocuments &&
       dbstatesdocuments.map((stateData) => ({
