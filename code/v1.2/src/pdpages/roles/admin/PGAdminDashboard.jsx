@@ -20,7 +20,7 @@ import MyPieChart from "../../graphs/MyPieChart";
 import CircularProgressBar from "../../../pages/roles/admin/CircularProgressBar";
 
 // css
-import "./PGAdminDashboard.css";
+import "./PGAdminDashboard.scss";
 
 const PGAdminDashboard = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -299,11 +299,7 @@ const PGAdminDashboard = () => {
                     <div className="ps_single active">
                       <h5>{activeProperties && activeProperties.length}</h5>
                       <h6>Active</h6>
-                    </div>
-                    <div className="ps_single active">
-                      <h5>2</h5>
-                      <h6>Not assign</h6>
-                    </div>
+                    </div>               
                     <div className="ps_single inactive">
                       <h5>{inactiveProperties && inactiveProperties.length}</h5>
                       <h6>Inactive</h6>
@@ -312,6 +308,30 @@ const PGAdminDashboard = () => {
                 </div>
               </section>
               <div className="vg22"></div>
+              <section className="property_status assign">
+              <div className="ps_single one">
+                      <h5>5</h5>
+                      <h6>Not Assign To <br /> Owner </h6>
+                    </div>
+                    <div className="ps_single two">
+                    <h5>8</h5>
+                    <h6>Not Assign To <br /> Manager </h6>
+                    </div>
+                    <div className="ps_single three">
+                    <h5>2</h5>
+                    <h6>Not Assign To <br /> Tenant </h6>
+                    </div>
+                    <div className="ps_single four">
+                    <h5>{residentialProperties &&
+                            residentialProperties.length}</h5>
+                    <h6>Property Category <br /> Residential </h6>
+                    </div>
+                    <div className="ps_single five">
+                    <h5>{commercialProperties && commercialProperties.length}</h5>
+                    <h6>Property Category <br /> Commercial </h6>
+                    </div>
+              </section>
+              {/* <div className="vg22"></div>
               <section className="upcoming">
                 <div className="parent">
                   <div className="">
@@ -323,6 +343,12 @@ const PGAdminDashboard = () => {
                         </h5>
                         <h6>Residential</h6>
                       </div>
+                      <div className="dots bottom">
+                        <img src="/assets/img/icons/dots.png" alt="" />
+                      </div>
+                      <div className="dots top">
+                        <img src="/assets/img/icons/dots.png" alt="" />
+                      </div>
                     </div>
                   </div>
                   <div className="">
@@ -333,6 +359,12 @@ const PGAdminDashboard = () => {
                         </h5>
                         <h6>Commercial</h6>
                       </div>
+                      <div className="dots bottom">
+                        <img src="/assets/img/icons/dots.png" alt="" />
+                      </div>
+                      <div className="dots top">
+                        <img src="/assets/img/icons/dots.png" alt="" />
+                      </div>
                     </div>
                   </div>
                   <div className="coming_soon">
@@ -340,6 +372,12 @@ const PGAdminDashboard = () => {
                       <div className="inner">
                         <h5>0</h5>
                         <h6>Upcoming Inspections</h6>
+                      </div>
+                      <div className="dots bottom">
+                        <img src="/assets/img/icons/dots.png" alt="" />
+                      </div>
+                      <div className="dots top">
+                        <img src="/assets/img/icons/dots.png" alt="" />
                       </div>
                     </div>
                   </div>
@@ -349,10 +387,16 @@ const PGAdminDashboard = () => {
                         <h5>0</h5>
                         <h6>Upcoming Rent Renewal</h6>
                       </div>
+                      <div className="dots bottom">
+                        <img src="/assets/img/icons/dots.png" alt="" />
+                      </div>
+                      <div className="dots top">
+                        <img src="/assets/img/icons/dots.png" alt="" />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </section>
+              </section> */}
               <div className="vg22"></div>
               <section className="self_property_detail">
                 <div className="spd_single">

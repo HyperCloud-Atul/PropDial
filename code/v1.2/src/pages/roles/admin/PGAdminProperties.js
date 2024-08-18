@@ -11,7 +11,7 @@ import PropertyList from "../../../components/PropertyList";
 import Hero from "../../../components/Hero";
 
 // styles
-import "./PGAdminDashboard.css";
+// import "./PGAdminDashboard.scss";
 
 export default function PGAdminProperties() {
   // Scroll to the top of the page whenever the location changes start

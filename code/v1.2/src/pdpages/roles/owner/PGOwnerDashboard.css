@@ -163,7 +163,7 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     background: var(--white-color);
     border-radius: 22px;
-    margin-top: 22px;
+    /* margin-top: 22px; */
     padding: 20px;
     display: flex;
     gap: 15px;
@@ -181,15 +181,15 @@
 }
 
 .self_property_detail .spd_single .left {
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(64, 64, 64, 0.4) !important;
-    width: 75px;
-    height: 75px;  
-    border-radius: 22px;
+    /* box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(64, 64, 64, 0.4) !important; */
+    width: 65px;
+    height: 65px;  
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px;
-    margin-top: -40px;
+    padding: 12px;
+    /* margin-top: -40px; */
 }
 .self_property_detail .spd_single .left.rent{
     background: var(--theme-purple);

@@ -15,7 +15,7 @@ import PropertyList from "../../../components/PropertyList";
 import LeftSidebar from "../../../components/LeftSidebar";
 
 // styles
-import "./PGAdminDashboard.css";
+// import "./PGAdminDashboard.scss";
 const propertyFilter = ["ALL", "RESIDENTIAL", "COMMERCIAL", "INACTIVE"];
 export default function PGAdminDashboard() {
   // Scroll to the top of the page whenever the location changes start

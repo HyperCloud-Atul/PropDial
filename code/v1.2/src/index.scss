@@ -293,16 +293,39 @@
       box-shadow: none;
     }
 
+    .male{
+      input[type="radio"] + label::before { 
+        content: "\1F468"; /* Unicode for Male face */         
+      }
+      input[type="radio"]:checked + label::before {     
+        content: "\1F468"; /* Unicode for Male face */       
+      }
+    }
+    .female{
+      input[type="radio"] + label::before {       
+        content: "\1F469"; /* Unicode for Female face */            
+      }
+      input[type="radio"]:checked + label::before {     
+        content: "\1F469"; /* Unicode for Female face */         
+      }
+    }
+    .other{
+      input[type="radio"] + label::before {     
+        content: "\1F9D1"; /* Unicode for a gender-neutral face */       
+      }
+      input[type="radio"]:checked + label::before {     
+        content: "\1F9D1"; /* Unicode for a gender-neutral face */      
+      }
+    }
     input[type="radio"] + label::before {
-      content: "\002B";
+      content: "\002B";   
       display: inline-block;
       margin-right: 5px;
       font-size: 15px;
     }
 
     input[type="radio"]:checked + label::before {
-      content: "\2713";
-      /* Check mark icon */
+      content: "\2713"; /* Check mark icon */     
       display: inline-block;
       margin-right: 5px;
       font-size: 15px;
