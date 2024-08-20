@@ -295,28 +295,54 @@
 
     .male{
       input[type="radio"] + label::before { 
-        content: "\1F468"; /* Unicode for Male face */         
+        content: none; /* Unicode for Male face */         
       }
       input[type="radio"]:checked + label::before {     
-        content: "\1F468"; /* Unicode for Male face */       
+            
       }
     }
     .female{
       input[type="radio"] + label::before {       
-        content: "\1F469"; /* Unicode for Female face */            
+        content: none; /* Unicode for Female face */            
       }
       input[type="radio"]:checked + label::before {     
-        content: "\1F469"; /* Unicode for Female face */         
+             
       }
     }
-    .other{
-      input[type="radio"] + label::before {     
-        content: "\1F9D1"; /* Unicode for a gender-neutral face */       
-      }
-      input[type="radio"]:checked + label::before {     
-        content: "\1F9D1"; /* Unicode for a gender-neutral face */      
+    .gender_single{
+      label{
+        width: 150px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px !important;  
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        padding: 15px !important;
+        position: relative;
+        &::before{
+          position: absolute;
+          top: 5px;
+          right: 8px;
+          font-size: 22px !important;
+          font-weight: 800
+        }
+        .label_inner{
+          display: grid;
+          gap: 7px;
+          h6{
+            font-size: 16px;
+          }
+        }
+        img{
+          width: 75px;
+          height: 75px;
+          object-fit: contain;
+        }
       }
     }
+   
+  
     input[type="radio"] + label::before {
       content: "\002B";   
       display: inline-block;
