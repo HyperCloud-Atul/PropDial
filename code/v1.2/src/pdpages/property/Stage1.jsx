@@ -247,6 +247,7 @@ const Stage1 = (props) => {
     City: "",
     Locality: "",
     Society: "",
+    PropertyName: ""
   });
 
   //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active 
@@ -375,6 +376,7 @@ const Stage1 = (props) => {
         City: propertyDocument.city ? propertyDocument.city : "",
         Locality: propertyDocument.locality ? propertyDocument.locality : "",
         Society: propertyDocument.society ? propertyDocument.society : "",
+        PropertyName: propertyDocument.unitNumber + ", " + camelCase(propertyDocument.society.toLowerCase().trim()),
       });
     }
   }, [dbstatesdocuments, dbpropertiesdocuments, propertyDocument]);
@@ -648,6 +650,7 @@ const Stage1 = (props) => {
       locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
       society: camelCase(propertyDetails.Society.toLowerCase().trim()),
       pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
+      propertyName: propertyDetails.UnitNumber + ", " + camelCase(propertyDetails.Society.toLowerCase().trim()),
     };
 
     if (propertyid === "new") {

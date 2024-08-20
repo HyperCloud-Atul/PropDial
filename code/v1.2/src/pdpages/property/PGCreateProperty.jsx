@@ -259,14 +259,10 @@ const CreateProperty = () => {
     Locality: "",
     Society: "",
     Pincode: "",
+    PropertyName: ""
   });
 
   useEffect(() => {
-
-
-
-
-
 
     statesOptions.current =
       dbstatesdocuments &&
@@ -464,6 +460,16 @@ const CreateProperty = () => {
       let errorFlag = false;
       let errorMsg = "Error: Please select ";
 
+      if (propertyDetails.UnitNumber === "" ||
+        propertyDetails.UnitNumber === "undefined" ||
+        propertyDetails.UnitNumber === null
+      ) {
+        if (errorMsg === "Error: Please select ")
+          errorMsg = errorMsg + "Unit Number";
+        else errorMsg = errorMsg + ", Unit Number";
+        errorFlag = true;
+
+      }
       if (
         propertyDetails.Purpose === "" ||
         propertyDetails.Purpose === "undefined" ||
@@ -618,6 +624,7 @@ const CreateProperty = () => {
         locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
         society: camelCase(propertyDetails.Society.toLowerCase().trim()),
         pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
+        propertyName: propertyDetails.UnitNumber + ", " + camelCase(propertyDetails.Society.toLowerCase().trim()),
       };
 
       const _newProperty = {
@@ -1177,6 +1184,7 @@ const CreateProperty = () => {
                 <div className="form_field_inner">
                   <input
                     type="text"
+                    required
                     placeholder="Enter House/Flat/Shop no"
                     maxLength={100}
                     onChange={(e) =>
