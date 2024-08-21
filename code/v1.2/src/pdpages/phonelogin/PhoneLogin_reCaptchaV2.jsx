@@ -75,6 +75,9 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [mobilenoSliderState, setmobilenoSliderState] = useState(true);
   const [otpSliderState, setotpSliderState] = useState(false);
   const [newUserSliderState, setnewUserSliderState] = useState(false);
+  const [genderSlider, setGenderSlider] = useState(false);
+  const [personalInfoSlider, setPersonalInfoSlider] = useState(false);
+  const [whoAmISlider, setWhoAmISlider] = useState(false);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
   const [sendOTPFlag, setSendOTPFlag] = useState(true);
@@ -237,12 +240,20 @@ const PhoneLogin_reCaptchaV2 = () => {
       });
   };
 
-  //   send opt
+
+  //New optimized code 
+  const allSliderVisible = (state) => {
+    setmobilenoSliderState(state)
+    setotpSliderState(state)
+    setGenderSlider(state)
+    setPersonalInfoSlider(state)
+    setWhoAmISlider(state)
+  }
+
+  // send opt
   const getOTP = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // Start the loader
-    setOtpTimer(20);
-    setIsResendDisabled(true);
+
     // console.log("In getOTP");
     setError("");
     if (phone === "" || phone === undefined || phone.length < 10) {
@@ -250,190 +261,48 @@ const PhoneLogin_reCaptchaV2 = () => {
     }
 
     try {
-      // let btnSendOTP = document.getElementById("btn_sendotp");
-      // btnSendOTP.style.display = "none";
-      // const respons = await setUpRecapcha("+" + phone);
-      // // console.log("in try 2", respons);
-      // setConfirmObj(respons);
-      setmobilenoSliderState(false);
-      setotpSliderState(true);
-      setnewUserSliderState(false);
-    } catch (error) {
-      console.log("2 error.message", error.message);
-      setError(error.message);
-      await resendOTP("+" + phone);
-      let obj_maintenance = document.getElementById("btn_sendotp");
-      obj_maintenance.style.display = "block";
-      setIsLoading(false); // Stop the loader
+      setIsLoading(true); // Start the loader
+      const respons = await setUpRecapcha("+" + phone);
+      setConfirmObj(respons);
+
+      setIsLoading(true); // Start the loader
+      allSliderVisible(false)
+      setotpSliderState(true)
+
     }
-  };
-
-  // New User Form
-  const newUserForm = async () => {
-    // console.log("In New User Form ")
-    // console.log("User: ", user)
-    setmobilenoSliderState(false);
-    setotpSliderState(false);
-    setnewUserSliderState(true);
-
-    let errFlag = false;
-    // if (!validateEmail(email)) {
-    //   setError("Email format is not valid");
-    //   errFlag = true
-    // }
-    if (name === "" || email === "" || city === "") {
-      setError("All details are mandatory");
-      errFlag = true;
-    } else if (!validateEmail(email)) {
-      setError("Email format is not valid");
-      errFlag = true;
-    } else {
-      errFlag = false;
+    catch (err) {
+      console.log("Error : ", err.message);
+      setIsLoading(false); // loading false
     }
-
-    if (!errFlag) {
-      let splitName = name.split(" ");
-
-      // Extract the first name
-      displayName = splitName.length > 0 ? splitName[0] : name;
-
-      await updateDocument(user.uid, {
-        displayName: camelCase(displayName.toLowerCase()),
-        fullName: camelCase(name.toLowerCase()),
-        email,
-        city: camelCase(city.toLowerCase()),
-      });
-
-      navigate("/dashboard");
-    }
-  };
+  }
 
   // OTP verify
   const verifyOTP = async (e) => {
-    e.preventDefault();
-    setIsLoading(true); // Start the loader
-    setError("");
-    // console.log("in verifyOTP", otp);
-
     if (otp === "" || otp === undefined || otp === null) return;
     try {
-      // await confirmObj.confirm(otp).then(async (result) => {
-      //   const user = result.user;
-      //   setUser(user)
-      // Check if the user is new
-      if (false) {
-        // if (result.additionalUserInfo.isNewUser) {
-        console.log("New user signed in with phone number");
-        setUserName(user.displayName);
-        // Split the full name by space
-        let splitName = userName.split(" ");
+      setIsLoading(true); // Start the loader
+      await confirmObj.confirm(otp).then(async (result) => {
+        const user = result.user;
+        setUser(user)
 
-        // Extract the first name
-        let firstName = splitName[0];
+        // Check if the user is new
+        if (result.additionalUserInfo.isNewUser) {
+          console.log("New User Signed-In");
+          allSliderVisible(false)
+          setnewUserSliderState(true)
+          setGenderSlider(true)
 
-        let imgUrl = "/assets/img/dummy_user.png";
+        }
+        else {//Existing User
+          console.log("Existing User Signed-In")
+          setIsLoading(false); // Start the loader
+          allSliderVisible(false)
+          navigate("/dashboard"); //Navigae to dashboard 
+        }
+      })
 
-        await user.updateProfile({
-          phoneNumber: phone,
-          displayName: firstName,
-          photoURL: imgUrl,
-        });
-
-        projectFirestore
-          .collection("users")
-          .doc(user.uid)
-          .set({
-            online: true,
-            displayName: firstName,
-            fullName: userName,
-            phoneNumber: phone,
-            email: "",
-            city,
-            address,
-            gender: "",
-
-            country,
-            countryCode,
-            photoURL: imgUrl,
-            rolePropAgent: "na",
-            rolePropDial: "owner",
-            rolesPropAgent: ["propagent"],
-            rolesPropDial: ["owner"],
-            accessType: "country",
-            accessValue: ["India"],
-            status: "active",
-            createdAt: timestamp.fromDate(new Date()),
-            lastLoginTimestamp: timestamp.fromDate(new Date()),
-          });
-
-        setnewUserSliderState(true);
-        setmobilenoSliderState(false);
-        setotpSliderState(false);
-      } else {
-        console.log("Existing user signed in with phone number");
-        setIsLoading(false); // Stop the loader
-        setmobilenoSliderState(false);
-        setotpSliderState(false);
-        setnewUserSliderState(true);
-        // setnewUserSliderState(false)
-
-        // let role = 'owner';
-        // const docRef = projectFirestore.collection("users").doc(user.uid)
-        // // Get the document snapshot
-        // const docSnapshot = await docRef.get();
-        // // Check if the document exists
-        // if (docSnapshot.exists) {
-        //   // Extract the data from the document snapshot
-        //   // const data = docSnapshot.data();
-        //   if (docSnapshot.data().rolePropDial === 'na')
-        //     role = 'owner'
-        //   else
-        //     role = docSnapshot.data().rolePropDial
-        // }
-
-        // console.log('role: ', role)
-        // await updateDocument(user.uid, {
-        //   rolePropDial: role,
-        //   online: true,
-        //   lastLoginTimestamp: timestamp.fromDate(new Date()),
-        // });
-
-        // await updateDocument(user.uid, {
-        //   online: true,
-        //   lastLoginTimestamp: timestamp.fromDate(new Date()),
-        // });
-
-        // navigate("/dashboard");
-      }
-
-      // if (user) {
-      //   const providerData = user.providerData;
-      //   const isLinkedWithGoogle = providerData.some(provider => provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID);
-
-      //   if (isLinkedWithGoogle) {
-      //     console.log("User is already linked with Google");
-      //     // setError("User is already linked with Google");
-      //   } else {
-      //     console.log("User is not linked with Google");
-      //     // Now link with Google account
-      //     linkGoogleAccount(user);
-      //   }
-      // }
-
-      // if (result.additionalUserInfo.isNewUser) {
-      //   console.log('I am in ')
-      //   setnewUserSlider(true)
-      //   setotpSliderState(false)
-      // }
-      // else {
-      //   console.log("Existing user")
-      //   setnewUserSlider(false)
-      //   setotpSliderState(false)
-      //   navigate("/profile");
-      // }
-
-      // })
-    } catch (error) {
+    }
+    catch (error) {
       console.log("error.message", error.message);
       setError(
         "Given OTP is not valid, please enter the valid OTP sent to your mobile"
@@ -444,7 +313,67 @@ const PhoneLogin_reCaptchaV2 = () => {
         setResendOTPFlag(true);
       }, 30000);
     }
-  };
+  }
+
+  const handleNewUserData = async () => {
+    console.log("in handleNewUserData")
+
+    let splitName = name.split(" ");
+    displayName = splitName.length > 0 ? splitName[0] : name;
+    // console.log("User Display or First Name: ", displayName)
+    // console.log("User Full Name: ", name)
+    // console.log("User Gender: ", gender)
+    // console.log("User Email: ", email)
+    // console.log("User City: ", city)
+    // console.log("User WhoAmI: ", whoAmI)
+
+
+    let imgUrl = "/assets/img/dummy_user.png";
+
+    try {
+
+      await user.updateProfile({
+        phoneNumber: phone,
+        displayName: camelCase(displayName.toLowerCase()),
+        photoURL: imgUrl,
+      });
+
+      projectFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set({
+          online: true,
+          whatsappUpdate: false,
+          displayName: camelCase(displayName.toLowerCase()),
+          fullName: camelCase(name.toLowerCase()),
+          phoneNumber: phone,
+          email: camelCase(email.toLowerCase()),
+          city: camelCase(city.toLowerCase()),
+          address: camelCase(address.toLowerCase()),
+          gender,
+          whoAmI,
+          country,
+          countryCode,
+          photoURL: imgUrl,
+          rolePropAgent: "na",
+          rolePropDial: "owner",
+          rolesPropAgent: ["propagent"],
+          rolesPropDial: ["owner"],
+          accessType: "country",
+          accessValue: ["India"],
+          status: "active",
+          createdAt: timestamp.fromDate(new Date()),
+          lastLoginTimestamp: timestamp.fromDate(new Date()),
+        });
+
+      console.log("User Created Successfully")
+
+      navigate("/dashboard"); //Navigae to dashboard 
+
+    } catch ({ error }) {
+      console.log("Error: ", error.message)
+    }
+  }
 
   const handlePhoneChange = (value, countryData) => {
     // setPhone(value);
@@ -461,18 +390,18 @@ const PhoneLogin_reCaptchaV2 = () => {
         <img src="./assets/img/login_img2.png" alt="" />
       </div>
       <div className="left col_left">
+        <div className="left_inner col_left_inner">
+          <div className="page_inner_logo">
+            <img src="/assets/img/logo_propdial.png" alt="" />
+          </div>
+        </div>
         {mobilenoSliderState && (
           <>
             <div className="left_inner col_left_inner">
-              <div className="page_inner_logo">
+              {/* <div className="page_inner_logo">
                 <img src="/assets/img/logo_propdial.png" alt="" />
-              </div>
+              </div> */}
               <div className="vg22"></div>
-              {/* <h5 className="m22 mt-3 mb-4">
-                Unlocking Your Property Prospects: PropDial - Where Realty Meets
-                Security.
-           
-              </h5> */}
               <form action="">
                 <div className="new_form_field with_icon phoneinput">
                   <label htmlFor="" className="text-center">
@@ -568,65 +497,15 @@ const PhoneLogin_reCaptchaV2 = () => {
             </div>
           </>
         )}
-        {/* {otpSliderState && (
-          <div className="left_inner col_left_inner">
-            <div className="page_inner_logo">
-              <img src="/assets/img/logo_propdial.png" alt="" />
-            </div>
-            <h5 className="m20 mt-3 mb-4">
-              Unlocking Your Property Prospects: PropDial - Where Realty Meets
-              Security.
-            </h5>
-            <form action="">
-              <div className="new_form_field with_icon">
-                <label htmlFor="" className="text-center">
-                  OTP
-                </label>
-                <div className="nff_inner">
-            
-                  <OtpInput
-                    value={otp}
-                    onChange={setOtp}
-                    numInputs={6}
-                    renderSeparator={
-                      <span style={{ margin: "10px 5px 20px 5px" }}> - </span>
-                    }
-                    renderInput={(props) => (
-                      <input
-                        {...props}
-                        type="number"
-                        onWheel={handleWheel}
-                        inputMode="numeric"
-                        style={{
-                          width: "40px",
-                          height: "40px",
-                          border: "1px solid gray",
-                          textAlign: "center",
-                          borderRadius: "5px",
-                          margin: "10px 0px 20px 0px",
-                        }}
-                      />
-                    )}
-                  />               
-                </div>
-              </div>
-              <Link className="p_theme_btn w_full" onClick={verifyOTP}>
-                Login
-              </Link>
-            </form>
-          </div>
-        )} */}
+
         {/* OTP Slider */}
         <div>
           {otpSliderState && (
             <div className="left_inner col_left_inner">
-              <div className="page_inner_logo">
+              {/* <div className="page_inner_logo">
                 <img src="/assets/img/logo_propdial.png" alt="" />
-              </div>
-              {/* <h5 className="m20 mt-3 mb-4">
-              Unlocking Your Property Prospects: PropDial - Where Realty Meets
-              Security.
-            </h5> */}
+              </div> */}
+
               <div className="vg22"></div>
               <div className="otp_input">
                 <label htmlFor="">Enter 6 digit OTP</label>
@@ -684,7 +563,7 @@ const PhoneLogin_reCaptchaV2 = () => {
               )}
               {!isLoading && (
                 <div className="text-center">
-                  <h6 className="text_green mb-2">Redirecting to Dashboard</h6>
+                  <h6 className="text_green mb-2">Redirecting to Dashboard...</h6>
                   <BeatLoader color={"#00a8a8"} loading={true} />
                 </div>
               )}
@@ -696,18 +575,14 @@ const PhoneLogin_reCaptchaV2 = () => {
           {newUserSliderState && (
             <>
               <div className="left_inner col_left_inner">
-                <div className="page_inner_logo">
+                {/* <div className="page_inner_logo">
                   <img src="/assets/img/logo_propdial.png" alt="" />
-                </div>
-                {/* <h5 className="m20 mt-3 mb-4">
-              Unlocking Your Property Prospects: PropDial - Where Realty Meets
-              Security.
-            </h5> */}
+                </div> */}
+
                 <div className="vg22"></div>
                 <div></div>
 
                 <label htmlFor="" className="text-center">
-                  {/* <strong> Welcome to Propdial</strong> */}
 
                   <h5>Congratulations and welcome aboard! 🎉</h5>
 
@@ -722,7 +597,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                 </label>
                 <div className="vg22"></div>
                 {/* stage one gender  */}
-                {/* <div className="field_box theme_radio_new">
+                {genderSlider && <div className="field_box theme_radio_new">
                   <div
                     className="theme_radio_container gender"
                     style={{
@@ -737,15 +612,16 @@ const PhoneLogin_reCaptchaV2 = () => {
                         name="gender"
                         id="male"
                         value="male"
+                        onClick={(e) => { setGender('male') }}
                       />
                       <label htmlFor="male">
-                     <div className="label_inner">
-                     <img
-                          src="assets/img/icons/men-icon-login.png"
-                          alt="icon"
-                        />
-                        <h6>Male</h6>
-                     </div>
+                        <div className="label_inner">
+                          <img
+                            src="assets/img/icons/men-icon-login.png"
+                            alt="icon"
+                          />
+                          <h6>Male</h6>
+                        </div>
                       </label>
                     </div>
 
@@ -755,23 +631,43 @@ const PhoneLogin_reCaptchaV2 = () => {
                         name="gender"
                         id="female"
                         value="female"
+                        onClick={(e) => { setGender('female') }}
                       />
-                     <label htmlFor="female">
-                    <div className="label_inner">
-                    <img
-                          src="assets/img/icons/women-icon-login.png"
-                          alt="icon"
-                        />
-                        <h6>Female</h6>
-                    </div>
+                      <label htmlFor="female">
+                        <div className="label_inner">
+                          <img
+                            src="assets/img/icons/women-icon-login.png"
+                            alt="icon"
+                          />
+                          <h6>Female</h6>
+                        </div>
                       </label>
                     </div>
                   </div>
-                  <div className="vg22"></div>                  
-                </div> */}
+                  <div className="vg22"></div>
+                  <div>
+                    <button
+                      className="theme_btn btn_fill w_full"
+                      onClick={(e) => {
+                        if (!gender) {
+                          setError("Please select Gender");
+                          allSliderVisible(false)
+                          setGenderSlider(true)
+                        }
+                        else {
+                          setError("");
+                          allSliderVisible(false)
+                          setPersonalInfoSlider(true)
+                        }
+                      }}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>}
 
                 {/* stage two personal info  */}
-                {/* <div className="new_form_field with_icon">
+                {personalInfoSlider && <div className="new_form_field with_icon">
                   <input
                     required
                     type="text"
@@ -804,86 +700,128 @@ const PhoneLogin_reCaptchaV2 = () => {
                       background: "none",
                     }}
                   />
-                </div> */}
+                  <div className="vg22"></div>
+                  <div>
+                    <button
+                      className="theme_btn btn_fill w_full"
+                      onClick={(e) => {
+                        if (name === "" || email === "" || city === "") {
+                          setError("Please complete all the details");
+                          allSliderVisible(false)
+                          setPersonalInfoSlider(true)
+                        }
+                        else if (!validateEmail(email)) {
+                          setError("Email format is not valid");
+                          allSliderVisible(false)
+                          setPersonalInfoSlider(true)
+                        }
+                        else {
+                          setError("");
+                          allSliderVisible(false)
+                          setWhoAmISlider(true)
+                        }
+                      }}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>}
 
                 {/* stage three who am i   */}
-                <div className="field_box theme_radio_new whoami">
-               <div className="inner">
-               <label htmlFor="" className="text-center mb-2">
-                    <h6> Who am i?</h6>
-                    <div className="emoji"></div>
-                  </label>
-                  <div className="vg12"></div>
-                  <div
-                    className="theme_radio_container"
-                    style={{
-                      padding: "0px",
-                      border: "none",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div className="radio_single owner">
-                      <input
-                        type="radio"
-                        name="whoAmI"
-                        id="owner"
-                        value="owner"
-                      />
-                      <label htmlFor="owner">I Am owner</label>
-                    </div>
+                {whoAmISlider && <div className="field_box theme_radio_new whoami">
+                  <div className="inner">
+                    <label htmlFor="" className="text-center mb-2">
+                      <h6> Who am i?</h6>
+                      <div className="emoji"></div>
+                    </label>
+                    <div className="vg12"></div>
+                    <div
+                      className="theme_radio_container"
+                      style={{
+                        padding: "0px",
+                        border: "none",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <div className="radio_single owner">
+                        <input
+                          type="radio"
+                          name="whoAmI"
+                          id="owner"
+                          value="owner"
+                          onClick={(e) => { setWhoAmI('owner') }}
+                        />
+                        <label htmlFor="owner">I Am owner</label>
+                      </div>
 
-                    <div className="radio_single agent">
-                      <input
-                        type="radio"
-                        name="whoAmI"
-                        id="agent"
-                        value="agent"
-                      />
-                      <label htmlFor="agent">I Am agent</label>
-                    </div>
-                    <div className="radio_single tenant">
-                      <input
-                        type="radio"
-                        name="whoAmI"
-                        id="tenant"
-                        value="tenant"
-                      />
-                      <label htmlFor="tenant">I Am tenant</label>
-                    </div>
-                    <div className="radio_single buyer">
-                      <input
-                        type="radio"
-                        name="whoAmI"
-                        id="buyer"
-                        value="buyer"
-                      />
-                      <label htmlFor="buyer">I Am buyer</label>
-                    </div>
-                    <div className="radio_single seller">
-                      <input
-                        type="radio"
-                        name="whoAmI"
-                        id="seller"
-                        value="seller"
-                      />
-                      <label htmlFor="seller">I Am seller</label>
+                      <div className="radio_single agent">
+                        <input
+                          type="radio"
+                          name="whoAmI"
+                          id="agent"
+                          value="agent"
+                          onClick={(e) => { setWhoAmI('agent') }}
+                        />
+                        <label htmlFor="agent">I Am agent</label>
+                      </div>
+                      <div className="radio_single tenant">
+                        <input
+                          type="radio"
+                          name="whoAmI"
+                          id="tenant"
+                          value="tenant"
+                          onClick={(e) => { setWhoAmI('tenant') }}
+                        />
+                        <label htmlFor="tenant">I Am tenant</label>
+                      </div>
+                      <div className="radio_single buyer">
+                        <input
+                          type="radio"
+                          name="whoAmI"
+                          id="buyer"
+                          value="buyer"
+                          onClick={(e) => { setWhoAmI('buyer') }}
+                        />
+                        <label htmlFor="buyer">I Am buyer</label>
+                      </div>
+                      <div className="radio_single seller">
+                        <input
+                          type="radio"
+                          name="whoAmI"
+                          id="seller"
+                          value="seller"
+                          onClick={(e) => { setWhoAmI('seller') }}
+                        />
+                        <label htmlFor="seller">I Am seller</label>
+                      </div>
                     </div>
                   </div>
-               </div>
                   <div className="vg22"></div>
                   <div className="vg22"></div>
-                </div>
+                  <div>
+                    <button
+                      className="theme_btn btn_fill w_full"
+                      onClick={(e) => {
+                        if (whoAmI === "") {
+                          setError("Please select who you are");
+                          allSliderVisible(false)
+                          setWhoAmISlider(true)
+                        }
+                        else {
+                          setError("");
+                          allSliderVisible(false)
+                          handleNewUserData()
+                        }
+                      }}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>}
 
                 {error && <div className="field_error">{error}</div>}
                 <div className="vg10"></div>
-                <div>
-                  <button
-                    className="theme_btn btn_fill w_full"
-                    onClick={newUserForm}
-                  >
-                    Next
-                  </button>
-                </div>
+
               </div>
             </>
           )}
