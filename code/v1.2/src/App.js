@@ -2,6 +2,9 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAuthContext } from "./hooks/useAuthContext";
 import { useDocument } from "./hooks/useDocument";
 import { useEffect, useState } from "react";
+import { projectMsg } from "./firebase/config";
+import toast, { Toaster } from "react-hot-toast"; // You can use any toast notification library or create your custom popup
+
 
 // components
 import Navbar from "./components/Navbar";
@@ -94,13 +97,68 @@ import PGAdminProperty from "./pdpages/property/PGAdminProperty";
 import PGEnquiry from "./pdpages/enquiry/PGEnquiry";
 import UpdateEnquiry from "./pdpages/enquiry/UpdateEnquiry";
 import ScrollToTop from "./components/ScrollToTop";
+import FCMNotification from "./components/FCMNotification";
 
 // New component import end
 
 function App() {
   const { authIsReady, user } = useAuthContext();
+  const [fcmMessage, setFCMMessage] = useState(null);
 
-  useEffect(() => { }, [user]);
+  //FCM Messaging User Request Permission and get the user token
+  const requestPermission = async () => {
+    try {
+      await Notification.requestPermission();
+      console.log("Notification permission granted.");
+
+      // Get the token if permission is granted
+      if (Notification.permission === "granted") {
+        const token = await projectMsg.getToken();
+        console.log("FCM Token:", token);
+        // Save this token to your server/database as required
+      }
+    } catch (error) {
+      console.error("Unable to get permission to notify.", error);
+    }
+  };
+
+  const handleIncomingMessages = () => {
+    projectMsg.onMessage((payload) => {
+      console.log("Message received. ", payload);
+      // Show notification to the user or update UI
+      // alert(`${payload.notification.title}` + `${payload.notification.body}`);
+      // alert(`${payload.notification.icon}`);
+
+      // Display the message using a toast notification
+      // toast(payload.notification.title, {
+      //   icon: "🔔",
+      //   // icon: "/assets/img/logo_propdial.png",
+      //   body: payload.notification.body,
+      // });
+
+      setFCMMessage({
+        // icon: "🔔",
+        icon: "/assets/img/logo_propdial.png",
+        title: payload.notification.title,
+        body: payload.notification.body,
+      });
+    });
+  }
+
+  const handleCloseFCMNotification = () => {
+    setFCMMessage(null);
+  };
+
+
+  useEffect(() => {
+
+    //FCM Message Permission by End Users and get the user token
+    requestPermission();
+
+    // Handle incoming messages
+    handleIncomingMessages();
+
+  }, []);
 
   const [currentModeStatus, setCurrentModeStatus] = useState("dark");
   const { document: dbDisplayModeDocuments, error: dbDisplayModeError } =
@@ -166,6 +224,14 @@ function App() {
 
   return (
     <div className={currentModeStatus === "dark" ? "dark" : "light"}>
+      {fcmMessage && (
+        <FCMNotification
+          icon={fcmMessage.icon}
+          title={fcmMessage.title}
+          body={fcmMessage.body}
+          onClose={handleCloseFCMNotification}
+        />
+      )}
       <div className="page">
         {authIsReady && (
           <BrowserRouter>
