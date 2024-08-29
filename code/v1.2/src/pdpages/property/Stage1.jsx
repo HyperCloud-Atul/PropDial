@@ -10,6 +10,7 @@ import { useCollection } from "../../hooks/useCollection";
 
 import { timestamp } from "../../firebase/config";
 import SearchBarAutoComplete from "../../pages/search/SearchBarAutoComplete";
+
 // import { projectID } from 'firebase-functions/params';
 
 //Restrict to Input
@@ -30,8 +31,137 @@ function restrictInput(event, maxLength) {
   event.target.value = numericValue;
 }
 
-//Convert Amount to Words - Starts
+//Convert Amount to Words - old code Starts
 
+// const units = [
+//   "",
+//   "one",
+//   "two",
+//   "three",
+//   "four",
+//   "five",
+//   "six",
+//   "seven",
+//   "eight",
+//   "nine",
+// ];
+// const teens = [
+//   "ten",
+//   "eleven",
+//   "twelve",
+//   "thirteen",
+//   "fourteen",
+//   "fifteen",
+//   "sixteen",
+//   "seventeen",
+//   "eighteen",
+//   "nineteen",
+// ];
+// const tens = [
+//   "",
+//   "",
+//   "twenty",
+//   "thirty",
+//   "forty",
+//   "fifty",
+//   "sixty",
+//   "seventy",
+//   "eighty",
+//   "ninety",
+// ];
+
+// function convertToWords(number) {
+//   if (number === 0) {
+//     return "zero";
+//   }
+
+//   // Split the number into groups of three digits
+//   const chunks = [];
+//   while (number > 0) {
+//     chunks.push(number % 1000);
+//     number = Math.floor(number / 1000);
+//   }
+
+//   // Convert each chunk to words
+//   const chunkWords = chunks.map((chunk, index) => {
+//     if (chunk === 0) {
+//       return "";
+//     }
+
+//     const chunkText = chunkToWords(chunk);
+//     const suffix = index === 0 ? "" : ` ${indexToPlace(index)}`;
+//     return `${chunkText}${suffix}`;
+//   });
+
+//   // Combine the chunk words
+//   return chunkWords.reverse().join(" ").trim();
+// }
+
+// function chunkToWords(chunk) {
+//   const hundredDigit = Math.floor(chunk / 100);
+//   const remainder = chunk % 100;
+
+//   let result = "";
+//   if (hundredDigit > 0) {
+//     result += `${units[hundredDigit]} hundred`;
+//   }
+
+//   if (remainder > 0) {
+//     if (result !== "") {
+//       result += " and ";
+//     }
+
+//     if (remainder < 10) {
+//       result += units[remainder];
+//     } else if (remainder < 20) {
+//       result += teens[remainder - 10];
+//     } else {
+//       const tenDigit = Math.floor(remainder / 10);
+//       const oneDigit = remainder % 10;
+
+//       result += tens[tenDigit];
+//       if (oneDigit > 0) {
+//         result += `-${units[oneDigit]}`;
+//       }
+//     }
+//   }
+
+//   return result;
+// }
+
+// function indexToPlace(index) {
+//   const places = [
+//     "",
+//     "thousand",
+//     "million",
+//     "billion",
+//     "trillion",
+//     "quadrillion",
+//     "quintillion",
+//   ];
+//   return places[index];
+// }
+
+// Example usage:
+// const amount = 12000;
+// const amountInWords = convertToWords(amount);
+// console.log(`${amount} in words: ${amountInWords}`);
+
+//Convert Amount to Words - Ends
+
+// function formatAmount(amount) {
+//   // Example: Add dashes
+//   return amount.toLocaleString('en-US');
+// }
+// function formatAmount(event) {
+//   // Example: Add dashes
+//   let inputValue = event.target.value
+//   return inputValue.toLocaleString('en-US');
+// }
+
+//Convert Amount to Words - old code End
+
+//Convert Amount to Words - new code start
 const units = [
   "",
   "one",
@@ -68,20 +198,24 @@ const tens = [
   "eighty",
   "ninety",
 ];
+const places = ["", "thousand", "lakh", "crore", "arab", "kharab"];
 
 function convertToWords(number) {
   if (number === 0) {
     return "zero";
   }
 
-  // Split the number into groups of three digits
+  // Split the number into groups of three digits for the first chunk and then two digits
   const chunks = [];
+  chunks.push(number % 1000); // Get the last three digits
+  number = Math.floor(number / 1000);
+
   while (number > 0) {
-    chunks.push(number % 1000);
-    number = Math.floor(number / 1000);
+    chunks.push(number % 100); // Get chunks of two digits
+    number = Math.floor(number / 100);
   }
 
-  // Convert each chunk to words
+  // Convert each chunk to words with Indian format
   const chunkWords = chunks.map((chunk, index) => {
     if (chunk === 0) {
       return "";
@@ -129,33 +263,35 @@ function chunkToWords(chunk) {
 }
 
 function indexToPlace(index) {
-  const places = [
-    "",
-    "thousand",
-    "million",
-    "billion",
-    "trillion",
-    "quadrillion",
-    "quintillion",
-  ];
-  return places[index];
+  return places[index] || "";
 }
 
 // Example usage:
-// const amount = 12000;
-// const amountInWords = convertToWords(amount);
-// console.log(`${amount} in words: ${amountInWords}`);
-//Convert Amount to Words - Ends
+const amount = 1200000;
+const amountInWords = convertToWords(amount);
+console.log(`${amount} in words: ${amountInWords}`);
+//Convert Amount to Words - new code end
 
-// function formatAmount(amount) {
-//   // Example: Add dashes
-//   return amount.toLocaleString('en-US');
-// }
-// function formatAmount(event) {
-//   // Example: Add dashes
-//   let inputValue = event.target.value
-//   return inputValue.toLocaleString('en-US');
-// }
+// Convert digit into comma formate start
+function formatNumberWithCommas(number) {
+  // Convert number to a string if it's not already
+  let numStr = number.toString();
+
+  // Handle decimal part if present
+  const [integerPart, decimalPart] = numStr.split(".");
+
+  // Regular expression for Indian comma format
+  const lastThreeDigits = integerPart.slice(-3);
+  const otherDigits = integerPart.slice(0, -3);
+
+  const formattedNumber =
+    otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+    (otherDigits ? "," : "") +
+    lastThreeDigits;
+
+  // Return the formatted number with decimal part if it exists
+  return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
+}
 
 function camelCase(inputStr) {
   let str = inputStr.toLowerCase();
@@ -179,7 +315,7 @@ const Stage1 = (props) => {
     "properties",
     propertyid
   );
-  function setRedirectFlag(flag, key) { }
+  function setRedirectFlag(flag, key) {}
   const { user } = useAuthContext();
 
   let statesOptions = useRef([]);
@@ -190,7 +326,10 @@ const Stage1 = (props) => {
   var distinctLocalityList = [];
   var distinctSocietyList = [];
   const [state, setState] = useState();
-  const [city, setCity] = useState({ label: "Select City", value: "Select City" });
+  const [city, setCity] = useState({
+    label: "Select City",
+    value: "Select City",
+  });
   const [distinctValuesLocality, setdistinctValuesLocality] = useState([]);
   const [distinctValuesSociety, setdistinctValuesSociety] = useState([]);
   const [formError, setFormError] = useState(null);
@@ -229,8 +368,6 @@ const Stage1 = (props) => {
     ["status", "==", "active"]
   );
 
-
-
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
     Region: "",
@@ -247,10 +384,10 @@ const Stage1 = (props) => {
     City: "",
     Locality: "",
     Society: "",
-    PropertyName: ""
+    PropertyName: "",
   });
 
-  //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active 
+  //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active
   dbcitiesdocuments &&
     dbcitiesdocuments.map((doc) => {
       // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
@@ -294,7 +431,6 @@ const Stage1 = (props) => {
     });
 
   useEffect(() => {
-
     statesOptions.current =
       dbstatesdocuments &&
       dbstatesdocuments.map((stateData) => ({
@@ -361,7 +497,9 @@ const Stage1 = (props) => {
         DemandPrice: propertyDocument.demandPrice
           ? propertyDocument.demandPrice
           : "",
-        MaintenanceFlag: propertyDocument.maintenanceFlag ? propertyDocument.maintenanceFlag : "",
+        MaintenanceFlag: propertyDocument.maintenanceFlag
+          ? propertyDocument.maintenanceFlag
+          : "",
         MaintenanceCharges: propertyDocument.maintenanceCharges
           ? propertyDocument.maintenanceCharges
           : "",
@@ -369,14 +507,19 @@ const Stage1 = (props) => {
           propertyDocument.maintenanceChargesFrequency
             ? propertyDocument.maintenanceChargesFrequency
             : "",
-        SecurityDeposit: propertyDocument.securityDeposit ? propertyDocument.securityDeposit : "",
+        SecurityDeposit: propertyDocument.securityDeposit
+          ? propertyDocument.securityDeposit
+          : "",
         Purpose: propertyDocument.purpose ? propertyDocument.purpose : "",
         Country: propertyDocument.country ? propertyDocument.country : "",
         State: propertyDocument.state ? propertyDocument.state : "",
         City: propertyDocument.city ? propertyDocument.city : "",
         Locality: propertyDocument.locality ? propertyDocument.locality : "",
         Society: propertyDocument.society ? propertyDocument.society : "",
-        PropertyName: propertyDocument.unitNumber + ", " + camelCase(propertyDocument.society.toLowerCase().trim()),
+        PropertyName:
+          propertyDocument.unitNumber +
+          ", " +
+          camelCase(propertyDocument.society.toLowerCase().trim()),
       });
     }
   }, [dbstatesdocuments, dbpropertiesdocuments, propertyDocument]);
@@ -410,7 +553,6 @@ const Stage1 = (props) => {
   // };
 
   const handleStateChange = async (option) => {
-
     setState(option);
     let statename = option.label;
     // console.log('state name:  ', statename)
@@ -451,8 +593,8 @@ const Stage1 = (props) => {
 
     // console.log('City option: ', option)
 
-    setSearchedCity(option.value)
-  }
+    setSearchedCity(option.value);
+  };
 
   function setSearchedCity(cityname) {
     // console.log('cityname', cityname);
@@ -471,8 +613,7 @@ const Stage1 = (props) => {
       localityListStateWise && localityListStateWise.map((doc) => doc.locality);
     setdistinctValuesLocality([...new Set(dataList)]);
 
-    console.log('Locality dataList: ', dataList)
-
+    console.log("Locality dataList: ", dataList);
   }
 
   function setSearchedLocality(localityname) {
@@ -546,7 +687,7 @@ const Stage1 = (props) => {
   }, [addDocumentResponse]);
 
   const handleSubmit = async (e, option) => {
-    console.log("In handleSubmit")
+    console.log("In handleSubmit");
     e.preventDefault();
     // console.log('e: ', e)
     // console.log('option: ', option)
@@ -615,11 +756,12 @@ const Stage1 = (props) => {
     //   errorFlag = true;
     // }
 
-    if (errorFlag) setFormError(errorMsg);
+    if (errorFlag)
+       setFormError(errorMsg);
+      
     else setFormError("");
 
     errorFlag = false;
-
 
     // console.log('propertyDetails.City:', propertyDetails.City)
 
@@ -650,11 +792,14 @@ const Stage1 = (props) => {
       locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
       society: camelCase(propertyDetails.Society.toLowerCase().trim()),
       pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
-      propertyName: propertyDetails.UnitNumber + ", " + camelCase(propertyDetails.Society.toLowerCase().trim()),
+      propertyName:
+        propertyDetails.UnitNumber +
+        ", " +
+        camelCase(propertyDetails.Society.toLowerCase().trim()),
     };
 
     if (propertyid === "new") {
-      console.log('Property id while newly added : ', propertyid)
+      console.log("Property id while newly added : ", propertyid);
       // console.log("Property: ", property)
 
       const newProperty = {
@@ -686,8 +831,8 @@ const Stage1 = (props) => {
         onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
       };
       if (!errorFlag) {
-        console.log("new property created: ")
-        console.log(newProperty)
+        console.log("new property created: ");
+        console.log(newProperty);
         await addDocument(newProperty);
         if (addDocumentResponse.error) {
           navigate("/");
@@ -710,12 +855,15 @@ const Stage1 = (props) => {
           navigate("/");
         } else {
           if (option === "Save") {
-            console.log("option: ", option)
+            console.log("option: ", option);
             //Do nothing
             setFormSuccess("Data Saved Successfully");
-          }
-          else {
-            console.log("option: ", option)
+            // Clear the success message after 3 seconds
+            setTimeout(() => {
+              setFormSuccess(null);
+            }, 3000);
+          } else {
+            console.log("option: ", option);
             props.setStateFlag("stage2");
           }
         }
@@ -732,6 +880,7 @@ const Stage1 = (props) => {
     //   },
     // });
   };
+
   return (
     <>
       <div className="add_property_fields">
@@ -739,8 +888,7 @@ const Stage1 = (props) => {
           {/* Region */}
           <div className="col-md-12">
             <div className="form_field st-2 label_top">
-              <label htmlFor="">
-                Region</label>
+              <label htmlFor="">Region</label>
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
@@ -795,7 +943,6 @@ const Stage1 = (props) => {
                               Region: "South India",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="region_southindia"
@@ -830,7 +977,6 @@ const Stage1 = (props) => {
                               Region: "East India",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="region_eastindia"
@@ -865,7 +1011,6 @@ const Stage1 = (props) => {
                               Region: "West India",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="region_westindia"
@@ -891,8 +1036,7 @@ const Stage1 = (props) => {
           {/* Package */}
           <div className="col-md-6">
             <div className="form_field st-2 label_top">
-              <label htmlFor="">
-                Package</label>
+              <label htmlFor="">Package</label>
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
@@ -947,7 +1091,6 @@ const Stage1 = (props) => {
                               Package: "PMS Light",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="package_pmslight"
@@ -982,7 +1125,6 @@ const Stage1 = (props) => {
                               Package: "PMS Sale",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="package_pmssale"
@@ -1017,7 +1159,6 @@ const Stage1 = (props) => {
                               Package: "Pre PMS",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="package_prepms"
@@ -1052,7 +1193,6 @@ const Stage1 = (props) => {
                               Package: "Rent Only",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="package_rentonly"
@@ -1070,7 +1210,7 @@ const Stage1 = (props) => {
                         </label>
                       </div>
                     </div>
-                    <div className="radio_group_single">
+                    {/* <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.Package === "Rent Only"
@@ -1104,7 +1244,7 @@ const Stage1 = (props) => {
                           Rent Only
                         </label>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -1113,8 +1253,7 @@ const Stage1 = (props) => {
           {/* Property Flags */}
           <div className="col-md-6">
             <div className="form_field st-2 label_top">
-              <label htmlFor="">
-                Flags</label>
+              <label htmlFor="">Flags</label>
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
@@ -1169,7 +1308,6 @@ const Stage1 = (props) => {
                               Flag: "Rented Out",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="flag_rentedout"
@@ -1204,7 +1342,6 @@ const Stage1 = (props) => {
                               Flag: "Available For Sale",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="flag_availableforsale"
@@ -1239,7 +1376,6 @@ const Stage1 = (props) => {
                               Flag: "Sold Out",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="flag_soldout"
@@ -1274,7 +1410,6 @@ const Stage1 = (props) => {
                               Flag: "Rent or Sale",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="flag_rentsale"
@@ -1288,7 +1423,7 @@ const Stage1 = (props) => {
                               done
                             </span>
                           </div>
-                          Rent or Sale
+                          Rent And Sale
                         </label>
                       </div>
                     </div>
@@ -1309,7 +1444,6 @@ const Stage1 = (props) => {
                               Flag: "Rented But Sale",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="flag_rentedbutsale"
@@ -1344,7 +1478,6 @@ const Stage1 = (props) => {
                               Flag: "PMS Only",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="flag_pmsonly"
@@ -1367,31 +1500,10 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">Unit Number</label>
-              <div className="form_field_inner">
-                <input
-                  type="text"
-                  placeholder="Enter House/Flat/Shop no"
-                  maxLength={100}
-                  onChange={(e) =>
-                    setPropertyDetails({
-                      ...propertyDetails,
-                      UnitNumber: e.target.value.trim(),
-                    })
-                  }
-                  value={propertyDetails && propertyDetails.UnitNumber}
-                />
-                <div className="field_icon"></div>
-              </div>
-            </div>
-          </div>
 
           <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
-              <label htmlFor="">
-                Category</label>
+              <label htmlFor="">Category</label>
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
@@ -1446,7 +1558,6 @@ const Stage1 = (props) => {
                               Category: "Commercial",
                             });
                           }}
-
                         />
                         <label
                           htmlFor="category_commercial"
@@ -1711,6 +1822,40 @@ const Stage1 = (props) => {
                         </label>
                       </div>
                     </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Purpose === "PMS"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="purpose_pms"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Purpose: "PMS",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="purpose_pms"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>PMS</h6>
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1720,7 +1865,7 @@ const Stage1 = (props) => {
           <div className="col-xl-4 col-lg-6">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Demand/Price</label>
-              <div className="form_field_inner">
+              <div className="form_field_inner price_input">
                 <input
                   id="id_demandprice"
                   className="custom-input"
@@ -1732,382 +1877,390 @@ const Stage1 = (props) => {
                     restrictInput(e, 9);
                   }}
                   onChange={(e) => {
+                    const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas
+                    const formattedValue = formatNumberWithCommas(rawValue);
+
                     setPropertyDetails({
                       ...propertyDetails,
-                      // DemandPrice: e.target.value,
-                      DemandPrice: e.target.value.trim(),
-                      // DemandPriceInWords: amountToWords(e.target.value)
+                      DemandPrice: formattedValue,
                     });
                   }}
                   value={propertyDetails && propertyDetails.DemandPrice}
                 />
-                <div style={{ fontSize: "smaller" }}>
-                  {convertToWords(propertyDetails.DemandPrice)}
-                </div>
+              </div>
+              <div style={{ fontSize: "smaller" }} className="mt-2">
+                {convertToWords(propertyDetails.DemandPrice)}
               </div>
             </div>
           </div>
 
-          {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-xl-4 col-lg-6">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Maintenance Status</label>
-              <div className="form_field_inner">
-                <div className="form_field_container">
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.MaintenanceFlag === "Included"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="maintenanceflag_included"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              MaintenanceFlag: "Included",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="maintenanceflag_included"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Included</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.MaintenanceFlag === "Excluded"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="maintenanceflag_excluded"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              MaintenanceFlag: "Excluded",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="maintenanceflag_excluded"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Excluded</h6>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>}
-
           {propertyDetails && propertyDetails.Purpose === "Rent" && (
             <div className="col-xl-4 col-lg-6">
-              <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
-                <label>Maintenance fees</label>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <input
-                    className="custom-input"
-                    style={{ width: "30%", paddingRight: "10px" }}
-                    type="text"
-                    placeholder="Optional"
-                    maxLength={6}
-                    onInput={(e) => {
-                      restrictInput(e, 6);
-                    }}
-                    onChange={(e) =>
-                      setPropertyDetails({
-                        ...propertyDetails,
-                        MaintenanceCharges: e.target.value.trim(),
-                      })
-                    }
-                    value={
-                      propertyDetails && propertyDetails.MaintenanceCharges
-                    }
-                  />
-                  <div
-                    style={{
-                      width: "70%",
-                      borderLeft: "2px solid #ddd",
-                      padding: "5px 0 5px 12px",
-                    }}
-                  >
-                    <div
-                      className="radio_group"
-                      style={{ gridColumnGap: "5px" }}
-                    >
+              <div className="form_field st-2 label_top">
+                <label htmlFor="">Maintenance Status</label>
+                <div className="form_field_inner">
+                  <div className="form_field_container">
+                    <div className="radio_group">
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.MaintenanceChargesFrequency ===
-                              "Monthly"
+                            propertyDetails.MaintenanceFlag === "Included"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
                         >
                           <input
                             type="checkbox"
-                            id="maintenane_monthly"
+                            id="maintenanceflag_included"
                             onClick={(e) => {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                MaintenanceChargesFrequency: "Monthly",
+                                MaintenanceFlag: "Included",
                               });
                             }}
                           />
                           <label
-                            htmlFor="maintenane_monthly"
-                            style={{
-                              padding: "6px 0 10px 22px",
-                              height: "30px",
-                            }}
+                            htmlFor="maintenanceflag_included"
+                            style={{ paddingTop: "7px" }}
                           >
                             <div className="radio_icon">
-                              <span
-                                className="material-symbols-outlined add"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
+                              <span className="material-symbols-outlined add">
                                 add
                               </span>
-                              <span
-                                className="material-symbols-outlined check"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
+                              <span className="material-symbols-outlined check">
                                 done
                               </span>
                             </div>
-                            <h6 style={{ fontSize: "0.8rem" }}>Monthly</h6>
+                            <h6>Included</h6>
                           </label>
                         </div>
                       </div>
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.MaintenanceChargesFrequency ===
-                              "Quarterly"
+                            propertyDetails.MaintenanceFlag === "Extra"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
                         >
                           <input
                             type="checkbox"
-                            id="maintenance_quarterly"
+                            id="maintenanceflag_extra"
                             onClick={(e) => {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                MaintenanceChargesFrequency: "Quarterly",
+                                MaintenanceFlag: "Extra",
                               });
                             }}
                           />
                           <label
-                            htmlFor="maintenance_quarterly"
-                            style={{
-                              padding: "6px 0 10px 22px",
-                              height: "30px",
-                              width: "90%",
-                            }}
+                            htmlFor="maintenanceflag_extra"
+                            style={{ paddingTop: "7px" }}
                           >
                             <div className="radio_icon">
-                              <span
-                                className="material-symbols-outlined add"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
+                              <span className="material-symbols-outlined add">
                                 add
                               </span>
-                              <span
-                                className="material-symbols-outlined check"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
+                              <span className="material-symbols-outlined check">
                                 done
                               </span>
                             </div>
-                            <h6 style={{ fontSize: "0.8rem" }}>Quarterly</h6>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="radio_group_single">
-                        <div
-                          className={
-                            propertyDetails.MaintenanceChargesFrequency ===
-                              "Half Yearly"
-                              ? "custom_radio_button radiochecked"
-                              : "custom_radio_button"
-                          }
-                        >
-                          <input
-                            type="checkbox"
-                            id="maintenance_halfyearly"
-                            onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                MaintenanceChargesFrequency: "Half Yearly",
-                              });
-                            }}
-                          />
-                          <label
-                            htmlFor="maintenance_halfyearly"
-                            style={{
-                              padding: "6px 0 10px 22px",
-                              height: "30px",
-                            }}
-                          >
-                            <div className="radio_icon">
-                              <span
-                                className="material-symbols-outlined add"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
-                                add
-                              </span>
-                              <span
-                                className="material-symbols-outlined check"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
-                                done
-                              </span>
-                            </div>
-                            <h6 style={{ fontSize: "0.8rem" }}>Half Yearly</h6>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="radio_group_single">
-                        <div
-                          className={
-                            propertyDetails.MaintenanceChargesFrequency ===
-                              "Yearly"
-                              ? "custom_radio_button radiochecked"
-                              : "custom_radio_button"
-                          }
-                        >
-                          <input
-                            type="checkbox"
-                            id="maintenance_yearly"
-                            onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                MaintenanceChargesFrequency: "Yearly",
-                              });
-                            }}
-                          />
-                          <label
-                            htmlFor="maintenance_yearly"
-                            style={{
-                              padding: "6px 0 10px 22px",
-                              height: "30px",
-                              width: "90%",
-                            }}
-                          >
-                            <div className="radio_icon">
-                              <span
-                                className="material-symbols-outlined add"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
-                                add
-                              </span>
-                              <span
-                                className="material-symbols-outlined check"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
-                                done
-                              </span>
-                            </div>
-                            <h6 style={{ fontSize: "0.8rem" }}>Yearly</h6>
+                            <h6>Extra</h6>
                           </label>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div
-                  style={{ fontSize: "smaller", borderTop: "1px solid #ddd" }}
-                >
-                  {convertToWords(propertyDetails.MaintenanceCharges)}
-                </div>
               </div>
-
             </div>
           )}
 
-          {propertyDetails && propertyDetails.Purpose === "Rent" && <div className="col-xl-4 col-lg-6">
-            <div id="id_demand" className="form_field label_top">
-              <label htmlFor="">Security Deposit</label>
-              <div className="form_field_inner">
-                <input
-                  id="id_securitydeposit"
-                  className="custom-input"
-                  required
-                  type="text"
-                  placeholder="Security Deposit Amount"
-                  maxLength={9}
-                  onInput={(e) => {
-                    restrictInput(e, 9);
-                  }}
-                  onChange={(e) => {
-                    setPropertyDetails({
-                      ...propertyDetails,
-                      // DemandPrice: e.target.value,
-                      SecurityDeposit: e.target.value.trim(),
-                      // DemandPriceInWords: amountToWords(e.target.value)
-                    });
-                  }}
-                  value={propertyDetails && propertyDetails.SecurityDeposit}
-                />
-                <div style={{ fontSize: "smaller" }}>
+          {propertyDetails &&
+            propertyDetails.Purpose === "Rent" &&
+            propertyDetails.MaintenanceFlag === "Extra" && (
+              <div className="col-xl-4 col-lg-6">
+                <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
+                  <label>Maintenance fees</label>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <input
+                      className="custom-input"
+                      style={{ width: "30%", paddingRight: "10px" }}
+                      type="text"
+                      placeholder="Optional"
+                      maxLength={6}
+                      onInput={(e) => {
+                        restrictInput(e, 6);
+                      }}
+                      onChange={(e) =>
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          MaintenanceCharges: e.target.value.trim(),
+                        })
+                      }
+                      value={
+                        propertyDetails && propertyDetails.MaintenanceCharges
+                      }
+                    />
+                    <div
+                      style={{
+                        width: "70%",
+                        borderLeft: "2px solid #ddd",
+                        padding: "5px 0 5px 12px",
+                      }}
+                    >
+                      <div
+                        className="radio_group"
+                        style={{ gridColumnGap: "5px" }}
+                      >
+                        <div className="radio_group_single">
+                          <div
+                            className={
+                              propertyDetails.MaintenanceChargesFrequency ===
+                              "Monthly"
+                                ? "custom_radio_button radiochecked"
+                                : "custom_radio_button"
+                            }
+                          >
+                            <input
+                              type="checkbox"
+                              id="maintenane_monthly"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  MaintenanceChargesFrequency: "Monthly",
+                                });
+                              }}
+                            />
+                            <label
+                              htmlFor="maintenane_monthly"
+                              style={{
+                                padding: "6px 0 10px 22px",
+                                height: "30px",
+                              }}
+                            >
+                              <div className="radio_icon">
+                                <span
+                                  className="material-symbols-outlined add"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    transform: "translateX(-3px)",
+                                  }}
+                                >
+                                  add
+                                </span>
+                                <span
+                                  className="material-symbols-outlined check"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    transform: "translateX(-3px)",
+                                  }}
+                                >
+                                  done
+                                </span>
+                              </div>
+                              <h6 style={{ fontSize: "0.8rem" }}>Monthly</h6>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="radio_group_single">
+                          <div
+                            className={
+                              propertyDetails.MaintenanceChargesFrequency ===
+                              "Quarterly"
+                                ? "custom_radio_button radiochecked"
+                                : "custom_radio_button"
+                            }
+                          >
+                            <input
+                              type="checkbox"
+                              id="maintenance_quarterly"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  MaintenanceChargesFrequency: "Quarterly",
+                                });
+                              }}
+                            />
+                            <label
+                              htmlFor="maintenance_quarterly"
+                              style={{
+                                padding: "6px 0 10px 22px",
+                                height: "30px",
+                                width: "90%",
+                              }}
+                            >
+                              <div className="radio_icon">
+                                <span
+                                  className="material-symbols-outlined add"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    transform: "translateX(-3px)",
+                                  }}
+                                >
+                                  add
+                                </span>
+                                <span
+                                  className="material-symbols-outlined check"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    transform: "translateX(-3px)",
+                                  }}
+                                >
+                                  done
+                                </span>
+                              </div>
+                              <h6 style={{ fontSize: "0.8rem" }}>Quarterly</h6>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="radio_group_single">
+                          <div
+                            className={
+                              propertyDetails.MaintenanceChargesFrequency ===
+                              "Half Yearly"
+                                ? "custom_radio_button radiochecked"
+                                : "custom_radio_button"
+                            }
+                          >
+                            <input
+                              type="checkbox"
+                              id="maintenance_halfyearly"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  MaintenanceChargesFrequency: "Half Yearly",
+                                });
+                              }}
+                            />
+                            <label
+                              htmlFor="maintenance_halfyearly"
+                              style={{
+                                padding: "6px 0 10px 22px",
+                                height: "30px",
+                              }}
+                            >
+                              <div className="radio_icon">
+                                <span
+                                  className="material-symbols-outlined add"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    transform: "translateX(-3px)",
+                                  }}
+                                >
+                                  add
+                                </span>
+                                <span
+                                  className="material-symbols-outlined check"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    transform: "translateX(-3px)",
+                                  }}
+                                >
+                                  done
+                                </span>
+                              </div>
+                              <h6 style={{ fontSize: "0.8rem" }}>
+                                Half Yearly
+                              </h6>
+                            </label>
+                          </div>
+                        </div>
+                        <div className="radio_group_single">
+                          <div
+                            className={
+                              propertyDetails.MaintenanceChargesFrequency ===
+                              "Yearly"
+                                ? "custom_radio_button radiochecked"
+                                : "custom_radio_button"
+                            }
+                          >
+                            <input
+                              type="checkbox"
+                              id="maintenance_yearly"
+                              onClick={(e) => {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  MaintenanceChargesFrequency: "Yearly",
+                                });
+                              }}
+                            />
+                            <label
+                              htmlFor="maintenance_yearly"
+                              style={{
+                                padding: "6px 0 10px 22px",
+                                height: "30px",
+                                width: "90%",
+                              }}
+                            >
+                              <div className="radio_icon">
+                                <span
+                                  className="material-symbols-outlined add"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    transform: "translateX(-3px)",
+                                  }}
+                                >
+                                  add
+                                </span>
+                                <span
+                                  className="material-symbols-outlined check"
+                                  style={{
+                                    fontSize: "1.2rem",
+                                    transform: "translateX(-3px)",
+                                  }}
+                                >
+                                  done
+                                </span>
+                              </div>
+                              <h6 style={{ fontSize: "0.8rem" }}>Yearly</h6>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={{ fontSize: "smaller", borderTop: "1px solid #ddd" }}
+                  >
+                    {convertToWords(propertyDetails.MaintenanceCharges)}
+                  </div>
+                </div>
+              </div>
+            )}
+
+          {propertyDetails && propertyDetails.Purpose === "Rent" && (
+            <div className="col-xl-4 col-lg-6">
+              <div id="id_demand" className="form_field label_top">
+                <label htmlFor="">Security Deposit</label>
+                <div className="form_field_inner price_input">
+                  <input
+                    id="id_securitydeposit"
+                    className="custom-input"
+                    required
+                    type="text"
+                    placeholder="Security Deposit Amount"
+                    maxLength={9}
+                    onInput={(e) => {
+                      restrictInput(e, 9);
+                    }}
+                    onChange={(e) => {
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        // DemandPrice: e.target.value,
+                        SecurityDeposit: e.target.value.trim(),
+                        // DemandPriceInWords: amountToWords(e.target.value)
+                      });
+                    }}
+                    value={propertyDetails && propertyDetails.SecurityDeposit}
+                  />
+                </div>
+                <div style={{ fontSize: "smaller" }} className="mt-2">
                   {convertToWords(propertyDetails.SecurityDeposit)}
                 </div>
               </div>
             </div>
-          </div>}
+          )}
 
           {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
@@ -2147,7 +2300,6 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div> */}
-
 
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
@@ -2201,7 +2353,6 @@ const Stage1 = (props) => {
             </div>
           </div>
 
-
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
               <label htmlFor="">Locality</label>
@@ -2220,7 +2371,6 @@ const Stage1 = (props) => {
                 ></SearchBarAutoComplete>
               </div>
             </div>
-
           </div>
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
@@ -2243,18 +2393,43 @@ const Stage1 = (props) => {
           </div>
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
-              <label htmlFor="">Pincode number</label>
+              <label htmlFor="">Unit Number</label>
               <div className="form_field_inner">
                 <input
-                  type="number"
-                  placeholder="Enter here"
-                  maxLength={6}
+                  type="text"
+                  placeholder="Enter House/Flat/Shop no"
+                  maxLength={100}
                   onChange={(e) =>
                     setPropertyDetails({
                       ...propertyDetails,
-                      Pincode: e.target.value.trim(),
+                      UnitNumber: e.target.value.trim(),
                     })
                   }
+                  value={propertyDetails && propertyDetails.UnitNumber}
+                />
+                <div className="field_icon"></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-xl-4 col-lg-6">
+            <div className="form_field label_top">
+              <label htmlFor="">Pincode Number</label>
+              <div className="form_field_inner">
+                <input
+                  type="text" // Use type="text" to control length
+                  placeholder="Enter here"
+                  maxLength={6} // Limits input to 6 characters
+                  onChange={(e) => {
+                    const value = e.target.value.trim();
+                    // Check if the input is numeric and has a maximum length of 6
+                    if (/^\d{0,6}$/.test(value)) {
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        Pincode: value,
+                      });
+                    }
+                  }}
                   value={propertyDetails && propertyDetails.Pincode}
                 />
                 <div className="field_icon"></div>
@@ -2264,8 +2439,9 @@ const Stage1 = (props) => {
         </div>
       </div>
       <div className="bottom_fixed_button">
-        {formError && <p className="error">{formError}</p>}
-        {formSuccess && <p className="success">{formSuccess}</p>}
+        {formError && <p className="error_new">{formError}</p>}
+
+        {formSuccess && <p className="success_new">{formSuccess}</p>}
         <div className="next_btn_back">
           <button
             className="theme_btn no_icon btn_border full_width"
@@ -2273,22 +2449,20 @@ const Stage1 = (props) => {
           >
             {"<< Back"}
           </button>
-          {propertyid !== "new" &&
+          {propertyid !== "new" && (
             <button
               className="theme_btn no_icon btn_fill full_width"
-              onClick={(e) => handleSubmit(e, 'Save')}
+              onClick={(e) => handleSubmit(e, "Save")}
             >
               Save
             </button>
-          }
+          )}
           <button
             className="theme_btn no_icon btn_border full_width"
-            onClick={(e) => handleSubmit(e, 'Next')}
+            onClick={(e) => handleSubmit(e, "Next")}
           >
             {"Next >>"}
           </button>
-
-
         </div>
       </div>
     </>

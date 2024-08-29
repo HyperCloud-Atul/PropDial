@@ -1,17 +1,16 @@
-import React from 'react'
+import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
 import { timestamp, projectStorage } from "../../firebase/config";
-import Accordion from 'react-bootstrap/Accordion';
+import Accordion from "react-bootstrap/Accordion";
 // import Adcarousel from "../../../Components/Ads";
 import Gallery from "react-image-gallery";
 import Popup from "../../components/Popup";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import Quill styles
-
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import Quill styles
 
 import { useImageUpload } from "../../hooks/useImageUpload";
 
@@ -49,8 +48,8 @@ export default function Stage3(props) {
     MainDoorFacing: "",
     OverLooking: [],
     BalconyFacing: "",
-    VisitingHrsFrom: "",
-    VisitingHrsTo: "",
+    VisitingHrsFrom: "10:00 AM",
+    VisitingHrsTo: "06:00 PM",
     VisitingDays: [],
     BachlorsBoysAllowed: "",
     BachlorsGirlsAllowed: "",
@@ -58,126 +57,146 @@ export default function Stage3(props) {
     VegNonVeg: "",
     PropertyDescription: "",
     OwnerInstructions: "",
-  })
-
-
+  });
 
   useEffect(() => {
     if (propertyDocument) {
-      console.log('Visiting Hrs From:', propertyDocument.visitingHrsFrom)
+      console.log("Visiting Hrs From:", propertyDocument.visitingHrsFrom);
       setPropertyDetails({
-        MainDoorFacing: propertyDocument.mainDoorFacing ? propertyDocument.mainDoorFacing : "",
-        OverLooking: propertyDocument.overLooking ? propertyDocument.overLooking : [],
-        BalconyFacing: propertyDocument.balconyFacing ? propertyDocument.balconyFacing : "",
-        VisitingHrsFrom: propertyDocument.visitingHrsFrom ? propertyDocument.visitingHrsFrom : "",
-        VisitingHrsTo: propertyDocument.visitingHrsTo ? propertyDocument.visitingHrsTo : "",
-        VisitingDays: propertyDocument.visitingDays ? propertyDocument.visitingDays : [],
-        BachlorsBoysAllowed: propertyDocument.bachlorsBoysAllowed ? propertyDocument.bachlorsBoysAllowed : "",
-        BachlorsGirlsAllowed: propertyDocument.bachlorsGirlsAllowed ? propertyDocument.bachlorsGirlsAllowed : "",
-        PetsAllowed: propertyDocument.petsAllowed ? propertyDocument.petsAllowed : "",
+        MainDoorFacing: propertyDocument.mainDoorFacing
+          ? propertyDocument.mainDoorFacing
+          : "",
+        OverLooking: propertyDocument.overLooking
+          ? propertyDocument.overLooking
+          : [],
+        BalconyFacing: propertyDocument.balconyFacing
+          ? propertyDocument.balconyFacing
+          : "",
+        VisitingHrsFrom: propertyDocument.visitingHrsFrom
+          ? propertyDocument.visitingHrsFrom
+          : "10:00 AM",
+        VisitingHrsTo: propertyDocument.visitingHrsTo
+          ? propertyDocument.visitingHrsTo
+          : "06:00 PM",
+        VisitingDays: propertyDocument.visitingDays
+          ? propertyDocument.visitingDays
+          : [],
+        BachlorsBoysAllowed: propertyDocument.bachlorsBoysAllowed
+          ? propertyDocument.bachlorsBoysAllowed
+          : "",
+        BachlorsGirlsAllowed: propertyDocument.bachlorsGirlsAllowed
+          ? propertyDocument.bachlorsGirlsAllowed
+          : "",
+        PetsAllowed: propertyDocument.petsAllowed
+          ? propertyDocument.petsAllowed
+          : "",
         VegNonVeg: propertyDocument.vegNonVeg ? propertyDocument.vegNonVeg : "",
-        PropertyDescription: propertyDocument.propertyDescription ? propertyDocument.propertyDescription : "",
-        OwnerInstructions: propertyDocument.ownerInstructions ? propertyDocument.ownerInstructions : "",
+        PropertyDescription: propertyDocument.propertyDescription
+          ? propertyDocument.propertyDescription
+          : "",
+        OwnerInstructions: propertyDocument.ownerInstructions
+          ? propertyDocument.ownerInstructions
+          : "",
 
         // Visiting Hrs Values
         MondayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Monday")
+          propertyDocument.visitingDays.find((e) => e === "Monday")
             ? true
             : false,
         TuesdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Tuesday")
+          propertyDocument.visitingDays.find((e) => e === "Tuesday")
             ? true
             : false,
         WednesdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Wednesday")
+          propertyDocument.visitingDays.find((e) => e === "Wednesday")
             ? true
             : false,
         ThursdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Thursday")
+          propertyDocument.visitingDays.find((e) => e === "Thursday")
             ? true
             : false,
         FridayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Friday")
+          propertyDocument.visitingDays.find((e) => e === "Friday")
             ? true
             : false,
         SaturdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Saturday")
+          propertyDocument.visitingDays.find((e) => e === "Saturday")
             ? true
             : false,
         SundayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Sunday")
+          propertyDocument.visitingDays.find((e) => e === "Sunday")
             ? true
             : false,
 
         // Overlooking Values
         ClubClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Club")
+          propertyDocument.overLooking.find((e) => e === "Club")
             ? true
             : false,
         GardenParkClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Garden/Park")
+          propertyDocument.overLooking.find((e) => e === "Garden/Park")
             ? true
             : false,
         RoadClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Road")
+          propertyDocument.overLooking.find((e) => e === "Road")
             ? true
             : false,
         SwimmingPoolClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Swimming Pool")
+          propertyDocument.overLooking.find((e) => e === "Swimming Pool")
             ? true
             : false,
         CentralParkClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Central Park")
+          propertyDocument.overLooking.find((e) => e === "Central Park")
             ? true
             : false,
         GolfClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Golf")
+          propertyDocument.overLooking.find((e) => e === "Golf")
             ? true
             : false,
         HillViewlClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Hill View")
+          propertyDocument.overLooking.find((e) => e === "Hill View")
             ? true
             : false,
         BeachClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Beach")
+          propertyDocument.overLooking.find((e) => e === "Beach")
             ? true
             : false,
         LakeClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Lake")
+          propertyDocument.overLooking.find((e) => e === "Lake")
             ? true
             : false,
         RiverClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "River")
+          propertyDocument.overLooking.find((e) => e === "River")
             ? true
             : false,
         ForestClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Forest")
+          propertyDocument.overLooking.find((e) => e === "Forest")
             ? true
             : false,
-      })
+      });
     }
-  }, [propertyDocument])
+  }, [propertyDocument]);
 
   function handleBackSubmit() {
-    props.setStateFlag('stage2');
+    props.setStateFlag("stage2");
   }
 
   const handleNextSubmit = async (e) => {
@@ -185,11 +204,15 @@ export default function Stage3(props) {
     setFormError(null);
     const property = {
       mainDoorFacing: propertyDetails.MainDoorFacing,
-      overLooking: propertyDetails.OverLooking ? propertyDetails.OverLooking : [],
+      overLooking: propertyDetails.OverLooking
+        ? propertyDetails.OverLooking
+        : [],
       balconyFacing: propertyDetails.BalconyFacing,
       visitingHrsFrom: propertyDetails.VisitingHrsFrom,
       visitingHrsTo: propertyDetails.VisitingHrsTo,
-      visitingDays: propertyDetails.VisitingDays ? propertyDetails.VisitingDays : [],
+      visitingDays: propertyDetails.VisitingDays
+        ? propertyDetails.VisitingDays
+        : [],
       bachlorsBoysAllowed: propertyDetails.BachlorsBoysAllowed,
       bachlorsGirlsAllowed: propertyDetails.BachlorsGirlsAllowed,
       petsAllowed: propertyDetails.PetsAllowed,
@@ -206,7 +229,7 @@ export default function Stage3(props) {
         updatedAt: timestamp.fromDate(new Date()),
         updatedBy: user.uid,
       };
-      console.log('updatedProperty:', updatedProperty)
+      console.log("updatedProperty:", updatedProperty);
       // console.log('propertyid:', propertyid)
       await updateDocument(propertyid, updatedProperty);
 
@@ -214,13 +237,12 @@ export default function Stage3(props) {
         navigate("/");
       } else {
         props.setStateFlag("stage4");
-        navigate("/propertydetails/" + propertyid)
+        navigate("/propertydetails/" + propertyid);
       }
     }
-  }
+  };
 
-  const [value, setValue] = useState('');
-
+  const [value, setValue] = useState("");
   return (
     <>
       {/* <Popup
@@ -230,8 +252,8 @@ export default function Stage3(props) {
         msg={"Are you sure you want to delete?"}
       /> */}
       <form>
-        <div className='add_property_fields'>
-          <div className="stage4form">           
+        <div className="add_property_fields">
+          <div className="stage4form">
             <div className="row row_gap form_full">
               {/* Maindoor Facing */}
               <div className="col-md-6">
@@ -241,7 +263,7 @@ export default function Stage3(props) {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.MainDoorFacing === 'East'
+                          propertyDetails.MainDoorFacing === "East"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -252,7 +274,7 @@ export default function Stage3(props) {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              MainDoorFacing: 'East'
+                              MainDoorFacing: "East",
                             });
                           }}
                         />
@@ -265,16 +287,14 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>East
-
-                          </h6>
+                          <h6>East</h6>
                         </label>
                       </div>
                     </div>
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.MainDoorFacing === 'West'
+                          propertyDetails.MainDoorFacing === "West"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -285,7 +305,7 @@ export default function Stage3(props) {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              MainDoorFacing: 'West'
+                              MainDoorFacing: "West",
                             });
                           }}
                         />
@@ -298,16 +318,14 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>West
-
-                          </h6>
+                          <h6>West</h6>
                         </label>
                       </div>
                     </div>
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.MainDoorFacing === 'North'
+                          propertyDetails.MainDoorFacing === "North"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -318,7 +336,7 @@ export default function Stage3(props) {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              MainDoorFacing: 'North'
+                              MainDoorFacing: "North",
                             });
                           }}
                         />
@@ -331,16 +349,14 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>North
-
-                          </h6>
+                          <h6>North</h6>
                         </label>
                       </div>
                     </div>
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.MainDoorFacing === 'South'
+                          propertyDetails.MainDoorFacing === "South"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -351,7 +367,7 @@ export default function Stage3(props) {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              MainDoorFacing: 'South'
+                              MainDoorFacing: "South",
                             });
                           }}
                         />
@@ -364,16 +380,14 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>South
-
-                          </h6>
+                          <h6>South</h6>
                         </label>
                       </div>
                     </div>
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.MainDoorFacing === 'North East'
+                          propertyDetails.MainDoorFacing === "North East"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -384,7 +398,7 @@ export default function Stage3(props) {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              MainDoorFacing: 'North East'
+                              MainDoorFacing: "North East",
                             });
                           }}
                         />
@@ -397,16 +411,14 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>North East
-
-                          </h6>
+                          <h6>North East</h6>
                         </label>
                       </div>
                     </div>
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.MainDoorFacing === 'North West'
+                          propertyDetails.MainDoorFacing === "North West"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -417,7 +429,7 @@ export default function Stage3(props) {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              MainDoorFacing: 'North West'
+                              MainDoorFacing: "North West",
                             });
                           }}
                         />
@@ -430,15 +442,14 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>North West
-
-                          </h6>
+                          <h6>North West</h6>
                         </label>
                       </div>
-                    </div><div className="radio_group_single">
+                    </div>
+                    <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.MainDoorFacing === 'South East'
+                          propertyDetails.MainDoorFacing === "South East"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -449,7 +460,7 @@ export default function Stage3(props) {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              MainDoorFacing: 'South East'
+                              MainDoorFacing: "South East",
                             });
                           }}
                         />
@@ -462,16 +473,14 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>South East
-
-                          </h6>
+                          <h6>South East</h6>
                         </label>
                       </div>
                     </div>
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.MainDoorFacing === 'South West'
+                          propertyDetails.MainDoorFacing === "South West"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -482,7 +491,7 @@ export default function Stage3(props) {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              MainDoorFacing: 'South West'
+                              MainDoorFacing: "South West",
                             });
                           }}
                         />
@@ -495,9 +504,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>South West
-
-                          </h6>
+                          <h6>South West</h6>
                         </label>
                       </div>
                     </div>
@@ -506,276 +513,268 @@ export default function Stage3(props) {
               </div>
 
               {/* Balcony Facing */}
-              <div className="col-md-6">
-                <div className="form_field st-2 label_top">
-                  <label htmlFor="">Balcony Facing</label>
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.BalconyFacing === 'East'
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="east_balconyfacing"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              BalconyFacing: 'East'
-                            });
-                          }}
-                        />
-                        <label htmlFor="east_balconyfacing">
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>East
-
-                          </h6>
-                        </label>
+              {propertyDocument &&
+              propertyDocument.numberOfBalcony &&
+              propertyDocument.numberOfBalcony !== 0 ? (
+                <div className="col-md-6">
+                  <div className="form_field st-2 label_top">
+                    <label htmlFor="">Balcony Facing</label>
+                    <div className="radio_group">
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.BalconyFacing === "East"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="east_balconyfacing"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BalconyFacing: "East",
+                              });
+                            }}
+                          />
+                          <label htmlFor="east_balconyfacing">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>East</h6>
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.BalconyFacing === 'West'
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="west_balconyfacing"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              BalconyFacing: 'West'
-                            });
-                          }}
-                        />
-                        <label htmlFor="west_balconyfacing">
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>West
-
-                          </h6>
-                        </label>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.BalconyFacing === "West"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="west_balconyfacing"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BalconyFacing: "West",
+                              });
+                            }}
+                          />
+                          <label htmlFor="west_balconyfacing">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>West</h6>
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.BalconyFacing === 'North'
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="north_balconyfacing"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              BalconyFacing: 'North'
-                            });
-                          }}
-                        />
-                        <label htmlFor="north_balconyfacing">
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>North
-
-                          </h6>
-                        </label>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.BalconyFacing === "North"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="north_balconyfacing"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BalconyFacing: "North",
+                              });
+                            }}
+                          />
+                          <label htmlFor="north_balconyfacing">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>North</h6>
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.BalconyFacing === 'South'
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="south_balconyfacing"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              BalconyFacing: 'South'
-                            });
-                          }}
-                        />
-                        <label htmlFor="south_balconyfacing">
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>South
-
-                          </h6>
-                        </label>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.BalconyFacing === "South"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="south_balconyfacing"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BalconyFacing: "South",
+                              });
+                            }}
+                          />
+                          <label htmlFor="south_balconyfacing">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>South</h6>
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.BalconyFacing === 'North East'
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="northeast_balconyfacing"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              BalconyFacing: 'North East'
-                            });
-                          }}
-                        />
-                        <label htmlFor="northeast_balconyfacing">
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>North East
-
-                          </h6>
-                        </label>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.BalconyFacing === "North East"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="northeast_balconyfacing"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BalconyFacing: "North East",
+                              });
+                            }}
+                          />
+                          <label htmlFor="northeast_balconyfacing">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>North East</h6>
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.BalconyFacing === 'North West'
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="northwest_balconyfacing"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              BalconyFacing: 'North West'
-                            });
-                          }}
-                        />
-                        <label htmlFor="northwest_balconyfacing">
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>North West
-
-                          </h6>
-                        </label>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.BalconyFacing === "North West"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="northwest_balconyfacing"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BalconyFacing: "North West",
+                              });
+                            }}
+                          />
+                          <label htmlFor="northwest_balconyfacing">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>North West</h6>
+                          </label>
+                        </div>
                       </div>
-                    </div><div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.BalconyFacing === 'South East'
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="southeast_balconyfacing"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              BalconyFacing: 'South East'
-                            });
-                          }}
-                        />
-                        <label htmlFor="southeast_balconyfacing">
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>South East
-
-                          </h6>
-                        </label>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.BalconyFacing === "South East"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="southeast_balconyfacing"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BalconyFacing: "South East",
+                              });
+                            }}
+                          />
+                          <label htmlFor="southeast_balconyfacing">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>South East</h6>
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.BalconyFacing === 'South West'
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="southwest_balconyfacing"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              BalconyFacing: 'South West'
-                            });
-                          }}
-                        />
-                        <label htmlFor="southwest_balconyfacing">
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>South West
-
-                          </h6>
-                        </label>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.BalconyFacing === "South West"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="southwest_balconyfacing"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                BalconyFacing: "South West",
+                              });
+                            }}
+                          />
+                          <label htmlFor="southwest_balconyfacing">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>South West</h6>
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
+
               {/* Overlooking */}
               <div className="col-md-12">
                 <div className="form_field st-2 label_top">
@@ -824,8 +823,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Club
-                          </h6>
+                          <h6>Club</h6>
                         </label>
                       </div>
                     </div>
@@ -849,7 +847,8 @@ export default function Stage3(props) {
                                   propertyDetails.OverLooking.filter(
                                     (elem) => elem !== "Garden/Park"
                                   ),
-                                GardenParkClick: !propertyDetails.GardenParkClick,
+                                GardenParkClick:
+                                  !propertyDetails.GardenParkClick,
                               });
                             } else {
                               setPropertyDetails({
@@ -858,7 +857,8 @@ export default function Stage3(props) {
                                   ...propertyDetails.OverLooking,
                                   "Garden/Park",
                                 ],
-                                GardenParkClick: !propertyDetails.GardenParkClick,
+                                GardenParkClick:
+                                  !propertyDetails.GardenParkClick,
                               });
                             }
                           }}
@@ -872,8 +872,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Garden/Park
-                          </h6>
+                          <h6>Garden/Park</h6>
                         </label>
                       </div>
                     </div>
@@ -920,8 +919,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Road
-                          </h6>
+                          <h6>Road</h6>
                         </label>
                       </div>
                     </div>
@@ -945,7 +943,8 @@ export default function Stage3(props) {
                                   propertyDetails.OverLooking.filter(
                                     (elem) => elem !== "Swimming Pool"
                                   ),
-                                SwimmingPoolClick: !propertyDetails.SwimmingPoolClick,
+                                SwimmingPoolClick:
+                                  !propertyDetails.SwimmingPoolClick,
                               });
                             } else {
                               setPropertyDetails({
@@ -954,7 +953,8 @@ export default function Stage3(props) {
                                   ...propertyDetails.OverLooking,
                                   "Swimming Pool",
                                 ],
-                                SwimmingPoolClick: !propertyDetails.SwimmingPoolClick,
+                                SwimmingPoolClick:
+                                  !propertyDetails.SwimmingPoolClick,
                               });
                             }
                           }}
@@ -968,8 +968,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Swimming Pool
-                          </h6>
+                          <h6>Swimming Pool</h6>
                         </label>
                       </div>
                     </div>
@@ -993,7 +992,8 @@ export default function Stage3(props) {
                                   propertyDetails.OverLooking.filter(
                                     (elem) => elem !== "Central Park"
                                   ),
-                                CentralParkClick: !propertyDetails.CentralParkClick,
+                                CentralParkClick:
+                                  !propertyDetails.CentralParkClick,
                               });
                             } else {
                               setPropertyDetails({
@@ -1002,7 +1002,8 @@ export default function Stage3(props) {
                                   ...propertyDetails.OverLooking,
                                   "Central Park",
                                 ],
-                                CentralParkClick: !propertyDetails.CentralParkClick,
+                                CentralParkClick:
+                                  !propertyDetails.CentralParkClick,
                               });
                             }
                           }}
@@ -1016,8 +1017,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Central Park
-                          </h6>
+                          <h6>Central Park</h6>
                         </label>
                       </div>
                     </div>
@@ -1064,8 +1064,7 @@ export default function Stage3(props) {
                               add
                             </span>
                           </div>
-                          <h6>Golf
-                          </h6>
+                          <h6>Golf</h6>
                         </label>
                       </div>
                     </div>
@@ -1112,8 +1111,7 @@ export default function Stage3(props) {
                               add
                             </span>
                           </div>
-                          <h6>Hill View
-                          </h6>
+                          <h6>Hill View</h6>
                         </label>
                       </div>
                     </div>
@@ -1160,9 +1158,7 @@ export default function Stage3(props) {
                               add
                             </span>
                           </div>
-                          <h6>Beach
-
-                          </h6>
+                          <h6>Beach</h6>
                         </label>
                       </div>
                     </div>
@@ -1209,9 +1205,7 @@ export default function Stage3(props) {
                               add
                             </span>
                           </div>
-                          <h6>Lake
-
-                          </h6>
+                          <h6>Lake</h6>
                         </label>
                       </div>
                     </div>
@@ -1258,9 +1252,7 @@ export default function Stage3(props) {
                               add
                             </span>
                           </div>
-                          <h6>River
-
-                          </h6>
+                          <h6>River</h6>
                         </label>
                       </div>
                     </div>
@@ -1307,36 +1299,30 @@ export default function Stage3(props) {
                               add
                             </span>
                           </div>
-                          <h6>Forest
-                          </h6>
+                          <h6>Forest</h6>
                         </label>
                       </div>
                     </div>
-
-
-
                   </div>
                 </div>
               </div>
 
-              
               {/* Visiting Hours From */}
               <div className="col-md-6">
                 <div className="form_field label_top">
                   <label htmlFor="">Visiting Hours From</label>
                   <div className="form_field_inner">
                     <input
-                      type="datetime-local"
-                      placeholder="dd/mm/yyyy"
+                      type="text"
+                      // placeholder="dd/mm/yyyy"
                       value={propertyDetails.VisitingHrsFrom}
                       onChange={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          VisitingHrsFrom: e.target.value
-                        })
+                          VisitingHrsFrom: e.target.value,
+                        });
                       }}
                     />
-
                   </div>
                 </div>
               </div>
@@ -1346,14 +1332,14 @@ export default function Stage3(props) {
                   <label htmlFor="">Visiting Hours To</label>
                   <div className="form_field_inner">
                     <input
-                      type="datetime-local"
-                      placeholder="dd/mm/yyyy"
+                      type="text"
+                      // placeholder="dd/mm/yyyy"
                       value={propertyDetails.VisitingHrsTo}
                       onChange={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          VisitingHrsTo: e.target.value
-                        })
+                          VisitingHrsTo: e.target.value,
+                        });
                       }}
                     />
                   </div>
@@ -1407,10 +1393,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Monday
-
-
-                          </h6>
+                          <h6>Monday</h6>
                         </label>
                       </div>
                     </div>
@@ -1457,10 +1440,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Tuesday
-
-
-                          </h6>
+                          <h6>Tuesday</h6>
                         </label>
                       </div>
                     </div>
@@ -1507,10 +1487,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Wednesday
-
-
-                          </h6>
+                          <h6>Wednesday</h6>
                         </label>
                       </div>
                     </div>
@@ -1557,10 +1534,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Thursday
-
-
-                          </h6>
+                          <h6>Thursday</h6>
                         </label>
                       </div>
                     </div>
@@ -1608,10 +1582,7 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Friday
-
-
-                          </h6>
+                          <h6>Friday</h6>
                         </label>
                       </div>
                     </div>
@@ -1658,10 +1629,7 @@ export default function Stage3(props) {
                               add
                             </span>
                           </div>
-                          <h6>Saturday
-
-
-                          </h6>
+                          <h6>Saturday</h6>
                         </label>
                       </div>
                     </div>
@@ -1708,20 +1676,18 @@ export default function Stage3(props) {
                               add
                             </span>
                           </div>
-                          <h6>Sunday
-                          </h6>
+                          <h6>Sunday</h6>
                         </label>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              
+
               {/* Bachelor Boys Allowed */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
-                  <label htmlFor="">
-                    Bachelor Boys Allowed</label>
+                  <label htmlFor="">Bachelor Boys Allowed</label>
                   <div className="form_field_inner">
                     <div className="form_field_container">
                       <div className="radio_group">
@@ -1776,7 +1742,6 @@ export default function Stage3(props) {
                                   BachlorsBoysAllowed: "No",
                                 });
                               }}
-
                             />
                             <label
                               htmlFor="bachloresboysallowed_no"
@@ -1798,13 +1763,11 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-
               </div>
               {/* Bachelor Girls Allowed */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
-                  <label htmlFor="">
-                    Bachelor Girls Allowed</label>
+                  <label htmlFor="">Bachelor Girls Allowed</label>
                   <div className="form_field_inner">
                     <div className="form_field_container">
                       <div className="radio_group">
@@ -1880,13 +1843,11 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-
               </div>
               {/* Pets Allowed */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
-                  <label htmlFor="">
-                    Pets Allowed</label>
+                  <label htmlFor="">Pets Allowed</label>
                   <div className="form_field_inner">
                     <div className="form_field_container">
                       <div className="radio_group">
@@ -1941,7 +1902,6 @@ export default function Stage3(props) {
                                   PetsAllowed: "No",
                                 });
                               }}
-
                             />
                             <label
                               htmlFor="petsallowed_no"
@@ -1963,13 +1923,11 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-
               </div>
               {/* Vegetarian / Non-Vegetarian */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
-                  <label htmlFor="">
-                    Food Habit</label>
+                  <label htmlFor="">Food Habit</label>
                   <div className="form_field_inner">
                     <div className="form_field_container">
                       <div className="radio_group">
@@ -2024,7 +1982,6 @@ export default function Stage3(props) {
                                   VegNonVeg: "Non-Veg",
                                 });
                               }}
-
                             />
                             <label
                               htmlFor="vegnonveg_nonveg"
@@ -2046,21 +2003,20 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-
               </div>
 
-              
               {/* Property Description */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
-                  <label htmlFor="">
-                    Property Description</label>
+                  <label htmlFor="">Property Description</label>
                   <div className="form_field_inner">
                     <div className="form_field_container">
                       <ReactQuill
                         theme="snow" // Specify the theme ('snow' for a clean, modern look)
                         placeholder="Type here..." // Add placeholder prop here
-                        value={propertyDetails && propertyDetails.PropertyDescription}
+                        value={
+                          propertyDetails && propertyDetails.PropertyDescription
+                        }
                         // onChange={setValue} // Set the value state when the editor content changes
                         onChange={(e) => {
                           setPropertyDetails({
@@ -2070,32 +2026,50 @@ export default function Stage3(props) {
                         }}
                         modules={{
                           toolbar: [
-                            [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                            [{ header: "1" }, { header: "2" }, { font: [] }],
                             [{ size: [] }],
-                            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                            [{ 'list': 'ordered' }, { 'list': 'bullet' },
-                            { 'indent': '-1' }, { 'indent': '+1' }],
-                            ['link', 'image', 'video'],
-                            ['clean']
+                            [
+                              "bold",
+                              "italic",
+                              "underline",
+                              "strike",
+                              "blockquote",
+                            ],
+                            [
+                              { list: "ordered" },
+                              { list: "bullet" },
+                              { indent: "-1" },
+                              { indent: "+1" },
+                            ],
+                            ["link", "image", "video"],
+                            ["clean"],
                           ],
                         }}
                         formats={[
-                          'header', 'font', 'size',
-                          'bold', 'italic', 'underline', 'strike', 'blockquote',
-                          'list', 'bullet', 'indent',
-                          'link', 'image', 'video'
+                          "header",
+                          "font",
+                          "size",
+                          "bold",
+                          "italic",
+                          "underline",
+                          "strike",
+                          "blockquote",
+                          "list",
+                          "bullet",
+                          "indent",
+                          "link",
+                          "image",
+                          "video",
                         ]}
                       />
                     </div>
                   </div>
                 </div>
-
               </div>
               {/* Owner Instructions */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
-                  <label htmlFor="">
-                    Owner Instruction</label>
+                  <label htmlFor="">Owner Instruction</label>
                   <div className="form_field_inner">
                     <div className="form_field_container">
                       <ReactQuill
@@ -2105,45 +2079,70 @@ export default function Stage3(props) {
                         placeholder="Type here..." // Add placeholder prop here
                         modules={{
                           toolbar: [
-                            [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                            [{ header: "1" }, { header: "2" }, { font: [] }],
                             [{ size: [] }],
-                            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                            [{ 'list': 'ordered' }, { 'list': 'bullet' },
-                            { 'indent': '-1' }, { 'indent': '+1' }],
-                            ['link', 'image', 'video'],
-                            ['clean']
+                            [
+                              "bold",
+                              "italic",
+                              "underline",
+                              "strike",
+                              "blockquote",
+                            ],
+                            [
+                              { list: "ordered" },
+                              { list: "bullet" },
+                              { indent: "-1" },
+                              { indent: "+1" },
+                            ],
+                            ["link", "image", "video"],
+                            ["clean"],
                           ],
                         }}
                         formats={[
-                          'header', 'font', 'size',
-                          'bold', 'italic', 'underline', 'strike', 'blockquote',
-                          'list', 'bullet', 'indent',
-                          'link', 'image', 'video'
+                          "header",
+                          "font",
+                          "size",
+                          "bold",
+                          "italic",
+                          "underline",
+                          "strike",
+                          "blockquote",
+                          "list",
+                          "bullet",
+                          "indent",
+                          "link",
+                          "image",
+                          "video",
                         ]}
                       />
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
         <div className="verticall_gap"></div>
-        {formError && <p className="error">{formError}</p>}
-        <div style={{ display: "flex", alignItems: "center", gap: "22px" }} className='next_btn_back bottom_fixed_button'>
-
-          <button className="theme_btn btn_border full_width no_icon" onClick={handleBackSubmit}>
+        {formError && <p className="error_new">{formError}</p>}
+        <div
+          style={{ display: "flex", alignItems: "center", gap: "22px" }}
+          className="next_btn_back bottom_fixed_button"
+        >
+          <button
+            className="theme_btn btn_border full_width no_icon"
+            onClick={handleBackSubmit}
+          >
             {"<< Back"}
           </button>
 
-          <button className="theme_btn btn_fill full_width no_icon" onClick={handleNextSubmit}>
+          <button
+            className="theme_btn btn_fill full_width no_icon"
+            onClick={handleNextSubmit}
+          >
             Submit
           </button>
-
         </div>
-      </form >
-
+      </form>
     </>
-  )
+  );
 }

@@ -464,9 +464,9 @@ const PGAdminDashboard = () => {
                 </div>
               </section>
               <div className="vg22"></div>
-              <div className="row row_reverse_991">
+              <div className="row">
                 <div className="col-lg-6">
-                  <div className="vg22_991"></div>
+                  
                   <div className="properties_map">
                     <h2
                       className="p_title"
@@ -735,6 +735,7 @@ const PGAdminDashboard = () => {
                   </div>
                 </div>
                 <div className="col-lg-6">
+                <div className="vg22_991"></div>
                   <section style={{
                     display:"grid",
                     gap:"22px"
@@ -765,15 +766,15 @@ const PGAdminDashboard = () => {
               </div>
 
               <div className="vg22"></div>
-              <hr />
-              <div className="vg22"></div>
+          
+           
 
-              <section className="property_cards_parent">
+              {/* <section className="property_cards_parent">
                 {properties &&
                   properties.map((property) => (
                     <PropertyCard propertyid={property.id} />
                   ))}
-              </section>
+              </section> */}
 
               {/* <>
                 <div className="vg22"></div>
@@ -902,7 +903,7 @@ const PGAdminDashboard = () => {
                 <hr />
               </> */}
 
-              <div className="vg22"></div>
+              {/* <div className="vg22"></div> */}
               <section className="add_section row">
                 <div className="add_single col-lg-6">
                   <OwlCarousel className="owl-theme" {...addImgOptions2}>

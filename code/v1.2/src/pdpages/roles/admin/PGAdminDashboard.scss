@@ -384,9 +384,12 @@
   .add_single_2 {
     display: none;
   }
-
+  .propagent_dashboard_inner .property_status.assign {
+    grid-template-columns: repeat(3, 1fr);
+  grid-row-gap: 22px;
+}
   .self_property_detail {
-    grid-template-columns: repeat(1, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     grid-row-gap: 22px;
   }
   .self_property_detail .theme_btn {
@@ -408,7 +411,7 @@
   .self_property_detail .spd_single {
     border-radius: 20px !important;
     gap: 10px !important;
-    margin-top: 10px !important;
+    margin-top: 0px !important;
     padding: 15px !important;
   }
 
@@ -420,7 +423,7 @@
   .self_property_detail .spd_single .left {
     border-radius: 15px !important;
     height: 50px !important;
-    margin-top: -25px !important;
+    margin-top: 0px !important;
     padding: 8px !important;
     width: 50px !important;
   }
@@ -433,6 +436,53 @@
     font-size: 22px !important;
     margin-top: 4px !important;
   }
+  .propagent_dashboard_inner .ps_single h5 {
+    font-size: 22px;
+    margin-bottom: 4px !important;
+  }
+  .propagent_dashboard_inner .ps_single h6 {
+    font-size: 14px;
+  }
+  .propagent_dashboard_inner .property_status {
+    grid-column-gap: 15px;
+  }
+  .propagent_dashboard_inner .property_details {
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+  }
+  .properties_map {
+    border-radius: 20px;
+    padding: 15px;
+  }
+  .properties_map .p_title {
+    font-size: 18px !important;
+    margin-bottom: 0px !important;
+  }
+  .pi_cities_single h6 {
+    font-size: 14px;
+  }
+  .pi_cities_single h5 {
+    font-size: 17px;
+  }
+  .pi_cities_single .bar {
+    width: 85%;
+    height: 5px;
+  }
+  .propagent_dashboard_inner .property_details .property_detail_single {   
+    border-radius: 20px;
+    padding: 15px;  
+  }
+  .property_detail_circular-progress {
+    width: 25%;
+}
+.property_detail_single .left h6 {
+  font-size: 14px;
+ 
+}
+.property_detail_single .left h5 {
+  font-size: 22px; 
+  margin-top: 4px !important;
+}
 }
 
 @media only screen and (max-width: 575px) {
@@ -440,7 +490,10 @@
     border-radius: 20px;
     padding: 15px;
   }
-
+  .propagent_dashboard_inner .property_status.assign {
+    grid-template-columns: repeat(2, 1fr);
+    grid-row-gap: 15px;
+}
   .total_prop_card .content h4.title {
     font-size: 18px;
   }
@@ -448,33 +501,17 @@
   .total_prop_card .content h6 {
     font-size: 12px;
   }
-
   .total_prop_card .icon img {
     height: 50px;
   }
-
   .total_prop_card .number {
     font-size: 38px;
     margin-left: 20px;
   }
-
   .propagent_dashboard_inner .ps_single {
     border-radius: 20px;
     padding: 15px;
     min-height: inherit;
-  }
-
-  .propagent_dashboard_inner .property_status {
-    grid-column-gap: 15px;
-  }
-
-  .propagent_dashboard_inner .ps_single h5 {
-    font-size: 22px;
-    margin-bottom: 4px !important;
-  }
-
-  .propagent_dashboard_inner .ps_single h6 {
-    font-size: 14px;
   }
   .upcoming .parent .child h5 {
     font-size: 22px;
@@ -499,22 +536,20 @@
   .upcoming .parent .child h6 {
     font-size: 14px;
   }
-  .properties_map {
-    border-radius: 20px;
-    padding: 15px;
-  }
-  .properties_map .p_title {
-    font-size: 18px !important;
-    margin-bottom: 0px !important;
-  }
-  .pi_cities_single h6 {
-    font-size: 14px;
-  }
-  .pi_cities_single h5 {
-    font-size: 17px;
-  }
-  .pi_cities_single .bar {
-    width: 85%;
-    height: 5px;
+  .propagent_dashboard_inner .property_details .property_detail_single {
+flex-direction: column;
+    gap: 5px !important;
+    justify-content: inherit !important;
+}
+.property_detail_circular-progress {
+  width: 35%;
+}
+
+}
+@media only screen and (max-width: 445px) {
+
+  .self_property_detail {
+    grid-template-columns: repeat(1, 1fr) !important;
+   
   }
 }

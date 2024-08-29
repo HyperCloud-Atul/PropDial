@@ -1239,14 +1239,13 @@ const PropertyDetails = () => {
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
-                        <div className="pdms_single">
+                      <div className="pdms_single">
                           <h4>
-                            <img src="/assets/img/new_carpet.png"></img>
-                            {propertyDocument.superArea}{" "}
-                            {propertyDocument.superAreaUnit}
+                            <img src="/assets/img/new_bhk.png"></img>
+                            {propertyDocument.bhk}
                           </h4>
-                          <h6>Super Area</h6>
-                        </div>
+                          <h6>BHK</h6>
+                        </div>                     
                         <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_bedroom.png"></img>
@@ -1264,6 +1263,19 @@ const PropertyDetails = () => {
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
+                      <div className="pdms_single">
+                          <h4>
+                            <img src="/assets/img/new_carpet.png"></img>
+                            {propertyDocument.superArea}
+                            {propertyDocument.superArea && propertyDocument.carpetArea ? "/" : ""}
+                            {propertyDocument.carpetArea}
+                            <h6>{" "}{propertyDocument.superAreaUnit}</h6>                         
+                          </h4>
+                          <h6>{propertyDocument.superArea && "Super Area"}
+                          {propertyDocument.superArea && propertyDocument.carpetArea ? "/" : ""}
+                          {propertyDocument.carpetArea && "Carpet Area"}
+                          </h6>
+                        </div>
                         <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
@@ -1272,13 +1284,7 @@ const PropertyDetails = () => {
                           </h4>
                           <h6>Floor no.</h6>
                         </div>
-                        <div className="pdms_single">
-                          <h4>
-                            <img src="/assets/img/new_bhk.png"></img>
-                            {propertyDocument.bhk}
-                          </h4>
-                          <h6>BHK</h6>
-                        </div>
+                      
                         <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_furniture.png"></img>
@@ -3810,7 +3816,7 @@ const PropertyDetails = () => {
                         </div>
                         <div className="pis_content">
                           <h6>Visiting Hours</h6>
-                          <h5>
+                          {/* <h5>
                             {propertyDocument.visitingHrsFrom &&
                               format(
                                 new Date(propertyDocument.visitingHrsFrom),
@@ -3822,6 +3828,12 @@ const PropertyDetails = () => {
                                 new Date(propertyDocument.visitingHrsTo),
                                 "hh:mm aa"
                               )}
+                          </h5> */}
+                          <h5>
+                            {propertyDocument.visitingHrsFrom}
+                            {propertyDocument.visitingHrsTo && " to"}{" "}
+                            {propertyDocument.visitingHrsTo}
+                             
                           </h5>
                         </div>
                       </div>

@@ -1073,7 +1073,12 @@ label.upload_img input {
     letter-spacing: 0.5px;
     width: fit-content;
 }
-
+.short_prop_summary .card_badge.active{
+    background: var(--success-color);
+}
+.short_prop_summary .card_badge.inactive{
+    background: var(--theme-red);
+}
 @media only screen and (max-width: 991px) {
     .full_card_width {
         padding-right: 0px;

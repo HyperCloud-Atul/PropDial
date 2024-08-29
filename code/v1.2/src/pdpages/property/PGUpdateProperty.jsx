@@ -113,7 +113,7 @@ const PGUpdateProperty = () => {
                           {propertydoc.pid}
                         </span>
                         {" "}{" "}
-                        <span className="card_badge">
+                        <span className={`card_badge ${propertydoc.isActiveInactiveReview.toLowerCase()}`}>
                           {propertydoc.isActiveInactiveReview}
                         </span>
                       </div>

@@ -298,7 +298,18 @@ function App() {
                   <Route path="/about-us" element={<PGAboutUs />}></Route>
                   <Route path="/contact-us" element={<PGContactUs />}></Route>
                   <Route path="/faq" element={<Faq></Faq>}></Route>
-                  <Route path="/enquiry/:id" element={<PGEnquiry></PGEnquiry>}></Route>
+                  <Route
+                    path="/enquiry/:id"
+                    element={
+                      user &&
+                        user.status === "active" &&
+                        (user.role === "owner" || user.role !== "admin") ? (
+                        <PGEnquiry />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
+                    }
+                  ></Route>                 
                   <Route path="/edit-enquiry/:id" element={<UpdateEnquiry></UpdateEnquiry>} />
                   <Route path="/properties" element={<PGProperties />}></Route>
                   <Route

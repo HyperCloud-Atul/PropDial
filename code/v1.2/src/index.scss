@@ -1,4 +1,29 @@
 // forms field css start
+.error_new{
+  text-align: center; 
+  border-radius: 8px;
+  padding: 8px;
+  /* width: fit-content; */
+  color: red;
+  background: #ffe9e9;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px !important;
+  text-transform: capitalize;
+}
+.success_new{
+text-align: center;
+background: #00a3001f;
+text-transform: capitalize;
+border-radius: 8px;
+padding: 8px;
+/* width: fit-content; */
+color: var(--success-color);
+font-size: 16px;
+font-weight: 600;
+margin-bottom: 8px !important;
+}
+
 .new_form_field {
   label {
     font-size: 16px;
@@ -952,6 +977,8 @@
     }
   }
 
+ 
+
   &.dead {
     background: red;
 
@@ -1587,7 +1614,19 @@
   left: 0;
   margin: auto;
 }
-
+.price_input::after {
+  content: "\20B9";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #666;
+}
+.price_input input{
+  padding-left: 13px !important;
+}
 @media only screen and (max-width: 991px) {
   section.graphs {
     grid-template-columns: repeat(1, 1fr) !important;

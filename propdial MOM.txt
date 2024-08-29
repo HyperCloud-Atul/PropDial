@@ -1,4 +1,111 @@
 Minutes of Meeting (MoM)
+Date: August 25, 2024 (Sunday)
+
+Attendees:
+1. Vinay Sir
+2. Atul Sir
+3. Sanskar 
+
+Agenda:
+Enhancements and updates for Propdial system.
+
+..............................................
+
+
+1. Dashboard
+
+Task: Make all cards clickable. (Atul sir)
+Description: Ensure that every card on the dashboard is interactive, allowing users to click and access further details. 
+
+2. Property Edit Page 
+
+Task: Update the "Flag" field. (Done) 
+Action: Change the text from "Rent or Sale" to "Rent and Sale."
+
+Task: Remove duplicate "Rent Only" option in the "Property Package" field. (Done)
+Action: Ensure only one "Rent Only" option is available.
+
+Task: Purpose Option Based on Flag Click.
+Action: The purpose should be determined by the flag selected and should remain uneditable.
+
+Task: Flag Options According to Package.
+*Action:* Fetch and display the flag options from the Propdial admin website according to the selected package.
+
+Task: Add New Purpose Option. (Done)
+Action: Introduce "PMS" as a new purpose option.
+
+Task: Synchronize Field Changes with Flag Click.
+Action: Fields that currently change based on purpose should now change based on the flag selection.
+
+Task: Update "Excluded" Text. (Done)
+Action: Change the text "Excluded" to "Extra."
+
+Task: Hide Maintenance Field. (Done)
+Action: When "Included" is selected, hide the maintenance field.
+
+Task: Display Price in Indian Format. (Done)
+Action: When a price is entered, it should be displayed in words in the Indian numbering format.
+
+Task: Add Separation Comma and Rupee Symbol(Done) in Price Field. (Half Done)
+Action: Automatically add commas and the rupee symbol when the price is entered.
+
+Task: Relocate Unit Number Field. (Done) 
+Action: Move the "Unit Number" field near the "State" field.
+
+Task: Pincode Field Limitation. (Done)
+Action: Restrict the pincode field to only accept 6 digits.
+
+Task: Display Success/Error Messages. (Done, need to discuss)
+Action: Ensure messages like "Data successfully saved" or "Error" are displayed for only 10 seconds.
+
+Task: Servant Room Selection in Additional Room Field.
+Action: Allow users to select 2 servant rooms.
+
+Task: Relocate Floor Number Field. (Half done)
+Action: Move (Done) the "Floor Number" field to appear before the "Total Floor" field, allowing for negative values down to -1.
+
+Task: Default Value for Total Floor. (Done)
+Action: Set the default value for "Total Floor" to 1 and display "Total Floor" as a placeholder.
+
+Task: Default Two-Wheeler Parking Option. (Done)
+Action: Set the two-wheeler parking option to "No" by default.
+
+Task: Default Lock-in Period Value. (Done)
+Action: Set the default lock-in period value to 6 months.
+
+Task: Super Area and Carpet Area Comparison.
+Action: Ensure that the super area is always greater than or equal to the carpet area. If one value is missing, skip the comparison.
+
+Task: Hide Balcony Facing Field When Not Needed. (Done)
+Action: Do not show the balcony facing field if the balcony value is 0.
+
+Task: Change Balcony Facing Field to Checkbox.
+Action: Allow multiple selections by changing the balcony-facing field to a checkbox format.
+
+Task: Set Default Visiting Hours. (Done)
+Action: Set the visiting hours from 10 AM to 6 PM by default and only accept time inputs.
+
+Task: Set Default Visiting Days.
+Action: By default, all days except Tuesday should be checked.
+
+Task: Display Property Owner and Instructions.
+Action: Show the property owner details and property instructions on the property edit page if they are available.
+
+
+3. Property Page
+Task: Add Package and Flag Wise Search.
+Action: Enable users to search properties based on package and flag criteria.
+
+4. Property Detail Page (Done)
+Task: Rearrange Card Information.
+Action: Display BHK on the 4th position, combine and display Super Area and Carpet Area on the 7th position, and show the Floor Number on the 8th position.
+
+5. Property Summary Card (Done)
+Task: Update Active/Inactive Status Color.
+Action: Change the color representing the active or inactive status of a property.
+
+---------------------
+Minutes of Meeting (MoM)
 Date: June 25, 2024 (Tuesday)
 
 Attendees:

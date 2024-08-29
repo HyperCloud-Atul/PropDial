@@ -84,14 +84,14 @@ const Stage2 = (props) => {
     PrivateGardenClick: false,
     GarageClick: false,
     PowerBackup: "",
-    NumberOfFloors: 0,
+    NumberOfFloors: 1,
     FloorNo: 0,
     NumberOfFlatsOnFloor: 0,
     NumberOfLifts: 0,
     NumberOfOpenCarParking: 0,
     NumberOfClosedCarParking: 0,
-    TwoWheelarParking: "",
-    LockinPeriod: 0,
+    TwoWheelarParking: "No",
+    LockinPeriod: 6,
     YearOfConstruction: { label: 0, value: 0 },
     // AgeOfProperty: 0,
   });
@@ -217,14 +217,14 @@ const Stage2 = (props) => {
             ? true
             : false,
         PowerBackup: propertyDocument.powerBackup ? propertyDocument.powerBackup : "",
-        NumberOfFloors: propertyDocument.numberOfFloors ? propertyDocument.numberOfFloors : 0,
+        NumberOfFloors: propertyDocument.numberOfFloors ? propertyDocument.numberOfFloors : 1,
         FloorNo: propertyDocument.floorNo ? propertyDocument.floorNo : 0,
         NumberOfFlatsOnFloor: propertyDocument.numberOfFlatsOnFloor ? propertyDocument.numberOfFlatsOnFloor : 0,
         NumberOfLifts: propertyDocument.numberOfLifts ? propertyDocument.numberOfLifts : 0,
         NumberOfOpenCarParking: propertyDocument.numberOfOpenCarParking ? propertyDocument.numberOfOpenCarParking : 0,
         NumberOfClosedCarParking: propertyDocument.numberOfClosedCarParking ? propertyDocument.numberOfClosedCarParking : 0,
-        TwoWheelarParking: propertyDocument.twoWheelarParking ? propertyDocument.twoWheelarParking : 0,
-        LockinPeriod: propertyDocument.lockinPeriod ? propertyDocument.lockinPeriod : 0,
+        TwoWheelarParking: propertyDocument.twoWheelarParking ? propertyDocument.twoWheelarParking : "No",
+        LockinPeriod: propertyDocument.lockinPeriod ? propertyDocument.lockinPeriod : 6,
         YearOfConstruction: propertyDocument.yearOfConstruction ? propertyDocument.yearOfConstruction : "Year of Construction",
         // AgeOfProperty: propertyDocument.ageOfProperty ? propertyDocument.ageOfProperty : ""
 
@@ -2510,43 +2510,8 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-          {/* Total Floor */}
-          <div className="col-md-4">
-            <div className="form_field label_top">
-              <label htmlFor="">Total Floor</label>
-              <div className="plus_minus_input_wrapper">
-                <span className="pmi_label">#Floors</span>
-                <div className="plus_minus_input">
-                  <div
-                    className="left-minus-button pmbutton"
-                    onClick={() => {
-                      decrementInput("numberOfFloorsInput");
-                    }}
-                  >
-                    <span className="material-symbols-outlined">remove</span>
-                  </div>
-
-                  <input
-                    id="numberOfFloorsInput"
-                    type="number"
-                    disabled
-                    value={propertyDetails && propertyDetails.NumberOfFloors}
-                  />
-                  <div
-                    className="right-plus-button pmbutton"
-                    onClick={() => {
-                      incrementInput("numberOfFloorsInput");
-                    }}
-                  >
-                    <span className="material-symbols-outlined">add</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Flat Floor No */}
-          <div className="col-md-4">
+             {/* Flat Floor No */}
+             <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Floor No.</label>
               <div className="plus_minus_input_wrapper">
@@ -2580,6 +2545,42 @@ const Stage2 = (props) => {
             </div>
 
           </div>
+          {/* Total Floor */}
+          <div className="col-md-4">
+            <div className="form_field label_top">
+              <label htmlFor="">Total Floor</label>
+              <div className="plus_minus_input_wrapper">
+                <span className="pmi_label">Total Floor</span>
+                <div className="plus_minus_input">
+                  <div
+                    className="left-minus-button pmbutton"
+                    onClick={() => {
+                      decrementInput("numberOfFloorsInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">remove</span>
+                  </div>
+
+                  <input
+                    id="numberOfFloorsInput"
+                    type="number"
+                    disabled
+                    value={propertyDetails && propertyDetails.NumberOfFloors}
+                  />
+                  <div
+                    className="right-plus-button pmbutton"
+                    onClick={() => {
+                      incrementInput("numberOfFloorsInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">add</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+       
           {/* No of Apts on Floor */}
           <div className="col-md-4">
             <div className="form_field label_top">
@@ -2837,7 +2838,7 @@ const Stage2 = (props) => {
       </div>
 
       <div className=" bottom_fixed_button">
-        {formError && <p className="error">{formError}</p>}
+        {formError && <p className="error_new">{formError}</p>}
         <div className="next_btn_back">
           <button
             className="theme_btn btn_border full_width no_icon"
