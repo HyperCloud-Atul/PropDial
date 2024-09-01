@@ -7,8 +7,7 @@ import { useDocument } from "../../hooks/useDocument";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
-
-import { timestamp } from "../../firebase/config";
+import { projectFirestore, timestamp } from "../../firebase/config";
 import SearchBarAutoComplete from "../../pages/search/SearchBarAutoComplete";
 import Back from "../back/Back";
 import { TwoWheeler } from "@mui/icons-material";
@@ -213,8 +212,9 @@ const CreateProperty = () => {
     addDocument: addNewPropertyDocument,
     response: addNewPropertyDocumentResponse,
   } = useFirestore("properties");
+
   const {
-    addDocument: addPropertyUsersDocument,
+    addDocument: addProperyUsersDocument,
     response: addPropertyUsersDocumentResponse,
   } = useFirestore("propertyusers");
 
@@ -712,7 +712,7 @@ const CreateProperty = () => {
       if (!errorFlag) {
         console.log("new property created: ");
         console.log(newProperty);
-        setFormSuccess("Property Created Successfully");
+
         setFormError(null);
         const propertiesCount = dbpropertiesdocuments && dbpropertiesdocuments.length + 2101;
         // const nextPropertySeqCounter = "PID: " + state.value + "-" + (propertiesCount + 1)
@@ -726,9 +726,30 @@ const CreateProperty = () => {
         const _propertyWithSeqCounter = {
           ..._newProperty,
           pid: formattedId,
+          createdBy: user ? user.uid : "guest",
+          createdAt: timestamp.fromDate(new Date()),
         };
 
-        await addNewPropertyDocument(_propertyWithSeqCounter);
+        // const newpropid = await addNewPropertyDocument(_propertyWithSeqCounter);        
+        const collectionRef = projectFirestore.collection('properties');
+        // Add the document to the collection
+        const docRef = await collectionRef.add(_propertyWithSeqCounter);
+        // Get the ID of the newly created document
+        const newpropid = docRef.id;
+        console.log("New Property ID: ", newpropid)
+
+        setFormSuccess("Property Created Successfully");
+
+        //Add created by id into propertyusers list
+        const propertyUserData = {
+          propertyId: newpropid,
+          userId: user.uid,
+          userTag: "Admin",
+          userType: "propertyowner",
+        };
+
+        await addProperyUsersDocument(propertyUserData);
+
         if (addNewPropertyDocumentResponse.error) {
           navigate("/");
         } else {

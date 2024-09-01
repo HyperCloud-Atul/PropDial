@@ -46,16 +46,18 @@ const PGAdminProperty = () => {
 
     setProperties(_properties)
 
+    // console.log("_properties: ", _properties)
+
 
     let _propertyListWithUsers = []
     _properties && _properties.forEach(prop => {
       let assigneduserList = assignedPopertyUserList && assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id)
       let userDetails = ''
 
-      console.log("assigneduserList: ", assigneduserList)
+      // console.log("assigneduserList: ", assigneduserList)
 
       // console.log('assigneduserList : ', assigneduserList)
-      if (assigneduserList) {
+      if (assigneduserList && assigneduserList.length > 0) {
         assigneduserList.forEach(user => {
           let userObt = userList.filter(userDoc => userDoc.id === user.userId)
           // console.log('userObt :', userObt)
