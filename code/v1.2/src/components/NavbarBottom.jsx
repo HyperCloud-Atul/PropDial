@@ -43,13 +43,13 @@ export default function NavbarBottom() {
       return; // Exit the function to prevent further checks
     } else if (user.role === "admin") {
       // User is logged in and role is admin, navigate to "/properties"
-      navigate("/allproperties");
+      navigate("/allproperties/all");
     } else {
       // User is logged in but not an admin, navigate to "/contact-us"
       navigate("/contact-us");
     }
   };
-  
+
 
   const showFourthPage = () => {
     navigate("/more-menu");
@@ -184,7 +184,7 @@ export default function NavbarBottom() {
           </Link>)
         }
         <div
-          className={`b_menu_single ${location.pathname === "/about-us" || location.pathname === "/contact-us" || location.pathname === "/allproperties"  ? "b_menu_active" : ""
+          className={`b_menu_single ${location.pathname === "/about-us" || location.pathname === "/contact-us" || location.pathname === "/allproperties/all" ? "b_menu_active" : ""
             }`}
           onClick={showThirdPage}
         >

@@ -350,10 +350,10 @@ function App() {
                       )
                     }
                   ></Route> */}
-                  <Route
+                  {/* <Route
                     path="/allproperties"
                     element={<PropdialAllProperties />}
-                  ></Route>
+                  ></Route> */}
                   {/* <Route
                     path="/addproperty_quick"
                     element={

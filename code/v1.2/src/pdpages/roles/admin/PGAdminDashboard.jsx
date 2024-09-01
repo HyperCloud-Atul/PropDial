@@ -208,7 +208,7 @@ const PGAdminDashboard = () => {
 
 
   const searchPropertiesByFilter = (filterOption) => {
-    console.log("Filter Option: ", filterOption)
+    // console.log("Filter Option: ", filterOption)
 
     switch (filterOption.toUpperCase()) {
       case "IN-REVIEW":
@@ -266,7 +266,7 @@ const PGAdminDashboard = () => {
             <span className="material-symbols-outlined">location_city</span>
           </Link>
 
-          <Link to="/allproperties" className="more-add-options-icons">
+          <Link to="/allproperties/all" className="more-add-options-icons">
             <h1>Properties</h1>
             <span class="material-symbols-outlined">real_estate_agent</span>
           </Link>
@@ -312,14 +312,14 @@ const PGAdminDashboard = () => {
                 <div className="col-xl-7 bg_575">
                   <div className="vg22_1199"></div>
                   <div className="property_status">
-                    <div className="ps_single pending" onClick={() => searchPropertiesByFilter("In-Review")}>
+                    <Link to="/allproperties/in-review" className="ps_single pending">
                       <h5>{pendingProperties && pendingProperties.length}</h5>
                       <h6>In-Review</h6>
-                    </div>
-                    <div className="ps_single active">
+                    </Link>
+                    <Link to="/allproperties/active" className="ps_single active">
                       <h5>{activeProperties && activeProperties.length}</h5>
                       <h6>Active</h6>
-                    </div>
+                    </Link>
                     <div className="ps_single inactive">
                       <h5>{inactiveProperties && inactiveProperties.length}</h5>
                       <h6>Inactive</h6>
@@ -777,7 +777,7 @@ const PGAdminDashboard = () => {
                     </Link>
                     <Link
                       className="theme_btn btn_fill text-center no_icon"
-                      to="/allproperties"
+                      to="/allproperties/all"
                     >
                       View All Properties
                     </Link>

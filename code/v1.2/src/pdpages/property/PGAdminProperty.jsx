@@ -13,7 +13,7 @@ const PGAdminProperty = () => {
   const { user } = useAuthContext();
 
   const { filterOption } = useParams()
-  console.log("filter Option: ", filterOption)
+  // console.log("filter Option: ", filterOption)
 
   const { documents: allproperties, error: propertieserror } =
     useCollection("properties", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
@@ -28,7 +28,7 @@ const PGAdminProperty = () => {
 
   const [propertyListWithUsers, setPropertyListWithUsers] = useState();
   const [properties, setProperties] = useState();
-  console.log("properties: ", properties)
+  // console.log("properties: ", properties)
 
   useEffect(() => {
     let _properties = null;
@@ -52,14 +52,18 @@ const PGAdminProperty = () => {
       let assigneduserList = assignedPopertyUserList && assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id)
       let userDetails = ''
 
+      console.log("assigneduserList: ", assigneduserList)
+
       // console.log('assigneduserList : ', assigneduserList)
-      assigneduserList.forEach(user => {
-        let userObt = userList.filter(userDoc => userDoc.id === user.userId)
-        // console.log('userObt :', userObt)
+      if (assigneduserList) {
+        assigneduserList.forEach(user => {
+          let userObt = userList.filter(userDoc => userDoc.id === user.userId)
+          // console.log('userObt :', userObt)
 
-        userDetails = userDetails + (userObt && userObt[0] && (' ' + userObt[0].fullName + ' ' + userObt[0].phoneNumber))
+          userDetails = userDetails + (userObt && userObt[0] && (' ' + userObt[0].fullName + ' ' + userObt[0].phoneNumber))
 
-      });
+        });
+      }
 
       prop = {
         ...prop,

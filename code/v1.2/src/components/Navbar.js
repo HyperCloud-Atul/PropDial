@@ -46,7 +46,7 @@ export default function Navbar() {
     else {
       // console.log('showThirdPage')
       if (user.role === 'admin')
-        navigate("/allproperties");
+        navigate("/allproperties/all");
       else
         navigate('/contact-us')
 

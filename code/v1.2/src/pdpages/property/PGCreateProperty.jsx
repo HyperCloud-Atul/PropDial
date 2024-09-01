@@ -249,7 +249,7 @@ const CreateProperty = () => {
     MaintenanceCharges: "",
     MaintenanceChargesFrequency: "",
     SecurityDeposit: "",
-    Purpose: "",
+    Purpose: "Rent",
     PropertyType: "",
     Bhk: "",
     FloorNo: 0,
@@ -448,6 +448,7 @@ const CreateProperty = () => {
     e.preventDefault();
     // console.log('e: ', e)
     // console.log('option: ', option)
+    console.log("propertyDetails.Purpose: ", propertyDetails.Purpose)
 
     if (!(user && user.role === "admin")) {
       navigate("/");
@@ -518,9 +519,9 @@ const CreateProperty = () => {
         errorFlag = true;
       }
 
-      if (
-        propertyDetails.DemandPriceRent === "" ||
-        propertyDetails.DemandPriceRent === "0"
+      if ((propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") &&
+        (propertyDetails.DemandPriceRent === "" ||
+          propertyDetails.DemandPriceRent === "0")
       ) {
         if (errorMsg === "Error: Please select ")
           errorMsg = "Please Enter Demand for Rent";
@@ -528,9 +529,9 @@ const CreateProperty = () => {
         errorFlag = true;
       }
 
-      if (
-        propertyDetails.DemandPriceSale === "" ||
-        propertyDetails.DemandPriceSale === "0"
+      if ((propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") &&
+        (propertyDetails.DemandPriceSale === "" ||
+          propertyDetails.DemandPriceSale === "0")
       ) {
         if (errorMsg === "Error: Please select ")
           errorMsg = "Please Enter Demand for Sale";
@@ -608,7 +609,8 @@ const CreateProperty = () => {
         unitNumber: propertyDetails.UnitNumber
           ? propertyDetails.UnitNumber
           : "",
-        purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
+        // purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
+        purpose: propertyDetails.Flag.toLowerCase() === "pms only" ? "PMS" : (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out") ? "Rent" : "Sale",
         propertyType: propertyDetails.PropertyType
           ? propertyDetails.PropertyType
           : "",
@@ -782,7 +784,7 @@ const CreateProperty = () => {
               <h1>Close</h1>
               <span className="material-symbols-outlined">close</span>
             </div>
-            <Link to="/allproperties" className="more-add-options-icons">
+            <Link to="/allproperties/all" className="more-add-options-icons">
               <h1>Properties</h1>
               <span className="material-symbols-outlined">
                 real_estate_agent
@@ -990,6 +992,7 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Flag: "Available For Rent",
+                                Purpose: "Rent"
                               });
                             }}
                           />
@@ -1021,6 +1024,7 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Flag: "Rented Out",
+                                Purpose: "Rent"
                               });
                             }}
                           />
@@ -1052,6 +1056,7 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Flag: "Available For Sale",
+                                Purpose: "Sale"
                               });
                             }}
                           />
@@ -1083,6 +1088,7 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Flag: "Sold Out",
+                                Purpose: "Sale"
                               });
                             }}
                           />
@@ -1114,6 +1120,7 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Flag: "Rent and Sale",
+                                Purpose: "RentSaleBoth"
                               });
                             }}
                           />
@@ -1145,6 +1152,7 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Flag: "Rented But Sale",
+                                Purpose: "RentSaleBoth"
                               });
                             }}
                           />
@@ -1176,6 +1184,7 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Flag: "PMS Only",
+                                Purpose: "PMS"
                               });
                             }}
                           />
@@ -2198,7 +2207,7 @@ const CreateProperty = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-4 col-lg-6">
+            {(propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
               <div id="id_demand" className="form_field label_top">
                 <label htmlFor="">Demand/Price for Rent</label>
                 <div className="form_field_inner">
@@ -2225,8 +2234,8 @@ const CreateProperty = () => {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-xl-4 col-lg-6">
+            </div>}
+            {(propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
               <div id="id_demand" className="form_field label_top">
                 <label htmlFor="">Demand/Price for Sale</label>
                 <div className="form_field_inner">
@@ -2253,7 +2262,7 @@ const CreateProperty = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div>}
 
             {propertyDetails && propertyDetails.Purpose === "Rent" && (
               <div className="col-xl-4 col-lg-6">
@@ -2331,7 +2340,7 @@ const CreateProperty = () => {
               </div>
             )}
 
-            {propertyDetails && propertyDetails.Purpose === "Rent" && (
+            {propertyDetails && (propertyDetails.Purpose === "Rent" || propertyDetails.Purpose === "RentSale") && propertyDetails.MaintenanceFlag === "Extra" && (
               <div className="col-xl-4 col-lg-6">
                 <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                   <label>Maintenance fees</label>
