@@ -309,7 +309,7 @@ function App() {
                         <Navigate to="/login" />
                       )
                     }
-                  ></Route>                 
+                  ></Route>
                   <Route path="/edit-enquiry/:id" element={<UpdateEnquiry></UpdateEnquiry>} />
                   <Route path="/properties" element={<PGProperties />}></Route>
                   <Route
@@ -329,7 +329,7 @@ function App() {
                     element={<PropertyInspectionDocuments />}
                   ></Route>
                   <Route
-                    path="/allproperties"
+                    path="/allproperties/:filterOption"
                     element={
                       user && user.role === "admin" ? (
                         <PGAdminProperty />

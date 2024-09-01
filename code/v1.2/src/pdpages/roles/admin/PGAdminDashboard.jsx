@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useCollection } from "../../../hooks/useCollection";
 import { Navigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // owl carousel
 import OwlCarousel from "react-owl-carousel";
@@ -25,6 +26,7 @@ import "./PGAdminDashboard.scss";
 const PGAdminDashboard = () => {
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
+  const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
@@ -204,6 +206,24 @@ const PGAdminDashboard = () => {
   };
   // advertisement img option in owl carousel
 
+
+  const searchPropertiesByFilter = (filterOption) => {
+    console.log("Filter Option: ", filterOption)
+
+    switch (filterOption.toUpperCase()) {
+      case "IN-REVIEW":
+        console.log("In-Review Properties: ", pendingProperties)
+        navigate("/allproperties/" + filterOption);
+        return true;
+      case "ACTIVE":
+        return true;
+      default:
+        return true;
+
+    }
+
+  }
+
   // 9 dots controls
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
   const openMoreAddOptions = () => {
@@ -218,11 +238,11 @@ const PGAdminDashboard = () => {
     <div>
       {/* 9 dots html  */}
       <Link
-          to="/newproperty"
-          className="property-list-add-property with_9dot"
-        >
-          <span class="material-symbols-outlined">add</span>
-        </Link>
+        to="/newproperty"
+        className="property-list-add-property with_9dot"
+      >
+        <span class="material-symbols-outlined">add</span>
+      </Link>
       <div onClick={openMoreAddOptions} className="property-list-add-property">
         <span className="material-symbols-outlined">apps</span>
       </div>
@@ -292,14 +312,14 @@ const PGAdminDashboard = () => {
                 <div className="col-xl-7 bg_575">
                   <div className="vg22_1199"></div>
                   <div className="property_status">
-                    <div className="ps_single pending">
+                    <div className="ps_single pending" onClick={() => searchPropertiesByFilter("In-Review")}>
                       <h5>{pendingProperties && pendingProperties.length}</h5>
                       <h6>In-Review</h6>
                     </div>
                     <div className="ps_single active">
                       <h5>{activeProperties && activeProperties.length}</h5>
                       <h6>Active</h6>
-                    </div>               
+                    </div>
                     <div className="ps_single inactive">
                       <h5>{inactiveProperties && inactiveProperties.length}</h5>
                       <h6>Inactive</h6>
@@ -309,27 +329,27 @@ const PGAdminDashboard = () => {
               </section>
               <div className="vg22"></div>
               <section className="property_status assign">
-              <div className="ps_single one">
-                      <h5>5</h5>
-                      <h6>Not Assign To <br /> Owner </h6>
-                    </div>
-                    <div className="ps_single two">
-                    <h5>8</h5>
-                    <h6>Not Assign To <br /> Manager </h6>
-                    </div>
-                    <div className="ps_single three">
-                    <h5>2</h5>
-                    <h6>Not Assign To <br /> Tenant </h6>
-                    </div>
-                    <div className="ps_single four">
-                    <h5>{residentialProperties &&
-                            residentialProperties.length}</h5>
-                    <h6>Property Category <br /> Residential </h6>
-                    </div>
-                    <div className="ps_single five">
-                    <h5>{commercialProperties && commercialProperties.length}</h5>
-                    <h6>Property Category <br /> Commercial </h6>
-                    </div>
+                <div className="ps_single one">
+                  <h5>5</h5>
+                  <h6>Not Assign To <br /> Owner </h6>
+                </div>
+                <div className="ps_single two">
+                  <h5>8</h5>
+                  <h6>Not Assign To <br /> Manager </h6>
+                </div>
+                <div className="ps_single three">
+                  <h5>2</h5>
+                  <h6>Not Assign To <br /> Tenant </h6>
+                </div>
+                <div className="ps_single four">
+                  <h5>{residentialProperties &&
+                    residentialProperties.length}</h5>
+                  <h6>Property Category <br /> Residential </h6>
+                </div>
+                <div className="ps_single five">
+                  <h5>{commercialProperties && commercialProperties.length}</h5>
+                  <h6>Property Category <br /> Commercial </h6>
+                </div>
               </section>
               {/* <div className="vg22"></div>
               <section className="upcoming">
@@ -466,7 +486,7 @@ const PGAdminDashboard = () => {
               <div className="vg22"></div>
               <div className="row">
                 <div className="col-lg-6">
-                  
+
                   <div className="properties_map">
                     <h2
                       className="p_title"
@@ -484,7 +504,7 @@ const PGAdminDashboard = () => {
                           <h6>Chandigarh</h6>
                           <h5>
                             {chandigarhProperties &&
-                            chandigarhProperties.length > 0
+                              chandigarhProperties.length > 0
                               ? chandigarhProperties.length
                               : "0"}
                           </h5>
@@ -584,7 +604,7 @@ const PGAdminDashboard = () => {
                           <h6>Karnataka</h6>
                           <h5>
                             {karnatakaProperties &&
-                            karnatakaProperties.length > 0
+                              karnatakaProperties.length > 0
                               ? karnatakaProperties.length
                               : "0"}
                           </h5>
@@ -607,7 +627,7 @@ const PGAdminDashboard = () => {
                           <h6>Maharashtra</h6>
                           <h5>
                             {maharashtraProperties &&
-                            maharashtraProperties.length > 0
+                              maharashtraProperties.length > 0
                               ? maharashtraProperties.length
                               : "0"}
                           </h5>
@@ -629,7 +649,7 @@ const PGAdminDashboard = () => {
                           <h6>Rajasthan</h6>
                           <h5>
                             {rajasthanProperties &&
-                            rajasthanProperties.length > 0
+                              rajasthanProperties.length > 0
                               ? rajasthanProperties.length
                               : "0"}
                           </h5>
@@ -650,7 +670,7 @@ const PGAdminDashboard = () => {
                           <h6>Tamilnadu</h6>
                           <h5>
                             {tamilnaduProperties &&
-                            tamilnaduProperties.length > 0
+                              tamilnaduProperties.length > 0
                               ? tamilnaduProperties.length
                               : "0"}
                           </h5>
@@ -671,7 +691,7 @@ const PGAdminDashboard = () => {
                           <h6>Talangana</h6>
                           <h5>
                             {telanganaProperties &&
-                            telanganaProperties.length > 0
+                              telanganaProperties.length > 0
                               ? telanganaProperties.length
                               : "0"}
                           </h5>
@@ -692,7 +712,7 @@ const PGAdminDashboard = () => {
                           <h6>Uttar Pradesh</h6>
                           <h5>
                             {uttarpradeshProperties &&
-                            uttarpradeshProperties.length > 0
+                              uttarpradeshProperties.length > 0
                               ? uttarpradeshProperties.length
                               : "0"}
                           </h5>
@@ -713,7 +733,7 @@ const PGAdminDashboard = () => {
                           <h6>Uttrakhand</h6>
                           <h5>
                             {uttarakhandProperties &&
-                            uttarakhandProperties.length > 0
+                              uttarakhandProperties.length > 0
                               ? uttarakhandProperties.length
                               : "0"}
                           </h5>
@@ -735,10 +755,10 @@ const PGAdminDashboard = () => {
                   </div>
                 </div>
                 <div className="col-lg-6">
-                <div className="vg22_991"></div>
+                  <div className="vg22_991"></div>
                   <section style={{
-                    display:"grid",
-                    gap:"22px"
+                    display: "grid",
+                    gap: "22px"
                   }}>
                     <CircularProgressBar
                       rentProperties={availableForRentProperties}
@@ -759,15 +779,15 @@ const PGAdminDashboard = () => {
                       className="theme_btn btn_fill text-center no_icon"
                       to="/allproperties"
                     >
-                    View All Properties
+                      View All Properties
                     </Link>
                   </section>
                 </div>
               </div>
 
               <div className="vg22"></div>
-          
-           
+
+
 
               {/* <section className="property_cards_parent">
                 {properties &&

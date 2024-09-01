@@ -91,7 +91,7 @@ const PropertyDetails = () => {
 
   const { documents: propertyDocList, errors: propertyDocListError } =
     useCollection("docs", ["masterRefId", "==", propertyid]);
-  console.log("documents: ", propertyDocList);
+  // console.log("documents: ", propertyDocList);
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } =
     useFirestore("tenants");
@@ -1101,36 +1101,36 @@ const PropertyDetails = () => {
                             onChange={handleImageChange}
                             style={{ display: "none" }}
                             ref={fileInputRef}
-                          />                         
-                            {!isUploading && (
-                              <button
-                                className="theme_btn btn_fill no_icon"
-                                onClick={handleAddMoreImages}
-                              >
-                                {isConfirmVisible
-                                  ? "Replace Image"
-                                  : "Add More Images"}
-                              </button>
-                            )}                        
-                         
-                          {selectedImage && (
-                          
-                              <img
-                                src={selectedImage}
-                                alt="Selected img"
-                                style={{ maxWidth: "100px", maxHeight:"100px", borderRadius:"10px" }}
-                              />
-                       
+                          />
+                          {!isUploading && (
+                            <button
+                              className="theme_btn btn_fill no_icon"
+                              onClick={handleAddMoreImages}
+                            >
+                              {isConfirmVisible
+                                ? "Replace Image"
+                                : "Add More Images"}
+                            </button>
                           )}
-                             {selectedImage && (
-                              <button
-                                className="theme_btn btn_fill no_icon"
-                                onClick={handleConfirmUpload}
-                                disabled={!isConfirmVisible || isUploading} // Disable button when uploading
-                              >
-                                {isUploading ? "Uploading..." : "Confirm"}
-                              </button>
-                            )}
+
+                          {selectedImage && (
+
+                            <img
+                              src={selectedImage}
+                              alt="Selected img"
+                              style={{ maxWidth: "100px", maxHeight: "100px", borderRadius: "10px" }}
+                            />
+
+                          )}
+                          {selectedImage && (
+                            <button
+                              className="theme_btn btn_fill no_icon"
+                              onClick={handleConfirmUpload}
+                              disabled={!isConfirmVisible || isUploading} // Disable button when uploading
+                            >
+                              {isUploading ? "Uploading..." : "Confirm"}
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
@@ -1239,13 +1239,13 @@ const PropertyDetails = () => {
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
-                      <div className="pdms_single">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_bhk.png"></img>
                             {propertyDocument.bhk}
                           </h4>
                           <h6>BHK</h6>
-                        </div>                     
+                        </div>
                         <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_bedroom.png"></img>
@@ -1263,17 +1263,17 @@ const PropertyDetails = () => {
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
-                      <div className="pdms_single">
+                        <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_carpet.png"></img>
                             {propertyDocument.superArea}
                             {propertyDocument.superArea && propertyDocument.carpetArea ? "/" : ""}
                             {propertyDocument.carpetArea}
-                            <h6>{" "}{propertyDocument.superAreaUnit}</h6>                         
+                            <h6>{" "}{propertyDocument.superAreaUnit}</h6>
                           </h4>
                           <h6>{propertyDocument.superArea && "Super Area"}
-                          {propertyDocument.superArea && propertyDocument.carpetArea ? "/" : ""}
-                          {propertyDocument.carpetArea && "Carpet Area"}
+                            {propertyDocument.superArea && propertyDocument.carpetArea ? "/" : ""}
+                            {propertyDocument.carpetArea && "Carpet Area"}
                           </h6>
                         </div>
                         <div className="pdms_single">
@@ -1284,7 +1284,7 @@ const PropertyDetails = () => {
                           </h4>
                           <h6>Floor no.</h6>
                         </div>
-                      
+
                         <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_furniture.png"></img>
@@ -3833,7 +3833,7 @@ const PropertyDetails = () => {
                             {propertyDocument.visitingHrsFrom}
                             {propertyDocument.visitingHrsTo && " to"}{" "}
                             {propertyDocument.visitingHrsTo}
-                             
+
                           </h5>
                         </div>
                       </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
 import PropertyCard from "../../components/property/PropertyCard";
@@ -11,7 +11,11 @@ const propertyFilter = ["Residential", "Commercial"];
 
 const PGAdminProperty = () => {
   const { user } = useAuthContext();
-  const { documents: properties, error: propertieserror } =
+
+  const { filterOption } = useParams()
+  console.log("filter Option: ", filterOption)
+
+  const { documents: allproperties, error: propertieserror } =
     useCollection("properties", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
 
   const { documents: assignedPopertyUserList, error: errassignedPopertyUserList } = useCollection(
@@ -23,10 +27,28 @@ const PGAdminProperty = () => {
   );
 
   const [propertyListWithUsers, setPropertyListWithUsers] = useState();
+  const [properties, setProperties] = useState();
+  console.log("properties: ", properties)
 
   useEffect(() => {
+    let _properties = null;
+    if (filterOption === 'all') {
+      _properties = allproperties
+
+    }
+    else {
+      _properties = allproperties &&
+        allproperties.filter(
+          (item) =>
+            item.isActiveInactiveReview.trim().toUpperCase() === filterOption.toUpperCase()
+        );
+    }
+
+    setProperties(_properties)
+
+
     let _propertyListWithUsers = []
-    properties && properties.forEach(prop => {
+    _properties && _properties.forEach(prop => {
       let assigneduserList = assignedPopertyUserList && assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id)
       let userDetails = ''
 
@@ -50,7 +72,7 @@ const PGAdminProperty = () => {
 
     setPropertyListWithUsers(_propertyListWithUsers)
 
-  }, [assignedPopertyUserList, properties, userList]);
+  }, [assignedPopertyUserList, allproperties, userList]);
 
   // console.log('propertyListWithUsers: ', propertyListWithUsers)
 

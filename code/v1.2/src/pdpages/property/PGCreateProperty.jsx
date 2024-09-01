@@ -244,7 +244,8 @@ const CreateProperty = () => {
     Flag: "Available For Rent",
     Category: "Residential",
     UnitNumber: "",
-    DemandPrice: "",
+    DemandPriceRent: "",
+    DemandPriceSale: "",
     MaintenanceCharges: "",
     MaintenanceChargesFrequency: "",
     SecurityDeposit: "",
@@ -261,6 +262,10 @@ const CreateProperty = () => {
     Pincode: "",
     PropertyName: ""
   });
+
+  const setPurposeByFlag = () => {
+    console.log("Flags: ", propertyDetails.Flag)
+  };
 
   useEffect(() => {
 
@@ -514,12 +519,22 @@ const CreateProperty = () => {
       }
 
       if (
-        propertyDetails.DemandPrice === "" ||
-        propertyDetails.DemandPrice === "0"
+        propertyDetails.DemandPriceRent === "" ||
+        propertyDetails.DemandPriceRent === "0"
       ) {
         if (errorMsg === "Error: Please select ")
-          errorMsg = "Please Enter Demand Price";
-        else errorMsg = errorMsg + ", Demand Price";
+          errorMsg = "Please Enter Demand for Rent";
+        else errorMsg = errorMsg + ", Demand for Rent";
+        errorFlag = true;
+      }
+
+      if (
+        propertyDetails.DemandPriceSale === "" ||
+        propertyDetails.DemandPriceSale === "0"
+      ) {
+        if (errorMsg === "Error: Please select ")
+          errorMsg = "Please Enter Demand for Sale";
+        else errorMsg = errorMsg + ", Demand for Sale";
         errorFlag = true;
       }
 
@@ -603,8 +618,11 @@ const CreateProperty = () => {
           propertyDetails.Purpose === "Rent"
             ? "Available for Rent"
             : "Available for Sale",
-        demandPrice: propertyDetails.DemandPrice
-          ? propertyDetails.DemandPrice
+        demandPriceRent: propertyDetails.DemandPriceRent
+          ? propertyDetails.DemandPriceRent
+          : "",
+        demandPriceSale: propertyDetails.DemandPriceSale
+          ? propertyDetails.DemandPriceSale
           : "",
         maintenanceFlag: propertyDetails.MaintenanceFlag
           ? propertyDetails.MaintenanceFlag
@@ -739,6 +757,7 @@ const CreateProperty = () => {
   const closeMoreAddOptions = () => {
     setHandleMoreOptionsClick(false);
   };
+
   return (
     <div className="top_header_pg pg_bg">
       <div className="page_spacing">
@@ -943,37 +962,7 @@ const CreateProperty = () => {
                           </label>
                         </div>
                       </div>
-                      <div className="radio_group_single">
-                        <div
-                          className={
-                            propertyDetails.Package === "Rent Only"
-                              ? "custom_radio_button radiochecked"
-                              : "custom_radio_button"
-                          }
-                        >
-                          <input
-                            type="checkbox"
-                            id="package_rentonly"
-                            onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                Package: "Rent Only",
-                              });
-                            }}
-                          />
-                          <label htmlFor="package_rentonly">
-                            <div className="radio_icon">
-                              <span className="material-symbols-outlined add">
-                                add
-                              </span>
-                              <span className="material-symbols-outlined check">
-                                done
-                              </span>
-                            </div>
-                            Rent Only
-                          </label>
-                        </div>
-                      </div>
+
                     </div>
                   </div>
                 </div>
@@ -1113,7 +1102,7 @@ const CreateProperty = () => {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.Flag === "Rent or Sale"
+                            propertyDetails.Flag === "Rent and Sale"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -1124,7 +1113,7 @@ const CreateProperty = () => {
                             onClick={(e) => {
                               setPropertyDetails({
                                 ...propertyDetails,
-                                Flag: "Rent or Sale",
+                                Flag: "Rent and Sale",
                               });
                             }}
                           />
@@ -1137,7 +1126,7 @@ const CreateProperty = () => {
                                 done
                               </span>
                             </div>
-                            Rent or Sale
+                            Rent and Sale
                           </label>
                         </div>
                       </div>
@@ -1172,30 +1161,39 @@ const CreateProperty = () => {
                           </label>
                         </div>
                       </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.Flag === "PMS Only"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="flag_rentedpmsonly"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                Flag: "PMS Only",
+                              });
+                            }}
+                          />
+                          <label htmlFor="flag_rentedpmsonly">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            PMS Only
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-            {/* Unit No */}
-            <div className="col-xl-4 col-lg-6">
-              <div className="form_field label_top">
-                <label htmlFor="">Unit Number</label>
-                <div className="form_field_inner">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Enter House/Flat/Shop no"
-                    maxLength={100}
-                    onChange={(e) =>
-                      setPropertyDetails({
-                        ...propertyDetails,
-                        UnitNumber: e.target.value.trim(),
-                      })
-                    }
-                    value={propertyDetails && propertyDetails.UnitNumber}
-                  />
-                  <div className="field_icon"></div>
                 </div>
               </div>
             </div>
@@ -1273,26 +1271,6 @@ const CreateProperty = () => {
                 </div>
               </div>
             </div>
-
-            {/* <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label>Property Source</label>
-              <div className="form_field_inner">
-                <select>
-                  <option>Select</option>
-                  <option >Propdial</option>
-                  <option >Broker</option>
-                  <option >ICICI</option>
-                  <option >MyGate</option>
-                  <option >Housing</option>
-                  <option >Google</option>
-                  <option >Reference</option>
-                  <option selected>Exisiting Owner</option>
-
-                </select>
-              </div>
-            </div>
-          </div> */}
             <div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 label_top">
                 <label htmlFor="">Purpose</label>
@@ -1302,13 +1280,14 @@ const CreateProperty = () => {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.Purpose === "Rent"
+                            propertyDetails.Purpose === "Rent" || propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
                         >
                           <input
                             type="checkbox"
+                            disabled
                             id="purpose_rent"
                             onClick={(e) => {
                               setPropertyDetails({
@@ -1333,13 +1312,14 @@ const CreateProperty = () => {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.Purpose === "Sale"
+                            propertyDetails.Purpose === "Sale" || propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
                         >
                           <input
                             type="checkbox"
+                            disabled
                             id="purpose_sale"
                             onClick={(e) => {
                               setPropertyDetails({
@@ -1358,6 +1338,39 @@ const CreateProperty = () => {
                               </span>
                             </div>
                             Sale
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.Purpose === "PMS" || propertyDetails.Flag === "PMS Only"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            disabled
+                            id="purpose_pms"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                Purpose: "PMS",
+                              });
+                            }}
+                          />
+                          <label htmlFor="purpose_pms">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            PMS
                           </label>
                         </div>
                       </div>
@@ -2187,14 +2200,14 @@ const CreateProperty = () => {
             </div>
             <div className="col-xl-4 col-lg-6">
               <div id="id_demand" className="form_field label_top">
-                <label htmlFor="">Demand/Price</label>
+                <label htmlFor="">Demand/Price for Rent</label>
                 <div className="form_field_inner">
                   <input
-                    id="id_demandprice"
+                    id="id_demandpricerent"
                     className="custom-input"
                     required
                     type="text"
-                    placeholder="Demand Amount for Rent or Sale"
+                    placeholder="Demand for Rent"
                     maxLength={9}
                     onInput={(e) => {
                       restrictInput(e, 9);
@@ -2202,15 +2215,41 @@ const CreateProperty = () => {
                     onChange={(e) => {
                       setPropertyDetails({
                         ...propertyDetails,
-                        // DemandPrice: e.target.value,
-                        DemandPrice: e.target.value.trim(),
-                        // DemandPriceInWords: amountToWords(e.target.value)
+                        DemandPriceRent: e.target.value.trim(),
                       });
                     }}
-                    value={propertyDetails && propertyDetails.DemandPrice}
+                    value={propertyDetails && propertyDetails.DemandPriceRent}
                   />
                   <div style={{ fontSize: "smaller" }}>
-                    {convertToWords(propertyDetails.DemandPrice)}
+                    {convertToWords(propertyDetails.DemandPriceRent)}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-4 col-lg-6">
+              <div id="id_demand" className="form_field label_top">
+                <label htmlFor="">Demand/Price for Sale</label>
+                <div className="form_field_inner">
+                  <input
+                    id="id_demandpricesale"
+                    className="custom-input"
+                    required
+                    type="text"
+                    placeholder="Demand for Sale"
+                    maxLength={9}
+                    onInput={(e) => {
+                      restrictInput(e, 9);
+                    }}
+                    onChange={(e) => {
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        DemandPriceSale: e.target.value.trim(),
+                      });
+                    }}
+                    value={propertyDetails && propertyDetails.DemandPriceSale}
+                  />
+                  <div style={{ fontSize: "smaller" }}>
+                    {convertToWords(propertyDetails.DemandPriceSale)}
                   </div>
                 </div>
               </div>
@@ -2257,7 +2296,7 @@ const CreateProperty = () => {
                         <div className="radio_group_single">
                           <div
                             className={
-                              propertyDetails.MaintenanceFlag === "Excluded"
+                              propertyDetails.MaintenanceFlag === "Extra"
                                 ? "custom_radio_button radiochecked"
                                 : "custom_radio_button"
                             }
@@ -2268,7 +2307,7 @@ const CreateProperty = () => {
                               onClick={(e) => {
                                 setPropertyDetails({
                                   ...propertyDetails,
-                                  MaintenanceFlag: "Excluded",
+                                  MaintenanceFlag: "Extra",
                                 });
                               }}
                             />
@@ -2281,7 +2320,7 @@ const CreateProperty = () => {
                                   done
                                 </span>
                               </div>
-                              <h6>Excluded</h6>
+                              <h6>Extra</h6>
                             </label>
                           </div>
                         </div>
@@ -2561,9 +2600,7 @@ const CreateProperty = () => {
                       onChange={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          // DemandPrice: e.target.value,
                           SecurityDeposit: e.target.value.trim(),
-                          // DemandPriceInWords: amountToWords(e.target.value)
                         });
                       }}
                       value={propertyDetails && propertyDetails.SecurityDeposit}
@@ -2702,6 +2739,28 @@ const CreateProperty = () => {
                     queryValue={propertyDetails ? propertyDetails.Society : ""}
                     setRedirectFlag={setRedirectFlag}
                   ></SearchBarAutoComplete>
+                </div>
+              </div>
+            </div>
+            {/* Unit No */}
+            <div className="col-xl-4 col-lg-6">
+              <div className="form_field label_top">
+                <label htmlFor="">Unit Number</label>
+                <div className="form_field_inner">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter House/Flat/Shop no"
+                    maxLength={100}
+                    onChange={(e) =>
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        UnitNumber: e.target.value.trim(),
+                      })
+                    }
+                    value={propertyDetails && propertyDetails.UnitNumber}
+                  />
+                  <div className="field_icon"></div>
                 </div>
               </div>
             </div>
