@@ -998,7 +998,7 @@ const CreateProperty = () => {
                 <div className="form_field_inner">
                   <div className="form_field_container">
                     <div className="radio_group">
-                      <div className="radio_group_single">
+                      {<div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "Available For Rent"
@@ -1029,7 +1029,7 @@ const CreateProperty = () => {
                             Available For Rent
                           </label>
                         </div>
-                      </div>
+                      </div>}
                       <div className="radio_group_single">
                         <div
                           className={
@@ -1062,7 +1062,7 @@ const CreateProperty = () => {
                           </label>
                         </div>
                       </div>
-                      <div className="radio_group_single">
+                      {propertyDetails.Package.toLowerCase() !== "rent only" && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "Available For Sale"
@@ -1093,8 +1093,8 @@ const CreateProperty = () => {
                             Available For Sale
                           </label>
                         </div>
-                      </div>
-                      <div className="radio_group_single">
+                      </div>}
+                      {propertyDetails.Package.toLowerCase() !== "rent only" && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "Sold Out"
@@ -1125,7 +1125,7 @@ const CreateProperty = () => {
                             Sold Out
                           </label>
                         </div>
-                      </div>
+                      </div>}
                       <div className="radio_group_single">
                         <div
                           className={
@@ -1190,7 +1190,7 @@ const CreateProperty = () => {
                           </label>
                         </div>
                       </div>
-                      <div className="radio_group_single">
+                      {propertyDetails.Package.toLowerCase() !== "rent only" && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "PMS Only"
@@ -1221,7 +1221,7 @@ const CreateProperty = () => {
                             PMS Only
                           </label>
                         </div>
-                      </div>
+                      </div>}
                     </div>
                   </div>
                 </div>
