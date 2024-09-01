@@ -1198,9 +1198,15 @@ const PropertyDetails = () => {
                         <div className="pdms_single">
                           <h4>
                             <span className="currency">₹</span>
+                            {(propertyDocument.flag.toLowerCase() === "pms only") ? new Intl.NumberFormat("en-IN").format(
+                              propertyDocument.demandPriceRent
+                            ) : (propertyDocument.flag.toLowerCase() === "available for rent" || propertyDocument.flag.toLowerCase() === "rented out" || propertyDocument.flag.toLowerCase() === "rent and sale" || propertyDocument.flag.toLowerCase() === "rented but sale") ? new Intl.NumberFormat("en-IN").format(
+                              propertyDocument.demandPriceRent) : new Intl.NumberFormat("en-IN").format(
+                                propertyDocument.demandPriceSale)}
+                            {/* 
                             {new Intl.NumberFormat("en-IN").format(
                               propertyDocument.demandPrice
-                            )}
+                            )} */}
                             /-
                             <span className="price"></span>
                           </h4>
