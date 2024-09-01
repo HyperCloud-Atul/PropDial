@@ -286,11 +286,13 @@ const PropertyCard = ({ propertyid }) => {
                 )}
                 <h5 className="demand">
                   <span>₹</span>
-                  {new Intl.NumberFormat("en-IN").format(
-                    propertydoc.demandPrice
-                  )}
+                  {(propertydoc.flag.toLowerCase() === "pms only") ? new Intl.NumberFormat("en-IN").format(
+                    propertydoc.demandPriceRent
+                  ) : (propertydoc.flag.toLowerCase() === "available for rent" || propertydoc.flag.toLowerCase() === "rented out" || propertydoc.flag.toLowerCase() === "rent and sale" || propertydoc.flag.toLowerCase() === "rented but sale") ? new Intl.NumberFormat("en-IN").format(
+                    propertydoc.demandPriceRent) : new Intl.NumberFormat("en-IN").format(
+                      propertydoc.demandPriceSale)}
                   /-
-                  {propertydoc.maintenancecharges !== "" && (
+                  {propertydoc.maintenanceCharges !== "" && (
                     <span
                       style={{
                         fontSize: "10px",
@@ -298,9 +300,9 @@ const PropertyCard = ({ propertyid }) => {
                     >
                       + ₹
                       {new Intl.NumberFormat("en-IN").format(
-                        propertydoc.maintenancecharges
+                        propertydoc.maintenanceCharges
                       )}
-                      /- ({propertydoc.maintenancechargesfrequency})
+                      /- ({propertydoc.maintenanceChargesFrequency})
                     </span>
                   )}
                 </h5>
