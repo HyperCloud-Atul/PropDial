@@ -315,7 +315,7 @@ const Stage1 = (props) => {
     "properties",
     propertyid
   );
-  function setRedirectFlag(flag, key) {}
+  function setRedirectFlag(flag, key) { }
   const { user } = useAuthContext();
 
   let statesOptions = useRef([]);
@@ -757,8 +757,8 @@ const Stage1 = (props) => {
     // }
 
     if (errorFlag)
-       setFormError(errorMsg);
-      
+      setFormError(errorMsg);
+
     else setFormError("");
 
     errorFlag = false;
@@ -1257,7 +1257,7 @@ const Stage1 = (props) => {
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
-                    <div className="radio_group_single">
+                    {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms light" || propertyDetails.Package.toLowerCase() === "rent only") && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.Flag === "Available For Rent"
@@ -1272,6 +1272,7 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Flag: "Available For Rent",
+                              Purpose: "Rent"
                             });
                           }}
                         />
@@ -1290,8 +1291,8 @@ const Stage1 = (props) => {
                           Available For Rent
                         </label>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
+                    </div>}
+                    {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms light" || propertyDetails.Package.toLowerCase() === "rent only") && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.Flag === "Rented Out"
@@ -1306,6 +1307,7 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Flag: "Rented Out",
+                              Purpose: "Rent"
                             });
                           }}
                         />
@@ -1324,8 +1326,8 @@ const Stage1 = (props) => {
                           Rented Out
                         </label>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
+                    </div>}
+                    {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms sale") && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.Flag === "Available For Sale"
@@ -1340,6 +1342,7 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Flag: "Available For Sale",
+                              Purpose: "Sale"
                             });
                           }}
                         />
@@ -1358,8 +1361,8 @@ const Stage1 = (props) => {
                           Available For Sale
                         </label>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
+                    </div>}
+                    {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms sale") && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.Flag === "Sold Out"
@@ -1374,6 +1377,7 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Flag: "Sold Out",
+                              Purpose: "Sale"
                             });
                           }}
                         />
@@ -1392,11 +1396,11 @@ const Stage1 = (props) => {
                           Sold Out
                         </label>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
+                    </div>}
+                    {(propertyDetails.Package.toLowerCase() === "pms premium") && <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Flag === "Rent or Sale"
+                          propertyDetails.Flag === "Rent and Sale"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -1407,7 +1411,8 @@ const Stage1 = (props) => {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Flag: "Rent or Sale",
+                              Flag: "Rent and Sale",
+                              Purpose: "RentSaleBoth"
                             });
                           }}
                         />
@@ -1423,11 +1428,11 @@ const Stage1 = (props) => {
                               done
                             </span>
                           </div>
-                          Rent And Sale
+                          Rent and Sale
                         </label>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
+                    </div>}
+                    {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms light") && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.Flag === "Rented But Sale"
@@ -1442,6 +1447,7 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Flag: "Rented But Sale",
+                              Purpose: "RentSaleBoth"
                             });
                           }}
                         />
@@ -1460,8 +1466,8 @@ const Stage1 = (props) => {
                           Rented But Sale
                         </label>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
+                    </div>}
+                    {(propertyDetails.Package.toLowerCase() === "pms premium") && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.Flag === "PMS Only"
@@ -1476,6 +1482,7 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Flag: "PMS Only",
+                              Purpose: "PMS"
                             });
                           }}
                         />
@@ -1494,7 +1501,7 @@ const Stage1 = (props) => {
                           PMS Only
                         </label>
                       </div>
-                    </div>
+                    </div>}
                   </div>
                 </div>
               </div>
@@ -1757,13 +1764,14 @@ const Stage1 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Rent"
+                          propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
+                          disabled
                           id="purpose_rent"
                           onClick={(e) => {
                             setPropertyDetails({
@@ -1791,13 +1799,14 @@ const Stage1 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "Sale"
+                          propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
+                          disabled
                           id="purpose_sale"
                           onClick={(e) => {
                             setPropertyDetails({
@@ -1825,13 +1834,14 @@ const Stage1 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Purpose === "PMS"
+                          propertyDetails.Flag === "PMS Only"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
+                          disabled
                           id="purpose_pms"
                           onClick={(e) => {
                             setPropertyDetails({
@@ -1862,16 +1872,16 @@ const Stage1 = (props) => {
             </div>
           </div>
 
-          <div className="col-xl-4 col-lg-6">
+          {(propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
             <div id="id_demand" className="form_field label_top">
-              <label htmlFor="">Demand/Price</label>
+              <label htmlFor="">Demand/Price for Rent</label>
               <div className="form_field_inner price_input">
                 <input
-                  id="id_demandprice"
+                  id="id_demandpricerent"
                   className="custom-input"
                   required
                   type="text"
-                  placeholder="Demand Amount for Rent or Sale"
+                  placeholder="Demand for Rent"
                   maxLength={9}
                   onInput={(e) => {
                     restrictInput(e, 9);
@@ -1882,17 +1892,49 @@ const Stage1 = (props) => {
 
                     setPropertyDetails({
                       ...propertyDetails,
-                      DemandPrice: formattedValue,
+                      DemandPriceRent: formattedValue,
                     });
                   }}
-                  value={propertyDetails && propertyDetails.DemandPrice}
+                  value={propertyDetails && propertyDetails.DemandPriceRent}
                 />
               </div>
               <div style={{ fontSize: "smaller" }} className="mt-2">
-                {convertToWords(propertyDetails.DemandPrice)}
+                {convertToWords(propertyDetails.DemandPriceRent)}
               </div>
             </div>
-          </div>
+          </div>}
+
+          {(propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
+            <div id="id_demand" className="form_field label_top">
+              <label htmlFor="">Demand/Price for Sale</label>
+              <div className="form_field_inner price_input">
+                <input
+                  id="id_demandpricesale"
+                  className="custom-input"
+                  required
+                  type="text"
+                  placeholder="Demand for Sale"
+                  maxLength={9}
+                  onInput={(e) => {
+                    restrictInput(e, 9);
+                  }}
+                  onChange={(e) => {
+                    const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas
+                    const formattedValue = formatNumberWithCommas(rawValue);
+
+                    setPropertyDetails({
+                      ...propertyDetails,
+                      DemandPriceSale: formattedValue,
+                    });
+                  }}
+                  value={propertyDetails && propertyDetails.DemandPriceSale}
+                />
+              </div>
+              <div style={{ fontSize: "smaller" }} className="mt-2">
+                {convertToWords(propertyDetails.DemandPriceSale)}
+              </div>
+            </div>
+          </div>}
 
           {propertyDetails && propertyDetails.Purpose === "Rent" && (
             <div className="col-xl-4 col-lg-6">
@@ -1976,258 +2018,256 @@ const Stage1 = (props) => {
             </div>
           )}
 
-          {propertyDetails &&
-            propertyDetails.Purpose === "Rent" &&
-            propertyDetails.MaintenanceFlag === "Extra" && (
-              <div className="col-xl-4 col-lg-6">
-                <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
-                  <label>Maintenance fees</label>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <input
-                      className="custom-input"
-                      style={{ width: "30%", paddingRight: "10px" }}
-                      type="text"
-                      placeholder="Optional"
-                      maxLength={6}
-                      onInput={(e) => {
-                        restrictInput(e, 6);
-                      }}
-                      onChange={(e) =>
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          MaintenanceCharges: e.target.value.trim(),
-                        })
-                      }
-                      value={
-                        propertyDetails && propertyDetails.MaintenanceCharges
-                      }
-                    />
+          {propertyDetails && (propertyDetails.Purpose === "Rent" || propertyDetails.Purpose === "RentSale") && propertyDetails.MaintenanceFlag === "Extra" && (
+            <div className="col-xl-4 col-lg-6">
+              <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
+                <label>Maintenance fees</label>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <input
+                    className="custom-input"
+                    style={{ width: "30%", paddingRight: "10px" }}
+                    type="text"
+                    placeholder="Optional"
+                    maxLength={6}
+                    onInput={(e) => {
+                      restrictInput(e, 6);
+                    }}
+                    onChange={(e) =>
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        MaintenanceCharges: e.target.value.trim(),
+                      })
+                    }
+                    value={
+                      propertyDetails && propertyDetails.MaintenanceCharges
+                    }
+                  />
+                  <div
+                    style={{
+                      width: "70%",
+                      borderLeft: "2px solid #ddd",
+                      padding: "5px 0 5px 12px",
+                    }}
+                  >
                     <div
-                      style={{
-                        width: "70%",
-                        borderLeft: "2px solid #ddd",
-                        padding: "5px 0 5px 12px",
-                      }}
+                      className="radio_group"
+                      style={{ gridColumnGap: "5px" }}
                     >
-                      <div
-                        className="radio_group"
-                        style={{ gridColumnGap: "5px" }}
-                      >
-                        <div className="radio_group_single">
-                          <div
-                            className={
-                              propertyDetails.MaintenanceChargesFrequency ===
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.MaintenanceChargesFrequency ===
                               "Monthly"
-                                ? "custom_radio_button radiochecked"
-                                : "custom_radio_button"
-                            }
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="maintenane_monthly"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                MaintenanceChargesFrequency: "Monthly",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="maintenane_monthly"
+                            style={{
+                              padding: "6px 0 10px 22px",
+                              height: "30px",
+                            }}
                           >
-                            <input
-                              type="checkbox"
-                              id="maintenane_monthly"
-                              onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  MaintenanceChargesFrequency: "Monthly",
-                                });
-                              }}
-                            />
-                            <label
-                              htmlFor="maintenane_monthly"
-                              style={{
-                                padding: "6px 0 10px 22px",
-                                height: "30px",
-                              }}
-                            >
-                              <div className="radio_icon">
-                                <span
-                                  className="material-symbols-outlined add"
-                                  style={{
-                                    fontSize: "1.2rem",
-                                    transform: "translateX(-3px)",
-                                  }}
-                                >
-                                  add
-                                </span>
-                                <span
-                                  className="material-symbols-outlined check"
-                                  style={{
-                                    fontSize: "1.2rem",
-                                    transform: "translateX(-3px)",
-                                  }}
-                                >
-                                  done
-                                </span>
-                              </div>
-                              <h6 style={{ fontSize: "0.8rem" }}>Monthly</h6>
-                            </label>
-                          </div>
+                            <div className="radio_icon">
+                              <span
+                                className="material-symbols-outlined add"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                add
+                              </span>
+                              <span
+                                className="material-symbols-outlined check"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                done
+                              </span>
+                            </div>
+                            <h6 style={{ fontSize: "0.8rem" }}>Monthly</h6>
+                          </label>
                         </div>
-                        <div className="radio_group_single">
-                          <div
-                            className={
-                              propertyDetails.MaintenanceChargesFrequency ===
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.MaintenanceChargesFrequency ===
                               "Quarterly"
-                                ? "custom_radio_button radiochecked"
-                                : "custom_radio_button"
-                            }
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="maintenance_quarterly"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                MaintenanceChargesFrequency: "Quarterly",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="maintenance_quarterly"
+                            style={{
+                              padding: "6px 0 10px 22px",
+                              height: "30px",
+                              width: "90%",
+                            }}
                           >
-                            <input
-                              type="checkbox"
-                              id="maintenance_quarterly"
-                              onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  MaintenanceChargesFrequency: "Quarterly",
-                                });
-                              }}
-                            />
-                            <label
-                              htmlFor="maintenance_quarterly"
-                              style={{
-                                padding: "6px 0 10px 22px",
-                                height: "30px",
-                                width: "90%",
-                              }}
-                            >
-                              <div className="radio_icon">
-                                <span
-                                  className="material-symbols-outlined add"
-                                  style={{
-                                    fontSize: "1.2rem",
-                                    transform: "translateX(-3px)",
-                                  }}
-                                >
-                                  add
-                                </span>
-                                <span
-                                  className="material-symbols-outlined check"
-                                  style={{
-                                    fontSize: "1.2rem",
-                                    transform: "translateX(-3px)",
-                                  }}
-                                >
-                                  done
-                                </span>
-                              </div>
-                              <h6 style={{ fontSize: "0.8rem" }}>Quarterly</h6>
-                            </label>
-                          </div>
+                            <div className="radio_icon">
+                              <span
+                                className="material-symbols-outlined add"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                add
+                              </span>
+                              <span
+                                className="material-symbols-outlined check"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                done
+                              </span>
+                            </div>
+                            <h6 style={{ fontSize: "0.8rem" }}>Quarterly</h6>
+                          </label>
                         </div>
-                        <div className="radio_group_single">
-                          <div
-                            className={
-                              propertyDetails.MaintenanceChargesFrequency ===
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.MaintenanceChargesFrequency ===
                               "Half Yearly"
-                                ? "custom_radio_button radiochecked"
-                                : "custom_radio_button"
-                            }
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="maintenance_halfyearly"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                MaintenanceChargesFrequency: "Half Yearly",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="maintenance_halfyearly"
+                            style={{
+                              padding: "6px 0 10px 22px",
+                              height: "30px",
+                            }}
                           >
-                            <input
-                              type="checkbox"
-                              id="maintenance_halfyearly"
-                              onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  MaintenanceChargesFrequency: "Half Yearly",
-                                });
-                              }}
-                            />
-                            <label
-                              htmlFor="maintenance_halfyearly"
-                              style={{
-                                padding: "6px 0 10px 22px",
-                                height: "30px",
-                              }}
-                            >
-                              <div className="radio_icon">
-                                <span
-                                  className="material-symbols-outlined add"
-                                  style={{
-                                    fontSize: "1.2rem",
-                                    transform: "translateX(-3px)",
-                                  }}
-                                >
-                                  add
-                                </span>
-                                <span
-                                  className="material-symbols-outlined check"
-                                  style={{
-                                    fontSize: "1.2rem",
-                                    transform: "translateX(-3px)",
-                                  }}
-                                >
-                                  done
-                                </span>
-                              </div>
-                              <h6 style={{ fontSize: "0.8rem" }}>
-                                Half Yearly
-                              </h6>
-                            </label>
-                          </div>
+                            <div className="radio_icon">
+                              <span
+                                className="material-symbols-outlined add"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                add
+                              </span>
+                              <span
+                                className="material-symbols-outlined check"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                done
+                              </span>
+                            </div>
+                            <h6 style={{ fontSize: "0.8rem" }}>
+                              Half Yearly
+                            </h6>
+                          </label>
                         </div>
-                        <div className="radio_group_single">
-                          <div
-                            className={
-                              propertyDetails.MaintenanceChargesFrequency ===
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.MaintenanceChargesFrequency ===
                               "Yearly"
-                                ? "custom_radio_button radiochecked"
-                                : "custom_radio_button"
-                            }
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="maintenance_yearly"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                MaintenanceChargesFrequency: "Yearly",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="maintenance_yearly"
+                            style={{
+                              padding: "6px 0 10px 22px",
+                              height: "30px",
+                              width: "90%",
+                            }}
                           >
-                            <input
-                              type="checkbox"
-                              id="maintenance_yearly"
-                              onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  MaintenanceChargesFrequency: "Yearly",
-                                });
-                              }}
-                            />
-                            <label
-                              htmlFor="maintenance_yearly"
-                              style={{
-                                padding: "6px 0 10px 22px",
-                                height: "30px",
-                                width: "90%",
-                              }}
-                            >
-                              <div className="radio_icon">
-                                <span
-                                  className="material-symbols-outlined add"
-                                  style={{
-                                    fontSize: "1.2rem",
-                                    transform: "translateX(-3px)",
-                                  }}
-                                >
-                                  add
-                                </span>
-                                <span
-                                  className="material-symbols-outlined check"
-                                  style={{
-                                    fontSize: "1.2rem",
-                                    transform: "translateX(-3px)",
-                                  }}
-                                >
-                                  done
-                                </span>
-                              </div>
-                              <h6 style={{ fontSize: "0.8rem" }}>Yearly</h6>
-                            </label>
-                          </div>
+                            <div className="radio_icon">
+                              <span
+                                className="material-symbols-outlined add"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                add
+                              </span>
+                              <span
+                                className="material-symbols-outlined check"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                done
+                              </span>
+                            </div>
+                            <h6 style={{ fontSize: "0.8rem" }}>Yearly</h6>
+                          </label>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div
-                    style={{ fontSize: "smaller", borderTop: "1px solid #ddd" }}
-                  >
-                    {convertToWords(propertyDetails.MaintenanceCharges)}
-                  </div>
+                </div>
+                <div
+                  style={{ fontSize: "smaller", borderTop: "1px solid #ddd" }}
+                >
+                  {convertToWords(propertyDetails.MaintenanceCharges)}
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
           {propertyDetails && propertyDetails.Purpose === "Rent" && (
             <div className="col-xl-4 col-lg-6">
