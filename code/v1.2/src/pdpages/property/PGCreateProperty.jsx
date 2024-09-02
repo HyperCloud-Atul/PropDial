@@ -998,7 +998,7 @@ const CreateProperty = () => {
                 <div className="form_field_inner">
                   <div className="form_field_container">
                     <div className="radio_group">
-                      {<div className="radio_group_single">
+                      {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms light" || propertyDetails.Package.toLowerCase() === "rent only") && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "Available For Rent"
@@ -1030,7 +1030,7 @@ const CreateProperty = () => {
                           </label>
                         </div>
                       </div>}
-                      <div className="radio_group_single">
+                      {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms light" || propertyDetails.Package.toLowerCase() === "rent only") && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "Rented Out"
@@ -1061,8 +1061,8 @@ const CreateProperty = () => {
                             Rented Out
                           </label>
                         </div>
-                      </div>
-                      {propertyDetails.Package.toLowerCase() !== "rent only" && <div className="radio_group_single">
+                      </div>}
+                      {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms sale") && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "Available For Sale"
@@ -1094,7 +1094,7 @@ const CreateProperty = () => {
                           </label>
                         </div>
                       </div>}
-                      {propertyDetails.Package.toLowerCase() !== "rent only" && <div className="radio_group_single">
+                      {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms sale") && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "Sold Out"
@@ -1126,7 +1126,7 @@ const CreateProperty = () => {
                           </label>
                         </div>
                       </div>}
-                      <div className="radio_group_single">
+                      {(propertyDetails.Package.toLowerCase() === "pms premium") && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "Rent and Sale"
@@ -1157,8 +1157,8 @@ const CreateProperty = () => {
                             Rent and Sale
                           </label>
                         </div>
-                      </div>
-                      <div className="radio_group_single">
+                      </div>}
+                      {(propertyDetails.Package.toLowerCase() === "pms premium" || propertyDetails.Package.toLowerCase() === "pms light") && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "Rented But Sale"
@@ -1189,8 +1189,8 @@ const CreateProperty = () => {
                             Rented But Sale
                           </label>
                         </div>
-                      </div>
-                      {propertyDetails.Package.toLowerCase() !== "rent only" && <div className="radio_group_single">
+                      </div>}
+                      {(propertyDetails.Package.toLowerCase() === "pms premium") && <div className="radio_group_single">
                         <div
                           className={
                             propertyDetails.Flag === "PMS Only"
