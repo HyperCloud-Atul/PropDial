@@ -375,7 +375,8 @@ const Stage1 = (props) => {
     Flag: "",
     Category: "",
     UnitNumber: "",
-    DemandPrice: "",
+    DemandPriceRent: "",
+    DemandPriceSale: "",
     MaintenanceCharges: "",
     MaintenanceChargesFrequency: "",
     Purpose: "",
@@ -494,8 +495,11 @@ const Stage1 = (props) => {
         UnitNumber: propertyDocument.unitNumber
           ? propertyDocument.unitNumber
           : "",
-        DemandPrice: propertyDocument.demandPrice
-          ? propertyDocument.demandPrice
+        DemandPriceRent: propertyDocument.demandPriceRent
+          ? propertyDocument.demandPriceRent
+          : "",
+        DemandPriceSale: propertyDocument.demandPriceSale
+          ? propertyDocument.demandPriceSale
           : "",
         MaintenanceFlag: propertyDocument.maintenanceFlag
           ? propertyDocument.maintenanceFlag
@@ -774,12 +778,20 @@ const Stage1 = (props) => {
         : "Residential",
       unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : "",
       purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
-      demandprice: propertyDetails.DemandPrice
-        ? propertyDetails.DemandPrice
+
+      // demandprice: propertyDetails.DemandPrice
+      //   ? propertyDetails.DemandPrice
+      //   : "",
+
+      demandPriceRent: propertyDetails.DemandPriceRent
+        ? propertyDetails.DemandPriceRent
+        : "",
+      demandPriceSale: propertyDetails.DemandPriceSale
+        ? propertyDetails.DemandPriceSale
         : "",
       maintenanceflag: propertyDetails.MaintenanceFlag
         ? propertyDetails.MaintenanceFlag
-        : "Excluded",
+        : "Extra",
       maintenancecharges: propertyDetails.MaintenanceCharges
         ? propertyDetails.MaintenanceCharges
         : "",
