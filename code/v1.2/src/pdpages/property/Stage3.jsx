@@ -62,6 +62,41 @@ export default function Stage3(props) {
     setIsPropDescEdit(false);
   };
 
+  const [editedOwnerInstruction, setEditedOwnerInstruction] = useState("");
+  const [isEditingOwnerInstruction, setIsEditingOwnerInstruction] =
+    useState(false);
+  const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
+    RichTextEditor.createValueFromString(propertyDocument && propertyDocument.ownerInstructions + editedOwnerInstruction, "html")
+  );
+
+  // START CODE FOR EDIT FIELDS
+  const handleEditOwnerInstruction = () => {
+    setIsEditingOwnerInstruction(true);
+  };
+
+  const handleSaveOwnerInstruction = async () => {
+    try {
+      await updateDocument(propertyid, {
+        ownerInstructions: ownerInstructionvalue.toString("html"),
+      });
+      setIsEditingOwnerInstruction(false);
+    } catch (error) {
+      console.error("Error updating document:", error);
+    }
+  };
+
+  const handleCancelOwnerInstruction = () => {
+    setIsEditingOwnerInstruction(false);
+  };
+
+  useEffect(() => {
+    if (propertyDocument) {
+      setPropValue(RichTextEditor.createValueFromString(propertyDocument.propertyDescription, "html"))
+
+      setOwnerInstrucitonValue(RichTextEditor.createValueFromString(propertyDocument.ownerInstructions, "html"))
+    }
+  }, [propertyDocument]);
+
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
@@ -2032,77 +2067,144 @@ export default function Stage3(props) {
               </div>
 
               {/* New Property Description */}
-              <div>
-                <div className="col-lg-6">
-                  <div className="property_card_single mobile_full_card">
-                    <div className="more_detail_card_inner">
-                      <h2 className="card_title">Property Description</h2>
-                      {isPropDescEdit ? (
+              <div className="col-lg-6">
+                <div className="property_card_single mobile_full_card">
+                  <div className="more_detail_card_inner">
+                    <h2 className="card_title">Property Description</h2>
+                    {isPropDescEdit ? (
+                      <div>
                         <div>
-                          <div>
-                            <RichTextEditor
-                              value={Propvalue}
-                              onChange={setPropValue}
-                            />
+                          <RichTextEditor
+                            value={Propvalue}
+                            onChange={setPropValue}
+                          />
+                        </div>
+                        <div className="vg10"></div>
+                        <div className="d-flex justify-content-between">
+                          <div
+                            className="theme_btn btn_border"
+                            onClick={handleCancelPropDesc}
+                            style={{
+                              width: "fit-content",
+                            }}
+                          >
+                            Cancel
                           </div>
-                          <div className="vg10"></div>
-                          <div className="d-flex justify-content-between">
-                            <div
-                              className="theme_btn btn_border"
-                              onClick={handleCancelPropDesc}
-                              style={{
-                                width: "fit-content",
-                              }}
-                            >
-                              Cancel
-                            </div>
-                            <div
-                              className="theme_btn btn_fill"
-                              onClick={handleSavePropDesc}
-                              style={{
-                                width: "fit-content",
-                              }}
-                            >
-                              Save
-                            </div>
+                          <div
+                            className="theme_btn btn_fill"
+                            onClick={handleSavePropDesc}
+                            style={{
+                              width: "fit-content",
+                            }}
+                          >
+                            Save
                           </div>
                         </div>
-                      ) : (
-                        <>
-                          <div className="d-flex align-items-center">
-                            <p
-                              className="editortext"
-                              dangerouslySetInnerHTML={{
-                                __html:
-                                  propertyDocument &&
-                                  propertyDocument.propertyDescription.toString(
-                                    "html"
-                                  ),
-                              }}
-                            ></p>
-                            {!isPropDescEdit &&
-                              user &&
-                              (user.role === "owner" ||
-                                user.role === "admin") && (
-                                <span
-                                  class="material-symbols-outlined click_icon text_near_icon"
-                                  onClick={() =>
-                                    handleEditPropDesc("propertyDescription")
-                                  }
-                                >
-                                  edit
-                                </span>
-                              )}
+                      </div>
+                    ) : (
+                      <>
+                        <div className="d-flex align-items-center">
+                          <p
+                            className="editortext"
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                propertyDocument &&
+                                propertyDocument.propertyDescription.toString(
+                                  "html"
+                                ),
+                            }}
+                          ></p>
+                          {!isPropDescEdit &&
+                            user &&
+                            (user.role === "owner" ||
+                              user.role === "admin") && (
+                              <span
+                                class="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() =>
+                                  handleEditPropDesc("propertyDescription")
+                                }
+                              >
+                                edit
+                              </span>
+                            )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* New Owner Instruction */}
+              <div className="col-lg-6">
+                <div className="property_card_single mobile_full_card">
+                  <div className="more_detail_card_inner">
+                    <h2 className="card_title">Owner Instruction</h2>
+
+                    {isEditingOwnerInstruction ? (
+                      <div>
+                        <div>
+                          <RichTextEditor
+                            value={ownerInstructionvalue}
+                            onChange={setOwnerInstrucitonValue}
+                          />
+                        </div>
+                        <div className="vg10"></div>
+                        <div className="d-flex justify-content-between">
+                          <div
+                            className="theme_btn btn_border"
+                            onClick={handleCancelOwnerInstruction}
+                            style={{
+                              width: "fit-content",
+                            }}
+                          >
+                            Cancel
                           </div>
-                        </>
-                      )}
-                    </div>
+                          <div
+                            className="theme_btn btn_fill"
+                            onClick={handleSaveOwnerInstruction}
+                            style={{
+                              width: "fit-content",
+                            }}
+                          >
+                            Save
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="d-flex align-items-center">
+                          <p
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                propertyDocument &&
+                                propertyDocument.ownerInstructions.toString(
+                                  "html"
+                                ),
+                            }}
+                          ></p>
+                          {!isEditingOwnerInstruction &&
+                            user &&
+                            user.role == "admin" && (
+                              <span
+                                class="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() =>
+                                  handleEditOwnerInstruction(
+                                    "ownerInstructions"
+                                  )
+                                }
+                              >
+                                edit
+                              </span>
+                            )}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Property Description */}
-              <div className="col-md-6">
+              {/* <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Property Description</label>
                   <div className="form_field_inner">
@@ -2161,9 +2263,9 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* Owner Instructions */}
-              <div className="col-md-6">
+              {/* <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Owner Instruction</label>
                   <div className="form_field_inner">
@@ -2214,7 +2316,7 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
