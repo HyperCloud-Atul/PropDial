@@ -43,13 +43,6 @@ const PGAdminDashboard = () => {
   );
 
   let totalProperties = "50";
-  // let activeProperties = "0";
-  let availableForRentProperties = "25";
-  let availableForSaleProperties = "10";
-  let rentedoutProperties = "12";
-  let soldoutProperties = "3";
-  // let residentialProperties = "0";
-  // let commercialProperties = "0";
 
   const activeProperties =
     properties &&
@@ -72,15 +65,44 @@ const PGAdminDashboard = () => {
   const residentialProperties =
     properties &&
     properties.filter(
-      (item) => item.category.trim().toUpperCase() === "RESIDENTIAL"
+      (item) => item.category.trim().toLowerCase() === "residential"
     );
 
   // commercialProperties
   const commercialProperties =
     properties &&
     properties.filter(
-      (item) => item.category.trim().toUpperCase() === "COMMERCIAL"
+      (item) => item.category.trim().toLowerCase() === "commercial"
     );
+
+  // available forrent
+  const availableForRentProperties =
+    properties &&
+    properties.filter(
+      (item) => item.flag.trim().toLowerCase() === "available for rent"
+    );
+
+  // available for sale
+  const availableForSaleProperties =
+    properties &&
+    properties.filter(
+      (item) => item.flag.trim().toLowerCase() === "available for sale"
+    );
+
+  // rented out
+  const rentedoutProperties =
+    properties &&
+    properties.filter(
+      (item) => item.flag.trim().toLowerCase() === "rented out"
+    );
+
+  // rented out
+  const soldoutProperties =
+    properties &&
+    properties.filter(
+      (item) => item.flag.trim().toLowerCase() === "sold out"
+    );
+
 
   //State Wise Properties
   const chandigarhProperties =
@@ -207,22 +229,22 @@ const PGAdminDashboard = () => {
   // advertisement img option in owl carousel
 
 
-  const searchPropertiesByFilter = (filterOption) => {
-    // console.log("Filter Option: ", filterOption)
+  // const searchPropertiesByFilter = (filterOption) => {
+  //   // console.log("Filter Option: ", filterOption)
 
-    switch (filterOption.toUpperCase()) {
-      case "IN-REVIEW":
-        console.log("In-Review Properties: ", pendingProperties)
-        navigate("/allproperties/" + filterOption);
-        return true;
-      case "ACTIVE":
-        return true;
-      default:
-        return true;
+  //   switch (filterOption.toUpperCase()) {
+  //     case "IN-REVIEW":
+  //       console.log("In-Review Properties: ", pendingProperties)
+  //       navigate("/allproperties/" + filterOption);
+  //       return true;
+  //     case "ACTIVE":
+  //       return true;
+  //     default:
+  //       return true;
 
-    }
+  //   }
 
-  }
+  // }
 
   // 9 dots controls
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
@@ -320,10 +342,10 @@ const PGAdminDashboard = () => {
                       <h5>{activeProperties && activeProperties.length}</h5>
                       <h6>Active</h6>
                     </Link>
-                    <div className="ps_single inactive">
+                    <Link to="/allproperties/inactive" className="ps_single inactive">
                       <h5>{inactiveProperties && inactiveProperties.length}</h5>
                       <h6>Inactive</h6>
-                    </div>
+                    </Link>
                   </div>
                 </div>
               </section>
@@ -341,15 +363,15 @@ const PGAdminDashboard = () => {
                   <h5>2</h5>
                   <h6>Not Assign To <br /> Tenant </h6>
                 </div>
-                <div className="ps_single four">
+                <Link to="/allproperties/residential" className="ps_single four">
                   <h5>{residentialProperties &&
                     residentialProperties.length}</h5>
                   <h6>Property Category <br /> Residential </h6>
-                </div>
-                <div className="ps_single five">
+                </Link>
+                <Link to="/allproperties/commercial" className="ps_single five">
                   <h5>{commercialProperties && commercialProperties.length}</h5>
                   <h6>Property Category <br /> Commercial </h6>
-                </div>
+                </Link>
               </section>
               {/* <div className="vg22"></div>
               <section className="upcoming">
@@ -419,42 +441,42 @@ const PGAdminDashboard = () => {
               </section> */}
               <div className="vg22"></div>
               <section className="self_property_detail">
-                <div className="spd_single">
+                <Link to="/allproperties/rent" className="spd_single">
                   <div className="left rent">
                     <img src="/assets/img/key.png" alt="" />
                   </div>
                   <div className="right">
                     <h6>Available for Rent</h6>
-                    <h5>5</h5>
+                    <h5>{availableForRentProperties && availableForRentProperties.length}</h5>
                   </div>
-                </div>
-                <div className="spd_single">
+                </Link>
+                <Link to="/allproperties/sale" className="spd_single">
                   <div className="left sale">
                     <img src="/assets/img/growth.png  " alt="" />
                   </div>
                   <div className="right ">
                     <h6>Available for Sale</h6>
-                    <h5>5</h5>
+                    <h5>{availableForSaleProperties && availableForSaleProperties.length}</h5>
                   </div>
-                </div>
-                <div className="spd_single">
+                </Link>
+                <Link to="/allproperties/rented out" className="spd_single">
                   <div className="left rent">
                     <img src="/assets/img/rented_out.png" alt="" />
                   </div>
                   <div className="right">
                     <h6>Rented Out</h6>
-                    <h5>55</h5>
+                    <h5>{rentedoutProperties && rentedoutProperties.length}</h5>
                   </div>
-                </div>
-                <div className="spd_single">
+                </Link>
+                <Link to="/allproperties/sold out" className="spd_single">
                   <div className="left sale">
                     <img src="/assets/img/sold_out.png  " alt="" />
                   </div>
                   <div className="right ">
                     <h6>Sold Out</h6>
-                    <h5>6</h5>
+                    <h5>{soldoutProperties && soldoutProperties.length}</h5>
                   </div>
-                </div>
+                </Link>
                 <div className="spd_single">
                   <div className="left residential">
                     <img src="/assets/img/house.png" alt="" />
@@ -760,15 +782,15 @@ const PGAdminDashboard = () => {
                     display: "grid",
                     gap: "22px"
                   }}>
-                    <CircularProgressBar
+                    {/* <CircularProgressBar
                       rentProperties={availableForRentProperties}
                       saleProperties={availableForSaleProperties}
                       rentedoutProperties={rentedoutProperties}
                       soldoutProperties={soldoutProperties}
-                      // commercialProperties={commercialProperties}
-                      // residentialProperties={residentialProperties}
+                      commercialProperties={commercialProperties}
+                      residentialProperties={residentialProperties}
                       totalProperties={totalProperties}
-                    />
+                    /> */}
                     <Link
                       className="theme_btn btn_fill text-center no_icon"
                       to="/newproperty"

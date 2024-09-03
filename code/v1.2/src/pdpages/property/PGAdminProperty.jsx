@@ -40,7 +40,7 @@ const PGAdminProperty = () => {
       _properties = allproperties &&
         allproperties.filter(
           (item) =>
-            item.isActiveInactiveReview.trim().toUpperCase() === filterOption.toUpperCase()
+            (filterOption.toLowerCase() === "in-review" || filterOption.toLowerCase() === "active" || filterOption.toLowerCase() === "inactive") ? item.isActiveInactiveReview.trim().toUpperCase() === filterOption.toUpperCase() : (filterOption.toLowerCase() === "residential" || filterOption.toLowerCase() === "commercial") ? item.category.trim().toUpperCase() === filterOption.toUpperCase() : item.purpose.trim().toUpperCase() === filterOption.toUpperCase()
         );
     }
 
