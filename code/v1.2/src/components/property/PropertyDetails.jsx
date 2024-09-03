@@ -730,7 +730,7 @@ const PropertyDetails = () => {
   const [editedPropDesc, setEditedPropDesc] = useState("");
   const [isPropDescEdit, setIsPropDescEdit] = useState(false);
   const [Propvalue, setPropValue] = useState(
-    RichTextEditor.createValueFromString(editedPropDesc, "html")
+    RichTextEditor.createValueFromString(propertyDocument && propertyDocument.propertyDescription + editedPropDesc, "html")
   );
 
   // START CODE FOR EDIT FIELDS
@@ -759,7 +759,7 @@ const PropertyDetails = () => {
   const [isEditingOwnerInstruction, setIsEditingOwnerInstruction] =
     useState(false);
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
-    RichTextEditor.createValueFromString(editedOwnerInstruction, "html")
+    RichTextEditor.createValueFromString(propertyDocument && propertyDocument.ownerInstructions + editedOwnerInstruction, "html")
   );
 
   // START CODE FOR EDIT FIELDS
