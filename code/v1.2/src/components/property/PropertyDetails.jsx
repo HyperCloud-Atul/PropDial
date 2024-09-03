@@ -726,12 +726,17 @@ const PropertyDetails = () => {
 
   //Property Users / Owners - Ends
 
+
   // START CODE FOR EDIT Property desc by TEXT USING TEXT EDITOR
   const [editedPropDesc, setEditedPropDesc] = useState("");
   const [isPropDescEdit, setIsPropDescEdit] = useState(false);
+
   const [Propvalue, setPropValue] = useState(
-    RichTextEditor.createValueFromString(editedPropDesc, "html")
+    RichTextEditor.createValueFromString(propertyDocument && propertyDocument.propertyDescription + editedPropDesc, "html")
   );
+
+
+
 
   // START CODE FOR EDIT FIELDS
   const handleEditPropDesc = () => {
@@ -759,7 +764,7 @@ const PropertyDetails = () => {
   const [isEditingOwnerInstruction, setIsEditingOwnerInstruction] =
     useState(false);
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
-    RichTextEditor.createValueFromString(editedOwnerInstruction, "html")
+    RichTextEditor.createValueFromString(propertyDocument && propertyDocument.ownerInstructions + editedOwnerInstruction, "html")
   );
 
   // START CODE FOR EDIT FIELDS
@@ -781,6 +786,15 @@ const PropertyDetails = () => {
   const handleCancelOwnerInstruction = () => {
     setIsEditingOwnerInstruction(false);
   };
+
+  useEffect(() => {
+    if (propertyDocument) {
+      setPropValue(RichTextEditor.createValueFromString(propertyDocument.propertyDescription, "html"))
+
+      setOwnerInstrucitonValue(RichTextEditor.createValueFromString(propertyDocument.ownerInstructions, "html"))
+    }
+  }, [propertyDocument]);
+
   // END CODE FOR EDIT TEXT USING TEXT EDITOR
 
   // modal controls start

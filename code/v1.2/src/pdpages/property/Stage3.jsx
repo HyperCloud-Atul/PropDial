@@ -5,6 +5,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
 import { timestamp, projectStorage } from "../../firebase/config";
+import RichTextEditor from "react-rte";
 import Accordion from "react-bootstrap/Accordion";
 // import Adcarousel from "../../../Components/Ads";
 import Gallery from "react-image-gallery";
@@ -26,8 +27,75 @@ export default function Stage3(props) {
   // const { imgUpload, isImgCompressPending, imgCompressedFile } =
   //   useImageUpload();
 
+  const { document: propertyDocument, error: propertyerror } = useDocument(
+    "properties",
+    propertyid
+  );
+
+  const { updateDocument, response: updateDocumentResponse } =
+    useFirestore("properties");
+
   //Popup Flags
   const [showPopupFlag, setShowPopupFlag] = useState(false);
+  const [editedPropDesc, setEditedPropDesc] = useState("");
+  const [isPropDescEdit, setIsPropDescEdit] = useState(false);
+  const [Propvalue, setPropValue] = useState(
+    RichTextEditor.createValueFromString(propertyDocument && propertyDocument.propertyDescription + editedPropDesc, "html")
+  );
+
+  const handleEditPropDesc = () => {
+    setIsPropDescEdit(true);
+  };
+
+  const handleSavePropDesc = async () => {
+    try {
+      await updateDocument(propertyid, {
+        propertyDescription: Propvalue.toString("html"),
+      });
+      setIsPropDescEdit(false);
+    } catch (error) {
+      console.error("Error updating document:", error);
+    }
+  };
+
+  const handleCancelPropDesc = () => {
+    setIsPropDescEdit(false);
+  };
+
+  const [editedOwnerInstruction, setEditedOwnerInstruction] = useState("");
+  const [isEditingOwnerInstruction, setIsEditingOwnerInstruction] =
+    useState(false);
+  const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
+    RichTextEditor.createValueFromString(propertyDocument && propertyDocument.ownerInstructions + editedOwnerInstruction, "html")
+  );
+
+  // START CODE FOR EDIT FIELDS
+  const handleEditOwnerInstruction = () => {
+    setIsEditingOwnerInstruction(true);
+  };
+
+  const handleSaveOwnerInstruction = async () => {
+    try {
+      await updateDocument(propertyid, {
+        ownerInstructions: ownerInstructionvalue.toString("html"),
+      });
+      setIsEditingOwnerInstruction(false);
+    } catch (error) {
+      console.error("Error updating document:", error);
+    }
+  };
+
+  const handleCancelOwnerInstruction = () => {
+    setIsEditingOwnerInstruction(false);
+  };
+
+  useEffect(() => {
+    if (propertyDocument) {
+      setPropValue(RichTextEditor.createValueFromString(propertyDocument.propertyDescription, "html"))
+
+      setOwnerInstrucitonValue(RichTextEditor.createValueFromString(propertyDocument.ownerInstructions, "html"))
+    }
+  }, [propertyDocument]);
 
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
@@ -36,13 +104,6 @@ export default function Stage3(props) {
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
 
-  const { document: propertyDocument, error: propertyerror } = useDocument(
-    "properties",
-    propertyid
-  );
-
-  const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties");
 
   const [propertyDetails, setPropertyDetails] = useState({
     MainDoorFacing: "",
@@ -101,94 +162,94 @@ export default function Stage3(props) {
         // Visiting Hrs Values
         MondayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Monday")
+            propertyDocument.visitingDays.find((e) => e === "Monday")
             ? true
             : false,
         TuesdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Tuesday")
+            propertyDocument.visitingDays.find((e) => e === "Tuesday")
             ? true
             : false,
         WednesdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Wednesday")
+            propertyDocument.visitingDays.find((e) => e === "Wednesday")
             ? true
             : false,
         ThursdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Thursday")
+            propertyDocument.visitingDays.find((e) => e === "Thursday")
             ? true
             : false,
         FridayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Friday")
+            propertyDocument.visitingDays.find((e) => e === "Friday")
             ? true
             : false,
         SaturdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Saturday")
+            propertyDocument.visitingDays.find((e) => e === "Saturday")
             ? true
             : false,
         SundayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Sunday")
+            propertyDocument.visitingDays.find((e) => e === "Sunday")
             ? true
             : false,
 
         // Overlooking Values
         ClubClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Club")
+            propertyDocument.overLooking.find((e) => e === "Club")
             ? true
             : false,
         GardenParkClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Garden/Park")
+            propertyDocument.overLooking.find((e) => e === "Garden/Park")
             ? true
             : false,
         RoadClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Road")
+            propertyDocument.overLooking.find((e) => e === "Road")
             ? true
             : false,
         SwimmingPoolClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Swimming Pool")
+            propertyDocument.overLooking.find((e) => e === "Swimming Pool")
             ? true
             : false,
         CentralParkClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Central Park")
+            propertyDocument.overLooking.find((e) => e === "Central Park")
             ? true
             : false,
         GolfClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Golf")
+            propertyDocument.overLooking.find((e) => e === "Golf")
             ? true
             : false,
         HillViewlClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Hill View")
+            propertyDocument.overLooking.find((e) => e === "Hill View")
             ? true
             : false,
         BeachClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Beach")
+            propertyDocument.overLooking.find((e) => e === "Beach")
             ? true
             : false,
         LakeClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Lake")
+            propertyDocument.overLooking.find((e) => e === "Lake")
             ? true
             : false,
         RiverClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "River")
+            propertyDocument.overLooking.find((e) => e === "River")
             ? true
             : false,
         ForestClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Forest")
+            propertyDocument.overLooking.find((e) => e === "Forest")
             ? true
             : false,
       });
@@ -2005,8 +2066,145 @@ export default function Stage3(props) {
                 </div>
               </div>
 
+              {/* New Property Description */}
+              <div className="col-lg-6">
+                <div className="property_card_single mobile_full_card">
+                  <div className="more_detail_card_inner">
+                    <h2 className="card_title">Property Description</h2>
+                    {isPropDescEdit ? (
+                      <div>
+                        <div>
+                          <RichTextEditor
+                            value={Propvalue}
+                            onChange={setPropValue}
+                          />
+                        </div>
+                        <div className="vg10"></div>
+                        <div className="d-flex justify-content-between">
+                          <div
+                            className="theme_btn btn_border"
+                            onClick={handleCancelPropDesc}
+                            style={{
+                              width: "fit-content",
+                            }}
+                          >
+                            Cancel
+                          </div>
+                          <div
+                            className="theme_btn btn_fill"
+                            onClick={handleSavePropDesc}
+                            style={{
+                              width: "fit-content",
+                            }}
+                          >
+                            Save
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="d-flex align-items-center">
+                          <p
+                            className="editortext"
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                propertyDocument &&
+                                propertyDocument.propertyDescription.toString(
+                                  "html"
+                                ),
+                            }}
+                          ></p>
+                          {!isPropDescEdit &&
+                            user &&
+                            (user.role === "owner" ||
+                              user.role === "admin") && (
+                              <span
+                                class="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() =>
+                                  handleEditPropDesc("propertyDescription")
+                                }
+                              >
+                                edit
+                              </span>
+                            )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* New Owner Instruction */}
+              <div className="col-lg-6">
+                <div className="property_card_single mobile_full_card">
+                  <div className="more_detail_card_inner">
+                    <h2 className="card_title">Owner Instruction</h2>
+
+                    {isEditingOwnerInstruction ? (
+                      <div>
+                        <div>
+                          <RichTextEditor
+                            value={ownerInstructionvalue}
+                            onChange={setOwnerInstrucitonValue}
+                          />
+                        </div>
+                        <div className="vg10"></div>
+                        <div className="d-flex justify-content-between">
+                          <div
+                            className="theme_btn btn_border"
+                            onClick={handleCancelOwnerInstruction}
+                            style={{
+                              width: "fit-content",
+                            }}
+                          >
+                            Cancel
+                          </div>
+                          <div
+                            className="theme_btn btn_fill"
+                            onClick={handleSaveOwnerInstruction}
+                            style={{
+                              width: "fit-content",
+                            }}
+                          >
+                            Save
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="d-flex align-items-center">
+                          <p
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                propertyDocument &&
+                                propertyDocument.ownerInstructions.toString(
+                                  "html"
+                                ),
+                            }}
+                          ></p>
+                          {!isEditingOwnerInstruction &&
+                            user &&
+                            user.role == "admin" && (
+                              <span
+                                class="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() =>
+                                  handleEditOwnerInstruction(
+                                    "ownerInstructions"
+                                  )
+                                }
+                              >
+                                edit
+                              </span>
+                            )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               {/* Property Description */}
-              <div className="col-md-6">
+              {/* <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Property Description</label>
                   <div className="form_field_inner">
@@ -2065,9 +2263,9 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* Owner Instructions */}
-              <div className="col-md-6">
+              {/* <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Owner Instruction</label>
                   <div className="form_field_inner">
@@ -2118,7 +2316,7 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
