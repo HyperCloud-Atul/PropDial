@@ -477,7 +477,7 @@ const Stage2 = (props) => {
     if (errorFlag) setFormError(errorMsg);
     else setFormError("");
 
-    errorFlag = false;
+    // errorFlag = false;
 
     const property = {
       propertyType: propertyDetails.PropertyType,
@@ -2510,8 +2510,8 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-             {/* Flat Floor No */}
-             <div className="col-md-4">
+          {/* Flat Floor No */}
+          <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Floor No.</label>
               <div className="plus_minus_input_wrapper">
@@ -2580,7 +2580,7 @@ const Stage2 = (props) => {
             </div>
           </div>
 
-       
+
           {/* No of Apts on Floor */}
           <div className="col-md-4">
             <div className="form_field label_top">
