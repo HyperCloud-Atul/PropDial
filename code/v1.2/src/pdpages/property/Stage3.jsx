@@ -40,7 +40,10 @@ export default function Stage3(props) {
   const [editedPropDesc, setEditedPropDesc] = useState("");
   const [isPropDescEdit, setIsPropDescEdit] = useState(false);
   const [Propvalue, setPropValue] = useState(
-    RichTextEditor.createValueFromString(propertyDocument && propertyDocument.propertyDescription + editedPropDesc, "html")
+    RichTextEditor.createValueFromString(
+      propertyDocument && propertyDocument.propertyDescription + editedPropDesc,
+      "html"
+    )
   );
 
   const handleEditPropDesc = () => {
@@ -66,7 +69,11 @@ export default function Stage3(props) {
   const [isEditingOwnerInstruction, setIsEditingOwnerInstruction] =
     useState(false);
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
-    RichTextEditor.createValueFromString(propertyDocument && propertyDocument.ownerInstructions + editedOwnerInstruction, "html")
+    RichTextEditor.createValueFromString(
+      propertyDocument &&
+        propertyDocument.ownerInstructions + editedOwnerInstruction,
+      "html"
+    )
   );
 
   // START CODE FOR EDIT FIELDS
@@ -91,9 +98,19 @@ export default function Stage3(props) {
 
   useEffect(() => {
     if (propertyDocument) {
-      setPropValue(RichTextEditor.createValueFromString(propertyDocument.propertyDescription, "html"))
+      setPropValue(
+        RichTextEditor.createValueFromString(
+          propertyDocument.propertyDescription,
+          "html"
+        )
+      );
 
-      setOwnerInstrucitonValue(RichTextEditor.createValueFromString(propertyDocument.ownerInstructions, "html"))
+      setOwnerInstrucitonValue(
+        RichTextEditor.createValueFromString(
+          propertyDocument.ownerInstructions,
+          "html"
+        )
+      );
     }
   }, [propertyDocument]);
 
@@ -103,7 +120,6 @@ export default function Stage3(props) {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
-
 
   const [propertyDetails, setPropertyDetails] = useState({
     MainDoorFacing: "",
@@ -162,94 +178,94 @@ export default function Stage3(props) {
         // Visiting Hrs Values
         MondayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Monday")
+          propertyDocument.visitingDays.find((e) => e === "Monday")
             ? true
             : false,
         TuesdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Tuesday")
+          propertyDocument.visitingDays.find((e) => e === "Tuesday")
             ? true
             : false,
         WednesdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Wednesday")
+          propertyDocument.visitingDays.find((e) => e === "Wednesday")
             ? true
             : false,
         ThursdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Thursday")
+          propertyDocument.visitingDays.find((e) => e === "Thursday")
             ? true
             : false,
         FridayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Friday")
+          propertyDocument.visitingDays.find((e) => e === "Friday")
             ? true
             : false,
         SaturdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Saturday")
+          propertyDocument.visitingDays.find((e) => e === "Saturday")
             ? true
             : false,
         SundayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Sunday")
+          propertyDocument.visitingDays.find((e) => e === "Sunday")
             ? true
             : false,
 
         // Overlooking Values
         ClubClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Club")
+          propertyDocument.overLooking.find((e) => e === "Club")
             ? true
             : false,
         GardenParkClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Garden/Park")
+          propertyDocument.overLooking.find((e) => e === "Garden/Park")
             ? true
             : false,
         RoadClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Road")
+          propertyDocument.overLooking.find((e) => e === "Road")
             ? true
             : false,
         SwimmingPoolClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Swimming Pool")
+          propertyDocument.overLooking.find((e) => e === "Swimming Pool")
             ? true
             : false,
         CentralParkClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Central Park")
+          propertyDocument.overLooking.find((e) => e === "Central Park")
             ? true
             : false,
         GolfClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Golf")
+          propertyDocument.overLooking.find((e) => e === "Golf")
             ? true
             : false,
         HillViewlClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Hill View")
+          propertyDocument.overLooking.find((e) => e === "Hill View")
             ? true
             : false,
         BeachClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Beach")
+          propertyDocument.overLooking.find((e) => e === "Beach")
             ? true
             : false,
         LakeClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Lake")
+          propertyDocument.overLooking.find((e) => e === "Lake")
             ? true
             : false,
         RiverClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "River")
+          propertyDocument.overLooking.find((e) => e === "River")
             ? true
             : false,
         ForestClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Forest")
+          propertyDocument.overLooking.find((e) => e === "Forest")
             ? true
             : false,
       });
@@ -2067,79 +2083,84 @@ export default function Stage3(props) {
               </div>
 
               {/* New Property Description */}
-              <div className="col-lg-6">
-                <div className="property_card_single mobile_full_card">
-                  <div className="more_detail_card_inner">
-                    <h2 className="card_title">Property Description</h2>
-                    {isPropDescEdit ? (
-                      <div>
+              <div className="col-md-6">
+                <div className="form_field st-2 label_top">
+                  <label htmlFor="">Property Description</label>
+                  <div className="form_field_inner">
+                    <div className="form_field_container">
+                      {isPropDescEdit ? (
                         <div>
-                          <RichTextEditor
-                            value={Propvalue}
-                            onChange={setPropValue}
-                          />
-                        </div>
-                        <div className="vg10"></div>
-                        <div className="d-flex justify-content-between">
-                          <div
-                            className="theme_btn btn_border"
-                            onClick={handleCancelPropDesc}
-                            style={{
-                              width: "fit-content",
-                            }}
-                          >
-                            Cancel
+                          <div>
+                            <RichTextEditor
+                              value={Propvalue}
+                              onChange={setPropValue}
+                            />
                           </div>
-                          <div
-                            className="theme_btn btn_fill"
-                            onClick={handleSavePropDesc}
-                            style={{
-                              width: "fit-content",
-                            }}
-                          >
-                            Save
+                          <div className="vg10"></div>
+                          <div className="d-flex justify-content-between">
+                            <div
+                              className="theme_btn btn_border"
+                              onClick={handleCancelPropDesc}
+                              style={{
+                                width: "fit-content",
+                              }}
+                            >
+                              Cancel
+                            </div>
+                            <div
+                              className="theme_btn btn_fill"
+                              onClick={handleSavePropDesc}
+                              style={{
+                                width: "fit-content",
+                              }}
+                            >
+                              Save
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="d-flex align-items-center">
-                          <p
-                            className="editortext"
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                propertyDocument &&
-                                propertyDocument.propertyDescription.toString(
-                                  "html"
-                                ),
-                            }}
-                          ></p>
-                          {!isPropDescEdit &&
-                            user &&
-                            (user.role === "owner" ||
-                              user.role === "admin") && (
-                              <span
-                                class="material-symbols-outlined click_icon text_near_icon"
-                                onClick={() =>
-                                  handleEditPropDesc("propertyDescription")
-                                }
-                              >
-                                edit
-                              </span>
-                            )}
-                        </div>
-                      </>
-                    )}
+                      ) : (
+                        <>
+                          <div className="d-flex align-items-center">
+                            <p
+                              className="editortext"
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  propertyDocument &&
+                                  propertyDocument.propertyDescription.toString(
+                                    "html"
+                                  ),
+                              }}
+                            ></p>
+                            {!isPropDescEdit &&
+                              user &&
+                              (user.role === "owner" ||
+                                user.role === "admin") && (
+                                <span
+                                  class="material-symbols-outlined click_icon text_near_icon"
+                                  onClick={() =>
+                                    handleEditPropDesc("propertyDescription")
+                                  }
+                                  style={{
+                                    marginTop: "5px",
+                                  }}
+                                >
+                                  edit
+                                </span>
+                              )}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* New Owner Instruction */}
-              <div className="col-lg-6">
-                <div className="property_card_single mobile_full_card">
-                  <div className="more_detail_card_inner">
-                    <h2 className="card_title">Owner Instruction</h2>
-
+              <div className="col-md-6">
+                <div className="form_field st-2 label_top">
+                  <label htmlFor="">Owner Instruction</label>
+                  <div className="form_field_inner">
+                    <div className="form_field_container">
                     {isEditingOwnerInstruction ? (
                       <div>
                         <div>
@@ -2192,6 +2213,9 @@ export default function Stage3(props) {
                                     "ownerInstructions"
                                   )
                                 }
+                                style={{
+                                  marginTop: "5px",
+                                }}
                               >
                                 edit
                               </span>
@@ -2199,9 +2223,10 @@ export default function Stage3(props) {
                         </div>
                       </>
                     )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </div>         
 
               {/* Property Description */}
               {/* <div className="col-md-6">

@@ -73,13 +73,13 @@ Action: Set the two-wheeler parking option to "No" by default.
 Task: Default Lock-in Period Value. (Done)
 Action: Set the default lock-in period value to 6 months.
 
-Task: Super Area and Carpet Area Comparison. (need to dicuss)
+Task: Super Area and Carpet Area Comparison. (need to discuss)
 Action: Ensure that the super area is always greater than or equal to the carpet area. If one value is missing, skip the comparison.
 
-Task: Hide Balcony Facing Field When Not Needed. (Done)
+Task: Hide Balcony Facing Field When Not Needed. (Done) (nedd to discuss)
 Action: Do not show the balcony facing field if the balcony value is 0.
 
-Task: Change Balcony Facing Field to Checkbox. (sanskar)
+Task: Change Balcony Facing Field to Checkbox. (sanskar) (need to discuss)
 Action: Allow multiple selections by changing the balcony-facing field to a checkbox format.
 
 Task: Set Default Visiting Hours. (Done)
