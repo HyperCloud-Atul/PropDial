@@ -71,7 +71,8 @@ const Stage2 = (props) => {
     EntranceGallery: "",
     Furnishing: "Raw",
     AdditionalRooms: [],
-    ServentRoomClick: false,
+    ServentRoomOneClick: false,
+    ServentRoomTwoClick: false,
     OfficeRoomClick: false,
     StoreRoomClick: false,
     PoojaRoomClick: false,
@@ -152,11 +153,16 @@ const Stage2 = (props) => {
         AdditionalRooms: propertyDocument.additionalRooms
           ? propertyDocument.additionalRooms
           : [],
-        ServentRoomClick:
+          ServentRoomOneClick:
           propertyDocument.additionalRooms &&
-            propertyDocument.additionalRooms.find((e) => e === "Servent Room")
+            propertyDocument.additionalRooms.find((e) => e === "Servent Room 1")
             ? true
             : false,
+            ServentRoomTwoClick:
+            propertyDocument.additionalRooms &&
+              propertyDocument.additionalRooms.find((e) => e === "Servent Room 2")
+              ? true
+              : false,
         OfficeRoomClick:
           propertyDocument.additionalRooms &&
             propertyDocument.additionalRooms.find((e) => e === "Office Room")
@@ -1184,38 +1190,38 @@ const Stage2 = (props) => {
                 <div className="radio_group_single">
                   <div
                     className={
-                      propertyDetails.ServentRoomClick
+                      propertyDetails.ServentRoomOneClick
                         ? "custom_radio_button radiochecked"
                         : "custom_radio_button"
                     }
                   >
                     <input
                       type="checkbox"
-                      id="servent_room"
+                      id="servent_room_1"
                       onClick={(e) => {
-                        if (propertyDetails.ServentRoomClick) {
+                        if (propertyDetails.ServentRoomOneClick) {
                           setPropertyDetails({
                             ...propertyDetails,
                             AdditionalRooms:
                               propertyDetails.AdditionalRooms &&
                               propertyDetails.AdditionalRooms.filter(
-                                (elem) => elem !== "Servent Room"
+                                (elem) => elem !== "Servent Room 1"
                               ),
-                            ServentRoomClick: !propertyDetails.ServentRoomClick,
+                              ServentRoomOneClick: !propertyDetails.ServentRoomOneClick,
                           });
                         } else {
                           setPropertyDetails({
                             ...propertyDetails,
                             AdditionalRooms: [
                               ...propertyDetails.AdditionalRooms,
-                              "Servent Room",
+                              "Servent Room 1",
                             ],
-                            ServentRoomClick: !propertyDetails.ServentRoomClick,
+                            ServentRoomOneClick: !propertyDetails.ServentRoomOneClick,
                           });
                         }
                       }}
                     />
-                    <label htmlFor="servent_room">
+                    <label htmlFor="servent_room_1">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -1224,7 +1230,54 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6>Servent Room</h6>
+                      <h6>Servent Room 1</h6>
+                    </label>
+                  </div>
+                </div>
+                <div className="radio_group_single">
+                  <div
+                    className={
+                      propertyDetails.ServentRoomTwoClick
+                        ? "custom_radio_button radiochecked"
+                        : "custom_radio_button"
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      id="servent_room_2"
+                      onClick={(e) => {
+                        if (propertyDetails.ServentRoomTwoClick) {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            AdditionalRooms:
+                              propertyDetails.AdditionalRooms &&
+                              propertyDetails.AdditionalRooms.filter(
+                                (elem) => elem !== "Servent Room 2"
+                              ),
+                              ServentRoomTwoClick: !propertyDetails.ServentRoomTwoClick,
+                          });
+                        } else {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            AdditionalRooms: [
+                              ...propertyDetails.AdditionalRooms,
+                              "Servent Room 2",
+                            ],
+                            ServentRoomTwoClick: !propertyDetails.ServentRoomTwoClick,
+                          });
+                        }
+                      }}
+                    />
+                    <label htmlFor="servent_room_2">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Servent Room 2</h6>
                     </label>
                   </div>
                 </div>
