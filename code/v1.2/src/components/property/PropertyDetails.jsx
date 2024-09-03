@@ -1049,34 +1049,130 @@ const PropertyDetails = () => {
             {propertyDocument && (
               <div className="">
                 {user && user.role === 'admin' && (
-                  <div className="property_card_single quick_detail_show mobile_full_card">
-                    <div className="more_detail_card_inner">
-                      <div className="row align-items-center">
-                        <div className="col-6 col-md-9">
-                          <div className="left">
-                            <div className="qd_single">
-                              <span class="material-symbols-outlined">
-                                home
-                              </span>
-                              <h6>
-                                {propertyDocument.category}-{" "}
-                                {propertyDocument.bhk}
-                              </h6>
-                            </div>
-                          </div>
+                  // <div className="property_card_single quick_detail_show mobile_full_card">
+                  //   <div className="more_detail_card_inner">
+                  //     <div className="row align-items-center">
+                  //       <div className="col-6 col-md-9">
+                  //         <div className="left">
+                  //           <div className="qd_single">
+                  //             <span class="material-symbols-outlined">
+                  //               home
+                  //             </span>
+                  //             <h6>
+                  //               {propertyDocument.category}-{" "}
+                  //               {propertyDocument.bhk}
+                  //             </h6>
+                  //           </div>
+                  //         </div>
+                  //       </div>
+                  //       <div className="col-6 col-md-3">
+                  //         <div className="right">
+                  //           <div className="premium text-center">
+                  //             <img src="/assets/img/premium_img.jpg" alt="" />
+                  //             <h6>PMS Premium - PMS After Rent</h6>
+                  //             <h5>On Boarding 2nd Jan'22</h5>
+                  //           </div>
+                  //         </div>
+                  //       </div>
+                  //     </div>
+                  //   </div>
+                  // </div>
+                  <div className="property_card_single mobile_full_card">
+                  <div className="more_detail_card_inner">
+                    {/* <h2 className="card_title">About Property</h2> */}
+                    <div className="p_info">
+                      <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/VisitingDays.png"
+                            alt=""
+                          />
                         </div>
-                        <div className="col-6 col-md-3">
-                          <div className="right">
-                            <div className="premium text-center">
-                              <img src="/assets/img/premium_img.jpg" alt="" />
-                              <h6>PMS Premium - PMS After Rent</h6>
-                              <h5>On Boarding 2nd Jan'22</h5>
+                        <div className="pis_content">
+                          <h6>Property Added Date</h6>
+                          <h5>
+                            {propertyDocument &&
+                              propertyOnboardingDateFormatted}
+                          </h5>
+                          {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}
+                        </div>
+                      </div>
+
+                      {/* <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/property-detail-icon/Property_status.png" alt="" />
                             </div>
-                          </div>
+                            <div className="pis_content">
+                              <h6>Property Status</h6>
+                              <h5> Active</h5>
+                            </div>
+
+                          </div> */}
+                      <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/ownership.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Ownership</h6>
+                          <h5>
+                            {propertyDocument && propertyDocument.ownership}
+                          </h5>
+                        </div>
+                      </div>
+                      <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/property_source.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Property Source</h6>
+                          <h5>{propertyDocument && propertyDocument.source}</h5>
+                        </div>
+                      </div>
+
+                      {/* <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/property-detail-icon/Purpose.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Purpose</h6>
+                              <h5>Rent</h5>
+                            </div>
+                          </div> */}
+                      <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/package.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Package</h6>
+                          <h5>
+                            {propertyDocument && propertyDocument.package}
+                          </h5>
+                        </div>
+                      </div>
+                      <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/property_flag.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Property Flag</h6>
+                          <h5>{propertyDocument && propertyDocument.flag}</h5>
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
                 )}
 
                 <div className="property_card_single mobile_full_card">
@@ -3071,102 +3167,7 @@ const PropertyDetails = () => {
                   )}
                 {/* propdial managers / user card end  */}
 
-                <div className="property_card_single mobile_full_card">
-                  <div className="more_detail_card_inner">
-                    <h2 className="card_title">About Property</h2>
-                    <div className="p_info">
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/VisitingDays.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Property Added Date</h6>
-                          <h5>
-                            {propertyDocument &&
-                              propertyOnboardingDateFormatted}
-                          </h5>
-                          {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}
-                        </div>
-                      </div>
-
-                      {/* <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/Property_status.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Property Status</h6>
-                              <h5> Active</h5>
-                            </div>
-
-                          </div> */}
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/ownership.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Ownership</h6>
-                          <h5>
-                            {propertyDocument && propertyDocument.ownership}
-                          </h5>
-                        </div>
-                      </div>
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/property_source.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Property Source</h6>
-                          <h5>{propertyDocument && propertyDocument.source}</h5>
-                        </div>
-                      </div>
-
-                      {/* <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/Purpose.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Purpose</h6>
-                              <h5>Rent</h5>
-                            </div>
-                          </div> */}
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/package.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Package</h6>
-                          <h5>
-                            {propertyDocument && propertyDocument.package}
-                          </h5>
-                        </div>
-                      </div>
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/property_flag.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Property Flag</h6>
-                          <h5>{propertyDocument && propertyDocument.flag}</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            
                 <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Property Type</h2>
