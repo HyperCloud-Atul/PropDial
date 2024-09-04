@@ -739,7 +739,10 @@ const CreateProperty = () => {
         console.log("New Property ID: ", newpropid)
 
         setFormSuccess("Property Created Successfully");
-
+         // Clear the success message after 3 seconds
+        setTimeout(() => {
+          setFormSuccess(null);
+        }, 3000);       
         //Add created by id into propertyusers list
         const propertyUserData = {
           propertyId: newpropid,
@@ -2798,7 +2801,23 @@ const CreateProperty = () => {
               <div className="form_field label_top">
                 <label htmlFor="">Pincode number</label>
                 <div className="form_field_inner">
-                  <input
+                <input
+                  type="text" // Use type="text" to control length
+                  placeholder="Enter here"
+                  maxLength={6} // Limits input to 6 characters
+                  onChange={(e) => {
+                    const value = e.target.value.trim();
+                    // Check if the input is numeric and has a maximum length of 6
+                    if (/^\d{0,6}$/.test(value)) {
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        Pincode: value,
+                      });
+                    }
+                  }}
+                  value={propertyDetails && propertyDetails.Pincode}
+                />
+                  {/* <input
                     type="number"
                     placeholder="Enter here"
                     maxLength={6}
@@ -2809,13 +2828,15 @@ const CreateProperty = () => {
                       })
                     }
                     value={propertyDetails && propertyDetails.Pincode}
-                  />
+                  /> */}
                   <div className="field_icon"></div>
                 </div>
               </div>
             </div>
-            {formError && <p className="error">{formError}</p>}
-            {formSuccess && <p className="success">{formSuccess}</p>}
+            <div className="col-12">
+            {formError && <p className="error_new">{formError}</p>}
+            {formSuccess && <p className="success_new">{formSuccess}</p>}
+            </div>
             <div className="col-12">
               <button
                 id="btn_create"

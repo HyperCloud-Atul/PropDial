@@ -28,7 +28,7 @@ Action: Ensure only one "Rent Only" option is available.
 Task: Purpose Option Based on Flag Click. (Done)
 Action: The purpose should be determined by the flag selected and should remain uneditable.
 
-Task: Flag Options According to Package. (Half done need to discuss)
+Task: Flag Options According to Package. (done)
 *Action:* Fetch and display the flag options from the Propdial admin website according to the selected package.
 
 Task: Add New Purpose Option. (Done)
@@ -46,23 +46,14 @@ Action: When "Included" is selected, hide the maintenance field.
 Task: Display Price in Indian Format. (Done)
 Action: When a price is entered, it should be displayed in words in the Indian numbering format.
 
-Task: Add Separation Comma and Rupee Symbol(Done) in Price Field. (Half Done)
-Action: Automatically add commas and the rupee symbol when the price is entered.
-
 Task: Relocate Unit Number Field. (Done) 
 Action: Move the "Unit Number" field near the "State" field.
 
 Task: Pincode Field Limitation. (Done)
 Action: Restrict the pincode field to only accept 6 digits.
 
-Task: Display Success/Error Messages. (Done, need to discuss) (Pending in create property sanskar)
-Action: Ensure messages like "Data successfully saved" or "Error" are displayed for only 10 seconds.
-
 Task: Servant Room Selection in Additional Room Field.(Done)
 Action: Allow users to select 2 servant rooms.
-
-Task: Relocate Floor Number Field. (Half done)
-Action: Move (Done) the "Floor Number" field to appear before the "Total Floor" field, allowing for negative values down to -1.
 
 Task: Default Value for Total Floor. (Done)
 Action: Set the default value for "Total Floor" to 1 and display "Total Floor" as a placeholder.
@@ -73,24 +64,14 @@ Action: Set the two-wheeler parking option to "No" by default.
 Task: Default Lock-in Period Value. (Done)
 Action: Set the default lock-in period value to 6 months.
 
-Task: Super Area and Carpet Area Comparison. (need to discuss)
-Action: Ensure that the super area is always greater than or equal to the carpet area. If one value is missing, skip the comparison.
-
 Task: Hide Balcony Facing Field When Not Needed. (Done) (nedd to discuss)
 Action: Do not show the balcony facing field if the balcony value is 0.
-
-Task: Change Balcony Facing Field to Checkbox. (sanskar) (need to discuss)
-Action: Allow multiple selections by changing the balcony-facing field to a checkbox format.
 
 Task: Set Default Visiting Hours. (Done)
 Action: Set the visiting hours from 10 AM to 6 PM by default and only accept time inputs.
 
-Task: Set Default Visiting Days. 
-Action: By default, all days except Tuesday should be checked.
-
 Task: Display Property Owner and Instructions.
 Action: Show the property owner details and property instructions on the property edit page if they are available.
-
 
 3. Property Page
 Task: Add Package and Flag Wise Search.
