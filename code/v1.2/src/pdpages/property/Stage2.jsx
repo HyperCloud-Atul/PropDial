@@ -330,13 +330,104 @@ const Stage2 = (props) => {
     }
   }
 
+  // function decrementInput(input) {
+  //   var inputValue = document.getElementById(input).value;
+  //   console.log("input value in decrementInput:", inputValue)
+  //   if (inputValue === "0") {
+  //     //Don't do anything
+  //   } else {
+  //     inputValue--;
+  //     if (input === "bedroomNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfBedrooms: inputValue,
+  //       });
+  //     } else if (input === "bathroomNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfBathrooms: inputValue,
+  //       });
+  //     } else if (input === "balconyNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfBalcony: inputValue,
+  //       });
+  //     }
+  //     else if (input === "kitchenNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfKitchen: inputValue,
+  //       });
+  //     }
+  //     else if (input === "livingAreaNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfLivingArea: inputValue,
+  //       });
+  //     }
+  //     else if (input === "basementNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfBasement: inputValue,
+  //       });
+  //     }
+  //     else if (input === "floorNoInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         FloorNo: inputValue,
+  //       });
+  //     }
+  //     else if (input === "numberOfFloorsInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfFloors: inputValue,
+  //       });
+  //     }
+  //     else if (input === "numberOfFlatsOnFloorInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfFlatsOnFloor: inputValue,
+  //       });
+  //     }
+  //     else if (input === "numberOfLiftsInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfLifts: inputValue,
+  //       });
+  //     }
+  //     else if (input === "numberOfOpenCarParkingInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfOpenCarParking: inputValue,
+  //       });
+  //     }
+  //     else if (input === "numberOfClosedCarParkingInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfClosedCarParking: inputValue,
+  //       });
+  //     }
+  //     else if (input === "lockinperiodInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         LockinPeriod: inputValue,
+  //       });
+  //     }
+  //   }
+  // }
+
+
   function decrementInput(input) {
     var inputValue = document.getElementById(input).value;
-    console.log("input value in decrementInput:", inputValue)
-    if (inputValue === "0") {
-      //Don't do anything
-    } else {
-      inputValue--;
+  
+    if (input === "floorNoInput" && inputValue > -1) {
+      inputValue--; // Allow FloorNo to go to -1
+      setPropertyDetails({
+        ...propertyDetails,
+        FloorNo: inputValue,
+      });
+    } else if (inputValue > 0) {
+      inputValue--; // Ensure all others don't go below 0
       if (input === "bedroomNumberInput") {
         setPropertyDetails({
           ...propertyDetails,
@@ -352,62 +443,47 @@ const Stage2 = (props) => {
           ...propertyDetails,
           NumberOfBalcony: inputValue,
         });
-      }
-      else if (input === "kitchenNumberInput") {
+      } else if (input === "kitchenNumberInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfKitchen: inputValue,
         });
-      }
-      else if (input === "livingAreaNumberInput") {
+      } else if (input === "livingAreaNumberInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfLivingArea: inputValue,
         });
-      }
-      else if (input === "basementNumberInput") {
+      } else if (input === "basementNumberInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBasement: inputValue,
         });
-      }
-      else if (input === "floorNoInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          FloorNo: inputValue,
-        });
-      }
-      else if (input === "numberOfFloorsInput") {
+      } else if (input === "numberOfFloorsInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfFloors: inputValue,
         });
-      }
-      else if (input === "numberOfFlatsOnFloorInput") {
+      } else if (input === "numberOfFlatsOnFloorInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfFlatsOnFloor: inputValue,
         });
-      }
-      else if (input === "numberOfLiftsInput") {
+      } else if (input === "numberOfLiftsInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfLifts: inputValue,
         });
-      }
-      else if (input === "numberOfOpenCarParkingInput") {
+      } else if (input === "numberOfOpenCarParkingInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfOpenCarParking: inputValue,
         });
-      }
-      else if (input === "numberOfClosedCarParkingInput") {
+      } else if (input === "numberOfClosedCarParkingInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfClosedCarParking: inputValue,
         });
-      }
-      else if (input === "lockinperiodInput") {
+      } else if (input === "lockinperiodInput") {
         setPropertyDetails({
           ...propertyDetails,
           LockinPeriod: inputValue,
@@ -415,6 +491,7 @@ const Stage2 = (props) => {
       }
     }
   }
+  
 
 
 
@@ -469,14 +546,18 @@ const Stage2 = (props) => {
         errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
       else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
       errorFlag = true;
-    }
+    } 
 
     if (
+      propertyDetails.SuperArea !== null && 
+      Number(propertyDetails.SuperArea) !== 0 &&
       Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)
     ) {
-      if (errorMsg === "Please select ")
+      if (errorMsg === "Please select ") {
         errorMsg = "Carpet Area should be less than Super Area";
-      else errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
+      } else {
+        errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
+      }
       errorFlag = true;
     }
 

@@ -11,7 +11,6 @@ Enhancements and updates for Propdial system.
 
 ..............................................
 
-
 1. Dashboard
 
 Task: Make all cards clickable. (Atul sir)
@@ -64,14 +63,32 @@ Action: Set the two-wheeler parking option to "No" by default.
 Task: Default Lock-in Period Value. (Done)
 Action: Set the default lock-in period value to 6 months.
 
-Task: Hide Balcony Facing Field When Not Needed. (Done) (nedd to discuss)
+Task: Hide Balcony Facing Field When Not Needed. (Done) (need to discuss)
 Action: Do not show the balcony facing field if the balcony value is 0.
 
 Task: Set Default Visiting Hours. (Done)
 Action: Set the visiting hours from 10 AM to 6 PM by default and only accept time inputs.
 
-Task: Display Property Owner and Instructions.
+Task: Display Property Owner and Instructions.(Done)
 Action: Show the property owner details and property instructions on the property edit page if they are available.
+
+Task: Relocate Floor Number Field. (Done)
+Action: Move (Done) the "Floor Number" field to appear before the "Total Floor" field, allowing for negative values down to -1.
+
+Task: Super Area and Carpet Area Comparison.(Done)
+Action: Ensure that the super area is always greater than or equal to the carpet area. If one value is missing, skip the comparison.
+
+Task: Change Balcony Facing Field to Checkbox.
+Action: Allow multiple selections by changing the balcony-facing field to a checkbox format.
+
+Task: Set Default Visiting Days. 
+Action: By default, all days except Tuesday should be checked.
+
+Task: Display Success/Error Messages.(Done)
+Action: Ensure messages like "Data successfully saved" or "Error" are displayed for only 10 seconds.
+
+Task: Add Separation Comma and Rupee Symbol(Done) in Price Field. (Half Done)
+Action: Automatically add commas and the rupee symbol when the price is entered.
 
 3. Property Page
 Task: Add Package and Flag Wise Search.
