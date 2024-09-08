@@ -77,7 +77,7 @@ const UserTable = ({ users }) => {
         accessor: 'fullName',
   
         Cell: ({ row }) => (
-          <div onClick={() => handleEdit(row.original)} className='pointer'>
+          <div onClick={() => handleEdit(row.original)} className='pointer mobile_min_width'>
             <span className='text-capitalize'>{row.original.fullName}</span>
             <span className="material-symbols-outlined click_icon text_near_icon">edit</span>
           </div>
@@ -87,7 +87,7 @@ const UserTable = ({ users }) => {
         Header: 'Phone Number',
         accessor: 'phoneNumber',
         Cell: ({ value }) => (
-          <div className="phone-number">
+          <div className="phone-number mobile_min_width">
             <span>{formatPhoneNumber(value)}</span>
           </div>
         ),  
@@ -95,13 +95,14 @@ const UserTable = ({ users }) => {
       {
         Header: 'Email',
         accessor: 'email', 
+        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
         Header: 'Contact',
         accessor: 'actions',
   
         Cell: ({ row }) => (
-          <div className="contact_btn">
+          <div className="contact_btn mobile_min_width">
             <Link
               className="whatsapp-icon"
               to={`https://wa.me/${row.original.phoneNumber}`}
@@ -123,21 +124,23 @@ const UserTable = ({ users }) => {
       {
         Header: 'On-Boarded',
         accessor: 'createdAt',
-        Cell: ({ value }) => format(value.toDate(), 'dd-MMM-yy hh:mm a'),
-  
+        Cell: ({ value }) => (
+          <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
+        ),
       },
       {
         Header: 'Last Login',
         accessor: 'lastLoginTimestamp',
-        Cell: ({ value }) => format(value.toDate(), 'dd-MMM-yy hh:mm a'),
-  
+        Cell: ({ value }) => (
+          <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
+        ),
       },
       {
         Header: 'Status',
         accessor: 'status',
   
         Cell: ({ value }) => (
-          <span className={`text-capitalize ${value === 'active' ? 'text_green2' : 'text_red'}`}>
+          <span className={`text-capitalize  ${value === 'active' ? 'text_green2' : 'text_red'}`}>
             {value}
           </span>
         ),

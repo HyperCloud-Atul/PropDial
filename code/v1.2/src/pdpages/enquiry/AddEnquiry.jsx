@@ -86,11 +86,10 @@ const AddEnquiry = () => {
         if (email && !/\S+@\S+\.\S+/.test(email)) errors.email = "Email is not in the correct format";
         if (!remark) {
             errors.remark = "Remark is a required field";
-        } else if (remark.length < 50) {
-            errors.remark = "Remark must be at least 50 characters long";
-        }
-
-     
+        } 
+        // else if (remark.length < 50) {
+        //     errors.remark = "Remark must be at least 50 characters long";
+        // }    
 
         setErrors(errors);
         return Object.keys(errors).length === 0;

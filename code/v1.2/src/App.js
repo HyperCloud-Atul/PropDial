@@ -303,7 +303,7 @@ function App() {
                     element={
                       user &&
                         user.status === "active" &&
-                        (user.role === "owner" || user.role !== "admin") ? (
+                        (user.role === "owner" || user.role === "admin") ? (
                         <PGEnquiry />
                       ) : (
                         <Navigate to="/login" />

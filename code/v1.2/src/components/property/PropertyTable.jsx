@@ -47,27 +47,35 @@ const PropertyTable = ({ properties }) => {
       {
         Header: "PID",
         accessor: "pid",
+        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
-
+      
       {
         Header: "City",
         accessor: "city",
+        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
+
+    
       {
         Header: "Locality",
         accessor: "locality",
+        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
         Header: "Society",
         accessor: "society",
+        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
         Header: "Unit No",
         accessor: "unitNumber",
+        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
         Header: "Type",
         accessor: "category",
+        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
         Header: "Flag",

@@ -1,3 +1,150 @@
+*Minutes of Meeting (MoM)*  
+*Date:* September 7, 2024 (Saturday)
+
+*Attendees:*  
+1. Vinay Sir  
+2. Atul Sir  
+3. Sanskar
+
+*Agenda:*  
+Updates and enhancements for the Propdial system.
+
+---
+
+*1. Create Property / Edit Property*
+
+1. *Flag for PMS Pre:* (Sans)
+   -Flag for PMS Pre will be PMS after rent and purpose for PMS Pre will be rent 
+
+2. *Property Amount Field:* (Sans) 
+   - Add commas and Indian format conversion for numbers.  
+   - Ensure the amount is displayed in words in all relevant fields.
+
+3. *New Field:* (Sans)
+   - Add a new field for "Complete Address."
+
+4. *Society Field:* (Atul sir)
+   - Make the Society field work similarly to the Locality field.
+
+5. *Region Field Position & Default:*  
+   - Change the position of the "Region" field. (Sans) (Done) 
+   - Make this field uneditable, automatically selected based on the chosen state. (Atul sir)
+
+6. *Furnished Field:* (Sans) 
+   - Remove the default "Raw" option.  
+   - Make this field mandatory.
+
+7. *Hide Specific Fields:*  (Sans)
+   - Hide fields for the number of basements, kitchens, and living areas.
+
+8. *Servant Room Display:*  (Sans)
+   - Display "1 Servant Room" if one room is selected.  
+   - Display "2 Servant Rooms" if both rooms are selected.
+
+9. *Modify Existing Fields:*  (Sans)
+   - Add new rearranged fields for "Living Area" and "Dining Area."  
+   - Change the field name to "Living and Dining Combined."
+
+10. *Year of Construction Options:* (Sans) 
+    - Show the year of construction options in descending order (2024 on top).
+
+11. *Rename Power Room:*  (Sans)
+    - Change "Power Room" to "Powder Room."
+
+12. *Remove Specific Fields:*  (Sans)
+    - Remove "Office Room" and "Private Garden" fields.
+
+13. *New Additional Room:*  (Sans)
+    - Add a new room option named "Roof Rights" in the Additional Room field.
+
+14. *Unit Sequence Rearrangement:*  (Sans)
+    - Rearrange units in the following sequence: Sqft, ,Sqyard, Sqmt .
+
+15. *Super Area vs Carpet Area Comparison:* (Atul sir) 
+    - Recheck the logic to ensure the Super Area is always equal to or greater than the Carpet Area.
+
+16. *Maintenance Bug:*  (Atul sir)
+    - Resolve the bug where changing maintenance from "Extra" to "Included" reverts to "Extra" after saving.
+
+17. *Lowest Value for Total Floor and Apt on Floor:* (Sans and need to discuss) 
+    - The lowest value should be 1, excluding 0.
+
+18. *Total Floor Value:* (Sans and need to discuss)
+    - The total floor value must be equal to or greater than the floor number.
+
+19. *Rename Car Parking Field:* (Sans)
+    - Change "No. of Closed Car Parking" to "Covered Car Parking."
+
+20. *Main Door Facing:* (Sans) 
+    - Change the text from "Maindoor Facing" to "Main Door Facing."
+
+21. *Balcony Facing Field:* (Sans and need to discuss)  
+    - Make the Balcony Facing field multi-selectable based on the number of balconies added.
+
+22. *Visiting Hour Clock:* (Sans and need to discuss) 
+    - Add a clock for the visiting hour selection.
+
+---
+
+ *2. Taken from Client* (Need to discuss)
+
+1. *List of Property Types:*  
+   - Provide a detailed list or arrangement for property types.
+
+2. *List of Additional Rooms:*  
+   - Prepare and organize a list of all additional rooms.
+
+---
+
+ *3. Dashboard*
+
+1. *Text Change:* (Sans) 
+   - Change "Not Assign to Manager" to "Not Assign to Executive."
+
+---
+
+*4. Property Card*
+
+1. *Display Information:* (Sans) 
+   - Display property information on the property card in the same format as the property detail card.
+
+---
+*5. Property Detail Page* (Sans)
+
+1. *Maintenance Display:*  
+   - When "Maintenance Included" is selected, display it as "Included / Maintenance."
+
+2. *UI Fix for Overlooking:* (Sans) 
+   - If all options are selected under "Overlooking," fix the UI for better display.
+
+3. *Rearrange Car Parking Information:*  (Sans) 
+   - Display "Covered Car Parking" first, followed by a vertical line, then "Two-Wheeler Parking."
+
+---
+
+ *6. Property Summary Card* (Sans)
+
+1. *Demand Price Display:*  
+   - Display the demand price on the property summary card.
+
+7. property page(rent and sale)
+1. *Filter Check:* (need to discuss) 
+   - Ensure all filters are properly arranged and functional.
+
+
+Last MOM dues (Atul sir)
+
+Task: Set Default Visiting Days. 
+Action: By default, all days except Tuesday should be checked.
+
+Property Page
+Task: Add Package and Flag Wise Search.
+Action: Enable users to search properties based on package and flag criteria.
+
+
+..............................................
+
+
 Minutes of Meeting (MoM)
 Date: August 25, 2024 (Sunday)
 
@@ -78,19 +225,19 @@ Action: Move (Done) the "Floor Number" field to appear before the "Total Floor" 
 Task: Super Area and Carpet Area Comparison.(Done)
 Action: Ensure that the super area is always greater than or equal to the carpet area. If one value is missing, skip the comparison.
 
-Task: Change Balcony Facing Field to Checkbox.
+Task: Change Balcony Facing Field to Checkbox. (included in new mom)
 Action: Allow multiple selections by changing the balcony-facing field to a checkbox format.
 
-Task: Set Default Visiting Days. 
+Task: Set Default Visiting Days. (included in new mom)
 Action: By default, all days except Tuesday should be checked.
 
 Task: Display Success/Error Messages.(Done)
 Action: Ensure messages like "Data successfully saved" or "Error" are displayed for only 10 seconds.
 
-Task: Add Separation Comma and Rupee Symbol(Done) in Price Field. (Half Done)
+Task: Add Separation Comma and Rupee Symbol in Price Field. (Included in new mom)
 Action: Automatically add commas and the rupee symbol when the price is entered.
 
-3. Property Page
+3. Property Page (Included in new Mom)
 Task: Add Package and Flag Wise Search.
 Action: Enable users to search properties based on package and flag criteria.
 
@@ -265,8 +412,3 @@ View enquiry:
 Contact no & email id should be masked
 update krte wqt jo new field add hogi unke bare me discuss krna hai 
 phir agr phir se whi enquiry aati hai to kese trace krenge
-
-
-
-
-
