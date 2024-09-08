@@ -13,14 +13,14 @@ Updates and enhancements for the Propdial system.
 
 *1. Create Property / Edit Property*
 
-1. *Flag for PMS Pre:* (Sans) (Done)
+1. *Flag for PMS Pre:* (Sans) (Done) (By default sale ho rha hai) (Sir plz check once)
    -Flag for PMS Pre will be PMS after rent and purpose for PMS Pre will be rent (Done but check once) 
 
 2. *Property Amount Field:* (Sans) 
    - Add commas and Indian format conversion for numbers.  
    - Ensure the amount is displayed in words in all relevant fields.
 
-3. *New Field:* (Sans) 
+3. *New Field:* (Atul sir)
    - Add a new field for "Complete Address."
 
 4. *Society Field:* (Atul sir)
@@ -30,18 +30,18 @@ Updates and enhancements for the Propdial system.
    - Change the position of the "Region" field. (Sans) (Done) 
    - Make this field uneditable, automatically selected based on the chosen state. (Atul sir)
 
-6. *Furnished Field:* (Sans) (Done)
+6. *Furnished Field:* (Sans) (Done)  tested
    - Remove the default "Raw" option.  
    - Make this field mandatory.
 
 7. *Hide Specific Fields:*  (Sans)
-   - Hide fields for the number of basements, kitchens, and living areas. (yh hide to kr diya hai pr abhi sir se discuss krna hai ki iska yes or no bhi bnega phir or agar yes or no bna to detail page me yes or no me show hoga)
+   - Hide fields for the number of basements, kitchens, and living areas.(Done)
 
-8. *Servant Room Display:*  (Sans)
+8. *Servant Room Display:*  (Sans) (Done) (Tested)
    - Display "1 Servant Room" if one room is selected.  
    - Display "2 Servant Rooms" if both rooms are selected.
 
-9. *Modify Existing Fields:*  (Sans) (yh bhi discuss krna hai abhi sir se mtlb living area abhi yes kese aarha hai )
+9. *Modify Existing Fields:*  (Sans) (Done)
    - Add new rearranged fields for "Living Area" and "Dining Area."  
    - Change the field name to "Living and Dining Combined."
 
@@ -66,10 +66,10 @@ Updates and enhancements for the Propdial system.
 16. *Maintenance Bug:*  (Atul sir)
     - Resolve the bug where changing maintenance from "Extra" to "Included" reverts to "Extra" after saving.
 
-17. *Lowest Value for Total Floor and Apt on Floor:* (Sans and need to discuss) 
+17. *Lowest Value for Total Floor and Apt on Floor:* (Sans and need to discuss) try
     - The lowest value should be 1, excluding 0.
 
-18. *Total Floor Value:* (Sans and need to discuss)
+18. *Total Floor Value:* (Sans and need to discuss) try
     - The total floor value must be equal to or greater than the floor number.
 
 19. *Rename Car Parking Field:* (Sans) (Done)
@@ -81,8 +81,10 @@ Updates and enhancements for the Propdial system.
 21. *Balcony Facing Field:* (Atul sir)  
     - Make the Balcony Facing field multi-selectable based on the number of balconies added.
 
-22. *Visiting Hour Clock:* (Sans and need to discuss) 
+22. *Visiting Hour Clock:* (Sans and need to discuss) try
     - Add a clock for the visiting hour selection.
+
+23. add rs icon in create property (sanskar)
 
 ---
 
@@ -98,7 +100,7 @@ Updates and enhancements for the Propdial system.
 
  *3. Dashboard*
 
-1. *Text Change:* (Sans) 
+1. *Text Change:* (Sans) (Done)
    - Change "Not Assign to Manager" to "Not Assign to Executive."
 
 ---

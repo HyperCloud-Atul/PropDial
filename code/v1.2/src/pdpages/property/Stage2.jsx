@@ -25,9 +25,6 @@ function restrictInput(event, maxLength) {
   event.target.value = numericValue;
 }
 
-
-
-
 const Stage2 = (props) => {
   const { propertyid } = useParams();
   // console.log('property id in Stage 2: ', propertyid)
@@ -42,7 +39,10 @@ const Stage2 = (props) => {
   const navigate = useNavigate();
   const [formError, setFormError] = useState(null);
   const [years, setYears] = useState({ label: "", value: "" });
-  const [yearOfConstruction, setYearOfConstruction] = useState({ label: "Year of Construction", value: "Year of Construction" });
+  const [yearOfConstruction, setYearOfConstruction] = useState({
+    label: "Year of Construction",
+    value: "Year of Construction",
+  });
   const { document: propertyDocument, error: propertyerror } = useDocument(
     "properties",
     propertyid
@@ -65,6 +65,7 @@ const Stage2 = (props) => {
     NumberOfKitchen: "0",
     NumberOfLivingArea: "0",
     NumberOfBasement: "0",
+    LivingArea: "",
     DiningArea: "",
     LivingAndDining: "",
     Passage: "",
@@ -98,14 +99,13 @@ const Stage2 = (props) => {
   });
 
   useEffect(() => {
-
     if (propertyDocument) {
       // console.log("propertyDocument:", propertyDocument);
 
       setYearOfConstruction({
         label: propertyDocument.yearOfConstruction,
         value: propertyDocument.yearOfConstruction,
-      })
+      });
 
       setPropertyDetails({
         // All select type
@@ -135,6 +135,9 @@ const Stage2 = (props) => {
         NumberOfBasement: propertyDocument.numberOfBasement
           ? propertyDocument.numberOfBasement
           : "0",
+        LivingArea: propertyDocument.livingArea
+          ? propertyDocument.livingArea
+          : "",
         DiningArea: propertyDocument.diningArea
           ? propertyDocument.diningArea
           : "",
@@ -144,53 +147,51 @@ const Stage2 = (props) => {
         EntranceGallery: propertyDocument.entranceGallery
           ? propertyDocument.entranceGallery
           : "",
-        Passage: propertyDocument.passage
-          ? propertyDocument.passage
-          : "",
+        Passage: propertyDocument.passage ? propertyDocument.passage : "",
         Furnishing: propertyDocument.furnishing
           ? propertyDocument.furnishing
           : "",
         AdditionalRooms: propertyDocument.additionalRooms
           ? propertyDocument.additionalRooms
           : [],
-          ServentRoomOneClick:
+        ServentRoomOneClick:
           propertyDocument.additionalRooms &&
-            propertyDocument.additionalRooms.find((e) => e === "Servent Room 1")
+          propertyDocument.additionalRooms.find((e) => e === "Servent Room 1")
             ? true
             : false,
-            ServentRoomTwoClick:
-            propertyDocument.additionalRooms &&
-              propertyDocument.additionalRooms.find((e) => e === "Servent Room 2")
-              ? true
-              : false,
+        ServentRoomTwoClick:
+          propertyDocument.additionalRooms &&
+          propertyDocument.additionalRooms.find((e) => e === "Servent Room 2")
+            ? true
+            : false,
         OfficeRoomClick:
           propertyDocument.additionalRooms &&
-            propertyDocument.additionalRooms.find((e) => e === "Office Room")
+          propertyDocument.additionalRooms.find((e) => e === "Office Room")
             ? true
             : false,
         StoreRoomClick:
           propertyDocument.additionalRooms &&
-            propertyDocument.additionalRooms.find((e) => e === "Store Room")
+          propertyDocument.additionalRooms.find((e) => e === "Store Room")
             ? true
             : false,
         PoojaRoomClick:
           propertyDocument.additionalRooms &&
-            propertyDocument.additionalRooms.find((e) => e === "Pooja Room")
+          propertyDocument.additionalRooms.find((e) => e === "Pooja Room")
             ? true
             : false,
         StudyRoomClick:
           propertyDocument.additionalRooms &&
-            propertyDocument.additionalRooms.find((e) => e === "Study Room")
+          propertyDocument.additionalRooms.find((e) => e === "Study Room")
             ? true
             : false,
         PowderRoomClick:
           propertyDocument.additionalRooms &&
-            propertyDocument.additionalRooms.find((e) => e === "Powder Room")
+          propertyDocument.additionalRooms.find((e) => e === "Powder Room")
             ? true
             : false,
         BasementClick:
           propertyDocument.additionalRooms &&
-            propertyDocument.additionalRooms.find((e) => e === "Basement")
+          propertyDocument.additionalRooms.find((e) => e === "Basement")
             ? true
             : false,
 
@@ -199,45 +200,60 @@ const Stage2 = (props) => {
           : [],
         FrontYardClick:
           propertyDocument.additionalArea &&
-            propertyDocument.additionalArea.find((e) => e === "Front Yard")
+          propertyDocument.additionalArea.find((e) => e === "Front Yard")
             ? true
             : false,
         BackYardClick:
           propertyDocument.additionalArea &&
-            propertyDocument.additionalArea.find((e) => e === "Back Yard")
+          propertyDocument.additionalArea.find((e) => e === "Back Yard")
             ? true
             : false,
         TerraceClick:
           propertyDocument.additionalArea &&
-            propertyDocument.additionalArea.find((e) => e === "Terrace")
+          propertyDocument.additionalArea.find((e) => e === "Terrace")
             ? true
             : false,
         RoofRightsClick:
           propertyDocument.additionalArea &&
-            propertyDocument.additionalArea.find((e) => e === "Roof Rights")
+          propertyDocument.additionalArea.find((e) => e === "Roof Rights")
             ? true
             : false,
         GarageClick:
           propertyDocument.additionalArea &&
-            propertyDocument.additionalArea.find((e) => e === "Garage")
+          propertyDocument.additionalArea.find((e) => e === "Garage")
             ? true
             : false,
-        PowerBackup: propertyDocument.powerBackup ? propertyDocument.powerBackup : "",
-        NumberOfFloors: propertyDocument.numberOfFloors ? propertyDocument.numberOfFloors : 1,
+        PowerBackup: propertyDocument.powerBackup
+          ? propertyDocument.powerBackup
+          : "",
+        NumberOfFloors: propertyDocument.numberOfFloors
+          ? propertyDocument.numberOfFloors
+          : 1,
         FloorNo: propertyDocument.floorNo ? propertyDocument.floorNo : 0,
-        NumberOfFlatsOnFloor: propertyDocument.numberOfFlatsOnFloor ? propertyDocument.numberOfFlatsOnFloor : 0,
-        NumberOfLifts: propertyDocument.numberOfLifts ? propertyDocument.numberOfLifts : 0,
-        NumberOfOpenCarParking: propertyDocument.numberOfOpenCarParking ? propertyDocument.numberOfOpenCarParking : 0,
-        NumberOfCoveredCarParking: propertyDocument.numberOfCoveredCarParking ? propertyDocument.numberOfCoveredCarParking : 0,
-        TwoWheelarParking: propertyDocument.twoWheelarParking ? propertyDocument.twoWheelarParking : "No",
-        LockinPeriod: propertyDocument.lockinPeriod ? propertyDocument.lockinPeriod : 6,
-        YearOfConstruction: propertyDocument.yearOfConstruction ? propertyDocument.yearOfConstruction : "Year of Construction",
+        NumberOfFlatsOnFloor: propertyDocument.numberOfFlatsOnFloor
+          ? propertyDocument.numberOfFlatsOnFloor
+          : 0,
+        NumberOfLifts: propertyDocument.numberOfLifts
+          ? propertyDocument.numberOfLifts
+          : 0,
+        NumberOfOpenCarParking: propertyDocument.numberOfOpenCarParking
+          ? propertyDocument.numberOfOpenCarParking
+          : 0,
+        NumberOfCoveredCarParking: propertyDocument.numberOfCoveredCarParking
+          ? propertyDocument.numberOfCoveredCarParking
+          : 0,
+        TwoWheelarParking: propertyDocument.twoWheelarParking
+          ? propertyDocument.twoWheelarParking
+          : "No",
+        LockinPeriod: propertyDocument.lockinPeriod
+          ? propertyDocument.lockinPeriod
+          : 6,
+        YearOfConstruction: propertyDocument.yearOfConstruction
+          ? propertyDocument.yearOfConstruction
+          : "Year of Construction",
         // AgeOfProperty: propertyDocument.ageOfProperty ? propertyDocument.ageOfProperty : ""
-
       });
     }
-
-
   }, [propertyDocument]);
 
   const handleBackSubmit = (e) => {
@@ -266,62 +282,52 @@ const Stage2 = (props) => {
           ...propertyDetails,
           NumberOfBalcony: inputValue,
         });
-      }
-      else if (input === "kitchenNumberInput") {
+      } else if (input === "kitchenNumberInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfKitchen: inputValue,
         });
-      }
-      else if (input === "livingAreaNumberInput") {
+      } else if (input === "livingAreaNumberInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfLivingArea: inputValue,
         });
-      }
-      else if (input === "basementNumberInput") {
+      } else if (input === "basementNumberInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfBasement: inputValue,
         });
-      }
-      else if (input === "floorNoInput") {
+      } else if (input === "floorNoInput") {
         setPropertyDetails({
           ...propertyDetails,
           FloorNo: inputValue,
         });
-      }
-      else if (input === "numberOfFloorsInput") {
+      } else if (input === "numberOfFloorsInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfFloors: inputValue,
         });
-      }
-      else if (input === "numberOfFlatsOnFloorInput") {
+      } else if (input === "numberOfFlatsOnFloorInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfFlatsOnFloor: inputValue,
         });
-      }
-      else if (input === "numberOfLiftsInput") {
+      } else if (input === "numberOfLiftsInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfLifts: inputValue,
         });
-      }
-      else if (input === "numberOfOpenCarParkingInput") {
+      } else if (input === "numberOfOpenCarParkingInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfOpenCarParking: inputValue,
         });
-      }
-      else if (input === "numberOfCoveredCarParkingInput") {
+      } else if (input === "numberOfCoveredCarParkingInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfCoveredCarParking: inputValue,
         });
-      }
-      else if (input === "lockinperiodInput") {
+      } else if (input === "lockinperiodInput") {
         setPropertyDetails({
           ...propertyDetails,
           LockinPeriod: inputValue,
@@ -416,10 +422,9 @@ const Stage2 = (props) => {
   //   }
   // }
 
-
   function decrementInput(input) {
     var inputValue = document.getElementById(input).value;
-  
+
     if (input === "floorNoInput" && inputValue > -1) {
       inputValue--; // Allow FloorNo to go to -1
       setPropertyDetails({
@@ -491,9 +496,6 @@ const Stage2 = (props) => {
       }
     }
   }
-  
-
-
 
   const handleNextSubmit = async (e) => {
     e.preventDefault();
@@ -531,13 +533,13 @@ const Stage2 = (props) => {
     }
     if (
       // propertyDetails && propertyDetails.NumberOfBedrooms.toUpperCase() === "SELECT BEDROOM" ||
-      (propertyDetails.Furnishing) === ""
+      propertyDetails.Furnishing === ""
     ) {
       if (errorMsg === "Select Furnishing") errorMsg = errorMsg + "Furnishing";
       else errorMsg = errorMsg + ", Furnishing";
       errorFlag = true;
     }
-    
+
     if (
       // propertyDetails.NumberOfBathrooms.toUpperCase() === "SELECT BATHROOM" ||
       Number(propertyDetails.NumberOfBathrooms) === 0
@@ -555,10 +557,10 @@ const Stage2 = (props) => {
         errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
       else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
       errorFlag = true;
-    } 
+    }
 
     if (
-      propertyDetails.SuperArea !== null && 
+      propertyDetails.SuperArea !== null &&
       Number(propertyDetails.SuperArea) !== 0 &&
       Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)
     ) {
@@ -584,6 +586,7 @@ const Stage2 = (props) => {
       numberOfKitchen: propertyDetails.NumberOfKitchen,
       numberOfLivingArea: propertyDetails.NumberOfLivingArea,
       numberOfBasement: propertyDetails.NumberOfBasement,
+      livingArea: propertyDetails.LivingArea,
       diningArea: propertyDetails.DiningArea,
       livingAndDining: propertyDetails.LivingAndDining,
       passage: propertyDetails.Passage,
@@ -600,16 +603,32 @@ const Stage2 = (props) => {
       superAreaUnit: propertyDetails.SuperAreaUnit,
       carpetAreaUnit: propertyDetails.SuperAreaUnit,
 
-      powerBackup: propertyDetails.PowerBackup ? propertyDetails.PowerBackup : "",
-      numberOfFloors: propertyDetails.NumberOfFloors ? propertyDetails.NumberOfFloors : 0,
+      powerBackup: propertyDetails.PowerBackup
+        ? propertyDetails.PowerBackup
+        : "",
+      numberOfFloors: propertyDetails.NumberOfFloors
+        ? propertyDetails.NumberOfFloors
+        : 0,
       floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "",
-      numberOfFlatsOnFloor: propertyDetails.NumberOfFlatsOnFloor ? propertyDetails.NumberOfFlatsOnFloor : 0,
-      numberOfLifts: propertyDetails.NumberOfLifts ? propertyDetails.NumberOfLifts : 0,
-      numberOfOpenCarParking: propertyDetails.NumberOfOpenCarParking ? propertyDetails.NumberOfOpenCarParking : 0,
-      numberOfCoveredCarParking: propertyDetails.NumberOfCoveredCarParking ? propertyDetails.NumberOfCoveredCarParking : 0,
+      numberOfFlatsOnFloor: propertyDetails.NumberOfFlatsOnFloor
+        ? propertyDetails.NumberOfFlatsOnFloor
+        : 0,
+      numberOfLifts: propertyDetails.NumberOfLifts
+        ? propertyDetails.NumberOfLifts
+        : 0,
+      numberOfOpenCarParking: propertyDetails.NumberOfOpenCarParking
+        ? propertyDetails.NumberOfOpenCarParking
+        : 0,
+      numberOfCoveredCarParking: propertyDetails.NumberOfCoveredCarParking
+        ? propertyDetails.NumberOfCoveredCarParking
+        : 0,
 
-      twoWheelarParking: propertyDetails.TwoWheelarParking ? propertyDetails.TwoWheelarParking : "",
-      lockinPeriod: propertyDetails.LockinPeriod ? propertyDetails.LockinPeriod : 0,
+      twoWheelarParking: propertyDetails.TwoWheelarParking
+        ? propertyDetails.TwoWheelarParking
+        : "",
+      lockinPeriod: propertyDetails.LockinPeriod
+        ? propertyDetails.LockinPeriod
+        : 0,
       yearOfConstruction: propertyDetails.YearOfConstruction,
       // ageOfProperty: propertyDetails.AgeOfProperty ? propertyDetails.AgeOfProperty : document.getElementById('ageOfPropertyCount'),
     };
@@ -624,7 +643,7 @@ const Stage2 = (props) => {
       };
 
       if (!errorFlag) {
-        console.log('updatedProperty:', updatedProperty)
+        console.log("updatedProperty:", updatedProperty);
         // console.log('propertyid:', propertyid)
         await updateDocument(propertyid, updatedProperty);
 
@@ -636,7 +655,6 @@ const Stage2 = (props) => {
       }
     }
   };
-
 
   // const [years, setYears] = useState([]);
   // Function to generate years from 1980 to current year
@@ -652,8 +670,8 @@ const Stage2 = (props) => {
     }
     yearArray.unshift({
       label: "Year of Construction",
-      value: "Year of Construction"
-    })
+      value: "Year of Construction",
+    });
     return yearArray;
   };
 
@@ -661,8 +679,6 @@ const Stage2 = (props) => {
     const yearList = generateYears();
     setYears(yearList);
   }, []);
-
-
 
   const handleYearOfConstructionChange = async (option) => {
     // console.log('Year Of Construction option: ', option)
@@ -675,8 +691,8 @@ const Stage2 = (props) => {
       // AgeOfProperty: ageOfProperty,
     });
 
-    setYearOfConstruction({ label: option.value, value: option.value })
-  }
+    setYearOfConstruction({ label: option.value, value: option.value });
+  };
 
   return (
     <form>
@@ -699,7 +715,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType.toUpperCase ===
+                      propertyDetails.PropertyType.toUpperCase ===
                         "SELECT PROPERTY TYPE"
                         ? true
                         : false
@@ -710,7 +726,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "High Rise Apt"
+                      propertyDetails.PropertyType === "High Rise Apt"
                         ? true
                         : false
                     }
@@ -720,7 +736,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "Low Rise Apt"
+                      propertyDetails.PropertyType === "Low Rise Apt"
                         ? true
                         : false
                     }
@@ -730,7 +746,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "Builder Floor"
+                      propertyDetails.PropertyType === "Builder Floor"
                         ? true
                         : false
                     }
@@ -740,7 +756,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "Kothi"
+                      propertyDetails.PropertyType === "Kothi"
                         ? true
                         : false
                     }
@@ -750,7 +766,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "Villa - Simplex"
+                      propertyDetails.PropertyType === "Villa - Simplex"
                         ? true
                         : false
                     }
@@ -760,7 +776,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "Villa - Duplex"
+                      propertyDetails.PropertyType === "Villa - Duplex"
                         ? true
                         : false
                     }
@@ -770,7 +786,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "Row House - Simplex"
+                      propertyDetails.PropertyType === "Row House - Simplex"
                         ? true
                         : false
                     }
@@ -780,7 +796,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "Row House - Duplex"
+                      propertyDetails.PropertyType === "Row House - Duplex"
                         ? true
                         : false
                     }
@@ -790,7 +806,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "Pent House - Simplex"
+                      propertyDetails.PropertyType === "Pent House - Simplex"
                         ? true
                         : false
                     }
@@ -800,7 +816,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "Pent House - Duplex"
+                      propertyDetails.PropertyType === "Pent House - Duplex"
                         ? true
                         : false
                     }
@@ -1002,10 +1018,11 @@ const Stage2 = (props) => {
               >
                 <div className="radio_group_single" style={{ width: "100%" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi"
-                      ? "radiochecked"
-                      : ""
-                      }`}
+                    className={`custom_radio_button ${
+                      propertyDetails && propertyDetails.Furnishing === "Semi"
+                        ? "radiochecked"
+                        : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -1033,10 +1050,11 @@ const Stage2 = (props) => {
                 </div>
                 <div className="radio_group_single" style={{ width: "100%" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully"
-                      ? "radiochecked"
-                      : ""
-                      }`}
+                    className={`custom_radio_button ${
+                      propertyDetails && propertyDetails.Furnishing === "Fully"
+                        ? "radiochecked"
+                        : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -1064,10 +1082,11 @@ const Stage2 = (props) => {
                 </div>
                 <div className="radio_group_single" style={{ width: "100%" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
-                      ? "radiochecked"
-                      : ""
-                      }`}
+                    className={`custom_radio_button ${
+                      propertyDetails && propertyDetails.Furnishing === "Raw"
+                        ? "radiochecked"
+                        : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -1117,7 +1136,9 @@ const Stage2 = (props) => {
                       id="bedroomNumberInput"
                       type="number"
                       disabled
-                      value={propertyDetails && propertyDetails.NumberOfBedrooms}
+                      value={
+                        propertyDetails && propertyDetails.NumberOfBedrooms
+                      }
                     />
                     <div
                       className="right-plus-button pmbutton"
@@ -1145,7 +1166,9 @@ const Stage2 = (props) => {
                       id="bathroomNumberInput"
                       type="number"
                       disabled
-                      value={propertyDetails && propertyDetails.NumberOfBathrooms}
+                      value={
+                        propertyDetails && propertyDetails.NumberOfBathrooms
+                      }
                     />
                     <div
                       className="right-plus-button pmbutton"
@@ -1275,7 +1298,10 @@ const Stage2 = (props) => {
           {/* Additional Rooms */}
           <div className="col-md-6">
             <div className="form_field st-2 label_top">
-              <label htmlFor=""> Additional Rooms - ( {propertyDetails.AdditionalRooms.length} )</label>
+              <label htmlFor="">
+                {" "}
+                Additional Rooms - ( {propertyDetails.AdditionalRooms.length} )
+              </label>
               <div className="radio_group">
                 <div className="radio_group_single">
                   <div
@@ -1297,7 +1323,8 @@ const Stage2 = (props) => {
                               propertyDetails.AdditionalRooms.filter(
                                 (elem) => elem !== "Servent Room 1"
                               ),
-                              ServentRoomOneClick: !propertyDetails.ServentRoomOneClick,
+                            ServentRoomOneClick:
+                              !propertyDetails.ServentRoomOneClick,
                           });
                         } else {
                           setPropertyDetails({
@@ -1306,7 +1333,8 @@ const Stage2 = (props) => {
                               ...propertyDetails.AdditionalRooms,
                               "Servent Room 1",
                             ],
-                            ServentRoomOneClick: !propertyDetails.ServentRoomOneClick,
+                            ServentRoomOneClick:
+                              !propertyDetails.ServentRoomOneClick,
                           });
                         }
                       }}
@@ -1344,7 +1372,8 @@ const Stage2 = (props) => {
                               propertyDetails.AdditionalRooms.filter(
                                 (elem) => elem !== "Servent Room 2"
                               ),
-                              ServentRoomTwoClick: !propertyDetails.ServentRoomTwoClick,
+                            ServentRoomTwoClick:
+                              !propertyDetails.ServentRoomTwoClick,
                           });
                         } else {
                           setPropertyDetails({
@@ -1353,7 +1382,8 @@ const Stage2 = (props) => {
                               ...propertyDetails.AdditionalRooms,
                               "Servent Room 2",
                             ],
-                            ServentRoomTwoClick: !propertyDetails.ServentRoomTwoClick,
+                            ServentRoomTwoClick:
+                              !propertyDetails.ServentRoomTwoClick,
                           });
                         }
                       }}
@@ -1657,90 +1687,10 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-          {/* Dining Area */}
-          <div className="col-md-4">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Dining Area</label>
-              <div className="form_field_inner">
-                <div className="form_field_container">
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.DiningArea === "Yes"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="diningArea_yes"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              DiningArea: "Yes",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="diningArea_yes"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Yes</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.DiningArea === "No"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="diningArea_no"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              DiningArea: "No",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="diningArea_no"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>No</h6>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           {/* Living & Dining */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
-              <label htmlFor="">Living & Dining</label>
+              <label htmlFor="">Living & Dining Combined</label>
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
@@ -1816,8 +1766,174 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-
           </div>
+          {/* Living Area */}
+          {propertyDetails.LivingAndDining.toLowerCase() === "no" && (
+            <div className="col-md-4">
+              <div className="form_field st-2 label_top">
+                <label htmlFor="">Living Area</label>
+                <div className="form_field_inner">
+                  <div className="form_field_container">
+                    <div className="radio_group">
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.LivingArea === "Yes"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="livingArea_yes"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                LivingArea: "Yes",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="livingArea_yes"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Yes</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.LivingArea === "No"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="livingArea_no"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                LivingArea: "No",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="livingArea_no"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>No</h6>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Dining Area */}
+          {propertyDetails.LivingAndDining.toLowerCase() === "no" && (
+           <div className="col-md-4">
+           <div className="form_field st-2 label_top">
+             <label htmlFor="">Dining Area</label>
+             <div className="form_field_inner">
+               <div className="form_field_container">
+                 <div className="radio_group">
+                   <div className="radio_group_single">
+                     <div
+                       className={
+                         propertyDetails.DiningArea === "Yes"
+                           ? "custom_radio_button radiochecked"
+                           : "custom_radio_button"
+                       }
+                     >
+                       <input
+                         type="checkbox"
+                         id="diningArea_yes"
+                         onClick={(e) => {
+                           setPropertyDetails({
+                             ...propertyDetails,
+                             DiningArea: "Yes",
+                           });
+                         }}
+                       />
+                       <label
+                         htmlFor="diningArea_yes"
+                         style={{ paddingTop: "7px" }}
+                       >
+                         <div className="radio_icon">
+                           <span className="material-symbols-outlined add">
+                             add
+                           </span>
+                           <span className="material-symbols-outlined check">
+                             done
+                           </span>
+                         </div>
+                         <h6>Yes</h6>
+                       </label>
+                     </div>
+                   </div>
+                   <div className="radio_group_single">
+                     <div
+                       className={
+                         propertyDetails.DiningArea === "No"
+                           ? "custom_radio_button radiochecked"
+                           : "custom_radio_button"
+                       }
+                     >
+                       <input
+                         type="checkbox"
+                         id="diningArea_no"
+                         onClick={(e) => {
+                           setPropertyDetails({
+                             ...propertyDetails,
+                             DiningArea: "No",
+                           });
+                         }}
+                       />
+                       <label
+                         htmlFor="diningArea_no"
+                         style={{ paddingTop: "7px" }}
+                       >
+                         <div className="radio_icon">
+                           <span className="material-symbols-outlined add">
+                             add
+                           </span>
+                           <span className="material-symbols-outlined check">
+                             done
+                           </span>
+                         </div>
+                         <h6>No</h6>
+                       </label>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+          )}
+         
+
           {/* Passages */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
@@ -2001,10 +2117,7 @@ const Stage2 = (props) => {
                       textTransform: "capitalize",
                     }),
                   }}
-                >
-
-                </Select>
-
+                ></Select>
               </div>
             </div>
           </div>
@@ -2022,16 +2135,23 @@ const Stage2 = (props) => {
                   onInput={(e) => {
                     restrictInput(e, 9);
                   }}
-                  value={propertyDetails && (((new Date().getFullYear()) - Number(propertyDetails.YearOfConstruction)) + " Years")}
+                  value={
+                    propertyDetails &&
+                    new Date().getFullYear() -
+                      Number(propertyDetails.YearOfConstruction) +
+                      " Years"
+                  }
                 />
               </div>
             </div>
-
           </div>
           {/* Additional Area */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
-              <label htmlFor=""> Additional Area  - ( {propertyDetails.AdditionalArea.length} )</label>
+              <label htmlFor="">
+                {" "}
+                Additional Area - ( {propertyDetails.AdditionalArea.length} )
+              </label>
               <div className="radio_group">
                 <div className="radio_group_single">
                   <div
@@ -2278,14 +2398,23 @@ const Stage2 = (props) => {
               <label htmlFor="">Power Backup</label>
               <div
                 className="radio_group"
-                style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                }}
               >
-                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                <div
+                  className="radio_group_single"
+                  style={{ minWidth: "30%", width: "fit-content" }}
+                >
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "No Backup"
-                      ? "radiochecked"
-                      : ""
-                      }`}
+                    className={`custom_radio_button ${
+                      propertyDetails &&
+                      propertyDetails.PowerBackup === "No Backup"
+                        ? "radiochecked"
+                        : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -2311,12 +2440,17 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
-                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                <div
+                  className="radio_group_single"
+                  style={{ minWidth: "30%", width: "fit-content" }}
+                >
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "Full Backup"
-                      ? "radiochecked"
-                      : ""
-                      }`}
+                    className={`custom_radio_button ${
+                      propertyDetails &&
+                      propertyDetails.PowerBackup === "Full Backup"
+                        ? "radiochecked"
+                        : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -2342,12 +2476,17 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
-                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                <div
+                  className="radio_group_single"
+                  style={{ minWidth: "30%", width: "fit-content" }}
+                >
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "Partial Backup"
-                      ? "radiochecked"
-                      : ""
-                      }`}
+                    className={`custom_radio_button ${
+                      propertyDetails &&
+                      propertyDetails.PowerBackup === "Partial Backup"
+                        ? "radiochecked"
+                        : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -2373,12 +2512,17 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
-                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                <div
+                  className="radio_group_single"
+                  style={{ minWidth: "30%", width: "fit-content" }}
+                >
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "Lift Only"
-                      ? "radiochecked"
-                      : ""
-                      }`}
+                    className={`custom_radio_button ${
+                      propertyDetails &&
+                      propertyDetails.PowerBackup === "Lift Only"
+                        ? "radiochecked"
+                        : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -2404,12 +2548,17 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
-                <div className="radio_group_single" style={{ minWidth: "30%", width: "fit-content" }}>
+                <div
+                  className="radio_group_single"
+                  style={{ minWidth: "30%", width: "fit-content" }}
+                >
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.PowerBackup === "Inverter"
-                      ? "radiochecked"
-                      : ""
-                      }`}
+                    className={`custom_radio_button ${
+                      propertyDetails &&
+                      propertyDetails.PowerBackup === "Inverter"
+                        ? "radiochecked"
+                        : ""
+                    }`}
                   >
                     <input
                       type="radio"
@@ -2647,8 +2796,6 @@ const Stage2 = (props) => {
                       </label>
                     </div>
                   </div>
-
-                 
                 </div>
               </div>
             </div>
@@ -2686,7 +2833,6 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-
           </div>
           {/* Total Floor */}
           <div className="col-md-4">
@@ -2723,7 +2869,6 @@ const Stage2 = (props) => {
             </div>
           </div>
 
-
           {/* No of Apts on Floor */}
           <div className="col-md-4">
             <div className="form_field label_top">
@@ -2744,7 +2889,9 @@ const Stage2 = (props) => {
                     id="numberOfFlatsOnFloorInput"
                     type="number"
                     disabled
-                    value={propertyDetails && propertyDetails.NumberOfFlatsOnFloor}
+                    value={
+                      propertyDetails && propertyDetails.NumberOfFlatsOnFloor
+                    }
                   />
                   <div
                     className="right-plus-button pmbutton"
@@ -2757,7 +2904,6 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-
           </div>
           {/* No of Lifts */}
           <div className="col-md-4">
@@ -2792,9 +2938,8 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-
           </div>
-           {/* No of Close Car Parking */}
+          {/* No of Close Car Parking */}
           <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Coverd Car Parking</label>
@@ -2814,7 +2959,10 @@ const Stage2 = (props) => {
                     id="numberOfCoveredCarParkingInput"
                     type="number"
                     disabled
-                    value={propertyDetails && propertyDetails.NumberOfCoveredCarParking}
+                    value={
+                      propertyDetails &&
+                      propertyDetails.NumberOfCoveredCarParking
+                    }
                   />
                   <div
                     className="right-plus-button pmbutton"
@@ -2848,7 +2996,9 @@ const Stage2 = (props) => {
                     id="numberOfOpenCarParkingInput"
                     type="number"
                     disabled
-                    value={propertyDetails && propertyDetails.NumberOfOpenCarParking}
+                    value={
+                      propertyDetails && propertyDetails.NumberOfOpenCarParking
+                    }
                   />
                   <div
                     className="right-plus-button pmbutton"
@@ -2862,7 +3012,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-         
+
           {/* two wheeler parking */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
@@ -2942,7 +3092,6 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-
           </div>
           {/* Lock-in Period */}
           <div className="col-md-4">
@@ -2993,11 +3142,9 @@ const Stage2 = (props) => {
           <button
             className="theme_btn btn_border next_btn full_width no_icon"
             onClick={handleNextSubmit}
-
           >
             {"Next >>"}
           </button>
-
         </div>
       </div>
     </form>

@@ -3290,22 +3290,50 @@ const PropertyDetails = () => {
                           <h5>{propertyDocument.numberOfKitchen}</h5>
                         </div>
                       </div> */}
-                      <div className="p_info_single">
+                      {propertyDocument.livingArea && (
+                        <div className="p_info_single">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/livingArea.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Living Area</h6>
+                            <h5>{propertyDocument.livingArea}</h5>
+                          </div>
+                        </div>
+                      )}
+                      {propertyDocument.diningArea && (
+                        <div className="p_info_single">
                         <div className="pd_icon">
                           <img
-                            src="/assets/img/property-detail-icon/livingArea.png"
+                            src="/assets/img/property-detail-icon/diningArea.png"
                             alt=""
                           />
                         </div>
                         <div className="pis_content">
-                          <h6>Living Area</h6>
-                          <h5>
-                            {propertyDocument.numberOfLivingArea === "0"
-                              ? "No"
-                              : "Yes"}
-                          </h5>
+                          <h6>Dining Area</h6>
+                          <h5>{propertyDocument.diningArea}</h5>
                         </div>
                       </div>
+                      )}
+                      {propertyDocument.livingAndDining.toLowerCase() === "yes" && (
+  <div className="p_info_single">
+  <div className="pd_icon">
+    <img
+      src="/assets/img/property-detail-icon/livingDining.png"
+      alt=""
+    />
+  </div>
+
+  <div className="pis_content">
+    <h6>Living & Dining:</h6>
+    <h5>{propertyDocument.livingAndDining}</h5>
+  </div>
+</div>
+                      )}
+                       
                       {propertyDocument.numberOfBasement !== "0" && (
                         <div className="p_info_single">
                           <div className="pd_icon">
@@ -3321,31 +3349,7 @@ const PropertyDetails = () => {
                         </div>
                       )}
 
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/diningArea.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Dining Area</h6>
-                          <h5>{propertyDocument.diningArea}</h5>
-                        </div>
-                      </div>
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/livingDining.png"
-                            alt=""
-                          />
-                        </div>
-
-                        <div className="pis_content">
-                          <h6>Living & Dining:</h6>
-                          <h5>{propertyDocument.livingAndDining}</h5>
-                        </div>
-                      </div>
+                   
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
@@ -3508,14 +3512,12 @@ const PropertyDetails = () => {
                                           src="/assets/img/property-detail-icon/powerRoom.png"
                                           alt="Power Room"
                                         />
-                                      ) :
-                                       item === "Powder Room" ? (
+                                      ) : item === "Powder Room" ? (
                                         <img
                                           src="/assets/img/property-detail-icon/powderroom.png"
                                           alt="Power Room"
                                         />
-                                      ) :
-                                      item === "Basement" ? (
+                                      ) : item === "Basement" ? (
                                         <img
                                           src="/assets/img/property-detail-icon/basement.png"
                                           alt="Power Room"
@@ -3568,8 +3570,7 @@ const PropertyDetails = () => {
                                     src="/assets/img/property-detail-icon/garage.png"
                                     alt=""
                                   />
-                                ) :
-                                item === "Roof Rights" ? (
+                                ) : item === "Roof Rights" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/roofing.png"
                                     alt=""
