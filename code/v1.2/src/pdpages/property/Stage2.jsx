@@ -69,7 +69,7 @@ const Stage2 = (props) => {
     LivingAndDining: "",
     Passage: "",
     EntranceGallery: "",
-    Furnishing: "Raw",
+    Furnishing: "",
     AdditionalRooms: [],
     ServentRoomOneClick: false,
     ServentRoomTwoClick: false,
@@ -77,12 +77,12 @@ const Stage2 = (props) => {
     StoreRoomClick: false,
     PoojaRoomClick: false,
     StudyRoomClick: false,
-    PowerRoomClick: false,
+    PowderRoomClick: false,
     AdditionalArea: [],
     FrontYardClick: false,
     BackYardClick: false,
     TerraceClick: false,
-    PrivateGardenClick: false,
+    RoofRightsClick: false,
     GarageClick: false,
     PowerBackup: "",
     NumberOfFloors: 1,
@@ -149,7 +149,7 @@ const Stage2 = (props) => {
           : "",
         Furnishing: propertyDocument.furnishing
           ? propertyDocument.furnishing
-          : "Raw",
+          : "",
         AdditionalRooms: propertyDocument.additionalRooms
           ? propertyDocument.additionalRooms
           : [],
@@ -183,9 +183,9 @@ const Stage2 = (props) => {
             propertyDocument.additionalRooms.find((e) => e === "Study Room")
             ? true
             : false,
-        PowerRoomClick:
+        PowderRoomClick:
           propertyDocument.additionalRooms &&
-            propertyDocument.additionalRooms.find((e) => e === "Power Room")
+            propertyDocument.additionalRooms.find((e) => e === "Powder Room")
             ? true
             : false,
         BasementClick:
@@ -212,9 +212,9 @@ const Stage2 = (props) => {
             propertyDocument.additionalArea.find((e) => e === "Terrace")
             ? true
             : false,
-        PrivateGardenClick:
+        RoofRightsClick:
           propertyDocument.additionalArea &&
-            propertyDocument.additionalArea.find((e) => e === "Private Garden")
+            propertyDocument.additionalArea.find((e) => e === "Roof Rights")
             ? true
             : false,
         GarageClick:
@@ -315,7 +315,7 @@ const Stage2 = (props) => {
           NumberOfOpenCarParking: inputValue,
         });
       }
-      else if (input === "numberOfClosedCarParkingInput") {
+      else if (input === "numberOfCoveredCarParkingInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfClosedCarParking: inputValue,
@@ -401,7 +401,7 @@ const Stage2 = (props) => {
   //         NumberOfOpenCarParking: inputValue,
   //       });
   //     }
-  //     else if (input === "numberOfClosedCarParkingInput") {
+  //     else if (input === "numberOfCoveredCarParkingInput") {
   //       setPropertyDetails({
   //         ...propertyDetails,
   //         NumberOfClosedCarParking: inputValue,
@@ -478,7 +478,7 @@ const Stage2 = (props) => {
           ...propertyDetails,
           NumberOfOpenCarParking: inputValue,
         });
-      } else if (input === "numberOfClosedCarParkingInput") {
+      } else if (input === "numberOfCoveredCarParkingInput") {
         setPropertyDetails({
           ...propertyDetails,
           NumberOfClosedCarParking: inputValue,
@@ -529,6 +529,15 @@ const Stage2 = (props) => {
       else errorMsg = errorMsg + ", Bedroom";
       errorFlag = true;
     }
+    if (
+      // propertyDetails && propertyDetails.NumberOfBedrooms.toUpperCase() === "SELECT BEDROOM" ||
+      (propertyDetails.Furnishing) === ""
+    ) {
+      if (errorMsg === "Select Furnishing") errorMsg = errorMsg + "Furnishing";
+      else errorMsg = errorMsg + ", Furnishing";
+      errorFlag = true;
+    }
+    
     if (
       // propertyDetails.NumberOfBathrooms.toUpperCase() === "SELECT BATHROOM" ||
       Number(propertyDetails.NumberOfBathrooms) === 0
@@ -635,7 +644,7 @@ const Stage2 = (props) => {
     const currentYear = new Date().getFullYear();
     const startYear = 1980;
     const yearArray = [];
-    for (let year = startYear; year <= currentYear; year++) {
+    for (let year = currentYear; year >= startYear; year--) {
       yearArray.push({
         label: year,
         value: year,
@@ -1176,7 +1185,7 @@ const Stage2 = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="plus_minus_input_wrapper">
+                {/* <div className="plus_minus_input_wrapper">
                   <span className="pmi_label">Kitchen</span>
                   <div className="plus_minus_input">
                     <div
@@ -1203,8 +1212,8 @@ const Stage2 = (props) => {
                       <span className="material-symbols-outlined">add</span>
                     </div>
                   </div>
-                </div>
-                <div className="plus_minus_input_wrapper">
+                </div> */}
+                {/* <div className="plus_minus_input_wrapper">
                   <span className="pmi_label">Living Area</span>
                   <div className="plus_minus_input">
                     <div
@@ -1231,8 +1240,8 @@ const Stage2 = (props) => {
                       <span className="material-symbols-outlined">add</span>
                     </div>
                   </div>
-                </div>
-                <div className="plus_minus_input_wrapper">
+                </div> */}
+                {/* <div className="plus_minus_input_wrapper">
                   <span className="pmi_label">Basement</span>
                   <div className="plus_minus_input">
                     <div
@@ -1259,7 +1268,7 @@ const Stage2 = (props) => {
                       <span className="material-symbols-outlined">add</span>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -1362,7 +1371,7 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
-                <div className="radio_group_single">
+                {/* <div className="radio_group_single">
                   <div
                     className={
                       propertyDetails.OfficeRoomClick
@@ -1408,7 +1417,7 @@ const Stage2 = (props) => {
                       <h6>Office Room</h6>
                     </label>
                   </div>
-                </div>
+                </div> */}
                 <div className="radio_group_single">
                   <div
                     className={
@@ -1554,38 +1563,38 @@ const Stage2 = (props) => {
                 <div className="radio_group_single">
                   <div
                     className={
-                      propertyDetails.PowerRoomClick
+                      propertyDetails.PowderRoomClick
                         ? "custom_radio_button radiochecked"
                         : "custom_radio_button"
                     }
                   >
                     <input
                       type="checkbox"
-                      id="power_room"
+                      id="powder_room"
                       onClick={(e) => {
-                        if (propertyDetails.PowerRoomClick) {
+                        if (propertyDetails.PowderRoomClick) {
                           setPropertyDetails({
                             ...propertyDetails,
                             AdditionalRooms:
                               propertyDetails.AdditionalRooms &&
                               propertyDetails.AdditionalRooms.filter(
-                                (elem) => elem !== "Power Room"
+                                (elem) => elem !== "Powder Room"
                               ),
-                            PowerRoomClick: !propertyDetails.PowerRoomClick,
+                            PowderRoomClick: !propertyDetails.PowderRoomClick,
                           });
                         } else {
                           setPropertyDetails({
                             ...propertyDetails,
                             AdditionalRooms: [
                               ...propertyDetails.AdditionalRooms,
-                              "Power Room",
+                              "Powder Room",
                             ],
-                            PowerRoomClick: !propertyDetails.PowerRoomClick,
+                            PowderRoomClick: !propertyDetails.PowderRoomClick,
                           });
                         }
                       }}
                     />
-                    <label htmlFor="power_room">
+                    <label htmlFor="powder_room">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined check">
                           done
@@ -1594,7 +1603,7 @@ const Stage2 = (props) => {
                           add
                         </span>
                       </div>
-                      <h6> Power Room</h6>
+                      <h6> Powder Room</h6>
                     </label>
                   </div>
                 </div>
@@ -2168,38 +2177,38 @@ const Stage2 = (props) => {
                 <div className="radio_group_single">
                   <div
                     className={
-                      propertyDetails.PrivateGardenClick
+                      propertyDetails.RoofRightsClick
                         ? "custom_radio_button radiochecked"
                         : "custom_radio_button"
                     }
                   >
                     <input
                       type="checkbox"
-                      id="privategarden_area"
+                      id="roofrights_area"
                       onClick={(e) => {
-                        if (propertyDetails.PrivateGardenClick) {
+                        if (propertyDetails.RoofRightsClick) {
                           setPropertyDetails({
                             ...propertyDetails,
                             AdditionalArea:
                               propertyDetails.AdditionalArea &&
                               propertyDetails.AdditionalArea.filter(
-                                (elem) => elem !== "Private Garden"
+                                (elem) => elem !== "Roof Rights"
                               ),
-                            PrivateGardenClick: !propertyDetails.PrivateGardenClick,
+                            RoofRightsClick: !propertyDetails.RoofRightsClick,
                           });
                         } else {
                           setPropertyDetails({
                             ...propertyDetails,
                             AdditionalArea: [
                               ...propertyDetails.AdditionalArea,
-                              "Private Garden",
+                              "Roof Rights",
                             ],
-                            PrivateGardenClick: !propertyDetails.PrivateGardenClick,
+                            RoofRightsClick: !propertyDetails.RoofRightsClick,
                           });
                         }
                       }}
                     />
-                    <label htmlFor="privategarden_area">
+                    <label htmlFor="roofrights_area">
                       <div className="radio_icon">
                         <span className="material-symbols-outlined add">
                           add
@@ -2208,7 +2217,7 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6>Private Garden</h6>
+                      <h6>Roof Rights</h6>
                     </label>
                   </div>
                 </div>
@@ -2540,7 +2549,55 @@ const Stage2 = (props) => {
                       </label>
                     </div>
                   </div>
-
+                  <div
+                    className="radio_group_single"
+                    style={{ padding: "5px 0", width: "100%" }}
+                  >
+                    <div
+                      className={
+                        propertyDetails.SuperAreaUnit === "SqYd"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
+                    >
+                      <input
+                        type="checkbox"
+                        id="superareaunit_SqYd"
+                        onClick={(e) => {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            SuperAreaUnit: "SqYd",
+                          });
+                        }}
+                      />
+                      <label
+                        htmlFor="superareaunit_SqYd"
+                        style={{ padding: "6px 0 10px 22px", height: "30px" }}
+                      >
+                        <div className="radio_icon">
+                          <span
+                            className="material-symbols-outlined add"
+                            style={{
+                              fontSize: "1.2rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            add
+                          </span>
+                          <span
+                            className="material-symbols-outlined check"
+                            style={{
+                              fontSize: "1.2rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            done
+                          </span>
+                        </div>
+                        <h6>SqYd</h6>
+                      </label>
+                    </div>
+                  </div>
                   <div
                     className="radio_group_single"
                     style={{ padding: "5px 0", width: "100%" }}
@@ -2591,55 +2648,7 @@ const Stage2 = (props) => {
                     </div>
                   </div>
 
-                  <div
-                    className="radio_group_single"
-                    style={{ padding: "5px 0", width: "100%" }}
-                  >
-                    <div
-                      className={
-                        propertyDetails.SuperAreaUnit === "SqYd"
-                          ? "custom_radio_button radiochecked"
-                          : "custom_radio_button"
-                      }
-                    >
-                      <input
-                        type="checkbox"
-                        id="superareaunit_SqYd"
-                        onClick={(e) => {
-                          setPropertyDetails({
-                            ...propertyDetails,
-                            SuperAreaUnit: "SqYd",
-                          });
-                        }}
-                      />
-                      <label
-                        htmlFor="superareaunit_SqYd"
-                        style={{ padding: "6px 0 10px 22px", height: "30px" }}
-                      >
-                        <div className="radio_icon">
-                          <span
-                            className="material-symbols-outlined add"
-                            style={{
-                              fontSize: "1.2rem",
-                              transform: "translateX(-3px)",
-                            }}
-                          >
-                            add
-                          </span>
-                          <span
-                            className="material-symbols-outlined check"
-                            style={{
-                              fontSize: "1.2rem",
-                              transform: "translateX(-3px)",
-                            }}
-                          >
-                            done
-                          </span>
-                        </div>
-                        <h6>SqYd</h6>
-                      </label>
-                    </div>
-                  </div>
+                 
                 </div>
               </div>
             </div>
@@ -2785,12 +2794,46 @@ const Stage2 = (props) => {
             </div>
 
           </div>
+           {/* No of Close Car Parking */}
+          <div className="col-md-4">
+            <div className="form_field label_top">
+              <label htmlFor="">No. of Coverd Car Parking</label>
+              <div className="plus_minus_input_wrapper">
+                <span className="pmi_label">#Covered</span>
+                <div className="plus_minus_input">
+                  <div
+                    className="left-minus-button pmbutton"
+                    onClick={() => {
+                      decrementInput("numberOfCoveredCarParkingInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">remove</span>
+                  </div>
+
+                  <input
+                    id="numberOfCoveredCarParkingInput"
+                    type="number"
+                    disabled
+                    value={propertyDetails && propertyDetails.NumberOfClosedCarParking}
+                  />
+                  <div
+                    className="right-plus-button pmbutton"
+                    onClick={() => {
+                      incrementInput("numberOfCoveredCarParkingInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">add</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           {/* No of Open Car Parking */}
           <div className="col-md-4">
             <div className="form_field label_top">
-              <label htmlFor="">No. of OPEN Car Parking</label>
+              <label htmlFor="">No. of Open Car Parking</label>
               <div className="plus_minus_input_wrapper">
-                <span className="pmi_label">#OPEN</span>
+                <span className="pmi_label">#Open</span>
                 <div className="plus_minus_input">
                   <div
                     className="left-minus-button pmbutton"
@@ -2819,40 +2862,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-          {/* No of Close Car Parking */}
-          <div className="col-md-4">
-            <div className="form_field label_top">
-              <label htmlFor="">No. of CLOSED Car Parking</label>
-              <div className="plus_minus_input_wrapper">
-                <span className="pmi_label">#CLOSED</span>
-                <div className="plus_minus_input">
-                  <div
-                    className="left-minus-button pmbutton"
-                    onClick={() => {
-                      decrementInput("numberOfClosedCarParkingInput");
-                    }}
-                  >
-                    <span className="material-symbols-outlined">remove</span>
-                  </div>
-
-                  <input
-                    id="numberOfClosedCarParkingInput"
-                    type="number"
-                    disabled
-                    value={propertyDetails && propertyDetails.NumberOfClosedCarParking}
-                  />
-                  <div
-                    className="right-plus-button pmbutton"
-                    onClick={() => {
-                      incrementInput("numberOfClosedCarParkingInput");
-                    }}
-                  >
-                    <span className="material-symbols-outlined">add</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+         
           {/* two wheeler parking */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">

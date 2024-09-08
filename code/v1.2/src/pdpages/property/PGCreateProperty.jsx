@@ -1225,6 +1225,38 @@ const CreateProperty = () => {
                           </label>
                         </div>
                       </div>}
+                      {(propertyDetails.Package.toLowerCase() === "pre pms") && <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.Flag === "PMS After Rent"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="flag_prepms"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                Flag: "PMS After Rent",
+                                Purpose: "Rent"
+                              });
+                            }}
+                          />
+                          <label htmlFor="flag_prepms">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            PMS After Rent
+                          </label>
+                        </div>
+                      </div>}
                     </div>
                   </div>
                 </div>
@@ -2231,7 +2263,7 @@ const CreateProperty = () => {
                 </div>
               </div>
             </div>
-            {(propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
+            {(propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "pms after rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
               <div id="id_demand" className="form_field label_top">
                 <label htmlFor="">Demand/Price for Rent</label>
                 <div className="form_field_inner">
