@@ -260,7 +260,8 @@ const CreateProperty = () => {
     Locality: "",
     Society: "",
     Pincode: "",
-    PropertyName: ""
+    PropertyName: "",
+    FullAddress:""
   });
 
   const setPurposeByFlag = () => {
@@ -2864,7 +2865,7 @@ const CreateProperty = () => {
                   <div className="field_icon"></div>
                 </div>
               </div>
-            </div>
+            </div>            
             <div className="col-12">
             {formError && <p className="error_new">{formError}</p>}
             {formSuccess && <p className="success_new">{formSuccess}</p>}

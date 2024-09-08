@@ -353,7 +353,7 @@ const PGAdminDashboard = () => {
               <section className="property_status assign">
                 <div className="ps_single one">
                   <h5>5</h5>
-                  <h6>Not Assign To <br /> Owner </h6>
+                  <h6>Not Assign To <br /> Executive </h6>
                 </div>
                 <div className="ps_single two">
                   <h5>8</h5>

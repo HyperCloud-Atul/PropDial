@@ -1349,24 +1349,31 @@ const PropertyDetails = () => {
                           </h4>
                           <h6>Demand Price</h6>
                         </div>
-                        {propertyDocument.purpose.toUpperCase() === "RENT" && (
-                          <div className="pdms_single">
-                            <h4>
-                              <span className="currency">₹</span>
-                              {new Intl.NumberFormat("en-IN").format(
-                                propertyDocument.maintenanceCharges
-                              )}
-                              /-{" "}
-                              <span className="extra">
-                                ({propertyDocument.maintenanceFlag})
-                              </span>
-                            </h4>
-                            <h6>
-                              Maintenance (
-                              {propertyDocument.maintenanceChargesFrequency})
-                            </h6>
-                          </div>
-                        )}
+                        {propertyDocument.purpose.toUpperCase() === "RENT" &&
+                          (propertyDocument.maintenanceFlag.toLowerCase() ===
+                          "included" ? (
+                            <div className="pdms_single">
+                              <h4>Included</h4>
+                              <h6>Maintenance</h6>
+                            </div>
+                          ) : (
+                            <div className="pdms_single">
+                              <h4>
+                                <span className="currency">₹</span>
+                                {new Intl.NumberFormat("en-IN").format(
+                                  propertyDocument.maintenanceCharges
+                                )}
+                                /-{" "}
+                                <span className="extra">
+                                  ({propertyDocument.maintenanceFlag})
+                                </span>
+                              </h4>
+                              <h6>
+                                Maintenance (
+                                {propertyDocument.maintenanceChargesFrequency})
+                              </h6>
+                            </div>
+                          ))}
                         {propertyDocument.purpose.toUpperCase() === "RENT" && (
                           <div className="pdms_single">
                             <h4>
@@ -2149,9 +2156,9 @@ const PropertyDetails = () => {
                               <>
                                 <Modal
                                   show={showRoomModal}
-                                  onHide={handleRoomModalClose}                                  
+                                  onHide={handleRoomModalClose}
                                   className="margin_top detail_modal"
-                                  centered                               
+                                  centered
                                 >
                                   <span
                                     class="material-symbols-outlined modal_close"
@@ -2289,26 +2296,27 @@ const PropertyDetails = () => {
                                         )}
                                     </div>
                                   </div>
-                                  {selectedRoom.roomAttachments.length !== 0 && (
+                                  {selectedRoom.roomAttachments.length !==
+                                    0 && (
                                     <div className="attached_with">
-                                    {selectedRoom.roomAttachments && (
-                                      <h6 className="text-center text_black">
-                                        Attached with
-                                      </h6>
-                                    )}
-                                    <div className="more_detail">
-                                      {selectedRoom.roomAttachments &&
-                                        selectedRoom.roomAttachments.map(
-                                          (attachment, findex) => (
-                                            <span className="more_detail_single">
-                                              {attachment}
-                                            </span>
-                                          )
-                                        )}
+                                      {selectedRoom.roomAttachments && (
+                                        <h6 className="text-center text_black">
+                                          Attached with
+                                        </h6>
+                                      )}
+                                      <div className="more_detail">
+                                        {selectedRoom.roomAttachments &&
+                                          selectedRoom.roomAttachments.map(
+                                            (attachment, findex) => (
+                                              <span className="more_detail_single">
+                                                {attachment}
+                                              </span>
+                                            )
+                                          )}
+                                      </div>
                                     </div>
-                                  </div>
                                   )}
-                                  
+
                                   {user && user.role === "admin" && (
                                     <div className="modal_footer">
                                       <div
@@ -2323,22 +2331,22 @@ const PropertyDetails = () => {
                                     </div>
                                   )}
                                 </Modal>
-                                
+
                                 <Modal
                                   show={showConfirmModal}
                                   onHide={handleConfirmClose}
                                   className="delete_modal"
                                   centered
                                 >
-                             <div className="alert_text text-center">
-                              Alert
-                             </div>
-                                  
-                                <div className="sure_content text-center">
-                                Are you sure you want to delete?
-                                </div>
-                             <div className="yes_no_btn">
-                             <div
+                                  <div className="alert_text text-center">
+                                    Alert
+                                  </div>
+
+                                  <div className="sure_content text-center">
+                                    Are you sure you want to delete?
+                                  </div>
+                                  <div className="yes_no_btn">
+                                    <div
                                       className="theme_btn full_width no_icon text-center btn_border"
                                       onClick={() =>
                                         deletePropertyLayout(selectedRoom.id)
@@ -2352,7 +2360,7 @@ const PropertyDetails = () => {
                                     >
                                       No
                                     </div>
-                             </div>
+                                  </div>
                                 </Modal>
                               </>
                             )}
@@ -2841,9 +2849,7 @@ const PropertyDetails = () => {
                         <div className="text-center sure_content">
                           Are you sure you want to delete?
                         </div>
-                        <div
-                          className="yes_no_btn"                         
-                        >
+                        <div className="yes_no_btn">
                           <div
                             className="theme_btn btn_border full_width no_icon text-center"
                             onClick={(e) =>
@@ -3391,18 +3397,6 @@ const PropertyDetails = () => {
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
-                            src="/assets/img/property-detail-icon/Overlooking.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Overlooking</h6>
-                          <h5>{propertyDocument.overLooking}</h5>
-                        </div>
-                      </div>
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
                             src="/assets/img/property-detail-icon/yearOfConstruction.png"
                             alt=""
                           />
@@ -3430,6 +3424,18 @@ const PropertyDetails = () => {
                           </h5>
                         </div>
                       </div>
+                      <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/Overlooking.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Overlooking</h6>
+                          <h5>{propertyDocument.overLooking.join(", ")}</h5>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -3440,49 +3446,90 @@ const PropertyDetails = () => {
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Additional Rooms</h2>
                         <div className="p_info">
-                          {propertyDocument.additionalRooms.map((item) => (
-                            <div className="p_info_single">
-                              <div className="pd_icon">
-                                {item === "Servent Room" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/servantRoom.png"
-                                    alt=""
-                                  />
-                                ) : item === "Office Room" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/officeRoom.png"
-                                    alt=""
-                                  />
-                                ) : item === "Store Room" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/storeRoom.png"
-                                    alt=""
-                                  />
-                                ) : item === "Pooja Room" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/poojaRoom.png"
-                                    alt=""
-                                  />
-                                ) : item === "Study Room" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/studyRoom.png"
-                                    alt=""
-                                  />
-                                ) : item === "Power Room" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/powerRoom.png"
-                                    alt=""
-                                  />
-                                ) : (
-                                  ""
+                          {(() => {
+                            const servantRooms =
+                              propertyDocument.additionalRooms.filter(
+                                (item) =>
+                                  item === "Servent Room 1" ||
+                                  item === "Servent Room 2"
+                              );
+                            const otherRooms =
+                              propertyDocument.additionalRooms.filter(
+                                (item) =>
+                                  item !== "Servent Room 1" &&
+                                  item !== "Servent Room 2"
+                              );
+
+                            return (
+                              <>
+                                {servantRooms.length > 0 && (
+                                  <div className="p_info_single">
+                                    <div className="pd_icon">
+                                      <img
+                                        src="/assets/img/property-detail-icon/servantRoom.png"
+                                        alt="Servant Room"
+                                      />
+                                    </div>
+                                    <div className="pis_content">
+                                      <h5>
+                                        {servantRooms.length > 1
+                                          ? `Servant Room (${servantRooms.length})`
+                                          : "Servant Room"}
+                                      </h5>
+                                    </div>
+                                  </div>
                                 )}
-                              </div>
-                              <div className="pis_content">
-                                {/* <h6>1</h6> */}
-                                <h5>{item}</h5>
-                              </div>
-                            </div>
-                          ))}
+
+                                {otherRooms.map((item) => (
+                                  <div className="p_info_single" key={item}>
+                                    <div className="pd_icon">
+                                      {item === "Office Room" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/officeRoom.png"
+                                          alt="Office Room"
+                                        />
+                                      ) : item === "Store Room" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/storeRoom.png"
+                                          alt="Store Room"
+                                        />
+                                      ) : item === "Pooja Room" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/poojaRoom.png"
+                                          alt="Pooja Room"
+                                        />
+                                      ) : item === "Study Room" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/studyRoom.png"
+                                          alt="Study Room"
+                                        />
+                                      ) : item === "Power Room" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/powerRoom.png"
+                                          alt="Power Room"
+                                        />
+                                      ) :
+                                       item === "Powder Room" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/powderroom.png"
+                                          alt="Power Room"
+                                        />
+                                      ) :
+                                      item === "Basement" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/basement.png"
+                                          alt="Power Room"
+                                        />
+                                      ) : null}
+                                    </div>
+                                    <div className="pis_content">
+                                      <h5>{item}</h5>
+                                    </div>
+                                  </div>
+                                ))}
+                              </>
+                            );
+                          })()}
                         </div>
                       </div>
                     </div>
@@ -3519,6 +3566,12 @@ const PropertyDetails = () => {
                                 ) : item === "Garage" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/garage.png"
+                                    alt=""
+                                  />
+                                ) :
+                                item === "Roof Rights" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/roofing.png"
                                     alt=""
                                   />
                                 ) : (
@@ -3622,7 +3675,7 @@ const PropertyDetails = () => {
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Parking</h2>
                     <div className="p_info">
-                               <div className="p_info_single">
+                      <div className="p_info_single">
                         <div className="pd_icon">
                           <img
                             src="/assets/img/property-detail-icon/car-parking.png"
@@ -3646,7 +3699,7 @@ const PropertyDetails = () => {
                           <h5>{propertyDocument.numberOfOpenCarParking}</h5>
                         </div>
                       </div>
-           
+
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img

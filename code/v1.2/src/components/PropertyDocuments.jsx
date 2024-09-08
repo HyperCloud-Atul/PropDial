@@ -374,7 +374,7 @@ const PropertyDocuments = () => {
                         </span>
                       </div>
                       <h6 className="demand">
-                        <span>₹</span> {propertydoc.demandPrice}
+                        <span>₹</span>{propertydoc.demandPrice}
                         {propertydoc.maintenancecharges !== '' && <span
                           style={{
                             fontSize: "10px",

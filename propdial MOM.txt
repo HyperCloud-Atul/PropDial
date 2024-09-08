@@ -72,13 +72,13 @@ Updates and enhancements for the Propdial system.
 18. *Total Floor Value:* (Sans and need to discuss)
     - The total floor value must be equal to or greater than the floor number.
 
-19. *Rename Car Parking Field:* (Sans)
+19. *Rename Car Parking Field:* (Sans) (Done)
     - Change "No. of Closed Car Parking" to "Covered Car Parking."
 
-20. *Main Door Facing:* (Sans) 
+20. *Main Door Facing:* (Sans) (Done) 
     - Change the text from "Maindoor Facing" to "Main Door Facing."
 
-21. *Balcony Facing Field:* (Sans and need to discuss)  
+21. *Balcony Facing Field:* (Atul sir)  
     - Make the Balcony Facing field multi-selectable based on the number of balconies added.
 
 22. *Visiting Hour Clock:* (Sans and need to discuss) 
@@ -111,13 +111,13 @@ Updates and enhancements for the Propdial system.
 ---
 *5. Property Detail Page* (Sans)
 
-1. *Maintenance Display:*  
+1. *Maintenance Display:* (Done) 
    - When "Maintenance Included" is selected, display it as "Included / Maintenance."
 
-2. *UI Fix for Overlooking:* (Sans) 
+2. *UI Fix for Overlooking:* (Sans) (yh sir se discuss krna hai ek bar ki iske liye ek alg se card bna de kya)
    - If all options are selected under "Overlooking," fix the UI for better display.
 
-3. *Rearrange Car Parking Information:*  (Sans) 
+3. *Rearrange Car Parking Information:*  (Sans) (Done)
    - Display "Covered Car Parking" first, followed by a vertical line, then "Two-Wheeler Parking."
 
 ---
@@ -125,7 +125,7 @@ Updates and enhancements for the Propdial system.
  *6. Property Summary Card* (Sans)
 
 1. *Demand Price Display:*  
-   - Display the demand price on the property summary card.
+   - Display the demand price on the property summary card.(yh sir se discuss krna hai ki isko kese show krna hai phir card me bhi kyuki demand price for rent or demand price for sale do do aarhe hai to kese show krna hai)
 
 7. property page(rent and sale)
 1. *Filter Check:* (need to discuss) 
