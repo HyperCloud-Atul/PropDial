@@ -3622,6 +3622,18 @@ const PropertyDetails = () => {
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Parking</h2>
                     <div className="p_info">
+                               <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/car-parking.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Covered Car Parking</h6>
+                          <h5>{propertyDocument.numberOfClosedCarParking}</h5>
+                        </div>
+                      </div>
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
@@ -3634,18 +3646,7 @@ const PropertyDetails = () => {
                           <h5>{propertyDocument.numberOfOpenCarParking}</h5>
                         </div>
                       </div>
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/car-parking.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Closed Car Parking</h6>
-                          <h5>{propertyDocument.numberOfClosedCarParking}</h5>
-                        </div>
-                      </div>
+           
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img

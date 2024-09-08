@@ -90,7 +90,7 @@ const Stage2 = (props) => {
     NumberOfFlatsOnFloor: 0,
     NumberOfLifts: 0,
     NumberOfOpenCarParking: 0,
-    NumberOfClosedCarParking: 0,
+    NumberOfCoveredCarParking: 0,
     TwoWheelarParking: "No",
     LockinPeriod: 6,
     YearOfConstruction: { label: 0, value: 0 },
@@ -228,7 +228,7 @@ const Stage2 = (props) => {
         NumberOfFlatsOnFloor: propertyDocument.numberOfFlatsOnFloor ? propertyDocument.numberOfFlatsOnFloor : 0,
         NumberOfLifts: propertyDocument.numberOfLifts ? propertyDocument.numberOfLifts : 0,
         NumberOfOpenCarParking: propertyDocument.numberOfOpenCarParking ? propertyDocument.numberOfOpenCarParking : 0,
-        NumberOfClosedCarParking: propertyDocument.numberOfClosedCarParking ? propertyDocument.numberOfClosedCarParking : 0,
+        NumberOfCoveredCarParking: propertyDocument.numberOfCoveredCarParking ? propertyDocument.numberOfCoveredCarParking : 0,
         TwoWheelarParking: propertyDocument.twoWheelarParking ? propertyDocument.twoWheelarParking : "No",
         LockinPeriod: propertyDocument.lockinPeriod ? propertyDocument.lockinPeriod : 6,
         YearOfConstruction: propertyDocument.yearOfConstruction ? propertyDocument.yearOfConstruction : "Year of Construction",
@@ -318,7 +318,7 @@ const Stage2 = (props) => {
       else if (input === "numberOfCoveredCarParkingInput") {
         setPropertyDetails({
           ...propertyDetails,
-          NumberOfClosedCarParking: inputValue,
+          NumberOfCoveredCarParking: inputValue,
         });
       }
       else if (input === "lockinperiodInput") {
@@ -404,7 +404,7 @@ const Stage2 = (props) => {
   //     else if (input === "numberOfCoveredCarParkingInput") {
   //       setPropertyDetails({
   //         ...propertyDetails,
-  //         NumberOfClosedCarParking: inputValue,
+  //         NumberOfCoveredCarParking: inputValue,
   //       });
   //     }
   //     else if (input === "lockinperiodInput") {
@@ -481,7 +481,7 @@ const Stage2 = (props) => {
       } else if (input === "numberOfCoveredCarParkingInput") {
         setPropertyDetails({
           ...propertyDetails,
-          NumberOfClosedCarParking: inputValue,
+          NumberOfCoveredCarParking: inputValue,
         });
       } else if (input === "lockinperiodInput") {
         setPropertyDetails({
@@ -606,7 +606,7 @@ const Stage2 = (props) => {
       numberOfFlatsOnFloor: propertyDetails.NumberOfFlatsOnFloor ? propertyDetails.NumberOfFlatsOnFloor : 0,
       numberOfLifts: propertyDetails.NumberOfLifts ? propertyDetails.NumberOfLifts : 0,
       numberOfOpenCarParking: propertyDetails.NumberOfOpenCarParking ? propertyDetails.NumberOfOpenCarParking : 0,
-      numberOfClosedCarParking: propertyDetails.NumberOfClosedCarParking ? propertyDetails.NumberOfClosedCarParking : 0,
+      numberOfCoveredCarParking: propertyDetails.NumberOfCoveredCarParking ? propertyDetails.NumberOfCoveredCarParking : 0,
 
       twoWheelarParking: propertyDetails.TwoWheelarParking ? propertyDetails.TwoWheelarParking : "",
       lockinPeriod: propertyDetails.LockinPeriod ? propertyDetails.LockinPeriod : 0,
@@ -2814,7 +2814,7 @@ const Stage2 = (props) => {
                     id="numberOfCoveredCarParkingInput"
                     type="number"
                     disabled
-                    value={propertyDetails && propertyDetails.NumberOfClosedCarParking}
+                    value={propertyDetails && propertyDetails.NumberOfCoveredCarParking}
                   />
                   <div
                     className="right-plus-button pmbutton"

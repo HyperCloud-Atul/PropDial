@@ -332,10 +332,10 @@ export default function Stage3(props) {
         <div className="add_property_fields">
           <div className="stage4form">
             <div className="row row_gap form_full">
-              {/* Maindoor Facing */}
+              {/* Main Door Facing */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
-                  <label htmlFor="">Maindoor Facing</label>
+                  <label htmlFor="">Main Door Facing</label>
                   <div className="radio_group">
                     <div className="radio_group_single">
                       <div
