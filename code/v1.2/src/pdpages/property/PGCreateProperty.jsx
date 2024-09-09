@@ -241,7 +241,7 @@ const CreateProperty = () => {
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
     Package: "PMS Premium",
-    Flag: "Available For Rent",
+    Flag: "",
     Category: "Residential",
     UnitNumber: "",
     DemandPriceRent: "",
@@ -249,7 +249,7 @@ const CreateProperty = () => {
     MaintenanceCharges: "",
     MaintenanceChargesFrequency: "",
     SecurityDeposit: "",
-    Purpose: "Rent",
+    Purpose: "",
     PropertyType: "",
     Bhk: "",
     FloorNo: 0,
@@ -502,6 +502,15 @@ const CreateProperty = () => {
         errorFlag = true;
 
       }
+
+      if (propertyDetails.Flag === "" || propertyDetails.Flag === "undefined" || propertyDetails.Flag === null) {
+        if (errorMsg === "Error: Please select ")
+          errorMsg = errorMsg + "Flag";
+        else errorMsg = errorMsg + ", Flag";
+        errorFlag = true;
+
+      }
+
       if (
         propertyDetails.Purpose === "" ||
         propertyDetails.Purpose === "undefined" ||
@@ -636,7 +645,7 @@ const CreateProperty = () => {
           ? propertyDetails.UnitNumber
           : "",
         // purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
-        purpose: propertyDetails.Flag.toLowerCase() === "pms only" ? "PMS" : (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out") ? "Rent" : "Sale",
+        purpose: propertyDetails.Flag.toLowerCase() === "pms only" ? "PMS" : (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "pms after rent") ? "Rent" : "Sale",
         propertyType: propertyDetails.PropertyType
           ? propertyDetails.PropertyType
           : "",
@@ -677,7 +686,9 @@ const CreateProperty = () => {
         ...property,
         //other property fields
         country: "India",
-        region: "India",
+        region: state.label === ("Delhi" || "Haryana" || "Himachal Pradesh" || "Jammu and Kashmir" || "Punjab" || "Uttar Pradesh" || "Uttarakhand") ? "North India" :
+          state.label === ("Andhra Pradesh" || "Karnataka" || "Kerala" || "Tamilnadu" || "Telangana") ? "South India" :
+            state.label === ("Arunachal Pradesh" || "Assam" || "Bihar" || "Jharkhand" || "Manipur" || "Meghalaya" || "Mizoram" || "Nagaland" || "Odisha" || "Sikkim" || "Tripura") ? "East India" : "West India",
         source: "",
         ownership: "",
         numberOfBedrooms: 0,
@@ -756,10 +767,13 @@ const CreateProperty = () => {
           createdAt: timestamp.fromDate(new Date()),
         };
 
+        console.log("_propertyWithSeqCounter: ", _propertyWithSeqCounter)
+
         // const newpropid = await addNewPropertyDocument(_propertyWithSeqCounter);        
         const collectionRef = projectFirestore.collection('properties');
         // Add the document to the collection
         const docRef = await collectionRef.add(_propertyWithSeqCounter);
+
         // Get the ID of the newly created document
         const newpropid = docRef.id;
         console.log("New Property ID: ", newpropid)
@@ -776,6 +790,8 @@ const CreateProperty = () => {
           userTag: "Admin",
           userType: "propertyowner",
         };
+
+        // console.log("New Property Data: ", propertyUserData)
 
         await addProperyUsersDocument(propertyUserData);
 

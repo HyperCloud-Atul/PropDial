@@ -294,9 +294,9 @@ function formatNumberWithCommas(number) {
 }
 
 function camelCase(inputStr) {
-  let str = inputStr.toLowerCase();
+  let str = inputStr && inputStr.toLowerCase();
   return (
-    str
+    str && str
       .replace(/\s(.)/g, function (a) {
         return a.toUpperCase();
       })
@@ -385,7 +385,9 @@ const Stage1 = (props) => {
     City: "",
     Locality: "",
     Society: "",
+    Pincode: "",
     PropertyName: "",
+    FullAddress: ""
   });
 
   //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active
@@ -520,10 +522,12 @@ const Stage1 = (props) => {
         City: propertyDocument.city ? propertyDocument.city : "",
         Locality: propertyDocument.locality ? propertyDocument.locality : "",
         Society: propertyDocument.society ? propertyDocument.society : "",
+        Pincode: "",
         PropertyName:
           propertyDocument.unitNumber +
           ", " +
           camelCase(propertyDocument.society.toLowerCase().trim()),
+        FullAddress: camelCase(propertyDocument.fullAddress && propertyDocument.fullAddress.toLowerCase().trim())
       });
     }
   }, [dbstatesdocuments, dbpropertiesdocuments, propertyDocument]);
@@ -896,7 +900,7 @@ const Stage1 = (props) => {
   return (
     <>
       <div className="add_property_fields">
-        <div className="row row_gap form_full">        
+        <div className="row row_gap form_full">
           {/* Package */}
           <div className="col-md-6">
             <div className="form_field st-2 label_top">
@@ -1367,37 +1371,37 @@ const Stage1 = (props) => {
                       </div>
                     </div>}
                     {(propertyDetails.Package.toLowerCase() === "pre pms") && <div className="radio_group_single">
-                        <div
-                          className={
-                            propertyDetails.Flag === "PMS After Rent"
-                              ? "custom_radio_button radiochecked"
-                              : "custom_radio_button"
-                          }
-                        >
-                          <input
-                            type="checkbox"
-                            id="flag_prepms"
-                            onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                Flag: "PMS After Rent",
-                                Purpose: "Rent"
-                              });
-                            }}
-                          />
-                          <label htmlFor="flag_prepms">
-                            <div className="radio_icon">
-                              <span className="material-symbols-outlined add">
-                                add
-                              </span>
-                              <span className="material-symbols-outlined check">
-                                done
-                              </span>
-                            </div>
-                            PMS After Rent
-                          </label>
-                        </div>
-                      </div>}
+                      <div
+                        className={
+                          propertyDetails.Flag === "PMS After Rent"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="flag_prepms"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Flag: "PMS After Rent",
+                              Purpose: "Rent"
+                            });
+                          }}
+                        />
+                        <label htmlFor="flag_prepms">
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          PMS After Rent
+                        </label>
+                      </div>
+                    </div>}
                   </div>
                 </div>
               </div>
@@ -1661,7 +1665,7 @@ const Stage1 = (props) => {
                       <div
                         className={
                           propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
-                          || propertyDetails.Flag.toLowerCase() === "pms after rent"
+                            || propertyDetails.Flag.toLowerCase() === "pms after rent"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -1770,37 +1774,37 @@ const Stage1 = (props) => {
           </div>
 
           {(propertyDetails.Flag.toLowerCase() === "available for rent" ||
-          propertyDetails.Flag.toLowerCase() === "pms after rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
-            <div id="id_demand" className="form_field label_top">
-              <label htmlFor="">Demand/Price for Rent</label>
-              <div className="form_field_inner price_input">
-                <input
-                  id="id_demandpricerent"
-                  className="custom-input"
-                  required
-                  type="text"
-                  placeholder="Demand for Rent"
-                  maxLength={9}
-                  onInput={(e) => {
-                    restrictInput(e, 9);
-                  }}
-                  onChange={(e) => {
-                    const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas
-                    const formattedValue = formatNumberWithCommas(rawValue);
+            propertyDetails.Flag.toLowerCase() === "pms after rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
+              <div id="id_demand" className="form_field label_top">
+                <label htmlFor="">Demand/Price for Rent</label>
+                <div className="form_field_inner price_input">
+                  <input
+                    id="id_demandpricerent"
+                    className="custom-input"
+                    required
+                    type="text"
+                    placeholder="Demand for Rent"
+                    maxLength={9}
+                    onInput={(e) => {
+                      restrictInput(e, 9);
+                    }}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas
+                      const formattedValue = formatNumberWithCommas(rawValue);
 
-                    setPropertyDetails({
-                      ...propertyDetails,
-                      DemandPriceRent: formattedValue,
-                    });
-                  }}
-                  value={propertyDetails && propertyDetails.DemandPriceRent}
-                />
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        DemandPriceRent: formattedValue,
+                      });
+                    }}
+                    value={propertyDetails && propertyDetails.DemandPriceRent}
+                  />
+                </div>
+                <div style={{ fontSize: "smaller" }} className="mt-2">
+                  {convertToWords(propertyDetails.DemandPriceRent)}
+                </div>
               </div>
-              <div style={{ fontSize: "smaller" }} className="mt-2">
-                {convertToWords(propertyDetails.DemandPriceRent)}
-              </div>
-            </div>
-          </div>}
+            </div>}
 
           {(propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
             <div id="id_demand" className="form_field label_top">
@@ -2264,8 +2268,8 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-  {/* Region */}
-  <div className="col-xl-4 col-lg-6">
+          {/* Region */}
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Region</label>
               <div className="form_field_inner">

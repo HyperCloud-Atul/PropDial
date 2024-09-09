@@ -166,7 +166,8 @@ const PGAdminProperty = () => {
         )
         : true;
 
-      return categoryMatch && purposeMatch && searchMatch;
+      // return categoryMatch && purposeMatch && searchMatch;
+      return categoryMatch && searchMatch;
     })
     : null;
 
@@ -265,7 +266,7 @@ const PGAdminProperty = () => {
                 />
               )}
             </div>
-            <div className="mobile_size residentail_commercial rent_sale">
+            {/* <div className="mobile_size residentail_commercial rent_sale">
               <label className={rentSaleFilter === "Sale" ? "on" : "off"}>
                 <div className="switch">
                   <span
@@ -290,7 +291,7 @@ const PGAdminProperty = () => {
                   </span>
                 </div>
               </label>
-            </div>
+            </div> */}
             <div className="button_filter diff_views">
               <div
                 className={`bf_single ${viewMode === "card_view" ? "active" : ""
