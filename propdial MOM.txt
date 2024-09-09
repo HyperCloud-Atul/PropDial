@@ -116,7 +116,7 @@ Updates and enhancements for the Propdial system.
 1. *Maintenance Display:* (Done) 
    - When "Maintenance Included" is selected, display it as "Included / Maintenance."
 
-2. *UI Fix for Overlooking:* (Sans) (yh sir se discuss krna hai ek bar ki iske liye ek alg se card bna de kya)
+2. *UI Fix for Overlooking:* (Sans) (Done tested)
    - If all options are selected under "Overlooking," fix the UI for better display.
 
 3. *Rearrange Car Parking Information:*  (Sans) (Done)
