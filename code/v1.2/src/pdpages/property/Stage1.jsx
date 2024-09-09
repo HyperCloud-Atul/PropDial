@@ -201,6 +201,7 @@ const tens = [
 const places = ["", "thousand", "lakh", "crore", "arab", "kharab"];
 
 function convertToWords(number) {
+
   if (number === 0) {
     return "zero";
   }
@@ -259,7 +260,7 @@ function chunkToWords(chunk) {
     }
   }
 
-  return result;
+  return camelCase(result);
 }
 
 function indexToPlace(index) {
@@ -291,6 +292,12 @@ function formatNumberWithCommas(number) {
 
   // Return the formatted number with decimal part if it exists
   return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
+}
+
+// Use replace() to remove all commas
+function removeCommas(stringWithCommas) {
+  const stringWithoutCommas = stringWithCommas.replace(/,/g, '');
+  return stringWithoutCommas;
 }
 
 function camelCase(inputStr) {
@@ -824,17 +831,20 @@ const Stage1 = (props) => {
       //   ? propertyDetails.DemandPrice
       //   : "",
 
-      demandPriceRent: propertyDetails.DemandPriceRent
-        ? propertyDetails.DemandPriceRent
+
+
+      demandPriceRent: removeCommas(propertyDetails.DemandPriceRent)
+        ? removeCommas(propertyDetails.DemandPriceRent)
         : "",
-      demandPriceSale: propertyDetails.DemandPriceSale
-        ? propertyDetails.DemandPriceSale
+      demandPriceSale: removeCommas(propertyDetails.DemandPriceSale)
+        ? removeCommas(propertyDetails.DemandPriceSale)
         : "",
+      securityDeposit: removeCommas(propertyDetails.SecurityDeposit) ? removeCommas(propertyDetails.SecurityDeposit) : "",
       maintenanceflag: propertyDetails.MaintenanceFlag
         ? propertyDetails.MaintenanceFlag
         : "Extra",
-      maintenancecharges: propertyDetails.MaintenanceCharges
-        ? propertyDetails.MaintenanceCharges
+      maintenancecharges: removeCommas(propertyDetails.MaintenanceCharges)
+        ? removeCommas(propertyDetails.MaintenanceCharges)
         : "",
       maintenancechargesfrequency: propertyDetails.MaintenanceChargesFrequency
         ? propertyDetails.MaintenanceChargesFrequency
@@ -1826,15 +1836,15 @@ const Stage1 = (props) => {
                       restrictInput(e, 9);
                     }}
                     onChange={(e) => {
-                      const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas
-                      const formattedValue = formatNumberWithCommas(rawValue);
+                      // const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas
+                      // const formattedValue = formatNumberWithCommas(rawValue);
 
                       setPropertyDetails({
                         ...propertyDetails,
-                        DemandPriceRent: formattedValue,
+                        DemandPriceRent: e.target.value.replace(/,/g, ""),
                       });
                     }}
-                    value={propertyDetails && propertyDetails.DemandPriceRent}
+                    value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceRent)}
                   />
                 </div>
                 <div style={{ fontSize: "smaller" }} className="mt-2">
@@ -1858,15 +1868,15 @@ const Stage1 = (props) => {
                     restrictInput(e, 9);
                   }}
                   onChange={(e) => {
-                    const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas
-                    const formattedValue = formatNumberWithCommas(rawValue);
+                    // const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas
+                    // const formattedValue = formatNumberWithCommas(rawValue);
 
                     setPropertyDetails({
                       ...propertyDetails,
-                      DemandPriceSale: formattedValue,
+                      DemandPriceSale: e.target.value.replace(/,/g, ""),
                     });
                   }}
-                  value={propertyDetails && propertyDetails.DemandPriceSale}
+                  value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceSale)}
                 />
               </div>
               <div style={{ fontSize: "smaller" }} className="mt-2">
@@ -1875,7 +1885,7 @@ const Stage1 = (props) => {
             </div>
           </div>}
 
-          {propertyDetails && propertyDetails.Purpose === "Rent" && (
+          {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && (
             <div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 label_top">
                 <label htmlFor="">Maintenance Status</label>
@@ -1957,7 +1967,7 @@ const Stage1 = (props) => {
             </div>
           )}
 
-          {propertyDetails && (propertyDetails.Purpose === "Rent" || propertyDetails.Purpose === "RentSale") && propertyDetails.MaintenanceFlag === "Extra" && (
+          {propertyDetails && propertyDetails.MaintenanceFlag === "Extra" && (
             <div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                 <label>Maintenance fees</label>
@@ -1971,14 +1981,15 @@ const Stage1 = (props) => {
                     onInput={(e) => {
                       restrictInput(e, 6);
                     }}
+
                     onChange={(e) =>
                       setPropertyDetails({
                         ...propertyDetails,
-                        MaintenanceCharges: e.target.value.trim(),
+                        MaintenanceCharges: e.target.value.replace(/,/g, ""),
                       })
                     }
                     value={
-                      propertyDetails && propertyDetails.MaintenanceCharges
+                      propertyDetails && formatNumberWithCommas(propertyDetails.MaintenanceCharges)
                     }
                   />
                   <div
@@ -2208,7 +2219,7 @@ const Stage1 = (props) => {
             </div>
           )}
 
-          {propertyDetails && propertyDetails.Purpose === "Rent" && (
+          {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && (
             <div className="col-xl-4 col-lg-6">
               <div id="id_demand" className="form_field label_top">
                 <label htmlFor="">Security Deposit</label>
@@ -2223,15 +2234,18 @@ const Stage1 = (props) => {
                     onInput={(e) => {
                       restrictInput(e, 9);
                     }}
+
                     onChange={(e) => {
+                      // const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas
+                      // const formattedValue = formatNumberWithCommas(rawValue);
                       setPropertyDetails({
                         ...propertyDetails,
                         // DemandPrice: e.target.value,
-                        SecurityDeposit: e.target.value.trim(),
+                        SecurityDeposit: e.target.value.replace(/,/g, ""),
                         // DemandPriceInWords: amountToWords(e.target.value)
                       });
                     }}
-                    value={propertyDetails && propertyDetails.SecurityDeposit}
+                    value={propertyDetails && formatNumberWithCommas(propertyDetails.SecurityDeposit)}
                   />
                 </div>
                 <div style={{ fontSize: "smaller" }} className="mt-2">

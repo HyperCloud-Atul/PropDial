@@ -126,7 +126,7 @@ function chunkToWords(chunk) {
     }
   }
 
-  return result;
+  return camelCase(result);
 }
 
 function indexToPlace(index) {
@@ -140,6 +140,34 @@ function indexToPlace(index) {
     "quintillion",
   ];
   return places[index];
+}
+
+
+// Convert digit into comma formate start
+function formatNumberWithCommas(number) {
+  // Convert number to a string if it's not already
+  let numStr = number.toString();
+
+  // Handle decimal part if present
+  const [integerPart, decimalPart] = numStr.split(".");
+
+  // Regular expression for Indian comma format
+  const lastThreeDigits = integerPart.slice(-3);
+  const otherDigits = integerPart.slice(0, -3);
+
+  const formattedNumber =
+    otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+    (otherDigits ? "," : "") +
+    lastThreeDigits;
+
+  // Return the formatted number with decimal part if it exists
+  return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
+}
+
+// Use replace() to remove all commas
+function removeCommas(stringWithCommas) {
+  const stringWithoutCommas = stringWithCommas.replace(/,/g, '');
+  return stringWithoutCommas;
 }
 
 // Example usage:
@@ -252,7 +280,7 @@ const CreateProperty = () => {
     Purpose: "",
     PropertyType: "",
     Bhk: "",
-    FloorNo: 0,
+    FloorNo: "",
     Country: "",
     Region: "",
     State: "",
@@ -344,18 +372,18 @@ const CreateProperty = () => {
       }
     });
 
-  const setPurpose = (option) => {
-    // console.log("setPurpose e.target.value:", option);
-    setPropertyDetails({
-      ...propertyDetails,
-      Purpose: option,
-    });
+  // const setPurpose = (option) => {
+  //   // console.log("setPurpose e.target.value:", option);
+  //   setPropertyDetails({
+  //     ...propertyDetails,
+  //     Purpose: option,
+  //   });
 
-    let obj_maintenance = document.getElementById("id_maintenancecharges");
-    option.toUpperCase() === "SALE"
-      ? (obj_maintenance.style.display = "none")
-      : (obj_maintenance.style.display = "flex");
-  };
+  //   let obj_maintenance = document.getElementById("id_maintenancecharges");
+  //   option.toUpperCase() === "SALE"
+  //     ? (obj_maintenance.style.display = "none")
+  //     : (obj_maintenance.style.display = "flex");
+  // };
 
   const handleStateChange = async (option) => {
     setState(option);
@@ -522,7 +550,7 @@ const CreateProperty = () => {
         errorFlag = true;
       } else {
         if (
-          propertyDetails.Purpose === "Rent" &&
+          (propertyDetails.Purpose === "Rent" || propertyDetails.Purpose === "RentSaleBoth") &&
           (propertyDetails.MaintenanceFlag === "" ||
             propertyDetails.MaintenanceFlag === "undefined" ||
             propertyDetails.MaintenanceFlag == null)
@@ -534,7 +562,7 @@ const CreateProperty = () => {
         }
       }
 
-      if (propertyDetails.PropertyType === "") {
+      if (propertyDetails.PropertyType === "" || propertyDetails.PropertyType === "Select Property Type") {
         if (errorMsg === "Error: Please select ")
           errorMsg = "Please Enter Property Type";
         else errorMsg = errorMsg + ", Property Type";
@@ -547,7 +575,7 @@ const CreateProperty = () => {
         errorFlag = true;
       }
 
-      if (propertyDetails.FloorNo === "") {
+      if (propertyDetails.FloorNo === "" || propertyDetails.FloorNo === "Select Floor No") {
         if (errorMsg === "Error: Please select ")
           errorMsg = "Please Enter Floor No";
         else errorMsg = errorMsg + ", Floor No";
@@ -645,7 +673,7 @@ const CreateProperty = () => {
           ? propertyDetails.UnitNumber
           : "",
         // purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
-        purpose: propertyDetails.Flag.toLowerCase() === "pms only" ? "PMS" : (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "pms after rent") ? "Rent" : "Sale",
+        purpose: propertyDetails.Flag.toLowerCase() === "pms only" ? "PMS" : (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "pms after rent") ? "Rent" : (propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out") ? "Sale" : "RentSaleBoth",
         propertyType: propertyDetails.PropertyType
           ? propertyDetails.PropertyType
           : "",
@@ -653,25 +681,25 @@ const CreateProperty = () => {
         floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "",
         status:
           propertyDetails.Purpose === "Rent"
-            ? "Available for Rent"
-            : "Available for Sale",
-        demandPriceRent: propertyDetails.DemandPriceRent
-          ? propertyDetails.DemandPriceRent
+            ? "Available for Rent" : propertyDetails.Purpose === "Sale" ?
+              "Available for Sale" : propertyDetails.Purpose === "RentSaleBoth" ? "Available for Rent & Sale Both" : "PMS Only",
+        demandPriceRent: removeCommas(propertyDetails.DemandPriceRent)
+          ? removeCommas(propertyDetails.DemandPriceRent)
           : "",
-        demandPriceSale: propertyDetails.DemandPriceSale
-          ? propertyDetails.DemandPriceSale
+        demandPriceSale: removeCommas(propertyDetails.DemandPriceSale)
+          ? removeCommas(propertyDetails.DemandPriceSale)
           : "",
         maintenanceFlag: propertyDetails.MaintenanceFlag
           ? propertyDetails.MaintenanceFlag
           : "",
-        maintenanceCharges: propertyDetails.MaintenanceCharges
-          ? propertyDetails.MaintenanceCharges
+        maintenanceCharges: removeCommas(propertyDetails.MaintenanceCharges)
+          ? removeCommas(propertyDetails.MaintenanceCharges)
           : "",
         maintenanceChargesFrequency: propertyDetails.MaintenanceChargesFrequency
           ? propertyDetails.MaintenanceChargesFrequency
           : "NA",
-        securityDeposit: propertyDetails.SecurityDeposit
-          ? propertyDetails.SecurityDeposit
+        securityDeposit: removeCommas(propertyDetails.SecurityDeposit)
+          ? removeCommas(propertyDetails.SecurityDeposit)
           : "",
         state: state.label,
         city: city.label,
@@ -686,9 +714,9 @@ const CreateProperty = () => {
         ...property,
         //other property fields
         country: "India",
-        region: state.label === ("Delhi" || "Haryana" || "Himachal Pradesh" || "Jammu and Kashmir" || "Punjab" || "Uttar Pradesh" || "Uttarakhand") ? "North India" :
-          state.label === ("Andhra Pradesh" || "Karnataka" || "Kerala" || "Tamilnadu" || "Telangana") ? "South India" :
-            state.label === ("Arunachal Pradesh" || "Assam" || "Bihar" || "Jharkhand" || "Manipur" || "Meghalaya" || "Mizoram" || "Nagaland" || "Odisha" || "Sikkim" || "Tripura") ? "East India" : "West India",
+        region: (state.label === "Delhi" || state.label === "Haryana" || state.label === "Himachal Pradesh" || state.label === "Jammu and Kashmir" || state.label === "Punjab" || state.label === "Uttar Pradesh" || state.label === "Uttarakhand") ? "North India" :
+          (state.label === "Andhra Pradesh" || state.label === "Karnataka" || state.label === "Kerala" || state.label === "Tamilnadu" || state.label === "Telangana") ? "South India" :
+            (state.label === "Arunachal Pradesh" || state.label === "Assam" || state.label === "Bihar" || state.label === "Jharkhand" || state.label === "Manipur" || state.label === "Meghalaya" || state.label === "Mizoram" || state.label === "Nagaland" || state.label === "Odisha" || state.label === "Sikkim" || state.label === "Tripura") ? "East India" : "West India",
         source: "",
         ownership: "",
         numberOfBedrooms: "",
@@ -702,8 +730,8 @@ const CreateProperty = () => {
         numberOfLifts: "",
         numberOfOpenCarParking: "",
         numberOfClosedCarParking: "",
-        twoWheelarParking: "",
-        lockinPeriod: "",
+        twoWheelarParking: "No",
+        lockinPeriod: 6,
         diningArea: "",
         livingAndDining: "",
         entranceGallery: "",
@@ -799,7 +827,7 @@ const CreateProperty = () => {
           navigate("/");
         } else {
           // var x = document.getElementById("btn_create").name;
-          document.getElementById("btn_create").innerHTML = "Properties";
+          document.getElementById("btn_create").display = "none";
           // navigate("/dashboard");
           navigate("/allproperties/all");
           // setNewProperty(newProperty);
@@ -2309,7 +2337,7 @@ const CreateProperty = () => {
             {(propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "pms after rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
               <div id="id_demand" className="form_field label_top">
                 <label htmlFor="">Demand/Price for Rent</label>
-                <div className="form_field_inner">
+                <div className="form_field_inner price_input">
                   <input
                     id="id_demandpricerent"
                     className="custom-input"
@@ -2323,10 +2351,10 @@ const CreateProperty = () => {
                     onChange={(e) => {
                       setPropertyDetails({
                         ...propertyDetails,
-                        DemandPriceRent: e.target.value.trim(),
+                        DemandPriceRent: e.target.value.replace(/,/g, ""),
                       });
                     }}
-                    value={propertyDetails && propertyDetails.DemandPriceRent}
+                    value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceRent)}
                   />
                   <div style={{ fontSize: "smaller" }}>
                     {convertToWords(propertyDetails.DemandPriceRent)}
@@ -2337,7 +2365,7 @@ const CreateProperty = () => {
             {(propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
               <div id="id_demand" className="form_field label_top">
                 <label htmlFor="">Demand/Price for Sale</label>
-                <div className="form_field_inner">
+                <div className="form_field_inner price_input">
                   <input
                     id="id_demandpricesale"
                     className="custom-input"
@@ -2351,10 +2379,10 @@ const CreateProperty = () => {
                     onChange={(e) => {
                       setPropertyDetails({
                         ...propertyDetails,
-                        DemandPriceSale: e.target.value.trim(),
+                        DemandPriceSale: e.target.value.replace(/,/g, ""),
                       });
                     }}
-                    value={propertyDetails && propertyDetails.DemandPriceSale}
+                    value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceSale)}
                   />
                   <div style={{ fontSize: "smaller" }}>
                     {convertToWords(propertyDetails.DemandPriceSale)}
@@ -2363,7 +2391,7 @@ const CreateProperty = () => {
               </div>
             </div>}
 
-            {propertyDetails && propertyDetails.Purpose === "Rent" && (
+            {(propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && (
               <div className="col-xl-4 col-lg-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Maintenance Status</label>
@@ -2384,6 +2412,7 @@ const CreateProperty = () => {
                               onClick={(e) => {
                                 setPropertyDetails({
                                   ...propertyDetails,
+                                  MaintenanceCharges: "",
                                   MaintenanceFlag: "Included",
                                 });
                               }}
@@ -2439,11 +2468,11 @@ const CreateProperty = () => {
               </div>
             )}
 
-            {propertyDetails && (propertyDetails.Purpose === "Rent" || propertyDetails.Purpose === "RentSale") && propertyDetails.MaintenanceFlag === "Extra" && (
+            {propertyDetails && propertyDetails.MaintenanceFlag === "Extra" && (
               <div className="col-xl-4 col-lg-6">
                 <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                   <label>Maintenance fees</label>
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div className="form_field_inner price_input" style={{ display: "flex", alignItems: "center" }}>
                     <input
                       className="custom-input"
                       style={{ width: "30%", paddingRight: "10px" }}
@@ -2456,11 +2485,11 @@ const CreateProperty = () => {
                       onChange={(e) =>
                         setPropertyDetails({
                           ...propertyDetails,
-                          MaintenanceCharges: e.target.value.trim(),
+                          MaintenanceCharges: e.target.value.replace(/,/g, ""),
                         })
                       }
                       value={
-                        propertyDetails && propertyDetails.MaintenanceCharges
+                        propertyDetails && formatNumberWithCommas(propertyDetails.MaintenanceCharges)
                       }
                     />
                     <div
@@ -2690,11 +2719,11 @@ const CreateProperty = () => {
               </div>
             )}
 
-            {propertyDetails && propertyDetails.Purpose === "Rent" && (
+            {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && (
               <div className="col-xl-4 col-lg-6">
                 <div id="id_demand" className="form_field label_top">
                   <label htmlFor="">Security Deposit</label>
-                  <div className="form_field_inner">
+                  <div className="form_field_inner price_input">
                     <input
                       id="id_securitydeposit"
                       className="custom-input"
@@ -2708,10 +2737,10 @@ const CreateProperty = () => {
                       onChange={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          SecurityDeposit: e.target.value.trim(),
+                          SecurityDeposit: e.target.value.replace(/,/g, ""),
                         });
                       }}
-                      value={propertyDetails && propertyDetails.SecurityDeposit}
+                      value={propertyDetails && formatNumberWithCommas(propertyDetails.SecurityDeposit)}
                     />
                     <div style={{ fontSize: "smaller" }}>
                       {convertToWords(propertyDetails.SecurityDeposit)}
