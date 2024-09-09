@@ -730,70 +730,83 @@ const Stage1 = (props) => {
     let errorFlag = false;
     let errorMsg = "Please select ";
 
-    // if (propertyDetails.Purpose === "") {
-    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "Purpose";
-    //   else errorMsg = errorMsg + ", Purpose";
-    //   errorFlag = true;
-    // }
-    // if (propertyDetails.DemandPrice === "" || propertyDetails.DemandPrice === "0") {
-    //   if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price";
-    //   else errorMsg = errorMsg + ", Demand Price";
-    //   errorFlag = true;
-    // }
+    if (propertyDetails.Purpose === "") {
+      if (errorMsg === "Please select ") errorMsg = errorMsg + "Purpose";
+      else errorMsg = errorMsg + ", Purpose";
+      errorFlag = true;
+    }
 
-    // if (propertyDetails.MaintenanceCharges === "") {
-    //   propertyDetails.MaintenanceChargesFrequency = "NA"
-    // } else {
-    //   if (
-    //     (propertyDetails.MaintenanceCharges !== "") &&
-    //     propertyDetails.MaintenanceChargesFrequency === ""
-    //   ) {
-    //     if (errorMsg === "Please select ")
-    //       errorMsg = errorMsg + "Frequency";
-    //     else errorMsg = errorMsg + ", Frequency";
-    //     errorFlag = true;
-    //   }
-    //   else {
-    //     if (propertyDetails.MaintenanceCharges !== "" &&
-    //       propertyDetails.MaintenanceChargesFrequency === "NA") {
-    //       if (errorMsg === "Please select ")
-    //         errorMsg = errorMsg + "Frequency";
-    //       else errorMsg = errorMsg + ", Frequency";
-    //       errorFlag = true;
-    //     }
-    //   }
-    // }
+    if (propertyDetails.Purpose === "Rent" && (propertyDetails.DemandPriceRent === "" || propertyDetails.DemandPriceRent === "0")) {
+      if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price for Rent";
+      else errorMsg = errorMsg + ", Demand Price for Rent";
+      errorFlag = true;
+    }
+
+    if (propertyDetails.Purpose === "Sale" && (propertyDetails.DemandPriceSale === "" || propertyDetails.DemandPriceSale === "0")) {
+      if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price for Sale";
+      else errorMsg = errorMsg + ", Demand Price for Sale";
+      errorFlag = true;
+    }
+
+    if (propertyDetails.Purpose === "RentSaleBoth" && (propertyDetails.DemandPriceSale === "" || propertyDetails.DemandPriceRent === "" || propertyDetails.DemandPriceRent === "0" || propertyDetails.DemandPriceSale === 0)) {
+      if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price for Rent & Sale both";
+      else errorMsg = errorMsg + ", Demand Price for Rent & Sale Both";
+      errorFlag = true;
+    }
+
+    if (propertyDetails.MaintenanceCharges === "") {
+      propertyDetails.MaintenanceChargesFrequency = "NA"
+    } else {
+      if (
+        (propertyDetails.MaintenanceCharges !== "") &&
+        propertyDetails.MaintenanceChargesFrequency === ""
+      ) {
+        if (errorMsg === "Please select ")
+          errorMsg = errorMsg + "Frequency";
+        else errorMsg = errorMsg + ", Frequency";
+        errorFlag = true;
+      }
+      else {
+        if (propertyDetails.MaintenanceCharges !== "" &&
+          propertyDetails.MaintenanceChargesFrequency === "NA") {
+          if (errorMsg === "Please select ")
+            errorMsg = errorMsg + "Frequency";
+          else errorMsg = errorMsg + ", Frequency";
+          errorFlag = true;
+        }
+      }
+    }
 
     // console.log('state:', state)
-    // if (state === "" || state === undefined || state === "Select State") {
-    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "State";
-    //   else errorMsg = errorMsg + ", State";
-    //   errorFlag = true;
-    // }
+    if (state === "" || state === undefined || state === "Select State") {
+      if (errorMsg === "Please select ") errorMsg = errorMsg + "State";
+      else errorMsg = errorMsg + ", State";
+      errorFlag = true;
+    }
 
-    // if (propertyDetails.City === "") {
-    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "City";
-    //   else errorMsg = errorMsg + ", City";
-    //   errorFlag = true;
-    // }
-    // if (propertyDetails.Locality === "") {
-    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "Locality";
-    //   else errorMsg = errorMsg + ", Locality";
-    //   errorFlag = true;
-    // }
-    // if (propertyDetails.Society === "") {
-    //   if (errorMsg === "Please select ") errorMsg = errorMsg + "Society";
-    //   else errorMsg = errorMsg + ", Society";
+    if (propertyDetails.City === "") {
+      if (errorMsg === "Please select ") errorMsg = errorMsg + "City";
+      else errorMsg = errorMsg + ", City";
+      errorFlag = true;
+    }
+    if (propertyDetails.Locality === "") {
+      if (errorMsg === "Please select ") errorMsg = errorMsg + "Locality";
+      else errorMsg = errorMsg + ", Locality";
+      errorFlag = true;
+    }
+    if (propertyDetails.Society === "") {
+      if (errorMsg === "Please select ") errorMsg = errorMsg + "Society";
+      else errorMsg = errorMsg + ", Society";
 
-    //   errorFlag = true;
-    // }
+      errorFlag = true;
+    }
 
     if (errorFlag)
       setFormError(errorMsg);
 
     else setFormError("");
 
-    errorFlag = false;
+    // errorFlag = false;
 
     // console.log('propertyDetails.City:', propertyDetails.City)
 
