@@ -261,7 +261,7 @@ const CreateProperty = () => {
     Society: "",
     Pincode: "",
     PropertyName: "",
-    FullAddress:""
+    FullAddress: ""
   });
 
   const setPurposeByFlag = () => {
@@ -310,18 +310,39 @@ const CreateProperty = () => {
       });
     // console.log('distinctLocalityList: ', distinctLocalityList)
 
-    dbpropertiesdocuments &&
-      dbpropertiesdocuments.map((doc) => {
-        if (!distinctSocietyList.find((e) => e.society === doc.society)) {
-          distinctSocietyList.push({
-            locality: doc.locality,
-            society: doc.society,
-          });
-        }
-      });
+    // dbpropertiesdocuments &&
+    //   dbpropertiesdocuments.map((doc) => {
+    //     if (!distinctSocietyList.find((e) => e.society === doc.society)) {
+    //       distinctSocietyList.push({
+    //         locality: doc.locality,
+    //         society: doc.society,
+    //       });
+    //     }
+    //   });
 
 
-  }, [dbstatesdocuments, dbpropertiesdocuments, dbcitiesdocuments, distinctCityList, distinctLocalityList, distinctSocietyList]);
+  }, [dbstatesdocuments, dbpropertiesdocuments, dbcitiesdocuments, distinctCityList, distinctLocalityList]);
+
+  // dbpropertiesdocuments &&
+  //   dbpropertiesdocuments.map((doc) => {
+  //     if (!distinctLocalityList.find((e) => e.locality === doc.locality)) {
+  //       distinctLocalityList.push({
+  //         city: doc.city,
+  //         locality: doc.locality,
+  //       });
+  //     }
+  //   });
+  // // console.log('distinctLocalityList: ', distinctLocalityList)
+
+  dbpropertiesdocuments &&
+    dbpropertiesdocuments.map((doc) => {
+      if (!distinctSocietyList.find((e) => e.society === doc.society)) {
+        distinctSocietyList.push({
+          locality: doc.locality,
+          society: doc.society,
+        });
+      }
+    });
 
   const setPurpose = (option) => {
     // console.log("setPurpose e.target.value:", option);
@@ -397,31 +418,35 @@ const CreateProperty = () => {
       localityListStateWise && localityListStateWise.map((doc) => doc.locality);
     setdistinctValuesLocality([...new Set(dataList)]);
 
-    console.log("Locality dataList: ", dataList);
+    // console.log("Locality dataList: ", dataList);
   }
 
   function setSearchedLocality(localityname) {
-    // console.log('localityname', localityname);
+    // console.log('localityname: ', localityname);
     setPropertyDetails({
       ...propertyDetails,
       Locality: localityname,
     });
     let societyListStateWise = [];
+    // console.log("distinctSocietyList:", distinctSocietyList);
     societyListStateWise = distinctSocietyList.filter(
-      (e) => e.locality === localityname
+      (e) => e.locality.toLowerCase() === localityname.toLowerCase()
     );
     // console.log("societyListStateWise:", societyListStateWise);
 
     const dataList =
       societyListStateWise && societyListStateWise.map((doc) => doc.society);
     setdistinctValuesSociety([...new Set(dataList)]);
+    // console.log("distinctValuesSociety:", distinctValuesSociety);
   }
+
   function setSearchedSociety(societyname) {
     // console.log('societyname', societyname);
     setPropertyDetails({
       ...propertyDetails,
       Society: societyname,
     });
+
   }
 
   // const cloneImage = async (sourcePath, destinationPath) => {
@@ -740,10 +765,10 @@ const CreateProperty = () => {
         console.log("New Property ID: ", newpropid)
 
         setFormSuccess("Property Created Successfully");
-         // Clear the success message after 3 seconds
+        // Clear the success message after 3 seconds
         setTimeout(() => {
           setFormSuccess(null);
-        }, 3000);       
+        }, 3000);
         //Add created by id into propertyusers list
         const propertyUserData = {
           propertyId: newpropid,
@@ -2834,22 +2859,22 @@ const CreateProperty = () => {
               <div className="form_field label_top">
                 <label htmlFor="">Pincode number</label>
                 <div className="form_field_inner">
-                <input
-                  type="text" // Use type="text" to control length
-                  placeholder="Enter here"
-                  maxLength={6} // Limits input to 6 characters
-                  onChange={(e) => {
-                    const value = e.target.value.trim();
-                    // Check if the input is numeric and has a maximum length of 6
-                    if (/^\d{0,6}$/.test(value)) {
-                      setPropertyDetails({
-                        ...propertyDetails,
-                        Pincode: value,
-                      });
-                    }
-                  }}
-                  value={propertyDetails && propertyDetails.Pincode}
-                />
+                  <input
+                    type="text" // Use type="text" to control length
+                    placeholder="Enter here"
+                    maxLength={6} // Limits input to 6 characters
+                    onChange={(e) => {
+                      const value = e.target.value.trim();
+                      // Check if the input is numeric and has a maximum length of 6
+                      if (/^\d{0,6}$/.test(value)) {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Pincode: value,
+                        });
+                      }
+                    }}
+                    value={propertyDetails && propertyDetails.Pincode}
+                  />
                   {/* <input
                     type="number"
                     placeholder="Enter here"
@@ -2865,10 +2890,10 @@ const CreateProperty = () => {
                   <div className="field_icon"></div>
                 </div>
               </div>
-            </div>            
+            </div>
             <div className="col-12">
-            {formError && <p className="error_new">{formError}</p>}
-            {formSuccess && <p className="success_new">{formSuccess}</p>}
+              {formError && <p className="error_new">{formError}</p>}
+              {formSuccess && <p className="success_new">{formSuccess}</p>}
             </div>
             <div className="col-12">
               <button
