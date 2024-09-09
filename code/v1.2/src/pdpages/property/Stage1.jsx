@@ -529,7 +529,7 @@ const Stage1 = (props) => {
         City: propertyDocument.city ? propertyDocument.city : "",
         Locality: propertyDocument.locality ? propertyDocument.locality : "",
         Society: propertyDocument.society ? propertyDocument.society : "",
-        Pincode: "",
+        Pincode: propertyDocument.pincode ? propertyDocument.pincode : "",
         PropertyName:
           propertyDocument.unitNumber +
           ", " +
@@ -2570,7 +2570,7 @@ const Stage1 = (props) => {
                     if (/^\d{0,6}$/.test(value)) {
                       setPropertyDetails({
                         ...propertyDetails,
-                        Pincode: value,
+                        Pincode: e.target.value.trim(),
                       });
                     }
                   }}

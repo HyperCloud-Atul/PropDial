@@ -142,7 +142,6 @@ function indexToPlace(index) {
   return places[index];
 }
 
-
 // Convert digit into comma formate start
 function formatNumberWithCommas(number) {
   // Convert number to a string if it's not already
@@ -2915,7 +2914,7 @@ const CreateProperty = () => {
                       if (/^\d{0,6}$/.test(value)) {
                         setPropertyDetails({
                           ...propertyDetails,
-                          Pincode: value,
+                          Pincode: e.target.value.trim(),
                         });
                       }
                     }}

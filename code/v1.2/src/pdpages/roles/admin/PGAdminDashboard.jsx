@@ -96,13 +96,40 @@ const PGAdminDashboard = () => {
       (item) => item.flag.trim().toLowerCase() === "rented out"
     );
 
-  // rented out
+  // sold out
   const soldoutProperties =
     properties &&
     properties.filter(
       (item) => item.flag.trim().toLowerCase() === "sold out"
     );
 
+  // rent or sale
+  const rentorsaleProperties =
+    properties &&
+    properties.filter(
+      (item) => item.flag.trim().toLowerCase() === "rent or sale"
+    );
+
+  // rented but sale
+  const rentedbutsaleProperties =
+    properties &&
+    properties.filter(
+      (item) => item.flag.trim().toLowerCase() === "rented but sale"
+    );
+
+  // pms only
+  const pmsonlyProperties =
+    properties &&
+    properties.filter(
+      (item) => item.flag.trim().toLowerCase() === "pms only"
+    );
+
+  // pms after rent
+  const pmsafterrentProperties =
+    properties &&
+    properties.filter(
+      (item) => item.flag.trim().toLowerCase() === "pms after rent"
+    );
 
   //State Wise Properties
   const chandigarhProperties =
@@ -353,15 +380,15 @@ const PGAdminDashboard = () => {
               <section className="property_status assign">
                 <div className="ps_single one">
                   <h5>5</h5>
-                  <h6>Not Assign To <br /> Executive </h6>
+                  <h6>Not Assign To <br /> Executive - In Progress </h6>
                 </div>
                 <div className="ps_single two">
                   <h5>8</h5>
-                  <h6>Not Assign To <br /> Manager </h6>
+                  <h6>Not Assign To <br /> Manager - In Progress </h6>
                 </div>
                 <div className="ps_single three">
                   <h5>2</h5>
-                  <h6>Not Assign To <br /> Tenant </h6>
+                  <h6>Not Assign To <br /> Tenant - In Progress </h6>
                 </div>
                 <Link to="/allproperties/residential" className="ps_single four">
                   <h5>{residentialProperties &&
@@ -483,7 +510,7 @@ const PGAdminDashboard = () => {
                   </div>
                   <div className="right">
                     <h6>Rent or Sale</h6>
-                    <h5>5</h5>
+                    <h5>{rentorsaleProperties && rentorsaleProperties.length}</h5>
                   </div>
                 </div>
                 <div className="spd_single">
@@ -492,7 +519,7 @@ const PGAdminDashboard = () => {
                   </div>
                   <div className="right">
                     <h6>Rented But Sale</h6>
-                    <h5>6</h5>
+                    <h5>{rentedbutsaleProperties && rentedbutsaleProperties.length}</h5>
                   </div>
                 </div>
                 <div className="spd_single">
@@ -501,7 +528,16 @@ const PGAdminDashboard = () => {
                   </div>
                   <div className="right">
                     <h6>PMS Only</h6>
-                    <h5>6</h5>
+                    <h5>{pmsonlyProperties && pmsonlyProperties.length}</h5>
+                  </div>
+                </div>
+                <div className="spd_single">
+                  <div className="left commercial">
+                    <img src="/assets/img/buildings.png" alt="" />
+                  </div>
+                  <div className="right">
+                    <h6>PMS After Rent</h6>
+                    <h5>{pmsafterrentProperties && pmsafterrentProperties.length}</h5>
                   </div>
                 </div>
               </section>

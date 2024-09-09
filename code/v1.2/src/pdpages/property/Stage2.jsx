@@ -156,42 +156,42 @@ const Stage2 = (props) => {
           : [],
         ServentRoomOneClick:
           propertyDocument.additionalRooms &&
-          propertyDocument.additionalRooms.find((e) => e === "Servent Room 1")
+            propertyDocument.additionalRooms.find((e) => e === "Servent Room 1")
             ? true
             : false,
         ServentRoomTwoClick:
           propertyDocument.additionalRooms &&
-          propertyDocument.additionalRooms.find((e) => e === "Servent Room 2")
+            propertyDocument.additionalRooms.find((e) => e === "Servent Room 2")
             ? true
             : false,
         OfficeRoomClick:
           propertyDocument.additionalRooms &&
-          propertyDocument.additionalRooms.find((e) => e === "Office Room")
+            propertyDocument.additionalRooms.find((e) => e === "Office Room")
             ? true
             : false,
         StoreRoomClick:
           propertyDocument.additionalRooms &&
-          propertyDocument.additionalRooms.find((e) => e === "Store Room")
+            propertyDocument.additionalRooms.find((e) => e === "Store Room")
             ? true
             : false,
         PoojaRoomClick:
           propertyDocument.additionalRooms &&
-          propertyDocument.additionalRooms.find((e) => e === "Pooja Room")
+            propertyDocument.additionalRooms.find((e) => e === "Pooja Room")
             ? true
             : false,
         StudyRoomClick:
           propertyDocument.additionalRooms &&
-          propertyDocument.additionalRooms.find((e) => e === "Study Room")
+            propertyDocument.additionalRooms.find((e) => e === "Study Room")
             ? true
             : false,
         PowderRoomClick:
           propertyDocument.additionalRooms &&
-          propertyDocument.additionalRooms.find((e) => e === "Powder Room")
+            propertyDocument.additionalRooms.find((e) => e === "Powder Room")
             ? true
             : false,
         BasementClick:
           propertyDocument.additionalRooms &&
-          propertyDocument.additionalRooms.find((e) => e === "Basement")
+            propertyDocument.additionalRooms.find((e) => e === "Basement")
             ? true
             : false,
 
@@ -200,27 +200,27 @@ const Stage2 = (props) => {
           : [],
         FrontYardClick:
           propertyDocument.additionalArea &&
-          propertyDocument.additionalArea.find((e) => e === "Front Yard")
+            propertyDocument.additionalArea.find((e) => e === "Front Yard")
             ? true
             : false,
         BackYardClick:
           propertyDocument.additionalArea &&
-          propertyDocument.additionalArea.find((e) => e === "Back Yard")
+            propertyDocument.additionalArea.find((e) => e === "Back Yard")
             ? true
             : false,
         TerraceClick:
           propertyDocument.additionalArea &&
-          propertyDocument.additionalArea.find((e) => e === "Terrace")
+            propertyDocument.additionalArea.find((e) => e === "Terrace")
             ? true
             : false,
         RoofRightsClick:
           propertyDocument.additionalArea &&
-          propertyDocument.additionalArea.find((e) => e === "Roof Rights")
+            propertyDocument.additionalArea.find((e) => e === "Roof Rights")
             ? true
             : false,
         GarageClick:
           propertyDocument.additionalArea &&
-          propertyDocument.additionalArea.find((e) => e === "Garage")
+            propertyDocument.additionalArea.find((e) => e === "Garage")
             ? true
             : false,
         PowerBackup: propertyDocument.powerBackup
@@ -572,6 +572,15 @@ const Stage2 = (props) => {
       errorFlag = true;
     }
 
+    if (
+      (propertyDetails.SuperAreaUnit === "" && propertyDetails.CarpetAreaUnit === "")
+    ) {
+      if (errorMsg === "Please select ")
+        errorMsg = errorMsg + "Select Super Area / Carpet Area Unit";
+      else errorMsg = errorMsg + ", Select Super Area / Carpet Area Unit";
+      errorFlag = true;
+    }
+
     if (errorFlag) setFormError(errorMsg);
     else setFormError("");
 
@@ -715,7 +724,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType.toUpperCase ===
+                        propertyDetails.PropertyType.toUpperCase ===
                         "SELECT PROPERTY TYPE"
                         ? true
                         : false
@@ -726,7 +735,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "High Rise Apt"
+                        propertyDetails.PropertyType === "High Rise Apt"
                         ? true
                         : false
                     }
@@ -736,7 +745,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "Low Rise Apt"
+                        propertyDetails.PropertyType === "Low Rise Apt"
                         ? true
                         : false
                     }
@@ -746,7 +755,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "Builder Floor"
+                        propertyDetails.PropertyType === "Builder Floor"
                         ? true
                         : false
                     }
@@ -756,7 +765,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "Kothi"
+                        propertyDetails.PropertyType === "Kothi"
                         ? true
                         : false
                     }
@@ -766,7 +775,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "Villa - Simplex"
+                        propertyDetails.PropertyType === "Villa - Simplex"
                         ? true
                         : false
                     }
@@ -776,7 +785,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "Villa - Duplex"
+                        propertyDetails.PropertyType === "Villa - Duplex"
                         ? true
                         : false
                     }
@@ -786,7 +795,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "Row House - Simplex"
+                        propertyDetails.PropertyType === "Row House - Simplex"
                         ? true
                         : false
                     }
@@ -796,7 +805,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "Row House - Duplex"
+                        propertyDetails.PropertyType === "Row House - Duplex"
                         ? true
                         : false
                     }
@@ -806,7 +815,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "Pent House - Simplex"
+                        propertyDetails.PropertyType === "Pent House - Simplex"
                         ? true
                         : false
                     }
@@ -816,7 +825,7 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                      propertyDetails.PropertyType === "Pent House - Duplex"
+                        propertyDetails.PropertyType === "Pent House - Duplex"
                         ? true
                         : false
                     }
@@ -1018,11 +1027,10 @@ const Stage2 = (props) => {
               >
                 <div className="radio_group_single" style={{ width: "100%" }}>
                   <div
-                    className={`custom_radio_button ${
-                      propertyDetails && propertyDetails.Furnishing === "Semi"
-                        ? "radiochecked"
-                        : ""
-                    }`}
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi"
+                      ? "radiochecked"
+                      : ""
+                      }`}
                   >
                     <input
                       type="radio"
@@ -1050,11 +1058,10 @@ const Stage2 = (props) => {
                 </div>
                 <div className="radio_group_single" style={{ width: "100%" }}>
                   <div
-                    className={`custom_radio_button ${
-                      propertyDetails && propertyDetails.Furnishing === "Fully"
-                        ? "radiochecked"
-                        : ""
-                    }`}
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully"
+                      ? "radiochecked"
+                      : ""
+                      }`}
                   >
                     <input
                       type="radio"
@@ -1082,11 +1089,10 @@ const Stage2 = (props) => {
                 </div>
                 <div className="radio_group_single" style={{ width: "100%" }}>
                   <div
-                    className={`custom_radio_button ${
-                      propertyDetails && propertyDetails.Furnishing === "Raw"
-                        ? "radiochecked"
-                        : ""
-                    }`}
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
+                      ? "radiochecked"
+                      : ""
+                      }`}
                   >
                     <input
                       type="radio"
@@ -1852,87 +1858,87 @@ const Stage2 = (props) => {
 
           {/* Dining Area */}
           {propertyDetails.LivingAndDining.toLowerCase() === "no" && (
-           <div className="col-md-4">
-           <div className="form_field st-2 label_top">
-             <label htmlFor="">Dining Area</label>
-             <div className="form_field_inner">
-               <div className="form_field_container">
-                 <div className="radio_group">
-                   <div className="radio_group_single">
-                     <div
-                       className={
-                         propertyDetails.DiningArea === "Yes"
-                           ? "custom_radio_button radiochecked"
-                           : "custom_radio_button"
-                       }
-                     >
-                       <input
-                         type="checkbox"
-                         id="diningArea_yes"
-                         onClick={(e) => {
-                           setPropertyDetails({
-                             ...propertyDetails,
-                             DiningArea: "Yes",
-                           });
-                         }}
-                       />
-                       <label
-                         htmlFor="diningArea_yes"
-                         style={{ paddingTop: "7px" }}
-                       >
-                         <div className="radio_icon">
-                           <span className="material-symbols-outlined add">
-                             add
-                           </span>
-                           <span className="material-symbols-outlined check">
-                             done
-                           </span>
-                         </div>
-                         <h6>Yes</h6>
-                       </label>
-                     </div>
-                   </div>
-                   <div className="radio_group_single">
-                     <div
-                       className={
-                         propertyDetails.DiningArea === "No"
-                           ? "custom_radio_button radiochecked"
-                           : "custom_radio_button"
-                       }
-                     >
-                       <input
-                         type="checkbox"
-                         id="diningArea_no"
-                         onClick={(e) => {
-                           setPropertyDetails({
-                             ...propertyDetails,
-                             DiningArea: "No",
-                           });
-                         }}
-                       />
-                       <label
-                         htmlFor="diningArea_no"
-                         style={{ paddingTop: "7px" }}
-                       >
-                         <div className="radio_icon">
-                           <span className="material-symbols-outlined add">
-                             add
-                           </span>
-                           <span className="material-symbols-outlined check">
-                             done
-                           </span>
-                         </div>
-                         <h6>No</h6>
-                       </label>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
+            <div className="col-md-4">
+              <div className="form_field st-2 label_top">
+                <label htmlFor="">Dining Area</label>
+                <div className="form_field_inner">
+                  <div className="form_field_container">
+                    <div className="radio_group">
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.DiningArea === "Yes"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="diningArea_yes"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                DiningArea: "Yes",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="diningArea_yes"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Yes</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.DiningArea === "No"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="diningArea_no"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                DiningArea: "No",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="diningArea_no"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>No</h6>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
-         
+
 
           {/* Passages */}
           <div className="col-md-4">
@@ -2138,8 +2144,8 @@ const Stage2 = (props) => {
                   value={
                     propertyDetails &&
                     new Date().getFullYear() -
-                      Number(propertyDetails.YearOfConstruction) +
-                      " Years"
+                    Number(propertyDetails.YearOfConstruction) +
+                    " Years"
                   }
                 />
               </div>
@@ -2409,12 +2415,11 @@ const Stage2 = (props) => {
                   style={{ minWidth: "30%", width: "fit-content" }}
                 >
                   <div
-                    className={`custom_radio_button ${
-                      propertyDetails &&
+                    className={`custom_radio_button ${propertyDetails &&
                       propertyDetails.PowerBackup === "No Backup"
-                        ? "radiochecked"
-                        : ""
-                    }`}
+                      ? "radiochecked"
+                      : ""
+                      }`}
                   >
                     <input
                       type="radio"
@@ -2445,12 +2450,11 @@ const Stage2 = (props) => {
                   style={{ minWidth: "30%", width: "fit-content" }}
                 >
                   <div
-                    className={`custom_radio_button ${
-                      propertyDetails &&
+                    className={`custom_radio_button ${propertyDetails &&
                       propertyDetails.PowerBackup === "Full Backup"
-                        ? "radiochecked"
-                        : ""
-                    }`}
+                      ? "radiochecked"
+                      : ""
+                      }`}
                   >
                     <input
                       type="radio"
@@ -2481,12 +2485,11 @@ const Stage2 = (props) => {
                   style={{ minWidth: "30%", width: "fit-content" }}
                 >
                   <div
-                    className={`custom_radio_button ${
-                      propertyDetails &&
+                    className={`custom_radio_button ${propertyDetails &&
                       propertyDetails.PowerBackup === "Partial Backup"
-                        ? "radiochecked"
-                        : ""
-                    }`}
+                      ? "radiochecked"
+                      : ""
+                      }`}
                   >
                     <input
                       type="radio"
@@ -2517,12 +2520,11 @@ const Stage2 = (props) => {
                   style={{ minWidth: "30%", width: "fit-content" }}
                 >
                   <div
-                    className={`custom_radio_button ${
-                      propertyDetails &&
+                    className={`custom_radio_button ${propertyDetails &&
                       propertyDetails.PowerBackup === "Lift Only"
-                        ? "radiochecked"
-                        : ""
-                    }`}
+                      ? "radiochecked"
+                      : ""
+                      }`}
                   >
                     <input
                       type="radio"
@@ -2553,12 +2555,11 @@ const Stage2 = (props) => {
                   style={{ minWidth: "30%", width: "fit-content" }}
                 >
                   <div
-                    className={`custom_radio_button ${
-                      propertyDetails &&
+                    className={`custom_radio_button ${propertyDetails &&
                       propertyDetails.PowerBackup === "Inverter"
-                        ? "radiochecked"
-                        : ""
-                    }`}
+                      ? "radiochecked"
+                      : ""
+                      }`}
                   >
                     <input
                       type="radio"
@@ -2640,6 +2641,7 @@ const Stage2 = (props) => {
                   />
                 </div>
               </div>
+
               <div style={{ width: "100%", padding: "5px 0" }}>
                 <div
                   className="radio_group"
@@ -2666,6 +2668,7 @@ const Stage2 = (props) => {
                         onClick={(e) => {
                           setPropertyDetails({
                             ...propertyDetails,
+                            CarpetAreaUnit: "SqFt",
                             SuperAreaUnit: "SqFt",
                           });
                         }}
@@ -2715,6 +2718,7 @@ const Stage2 = (props) => {
                         onClick={(e) => {
                           setPropertyDetails({
                             ...propertyDetails,
+                            CarpetAreaUnit: "SqYd",
                             SuperAreaUnit: "SqYd",
                           });
                         }}
@@ -2764,6 +2768,7 @@ const Stage2 = (props) => {
                         onClick={(e) => {
                           setPropertyDetails({
                             ...propertyDetails,
+                            CarpetAreaUnit: "SqMtr",
                             SuperAreaUnit: "SqMtr",
                           });
                         }}

@@ -7,6 +7,33 @@ import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
 
+// Convert digit into comma formate start
+function formatNumberWithCommas(number) {
+  // Convert number to a string if it's not already
+  let numStr = number.toString();
+
+  // Handle decimal part if present
+  const [integerPart, decimalPart] = numStr.split(".");
+
+  // Regular expression for Indian comma format
+  const lastThreeDigits = integerPart.slice(-3);
+  const otherDigits = integerPart.slice(0, -3);
+
+  const formattedNumber =
+    otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+    (otherDigits ? "," : "") +
+    lastThreeDigits;
+
+  // Return the formatted number with decimal part if it exists
+  return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
+}
+
+// Use replace() to remove all commas
+function removeCommas(stringWithCommas) {
+  const stringWithoutCommas = stringWithCommas.replace(/,/g, '');
+  return stringWithoutCommas;
+}
+
 const PropertyCard = ({ propertyid }) => {
   // console.log('property id: ', propertyid)
 
@@ -287,7 +314,7 @@ const PropertyCard = ({ propertyid }) => {
                 <h5 className="demand">
                   <span>₹</span>
                   {/* <span>{propertydoc.demandPriceRent}</span> */}
-                  {(propertydoc.flag.toLowerCase() === "pms only" || propertydoc.flag.toLowerCase() === "pms after rent" || propertydoc.flag.toLowerCase() === "available for rent" || propertydoc.flag.toLowerCase() === "rented out") ? propertydoc.demandPriceRent : (propertydoc.flag.toLowerCase() === "rent and sale" || propertydoc.flag.toLowerCase() === "rented but sale") ? propertydoc.demandPriceSale + " / ₹" + propertydoc.demandPriceRent : propertydoc.demandPriceSale}
+                  {(propertydoc.flag.toLowerCase() === "pms only" || propertydoc.flag.toLowerCase() === "pms after rent" || propertydoc.flag.toLowerCase() === "available for rent" || propertydoc.flag.toLowerCase() === "rented out") ? formatNumberWithCommas(propertydoc.demandPriceRent) : (propertydoc.flag.toLowerCase() === "rent and sale" || propertydoc.flag.toLowerCase() === "rented but sale") ? formatNumberWithCommas(propertydoc.demandPriceSale) + " / ₹" + formatNumberWithCommas(propertydoc.demandPriceRent) : formatNumberWithCommas(propertydoc.demandPriceSale)}
 
                   {propertydoc.maintenanceCharges !== "" && (
                     <span
@@ -381,7 +408,7 @@ const PropertyCard = ({ propertyid }) => {
                     <div className="left">
                       <h6>Floor #</h6>
                       <h5>
-                        {propertydoc.floorNo} of {propertydoc.numberOfFloors}
+                        {propertydoc.floorNo} {propertydoc.numberOfFloors !== "" ? " of " + propertydoc.numberOfFloors : ""}
                       </h5>
                     </div>
                   </div>
