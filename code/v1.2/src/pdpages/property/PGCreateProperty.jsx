@@ -801,6 +801,7 @@ const CreateProperty = () => {
           // var x = document.getElementById("btn_create").name;
           document.getElementById("btn_create").innerHTML = "Properties";
           // navigate("/dashboard");
+          navigate("/allproperties/all");
           // setNewProperty(newProperty);
         }
       }
