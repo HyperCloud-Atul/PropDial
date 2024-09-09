@@ -269,7 +269,7 @@ function indexToPlace(index) {
 // Example usage:
 const amount = 1200000;
 const amountInWords = convertToWords(amount);
-console.log(`${amount} in words: ${amountInWords}`);
+// console.log(`${amount} in words: ${amountInWords}`);
 //Convert Amount to Words - new code end
 
 // Convert digit into comma formate start
@@ -564,6 +564,30 @@ const Stage1 = (props) => {
     setState(option);
     let statename = option.label;
     // console.log('state name:  ', statename)
+
+    let _newRegion = "";
+
+    if (statename === "Delhi" || statename === "Haryana" || statename === "Himachal Pradesh" || statename === "Jammu and Kashmir" || statename === "Punjab" || statename === "Uttar Pradesh" || statename === "Uttarakhand") {
+      _newRegion = "North India"
+    }
+    else if (statename === "Andhra Pradesh" || statename === "Karnataka" || statename === "Kerala" || statename === "Tamilnadu" || statename === "Telangana") {
+      _newRegion = "South India"
+    }
+    else if (statename === "Arunachal Pradesh" || statename === "Assam" || statename === "Bihar" || statename === "Jharkhand" || statename === "Manipur" || statename === "Meghalaya" || statename === "Mizoram" || statename === "Nagaland" || statename === "Odisha" || statename === "Sikkim" || statename === "Tripura") {
+      _newRegion = "East India"
+    }
+    else {
+      _newRegion = "West India"
+    }
+
+    // console.log("_newRegion: ", _newRegion)
+    // setPropertyDetails({
+    //   ...propertyDetails,
+    //   Region: _newRegion,
+    // });
+
+    propertyDetails.Region = _newRegion
+
     let cityListStateWise = [];
     cityListStateWise = distinctCityList.filter((e) => e.state === statename);
     // console.log('cityListStateWise:', cityListStateWise)
@@ -621,7 +645,7 @@ const Stage1 = (props) => {
       localityListStateWise && localityListStateWise.map((doc) => doc.locality);
     setdistinctValuesLocality([...new Set(dataList)]);
 
-    console.log("Locality dataList: ", dataList);
+    // console.log("Locality dataList: ", dataList);
   }
 
   function setSearchedLocality(localityname) {
@@ -2286,6 +2310,7 @@ const Stage1 = (props) => {
                         <input
                           type="checkbox"
                           id="region_northindia"
+                          disabled
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
@@ -2320,6 +2345,7 @@ const Stage1 = (props) => {
                         <input
                           type="checkbox"
                           id="region_southindia"
+                          disabled
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
@@ -2354,6 +2380,7 @@ const Stage1 = (props) => {
                         <input
                           type="checkbox"
                           id="region_eastindia"
+                          disabled
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
@@ -2388,6 +2415,7 @@ const Stage1 = (props) => {
                         <input
                           type="checkbox"
                           id="region_westindia"
+                          disabled
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
