@@ -487,7 +487,7 @@ const CreateProperty = () => {
     // console.log("btnName: ", btnProperties);
     if (btnProperties === "Properties") {
       // console.log("btnName: ", btnProperties)
-      navigate("/dashboard");
+      navigate("/allproperties/all");
     } else {
       let errorFlag = false;
       let errorMsg = "Error: Please select ";
@@ -691,19 +691,19 @@ const CreateProperty = () => {
             state.label === ("Arunachal Pradesh" || "Assam" || "Bihar" || "Jharkhand" || "Manipur" || "Meghalaya" || "Mizoram" || "Nagaland" || "Odisha" || "Sikkim" || "Tripura") ? "East India" : "West India",
         source: "",
         ownership: "",
-        numberOfBedrooms: 0,
-        numberOfBathrooms: 0,
-        numberOfBalcony: 0,
-        numberOfKitchen: 0,
-        numberOfLivingArea: 0,
-        numberOfBasement: 0,
-        numberOfFloors: 0,
-        numberOfFlatsOnFloor: 0,
-        numberOfLifts: 0,
-        numberOfOpenCarParking: 0,
-        numberOfClosedCarParking: 0,
+        numberOfBedrooms: "",
+        numberOfBathrooms: "",
+        numberOfBalcony: "",
+        numberOfKitchen: "",
+        numberOfLivingArea: "",
+        numberOfBasement: "",
+        numberOfFloors: "",
+        numberOfFlatsOnFloor: "",
+        numberOfLifts: "",
+        numberOfOpenCarParking: "",
+        numberOfClosedCarParking: "",
         twoWheelarParking: "",
-        lockinPeriod: 0,
+        lockinPeriod: "",
         diningArea: "",
         livingAndDining: "",
         entranceGallery: "",
@@ -726,8 +726,8 @@ const CreateProperty = () => {
         mainDoorFacing: "",
         overLooking: [],
         balconyFacing: "",
-        visitingHrsFrom: "",
-        visitingHrsTo: "",
+        visitingHrsFrom: "10:00 AM",
+        visitingHrsTo: "06:00 PM",
         visitingDays: [],
         bachlorsBoysAllowed: "",
         bachlorsGirlsAllowed: "",
