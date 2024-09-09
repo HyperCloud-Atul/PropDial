@@ -3306,34 +3306,35 @@ const PropertyDetails = () => {
                       )}
                       {propertyDocument.diningArea && (
                         <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/diningArea.png"
-                            alt=""
-                          />
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/diningArea.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Dining Area</h6>
+                            <h5>{propertyDocument.diningArea}</h5>
+                          </div>
                         </div>
-                        <div className="pis_content">
-                          <h6>Dining Area</h6>
-                          <h5>{propertyDocument.diningArea}</h5>
-                        </div>
-                      </div>
                       )}
-                      {propertyDocument.livingAndDining.toLowerCase() === "yes" && (
-  <div className="p_info_single">
-  <div className="pd_icon">
-    <img
-      src="/assets/img/property-detail-icon/livingDining.png"
-      alt=""
-    />
-  </div>
+                      {propertyDocument.livingAndDining.toLowerCase() ===
+                        "yes" && (
+                        <div className="p_info_single">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/livingDining.png"
+                              alt=""
+                            />
+                          </div>
 
-  <div className="pis_content">
-    <h6>Living & Dining:</h6>
-    <h5>{propertyDocument.livingAndDining}</h5>
-  </div>
-</div>
+                          <div className="pis_content">
+                            <h6>Living & Dining:</h6>
+                            <h5>{propertyDocument.livingAndDining}</h5>
+                          </div>
+                        </div>
                       )}
-                       
+
                       {propertyDocument.numberOfBasement !== "0" && (
                         <div className="p_info_single">
                           <div className="pd_icon">
@@ -3349,7 +3350,6 @@ const PropertyDetails = () => {
                         </div>
                       )}
 
-                   
                       <div className="p_info_single">
                         <div className="pd_icon">
                           <img
@@ -3427,22 +3427,99 @@ const PropertyDetails = () => {
                                 " Years"}{" "}
                           </h5>
                         </div>
-                      </div>
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/Overlooking.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Overlooking</h6>
-                          <h5>{propertyDocument.overLooking.join(", ")}</h5>
+                      </div>               
+                    </div>
+                  </div>
+                </div>           
+
+  {/*Overlooking */}
+  {propertyDocument &&
+                  propertyDocument.overLooking.length > 0 && (
+                    <div className="property_card_single mobile_full_card">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">overLooking</h2>
+                        <div className="p_info">
+                          {propertyDocument.overLooking.map((item) => (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                {item === "Club" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/club.png"
+                                    alt=""
+                                  />
+                                ) : item === "Garden/Park" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/park.png"
+                                    alt=""
+                                  />
+                                ) : item === "Road" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/road.png"
+                                    alt=""
+                                  />
+                                ) : item === "Swimming Pool" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/swimming.png"
+                                    alt=""
+                                  />
+                                ) : item === "Central Park" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/central-park.png"
+                                    alt=""
+                                  />
+                                ) : item === "forest" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/forest.png"
+                                    alt=""
+                                  />
+                                ) :
+                                item === "River" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/river.png"
+                                    alt=""
+                                  />
+                                ) :
+                                item === "Golf" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/golf.png"
+                                    alt=""
+                                  />
+                                ) :
+                                item === "Lake" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/lake.png"
+                                    alt=""
+                                  />
+                                ) :
+                                item === "Beach" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/beach.png"
+                                    alt=""
+                                  />
+                                ) :
+                                item === "Hill View" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/hill.png"
+                                    alt=""
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              <div className="pis_content">
+                                {/* <h6>1</h6> */}
+                                <h5>{item}</h5>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  )}
+
+
+
+
                 {/* Additional Rooms */}
                 {propertyDocument &&
                   propertyDocument.additionalRooms.length > 0 && (
@@ -3536,6 +3613,7 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   )}
+                  {/* Additional Area */}
                 {propertyDocument &&
                   propertyDocument.additionalArea.length > 0 && (
                     <div className="property_card_single mobile_full_card">

@@ -243,7 +243,7 @@ export default function Stage3(props) {
           propertyDocument.overLooking.find((e) => e === "Golf")
             ? true
             : false,
-        HillViewlClick:
+        HillViewClick:
           propertyDocument.overLooking &&
           propertyDocument.overLooking.find((e) => e === "Hill View")
             ? true
@@ -1304,7 +1304,7 @@ export default function Stage3(props) {
                                 OverLooking:
                                   propertyDetails.OverLooking &&
                                   propertyDetails.OverLooking.filter(
-                                    (elem) => elem !== "Lake"
+                                    (elem) => elem !== "River"
                                   ),
                                 RiverClick: !propertyDetails.RiverClick,
                               });
@@ -1313,7 +1313,7 @@ export default function Stage3(props) {
                                 ...propertyDetails,
                                 OverLooking: [
                                   ...propertyDetails.OverLooking,
-                                  "Lake",
+                                  "River",
                                 ],
                                 RiverClick: !propertyDetails.RiverClick,
                               });

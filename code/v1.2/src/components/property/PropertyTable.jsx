@@ -49,7 +49,11 @@ const PropertyTable = ({ properties }) => {
         accessor: "pid",
         Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
-      
+      {
+        Header: "State",
+        accessor: "state",
+        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
+      },
       {
         Header: "City",
         accessor: "city",
