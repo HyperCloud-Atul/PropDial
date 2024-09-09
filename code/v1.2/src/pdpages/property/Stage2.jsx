@@ -59,12 +59,12 @@ const Stage2 = (props) => {
     SuperAreaUnit: "",
     CarpetArea: "",
     CarpetAreaUnit: "",
-    NumberOfBedrooms: "0",
-    NumberOfBathrooms: "0",
-    NumberOfBalcony: "0",
-    NumberOfKitchen: "0",
-    NumberOfLivingArea: "0",
-    NumberOfBasement: "0",
+    NumberOfBedrooms: "",
+    NumberOfBathrooms: "",
+    NumberOfBalcony: "",
+    NumberOfKitchen: "",
+    NumberOfLivingArea: "",
+    NumberOfBasement: "",
     LivingArea: "",
     DiningArea: "",
     LivingAndDining: "",
@@ -88,7 +88,7 @@ const Stage2 = (props) => {
     PowerBackup: "",
     NumberOfFloors: 1,
     FloorNo: 0,
-    NumberOfFlatsOnFloor: 0,
+    NumberOfFlatsOnFloor: 1,
     NumberOfLifts: 0,
     NumberOfOpenCarParking: 0,
     NumberOfCoveredCarParking: 0,
@@ -232,7 +232,7 @@ const Stage2 = (props) => {
         FloorNo: propertyDocument.floorNo ? propertyDocument.floorNo : 0,
         NumberOfFlatsOnFloor: propertyDocument.numberOfFlatsOnFloor
           ? propertyDocument.numberOfFlatsOnFloor
-          : 0,
+          : 1,
         NumberOfLifts: propertyDocument.numberOfLifts
           ? propertyDocument.numberOfLifts
           : 0,
@@ -261,80 +261,80 @@ const Stage2 = (props) => {
     props.setStateFlag("stage1");
   };
 
-  function incrementInput(input) {
-    var inputValue = document.getElementById(input).value;
-    if (inputValue === "99") {
-      //Don't do anything
-    } else {
-      inputValue++;
-      if (input === "bedroomNumberInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfBedrooms: inputValue,
-        });
-      } else if (input === "bathroomNumberInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfBathrooms: inputValue,
-        });
-      } else if (input === "balconyNumberInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfBalcony: inputValue,
-        });
-      } else if (input === "kitchenNumberInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfKitchen: inputValue,
-        });
-      } else if (input === "livingAreaNumberInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfLivingArea: inputValue,
-        });
-      } else if (input === "basementNumberInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfBasement: inputValue,
-        });
-      } else if (input === "floorNoInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          FloorNo: inputValue,
-        });
-      } else if (input === "numberOfFloorsInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfFloors: inputValue,
-        });
-      } else if (input === "numberOfFlatsOnFloorInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfFlatsOnFloor: inputValue,
-        });
-      } else if (input === "numberOfLiftsInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfLifts: inputValue,
-        });
-      } else if (input === "numberOfOpenCarParkingInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfOpenCarParking: inputValue,
-        });
-      } else if (input === "numberOfCoveredCarParkingInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfCoveredCarParking: inputValue,
-        });
-      } else if (input === "lockinperiodInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          LockinPeriod: inputValue,
-        });
-      }
-    }
-  }
+  // function incrementInput(input) {
+  //   var inputValue = document.getElementById(input).value;
+  //   if (inputValue === "99") {
+  //     //Don't do anything
+  //   } else {
+  //     inputValue++;
+  //     if (input === "bedroomNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfBedrooms: inputValue,
+  //       });
+  //     } else if (input === "bathroomNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfBathrooms: inputValue,
+  //       });
+  //     } else if (input === "balconyNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfBalcony: inputValue,
+  //       });
+  //     } else if (input === "kitchenNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfKitchen: inputValue,
+  //       });
+  //     } else if (input === "livingAreaNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfLivingArea: inputValue,
+  //       });
+  //     } else if (input === "basementNumberInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfBasement: inputValue,
+  //       });
+  //     } else if (input === "floorNoInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         FloorNo: inputValue,
+  //       });
+  //     } else if (input === "numberOfFloorsInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfFloors: inputValue,
+  //       });
+  //     } else if (input === "numberOfFlatsOnFloorInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfFlatsOnFloor: inputValue,
+  //       });
+  //     } else if (input === "numberOfLiftsInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfLifts: inputValue,
+  //       });
+  //     } else if (input === "numberOfOpenCarParkingInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfOpenCarParking: inputValue,
+  //       });
+  //     } else if (input === "numberOfCoveredCarParkingInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         NumberOfCoveredCarParking: inputValue,
+  //       });
+  //     } else if (input === "lockinperiodInput") {
+  //       setPropertyDetails({
+  //         ...propertyDetails,
+  //         LockinPeriod: inputValue,
+  //       });
+  //     }
+  //   }
+  // }
 
   // function decrementInput(input) {
   //   var inputValue = document.getElementById(input).value;
@@ -422,17 +422,13 @@ const Stage2 = (props) => {
   //   }
   // }
 
-  function decrementInput(input) {
+  function incrementInput(input) {
     var inputValue = document.getElementById(input).value;
-
-    if (input === "floorNoInput" && inputValue > -1) {
-      inputValue--; // Allow FloorNo to go to -1
-      setPropertyDetails({
-        ...propertyDetails,
-        FloorNo: inputValue,
-      });
-    } else if (inputValue > 0) {
-      inputValue--; // Ensure all others don't go below 0
+    if (inputValue === "99") {
+      // Don't do anything if value is already at 99
+      return;
+    } else {
+      inputValue++;
       if (input === "bedroomNumberInput") {
         setPropertyDetails({
           ...propertyDetails,
@@ -463,7 +459,19 @@ const Stage2 = (props) => {
           ...propertyDetails,
           NumberOfBasement: inputValue,
         });
+      } else if (input === "floorNoInput") {
+        // Increment floor number and ensure total floors is equal to or greater than the floor number
+        setPropertyDetails((prevDetails) => {
+          const updatedFloorNo = inputValue;
+          const updatedTotalFloors = Math.max(prevDetails.NumberOfFloors, updatedFloorNo);
+          return {
+            ...prevDetails,
+            FloorNo: updatedFloorNo,
+            NumberOfFloors: updatedTotalFloors,
+          };
+        });
       } else if (input === "numberOfFloorsInput") {
+        // Increment total floors normally
         setPropertyDetails({
           ...propertyDetails,
           NumberOfFloors: inputValue,
@@ -496,6 +504,90 @@ const Stage2 = (props) => {
       }
     }
   }
+  
+
+
+  function decrementInput(input) {
+    var inputValue = document.getElementById(input).value;
+  
+    if (input === "floorNoInput" && inputValue > -1) {
+      inputValue--; // Allow FloorNo to go to -1
+      setPropertyDetails({
+        ...propertyDetails,
+        FloorNo: inputValue,
+      });
+    } else if (
+      (input === "numberOfFloorsInput" || input === "numberOfFlatsOnFloorInput") &&
+      inputValue > 1
+    ) {
+      inputValue--; // Ensure total floors and flats on floor don't go below 1
+      if (input === "numberOfFloorsInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfFloors: inputValue,
+        });
+      } else if (input === "numberOfFlatsOnFloorInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfFlatsOnFloor: inputValue,
+        });
+      }
+    } else if (inputValue > 0) {
+      inputValue--; // Ensure all other inputs don't go below 0
+      if (input === "bedroomNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBedrooms: inputValue,
+        });
+      } else if (input === "bathroomNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBathrooms: inputValue,
+        });
+      } else if (input === "balconyNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBalcony: inputValue,
+        });
+      } else if (input === "kitchenNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfKitchen: inputValue,
+        });
+      } else if (input === "livingAreaNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfLivingArea: inputValue,
+        });
+      } else if (input === "basementNumberInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfBasement: inputValue,
+        });
+      } else if (input === "numberOfLiftsInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfLifts: inputValue,
+        });
+      } else if (input === "numberOfOpenCarParkingInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfOpenCarParking: inputValue,
+        });
+      } else if (input === "numberOfCoveredCarParkingInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          NumberOfCoveredCarParking: inputValue,
+        });
+      } else if (input === "lockinperiodInput") {
+        setPropertyDetails({
+          ...propertyDetails,
+          LockinPeriod: inputValue,
+        });
+      }
+    }
+  }
+  
 
   const handleNextSubmit = async (e) => {
     e.preventDefault();
