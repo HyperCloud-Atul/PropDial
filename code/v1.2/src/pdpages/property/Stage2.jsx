@@ -93,6 +93,7 @@ const Stage2 = (props) => {
     NumberOfOpenCarParking: 0,
     NumberOfCoveredCarParking: 0,
     TwoWheelarParking: "No",
+    ChargingPointForElectricVehicle: "No",
     LockinPeriod: 6,
     YearOfConstruction: { label: 0, value: 0 },
     // AgeOfProperty: 0,
@@ -245,6 +246,11 @@ const Stage2 = (props) => {
         TwoWheelarParking: propertyDocument.twoWheelarParking
           ? propertyDocument.twoWheelarParking
           : "No",
+
+        ChargingPointForElectricVehicle: propertyDocument.chargingPointForElectricVehicle
+          ? propertyDocument.chargingPointForElectricVehicle
+          : "No",
+
         LockinPeriod: propertyDocument.lockinPeriod
           ? propertyDocument.lockinPeriod
           : 6,
@@ -504,12 +510,12 @@ const Stage2 = (props) => {
       }
     }
   }
-  
+
 
 
   function decrementInput(input) {
     var inputValue = document.getElementById(input).value;
-  
+
     if (input === "floorNoInput" && inputValue > -1) {
       inputValue--; // Allow FloorNo to go to -1
       setPropertyDetails({
@@ -587,7 +593,7 @@ const Stage2 = (props) => {
       }
     }
   }
-  
+
 
   const handleNextSubmit = async (e) => {
     e.preventDefault();
@@ -651,11 +657,20 @@ const Stage2 = (props) => {
       errorFlag = true;
     }
 
-    if (
-      propertyDetails.SuperArea !== null &&
-      Number(propertyDetails.SuperArea) !== 0 &&
-      Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)
-    ) {
+    // if (
+    //   propertyDetails.SuperArea !== null &&
+    //   Number(propertyDetails.SuperArea) !== 0 &&
+    //   Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)
+    // ) {
+    //   if (errorMsg === "Please select ") {
+    //     errorMsg = "Carpet Area should be less than Super Area";
+    //   } else {
+    //     errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
+    //   }
+    //   errorFlag = true;
+    // }
+
+    if (Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
       if (errorMsg === "Please select ") {
         errorMsg = "Carpet Area should be less than Super Area";
       } else {
@@ -668,15 +683,13 @@ const Stage2 = (props) => {
       (propertyDetails.SuperAreaUnit === "" && propertyDetails.CarpetAreaUnit === "")
     ) {
       if (errorMsg === "Please select ")
-        errorMsg = errorMsg + "Select Super Area / Carpet Area Unit";
+        errorMsg = errorMsg + "Super Area / Carpet Area Unit";
       else errorMsg = errorMsg + ", Select Super Area / Carpet Area Unit";
       errorFlag = true;
     }
 
     if (errorFlag) setFormError(errorMsg);
     else setFormError("");
-
-    // errorFlag = false;
 
     const property = {
       propertyType: propertyDetails.PropertyType,
@@ -727,6 +740,11 @@ const Stage2 = (props) => {
       twoWheelarParking: propertyDetails.TwoWheelarParking
         ? propertyDetails.TwoWheelarParking
         : "",
+
+      chargingPointForElectricVehicle: propertyDetails.ChargingPointForElectricVehicle
+        ? propertyDetails.ChargingPointForElectricVehicle
+        : "",
+
       lockinPeriod: propertyDetails.LockinPeriod
         ? propertyDetails.LockinPeriod
         : 0,
@@ -3171,6 +3189,86 @@ const Stage2 = (props) => {
                         />
                         <label
                           htmlFor="twoWheelarParking_no"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Charging Station for Electric Vehicle */}
+          <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Charging Point for Electric Vehicle</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.ChargingPointForElectricVehicle === "Yes"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="chargingPointForElectricVehicle_yes"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              ChargingPointForElectricVehicle: "Yes",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="chargingPointForElectricVehicle_yes"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.ChargingPointForElectricVehicle === "No"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="chargingPointForElectricVehicle_no"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              ChargingPointForElectricVehicle: "No",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="chargingPointForElectricVehicle_no"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">

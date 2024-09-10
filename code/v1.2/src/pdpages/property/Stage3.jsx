@@ -71,7 +71,7 @@ export default function Stage3(props) {
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
     RichTextEditor.createValueFromString(
       propertyDocument &&
-        propertyDocument.ownerInstructions + editedOwnerInstruction,
+      propertyDocument.ownerInstructions + editedOwnerInstruction,
       "html"
     )
   );
@@ -175,97 +175,97 @@ export default function Stage3(props) {
           ? propertyDocument.ownerInstructions
           : "",
 
-        // Visiting Hrs Values
+        // Visiting days Values
         MondayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Monday")
+            propertyDocument.visitingDays.find((e) => e === "Monday")
             ? true
             : false,
         TuesdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Tuesday")
+            propertyDocument.visitingDays.find((e) => e === "Tuesday")
             ? true
             : false,
         WednesdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Wednesday")
+            propertyDocument.visitingDays.find((e) => e === "Wednesday")
             ? true
             : false,
         ThursdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Thursday")
+            propertyDocument.visitingDays.find((e) => e === "Thursday")
             ? true
             : false,
         FridayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Friday")
+            propertyDocument.visitingDays.find((e) => e === "Friday")
             ? true
             : false,
         SaturdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Saturday")
+            propertyDocument.visitingDays.find((e) => e === "Saturday")
             ? true
             : false,
         SundayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Sunday")
+            propertyDocument.visitingDays.find((e) => e === "Sunday")
             ? true
             : false,
 
         // Overlooking Values
         ClubClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Club")
+            propertyDocument.overLooking.find((e) => e === "Club")
             ? true
             : false,
         GardenParkClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Garden/Park")
+            propertyDocument.overLooking.find((e) => e === "Garden/Park")
             ? true
             : false,
         RoadClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Road")
+            propertyDocument.overLooking.find((e) => e === "Road")
             ? true
             : false,
         SwimmingPoolClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Swimming Pool")
+            propertyDocument.overLooking.find((e) => e === "Swimming Pool")
             ? true
             : false,
         CentralParkClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Central Park")
+            propertyDocument.overLooking.find((e) => e === "Central Park")
             ? true
             : false,
         GolfClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Golf")
+            propertyDocument.overLooking.find((e) => e === "Golf")
             ? true
             : false,
         HillViewClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Hill View")
+            propertyDocument.overLooking.find((e) => e === "Hill View")
             ? true
             : false,
         BeachClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Beach")
+            propertyDocument.overLooking.find((e) => e === "Beach")
             ? true
             : false,
         LakeClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Lake")
+            propertyDocument.overLooking.find((e) => e === "Lake")
             ? true
             : false,
         RiverClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "River")
+            propertyDocument.overLooking.find((e) => e === "River")
             ? true
             : false,
         ForestClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Forest")
+            propertyDocument.overLooking.find((e) => e === "Forest")
             ? true
             : false,
       });
@@ -591,8 +591,8 @@ export default function Stage3(props) {
 
               {/* Balcony Facing */}
               {propertyDocument &&
-              propertyDocument.numberOfBalcony &&
-              propertyDocument.numberOfBalcony === 0 ? (
+                propertyDocument.numberOfBalcony &&
+                propertyDocument.numberOfBalcony === 0 ? (
                 ""
               ) : (
                 <div className="col-md-6">
@@ -2161,72 +2161,72 @@ export default function Stage3(props) {
                   <label htmlFor="">Owner Instruction</label>
                   <div className="form_field_inner">
                     <div className="form_field_container">
-                    {isEditingOwnerInstruction ? (
-                      <div>
+                      {isEditingOwnerInstruction ? (
                         <div>
-                          <RichTextEditor
-                            value={ownerInstructionvalue}
-                            onChange={setOwnerInstrucitonValue}
-                          />
-                        </div>
-                        <div className="vg10"></div>
-                        <div className="d-flex justify-content-between">
-                          <div
-                            className="theme_btn btn_border"
-                            onClick={handleCancelOwnerInstruction}
-                            style={{
-                              width: "fit-content",
-                            }}
-                          >
-                            Cancel
+                          <div>
+                            <RichTextEditor
+                              value={ownerInstructionvalue}
+                              onChange={setOwnerInstrucitonValue}
+                            />
                           </div>
-                          <div
-                            className="theme_btn btn_fill"
-                            onClick={handleSaveOwnerInstruction}
-                            style={{
-                              width: "fit-content",
-                            }}
-                          >
-                            Save
+                          <div className="vg10"></div>
+                          <div className="d-flex justify-content-between">
+                            <div
+                              className="theme_btn btn_border"
+                              onClick={handleCancelOwnerInstruction}
+                              style={{
+                                width: "fit-content",
+                              }}
+                            >
+                              Cancel
+                            </div>
+                            <div
+                              className="theme_btn btn_fill"
+                              onClick={handleSaveOwnerInstruction}
+                              style={{
+                                width: "fit-content",
+                              }}
+                            >
+                              Save
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="d-flex align-items-center">
-                          <p
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                propertyDocument &&
-                                propertyDocument.ownerInstructions.toString(
-                                  "html"
-                                ),
-                            }}
-                          ></p>
-                          {!isEditingOwnerInstruction &&
-                            user &&
-                            user.role == "admin" && (
-                              <span
-                                class="material-symbols-outlined click_icon text_near_icon"
-                                onClick={() =>
-                                  handleEditOwnerInstruction(
-                                    "ownerInstructions"
-                                  )
-                                }
-                                style={{
-                                  marginTop: "5px",
-                                }}
-                              >
-                                edit
-                              </span>
-                            )}
-                        </div>
-                      </>
-                    )}
+                      ) : (
+                        <>
+                          <div className="d-flex align-items-center">
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  propertyDocument &&
+                                  propertyDocument.ownerInstructions.toString(
+                                    "html"
+                                  ),
+                              }}
+                            ></p>
+                            {!isEditingOwnerInstruction &&
+                              user &&
+                              user.role == "admin" && (
+                                <span
+                                  class="material-symbols-outlined click_icon text_near_icon"
+                                  onClick={() =>
+                                    handleEditOwnerInstruction(
+                                      "ownerInstructions"
+                                    )
+                                  }
+                                  style={{
+                                    marginTop: "5px",
+                                  }}
+                                >
+                                  edit
+                                </span>
+                              )}
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
-              </div>         
+              </div>
 
               {/* Property Description */}
               {/* <div className="col-md-6">
