@@ -3509,7 +3509,7 @@ const PropertyDetails = () => {
                                     src="/assets/img/property-detail-icon/central-park.png"
                                     alt=""
                                   />
-                                ) : item === "forest" ? (
+                                ) : item === "Forest" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/forest.png"
                                     alt=""
@@ -3701,8 +3701,7 @@ const PropertyDetails = () => {
                     </div>
                   )}
                 {/* Property Size  */}
-                {(propertyDocument && propertyDocument.carpetArea) ||
-                  (propertyDocument.superArea && (
+       
                     <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Property Size</h2>
@@ -3790,7 +3789,7 @@ const PropertyDetails = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
+              
                 {/* Parking  */}
                 <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
@@ -3815,8 +3814,8 @@ const PropertyDetails = () => {
                           </div>
                         )}
                       {/* Open car parking  */}
-                      {propertyDocument &&
-                        propertyDocument.numberOfOpenCarParking && (
+                      {propertyDocument.numberOfOpenCarParking !== 0 && (
+                          
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
