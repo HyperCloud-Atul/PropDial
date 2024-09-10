@@ -431,8 +431,7 @@ const Stage2 = (props) => {
   function incrementInput(input) {
     var inputValue = document.getElementById(input).value;
     if (inputValue === "99") {
-      // Don't do anything if value is already at 99
-      return;
+      //Don't do anything
     } else {
       inputValue++;
       if (input === "bedroomNumberInput") {
@@ -466,18 +465,11 @@ const Stage2 = (props) => {
           NumberOfBasement: inputValue,
         });
       } else if (input === "floorNoInput") {
-        // Increment floor number and ensure total floors is equal to or greater than the floor number
-        setPropertyDetails((prevDetails) => {
-          const updatedFloorNo = inputValue;
-          const updatedTotalFloors = Math.max(prevDetails.NumberOfFloors, updatedFloorNo);
-          return {
-            ...prevDetails,
-            FloorNo: updatedFloorNo,
-            NumberOfFloors: updatedTotalFloors,
-          };
+        setPropertyDetails({
+          ...propertyDetails,
+          FloorNo: inputValue,
         });
       } else if (input === "numberOfFloorsInput") {
-        // Increment total floors normally
         setPropertyDetails({
           ...propertyDetails,
           NumberOfFloors: inputValue,
@@ -593,6 +585,7 @@ const Stage2 = (props) => {
       }
     }
   }
+
 
 
   const handleNextSubmit = async (e) => {

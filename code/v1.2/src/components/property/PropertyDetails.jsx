@@ -1422,7 +1422,9 @@ const PropertyDetails = () => {
                               ? "/"
                               : ""}
                             {propertyDocument.carpetArea}
-                            <h6> {propertyDocument.superAreaUnit}</h6>
+                            <h6 style={{
+                              marginLeft:"3px"
+                            }}>{propertyDocument.superAreaUnit}</h6>
                           </h4>
                           <h6>
                             {propertyDocument.superArea && "Super Area"}

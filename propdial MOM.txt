@@ -84,7 +84,7 @@ Updates and enhancements for the Propdial system.
 22. *Visiting Hour Clock:* (Sans and need to discuss) try
     - Add a clock for the visiting hour selection.
 
-23. add rs icon in create property (sanskar)
+23. add rs icon in create property (sanskar) (Done)
 
 ---
 
@@ -132,7 +132,6 @@ Updates and enhancements for the Propdial system.
 7. property page(rent and sale)
 1. *Filter Check:* (need to discuss) 
    - Ensure all filters are properly arranged and functional.
-
 
 Last MOM dues (Atul sir)
 

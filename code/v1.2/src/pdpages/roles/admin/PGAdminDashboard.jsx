@@ -473,7 +473,7 @@ const PGAdminDashboard = () => {
                     <img src="/assets/img/key.png" alt="" />
                   </div>
                   <div className="right">
-                    <h6>Available for Rent</h6>
+                    <h6>Available For Rent</h6>
                     <h5>{availableForRentProperties && availableForRentProperties.length}</h5>
                   </div>
                 </Link>
@@ -482,7 +482,7 @@ const PGAdminDashboard = () => {
                     <img src="/assets/img/growth.png  " alt="" />
                   </div>
                   <div className="right ">
-                    <h6>Available for Sale</h6>
+                    <h6>Available For Sale</h6>
                     <h5>{availableForSaleProperties && availableForSaleProperties.length}</h5>
                   </div>
                 </Link>
@@ -509,7 +509,7 @@ const PGAdminDashboard = () => {
                     <img src="/assets/img/house.png" alt="" />
                   </div>
                   <div className="right">
-                    <h6>Rent or Sale</h6>
+                    <h6>Rent And Sale</h6>
                     <h5>{rentorsaleProperties && rentorsaleProperties.length}</h5>
                   </div>
                 </div>
