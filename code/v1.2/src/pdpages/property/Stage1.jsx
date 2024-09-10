@@ -1847,7 +1847,7 @@ const Stage1 = (props) => {
                     value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceRent)}
                   />
                 </div>
-                <div style={{ fontSize: "smaller" }} className="mt-2">
+                <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
                   {convertToWords(propertyDetails.DemandPriceRent)}
                 </div>
               </div>
@@ -1879,7 +1879,7 @@ const Stage1 = (props) => {
                   value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceSale)}
                 />
               </div>
-              <div style={{ fontSize: "smaller" }} className="mt-2">
+              <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
                 {convertToWords(propertyDetails.DemandPriceSale)}
               </div>
             </div>
@@ -2212,6 +2212,7 @@ const Stage1 = (props) => {
                 </div>
                 <div
                   style={{ fontSize: "smaller", borderTop: "1px solid #ddd" }}
+                  className="text-capitalize"
                 >
                   {convertToWords(propertyDetails.MaintenanceCharges)}
                 </div>
@@ -2248,7 +2249,7 @@ const Stage1 = (props) => {
                     value={propertyDetails && formatNumberWithCommas(propertyDetails.SecurityDeposit)}
                   />
                 </div>
-                <div style={{ fontSize: "smaller" }} className="mt-2">
+                <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
                   {convertToWords(propertyDetails.SecurityDeposit)}
                 </div>
               </div>

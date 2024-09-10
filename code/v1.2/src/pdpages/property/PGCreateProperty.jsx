@@ -2356,10 +2356,11 @@ const CreateProperty = () => {
                     }}
                     value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceRent)}
                   />
-                  <div style={{ fontSize: "smaller" }}>
+               
+                </div>
+                <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
                     {convertToWords(propertyDetails.DemandPriceRent)}
                   </div>
-                </div>
               </div>
             </div>}
             {(propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
@@ -2384,10 +2385,11 @@ const CreateProperty = () => {
                     }}
                     value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceSale)}
                   />
-                  <div style={{ fontSize: "smaller" }}>
+              
+                </div>
+                <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
                     {convertToWords(propertyDetails.DemandPriceSale)}
                   </div>
-                </div>
               </div>
             </div>}
 
@@ -2711,7 +2713,8 @@ const CreateProperty = () => {
                     </div>
                   </div>
                   <div
-                    style={{ fontSize: "smaller", borderTop: "1px solid #ddd" }}
+                    style={{ fontSize: "smaller", borderTop: "1px solid #ddd", paddingTop:"3px" }}
+                    className="text-capitalize"
                   >
                     {convertToWords(propertyDetails.MaintenanceCharges)}
                   </div>
@@ -2742,10 +2745,11 @@ const CreateProperty = () => {
                       }}
                       value={propertyDetails && formatNumberWithCommas(propertyDetails.SecurityDeposit)}
                     />
-                    <div style={{ fontSize: "smaller" }}>
+                
+                  </div>
+                  <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
                       {convertToWords(propertyDetails.SecurityDeposit)}
                     </div>
-                  </div>
                 </div>
               </div>
             )}
