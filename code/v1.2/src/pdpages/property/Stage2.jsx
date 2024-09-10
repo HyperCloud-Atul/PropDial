@@ -465,10 +465,19 @@ const Stage2 = (props) => {
           NumberOfBasement: inputValue,
         });
       } else if (input === "floorNoInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          FloorNo: inputValue,
-        });
+        if (propertyDetails.NumberOfFloors > propertyDetails.FloorNo) {
+          setPropertyDetails({
+            ...propertyDetails,
+            FloorNo: inputValue,
+          });
+        } else {
+          setPropertyDetails({
+            ...propertyDetails,
+            FloorNo: inputValue,
+            NumberOfFloors: inputValue
+          });
+
+        }
       } else if (input === "numberOfFloorsInput") {
         setPropertyDetails({
           ...propertyDetails,
@@ -520,10 +529,12 @@ const Stage2 = (props) => {
     ) {
       inputValue--; // Ensure total floors and flats on floor don't go below 1
       if (input === "numberOfFloorsInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfFloors: inputValue,
-        });
+        if (propertyDetails.NumberOfFloors > propertyDetails.FloorNo) {
+          setPropertyDetails({
+            ...propertyDetails,
+            NumberOfFloors: inputValue,
+          });
+        }
       } else if (input === "numberOfFlatsOnFloorInput") {
         setPropertyDetails({
           ...propertyDetails,

@@ -677,7 +677,7 @@ const CreateProperty = () => {
           ? propertyDetails.PropertyType
           : "",
         bhk: propertyDetails.Bhk ? propertyDetails.Bhk : "",
-        floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "",
+        floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "1",
         status:
           propertyDetails.Purpose === "Rent"
             ? "Available for Rent" : propertyDetails.Purpose === "Sale" ?
@@ -718,17 +718,17 @@ const CreateProperty = () => {
             (state.label === "Arunachal Pradesh" || state.label === "Assam" || state.label === "Bihar" || state.label === "Jharkhand" || state.label === "Manipur" || state.label === "Meghalaya" || state.label === "Mizoram" || state.label === "Nagaland" || state.label === "Odisha" || state.label === "Sikkim" || state.label === "Tripura") ? "East India" : "West India",
         source: "",
         ownership: "",
-        numberOfBedrooms: "",
-        numberOfBathrooms: "",
-        numberOfBalcony: "",
-        numberOfKitchen: "",
-        numberOfLivingArea: "",
-        numberOfBasement: "",
-        numberOfFloors: "",
-        numberOfFlatsOnFloor: "",
-        numberOfLifts: "",
-        numberOfOpenCarParking: "",
-        numberOfClosedCarParking: "",
+        numberOfBedrooms: "0",
+        numberOfBathrooms: "0",
+        numberOfBalcony: "0",
+        numberOfKitchen: "0",
+        numberOfLivingArea: "0",
+        numberOfBasement: "0",
+        numberOfFloors: propertyDetails.FloorNo ? propertyDetails.FloorNo : "1",
+        numberOfFlatsOnFloor: "1",
+        numberOfLifts: "0",
+        numberOfOpenCarParking: "0",
+        numberOfClosedCarParking: "0",
         twoWheelarParking: "No",
         chargingPointForElectricVehicle: "No",
         lockinPeriod: 6,
@@ -2356,11 +2356,11 @@ const CreateProperty = () => {
                     }}
                     value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceRent)}
                   />
-               
+
                 </div>
                 <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
-                    {convertToWords(propertyDetails.DemandPriceRent)}
-                  </div>
+                  {convertToWords(propertyDetails.DemandPriceRent)}
+                </div>
               </div>
             </div>}
             {(propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
@@ -2385,11 +2385,11 @@ const CreateProperty = () => {
                     }}
                     value={propertyDetails && formatNumberWithCommas(propertyDetails.DemandPriceSale)}
                   />
-              
+
                 </div>
                 <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
-                    {convertToWords(propertyDetails.DemandPriceSale)}
-                  </div>
+                  {convertToWords(propertyDetails.DemandPriceSale)}
+                </div>
               </div>
             </div>}
 
@@ -2713,7 +2713,7 @@ const CreateProperty = () => {
                     </div>
                   </div>
                   <div
-                    style={{ fontSize: "smaller", borderTop: "1px solid #ddd", paddingTop:"3px" }}
+                    style={{ fontSize: "smaller", borderTop: "1px solid #ddd", paddingTop: "3px" }}
                     className="text-capitalize"
                   >
                     {convertToWords(propertyDetails.MaintenanceCharges)}
@@ -2745,11 +2745,11 @@ const CreateProperty = () => {
                       }}
                       value={propertyDetails && formatNumberWithCommas(propertyDetails.SecurityDeposit)}
                     />
-                
+
                   </div>
                   <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
-                      {convertToWords(propertyDetails.SecurityDeposit)}
-                    </div>
+                    {convertToWords(propertyDetails.SecurityDeposit)}
+                  </div>
                 </div>
               </div>
             )}
