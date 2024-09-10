@@ -124,7 +124,7 @@ export default function Stage3(props) {
   const [propertyDetails, setPropertyDetails] = useState({
     MainDoorFacing: "",
     OverLooking: [],
-    BalconyFacing: "",
+    BalconyFacing: [],
     VisitingHrsFrom: "10:00 AM",
     VisitingHrsTo: "06:00 PM",
     VisitingDays: [],
@@ -148,7 +148,7 @@ export default function Stage3(props) {
           : [],
         BalconyFacing: propertyDocument.balconyFacing
           ? propertyDocument.balconyFacing
-          : "",
+          : [],
         VisitingHrsFrom: propertyDocument.visitingHrsFrom
           ? propertyDocument.visitingHrsFrom
           : "10:00 AM",
@@ -209,6 +209,50 @@ export default function Stage3(props) {
         SundayClick:
           propertyDocument.visitingDays &&
             propertyDocument.visitingDays.find((e) => e === "Sunday")
+            ? true
+            : false,
+
+
+        //Balcony Values
+        // Overlooking Values
+        EastClick:
+          propertyDocument.balconyFacing &&
+            propertyDocument.balconyFacing.find((e) => e === "East")
+            ? true
+            : false,
+        WestClick:
+          propertyDocument.balconyFacing &&
+            propertyDocument.balconyFacing.find((e) => e === "West")
+            ? true
+            : false,
+        NorthClick:
+          propertyDocument.balconyFacing &&
+            propertyDocument.balconyFacing.find((e) => e === "North")
+            ? true
+            : false,
+        SouthClick:
+          propertyDocument.balconyFacing &&
+            propertyDocument.balconyFacing.find((e) => e === "South")
+            ? true
+            : false,
+        NorthEastClick:
+          propertyDocument.balconyFacing &&
+            propertyDocument.balconyFacing.find((e) => e === "North East")
+            ? true
+            : false,
+        NorthWestClick:
+          propertyDocument.balconyFacing &&
+            propertyDocument.balconyFacing.find((e) => e === "North West")
+            ? true
+            : false,
+        SouthEastClick:
+          propertyDocument.balconyFacing &&
+            propertyDocument.balconyFacing.find((e) => e === "South East")
+            ? true
+            : false,
+        SouthWestClick:
+          propertyDocument.balconyFacing &&
+            propertyDocument.balconyFacing.find((e) => e === "South West")
             ? true
             : false,
 
@@ -284,7 +328,7 @@ export default function Stage3(props) {
       overLooking: propertyDetails.OverLooking
         ? propertyDetails.OverLooking
         : [],
-      balconyFacing: propertyDetails.BalconyFacing,
+      balconyFacing: propertyDetails.BalconyFacing ? propertyDetails.BalconyFacing : [],
       visitingHrsFrom: propertyDetails.VisitingHrsFrom,
       visitingHrsTo: propertyDetails.VisitingHrsTo,
       visitingDays: propertyDetails.VisitingDays
@@ -592,7 +636,7 @@ export default function Stage3(props) {
               {/* Balcony Facing */}
               {propertyDocument &&
                 propertyDocument.numberOfBalcony &&
-                propertyDocument.numberOfBalcony === 0 ? (
+                propertyDocument.numberOfBalcony === "0" ? (
                 ""
               ) : (
                 <div className="col-md-6">
@@ -602,7 +646,7 @@ export default function Stage3(props) {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.BalconyFacing === "East"
+                            propertyDetails.EastClick
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -611,11 +655,32 @@ export default function Stage3(props) {
                             type="checkbox"
                             id="east_balconyfacing"
                             onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                BalconyFacing: "East",
-                              });
+                              if (propertyDetails.EastClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BalconyFacing:
+                                    propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.filter(
+                                      (elem) => elem !== "East"
+                                    ),
+                                  EastClick: !propertyDetails.EastClick,
+                                });
+                              } else {
+                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    BalconyFacing: [
+                                      ...propertyDetails.BalconyFacing,
+                                      "East",
+                                    ],
+                                    EastClick: !propertyDetails.EastClick,
+                                  });
+                                }
+
+                              }
+
                             }}
+
                           />
                           <label htmlFor="east_balconyfacing">
                             <div className="radio_icon">
@@ -633,7 +698,7 @@ export default function Stage3(props) {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.BalconyFacing === "West"
+                            propertyDetails.WestClick
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -642,11 +707,31 @@ export default function Stage3(props) {
                             type="checkbox"
                             id="west_balconyfacing"
                             onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                BalconyFacing: "West",
-                              });
+                              if (propertyDetails.WestClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BalconyFacing:
+                                    propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.filter(
+                                      (elem) => elem !== "West"
+                                    ),
+                                  WestClick: !propertyDetails.WestClick,
+                                });
+                              } else {
+                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    BalconyFacing: [
+                                      ...propertyDetails.BalconyFacing,
+                                      "West",
+                                    ],
+                                    WestClick: !propertyDetails.WestClick,
+                                  });
+                                }
+
+                              }
                             }}
+
                           />
                           <label htmlFor="west_balconyfacing">
                             <div className="radio_icon">
@@ -664,7 +749,7 @@ export default function Stage3(props) {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.BalconyFacing === "North"
+                            propertyDetails.NorthClick
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -673,13 +758,36 @@ export default function Stage3(props) {
                             type="checkbox"
                             id="north_balconyfacing"
                             onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                BalconyFacing: "North",
-                              });
+
+                              if (propertyDetails.NorthClick) {
+
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BalconyFacing:
+                                    propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.filter(
+                                      (elem) => elem !== "North"
+                                    ),
+                                  NorthClick: !propertyDetails.NorthClick,
+                                });
+
+                              } else {
+                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    BalconyFacing: [
+                                      ...propertyDetails.BalconyFacing,
+                                      "North",
+                                    ],
+                                    NorthClick: !propertyDetails.NorthClick,
+                                  });
+                                }
+                              }
+
                             }}
+
                           />
-                          <label htmlFor="north_balconyfacing">
+                          < label htmlFor="north_balconyfacing" >
                             <div className="radio_icon">
                               <span className="material-symbols-outlined add">
                                 add
@@ -695,7 +803,7 @@ export default function Stage3(props) {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.BalconyFacing === "South"
+                            propertyDetails.SouthClick
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -704,10 +812,29 @@ export default function Stage3(props) {
                             type="checkbox"
                             id="south_balconyfacing"
                             onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                BalconyFacing: "South",
-                              });
+                              if (propertyDetails.SouthClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BalconyFacing:
+                                    propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.filter(
+                                      (elem) => elem !== "South"
+                                    ),
+                                  SouthClick: !propertyDetails.SouthClick,
+                                });
+
+                              } else {
+                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    BalconyFacing: [
+                                      ...propertyDetails.BalconyFacing,
+                                      "South",
+                                    ],
+                                    SouthClick: !propertyDetails.SouthClick,
+                                  });
+                                }
+                              }
                             }}
                           />
                           <label htmlFor="south_balconyfacing">
@@ -726,7 +853,7 @@ export default function Stage3(props) {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.BalconyFacing === "North East"
+                            propertyDetails.NorthEastClick
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -735,10 +862,29 @@ export default function Stage3(props) {
                             type="checkbox"
                             id="northeast_balconyfacing"
                             onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                BalconyFacing: "North East",
-                              });
+                              if (propertyDetails.NorthEastClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BalconyFacing:
+                                    propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.filter(
+                                      (elem) => elem !== "North East"
+                                    ),
+                                  NorthEastClick: !propertyDetails.NorthEastClick,
+                                });
+
+                              } else {
+                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    BalconyFacing: [
+                                      ...propertyDetails.BalconyFacing,
+                                      "North East",
+                                    ],
+                                    NorthEastClick: !propertyDetails.NorthEastClick,
+                                  });
+                                }
+                              }
                             }}
                           />
                           <label htmlFor="northeast_balconyfacing">
@@ -757,7 +903,7 @@ export default function Stage3(props) {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.BalconyFacing === "North West"
+                            propertyDetails.NorthWestClick
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -766,10 +912,29 @@ export default function Stage3(props) {
                             type="checkbox"
                             id="northwest_balconyfacing"
                             onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                BalconyFacing: "North West",
-                              });
+                              if (propertyDetails.NorthWestClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BalconyFacing:
+                                    propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.filter(
+                                      (elem) => elem !== "North West"
+                                    ),
+                                  NorthWestClick: !propertyDetails.NorthWestClick,
+                                });
+
+                              } else {
+                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    BalconyFacing: [
+                                      ...propertyDetails.BalconyFacing,
+                                      "North West",
+                                    ],
+                                    NorthWestClick: !propertyDetails.NorthWestClick,
+                                  });
+                                }
+                              }
                             }}
                           />
                           <label htmlFor="northwest_balconyfacing">
@@ -788,7 +953,7 @@ export default function Stage3(props) {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.BalconyFacing === "South East"
+                            propertyDetails.SouthEastClick
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -797,10 +962,29 @@ export default function Stage3(props) {
                             type="checkbox"
                             id="southeast_balconyfacing"
                             onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                BalconyFacing: "South East",
-                              });
+                              if (propertyDetails.SouthEastClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BalconyFacing:
+                                    propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.filter(
+                                      (elem) => elem !== "South East"
+                                    ),
+                                  SouthEastClick: !propertyDetails.SouthEastClick,
+                                });
+
+                              } else {
+                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    BalconyFacing: [
+                                      ...propertyDetails.BalconyFacing,
+                                      "South East",
+                                    ],
+                                    SouthEastClick: !propertyDetails.SouthEastClick,
+                                  });
+                                }
+                              }
                             }}
                           />
                           <label htmlFor="southeast_balconyfacing">
@@ -819,7 +1003,7 @@ export default function Stage3(props) {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.BalconyFacing === "South West"
+                            propertyDetails.SouthWestClick
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -828,10 +1012,29 @@ export default function Stage3(props) {
                             type="checkbox"
                             id="southwest_balconyfacing"
                             onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                BalconyFacing: "South West",
-                              });
+                              if (propertyDetails.SouthWestClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  BalconyFacing:
+                                    propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.filter(
+                                      (elem) => elem !== "South West"
+                                    ),
+                                  SouthWestClick: !propertyDetails.SouthWestClick,
+                                });
+
+                              } else {
+                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                  setPropertyDetails({
+                                    ...propertyDetails,
+                                    BalconyFacing: [
+                                      ...propertyDetails.BalconyFacing,
+                                      "South West",
+                                    ],
+                                    SouthWestClick: !propertyDetails.SouthWestClick,
+                                  });
+                                }
+                              }
                             }}
                           />
                           <label htmlFor="southwest_balconyfacing">
@@ -2365,7 +2568,7 @@ export default function Stage3(props) {
             Submit
           </button>
         </div>
-      </form>
+      </form >
     </>
   );
 }

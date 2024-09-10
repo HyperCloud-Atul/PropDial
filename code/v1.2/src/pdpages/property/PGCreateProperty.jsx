@@ -753,7 +753,7 @@ const CreateProperty = () => {
         powerBackup: "",
         mainDoorFacing: "",
         overLooking: [],
-        balconyFacing: "",
+        balconyFacing: [],
         visitingHrsFrom: "10:00 AM",
         visitingHrsTo: "06:00 PM",
         visitingDays: ["Monday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
