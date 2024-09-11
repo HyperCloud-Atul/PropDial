@@ -1449,8 +1449,9 @@ const PropertyDetails = () => {
                         <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
-                            {propertyDocument.floorNo} of{" "}
-                            {propertyDocument.numberOfFloors}
+                            {propertyDocument.floorNo}{" "}
+                        {propertyDocument.numberOfFloors && "Of"}{" "}
+                        {propertyDocument.numberOfFloors}
                           </h4>
                           <h6>Floor no.</h6>
                         </div>
@@ -3845,6 +3846,22 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         )}
+                         {/* Electric Vehicle Charging Point  */}
+                      {propertyDocument &&
+                        propertyDocument.chargingPointForElectricVehicle && (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/2Wheelerparking.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Electric Vehicle Charging Point</h6>
+                              <h5>{propertyDocument.chargingPointForElectricVehicle}</h5>
+                            </div>
+                          </div>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -4007,23 +4024,8 @@ const PropertyDetails = () => {
                 <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Visiting Details</h2>
-                    <div className="p_info">
-                      {propertyDocument.visitingDays.lenght > 0 && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/VisitingDays.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Visiting Days</h6>
-                            <h5>{propertyDocument.visitingDays.join(", ")}</h5>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="p_info_single">
+                    <div className="p_info"> 
+                    <div className="p_info_single ">
                         <div className="pd_icon">
                           <img
                             src="/assets/img/property-detail-icon/VisitingHrsFrom.png"
@@ -4051,7 +4053,19 @@ const PropertyDetails = () => {
                             {propertyDocument.visitingHrsTo}
                           </h5>
                         </div>
-                      </div>
+                      </div>                   
+                        <div className="p_info_single visiting_days">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/VisitingDays.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Visiting Days</h6>
+                            <h5>{propertyDocument.visitingDays.join(", ")}</h5>
+                          </div>
+                        </div>                
                     </div>
                   </div>
                 </div>
@@ -4073,7 +4087,7 @@ const PropertyDetails = () => {
                             <div className="vg10"></div>
                             <div className="d-flex justify-content-between">
                               <div
-                                className="theme_btn btn_border"
+                                className="theme_btn btn_border no_icon"
                                 onClick={handleCancelPropDesc}
                                 style={{
                                   width: "fit-content",
@@ -4082,7 +4096,7 @@ const PropertyDetails = () => {
                                 Cancel
                               </div>
                               <div
-                                className="theme_btn btn_fill"
+                                className="theme_btn btn_fill no_icon"
                                 onClick={handleSavePropDesc}
                                 style={{
                                   width: "fit-content",
@@ -4142,7 +4156,7 @@ const PropertyDetails = () => {
                               <div className="vg10"></div>
                               <div className="d-flex justify-content-between">
                                 <div
-                                  className="theme_btn btn_border"
+                                  className="theme_btn btn_border no_icon"
                                   onClick={handleCancelOwnerInstruction}
                                   style={{
                                     width: "fit-content",
@@ -4151,7 +4165,7 @@ const PropertyDetails = () => {
                                   Cancel
                                 </div>
                                 <div
-                                  className="theme_btn btn_fill"
+                                  className="theme_btn btn_fill no_icon "
                                   onClick={handleSaveOwnerInstruction}
                                   style={{
                                     width: "fit-content",

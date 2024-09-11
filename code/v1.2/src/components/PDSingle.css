@@ -88,7 +88,9 @@
 .pd_single .p_info_single {
   width: 19%;
 }
-
+.pd_single .p_info_single.visiting_days {
+  width: 50%;
+}
 .pdms_single h4 span.currency {
   padding-right: 2px;
 }
@@ -1324,6 +1326,9 @@ label.upload_img input {
       }
   .pd_single .p_info_single {
     width: 47%;
+  }
+  .pd_single .p_info_single.visiting_days {
+    width: 100%;
   }
   .coming_soon:after {
     font-size: 10px;

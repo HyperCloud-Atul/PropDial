@@ -106,28 +106,35 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                       </div>
                       <div className="pi_single">
                         <h6>Floor number</h6>
-                        <h5>{property.floorNo}</h5>
+                        <h5>
+                        {property.floorNo}{" "}
+                        {property.numberOfFloors && "Of"}{" "}
+                        {property.numberOfFloors}
+                        </h5>
                       </div>
                       <div className="pi_single">
                         <h6>Lift</h6>
                         <h5>{property.numberOfLifts}</h5>
-                      </div>
-
-                      {property.carpetArea !== "" ? (
+                      </div>                    
                         <div className="pi_single">
-                          <h6>Carpet area</h6>
+                          <h6> 
+                          {property.superArea && "Super "}
+                            {property.superArea &&
+                              property.carpetArea
+                              ? "/"
+                              : ""}
+                            {property.carpetArea && " Carpet "}
+                            {property.superArea ||
+                              property.carpetArea && "Area"} </h6>
                           <h5>
-                            {property.carpetArea} {property.carpetAreaUnit}
+                          {property.superArea}
+                            {property.superArea &&
+                              property.carpetArea
+                              ? "/"
+                              : ""}
+                            {property.carpetArea}&nbsp;{property.superAreaUnit}
                           </h5>
-                        </div>
-                      ) : (
-                        <div className="pi_single">
-                          <h6>Super area</h6>
-                          <h5>
-                            {property.superArea} {property.superAreaUnit}
-                          </h5>
-                        </div>
-                      )}
+                        </div>                   
                     </div>
                   </div>
                 </div>
@@ -147,13 +154,39 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
               <div className="id_badge on_desktop_hide_767">{property.pid}</div>
               <div className="poi_inner">
                 <div>
-                  <h6 className="value_per_sqf">Demand</h6>
+                  <h6 className="value_per_sqf">
+                  {property.flag.toLowerCase() === "pms only" || property.flag.toLowerCase() ===
+                            "available for rent" || property.flag.toLowerCase() ===
+                            "rented out"
+                            ? "Demand Price"
+                            : property.flag.toLowerCase() ===
+                              "rent and sale" ||
+                              property.flag.toLowerCase() ===
+                              "rented but sale"
+                              ? "Demand Rent / Sale"
+                              : "Demand Price"
+                          }
+                  </h6>
                   <h6 className="property_value">
                     <span>₹ </span>
-                    {new Intl.NumberFormat("en-IN").format(
-                      property.demandPrice
-                    )}
-                    /-
+                    {property.flag.toLowerCase() === "pms only" || property.flag.toLowerCase() ===
+                              "available for rent" || property.flag.toLowerCase() ===
+                              "rented out"
+                              ? new Intl.NumberFormat("en-IN").format(
+                                property.demandPriceRent
+                              )
+                              : property.flag.toLowerCase() ===
+                                "rent and sale" ||
+                                property.flag.toLowerCase() ===
+                                "rented but sale"
+                                ? new Intl.NumberFormat("en-IN").format(
+                                  property.demandPriceRent
+                                ) + " / ₹" + new Intl.NumberFormat("en-IN").format(
+                                  property.demandPriceSale
+                                )
+                                : new Intl.NumberFormat("en-IN").format(
+                                  property.demandPriceSale
+                                )}
                   </h6>
                 </div>
                 <button

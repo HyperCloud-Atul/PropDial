@@ -41,7 +41,26 @@ const SearchPropAgentProperty = ({ propagentProperties }) => {
                     <div className="ppss_footer">
                         <h6>{property.furnishing === "" ? "" : property.furnishing + "Furnished"} </h6>
                         <h6>
-                            <span>₹ {property.demandPrice}</span> onwards
+                            <span>₹{" "}
+                            {property.flag.toLowerCase() === "pms only" || property.flag.toLowerCase() ===
+                              "available for rent" || property.flag.toLowerCase() ===
+                              "rented out"
+                              ? new Intl.NumberFormat("en-IN").format(
+                                property.demandPriceRent
+                              )
+                              : property.flag.toLowerCase() ===
+                                "rent and sale" ||
+                                property.flag.toLowerCase() ===
+                                "rented but sale"
+                                ? new Intl.NumberFormat("en-IN").format(
+                                  property.demandPriceRent
+                                ) + " / ₹" + new Intl.NumberFormat("en-IN").format(
+                                  property.demandPriceSale
+                                )
+                                : new Intl.NumberFormat("en-IN").format(
+                                  property.demandPriceSale
+                                )}
+                                </span> onwards
                         </h6>
                         <h6>Marketed by {property.postedBy}</h6>
                     </div>
