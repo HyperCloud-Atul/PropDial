@@ -660,7 +660,7 @@ h6.value_per_sqf {
     .pp_sidebarcard_single {
         display: inline-block;
         width: 20%;
-        margin-right: 15px;
+        margin-right: 15px !important;
         white-space: initial;
     }
 }

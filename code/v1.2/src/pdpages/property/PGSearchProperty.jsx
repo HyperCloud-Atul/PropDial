@@ -55,9 +55,18 @@ const PGSearchProperty = () => {
   // previous filter for rent and sale end
 
   // previous Filter for  recent properties start
+  // const filteredPropdialPropertiesRecent = propdialProperties && propdialProperties
+  //   .filter((property) => ((activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale") && (property.category === activeCategory)))
+  //   .slice(0, 3);
   const filteredPropdialPropertiesRecent = propdialProperties && propdialProperties
-    .filter((property) => ((activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale") && (property.category === activeCategory)))
-    .slice(0, 3);
+  .filter((property) => (
+    (activeOption === "Rent" ? property.purpose.toLowerCase() === "rent" :
+    (activeOption === "Sale" ? property.purpose.toLowerCase() === "sale" :
+    (activeOption === "RentSaleBoth" ? property.purpose === "RentSaleBoth" : true))) &&
+    (property.category === activeCategory)
+  ))
+  .slice(0, 3);
+
   // previous Filter for  recent properties end
 
 
@@ -73,24 +82,31 @@ const PGSearchProperty = () => {
     let categoryMatch = true;
     let purposeMatch = true;
     let searchMatch = true;
-
+  
     // Filter by category
     categoryMatch = property.category.toUpperCase() === activeCategory.toUpperCase();
-
+  
     // Filter by purpose
-    purposeMatch = (activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale");
-
+    purposeMatch = (activeOption === "Rent"
+      ? property.purpose.toLowerCase() === "rent"
+      : activeOption === "Sale"
+      ? property.purpose.toLowerCase() === "sale"
+      : activeOption === "RentSaleBoth"
+      ? property.purpose.toLowerCase() === "rentsaleboth"
+      : true);
+  
     // Filter by search input
     searchMatch = searchQuery
       ? Object.values(property).some(
-        (field) =>
-          typeof field === "string" &&
-          field.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+          (field) =>
+            typeof field === "string" &&
+            field.toLowerCase().includes(searchQuery.toLowerCase())
+        )
       : true;
-
+  
     return categoryMatch && purposeMatch && searchMatch;
   });
+  
 
   // filter propdial property with search end 
 
@@ -157,6 +173,12 @@ const PGSearchProperty = () => {
               onClick={() => handleOptionClick('Sale')}
             >
               Sale
+            </div>
+            <div
+              className={`pointer ${activeOption === 'RentSaleBoth' ? 'active' : ''}`}
+              onClick={() => handleOptionClick('RentSaleBoth')}
+            >
+              Rent Sale Both
             </div>
           </div>
           <div className="mobile_size residentail_commercial">
