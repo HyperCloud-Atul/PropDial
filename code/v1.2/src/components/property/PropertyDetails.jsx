@@ -3851,7 +3851,7 @@ const PropertyDetails = () => {
                         )}
                       {/* Electric Vehicle Charging Point  */}
                       {propertyDocument &&
-                        propertyDocument.chargingPointForElectricVehicle && (
+                        propertyDocument.evChargingPointStatus.toLowerCase() === 'yes' && (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
@@ -3861,7 +3861,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>EV Charging Point</h6>
-                              <h5>{propertyDocument.chargingPointForElectricVehicle}</h5>
+                              <h5>{propertyDocument.evChargingPointStatus + ", " + propertyDocument.evChargingPointType}</h5>
                             </div>
                           </div>
                         )}
