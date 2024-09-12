@@ -93,7 +93,8 @@ const Stage2 = (props) => {
     NumberOfOpenCarParking: 0,
     NumberOfCoveredCarParking: 0,
     TwoWheelarParking: "No",
-    ChargingPointForElectricVehicle: "No",
+    EVChargingPointStatus: "No",
+    EVChargingPointType: "",
     LockinPeriod: 6,
     YearOfConstruction: { label: 0, value: 0 },
     // AgeOfProperty: 0,
@@ -247,9 +248,12 @@ const Stage2 = (props) => {
           ? propertyDocument.twoWheelarParking
           : "No",
 
-        ChargingPointForElectricVehicle: propertyDocument.chargingPointForElectricVehicle
-          ? propertyDocument.chargingPointForElectricVehicle
+        EVChargingPointStatus: propertyDocument.evChargingPointStatus
+          ? propertyDocument.evChargingPointStatus
           : "No",
+        EVChargingPointType: propertyDocument.evChargingPointType
+          ? propertyDocument.evChargingPointType
+          : "",
 
         LockinPeriod: propertyDocument.lockinPeriod
           ? propertyDocument.lockinPeriod
@@ -681,6 +685,16 @@ const Stage2 = (props) => {
       errorFlag = true;
     }
 
+    //EV Charging Type
+    if (
+      (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStats.toLowerCase() === 'yes')
+    ) {
+      if (errorMsg === "Please select ")
+        errorMsg = errorMsg + "EV Charging Type";
+      else errorMsg = errorMsg + ", EV Charging Type";
+      errorFlag = true;
+    }
+
     if (errorFlag) setFormError(errorMsg);
     else setFormError("");
 
@@ -734,8 +748,11 @@ const Stage2 = (props) => {
         ? propertyDetails.TwoWheelarParking
         : "",
 
-      chargingPointForElectricVehicle: propertyDetails.ChargingPointForElectricVehicle
-        ? propertyDetails.ChargingPointForElectricVehicle
+      evChargingPointStatus: propertyDetails.EVChargingPointStatus
+        ? propertyDetails.EVChargingPointStatus
+        : "No",
+      evChargingPointType: propertyDetails.EVChargingPointType
+        ? propertyDetails.EVChargingPointType
         : "",
 
       lockinPeriod: propertyDetails.LockinPeriod
@@ -3204,30 +3221,30 @@ const Stage2 = (props) => {
           {/* Charging Station for Electric Vehicle */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
-              <label htmlFor="">Charging Point for Electric Vehicle</label>
+              <label htmlFor="">Is EV Charging Point Available? </label>
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.ChargingPointForElectricVehicle === "Yes"
+                          propertyDetails.EVChargingPointStatus === "Yes"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="chargingPointForElectricVehicle_yes"
+                          id="evChargingPointStatus_yes"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              ChargingPointForElectricVehicle: "Yes",
+                              EVChargingPointStatus: "Yes",
                             });
                           }}
                         />
                         <label
-                          htmlFor="chargingPointForElectricVehicle_yes"
+                          htmlFor="evChargingPointStatus_yes"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -3245,23 +3262,23 @@ const Stage2 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.ChargingPointForElectricVehicle === "No"
+                          propertyDetails.EVChargingPointStatus === "No"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="chargingPointForElectricVehicle_no"
+                          id="evChargingPointStatus_no"
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              ChargingPointForElectricVehicle: "No",
+                              EVChargingPointStatus: "No",
                             });
                           }}
                         />
                         <label
-                          htmlFor="chargingPointForElectricVehicle_no"
+                          htmlFor="evChargingPointStatus_no"
                           style={{ paddingTop: "7px" }}
                         >
                           <div className="radio_icon">
@@ -3281,6 +3298,88 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+          {/* Private or Common Charging  Station for Electric Vehicle */}
+          {propertyDetails.EVChargingPointStatus.toLowerCase() === "yes" &&
+            <div className="col-md-4">
+              <div className="form_field st-2 label_top">
+                <label htmlFor="">EV Charging Point Type</label>
+                <div className="form_field_inner">
+                  <div className="form_field_container">
+                    <div className="radio_group">
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.EVChargingPointType === "Private"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="evChargingPointType_private"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                EVChargingPointType: "Private",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="evChargingPointType_private"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Private</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.EVChargingPointType === "Common"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="evChargingPointType_public"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                EVChargingPointType: "Common",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="evChargingPointType_public"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Common</h6>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
           {/* Lock-in Period */}
           <div className="col-md-4">
             <div className="form_field label_top">
