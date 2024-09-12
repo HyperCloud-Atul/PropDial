@@ -378,18 +378,18 @@ const PGAdminDashboard = () => {
               </section>
               <div className="vg22"></div>
               <section className="property_status assign">
-                <div className="ps_single one">
+                {/* <div className="ps_single one">
                   <h5>5</h5>
                   <h6>Not Assign To <br /> Executive - In Progress </h6>
-                </div>
-                <div className="ps_single two">
+                </div> */}
+                {/* <div className="ps_single two">
                   <h5>8</h5>
                   <h6>Not Assign To <br /> Manager - In Progress </h6>
-                </div>
-                <div className="ps_single three">
+                </div> */}
+                {/* <div className="ps_single three">
                   <h5>2</h5>
                   <h6>Not Assign To <br /> Tenant - In Progress </h6>
-                </div>
+                </div> */}
                 <Link to="/allproperties/residential" className="ps_single four">
                   <h5>{residentialProperties &&
                     residentialProperties.length}</h5>
