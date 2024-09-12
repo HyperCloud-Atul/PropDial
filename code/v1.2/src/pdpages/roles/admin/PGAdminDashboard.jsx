@@ -107,7 +107,7 @@ const PGAdminDashboard = () => {
   const rentorsaleProperties =
     properties &&
     properties.filter(
-      (item) => item.flag.trim().toLowerCase() === "rent or sale"
+      (item) => item.flag.trim().toLowerCase() === "rent and sale"
     );
 
   // rented but sale
