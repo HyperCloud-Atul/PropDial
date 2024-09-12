@@ -1593,9 +1593,11 @@ export default function Stage3(props) {
                   <label htmlFor="">Visiting Hours From</label>
                   <div className="form_field_inner">
                     <input
-                      type="text"
+                      type="time"
+                      min="09:00" max="18:00" step="1800"
                       // placeholder="dd/mm/yyyy"
                       value={propertyDetails.VisitingHrsFrom}
+                      // value="10:00"
                       onChange={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
@@ -1612,7 +1614,8 @@ export default function Stage3(props) {
                   <label htmlFor="">Visiting Hours To</label>
                   <div className="form_field_inner">
                     <input
-                      type="text"
+                      type="time"
+                      min="10:00" max="18:00" step="1800"
                       // placeholder="dd/mm/yyyy"
                       value={propertyDetails.VisitingHrsTo}
                       onChange={(e) => {
