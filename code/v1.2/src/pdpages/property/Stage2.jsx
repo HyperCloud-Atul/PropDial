@@ -651,6 +651,7 @@ const Stage2 = (props) => {
       errorFlag = true;
     }
 
+    //SuperArea & CarpetArea Value
     if (
       (propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "") ||
       (propertyDetails.SuperArea === "0" && propertyDetails.CarpetArea === "0")
@@ -660,21 +661,8 @@ const Stage2 = (props) => {
       else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
       errorFlag = true;
     }
-
-    // if (
-    //   propertyDetails.SuperArea !== null &&
-    //   Number(propertyDetails.SuperArea) !== 0 &&
-    //   Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)
-    // ) {
-    //   if (errorMsg === "Please select ") {
-    //     errorMsg = "Carpet Area should be less than Super Area";
-    //   } else {
-    //     errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
-    //   }
-    //   errorFlag = true;
-    // }
-
-    if (Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
+    else if ((propertyDetails.SuperArea != "" && propertyDetails.CarpetArea !== "") &&
+      Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
       if (errorMsg === "Please select ") {
         errorMsg = "Carpet Area should be less than Super Area";
       } else {
@@ -683,6 +671,7 @@ const Stage2 = (props) => {
       errorFlag = true;
     }
 
+    //SuperArea & CarpetArea Unit
     if (
       (propertyDetails.SuperAreaUnit === "" && propertyDetails.CarpetAreaUnit === "")
     ) {
