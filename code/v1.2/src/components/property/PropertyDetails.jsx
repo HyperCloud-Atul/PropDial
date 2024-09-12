@@ -1306,8 +1306,8 @@ const PropertyDetails = () => {
                           {propertyDocument.bhk} |{" "}
                           {propertyDocument.furnishing === ""
                             ? ""
-                            : propertyDocument.furnishing +
-                            " Furnished | "}{" "}
+                            : propertyDocument.furnishing.toLowerCase() === "raw" ? "Unfurnished " : propertyDocument.furnishing +
+                              " Furnished | "}{" "}
                           for {propertyDocument.purpose.toLowerCase() === "rentsaleboth" ? "Rent / Sale" : propertyDocument.purpose}
                           <br />
                         </h4>
@@ -1461,7 +1461,7 @@ const PropertyDetails = () => {
                         <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/new_furniture.png"></img>
-                            {propertyDocument.furnishing}
+                            {propertyDocument.furnishing.toLowerCase() === "raw" ? "Unfurnished" : propertyDocument.furnishing}
                           </h4>
                           <h6>Furnishing</h6>
                         </div>
@@ -3240,7 +3240,7 @@ const PropertyDetails = () => {
                           </div>
                           <div className="pis_content">
                             <h6>Furnishing</h6>
-                            <h5>{propertyDocument.furnishing}</h5>
+                            <h5>{propertyDocument.furnishing.toLowerCase() === "raw" ? "Unfurnished" : propertyDocument.furnishing}</h5>
                           </div>
                         </div>
                       )}
