@@ -687,7 +687,7 @@ const Stage2 = (props) => {
 
     //EV Charging Type
     if (
-      (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStats.toLowerCase() === 'yes')
+      (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStatus.toLowerCase() === 'yes')
     ) {
       if (errorMsg === "Please select ")
         errorMsg = errorMsg + "EV Charging Type";
