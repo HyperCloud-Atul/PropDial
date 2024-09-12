@@ -1303,12 +1303,13 @@ const PropertyDetails = () => {
                           )}
                         </h6> */}
                         <h4 className="property_name">
-                          {propertyDocument.bhk} |{" "}
-                          {propertyDocument.furnishing === ""
+                          {propertyDocument.bhk} | {" "}
+                          For {propertyDocument.purpose.toLowerCase() === "rentsaleboth" ? "Rent / Sale" : propertyDocument.purpose}
+                          {/* {propertyDocument.furnishing === ""
                             ? ""
                             : propertyDocument.furnishing.toLowerCase() === "raw" ? "Unfurnished " : propertyDocument.furnishing +
                               " Furnished | "}{" "}
-                          for {propertyDocument.purpose.toLowerCase() === "rentsaleboth" ? "Rent / Sale" : propertyDocument.purpose}
+                          for {propertyDocument.purpose.toLowerCase() === "rentsaleboth" ? "Rent / Sale" : propertyDocument.purpose} */}
                           <br />
                         </h4>
                         <h6 className="property_location">
@@ -1414,7 +1415,7 @@ const PropertyDetails = () => {
                             <img src="/assets/img/new_bedroom.png"></img>
                             {propertyDocument.numberOfBedrooms}
                           </h4>
-                          <h6>Bedrooms</h6>
+                          <h6>Bedroom</h6>
                         </div>
                         <div className="pdms_single">
                           <h4>
@@ -1431,7 +1432,7 @@ const PropertyDetails = () => {
                             <img src="/assets/img/new_carpet.png"></img>
                             {propertyDocument.superArea}
                             {propertyDocument.superArea &&
-                              propertyDocument.carpetArea
+                              (propertyDocument.carpetArea !== "0")
                               ? "/"
                               : ""}
                             {propertyDocument.carpetArea}
@@ -1442,17 +1443,17 @@ const PropertyDetails = () => {
                           <h6>
                             {propertyDocument.superArea && "Super Area"}
                             {propertyDocument.superArea &&
-                              propertyDocument.carpetArea
+                              (propertyDocument.carpetArea !== "0")
                               ? "/"
                               : ""}
-                            {propertyDocument.carpetArea && "Carpet Area"}
+                            {(propertyDocument.carpetArea !== "0") && "Carpet Area"}
                           </h6>
                         </div>
                         <div className="pdms_single">
                           <h4>
                             <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
                             {propertyDocument.floorNo}{" "}
-                            {propertyDocument.numberOfFloors && "Of"}{" "}
+                            {propertyDocument.numberOfFloors && "of"}{" "}
                             {propertyDocument.numberOfFloors}
                           </h4>
                           <h6>Floor no.</h6>
@@ -3255,7 +3256,7 @@ const PropertyDetails = () => {
                               />
                             </div>
                             <div className="pis_content">
-                              <h6>Bedrooms</h6>
+                              <h6>Bedroom</h6>
                               <h5>{propertyDocument.numberOfBedrooms}</h5>
                             </div>
                           </div>
@@ -3271,7 +3272,7 @@ const PropertyDetails = () => {
                               />
                             </div>
                             <div className="pis_content">
-                              <h6>Bathrooms</h6>
+                              <h6>Bathroom</h6>
                               <h5>{propertyDocument.numberOfBathrooms}</h5>
                             </div>
                           </div>
@@ -3378,7 +3379,7 @@ const PropertyDetails = () => {
                             />
                           </div>
                           <div className="pis_content">
-                            <h6>Passages</h6>
+                            <h6>Passage</h6>
                             <h5>{propertyDocument.passage}</h5>
                           </div>
                         </div>
@@ -3429,7 +3430,7 @@ const PropertyDetails = () => {
                                 Balcony({propertyDocument.numberOfBalcony})
                                 Facing
                               </h6>
-                              <h5>{propertyDocument.balconyFacing}</h5>
+                              <h5>{propertyDocument.balconyFacing.join(", ")}</h5>
                             </div>
                           </div>
                         )}
@@ -3460,7 +3461,7 @@ const PropertyDetails = () => {
                               />
                             </div>
                             <div className="pis_content">
-                              <h6>Age Of Property</h6>
+                              <h6>Age of Property</h6>
                               <h5>
                                 {" "}
                                 {propertyDocument &&
@@ -3770,7 +3771,7 @@ const PropertyDetails = () => {
                         </div>
                       )}
                       {/* Carpet Area  */}
-                      {propertyDocument && propertyDocument.carpetArea && (
+                      {propertyDocument && propertyDocument.carpetArea !== "0" && (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -3859,7 +3860,7 @@ const PropertyDetails = () => {
                               />
                             </div>
                             <div className="pis_content">
-                              <h6>Electric Vehicle Charging Point</h6>
+                              <h6>EV Charging Point</h6>
                               <h5>{propertyDocument.chargingPointForElectricVehicle}</h5>
                             </div>
                           </div>
@@ -3952,77 +3953,78 @@ const PropertyDetails = () => {
                   </div>
                 </div>
                 {/* Additional Info  */}
-                <div className="property_card_single mobile_full_card">
-                  <div className="more_detail_card_inner">
-                    <h2 className="card_title">Additional Info</h2>
-                    <div className="p_info">
-                      {/* Bachelor Boys Allowed  */}
-                      {propertyDocument &&
-                        propertyDocument.bachlorsBoysAllowed && (
+                {propertyDocument.purpose.toLowerCase() !== "sale" &&
+                  <div className="property_card_single mobile_full_card">
+                    <div className="more_detail_card_inner">
+                      <h2 className="card_title">Additional Info</h2>
+                      <div className="p_info">
+                        {/* Bachelor Boys Allowed  */}
+                        {propertyDocument &&
+                          propertyDocument.bachlorsBoysAllowed && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/BachelorBoys.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Bachelor Boys Allowed</h6>
+                                <h5>{propertyDocument.bachlorsBoysAllowed}</h5>
+                              </div>
+                            </div>
+                          )}
+                        {/* Bachelor Girls Allowed  */}
+                        {propertyDocument &&
+                          propertyDocument.bachlorsGirlsAllowed && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/BachelorGirls.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Bachelor Girls Allowed</h6>
+                                <h5>{propertyDocument.bachlorsGirlsAllowed}</h5>
+                              </div>
+                            </div>
+                          )}
+                        {/* Pets Allowed  */}
+                        {propertyDocument && propertyDocument.petsAllowed && (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
-                                src="/assets/img/property-detail-icon/BachelorBoys.png"
+                                src="/assets/img/property-detail-icon/pets.png"
                                 alt=""
                               />
                             </div>
                             <div className="pis_content">
-                              <h6>Bachelor Boys Allowed</h6>
-                              <h5>{propertyDocument.bachlorsBoysAllowed}</h5>
+                              <h6>Pets Allowed</h6>
+                              <h5>{propertyDocument.petsAllowed}</h5>
                             </div>
                           </div>
                         )}
-                      {/* Bachelor Girls Allowed  */}
-                      {propertyDocument &&
-                        propertyDocument.bachlorsGirlsAllowed && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/BachelorGirls.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Bachelor Girls Allowed</h6>
-                              <h5>{propertyDocument.bachlorsGirlsAllowed}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Pets Allowed  */}
-                      {propertyDocument && propertyDocument.petsAllowed && (
+                        {/* Food Habit  */}
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
-                              src="/assets/img/property-detail-icon/pets.png"
+                              src="/assets/img/property-detail-icon/restaurant.png"
                               alt=""
                             />
                           </div>
                           <div className="pis_content">
-                            <h6>Pets Allowed</h6>
-                            <h5>{propertyDocument.petsAllowed}</h5>
+                            <h6>Food Habit</h6>
+                            <h5>
+                              {propertyDocument.vegNonVeg === "Veg"
+                                ? "Vegetarian"
+                                : "No-Restrictions"}
+                            </h5>
                           </div>
-                        </div>
-                      )}
-                      {/* Food Habit  */}
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/restaurant.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          <h6>Food Habit</h6>
-                          <h5>
-                            {propertyDocument.vegNonVeg === "Veg"
-                              ? "Vegetarian"
-                              : "No-Restrictions"}
-                          </h5>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </div>}
                 <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Visiting Details</h2>

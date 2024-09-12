@@ -2358,9 +2358,9 @@ const CreateProperty = () => {
                     required
                     type="text"
                     placeholder="Demand for Sale"
-                    maxLength={9}
+                    maxLength={12}
                     onInput={(e) => {
-                      restrictInput(e, 9);
+                      restrictInput(e, 12);
                     }}
                     onChange={(e) => {
                       setPropertyDetails({
