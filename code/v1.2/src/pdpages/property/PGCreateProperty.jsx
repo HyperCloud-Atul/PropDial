@@ -31,8 +31,7 @@ function restrictInput(event, maxLength) {
   event.target.value = numericValue;
 }
 
-//Convert Amount to Words - Starts
-
+//Convert Amount to Words - new code start
 const units = [
   "",
   "one",
@@ -69,20 +68,25 @@ const tens = [
   "eighty",
   "ninety",
 ];
+const places = ["", "thousand", "lakh", "crore", "arab", "kharab"];
 
 function convertToWords(number) {
+
   if (number === 0) {
     return "zero";
   }
 
-  // Split the number into groups of three digits
+  // Split the number into groups of three digits for the first chunk and then two digits
   const chunks = [];
+  chunks.push(number % 1000); // Get the last three digits
+  number = Math.floor(number / 1000);
+
   while (number > 0) {
-    chunks.push(number % 1000);
-    number = Math.floor(number / 1000);
+    chunks.push(number % 100); // Get chunks of two digits
+    number = Math.floor(number / 100);
   }
 
-  // Convert each chunk to words
+  // Convert each chunk to words with Indian format
   const chunkWords = chunks.map((chunk, index) => {
     if (chunk === 0) {
       return "";
@@ -130,17 +134,14 @@ function chunkToWords(chunk) {
 }
 
 function indexToPlace(index) {
-  const places = [
-    "",
-    "thousand",
-    "million",
-    "billion",
-    "trillion",
-    "quadrillion",
-    "quintillion",
-  ];
-  return places[index];
+  return places[index] || "";
 }
+
+// Example usage:
+const amount = 1200000;
+const amountInWords = convertToWords(amount);
+// console.log(`${amount} in words: ${amountInWords}`);
+//Convert Amount to Words - new code end
 
 // Convert digit into comma formate start
 function formatNumberWithCommas(number) {
@@ -169,26 +170,10 @@ function removeCommas(stringWithCommas) {
   return stringWithoutCommas;
 }
 
-// Example usage:
-// const amount = 12000;
-// const amountInWords = convertToWords(amount);
-// console.log(`${amount} in words: ${amountInWords}`);
-//Convert Amount to Words - Ends
-
-// function formatAmount(amount) {
-//   // Example: Add dashes
-//   return amount.toLocaleString('en-US');
-// }
-// function formatAmount(event) {
-//   // Example: Add dashes
-//   let inputValue = event.target.value
-//   return inputValue.toLocaleString('en-US');
-// }
-
 function camelCase(inputStr) {
-  let str = inputStr.toLowerCase();
+  let str = inputStr && inputStr.toLowerCase();
   return (
-    str
+    str && str
       .replace(/\s(.)/g, function (a) {
         return a.toUpperCase();
       })
