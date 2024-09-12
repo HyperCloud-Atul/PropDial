@@ -380,6 +380,7 @@ const Stage1 = (props) => {
     Region: "",
     Package: "",
     Flag: "",
+    Source: "",
     Category: "",
     UnitNumber: "",
     DemandPriceRent: "",
@@ -498,6 +499,7 @@ const Stage1 = (props) => {
         Region: propertyDocument.region,
         Package: propertyDocument.package,
         Flag: propertyDocument.flag,
+        Source: propertyDocument.source,
         Category: propertyDocument.category
           ? propertyDocument.category
           : "Residential",
@@ -821,6 +823,7 @@ const Stage1 = (props) => {
       region: propertyDetails.Region,
       package: propertyDetails.Package,
       flag: propertyDetails.Flag,
+      source: propertyDetails.Source,
       category: propertyDetails.Category
         ? propertyDetails.Category
         : "Residential",
@@ -867,10 +870,8 @@ const Stage1 = (props) => {
 
       const newProperty = {
         ...property,
-        //Stage 2 fields-createhere
-        source: "",
+        //Stage 2 fields-createhere        
         ownership: "",
-        flag: "",
         propertyType: "",
         bhk: "",
         numberOfBedrooms: "0",
@@ -1449,6 +1450,87 @@ const Stage1 = (props) => {
                         </label>
                       </div>
                     </div>}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Property Source */}
+          <div className="col-md-6">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Propery Source</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Source === "Propdial"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="source_propdial"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Source: "Propdial"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="source_propdial"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Propdial
+                        </label>
+                      </div>
+                    </div>}
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Source === "Agent"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="source_agent"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Source: "Agent"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="source_agent"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Agent
+                        </label>
+                      </div>
+                    </div>}
+
                   </div>
                 </div>
               </div>

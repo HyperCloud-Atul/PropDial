@@ -716,7 +716,7 @@ const CreateProperty = () => {
         region: (state.label === "Delhi" || state.label === "Haryana" || state.label === "Himachal Pradesh" || state.label === "Jammu and Kashmir" || state.label === "Punjab" || state.label === "Uttar Pradesh" || state.label === "Uttarakhand") ? "North India" :
           (state.label === "Andhra Pradesh" || state.label === "Karnataka" || state.label === "Kerala" || state.label === "Tamilnadu" || state.label === "Telangana") ? "South India" :
             (state.label === "Arunachal Pradesh" || state.label === "Assam" || state.label === "Bihar" || state.label === "Jharkhand" || state.label === "Manipur" || state.label === "Meghalaya" || state.label === "Mizoram" || state.label === "Nagaland" || state.label === "Odisha" || state.label === "Sikkim" || state.label === "Tripura") ? "East India" : "West India",
-        source: "",
+        source: "Propdial",
         ownership: "",
         numberOfBedrooms: "0",
         numberOfBathrooms: "0",

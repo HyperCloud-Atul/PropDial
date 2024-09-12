@@ -1121,44 +1121,6 @@ const PropertyDetails = () => {
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
-                              src="/assets/img/property-detail-icon/ownership.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Ownership</h6>
-                            <h5>
-                              {propertyDocument && propertyDocument.ownership}
-                            </h5>
-                          </div>
-                        </div>
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/property_source.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Property Source</h6>
-                            <h5>
-                              {propertyDocument && propertyDocument.source}
-                            </h5>
-                          </div>
-                        </div>
-
-                        {/* <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/Purpose.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Purpose</h6>
-                              <h5>Rent</h5>
-                            </div>
-                          </div> */}
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
                               src="/assets/img/property-detail-icon/package.png"
                               alt=""
                             />
@@ -1182,6 +1144,46 @@ const PropertyDetails = () => {
                             <h5>{propertyDocument && propertyDocument.flag}</h5>
                           </div>
                         </div>
+                        <div className="p_info_single">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/property_source.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Property Source</h6>
+                            <h5>
+                              {propertyDocument && propertyDocument.source}
+                            </h5>
+                          </div>
+                        </div>
+                        <div className="p_info_single">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/ownership.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Ownership</h6>
+                            <h5>
+                              {propertyDocument && propertyDocument.ownership}
+                            </h5>
+                          </div>
+                        </div>
+
+
+                        {/* <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/property-detail-icon/Purpose.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Purpose</h6>
+                              <h5>Rent</h5>
+                            </div>
+                          </div> */}
+
                       </div>
                     </div>
                   </div>
@@ -1450,8 +1452,8 @@ const PropertyDetails = () => {
                           <h4>
                             <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
                             {propertyDocument.floorNo}{" "}
-                        {propertyDocument.numberOfFloors && "Of"}{" "}
-                        {propertyDocument.numberOfFloors}
+                            {propertyDocument.numberOfFloors && "Of"}{" "}
+                            {propertyDocument.numberOfFloors}
                           </h4>
                           <h6>Floor no.</h6>
                         </div>
@@ -3702,95 +3704,95 @@ const PropertyDetails = () => {
                     </div>
                   )}
                 {/* Property Size  */}
-       
-                    <div className="property_card_single mobile_full_card">
-                      <div className="more_detail_card_inner">
-                        <h2 className="card_title">Property Size</h2>
-                        <div className="p_info">
-                          {/* Plot Area  */}
-                          {propertyDocument && propertyDocument.plotArea && (
-                            <div className="p_info_single">
-                              <div className="pd_icon">
-                                <img
-                                  src="/assets/img/property-detail-icon/calendar.png"
-                                  alt=""
-                                />
-                              </div>
-                              <div className="pis_content">
-                                <h6>Plot Area:</h6>
-                                <h5>
-                                  {propertyDocument.plotArea}{" "}
-                                  {propertyDocument.plotArea
-                                    ? propertyDocument.plotAreaUnit
-                                    : ""}
-                                </h5>
-                              </div>
-                            </div>
-                          )}
-                          {/* Super Area  */}
-                          {propertyDocument && propertyDocument.superArea && (
-                            <div className="p_info_single">
-                              <div className="pd_icon">
-                                <img
-                                  src="/assets/img/property-detail-icon/superArea.png"
-                                  alt=""
-                                />
-                              </div>
-                              <div className="pis_content">
-                                <h6>Super Area</h6>
-                                <h5>
-                                  {propertyDocument.superArea}{" "}
-                                  {propertyDocument.superArea
-                                    ? propertyDocument.superAreaUnit
-                                    : ""}
-                                </h5>
-                              </div>
-                            </div>
-                          )}
-                          {/* Built-Up Area  */}
-                          {propertyDocument && propertyDocument.builtUpArea && (
-                            <div className="p_info_single">
-                              <div className="pd_icon">
-                                <img
-                                  src="/assets/img/property-detail-icon/buildUpArea.png"
-                                  alt=""
-                                />
-                              </div>
-                              <div className="pis_content">
-                                <h6>Built-up Area</h6>
-                                <h5>
-                                  {propertyDocument.builtUpArea}{" "}
-                                  {propertyDocument.builtUpArea
-                                    ? propertyDocument.builtUpAreaUnit
-                                    : ""}
-                                </h5>
-                              </div>
-                            </div>
-                          )}
-                          {/* Carpet Area  */}
-                          {propertyDocument && propertyDocument.carpetArea && (
-                            <div className="p_info_single">
-                              <div className="pd_icon">
-                                <img
-                                  src="/assets/img/property-detail-icon/carpetArea.png"
-                                  alt=""
-                                />
-                              </div>
-                              <div className="pis_content">
-                                <h6>Carpet Area</h6>
-                                <h5>
-                                  {propertyDocument.carpetArea}{" "}
-                                  {propertyDocument.carpetArea
-                                    ? propertyDocument.carpetAreaUnit
-                                    : ""}
-                                </h5>
-                              </div>
-                            </div>
-                          )}
+
+                <div className="property_card_single mobile_full_card">
+                  <div className="more_detail_card_inner">
+                    <h2 className="card_title">Property Size</h2>
+                    <div className="p_info">
+                      {/* Plot Area  */}
+                      {propertyDocument && propertyDocument.plotArea && (
+                        <div className="p_info_single">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/calendar.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Plot Area:</h6>
+                            <h5>
+                              {propertyDocument.plotArea}{" "}
+                              {propertyDocument.plotArea
+                                ? propertyDocument.plotAreaUnit
+                                : ""}
+                            </h5>
+                          </div>
                         </div>
-                      </div>
+                      )}
+                      {/* Super Area  */}
+                      {propertyDocument && propertyDocument.superArea && (
+                        <div className="p_info_single">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/superArea.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Super Area</h6>
+                            <h5>
+                              {propertyDocument.superArea}{" "}
+                              {propertyDocument.superArea
+                                ? propertyDocument.superAreaUnit
+                                : ""}
+                            </h5>
+                          </div>
+                        </div>
+                      )}
+                      {/* Built-Up Area  */}
+                      {propertyDocument && propertyDocument.builtUpArea && (
+                        <div className="p_info_single">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/buildUpArea.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Built-up Area</h6>
+                            <h5>
+                              {propertyDocument.builtUpArea}{" "}
+                              {propertyDocument.builtUpArea
+                                ? propertyDocument.builtUpAreaUnit
+                                : ""}
+                            </h5>
+                          </div>
+                        </div>
+                      )}
+                      {/* Carpet Area  */}
+                      {propertyDocument && propertyDocument.carpetArea && (
+                        <div className="p_info_single">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/carpetArea.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Carpet Area</h6>
+                            <h5>
+                              {propertyDocument.carpetArea}{" "}
+                              {propertyDocument.carpetArea
+                                ? propertyDocument.carpetAreaUnit
+                                : ""}
+                            </h5>
+                          </div>
+                        </div>
+                      )}
                     </div>
-              
+                  </div>
+                </div>
+
                 {/* Parking  */}
                 <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
@@ -3816,20 +3818,20 @@ const PropertyDetails = () => {
                         )}
                       {/* Open car parking  */}
                       {propertyDocument.numberOfOpenCarParking !== 0 && (
-                          
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/car-parking.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Open Car Parking</h6>
-                              <h5>{propertyDocument.numberOfOpenCarParking}</h5>
-                            </div>
+
+                        <div className="p_info_single">
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/car-parking.png"
+                              alt=""
+                            />
                           </div>
-                        )}
+                          <div className="pis_content">
+                            <h6>Open Car Parking</h6>
+                            <h5>{propertyDocument.numberOfOpenCarParking}</h5>
+                          </div>
+                        </div>
+                      )}
                       {/* 2 Wheeler Parking  */}
                       {propertyDocument &&
                         propertyDocument.twoWheelarParking && (
@@ -3846,7 +3848,7 @@ const PropertyDetails = () => {
                             </div>
                           </div>
                         )}
-                         {/* Electric Vehicle Charging Point  */}
+                      {/* Electric Vehicle Charging Point  */}
                       {propertyDocument &&
                         propertyDocument.chargingPointForElectricVehicle && (
                           <div className="p_info_single">
@@ -4024,8 +4026,8 @@ const PropertyDetails = () => {
                 <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Visiting Details</h2>
-                    <div className="p_info"> 
-                    <div className="p_info_single ">
+                    <div className="p_info">
+                      <div className="p_info_single ">
                         <div className="pd_icon">
                           <img
                             src="/assets/img/property-detail-icon/VisitingHrsFrom.png"
@@ -4053,19 +4055,19 @@ const PropertyDetails = () => {
                             {propertyDocument.visitingHrsTo}
                           </h5>
                         </div>
-                      </div>                   
-                        <div className="p_info_single visiting_days">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/VisitingDays.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Visiting Days</h6>
-                            <h5>{propertyDocument.visitingDays.join(", ")}</h5>
-                          </div>
-                        </div>                
+                      </div>
+                      <div className="p_info_single visiting_days">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/VisitingDays.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Visiting Days</h6>
+                          <h5>{propertyDocument.visitingDays.join(", ")}</h5>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
