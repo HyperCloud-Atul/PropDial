@@ -91,6 +91,9 @@ const PropertyDetails = () => {
 
   const { documents: propertyDocList, errors: propertyDocListError } =
     useCollection("docs", ["masterRefId", "==", propertyid]);
+
+    const { documents: advDocList, errors: advDocListError } =
+    useCollection("advertisements", ["propertyId", "===", propertyid]);
   // console.log("documents: ", propertyDocList);
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } =
@@ -1687,10 +1690,10 @@ const PropertyDetails = () => {
                           <div className="eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
-                                pageview
+                              featured_video
                               </span>
                               <div className="text">
-                                <h6>{inspections && inspections.length}</h6>
+                                <h6>{advDocList && advDocList.length}</h6>
                                 <h5>Advertisements</h5>
                               </div>
                             </div>
@@ -3850,8 +3853,8 @@ const PropertyDetails = () => {
                           </div>
                         )}
                       {/* Electric Vehicle Charging Point  */}
-                      {propertyDocument &&
-                        propertyDocument.evChargingPointStatus.toLowerCase() === 'yes' && (
+                      {/* {propertyDocument &&
+                        propertyDocument.evChargingPointStatus.ToLowerCase() === 'yes' && (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
@@ -3864,7 +3867,7 @@ const PropertyDetails = () => {
                               <h5>{propertyDocument.evChargingPointStatus + ", " + propertyDocument.evChargingPointType}</h5>
                             </div>
                           </div>
-                        )}
+                        )} */}
                     </div>
                   </div>
                 </div>
