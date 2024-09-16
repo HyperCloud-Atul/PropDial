@@ -14,6 +14,7 @@ import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 
 const TenantDetails = () => {
   const location = useLocation();
+  console.log("location: ", location)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
@@ -32,8 +33,8 @@ const TenantDetails = () => {
 
   const { document: tenantInfo, error: tenantInfoError } = useDocument("tenants", tenantId);
   console.log('Tenant Info: ', tenantInfo)
-  const { document: propertyInfo, error: propertyInfoError } = useDocument("properties", editedFields.propertyId);
-  console.log('Property Details:', propertyInfo)
+  // const { document: propertyInfo, error: propertyInfoError } = useDocument("properties", editedFields.propertyId);
+  // console.log('Property Details:', propertyInfo)
   const { documents: tenantDocs, errors: tenantDocsError } = useCollection("docs", ["masterRefId", "==", tenantId]);
 
   useEffect(() => {
@@ -326,7 +327,7 @@ const TenantDetails = () => {
             </div>
           </div>
           <QuickAccessMenu menuItems={menuItems} />
-         <div className="vg22"></div>
+          <div className="vg22"></div>
           <div className="">
             <div className="row">
               <div className="col-md-4">
@@ -468,13 +469,13 @@ const TenantDetails = () => {
               <div className="col-md-8">
                 <div className="tc_single">
 
-                  {propertyInfo && (
+                  {/* {propertyInfo && (
                     <>
                       <div className="tcs_single">
                         <h5>Property</h5>
                         <h6>{propertyInfo.unitNumber}, {propertyInfo.society}, {propertyInfo.locality}, {propertyInfo.city}, {propertyInfo.state}</h6>
                       </div>
-                      <div className="divider"></div></>)}
+                      <div className="divider"></div></>)} */}
                   <div className="tcs_single">
                     <h5>Rent Start Date</h5>
                     <h6>
@@ -914,7 +915,7 @@ const TenantDetails = () => {
                   <Tab className="pointer">Police Verification{" "}({filteredPoliceVerificationDocLength})</Tab>
                   <Tab className="pointer">Rent Agreements{" "}({filteredRentAgreementDocLength})</Tab>
                 </TabList>
-                <TabPanel>             
+                <TabPanel>
                   <div className="blog_sect">
                     <div className="row">
                       {filteredTenantDocLength === 0 && (
@@ -977,7 +978,7 @@ const TenantDetails = () => {
                 <TabPanel>
                   <div className="blog_sect">
                     <div className="row">
-                    {filteredPoliceVerificationDocLength === 0 && (
+                      {filteredPoliceVerificationDocLength === 0 && (
                         <h5 className="m20 text_red mt-4">No data found</h5>
                       )}
                       {filteredPoliceVerificationDocuments.map((doc, index) => (
@@ -1037,7 +1038,7 @@ const TenantDetails = () => {
                 <TabPanel>
                   <div className="blog_sect">
                     <div className="row">
-                    {filteredRentAgreementDocLength === 0 && (
+                      {filteredRentAgreementDocLength === 0 && (
                         <h5 className="m20 text_red mt-4">No data found</h5>
                       )}
                       {filteredRentAgreementDocuments.map((doc, index) => (
