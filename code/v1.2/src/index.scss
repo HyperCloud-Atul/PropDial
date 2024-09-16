@@ -1021,10 +1021,11 @@ margin-bottom: 8px !important;
     align-items: center;
 
     .left {
-      align-items: start;
+      align-items: center;
       margin-top: 7px;
       display: flex;
       width: 100%;
+      gap: 15px;
 
       .img_div {
         border-radius: 50%;
@@ -1036,7 +1037,11 @@ margin-bottom: 8px !important;
           height: 100%;
           object-fit: contain;
         }
+       
       }
+    }
+    .right{
+      width: 80%;
     }
 
     .top_right_content {

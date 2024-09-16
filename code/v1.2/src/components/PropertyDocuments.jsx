@@ -10,14 +10,9 @@ import "./PropertyDocuments.scss";
 import Switch from "@mui/material/Switch";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 import { useAuthContext } from "../hooks/useAuthContext";
+import ScrollToTop from "./ScrollToTop";
 
 const PropertyDocuments = () => {
-  // Scroll to the top of the page whenever the location changes start
-  const location = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
-  // Scroll to the top of the page whenever the location changes end
   const { user } = useAuthContext();
   const { propertyId } = useParams();
   const navigate = useNavigate();
@@ -285,6 +280,7 @@ const PropertyDocuments = () => {
 
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
+     <ScrollToTop/>
       <div className="page_spacing">
         {/* 9 dots html  */}
         <div
@@ -337,7 +333,7 @@ const PropertyDocuments = () => {
               {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
               {!showAIForm && (
                 <div className="theme_btn btn_fill no_icon text-center short_btn" onClick={handleShowAIForm}>
-                  Add new document
+                  Add New Document
                 </div>
               )}
             </div>
