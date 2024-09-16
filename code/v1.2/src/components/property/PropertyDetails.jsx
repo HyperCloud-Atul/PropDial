@@ -94,7 +94,11 @@ const PropertyDetails = () => {
 
     const { documents: advDocList, errors: advDocListError } =
     useCollection("advertisements", ["propertyId", "===", propertyid]);
-  // console.log("documents: ", propertyDocList);
+
+    // const { documents: advDocList, errors: advDocListError } =
+    // useCollection("advertisements");
+
+console.log("advDocList", advDocList && advDocList.length);
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } =
     useFirestore("tenants");
@@ -3853,8 +3857,8 @@ const PropertyDetails = () => {
                           </div>
                         )}
                       {/* Electric Vehicle Charging Point  */}
-                      {/* {propertyDocument &&
-                        propertyDocument.evChargingPointStatus.ToLowerCase() === 'yes' && (
+                      {propertyDocument && propertyDocument.evChargingPointStatus &&
+                        propertyDocument.evChargingPointStatus.toLowerCase() === 'yes' && (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
@@ -3867,7 +3871,7 @@ const PropertyDetails = () => {
                               <h5>{propertyDocument.evChargingPointStatus + ", " + propertyDocument.evChargingPointType}</h5>
                             </div>
                           </div>
-                        )} */}
+                        )}
                     </div>
                   </div>
                 </div>
