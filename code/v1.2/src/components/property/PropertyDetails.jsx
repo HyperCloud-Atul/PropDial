@@ -1675,8 +1675,8 @@ console.log("advDocList", advDocList && advDocList.length);
                           {/* </Link> */}
                         </SwiperSlide>
                         <SwiperSlide>
-                          {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
-                          <div className="eicp_single coming_soon">
+                          <Link to={`/property-utility-bills/${propertyid}`} >
+                          <div className="eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
                                 pageview
@@ -1687,7 +1687,7 @@ console.log("advDocList", advDocList && advDocList.length);
                               </div>
                             </div>
                           </div>
-                          {/* </Link> */}
+                          </Link>
                         </SwiperSlide>
                         <SwiperSlide>
                           <Link to={`/property-ads/${propertyid}`} >

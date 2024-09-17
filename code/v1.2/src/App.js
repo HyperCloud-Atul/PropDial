@@ -93,6 +93,7 @@ import PGTransactions from "./pdpages/property/PGTransactions";
 import PGRateCard from "./pdpages/roles/admin/master/PGRateCard";
 import PropertyDocuments from "./components/PropertyDocuments";
 import PropertyAds from "./pdpages/property/PropertyAds";
+import PropertyUtilityBills from "./pdpages/property/PropertyUtilityBills";
 import PropertyInspectionDocuments from "./components/PropertyInspectionDocuments";
 import PGAdminProperty from "./pdpages/property/PGAdminProperty";
 import PGEnquiry from "./pdpages/enquiry/PGEnquiry";
@@ -329,6 +330,10 @@ function App() {
                     path="/property-ads/:propertyId"
                     element={<PropertyAds />}
                   ></Route>
+                   <Route
+                    path="/property-utility-bills/:propertyId"
+                    element={<PropertyUtilityBills />}
+                  ></Route>                
                   
                   <Route
                     path="/propertyinspectiondocument/:propertyId"

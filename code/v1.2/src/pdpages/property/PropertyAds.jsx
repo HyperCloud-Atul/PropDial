@@ -30,7 +30,7 @@ const PropertyAds = () => {
   // all use states
   const [showAIForm, setShowAIForm] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [selectedAdvPortal, setselectedAdvPortal] = useState("");
+  const [selectedAdvPortal, setSelectedAdvPortal] = useState("");
   const [advLink, setAdvLink] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
@@ -38,7 +38,7 @@ const PropertyAds = () => {
   // functions
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const handleAdvPortalChange = (event) =>
-    setselectedAdvPortal(event.target.value);
+    setSelectedAdvPortal(event.target.value);
   const handleAdvLinkChange = (event) => setAdvLink(event.target.value);
   const handleDeleteClick = (docId) => {
     setDocToDelete(docId);
@@ -86,7 +86,7 @@ const PropertyAds = () => {
       // setNewDocId(docRef.id);
     } catch (error) {
       console.error("Error adding document:", error);
-      setselectedAdvPortal("");
+      setSelectedAdvPortal("");
       setIsUploading(false);
       setShowAIForm(!showAIForm);
     }
