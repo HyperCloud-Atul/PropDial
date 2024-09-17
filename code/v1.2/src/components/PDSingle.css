@@ -407,7 +407,12 @@
   width: fit-content;
   color: var(--light-black);
 }
-
+.aai_form .form_field.price_input input{
+  padding-left: 22px !important;
+}
+.aai_form .form_field.price_input::after{
+  left: 6px !important;
+}
 .aai_form .form_field input:focus {
   outline: none;
   border-color: #498fff;

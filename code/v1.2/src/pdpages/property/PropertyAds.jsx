@@ -81,12 +81,15 @@ const PropertyAds = () => {
         propertyId,
       });
 
+      setSelectedAdvPortal("");
+      setAdvLink("");
       setIsUploading(false);
       setShowAIForm(!showAIForm);
       // setNewDocId(docRef.id);
     } catch (error) {
       console.error("Error adding document:", error);
       setSelectedAdvPortal("");
+      setAdvLink("");
       setIsUploading(false);
       setShowAIForm(!showAIForm);
     }
@@ -376,12 +379,22 @@ const PropertyAds = () => {
             </section>
           </>
         )}
-        {advDoc && (
+        {advDoc && advDoc.length !== 0 && (
           <>
             <div className="vg22"></div>
             <hr />
             <div className="vg22"></div>
           </>
+        )}
+        {advDoc && advDoc.length === 0 && (
+          <div
+            className="pg_msg"
+            style={{
+              height: "calc(55vh)",
+            }}
+          >
+            <div>No Advertisement Yet!</div>
+          </div>
         )}
         <div className="my_small_card_parent">
           {advDoc &&
@@ -400,10 +413,22 @@ const PropertyAds = () => {
                     ) : null}
                   </div>
                   <div className="right">
-                    <h5 className="title">{doc.portal}</h5>
-                    <h6 className="sub_title">
-                      {doc.pid}, {doc.propertyType}
-                    </h6>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 className="title">{doc.portal}</h5>
+                      <h6 className="sub_title">
+                        {doc.pid}, {doc.propertyType}
+                      </h6>
+                    </div>
+                    <div
+                      onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
+                      className="text_red pointer"
+                      style={{
+                        fontSize: "12px",                     
+                      }}
+                    >
+                      Remove
+                    </div></div>
                     <Link
                       className="click_text"
                       to={doc.advLink}
@@ -425,16 +450,7 @@ const PropertyAds = () => {
                     {format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}
                   </span>
                 </h4>
-                <div
-                  onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
-                  className="text_red pointer"
-                  style={{
-                    fontSize: "12px",
-                    marginBottom: "20px",
-                  }}
-                >
-                  Remove
-                </div>
+
                 <Modal
                   show={showConfirmModal}
                   onHide={handleConfirmClose}

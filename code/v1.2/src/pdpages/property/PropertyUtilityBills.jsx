@@ -6,6 +6,8 @@ import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { Modal } from "react-bootstrap"; // Ensure you have imported Modal
 import { format } from "date-fns";
+import DatePicker from "react-datepicker"; // Import the DatePicker component
+import "react-datepicker/dist/react-datepicker.css"; // Import the necessary CSS
 const PropertyUtilityBills = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
@@ -49,19 +51,12 @@ const PropertyUtilityBills = () => {
     setSelectedPaymentType(event.target.value);
   const handleAmountDueChange = (event) => setAmountDue(event.target.value);
   //   const handleDueDateChange = (event) => setDueDate(event.target.value);
-  const handleDueDateChange = (e) => {
-    const selectedDate = new Date(e.target.value);
-
-    // Format the date as '17 Sep 2024'
-    const formattedDate = selectedDate.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-
-    setRawDate(e.target.value); // Keep the raw date to store in DB if needed
-    setDueDate(formattedDate); // Set the formatted date to display in the input box
-  }; 
+  const handleDueDateChange = (date) => {
+    // Format the selected date as '17 Sep 2024'
+    const formattedDate = date ? format(date, "dd MMM yyyy") : "";
+    setRawDate(date); // Store raw date
+    setDueDate(formattedDate); // Store formatted date
+  };
 
   const handleDeleteClick = (docId) => {
     setDocToDelete(docId);
@@ -87,9 +82,37 @@ const PropertyUtilityBills = () => {
     }
   };
 
+  // Convert digit into comma formate start
+  function formatNumberWithCommas(number) {
+    // Convert number to a string if it's not already
+    let numStr = number.toString();
+
+    // Handle decimal part if present
+    const [integerPart, decimalPart] = numStr.split(".");
+
+    // Regular expression for Indian comma format
+    const lastThreeDigits = integerPart.slice(-3);
+    const otherDigits = integerPart.slice(0, -3);
+
+    const formattedNumber =
+      otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+      (otherDigits ? "," : "") +
+      lastThreeDigits;
+
+    // Return the formatted number with decimal part if it exists
+    return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
+  }
+
   // add document code
   const addUtilityBill = async () => {
-    if ("") {
+    if (
+      !selectedBillType ||
+      !authorityName ||
+      !billId ||
+      !selectedPaymentType ||
+      !amountDue ||
+      !dueDate
+    ) {
       alert("All fields are required!");
       return;
     }
@@ -106,7 +129,13 @@ const PropertyUtilityBills = () => {
         pid: propertydoc.pid,
         propertyId,
       });
-
+      setSelectedBillType("");
+      setAuthorityName("");
+      setBillId("");
+      setSelectedPaymentType("");
+      setAmountDue("");
+      setDueDate("");
+      setRawDate("");
       setIsUploading(false);
       setShowAIForm(!showAIForm);
       // setNewDocId(docRef.id);
@@ -118,6 +147,7 @@ const PropertyUtilityBills = () => {
       setSelectedPaymentType("");
       setAmountDue("");
       setDueDate("");
+      setRawDate("");
       setIsUploading(false);
       setShowAIForm(!showAIForm);
     }
@@ -205,8 +235,8 @@ const PropertyUtilityBills = () => {
   console.log("utilityBillsDoc", utilityBillsDoc);
 
   return (
-    <div className="top_header_pg pg_bg property_docs_pg">
-      <div className="page_spacing">
+    <div className="top_header_pg pg_bg pg_utility_bill ">
+      <div className="page_spacing pg_min_height">
         <div className="row row_reverse_991">
           <div className="col-lg-6">
             <div className="title_card mobile_full_575 mobile_gap h-100">
@@ -405,8 +435,8 @@ const PropertyUtilityBills = () => {
                                 type="text"
                                 value={authorityName}
                                 onChange={handleauthorityNameChange}
-                                placeholder="Name of Authority"
-                                className="w-100" 
+                                placeholder="Name of authority"
+                                className="w-100"
                               />
                             </div>
                           </div>
@@ -421,7 +451,7 @@ const PropertyUtilityBills = () => {
                                 value={billId}
                                 onChange={handleBillIdChange}
                                 placeholder="Bill ID"
-                                className="w-100" 
+                                className="w-100"
                               />
                             </div>
                           </div>
@@ -440,7 +470,6 @@ const PropertyUtilityBills = () => {
                                     value={pt.value}
                                     onChange={handlePaymentTypeChange}
                                     checked={selectedPaymentType === pt.value}
-                                   
                                   />
                                   <label htmlFor={pt.id}>{pt.label}</label>
                                 </div>
@@ -451,29 +480,29 @@ const PropertyUtilityBills = () => {
                       </div>
                       <div className="col-md-6">
                         <div className="add_info_text">
-                          <div className="form_field">
-                            <div className="relative">
-                              <input
-                                type="number"
-                                value={amountDue}
-                                onChange={handleAmountDueChange}
-                                placeholder="Amount Due"
-                                className="w-100" 
-                              />
-                            </div>
+                          <div className="form_field price_input relative">
+                            <input
+                              type="number"
+                              value={amountDue}
+                              onChange={handleAmountDueChange}
+                              placeholder="Amount due"
+                              className="w-100"
+                            />
                           </div>
                         </div>
                       </div>
                       <div className="col-md-6">
-                        <div className="add_info_text">
-                          <div className="form_field">
-                            <div className="relative">                            
-                              <input
-                                type="date"
-                                value={rawDate}
-                                onChange={handleDueDateChange}   
-                              className="w-100"                          
-                              />                         
+                        <div className="add_info_text w-100">
+                          <div className="form_field w-100">
+                            <div className="relative">
+                              <DatePicker
+                                selected={rawDate}
+                                onChange={handleDueDateChange}
+                                dateFormat="dd/MM/yyyy"
+                                placeholderText="Amount due date"
+                                className="w-100"
+                                // isClearable
+                              />
                             </div>
                           </div>
                         </div>
@@ -507,98 +536,128 @@ const PropertyUtilityBills = () => {
             </section>
           </>
         )}
-        {utilityBillsDoc && (
-            <>
-              <div className="vg22"></div>
-              <hr />
-              <div className="vg22"></div>
-            </>
-          )}
-        <div className="my_small_card_parent">
-            {utilityBillsDoc &&
-              utilityBillsDoc.map((doc, index) => (
-                <div className="my_small_card notification_card" key={index}>
-                  <div className="left">
-                    <div className="img_div">
-                      {doc.billType === "CAM & CAE" || doc.billType === "CAM & CAE & Water" || doc.billType === "Common Area Maintenance (CAM)" || doc.billType === "Main + Elect + Water" || doc.billType === "Maintenance" || doc.billType === "Maintenance & Electricity"  ? (                        
-                        <img src="/assets/img/icons/maintainance.png" alt="" />
-                      ) : doc.billType.toLowerCase() === "club" ? (
-                        <img src="/assets/img/icons/clubill.png" alt="" />
-                      ) : doc.billType === "Common Area Electricity (CAE)" || doc.billType.toLowerCase() === "electricity" ? (
-                        <img src="/assets/img/icons/electicitybill.png" alt="" />
-                      ) : doc.billType.toLowerCase() === "water" ? (
-                        <img src="/assets/img/icons/waterbill.png" alt="" />
-                    ) : doc.billType === "PNG/LPG" ? (
-                        <img src="/assets/img/icons/lpgbill.png" alt="" />
-                    ) : doc.billType === "Power Back-up" ? (
-                        <img src="/assets/img/icons/powerbackup.png" alt="" />
-                    ) : doc.billType === "Property Tax" ? (
-                        <img src="/assets/img/icons/propertytax.png" alt="" />
-                    ) : doc.billType === "Water & Sewerage" ? (
-                        <img src="/assets/img/icons/wastewater.png" alt="" />
-                      ) : null}           
-                      
-                      
-                    </div>
-                    <div className="right">
-                      <h5 className="title">{doc.authorityName}</h5>
-                      <h6 className="sub_title">
-                        {doc.paymentType}
-                      </h6>
-                      <h6 className="sub_title">
-                      {doc.billType}
-                      </h6>                      
-                    </div>
-                  </div>
-                  <h4 className="top_right_content">
-                    <span>
-                      {format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}
-                    </span>
-                  </h4>
-                  <h4 className="top_left_content">
-                    <span className="text-capitalize">
-                    {doc.billId}
-                    </span>
-                  </h4>
-                  <div
-                    onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
-                    className="text_red pointer"
-                    style={{
-                      fontSize: "12px",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    Remove
-                  </div>
-                  <Modal
-                    show={showConfirmModal}
-                    onHide={handleConfirmClose}
-                    className="delete_modal"
-                    centered
-                  >
-                    <div className="alert_text text-center">Alert</div>
-  
-                    <div className="sure_content text-center">
-                      Are you sure you want to remove this utility bill?
-                    </div>
-                    <div className="yes_no_btn">
-                      <div
-                        className="theme_btn full_width no_icon text-center btn_border"
-                        onClick={confirmDeleteDocument} // Confirm and delete
-                      >
-                        Yes
-                      </div>
-                      <div
-                        className="theme_btn full_width no_icon text-center btn_fill"
-                        onClick={handleConfirmClose} // Close modal without deleting
-                      >
-                        No
-                      </div>
-                    </div>
-                  </Modal>
-                </div>
-              ))}
+        {utilityBillsDoc && utilityBillsDoc.length !== 0 && (
+          <>
+            <div className="vg22"></div>
+            <hr />
+            <div className="vg22"></div>
+          </>
+        )}
+        {utilityBillsDoc && utilityBillsDoc.length === 0 && (
+          <div
+            className="pg_msg"
+            style={{
+              height: "calc(55vh)",
+            }}
+          >
+            <div>No Utility Bill Yet!</div>
           </div>
+        )}
+        <div className="my_small_card_parent">
+          {utilityBillsDoc &&
+            utilityBillsDoc.map((doc, index) => (
+              <div className="my_small_card notification_card" key={index}>
+                <div className="left">
+                  <div className="img_div">
+                    {doc.billType === "Common Area Maintenance (CAM)" ||
+                    doc.billType.toLowerCase() === "maintenance" ? (
+                      <img src="/assets/img/icons/maintainance.png" alt="" />
+                    ) : doc.billType.toLowerCase() === "club" ? (
+                      <img src="/assets/img/icons/clubill.png" alt="" />
+                    ) : doc.billType === "Common Area Electricity (CAE)" ||
+                      doc.billType.toLowerCase() === "electricity" ? (
+                      <img src="/assets/img/icons/electicitybill.png" alt="" />
+                    ) : doc.billType.toLowerCase() === "water" ? (
+                      <img src="/assets/img/icons/waterbill.png" alt="" />
+                    ) : doc.billType === "PNG/LPG" ? (
+                      <img src="/assets/img/icons/lpgbill.png" alt="" />
+                    ) : doc.billType === "Power Back-up" ? (
+                      <img src="/assets/img/icons/powerbackup.png" alt="" />
+                    ) : doc.billType === "Property Tax" ? (
+                      <img src="/assets/img/icons/propertytax.png" alt="" />
+                    ) : doc.billType === "Main + Elect + Water" ||
+                      doc.billType === "CAM & CAE & Water" ? (
+                      <img src="/assets/img/icons/emw.png" alt="" />
+                    ) : doc.billType === "Maintenance & Electricity" ||
+                      doc.billType === "CAM & CAE" ? (
+                      <img src="/assets/img/icons/em.png" alt="" />
+                    ) : doc.billType === "Electricity & Water" ? (
+                      <img src="/assets/img/icons/ew.png" alt="" />
+                    ) : doc.billType === "Water & Sewerage" ? (
+                      <img src="/assets/img/icons/sw.png" alt="" />
+                    ) : doc.billType === "Electricity / Utility Bill" ? (
+                      <img src="/assets/img/icons/ue.png" alt="" />
+                    ) : null}
+                  </div>
+                  <div className="right">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5 className="title">{doc.authorityName}</h5>
+                        <h6 className="sub_title">{doc.paymentType}</h6>
+                      </div>
+                      <div
+                        onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
+                        className="text_red pointer"
+                        style={{
+                          fontSize: "12px",
+                        }}
+                      >
+                        Remove
+                      </div>
+                      <Modal
+                        show={showConfirmModal}
+                        onHide={handleConfirmClose}
+                        className="delete_modal"
+                        centered
+                      >
+                        <div className="alert_text text-center">Alert</div>
+
+                        <div className="sure_content text-center">
+                          Are you sure you want to remove this utility bill?
+                        </div>
+                        <div className="yes_no_btn">
+                          <div
+                            className="theme_btn full_width no_icon text-center btn_border"
+                            onClick={confirmDeleteDocument} // Confirm and delete
+                          >
+                            Yes
+                          </div>
+                          <div
+                            className="theme_btn full_width no_icon text-center btn_fill"
+                            onClick={handleConfirmClose} // Close modal without deleting
+                          >
+                            No
+                          </div>
+                        </div>
+                      </Modal>
+                    </div>
+                    <h6 className="sub_title text-capitalize">{doc.billId}</h6>
+                  </div>
+                </div>
+                <h4 className="top_right_content">
+                  <span>
+                    {format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}
+                  </span>
+                </h4>
+                <h4 className="top_left_content">
+                  <span className="text-capitalize">{doc.billType}</span>
+                </h4>
+
+                <div className="bottom_strip">
+                  <div className="bs_left">
+                    <h5>
+                      {doc.dueDate}
+                      <span>(Due Date)</span>
+                    </h5>
+                    <h6></h6>
+                  </div>
+                  <div className="bs_right">
+                    <h4>₹ {formatNumberWithCommas(doc.amountDue)}</h4>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );
