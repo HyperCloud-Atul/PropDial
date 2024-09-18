@@ -42,6 +42,7 @@ const PropertyDetails = () => {
 
   // get user from useauthcontext
   const { propertyid } = useParams();
+  // console.log("property id: ", propertyid)
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const { document: propertyDocument, error: propertyDocError } = useDocument(
@@ -92,16 +93,22 @@ const PropertyDetails = () => {
   const { documents: propertyDocList, errors: propertyDocListError } =
     useCollection("docs", ["masterRefId", "==", propertyid]);
 
-    const { documents: advDocList, errors: advDocListError } =
-    useCollection("advertisements", ["propertyId", "===", propertyid]);
+  // console.log("propertyDocList: ", propertyDocList && propertyDocList.length);
 
-    // const { documents: advDocList, errors: advDocListError } =
-    // useCollection("advertisements");
+  const { documents: advDocList, errors: advDocListError } =
+    useCollection("advertisements", ["propertyId", "==", propertyid]);
 
-console.log("advDocList", advDocList && advDocList.length);
+  // console.log("advDocList: ", advDocList && advDocList.length);
+
+  const { documents: utilityBillList, errors: utilityBillListError } =
+    useCollection("utilityBills", ["propertyId", "==", propertyid]);
+
+  const { documents: propertyKeysList, errors: propertyKeysListError } =
+    useCollection("propertyKeys", ["propertyId", "==", propertyid]);
 
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } =
     useFirestore("tenants");
+
   const {
     addDocument: addProperyUsersDocument,
     updateDocument: updateProperyUsersDocument,
@@ -1661,47 +1668,47 @@ console.log("advDocList", advDocList && advDocList.length);
                         </SwiperSlide>
                         <SwiperSlide>
                           <Link to={`/property-keys/${propertyid}`} >
-                          <div className="eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                              key
-                              </span>
-                              <div className="text">
-                                <h6>{inspections && inspections.length}</h6>
-                                <h5>Keys</h5>
+                            <div className="eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  key
+                                </span>
+                                <div className="text">
+                                  <h6>{propertyKeysList && propertyKeysList.length}</h6>
+                                  <h5>Keys</h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
                           </Link>
                         </SwiperSlide>
                         <SwiperSlide>
                           <Link to={`/property-utility-bills/${propertyid}`} >
-                          <div className="eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                              receipt_long
-                              </span>
-                              <div className="text">
-                                <h6>{inspections && inspections.length}</h6>
-                                <h5>Utility Bills</h5>
+                            <div className="eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  receipt_long
+                                </span>
+                                <div className="text">
+                                  <h6>{utilityBillList && utilityBillList.length}</h6>
+                                  <h5>Utility Bills</h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
                           </Link>
                         </SwiperSlide>
                         <SwiperSlide>
                           <Link to={`/property-ads/${propertyid}`} >
-                          <div className="eicp_single">
-                            <div className="icon">
-                              <span class="material-symbols-outlined">
-                              featured_video
-                              </span>
-                              <div className="text">
-                                <h6>{advDocList && advDocList.length}</h6>
-                                <h5>Advertisements</h5>
+                            <div className="eicp_single">
+                              <div className="icon">
+                                <span class="material-symbols-outlined">
+                                  featured_video
+                                </span>
+                                <div className="text">
+                                  <h6>{advDocList && advDocList.length}</h6>
+                                  <h5>Advertisements</h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
                           </Link>
                         </SwiperSlide>
                         <SwiperSlide>
