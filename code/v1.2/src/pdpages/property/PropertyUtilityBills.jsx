@@ -437,6 +437,7 @@ const PropertyUtilityBills = () => {
                                 onChange={handleauthorityNameChange}
                                 placeholder="Name of authority"
                                 className="w-100"
+                              
                               />
                             </div>
                           </div>
@@ -452,6 +453,9 @@ const PropertyUtilityBills = () => {
                                 onChange={handleBillIdChange}
                                 placeholder="Bill ID"
                                 className="w-100"
+                                style={{
+                                  background:"whitesmoke"
+                                }}
                               />
                             </div>
                           </div>

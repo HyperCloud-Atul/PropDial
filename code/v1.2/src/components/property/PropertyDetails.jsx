@@ -1661,10 +1661,10 @@ console.log("advDocList", advDocList && advDocList.length);
                         </SwiperSlide>
                         <SwiperSlide>
                           <Link to={`/property-keys/${propertyid}`} >
-                          <div className="eicp_single coming_soon">
+                          <div className="eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
-                                pageview
+                              key
                               </span>
                               <div className="text">
                                 <h6>{inspections && inspections.length}</h6>
@@ -1679,7 +1679,7 @@ console.log("advDocList", advDocList && advDocList.length);
                           <div className="eicp_single">
                             <div className="icon">
                               <span class="material-symbols-outlined">
-                                pageview
+                              receipt_long
                               </span>
                               <div className="text">
                                 <h6>{inspections && inspections.length}</h6>

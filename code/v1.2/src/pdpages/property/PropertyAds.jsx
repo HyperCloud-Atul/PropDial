@@ -318,37 +318,48 @@ const PropertyAds = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-2">
-                    <div className="add_info_text">
-                      <div className="form_field">
-                        <div className="relative">
-                          <input type="text" value={propertydoc.pid} readOnly />
+                  <div className="col-md-3">
+                    <div className="add_info_text w-100">
+                      <div className="form_field w-100">
+                        <div className="relative w-100">
+                          <input type="text" value={propertydoc.pid} readOnly
+                            style={{
+                              background:"whitesmoke",
+                              opacity:"0.7"
+                            }}
+                            className="w-100" />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-2">
-                    <div className="add_info_text">
-                      <div className="form_field">
-                        <div className="relative">
+                  <div className="col-md-3">
+                    <div className="add_info_text w-100">
+                      <div className="form_field w-100">
+                        <div className="relative w-100">
                           <input
                             type="text"
                             value={propertydoc.purpose}
                             readOnly
+                            style={{
+                              background:"whitesmoke",
+                              opacity:"0.7"
+                            }}
+                            className="w-100"
                           />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-8">
-                    <div className="add_info_text">
-                      <div className="form_field">
-                        <div className="relative">
+                  <div className="col-md-7">
+                    <div className="add_info_text w-100">
+                      <div className="form_field w-100">
+                        <div className="relative w-100">
                           <input
                             type="text"
                             value={advLink}
                             onChange={handleAdvLinkChange}
                             placeholder="Link"
+                            className="w-100"
                           />
                         </div>
                       </div>
