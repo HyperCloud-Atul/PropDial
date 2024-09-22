@@ -169,7 +169,7 @@ const PGMoreMenu = () => {
           )}
 
           {/* Admin cards */}
-          {user && user.role === "admin" && (
+          {user && (user.role === "superAdmin" || user.role === "admin") && (
             <div className="admin_div">
               <div className="dvg22"></div>
               <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">

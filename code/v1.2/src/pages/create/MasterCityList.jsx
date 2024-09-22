@@ -109,20 +109,27 @@ export default function MasterCityList() {
   };
 
   let results = [];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormError(null);
+    setFormError("");
+
+    let _addCityFlag = false;
 
     let cityname = city.trim();
     // console.log('cityname:', cityname)
-
-    if (currentDocid) {
+    // console.log("Updated currentDocid: ", currentDocid)
+    if (currentDocid != null) {
+      // console.log("Updated currentDocid: ", currentDocid)
+      setFormError("Updated Successfully");
+      // sethandleAddSectionFlag(!handleAddSectionFlag);
       await updateDocument(currentDocid, {
         country: country.label,
         state: state.label,
         city: cityname,
       });
-    } else {
+
+    } else if (currentDocid == null) {
       let ref = projectFirestore
         .collection("m_cities")
         .where("city", "==", cityname);
@@ -130,7 +137,8 @@ export default function MasterCityList() {
         snapshot.docs.forEach((doc) => {
           results.push({ ...doc.data(), id: doc.id });
         });
-
+        // console.log("_addCityFlag: ", _addCityFlag)
+        // console.log("results.length: ", results.length)
         if (results.length === 0) {
           const dataSet = {
             country: country.label,
@@ -138,28 +146,39 @@ export default function MasterCityList() {
             city: cityname,
             status: "active",
           };
-          await addDocument(dataSet);
+          // setAddCityFlag(true)
+          _addCityFlag = true
+          // console.log("_addCityFlag: ", _addCityFlag)
           setFormError("Successfully added");
-          sethandleAddSectionFlag(!handleAddSectionFlag);
-        } else {
-          setFormError("Already added");
-          sethandleAddSectionFlag(!handleAddSectionFlag);
+          // sethandleAddSectionFlag(!handleAddSectionFlag);
+          // console.log("Successfully added")
+          // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
+          await addDocument(dataSet);
+        } else if (results.length > 0 && _addCityFlag === false) {
+          // console.log("Duplicate City")
+          setFormError("Duplicate City");
+          // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
+          // sethandleAddSectionFlag(!handleAddSectionFlag);
         }
+
       });
+
     }
   };
+
+
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
   };
 
 
   const handleAddSection = () => {
-    setFormError(null);
+    setCurrentDocid(null);
+    setFormError("");
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add");
     handleCountryChange(country);
     setCity("");
-    setCurrentDocid(null);
   };
 
   // const [cityStatus, setCityStatus] = useState();
@@ -174,6 +193,7 @@ export default function MasterCityList() {
 
   const handleEditCard = (docid, doccountry, docstate, doccity) => {
     // console.log('data:', data)
+    setCurrentDocid(docid);
     window.scrollTo(0, 0);
     setFormError(null);
     setCountry({ label: doccountry, value: doccountry });
@@ -181,7 +201,7 @@ export default function MasterCityList() {
     setCity(doccity);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update City");
-    setCurrentDocid(docid);
+
   };
 
   const [searchInput, setSearchInput] = useState("");
@@ -236,7 +256,7 @@ export default function MasterCityList() {
 
   // nine dots menu start
   const nineDotsMenu = [
-    { title: "Country's List", link: "/countrylist", icon: "public" },
+    // { title: "Country's List", link: "/countrylist", icon: "public" },
     { title: "State's List", link: "/statelist", icon: "map" },
     {
       title: "Locality's List",
@@ -358,106 +378,112 @@ export default function MasterCityList() {
             maxHeight: handleAddSectionFlag ? "100%" : "0",
           }}
         >
-          <form>
-            <div className="row row_gap form_full">
-              <div className="col-xl-4 col-lg-6">
-                <div className="form_field label_top">
-                  <label htmlFor="">Country</label>
-                  <div className="form_field_inner">
-                    <Select
-                      className=""
-                      onChange={handleCountryChange}
-                      // options={countryOptionsSorted.current}
-                      options={countryList}
-                      value={country}
-                      styles={{
-                        control: (baseStyles, state) => ({
-                          ...baseStyles,
-                          outline: "none",
-                          background: "#eee",
-                          borderBottom: " 1px solid var(--theme-blue)",
-                        }),
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6">
-                <div className="form_field label_top">
-                  <label htmlFor="">State</label>
-                  <div className="form_field_inner">
-                    <Select
-                      className=""
-                      onChange={(option) => setState(option)}
-                      options={stateOptionsSorted.current}
-                      // options={stateList}
-                      value={state}
-                      styles={{
-                        control: (baseStyles, state) => ({
-                          ...baseStyles,
-                          outline: "none",
-                          background: "#eee",
-                          borderBottom: " 1px solid var(--theme-blue)",
-                        }),
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6">
-                <div className="form_field label_top">
-                  <label htmlFor="">City</label>
-                  <div className="form_field_inner">
-                    <input
-                      required
-                      type="text"
-                      placeholder="Entry City Name"
-                      onChange={(e) => setCity(e.target.value)}
-                      value={city}
-                    />
-                  </div>
+
+          <div className="row row_gap form_full">
+            <div className="col-xl-4 col-lg-6">
+              <div className="form_field label_top">
+                <label htmlFor="">Country</label>
+                <div className="form_field_inner">
+                  <Select
+                    className=""
+                    onChange={handleCountryChange}
+                    // options={countryOptionsSorted.current}
+                    options={countryList}
+                    value={country}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: "#eee",
+                        borderBottom: " 1px solid var(--theme-blue)",
+                      }),
+                    }}
+                  />
                 </div>
               </div>
             </div>
-            <div className="vg22"></div>
+            <div className="col-xl-4 col-lg-6">
+              <div className="form_field label_top">
+                <label htmlFor="">State</label>
+                <div className="form_field_inner">
+                  <Select
+                    className=""
+                    onChange={(option) => setState(option)}
+                    options={stateOptionsSorted.current}
+                    // options={stateList}
+                    value={state}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: "#eee",
+                        borderBottom: " 1px solid var(--theme-blue)",
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-4 col-lg-6">
+              <div className="form_field label_top">
+                <label htmlFor="">City</label>
+                <div className="form_field_inner">
+                  <input
+                    required
+                    type="text"
+                    placeholder="Entry City Name"
+                    onChange={(e) => setCity(e.target.value)}
+                    value={city}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="vg22"></div>
 
-            {formError && (
-              <>
-                <div className="error">{formError}</div>
-                <div className="vg22"></div>
-              </>
-            )}
+          {formError && (
+            <>
+              <div className="error">{formError}</div>
+              <div className="vg22"></div>
+            </>
+          )}
 
+          <div
+            className="d-flex align-items-center justify-content-end"
+            style={{
+              gap: "15px",
+            }}
+          >
             <div
-              className="d-flex align-items-center justify-content-end"
+              className="theme_btn btn_border no_icon text-center"
+              onClick={handleAddSection}
               style={{
-                gap: "15px",
+                minWidth: "140px",
               }}
             >
-              <div
-                className="theme_btn btn_border no_icon text-center"
-                onClick={handleAddSection}
-                style={{
-                  minWidth: "140px",
-                }}
-              >
-                Cancel
-              </div>
-              <div
-                className="theme_btn btn_fill no_icon text-center"
-                onClick={handleSubmit}
-                style={{
-                  minWidth: "140px",
-                }}
-              >
-                {formBtnText}
-              </div>
+              Cancel
             </div>
-          </form>
+            <div
+              className="theme_btn btn_fill no_icon text-center"
+              onClick={(e) => handleSubmit(e)}
+              style={{
+                minWidth: "140px",
+              }}
+            >
+              {formBtnText}
+            </div>
+          </div>
+
           <hr />
         </div>
         {masterCity && masterCity.length !== 0 && (
           <>
+            {/* {formError && (
+              <>
+                <div className="error">{formError}</div>
+                <div className="vg22"></div>
+              </>
+            )} */}
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>

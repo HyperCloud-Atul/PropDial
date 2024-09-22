@@ -53,7 +53,7 @@ export default function MasterStateList() {
     );
   }
   useEffect(() => {
-    console.log("in useeffect");
+    // console.log("in useeffect");
   }, []);
 
   let results = [];
@@ -189,7 +189,7 @@ export default function MasterStateList() {
 
   // nine dots menu start
   const nineDotsMenu = [
-    { title: "Country's List", link: "/countrylist", icon: "public" },
+    // { title: "Country's List", link: "/countrylist", icon: "public" },
     { title: "City's List", link: "/citylist", icon: "location_city" },
     {
       title: "Locality's List",
@@ -293,6 +293,7 @@ export default function MasterStateList() {
                       </span>
                     </div>
                   </div>
+                  {/* No need to add new state from UI, It will be added from back-end only */}
                   <div
                     onClick={handleAddSection}
                     className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFirestore } from "../../hooks/useFirestore";
+import { useCollection } from '../../hooks/useCollection';
+import { useParams } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput from "react-phone-input-2";
@@ -9,9 +11,15 @@ import "react-phone-input-2/lib/style.css";
 
 const AddEnquiry = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    console.log("property id: ", id)
     // add enquiry with add document start
     const { addDocument, updateDocument, deleteDocument, error } =
         useFirestore("enquiry");
+
+    // const { documents: propertyDoc, error: propertyDocError } = useCollection("properties", ["postedBy", "==", "Propdial"]);
+    const { documents: propertyDoc, error: propertyDocError } = useCollection("properties", ["id", "==", id]);
+    console.log("propertyDoc: ", propertyDoc)
 
 
     const [enquiryFrom, setEnquiryFrom] = useState("");
@@ -29,8 +37,15 @@ const AddEnquiry = () => {
     const [remark, setRemark] = useState("");
     const [isUploading, setIsUploading] = useState(false);
 
+    useEffect(() => {
+        if (propertyDoc) {
+            setPropertyName(propertyDoc && propertyDoc.propertyName)
+        }
+    }, [propertyDoc])
 
     const [errors, setErrors] = useState({});
+
+
 
     const handleFieldChange = (setter) => (event) => {
         const { name, value } = event.target;
@@ -81,12 +96,12 @@ const AddEnquiry = () => {
         if (referredBy === "employee" && !employeeName) errors.employeeName = "Employee name is a required field";
         if (!propertyOwner) errors.propertyOwner = "Property owner is a required field";
         if (!propertyName) errors.propertyName = "Property name is a required field";
-        if (!name) errors.name = "Name is a required field";   
-        if (!phone) errors.phone = "Contact is a required field"; 
+        if (!name) errors.name = "Name is a required field";
+        if (!phone) errors.phone = "Contact is a required field";
         if (email && !/\S+@\S+\.\S+/.test(email)) errors.email = "Email is not in the correct format";
         if (!remark) {
             errors.remark = "Remark is a required field";
-        } 
+        }
         // else if (remark.length < 50) {
         //     errors.remark = "Remark must be at least 50 characters long";
         // }    
@@ -110,8 +125,8 @@ const AddEnquiry = () => {
                 updatedAt: new Date(),
             };
             const docRef = await addDocument({
-                iAm:"",
-                description:"",
+                iAm: "",
+                description: "",
                 enquiryFrom,
                 referredBy,
                 enquiryType,
@@ -206,7 +221,7 @@ const AddEnquiry = () => {
                                     </div>
                                 </div>
                             </div>
-                            {errors.enquiryType && <div className="field_error">{errors.enquiryType }</div>}
+                            {errors.enquiryType && <div className="field_error">{errors.enquiryType}</div>}
 
                         </div>
                     </div>
@@ -298,7 +313,7 @@ const AddEnquiry = () => {
 
                                 </div>
                             </div>
-                            {errors.referredBy && <div className="field_error">{errors.referredBy }</div>}
+                            {errors.referredBy && <div className="field_error">{errors.referredBy}</div>}
                         </div>
                     </div>
                     {referredBy === "propdial" && (
@@ -397,11 +412,11 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                {errors.propertyOwner && <div className="field_error">{errors.propertyOwner }</div>}
-                               
-                                
-                              
-                               
+                                {errors.propertyOwner && <div className="field_error">{errors.propertyOwner}</div>}
+
+
+
+
                             </div>
                         </div>
                         <div className="col-md-6">
@@ -421,7 +436,7 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                { errors.propertyName && <div className="field_error">{ errors.propertyName }</div>}
+                                {errors.propertyName && <div className="field_error">{errors.propertyName}</div>}
                             </div>
                         </div>
 
@@ -445,7 +460,7 @@ const AddEnquiry = () => {
                                         </span>
                                     </div>
                                 </div>
-                                { errors.name && <div className="field_error">{ errors.name }</div>}
+                                {errors.name && <div className="field_error">{errors.name}</div>}
                             </div>
                         </div>
                         <div className="col-md-4">
