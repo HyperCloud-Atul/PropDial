@@ -9,6 +9,19 @@ import { useLocation } from "react-router-dom";
 import "./Create.css";
 import NineDots from "../../components/NineDots";
 
+function camelCase(str) {
+  return (
+    str
+      .replace(/\s(.)/g, function (a) {
+        return a.toUpperCase();
+      })
+      // .replace(/\s/g, '')
+      .replace(/^(.)/, function (b) {
+        return b.toUpperCase();
+      })
+  );
+}
+
 const dataFilter = ["INDIA", "USA", "OTHERS", "INACTIVE"];
 export default function MasterCityList() {
   // Scroll to the top of the page whenever the location changes start
@@ -116,7 +129,7 @@ export default function MasterCityList() {
 
     let _addCityFlag = false;
 
-    let cityname = city.trim();
+    let cityname = city.trim().toUpperCase();
     // console.log('cityname:', cityname)
     // console.log("Updated currentDocid: ", currentDocid)
     if (currentDocid != null) {
@@ -146,7 +159,7 @@ export default function MasterCityList() {
             city: cityname,
             status: "active",
           };
-          // setAddCityFlag(true)
+
           _addCityFlag = true
           // console.log("_addCityFlag: ", _addCityFlag)
           setFormError("Successfully added");
@@ -536,7 +549,7 @@ export default function MasterCityList() {
                                     transform: "translateY(5px)",
                                   }}
                                 >
-                                  {data.city}
+                                  {camelCase(data.city)}
                                 </h5>
                                 <small
                                   style={{
@@ -544,7 +557,7 @@ export default function MasterCityList() {
                                     transform: "translateY(5px)",
                                   }}
                                 >
-                                  {data.state}, {data.country}
+                                  {camelCase(data.state)}, {data.country}
                                 </small>
                               </div>
                               <div

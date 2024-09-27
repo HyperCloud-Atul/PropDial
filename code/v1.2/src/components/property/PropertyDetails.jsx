@@ -3444,7 +3444,7 @@ const PropertyDetails = () => {
                                 Balcony({propertyDocument.numberOfBalcony})
                                 Facing
                               </h6>
-                              <h5>{propertyDocument.balconyFacing.join(", ")}</h5>
+                              <h5>{propertyDocument.balconyFacing && propertyDocument.balconyFacing.join(", ")}</h5>
                             </div>
                           </div>
                         )}
