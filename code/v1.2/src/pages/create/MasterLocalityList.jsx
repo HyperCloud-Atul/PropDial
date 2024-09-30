@@ -232,7 +232,7 @@ export default function MasterLocalityList() {
 
   // nine dots menu start
   const nineDotsMenu = [
-    { title: "Country's List", link: "/countrylist", icon: "public" },
+    // { title: "Country's List", link: "/countrylist", icon: "public" },
     { title: "State's List", link: "/statelist", icon: "map" },
     {
       title: "City's List",
@@ -252,344 +252,339 @@ export default function MasterLocalityList() {
 
   return (
     <div className="top_header_pg pg_bg pg_adminproperty">
-        <div
-          className={`page_spacing ${
-            masterLocality && masterLocality.length === 0 && "pg_min_height"
+      <div
+        className={`page_spacing ${masterLocality && masterLocality.length === 0 && "pg_min_height"
           }`}
-        >
-          <NineDots nineDotsMenu={nineDotsMenu} />
+      >
+        <NineDots nineDotsMenu={nineDotsMenu} />
 
-          {masterLocality && masterLocality.length === 0 && (
-            <div className={`pg_msg ${handleAddSectionFlag && "d-none"}`}>
-              <div>
-                No Locality Yet!
+        {masterLocality && masterLocality.length === 0 && (
+          <div className={`pg_msg ${handleAddSectionFlag && "d-none"}`}>
+            <div>
+              No Locality Yet!
+              <div
+                onClick={handleAddSection}
+                className={`theme_btn no_icon header_btn mt-3 ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                  }`}
+              >
+                {handleAddSectionFlag ? "Cancel" : "Add New"}
+              </div>
+            </div>
+          </div>
+        )}
+        {masterLocality && masterLocality.length !== 0 && (
+          <>
+            <div className="pg_header d-flex justify-content-between">
+              <div className="left">
+                <h2 className="m22">
+                  Total Locality:{" "}
+                  {masterLocality && (
+                    <span className="text_orange">{masterLocality.length}</span>
+                  )}
+                </h2>
+              </div>
+              <div className="right">
+                <img
+                  src="./assets/img/icons/excel_logo.png"
+                  alt=""
+                  className="excel_dowanload"
+                />
+              </div>
+            </div>
+            <div className="vg12"></div>
+            <div className="filters">
+              <div className="left">
+                <div className="rt_global_search search_field">
+                  <input
+                    placeholder="Search"
+                  // value={searchInput}
+                  // onChange={handleSearchInputChange}
+                  />
+                  <div className="field_icon">
+                    <span className="material-symbols-outlined">search</span>
+                  </div>
+                </div>
+              </div>
+              <div className="right">
+                <div className="button_filter diff_views">
+                  <div
+                    className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                      }`}
+                    onClick={() => handleModeChange("card_view")}
+                  >
+                    <span className="material-symbols-outlined">
+                      calendar_view_month
+                    </span>
+                  </div>
+                  <div
+                    className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                      }`}
+                    onClick={() => handleModeChange("table_view")}
+                  >
+                    <span className="material-symbols-outlined">
+                      view_list
+                    </span>
+                  </div>
+                </div>
                 <div
                   onClick={handleAddSection}
-                  className={`theme_btn no_icon header_btn mt-3 ${
-                    handleAddSectionFlag ? "btn_border" : "btn_fill"
-                  }`}
+                  className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                    }`}
                 >
                   {handleAddSectionFlag ? "Cancel" : "Add New"}
                 </div>
               </div>
             </div>
-          )}
-          {masterLocality && masterLocality.length !== 0 && (
-            <>
-              <div className="pg_header d-flex justify-content-between">
-                <div className="left">
-                  <h2 className="m22">
-                    Total Locality:{" "}
-                    {masterLocality && (
-                      <span className="text_orange">{masterLocality.length}</span>
-                    )}
-                  </h2>
-                </div>
-                <div className="right">
-                  <img
-                    src="./assets/img/icons/excel_logo.png"
-                    alt=""
-                    className="excel_dowanload"
-                  />
-                </div>
-              </div>
-              <div className="vg12"></div>
-              <div className="filters">
-                <div className="left">
-                  <div className="rt_global_search search_field">
-                    <input
-                      placeholder="Search"
-                      // value={searchInput}
-                      // onChange={handleSearchInputChange}
+            <hr></hr>
+          </>
+        )}
+        <div className="vg12"></div>
+        <div
+          style={{
+            overflow: handleAddSectionFlag ? "visible" : "hidden",
+            // transition: "1s",
+            opacity: handleAddSectionFlag ? "1" : "0",
+            maxHeight: handleAddSectionFlag ? "100%" : "0",
+          }}
+        >
+          <form>
+            <div className="row row_gap form_full">
+              <div className="col-xl-4 col-lg-6">
+                <div className="form_field label_top">
+                  <label htmlFor="">Country</label>
+                  <div className="form_field_inner">
+                    <Select
+                      className=""
+                      onChange={handleCountryChange}
+                      // options={countryOptionsSorted.current}
+                      options={countryList}
+                      value={country}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                        }),
+                      }}
                     />
-                    <div className="field_icon">
-                      <span className="material-symbols-outlined">search</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="right">
-                  <div className="button_filter diff_views">
-                    <div
-                      className={`bf_single ${
-                        viewMode === "card_view" ? "active" : ""
-                      }`}
-                      onClick={() => handleModeChange("card_view")}
-                    >
-                      <span className="material-symbols-outlined">
-                        calendar_view_month
-                      </span>
-                    </div>
-                    <div
-                      className={`bf_single ${
-                        viewMode === "table_view" ? "active" : ""
-                      }`}
-                      onClick={() => handleModeChange("table_view")}
-                    >
-                      <span className="material-symbols-outlined">
-                        view_list
-                      </span>
-                    </div>
-                  </div>
-                  <div
-                    onClick={handleAddSection}
-                    className={`theme_btn no_icon header_btn ${
-                      handleAddSectionFlag ? "btn_border" : "btn_fill"
-                    }`}
-                  >
-                    {handleAddSectionFlag ? "Cancel" : "Add New"}
                   </div>
                 </div>
               </div>
-              <hr></hr>
-            </>
-          )}
-          <div className="vg12"></div>
-          <div
-            style={{
-              overflow: handleAddSectionFlag ? "visible" : "hidden",
-              // transition: "1s",
-              opacity: handleAddSectionFlag ? "1" : "0",
-              maxHeight: handleAddSectionFlag ? "100%" : "0",
-            }}
-          >
-            <form>
-              <div className="row row_gap form_full">
-                <div className="col-xl-4 col-lg-6">
-                  <div className="form_field label_top">
-                    <label htmlFor="">Country</label>
-                    <div className="form_field_inner">
-                      <Select
-                        className=""
-                        onChange={handleCountryChange}
-                        // options={countryOptionsSorted.current}
-                        options={countryList}
-                        value={country}
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            outline: "none",
-                            background: "#eee",
-                            borderBottom: " 1px solid var(--theme-blue)",
-                          }),
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-lg-6">
-                  <div className="form_field label_top">
-                    <label htmlFor="">State</label>
-                    <div className="form_field_inner">
-                      <Select
-                        className=""
-                        onChange={handleStateChange}
-                        options={stateOptionsSorted.current}
-                        // options={stateList}
-                        value={state}
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            outline: "none",
-                            background: "#eee",
-                            borderBottom: " 1px solid var(--theme-blue)",
-                          }),
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-lg-6">
-                  <div className="form_field label_top">
-                    <label htmlFor="">City</label>
-                    <div className="form_field_inner">
-                      <Select
-                        className=""
-                        onChange={(option) => setCity(option)}
-                        options={cityOptionsSorted.current}
-                        // options={stateList}
-                        value={city}
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            outline: "none",
-                            background: "#eee",
-                            borderBottom: " 1px solid var(--theme-blue)",
-                          }),
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-lg-6">
-                  <div className="form_field label_top">
-                    <label htmlFor="">Locality</label>
-                    <div className="form_field_inner">
-                      <input
-                        required
-                        type="text"
-                        placeholder="Entry Locality Name"
-                        onChange={(e) => setLocality(e.target.value)}
-                        value={locality}
-                        styles={{
-                          backgroundColor: "red",
-                          borderBottom: " 5px solid var(--theme-blue)",
-                        }}
-                      />
-                    </div>
+              <div className="col-xl-4 col-lg-6">
+                <div className="form_field label_top">
+                  <label htmlFor="">State</label>
+                  <div className="form_field_inner">
+                    <Select
+                      className=""
+                      onChange={handleStateChange}
+                      options={stateOptionsSorted.current}
+                      // options={stateList}
+                      value={state}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                        }),
+                      }}
+                    />
                   </div>
                 </div>
               </div>
-              <div className="vg22"></div>
+              <div className="col-xl-4 col-lg-6">
+                <div className="form_field label_top">
+                  <label htmlFor="">City</label>
+                  <div className="form_field_inner">
+                    <Select
+                      className=""
+                      onChange={(option) => setCity(option)}
+                      options={cityOptionsSorted.current}
+                      // options={stateList}
+                      value={city}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                        }),
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-4 col-lg-6">
+                <div className="form_field label_top">
+                  <label htmlFor="">Locality</label>
+                  <div className="form_field_inner">
+                    <input
+                      required
+                      type="text"
+                      placeholder="Entry Locality Name"
+                      onChange={(e) => setLocality(e.target.value)}
+                      value={locality}
+                      styles={{
+                        backgroundColor: "red",
+                        borderBottom: " 5px solid var(--theme-blue)",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="vg22"></div>
 
-              {formError && (
-                <>
-                  <div className="error">{formError}</div>
-                  <div className="vg22"></div>
-                </>
-              )}
+            {formError && (
+              <>
+                <div className="error">{formError}</div>
+                <div className="vg22"></div>
+              </>
+            )}
 
+            <div
+              className="d-flex align-items-center justify-content-end"
+              style={{
+                gap: "15px",
+              }}
+            >
               <div
-                className="d-flex align-items-center justify-content-end"
+                className="theme_btn btn_border no_icon text-center"
+                onClick={handleAddSection}
                 style={{
-                  gap: "15px",
+                  minWidth: "140px",
                 }}
               >
-                <div
-                  className="theme_btn btn_border no_icon text-center"
-                  onClick={handleAddSection}
-                  style={{
-                    minWidth: "140px",
-                  }}
-                >
-                  Cancel
-                </div>
-                <div
-                  className="theme_btn btn_fill no_icon text-center"
-                  onClick={handleSubmit}
-                  style={{
-                    minWidth: "140px",
-                  }}
-                >
-                  {formBtnText}
-                </div>
+                Cancel
               </div>
-            </form>
-            <hr />
-          </div>
-          {masterLocality && masterLocality.length !== 0 && (
-            <>
-              <div className="master_data_card">
-                {viewMode === "card_view" && (
-                  <>
-                    {masterLocality &&
-                      masterLocality.map((data) => (
-                        <div className="property-status-padding-div">
+              <div
+                className="theme_btn btn_fill no_icon text-center"
+                onClick={handleSubmit}
+                style={{
+                  minWidth: "140px",
+                }}
+              >
+                {formBtnText}
+              </div>
+            </div>
+          </form>
+          <hr />
+        </div>
+        {masterLocality && masterLocality.length !== 0 && (
+          <>
+            <div className="master_data_card">
+              {viewMode === "card_view" && (
+                <>
+                  {masterLocality &&
+                    masterLocality.map((data) => (
+                      <div className="property-status-padding-div">
+                        <div
+                          className="profile-card-div"
+                          style={{ position: "relative" }}
+                        >
                           <div
-                            className="profile-card-div"
-                            style={{ position: "relative" }}
+                            className="address-div"
+                            style={{ paddingBottom: "5px" }}
                           >
                             <div
-                              className="address-div"
-                              style={{ paddingBottom: "5px" }}
+                              className="icon"
+                              style={{ position: "relative", top: "-1px" }}
                             >
-                              <div
-                                className="icon"
-                                style={{ position: "relative", top: "-1px" }}
+                              <span
+                                className="material-symbols-outlined"
+                                style={{ color: "var(--darkgrey-color)" }}
                               >
-                                <span
-                                  className="material-symbols-outlined"
-                                  style={{ color: "var(--darkgrey-color)" }}
+                                flag
+                              </span>
+                            </div>
+                            <div className="address-text">
+                              <div
+                                onClick={() =>
+                                  handleEditCard(
+                                    data.id,
+                                    data.country,
+                                    data.state,
+                                    data.city,
+                                    data.locality
+                                  )
+                                }
+                                style={{
+                                  width: "80%",
+                                  height: "170%",
+                                  textAlign: "left",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  flexDirection: "column",
+                                  transform: "translateY(-7px)",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <h5
+                                  style={{
+                                    margin: "0",
+                                    transform: "translateY(5px)",
+                                  }}
                                 >
-                                  flag
-                                </span>
+                                  {data.locality}
+                                </h5>
+                                <small
+                                  style={{
+                                    margin: "0",
+                                    transform: "translateY(5px)",
+                                  }}
+                                >
+                                  {data.city}, {data.state}, {data.country}
+                                </small>
                               </div>
-                              <div className="address-text">
-                                <div
-                                  onClick={() =>
-                                    handleEditCard(
-                                      data.id,
-                                      data.country,
-                                      data.state,
-                                      data.city,
-                                      data.locality
-                                    )
-                                  }
+                              <div
+                                className=""
+                                onClick={() =>
+                                  handleChangeStatus(data.id, data.status)
+                                }
+                                style={{
+                                  width: "20%",
+                                  height: "calc(100% - -20px)",
+                                  position: "relative",
+                                  top: "-8px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "flex-end",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <small
                                   style={{
-                                    width: "80%",
-                                    height: "170%",
-                                    textAlign: "left",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    flexDirection: "column",
-                                    transform: "translateY(-7px)",
-                                    cursor: "pointer",
+                                    margin: "0",
+                                    background:
+                                      data.status === "active"
+                                        ? "green"
+                                        : "red",
+                                    color: "#fff",
+                                    padding: "3px 10px 3px 10px",
+                                    borderRadius: "4px",
                                   }}
                                 >
-                                  <h5
-                                    style={{
-                                      margin: "0",
-                                      transform: "translateY(5px)",
-                                    }}
-                                  >
-                                    {data.locality}
-                                  </h5>
-                                  <small
-                                    style={{
-                                      margin: "0",
-                                      transform: "translateY(5px)",
-                                    }}
-                                  >
-                                    {data.city}, {data.state}, {data.country}
-                                  </small>
-                                </div>
-                                <div
-                                  className=""
-                                  onClick={() =>
-                                    handleChangeStatus(data.id, data.status)
-                                  }
-                                  style={{
-                                    width: "20%",
-                                    height: "calc(100% - -20px)",
-                                    position: "relative",
-                                    top: "-8px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  <small
-                                    style={{
-                                      margin: "0",
-                                      background:
-                                        data.status === "active"
-                                          ? "green"
-                                          : "red",
-                                      color: "#fff",
-                                      padding: "3px 10px 3px 10px",
-                                      borderRadius: "4px",
-                                    }}
-                                  >
-                                    {data.status}
-                                  </small>
-                                  {/* <span className="material-symbols-outlined">
+                                  {data.status}
+                                </small>
+                                {/* <span className="material-symbols-outlined">
                                             chevron_right
                                         </span> */}
-                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      ))}
-                  </>
-                )}
-              </div>
-              {viewMode === "table_view" && (
-                <h5 className="text-center text_green">Coming Soon....</h5>
+                      </div>
+                    ))}
+                </>
               )}
-            </>
-          )}
-        </div>
+            </div>
+            {viewMode === "table_view" && (
+              <h5 className="text-center text_green">Coming Soon....</h5>
+            )}
+          </>
+        )}
       </div>
+    </div>
   );
 }

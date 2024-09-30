@@ -437,7 +437,7 @@ export default function PGProfile() {
               </div>
             </h5>
             <div>
-              <h5> {userDetails.City + ", "} {userDetails.Country}</h5>
+              <h5> {userDetails.City && userDetails.City.trim() + ", "} {userDetails.Country}</h5>
             </div>
             <div>
               <h5>{userDetails.Email}</h5>

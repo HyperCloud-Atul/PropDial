@@ -5,6 +5,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { useLocation } from "react-router-dom";
 import Select from "react-select";
 import Filters from "../../components/Filters";
+import { useCommon } from "../../hooks/useCommon";
 import { Link } from "react-router-dom";
 
 // component
@@ -19,6 +20,7 @@ export default function MasterStateList() {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
+  const { camelCase } = useCommon();
   const { addDocument, response } = useFirestore("m_states");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_states");
@@ -34,6 +36,8 @@ export default function MasterStateList() {
 
   const [country, setCountry] = useState();
   const [state, setState] = useState("");
+  const [stateCode, setStateCode] = useState("");
+  const [gstStateCode, setGSTStateCode] = useState("");
   const [formError, setFormError] = useState(null);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
@@ -53,7 +57,7 @@ export default function MasterStateList() {
     );
   }
   useEffect(() => {
-    console.log("in useeffect");
+    // console.log("in useeffect");
   }, []);
 
   let results = [];
@@ -61,36 +65,52 @@ export default function MasterStateList() {
     e.preventDefault();
     setFormError(null);
 
-    let statename = state.trim().toUpperCase();
-    if (currentDocid) {
+    let _addCityFlag = false;
+
+    let _state = state.trim().toUpperCase();
+    let _stateCode = stateCode.trim().toUpperCase();
+    let _gstStateCode = gstStateCode.trim().toUpperCase();
+    if (currentDocid != null) {
+      // console.log("Updated currentDocid: ", currentDocid)
+      setFormError("Updated Successfully");
       await updateDocument(currentDocid, {
         country: country.label,
-        state: statename,
+        state: _state,
+        stateCode: _stateCode,
+        gstStateCode: _gstStateCode
       });
 
-      setFormError("Successfully updated");
-    } else {
+    } else if (currentDocid == null) {
       let ref = projectFirestore
         .collection("m_states")
-        .where("state", "==", statename);
+        .where("state", "==", _state);
 
       const unsubscribe = ref.onSnapshot(async (snapshot) => {
         snapshot.docs.forEach((doc) => {
           results.push({ ...doc.data(), id: doc.id });
         });
 
+        // console.log("_addCityFlag: ", _addCityFlag)
+        // console.log("results.length: ", results.length)
+
         if (results.length === 0) {
           const dataSet = {
             country: country.label,
-            state: statename,
+            state: _state,
+            stateCode: _stateCode,
+            gstStateCode: _gstStateCode,
             status: "active",
           };
-          await addDocument(dataSet);
+          _addCityFlag = true
+          // console.log("_addCityFlag: ", _addCityFlag)
           setFormError("Successfully added");
-          sethandleAddSectionFlag(!handleAddSectionFlag);
-        } else {
-          setFormError("Already added");
-          sethandleAddSectionFlag(!handleAddSectionFlag);
+          // sethandleAddSectionFlag(!handleAddSectionFlag);
+          // console.log("Successfully added")
+          // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
+          await addDocument(dataSet);
+        } else if (results.length > 0 && _addCityFlag === false) {
+          setFormError("Duplicate State");
+          // sethandleAddSectionFlag(!handleAddSectionFlag);
         }
       });
     }
@@ -159,11 +179,11 @@ export default function MasterStateList() {
   };
 
   const handleAddSection = () => {
+    setCurrentDocid(null);
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add State");
     setState("");
-    setCurrentDocid(null);
   };
 
   // const [cityStatus, setCityStatus] = useState();
@@ -178,18 +198,19 @@ export default function MasterStateList() {
 
   const handleEditCard = (docid, doccountry, docstate) => {
     // console.log('docid in handleEditCard:', docid)
+    setCurrentDocid(docid);
     window.scrollTo(0, 0);
     setFormError(null);
     setCountry({ label: doccountry, value: doccountry });
     setState(docstate);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update State");
-    setCurrentDocid(docid);
+
   };
 
   // nine dots menu start
   const nineDotsMenu = [
-    { title: "Country's List", link: "/countrylist", icon: "public" },
+    // { title: "Country's List", link: "/countrylist", icon: "public" },
     { title: "City's List", link: "/citylist", icon: "location_city" },
     {
       title: "Locality's List",
@@ -293,6 +314,7 @@ export default function MasterStateList() {
                       </span>
                     </div>
                   </div>
+                  {/* No need to add new state from UI, It will be added from back-end only */}
                   <div
                     onClick={handleAddSection}
                     className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
@@ -347,6 +369,34 @@ export default function MasterStateList() {
                         placeholder="Entry State Name"
                         onChange={(e) => setState(e.target.value)}
                         value={state}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-6 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">State Code</label>
+                    <div className="form_field_inner">
+                      <input
+                        required
+                        type="text"
+                        placeholder="Entry State Code"
+                        onChange={(e) => setStateCode(e.target.value)}
+                        value={stateCode}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-6 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">GST State Code</label>
+                    <div className="form_field_inner">
+                      <input
+                        required
+                        type="text"
+                        placeholder="Entry GST State Code"
+                        onChange={(e) => setGSTStateCode(e.target.value)}
+                        value={gstStateCode}
                       />
                     </div>
                   </div>
@@ -442,7 +492,7 @@ export default function MasterStateList() {
                                       transform: "translateY(5px)",
                                     }}
                                   >
-                                    {data.state}
+                                    {camelCase(data.state)}
                                   </h5>
                                   <small
                                     style={{

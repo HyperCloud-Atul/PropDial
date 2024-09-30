@@ -54,12 +54,12 @@ export const useCommon = () => {
     }
 
     // Function to format the phone number (add your own formatting logic)
-    const formatAmount = async (amount) => {
+    const formatAmount = (amount) => {
         // Example: Add dashes
         return amount.toLocaleString('en-US');
     }
 
-    const camelCase = async (inputStr) => {
+    const camelCase = (inputStr) => {
         let str = inputStr.toLowerCase();
         return (
             str
@@ -80,7 +80,7 @@ export const useCommon = () => {
     };
 
 
-    const amountToWords = async (amount) => {
+    const amountToWords = (amount) => {
         if (amount === 0) {
             return 'zero';
         }
