@@ -128,6 +128,7 @@ const PropertyUtilityBills = () => {
         dueDate,
         pid: propertydoc.pid,
         propertyId,
+        postedBy: "Propdial",
       });
       setSelectedBillType("");
       setAuthorityName("");

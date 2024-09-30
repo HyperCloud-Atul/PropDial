@@ -67,6 +67,7 @@ const PropertyKeyDetail = () => {
         numberOfKey,
         propertyId,
         pid: propertydoc.pid,
+        postedBy: "Propdial",
       });
       setKeyNumber("");
       setNumberOfKey("");

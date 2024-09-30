@@ -413,3 +413,36 @@ View enquiry:
 Contact no & email id should be masked
 update krte wqt jo new field add hogi unke bare me discuss krna hai 
 phir agr phir se whi enquiry aati hai to kese trace krenge
+
+
+
+
+
+
+
+adv:-
+property id or portal (Done)
+rent and sale wala lgana hai (Done)
+all field required krna hai (Done)
+property summary wala component based bna na hai
+
+utility bills me document upload krwana hai or view bhi krwana hai max 5 upload krwana hai
+amount due me comma of 6 digit resetriction
+
+key wale me all field require krna hai
+
+
+
+sir se discuss krna hai ki sbhi me posted by jane de kya
+
+
+
+
+
+
+
+
+
+
+
+

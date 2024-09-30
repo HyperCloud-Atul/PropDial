@@ -390,11 +390,7 @@ const PhoneLogin_reCaptchaV2 = () => {
         <img src="./assets/img/login_img2.png" alt="" />
       </div>
       <div className="left col_left">
-        <div className="left_inner col_left_inner">
-          <div className="page_inner_logo">
-            <img src="/assets/img/logo_propdial.png" alt="" />
-          </div>
-        </div>
+     
         {mobilenoSliderState && (
           <>
             <div className="left_inner col_left_inner">

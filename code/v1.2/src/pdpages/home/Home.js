@@ -457,11 +457,11 @@ const Home = () => {
                     <img src="./assets/img/VP-Interview-new.jpg" alt="" />
                   </Link>
                 </div> */}
-                  <div className="image_sect">
+                  <div className="image_sect">                 
                     <iframe
                       className="img_div"
-                      src="https://www.youtube.com/embed/RphaFtAR8pw"
-                      title="Founder's Video 1"
+                      src="https://www.youtube.com/embed/cwEu27fCsEM"
+                      title="Founder's Video 2"
                       frameBorder="0"
                       allowFullScreen
                     ></iframe>

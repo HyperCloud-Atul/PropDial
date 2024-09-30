@@ -60,7 +60,7 @@ const ProductCarousel = () => {
             <div className="client_info_div">
               <div className="client_img">
                 <img
-                  src="./assets/img/home/client_img_1.jpg"
+                  src="./assets/img/home/client_img_male.png"
                   alt=""
                 />
               </div>
@@ -87,7 +87,7 @@ const ProductCarousel = () => {
             <div className="client_info_div">
               <div className="client_img">
                 <img
-                  src="./assets/img/home/client_img_2.jpg"
+                  src="./assets/img/home/client_img_female.png"
                   alt=""
                 />
               </div>
@@ -114,7 +114,7 @@ const ProductCarousel = () => {
             <div className="client_info_div">
               <div className="client_img">
                 <img
-                  src="./assets/img/home/client_img_3.jpg"
+                  src="./assets/img/home/client_img_male.png"
                   alt=""
                 />
               </div>
@@ -141,7 +141,7 @@ const ProductCarousel = () => {
             <div className="client_info_div">
               <div className="client_img">
                 <img
-                  src="./assets/img/home/client_img_6.jpg"
+                  src="./assets/img/home/client_img_male.png"
                   alt=""
                 />
               </div>

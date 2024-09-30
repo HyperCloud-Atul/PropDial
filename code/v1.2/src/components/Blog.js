@@ -124,7 +124,7 @@ const Blog = () => {
                         </div>
                         <div className="item card-container">
                             <div className="card-image">
-                                <img src="./assets/img/home/blog4.webp" />
+                                <img src="./assets/img/home/blog4.jpg" />
                             </div>
                             <div className="card-body">
                                 {/* <span className="card-badge">Propdial</span> */}
@@ -139,7 +139,7 @@ const Blog = () => {
 
                                 </p>
                                 <div className="card-author">
-                                    <img src="./assets/img/home/blog4.webp" alt="author avatar" />
+                                    <img src="./assets/img/home/blog4.jpg" alt="author avatar" />
                                     <div className="author-info">
                                         {/* <p className="author-name">John Doe</p>
                                         <p className="post-timestamp">2h ago</p> */}
