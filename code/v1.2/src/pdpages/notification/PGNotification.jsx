@@ -25,8 +25,8 @@ const PGNotification = () => {
   // console.log('dbpropertiesdocuments:', dbpropertiesdocuments)
 
   const activeNotifications =
-    user &&
-    user.uid &&
+    // user &&
+    // user.uid &&
     dbnotifications &&
     dbnotifications.filter((item) => item.status === "active");
 

@@ -1913,7 +1913,7 @@ const Stage1 = (props) => {
           </div>
 
           {(propertyDetails.Flag.toLowerCase() === "available for rent" ||
-            propertyDetails.Flag.toLowerCase() === "pms after rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && <div className="col-xl-4 col-lg-6">
+            propertyDetails.Flag.toLowerCase() === "pms after rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") && <div className="col-xl-4 col-lg-6">
               <div id="id_demand" className="form_field label_top">
                 <label htmlFor="">Demand/Price for Rent</label>
                 <div className="form_field_inner price_input">
@@ -1977,7 +1977,7 @@ const Stage1 = (props) => {
             </div>
           </div>}
 
-          {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && (
+          {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") && (
             <div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 label_top">
                 <label htmlFor="">Maintenance Status</label>
