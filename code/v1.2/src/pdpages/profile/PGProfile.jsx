@@ -621,8 +621,8 @@ export default function PGProfile() {
                     <span className="material-symbols-outlined">sms</span>
                   </div>
 
-                  <Link to="/createticket" className="address-text" >
-                    <h5>Help & Support</h5>
+                  <Link to="/properties" className="address-text" >
+                    <h5>Properties</h5>
                     <div className="">
                       <span className="material-symbols-outlined">
                         chevron_right

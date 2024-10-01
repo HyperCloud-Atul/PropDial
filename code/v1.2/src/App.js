@@ -27,6 +27,7 @@ import PGProperties from "./pdpages/property/PGProperties";
 import PGCreateProperty from "./pdpages/property/PGCreateProperty";
 import PGUpdateProperty from "./pdpages/property/PGUpdateProperty";
 import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
+import HowUse from "./pdpages/howUse/HowUse";
 
 // ------------------------------------------------------------------------------------
 
@@ -296,6 +297,11 @@ function App() {
                     path="/notification"
                     element={<PGNotification />}
                   ></Route>
+                    <Route
+                    path="/how-use"
+                    element={<HowUse />}
+                  ></Route>
+                  
                   <Route path="/privacypolicy" element={<PGPriacyPolicy />}></Route>
                   <Route path="/terms" element={<PGTerms />}></Route>
                   <Route path="/about-us" element={<PGAboutUs />}></Route>

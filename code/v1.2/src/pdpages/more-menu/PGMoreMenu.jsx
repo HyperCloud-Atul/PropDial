@@ -463,7 +463,7 @@ const PGMoreMenu = () => {
             </div>
             <div className="mm_inner card_shadow card_border_radius bg_white">
               <h6 className="title">Others</h6>
-              <Link className="mm_single coming_soon r0" to="">
+              <Link className="mm_single r0" to="/contact-us">
                 <span className="material-symbols-outlined mms_icon">help</span>
                 <h5 className="dr16">Help & Support</h5>
                 <h6>assistance and support resources</h6>
@@ -471,7 +471,7 @@ const PGMoreMenu = () => {
                   chevron_right
                 </span>
               </Link>
-              <Link className="mm_single coming_soon r0" to=" ">
+              <Link className="mm_single r0" to=" ">
                 <span className="material-symbols-outlined mms_icon">contrast</span>
                 <h5 className="dr16">Display mode</h5>
                 <h6>change your app mode to dark & light</h6>
