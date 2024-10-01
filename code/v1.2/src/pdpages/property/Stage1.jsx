@@ -971,6 +971,8 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Package: "PMS Premium",
+                              Flag: "",
+                              Purpose: ""
                             });
                           }}
                         />
@@ -1005,6 +1007,8 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Package: "PMS Light",
+                              Flag: "",
+                              Purpose: ""
                             });
                           }}
                         />
@@ -1039,6 +1043,8 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Package: "PMS Sale",
+                              Flag: "",
+                              Purpose: ""
                             });
                           }}
                         />
@@ -1073,6 +1079,8 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Package: "Pre PMS",
+                              Flag: "",
+                              Purpose: ""
                             });
                           }}
                         />
@@ -1107,6 +1115,8 @@ const Stage1 = (props) => {
                             setPropertyDetails({
                               ...propertyDetails,
                               Package: "Rent Only",
+                              Flag: "",
+                              Purpose: ""
                             });
                           }}
                         />
@@ -1793,8 +1803,8 @@ const Stage1 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
-                            || propertyDetails.Flag.toLowerCase() === "pms after rent"
+                          (propertyDetails.Purpose !== "") && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
+                            || propertyDetails.Flag.toLowerCase() === "pms after rent")
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -1829,7 +1839,7 @@ const Stage1 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
+                          (propertyDetails.Purpose !== "") && (propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale")
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -1864,7 +1874,7 @@ const Stage1 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Flag === "PMS Only"
+                          (propertyDetails.Purpose !== "") && (propertyDetails.Flag === "PMS Only")
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }

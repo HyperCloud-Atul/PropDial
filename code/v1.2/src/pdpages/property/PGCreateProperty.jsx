@@ -486,7 +486,7 @@ const CreateProperty = () => {
     e.preventDefault();
     // console.log('e: ', e)
     // console.log('option: ', option)
-    console.log("propertyDetails.Purpose: ", propertyDetails.Purpose)
+    // console.log("propertyDetails.Purpose: ", propertyDetails.Purpose)
 
     if (!(user && user.role === "admin")) {
       navigate("/");
@@ -905,6 +905,8 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Package: "PMS Premium",
+                                Flag: "",
+                                Purpose: ""
                               });
                             }}
                           />
@@ -936,6 +938,8 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Package: "PMS Light",
+                                Flag: "",
+                                Purpose: ""
                               });
                             }}
                           />
@@ -967,6 +971,8 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Package: "PMS Sale",
+                                Flag: "",
+                                Purpose: ""
                               });
                             }}
                           />
@@ -998,6 +1004,8 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Package: "Pre PMS",
+                                Flag: "",
+                                Purpose: ""
                               });
                             }}
                           />
@@ -1029,6 +1037,8 @@ const CreateProperty = () => {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 Package: "Rent Only",
+                                Flag: "",
+                                Purpose: ""
                               });
                             }}
                           />
@@ -1402,7 +1412,7 @@ const CreateProperty = () => {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.Purpose === "Rent" || propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
+                            (propertyDetails.Purpose !== "") && (propertyDetails.Purpose === "Rent" || propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale")
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -1434,7 +1444,7 @@ const CreateProperty = () => {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.Purpose === "Sale" || propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale"
+                            (propertyDetails.Purpose !== "") && (propertyDetails.Purpose === "Sale" || propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale")
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
@@ -1467,7 +1477,7 @@ const CreateProperty = () => {
                       <div className="radio_group_single">
                         <div
                           className={
-                            propertyDetails.Purpose === "PMS" || propertyDetails.Flag === "PMS Only"
+                            (propertyDetails.Purpose !== "") && (propertyDetails.Purpose === "PMS" || propertyDetails.Flag === "PMS Only")
                               ? "custom_radio_button radiochecked"
                               : "custom_radio_button"
                           }
