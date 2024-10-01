@@ -124,8 +124,8 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                               ? "/"
                               : ""}
                             {property.carpetArea && " Carpet "}
-                            {property.superArea ||
-                              property.carpetArea && "Area"} </h6>
+                           Area
+                               </h6>
                           <h5>
                           {property.superArea}
                             {property.superArea &&

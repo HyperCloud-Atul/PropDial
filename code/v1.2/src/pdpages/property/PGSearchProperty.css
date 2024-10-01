@@ -544,6 +544,7 @@ h6.value_per_sqf {
         border-radius: 0px;
         justify-content: space-between;
         width: 100%;
+        flex-direction: column;
     }
 
     .mobile_size.residentail_commercial .switch {
