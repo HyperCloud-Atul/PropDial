@@ -312,6 +312,11 @@ export default function Stage3(props) {
             propertyDocument.overLooking.find((e) => e === "Forest")
             ? true
             : false,
+            OtherSocietyClick:
+            propertyDocument.overLooking &&
+              propertyDocument.overLooking.find((e) => e === "Other Society")
+              ? true
+              : false,
       });
     }
   }, [propertyDocument]);
@@ -1580,6 +1585,54 @@ export default function Stage3(props) {
                             </span>
                           </div>
                           <h6>Forest</h6>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OtherSocietyClick
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="other_society_overlooking"
+                          onClick={(e) => {
+                            if (propertyDetails.OtherSocietyClick) {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking:
+                                  propertyDetails.OverLooking &&
+                                  propertyDetails.OverLooking.filter(
+                                    (elem) => elem !== "Other Society"
+                                  ),
+                                OtherSocietyClick: !propertyDetails.OtherSocietyClick,
+                              });
+                            } else {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking: [
+                                  ...propertyDetails.OverLooking,
+                                  "Other Society",
+                                ],
+                                OtherSocietyClick: !propertyDetails.OtherSocietyClick,
+                              });
+                            }
+                          }}
+                        />
+                        <label htmlFor="other_society_overlooking">
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                          </div>
+                          <h6>Other Society</h6>
                         </label>
                       </div>
                     </div>

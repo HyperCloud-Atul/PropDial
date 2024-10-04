@@ -274,6 +274,7 @@ span.material-symbols-outlined.fav {
     height: 100%;
     object-fit: cover;
     border-radius: 12px;
+    aspect-ratio: 3/2;
 }
 
 .pmd_top {

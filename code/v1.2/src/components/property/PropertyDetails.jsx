@@ -3550,6 +3550,11 @@ const PropertyDetails = () => {
                                     src="/assets/img/property-detail-icon/lake.png"
                                     alt=""
                                   />
+                                ) : item === "Other Society" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/skyline.png"
+                                    alt=""
+                                  />                                 
                                 ) : item === "Beach" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/beach.png"
