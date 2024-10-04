@@ -59,13 +59,13 @@ const PGSearchProperty = () => {
   //   .filter((property) => ((activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale") && (property.category === activeCategory)))
   //   .slice(0, 3);
   const filteredPropdialPropertiesRecent = propdialProperties && propdialProperties
-  .filter((property) => (
-    (activeOption === "Rent" ? property.purpose.toLowerCase() === "rent" :
-    (activeOption === "Sale" ? property.purpose.toLowerCase() === "sale" :
-    (activeOption === "RentSaleBoth" ? property.purpose === "RentSaleBoth" : true))) &&
-    (property.category === activeCategory)
-  ))
-  .slice(0, 3);
+    .filter((property) => (
+      (activeOption === "Rent" ? property.purpose.toLowerCase() === "rent" || property.purpose === "RentSaleBoth" :
+        (activeOption === "Sale" ? property.purpose.toLowerCase() === "sale" || property.purpose === "RentSaleBoth" :
+          (activeOption === "RentSaleBoth" ? property.purpose === "RentSaleBoth" : true))) &&
+      (property.category === activeCategory)
+    ))
+    .slice(0, 3);
 
   // previous Filter for  recent properties end
 
@@ -82,31 +82,31 @@ const PGSearchProperty = () => {
     let categoryMatch = true;
     let purposeMatch = true;
     let searchMatch = true;
-  
+
     // Filter by category
     categoryMatch = property.category.toUpperCase() === activeCategory.toUpperCase();
-  
+
     // Filter by purpose
     purposeMatch = (activeOption === "Rent"
-      ? property.purpose.toLowerCase() === "rent"
+      ? property.purpose.toLowerCase() === "rent" || property.purpose === "RentSaleBoth"
       : activeOption === "Sale"
-      ? property.purpose.toLowerCase() === "sale"
-      : activeOption === "RentSaleBoth"
-      ? property.purpose.toLowerCase() === "rentsaleboth"
-      : true);
-  
+        ? property.purpose.toLowerCase() === "sale" || property.purpose === "RentSaleBoth"
+        : activeOption === "RentSaleBoth"
+          ? property.purpose.toLowerCase() === "rentsaleboth"
+          : true);
+
     // Filter by search input
     searchMatch = searchQuery
       ? Object.values(property).some(
-          (field) =>
-            typeof field === "string" &&
-            field.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        (field) =>
+          typeof field === "string" &&
+          field.toLowerCase().includes(searchQuery.toLowerCase())
+      )
       : true;
-  
+
     return categoryMatch && purposeMatch && searchMatch;
   });
-  
+
 
   // filter propdial property with search end 
 
@@ -172,14 +172,14 @@ const PGSearchProperty = () => {
               className={`pointer ${activeOption === 'Sale' ? 'active' : ''}`}
               onClick={() => handleOptionClick('Sale')}
             >
-              Sale
+              Buy
             </div>
-            <div
+            {/* <div
               className={`pointer ${activeOption === 'RentSaleBoth' ? 'active' : ''}`}
               onClick={() => handleOptionClick('RentSaleBoth')}
             >
               Rent Sale Both
-            </div>
+            </div> */}
           </div>
           <div className="mobile_size residentail_commercial">
             <label className={checked ? "on" : "off"}>
@@ -257,7 +257,7 @@ const PGSearchProperty = () => {
                   </TabList>
                   <TabPanel>
                     <div className="property_card_left">
-                      {filteredPropdialProperties && <PropdialPropertyCard propertiesdocuments={filteredPropdialProperties} />}
+                      {filteredPropdialProperties && <PropdialPropertyCard propertiesdocuments={filteredPropdialProperties} activeOption={activeOption} />}
                     </div>
                   </TabPanel>
                   <TabPanel>
@@ -265,7 +265,7 @@ const PGSearchProperty = () => {
                       {filterFavoriteProperties(propdialProperties || []).length > 0 ? (
                         <PropdialPropertyCard
                           propertiesdocuments={filterFavoriteProperties(propdialProperties)}
-                          onUpdateFavorites={handleUpdateFavorites}
+                          onUpdateFavorites={handleUpdateFavorites} activeOption={activeOption}
                         />
                       ) : (
                         <p>No favorite properties yet!</p>
@@ -278,7 +278,7 @@ const PGSearchProperty = () => {
                 <div className="col-xl-3">
                   <div className="pp_sidebar">
                     <div className="pp_sidebar_cards">
-                      {filteredPropdialPropertiesRecent && <PropAgentPropertyCard propagentProperties={filteredPropdialPropertiesRecent} />}
+                      {filteredPropdialPropertiesRecent && <PropAgentPropertyCard propagentProperties={filteredPropdialPropertiesRecent} activeOption={activeOption} />}
                     </div>
                   </div>
                 </div>

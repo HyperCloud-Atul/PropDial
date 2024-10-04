@@ -694,9 +694,12 @@ const PropertyDetails = () => {
         }));
 
     setfilteredPropertyManagers(filteredPropertyManagerList);
+
+    console.log('filteredProperty manager Users: ', filteredPropertyManagerList)
+
   }, [allPropertyUsers]);
 
-  // console.log('filteredProperty Users: ', filteredPropertyusers)
+
 
   //Add Property Users
   const handleAddPropertyUser = async (e, _usertype) => {

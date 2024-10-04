@@ -3,7 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useFirestore } from "../../hooks/useFirestore";
 import EnquiryAddModal from "../EnquiryAddModal";
 
-const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
+const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }) => {
+  console.log('activeOption in SearchProperty: ', activeOption)
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -35,14 +36,14 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
   // add enquiry with modal and add document start
   const { addDocument, updateDocument, deleteDocument, error } =
     useFirestore("enquiry");
-    const [showEnquiryModal, setShowEnquiryModal] = useState(false);
-    const [selectedProperty, setSelectedProperty] = useState(null);
-  
-    const handleEnquiryModalClose = () => setShowEnquiryModal(false);
-    const handleEnquiryNowClick = (property) => {
-      setSelectedProperty(property);
-      setShowEnquiryModal(true);
-    };
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
+
+  const handleEnquiryModalClose = () => setShowEnquiryModal(false);
+  const handleEnquiryNowClick = (property) => {
+    setSelectedProperty(property);
+    setShowEnquiryModal(true);
+  };
   // add enquiry with modal and add document end
 
 
@@ -107,47 +108,46 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
                       <div className="pi_single">
                         <h6>Floor number</h6>
                         <h5>
-                        {property.floorNo}{" "}
-                        {property.numberOfFloors && "Of"}{" "}
-                        {property.numberOfFloors}
+                          {property.floorNo}{" "}
+                          {property.numberOfFloors && "Of"}{" "}
+                          {property.numberOfFloors}
                         </h5>
                       </div>
                       <div className="pi_single">
                         <h6>Lift</h6>
                         <h5>{property.numberOfLifts}</h5>
-                      </div>                    
-                        <div className="pi_single">
-                          <h6> 
+                      </div>
+                      <div className="pi_single">
+                        <h6>
                           {property.superArea && "Super "}
-                            {property.superArea &&
-                              property.carpetArea
-                              ? "/"
-                              : ""}
-                            {property.carpetArea && " Carpet "}
-                           Area
-                               </h6>
-                          <h5>
+                          {property.superArea &&
+                            property.carpetArea
+                            ? "/"
+                            : ""}
+                          {property.carpetArea && " Carpet "}
+                          Area
+                        </h6>
+                        <h5>
                           {property.superArea}
-                            {property.superArea &&
-                              property.carpetArea
-                              ? "/"
-                              : ""}
-                            {property.carpetArea}&nbsp;{property.superAreaUnit}
-                          </h5>
-                        </div>                   
+                          {property.superArea &&
+                            property.carpetArea
+                            ? "/"
+                            : ""}
+                          {property.carpetArea}&nbsp;{property.superAreaUnit}
+                        </h5>
+                      </div>
                     </div>
                   </div>
                 </div>
               </Link>
               <div className="fav_and_share">
                 <span
-                  className={`material-symbols-outlined mr-2 fav ${
-                    favorites.includes(property.id) ? "favorited" : ""
-                  }`}
+                  className={`material-symbols-outlined mr-2 fav ${favorites.includes(property.id) ? "favorited" : ""
+                    }`}
                   onClick={() => handleFavoriteClick(property.id)}
                 >
                   favorite
-                </span>           
+                </span>
               </div>
             </div>
             <div className="pcs_other_info">
@@ -155,38 +155,46 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
               <div className="poi_inner">
                 <div>
                   <h6 className="value_per_sqf">
-                  {property.flag.toLowerCase() === "pms only" || property.flag.toLowerCase() ===
-                            "available for rent" || property.flag.toLowerCase() ===
-                            "rented out"
-                            ? "Demand Price"
-                            : property.flag.toLowerCase() ===
-                              "rent and sale" ||
-                              property.flag.toLowerCase() ===
-                              "rented but sale"
-                              ? "Demand Rent / Sale"
-                              : "Demand Price"
-                          }
+                    {/* {property.flag.toLowerCase() === "pms only" || property.flag.toLowerCase() ===
+                      "available for rent" || property.flag.toLowerCase() ===
+                      "rented out"
+                      ? "Demand Price"
+                      : property.flag.toLowerCase() ===
+                        "rent and sale" ||
+                        property.flag.toLowerCase() ===
+                        "rented but sale"
+                        ? "Demand Rent / Sale"
+                        : "Demand Price"
+                    } */}
+                    Demand Price
                   </h6>
                   <h6 className="property_value">
                     <span>₹ </span>
-                    {property.flag.toLowerCase() === "pms only" || property.flag.toLowerCase() ===
-                              "available for rent" || property.flag.toLowerCase() ===
-                              "rented out"
-                              ? new Intl.NumberFormat("en-IN").format(
-                                property.demandPriceRent
-                              )
-                              : property.flag.toLowerCase() ===
-                                "rent and sale" ||
-                                property.flag.toLowerCase() ===
-                                "rented but sale"
-                                ? new Intl.NumberFormat("en-IN").format(
-                                  property.demandPriceRent
-                                ) + " / ₹" + new Intl.NumberFormat("en-IN").format(
-                                  property.demandPriceSale
-                                )
-                                : new Intl.NumberFormat("en-IN").format(
-                                  property.demandPriceSale
-                                )}
+                    {/* {property.flag.toLowerCase() === "pms only" || property.flag.toLowerCase() ===
+                      "available for rent" || property.flag.toLowerCase() ===
+                      "rented out"
+                      ? new Intl.NumberFormat("en-IN").format(
+                        property.demandPriceRent
+                      )
+                      : property.flag.toLowerCase() ===
+                        "rent and sale" ||
+                        property.flag.toLowerCase() ===
+                        "rented but sale"
+                        ? new Intl.NumberFormat("en-IN").format(
+                          property.demandPriceRent
+                        ) + " / ₹" + new Intl.NumberFormat("en-IN").format(
+                          property.demandPriceSale
+                        )
+                        : new Intl.NumberFormat("en-IN").format(
+                          property.demandPriceSale
+                        )} */}
+                    {activeOption.toLowerCase() === 'rent'
+                      ? new Intl.NumberFormat("en-IN").format(
+                        property.demandPriceRent
+                      )
+                      : new Intl.NumberFormat("en-IN").format(
+                        property.demandPriceSale
+                      )}
                   </h6>
                 </div>
                 <button
@@ -203,7 +211,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites }) => {
       <EnquiryAddModal
         show={showEnquiryModal}
         handleClose={handleEnquiryModalClose}
-        selectedProperty={selectedProperty}       
+        selectedProperty={selectedProperty}
       />
     </>
   );
