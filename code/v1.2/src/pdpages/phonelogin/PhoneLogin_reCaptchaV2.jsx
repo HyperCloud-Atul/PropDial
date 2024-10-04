@@ -85,6 +85,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [resendOTPFlag, setResendOTPFlag] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOtpHidden, setIsOtpHidden] = useState(true); // By default, OTP is hidden
 
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("users");
@@ -314,6 +315,9 @@ const PhoneLogin_reCaptchaV2 = () => {
       }, 30000);
     }
   }
+  const toggleOtpVisibility = () => {
+    setIsOtpHidden(!isOtpHidden); // Toggles the OTP visibility
+  };
 
   const handleNewUserData = async () => {
     console.log("in handleNewUserData")
@@ -503,8 +507,24 @@ const PhoneLogin_reCaptchaV2 = () => {
               </div> */}
 
               <div className="vg22"></div>
-              <div className="otp_input">
-                <label htmlFor="">Enter 6 digit OTP</label>
+              <div className="otp_input"
+              style={{
+                width:"fit-content",
+                margin:"auto"
+              }}
+              >
+                <label htmlFor="" className="w-100 relative">Enter 6 digit OTP
+                  <span onClick={toggleOtpVisibility} className="hs_otp pointer click_text"
+                  style={{
+                    position:"absolute",
+                    top:"0",
+                    right:"0"
+                  }}
+                  >
+                  {isOtpHidden ? "Show" : "Hide"}
+                  </span>
+                
+                </label>
                 <OtpInput
                   value={otp}
                   onChange={setOtp}
@@ -515,7 +535,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                   renderInput={(props) => (
                     <input
                       {...props}
-                      type="number"
+                      type={isOtpHidden ? "password" : "number"} // Hide or show OTP
                       onWheel={handleWheel}
                       inputMode="numeric"
                       style={{

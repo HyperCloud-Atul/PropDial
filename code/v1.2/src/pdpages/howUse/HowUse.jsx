@@ -7,8 +7,7 @@ const HowUse = () => {
     <div className="page_spacing pg_min_height">    
         <div className="pg_msg">
           No video available at this time
-        </div>    
-    
+        </div>        
     </div>
   </div>
   )
