@@ -631,7 +631,12 @@
   padding: 10px;
   padding-bottom: 0px;
 }
-
+.tenant_detail_pg .tcs_single .active{
+  color: var(--success-color);
+}
+.tenant_detail_pg .tcs_single .inactive{
+  color: var(--theme-red);
+}
 .tenant_detail_pg .tcs_single h5 {
   color: #7d7d7d;
   font-size: 16px;
@@ -662,6 +667,9 @@
   margin-bottom: 15px;
   padding: 0px 10px 3px 10px;
   width: 100%;
+}
+.tenant_detail_pg .edit_field input:focus{
+  box-shadow: none;
 }
 
 .tenant_detail_pg .theme_radio_new .theme_radio_container {
@@ -746,8 +754,8 @@ label.upload_img input {
 }
 
 .tenant_detail_pg .tcs_img_container {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   margin-bottom: 6px;
 }
 
@@ -814,7 +822,7 @@ label.upload_img input {
   color: var(--light-black);
   text-align: center;
   margin-top: 4px;
-  margin-bottom: 2px;
+  margin-bottom: 6px;
 }
 
 .tenant_detail_pg .t_name {

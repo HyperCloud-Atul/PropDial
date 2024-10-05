@@ -11,10 +11,14 @@ import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
 import SureDelete from "../pdpages/sureDelete/SureDelete";
 import Back from "../pdpages/back/Back";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
+import PhoneInput from "react-phone-input-2";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 
 const TenantDetails = () => {
   const location = useLocation();
-  console.log("location: ", location)
+  console.log("location: ", location);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
@@ -22,7 +26,7 @@ const TenantDetails = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { tenantId } = useParams();
-  console.log('Tenant ID: ', tenantId)
+  console.log("Tenant ID: ", tenantId);
   const fileInputRef = useRef(null);
 
   const [editedFields, setEditedFields] = useState({});
@@ -31,11 +35,17 @@ const TenantDetails = () => {
   const [loading, setLoading] = useState(false); // New state for loading
   const { updateDocument, deleteDocument } = useFirestore("tenants");
 
-  const { document: tenantInfo, error: tenantInfoError } = useDocument("tenants", tenantId);
-  console.log('Tenant Info: ', tenantInfo)
+  const { document: tenantInfo, error: tenantInfoError } = useDocument(
+    "tenants",
+    tenantId
+  );
+  console.log("Tenant Info: ", tenantInfo);
   // const { document: propertyInfo, error: propertyInfoError } = useDocument("properties", editedFields.propertyId);
   // console.log('Property Details:', propertyInfo)
-  const { documents: tenantDocs, errors: tenantDocsError } = useCollection("docs", ["masterRefId", "==", tenantId]);
+  const { documents: tenantDocs, errors: tenantDocsError } = useCollection(
+    "docs",
+    ["masterRefId", "==", tenantId]
+  );
 
   useEffect(() => {
     if (tenantInfo) {
@@ -44,14 +54,17 @@ const TenantDetails = () => {
     }
   }, [tenantInfo]);
 
+  // const handleEditClick = (fieldName) => {
+  //   setEditingField(fieldName);
+  // };
   const handleEditClick = (fieldName) => {
-    setEditingField(fieldName);
+    if (fieldName === "offBoardingDate" && !editedFields.onBoardingDate) {
+      alert("Please select Rent Start Date first.");
+    } else {
+      setEditingField(fieldName);
+    }
   };
-  // modal controls start
-  const [showModal, setShowModal] = useState(false);
-  const handleCloseModal = () => setShowModal(false);
-  const handleShowModal = () => setShowModal(true);
-  // modal controls end
+
   const deleteTenant = async () => {
     try {
       await deleteDocument(tenantId);
@@ -100,6 +113,7 @@ const TenantDetails = () => {
         console.error("Error deleting image:", error);
       }
     }
+    handleCloseModal();
   };
 
   const handleCancelClick = (fieldName) => {
@@ -116,6 +130,32 @@ const TenantDetails = () => {
       [fieldName]: value,
     }));
   };
+
+  // Function to format date to dd/mm/yy
+  const formatDateToDDMMMYYYY = (dateString) => {
+    const date = new Date(dateString);
+    if (!isNaN(date)) {
+      const day = String(date.getDate()).padStart(2, "0");
+      const monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
+    return "";
+  };
   // 9 dots controls
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
   const openMoreAddOptions = () => {
@@ -126,8 +166,12 @@ const TenantDetails = () => {
   };
   // 9 dots controls
 
-
-  const { addDocument: tenantDocsAddDocument, updateDocument: tenantDocsUpdateDocument, deleteDocument: tenantDocsDeleteDocument, docerror } = useFirestore("docs");
+  const {
+    addDocument: tenantDocsAddDocument,
+    updateDocument: tenantDocsUpdateDocument,
+    deleteDocument: tenantDocsDeleteDocument,
+    docerror,
+  } = useFirestore("docs");
   const [uploadingDocId, setUploadingDocId] = useState(null); // Track uploading document ID
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
@@ -158,7 +202,7 @@ const TenantDetails = () => {
         idNumber: idNumber,
         mediaType: "",
       });
-      setSelectedDocCat("")
+      setSelectedDocCat("");
       setSelectedIdType("");
       setIdNumber("");
       setIsUploading(false);
@@ -193,7 +237,9 @@ const TenantDetails = () => {
       setIsUploading(true);
       setUploadingDocId(newDocId); // Set the uploading document ID
       const fileType = getFileType(documentFile);
-      const storageRef = projectStorage.ref(`docs/${newDocId}/${documentFile.name}`);
+      const storageRef = projectStorage.ref(
+        `docs/${newDocId}/${documentFile.name}`
+      );
       await storageRef.put(documentFile);
 
       const fileURL = await storageRef.getDownloadURL();
@@ -223,52 +269,85 @@ const TenantDetails = () => {
     }
   };
 
-  // render jsx code in short form start 
+  // render jsx code in short form start
   const docCategories = [
     { id: "kyc", value: "KYC", label: "KYC" },
-    { id: "police_verification", value: "Police Verification", label: "Police Verification" },
-    { id: "agreement", value: "Rent Agreement", label: "Rent Agreement" }
+    {
+      id: "police_verification",
+      value: "Police Verification",
+      label: "Police Verification",
+    },
+    { id: "agreement", value: "Rent Agreement", label: "Rent Agreement" },
   ];
 
-
   const docTypes = {
-    "KYC": [
+    KYC: [
       { id: "aadhar", value: "Aadhar Card", label: "Aadhar Card" },
       { id: "pan_card", value: "Pan Card", label: "Pan Card" },
       { id: "voter_id", value: "Voter ID", label: "Voter ID" },
-      { id: "driving_licence", value: "Driving Licence", label: "Driving Licence" }
+      {
+        id: "driving_licence",
+        value: "Driving Licence",
+        label: "Driving Licence",
+      },
     ],
     "Police Verification": [
-      { id: "police_verification_doc", value: "Police Verification Document", label: "Police Verification Document" }
+      {
+        id: "police_verification_doc",
+        value: "Police Verification Document",
+        label: "Police Verification Document",
+      },
     ],
     "Rent Agreement": [
-      { id: "rent_agree_doc", value: "Rent Agreement (Word Doc)", label: "Rent Agreement (Word Doc)" },
-      { id: "rent_agree_pdf", value: "Rent Agreement (PDF)", label: "Rent Agreement (PDF)" }
-    ]
+      {
+        id: "rent_agree_doc",
+        value: "Rent Agreement (Word Doc)",
+        label: "Rent Agreement (Word Doc)",
+      },
+      {
+        id: "rent_agree_pdf",
+        value: "Rent Agreement (PDF)",
+        label: "Rent Agreement (PDF)",
+      },
+    ],
   };
   // render jsx code in short form end
 
-  // filters start 
-  // filter for KYC start 
-  const filteredTenantDocuments = tenantDocs ? tenantDocs.filter(doc => doc.docCat === "KYC") : [];
+  // filters start
+  // filter for KYC start
+  const filteredTenantDocuments = tenantDocs
+    ? tenantDocs.filter((doc) => doc.docCat === "KYC")
+    : [];
   const filteredTenantDocLength = filteredTenantDocuments.length;
   // filter for KYC end
 
-  // filter for Police Verification document start 
-  const filteredPoliceVerificationDocuments = tenantDocs ? tenantDocs.filter(doc => doc.docCat === "Police Verification") : [];
-  const filteredPoliceVerificationDocLength = filteredPoliceVerificationDocuments.length;
+  // filter for Police Verification document start
+  const filteredPoliceVerificationDocuments = tenantDocs
+    ? tenantDocs.filter((doc) => doc.docCat === "Police Verification")
+    : [];
+  const filteredPoliceVerificationDocLength =
+    filteredPoliceVerificationDocuments.length;
   // filter for propertymaintainance document end
-  // filter for property utility document start 
-  const filteredRentAgreementDocuments = tenantDocs ? tenantDocs.filter(doc => doc.docCat === "Rent Agreement") : [];
+  // filter for property utility document start
+  const filteredRentAgreementDocuments = tenantDocs
+    ? tenantDocs.filter((doc) => doc.docCat === "Rent Agreement")
+    : [];
   const filteredRentAgreementDocLength = filteredRentAgreementDocuments.length;
   // filter for property utility document end
-  // filters end 
+  // filters end
 
-
-  // data of quick access menu  start  
+  // data of quick access menu  start
   const menuItems = [
-    { name: 'Dashboard', link: '/dashboard', icon: '/assets/img/icons/qa_dashboard.png' },
-    { name: 'Property', link: '/propertydetails/' + editedFields.propertyId, icon: '/assets/img/icons/qa_property.png' },
+    {
+      name: "Dashboard",
+      link: "/dashboard",
+      icon: "/assets/img/icons/qa_dashboard.png",
+    },
+    {
+      name: "Property",
+      link: "/propertydetails/" + editedFields.propertyId,
+      icon: "/assets/img/icons/qa_property.png",
+    },
 
     // { name: 'Tenant', link: '/', icon: '/assets/img/icons/qa_tenant.png' },
     // { name: 'Document', link: '/', icon: '/assets/img/icons/qa_documentation.png' },
@@ -278,6 +357,33 @@ const TenantDetails = () => {
     // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
   ];
   // data of quick access menu  end
+
+  // modal controls
+  // modal controls start
+  const [showModal, setShowModal] = useState(false);
+  const [actionType, setActionType] = useState(""); // Store the type of action
+
+  const handleShowModal = (action) => {
+    setActionType(action); // Set the action type (e.g., "deleteTenant")
+    setShowModal(true); // Show modal
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false); // Close modal
+    setActionType(""); // Reset action type
+  };
+
+  // Generic delete handler based on action type
+  const handleDelete = () => {
+    if (actionType === "deleteTenant") {
+      deleteTenant();
+    } else if (actionType === "deleteTenantProfile") {
+      deleteTenantPhoto();
+    } else if (actionType === "deleteProfilePhoto") {
+      // deleteProfilePhoto();
+    }
+  };
+
   return (
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
@@ -331,7 +437,13 @@ const TenantDetails = () => {
           <div className="">
             <div className="row">
               <div className="col-md-4">
-                <div className={`tc_single ${tenantInfo && tenantInfo.status === "inactive" ? "t_inactive" : ""}`}>
+                <div
+                  className={`tc_single ${
+                    tenantInfo && tenantInfo.status === "inactive"
+                      ? "t_inactive"
+                      : ""
+                  }`}
+                >
                   <div className="tcs_img_container relative">
                     {loading ? (
                       <div className="loader">
@@ -339,7 +451,8 @@ const TenantDetails = () => {
                       </div>
                     ) : (
                       <>
-                        <img alt="="
+                        <img
+                          alt="="
                           src={imageURL || "/assets/img/upload_img_small.png"}
                         />
                         <label htmlFor="upload" className="upload_img">
@@ -353,8 +466,8 @@ const TenantDetails = () => {
 
                         {imageURL && (
                           <span
-                            className="material-symbols-outlined delete_icon"
-                            onClick={deleteTenantPhoto}
+                            className="material-symbols-outlined delete_icon"                           
+                            onClick={() => handleShowModal("deleteTenantProfile")}
                           >
                             delete_forever
                           </span>
@@ -376,13 +489,13 @@ const TenantDetails = () => {
                           />
                           <div className="d-flex justify-content-between">
                             <span
-                              className="cancel_btn"
+                              className="theme_btn btn_border text-center no_icon"
                               onClick={() => handleCancelClick("name")}
                             >
                               Cancel
                             </span>
                             <span
-                              className="save_btn"
+                              className="theme_btn btn_fill text-center no_icon"
                               onClick={() => handleSaveClick("name")}
                             >
                               Save
@@ -414,17 +527,50 @@ const TenantDetails = () => {
                             onChange={(e) =>
                               handleInputChange("mobile", e.target.value)
                             }
-                            placeholder="Mobile number"
+                            placeholder="Mobile number (Ex:- +912234567899)"
                           />
+                          {/* <PhoneInput
+                            country={"in"}
+                            // onlyCountries={['in', 'us', 'ae']}
+                            value={editedFields.mobile || ""}
+                            // onChange={setPhone}
+                            onChange={(e) =>
+                              handleInputChange("mobile", e.target.value)
+                            }
+                            international
+                            keyboardType="phone-pad"
+                            // countryCallingCodeEditable={false}
+                            countryCodeEditable={true}
+                            // disableCountryCode={true}
+                            placeholder="Mobile number"
+                            inputProps={{
+                              name: "phone",
+                              required: true,
+                              autoFocus: false,
+                            }}
+                            inputStyle={{
+                              width: "100%",
+                              height: "45px",
+                              paddingLeft: "45px",
+                              fontSize: "16px",
+                              borderRadius: "5px",
+                              border: "1px solid #00A8A8",
+                            }}
+                            buttonStyle={{
+                              borderRadius: "5px",
+                              textAlign: "left",
+                              border: "1px solid #00A8A8",
+                            }}
+                          ></PhoneInput> */}
                           <div className="d-flex justify-content-between">
                             <span
-                              className="cancel_btn"
+                              className="theme_btn btn_border text-center no_icon"
                               onClick={() => handleCancelClick("mobile")}
                             >
                               Cancel
                             </span>
                             <span
-                              className="save_btn"
+                              className="theme_btn btn_fill text-center no_icon"
                               onClick={() => handleSaveClick("mobile")}
                             >
                               Save
@@ -468,14 +614,6 @@ const TenantDetails = () => {
               </div>
               <div className="col-md-8">
                 <div className="tc_single">
-
-                  {/* {propertyInfo && (
-                    <>
-                      <div className="tcs_single">
-                        <h5>Property</h5>
-                        <h6>{propertyInfo.unitNumber}, {propertyInfo.society}, {propertyInfo.locality}, {propertyInfo.city}, {propertyInfo.state}</h6>
-                      </div>
-                      <div className="divider"></div></>)} */}
                   <div className="tcs_single">
                     <h5>Rent Start Date</h5>
                     <h6>
@@ -493,7 +631,7 @@ const TenantDetails = () => {
                           />
                           <div className="d-flex justify-content-between">
                             <span
-                              className="cancel_btn"
+                              className="theme_btn btn_border text-center no_icon"
                               onClick={() =>
                                 handleCancelClick("onBoardingDate")
                               }
@@ -501,7 +639,7 @@ const TenantDetails = () => {
                               Cancel
                             </span>
                             <span
-                              className="save_btn"
+                              className="theme_btn btn_fill text-center no_icon"
                               onClick={() => handleSaveClick("onBoardingDate")}
                             >
                               Save
@@ -510,8 +648,9 @@ const TenantDetails = () => {
                         </div>
                       ) : (
                         <>
+                          {/* Display the date in dd/mm/yy format */}
                           {tenantInfo && tenantInfo.onBoardingDate
-                            ? tenantInfo && tenantInfo.onBoardingDate
+                            ? formatDateToDDMMMYYYY(tenantInfo.onBoardingDate)
                             : "Add onborading date"}
                           {!editingField && user && user.role === "admin" && (
                             <span
@@ -540,10 +679,23 @@ const TenantDetails = () => {
                                 e.target.value
                               )
                             }
+                            // Set min date to one day after the Rent Start Date
+                            min={
+                              editedFields.onBoardingDate
+                                ? new Date(
+                                    new Date(
+                                      editedFields.onBoardingDate
+                                    ).getTime() +
+                                      24 * 60 * 60 * 1000
+                                  )
+                                    .toISOString()
+                                    .split("T")[0]
+                                : ""
+                            }
                           />
                           <div className="d-flex justify-content-between">
                             <span
-                              className="cancel_btn"
+                              className="theme_btn btn_border text-center no_icon"
                               onClick={() =>
                                 handleCancelClick("offBoardingDate")
                               }
@@ -551,7 +703,7 @@ const TenantDetails = () => {
                               Cancel
                             </span>
                             <span
-                              className="save_btn"
+                              className="theme_btn btn_fill text-center no_icon"
                               onClick={() => handleSaveClick("offBoardingDate")}
                             >
                               Save
@@ -561,8 +713,8 @@ const TenantDetails = () => {
                       ) : (
                         <>
                           {tenantInfo && tenantInfo.offBoardingDate
-                            ? tenantInfo && tenantInfo.offBoardingDate
-                            : "Add off borading date"}
+                            ? formatDateToDDMMMYYYY(tenantInfo.offBoardingDate)
+                            : "Add offboarding date"}
                           {!editingField && user && user.role === "admin" && (
                             <span
                               className="material-symbols-outlined click_icon text_near_icon"
@@ -576,7 +728,7 @@ const TenantDetails = () => {
                     </h6>
                   </div>
                   <div className="divider"></div>
-                  <div className="tcs_single">
+                  <div className="tcs_single status">
                     <h5>Status</h5>
                     <h6>
                       {editingField === "status" ? (
@@ -619,14 +771,14 @@ const TenantDetails = () => {
                           </div>
                           <div className="d-flex justify-content-between">
                             <span
-                              className="cancel_btn"
+                              className="theme_btn btn_border text-center no_icon"
                               onClick={() => handleCancelClick("status")}
                               style={{ marginLeft: "10px" }}
                             >
                               Cancel
                             </span>
                             <span
-                              className="save_btn"
+                              className="theme_btn btn_fill text-center no_icon"
                               onClick={() => handleSaveClick("status")}
                             >
                               Save
@@ -635,7 +787,13 @@ const TenantDetails = () => {
                         </div>
                       ) : (
                         <>
-                          {tenantInfo && tenantInfo.status}
+                          <span
+                            className={`text-capitalize ${
+                              tenantInfo && tenantInfo.status
+                            }`}
+                          >
+                            {tenantInfo && tenantInfo.status}
+                          </span>
                           {!editingField && user && user.role === "admin" && (
                             <span
                               className="material-symbols-outlined click_icon text_near_icon"
@@ -660,17 +818,18 @@ const TenantDetails = () => {
                             onChange={(e) =>
                               handleInputChange("emailID", e.target.value)
                             }
+                            placeholder="Email ID type here"
                           />
                           <div className="d-flex justify-content-between">
                             <span
-                              className="cancel_btn"
+                              className="theme_btn btn_border text-center no_icon"
                               onClick={() => handleCancelClick("emailID")}
                               style={{ marginLeft: "10px" }}
                             >
                               Cancel
                             </span>
                             <span
-                              className="save_btn"
+                              className="theme_btn btn_fill text-center no_icon"
                               onClick={() => handleSaveClick("emailID")}
                             >
                               Save
@@ -706,16 +865,17 @@ const TenantDetails = () => {
                             onChange={(e) =>
                               handleInputChange("address", e.target.value)
                             }
+                            placeholder="Address type here"
                           />
                           <div className="d-flex justify-content-between">
                             <span
-                              className="cancel_btn"
+                              className="theme_btn btn_border text-center no_icon"
                               onClick={() => handleCancelClick("address")}
                             >
                               Cancel
                             </span>
                             <span
-                              className="save_btn"
+                              className="theme_btn btn_fill text-center no_icon"
                               onClick={() => handleSaveClick("address")}
                             >
                               Save
@@ -752,7 +912,10 @@ const TenantDetails = () => {
               </div>
               <div className="right">
                 {!showAIForm && (
-                  <div className="theme_btn btn_fill" onClick={handleShowAIForm}>
+                  <div
+                    className="theme_btn btn_fill"
+                    onClick={handleShowAIForm}
+                  >
                     Add document
                   </div>
                 )}
@@ -779,7 +942,9 @@ const TenantDetails = () => {
                                     onChange={handleDocCatChange}
                                     checked={selectedDocCat === category.value}
                                   />
-                                  <label htmlFor={category.id}>{category.label}</label>
+                                  <label htmlFor={category.id}>
+                                    {category.label}
+                                  </label>
                                 </div>
                               ))}
                             </div>
@@ -802,7 +967,9 @@ const TenantDetails = () => {
                                       onChange={handleRadioChange}
                                       checked={selectedIdType === radio.value}
                                     />
-                                    <label htmlFor={radio.id}>{radio.label}</label>
+                                    <label htmlFor={radio.id}>
+                                      {radio.label}
+                                    </label>
                                   </div>
                                 ))}
                               </div>
@@ -838,8 +1005,9 @@ const TenantDetails = () => {
                     </div>
                     <div className="col-sm-3">
                       <div
-                        className={`theme_btn btn_fill text-center ${isUploading ? "disabled" : ""
-                          }`}
+                        className={`theme_btn btn_fill text-center ${
+                          isUploading ? "disabled" : ""
+                        }`}
                         onClick={isUploading ? null : addTenantDocuments}
                       >
                         {isUploading ? "Uploading..." : "Create"}
@@ -911,9 +1079,15 @@ const TenantDetails = () => {
             <div className="theme_tab prop_doc_tab">
               <Tabs>
                 <TabList className="tabs">
-                  <Tab className="pointer">Tenant KYC Document{" "}({filteredTenantDocLength})</Tab>
-                  <Tab className="pointer">Police Verification{" "}({filteredPoliceVerificationDocLength})</Tab>
-                  <Tab className="pointer">Rent Agreements{" "}({filteredRentAgreementDocLength})</Tab>
+                  <Tab className="pointer">
+                    Tenant KYC Document ({filteredTenantDocLength})
+                  </Tab>
+                  <Tab className="pointer">
+                    Police Verification ({filteredPoliceVerificationDocLength})
+                  </Tab>
+                  <Tab className="pointer">
+                    Rent Agreements ({filteredRentAgreementDocLength})
+                  </Tab>
                 </TabList>
                 <TabPanel>
                   <div className="blog_sect">
@@ -926,22 +1100,33 @@ const TenantDetails = () => {
                           <div className="item card-container">
                             <div className="card-image relative">
                               {uploadingDocId !== doc.id && (
-                                <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                                <label
+                                  htmlFor={`upload_img_${doc.id}`}
+                                  className="upload_img click_text by_text"
+                                >
                                   Upload PDF or Img
                                   <input
                                     type="file"
-                                    onChange={(e) => handleFileChange(e, doc.id)}
+                                    onChange={(e) =>
+                                      handleFileChange(e, doc.id)
+                                    }
                                     ref={fileInputRef}
                                     id={`upload_img_${doc.id}`}
                                   />
                                 </label>
                               )}
                               {uploadingDocId === doc.id ? (
-                                <div className="loader d-flex justify-content-center align-items-center" style={{
-                                  width: "100%",
-                                  height: "100%"
-                                }}>
-                                  <BeatLoader color={"#FF5733"} loading={true} />
+                                <div
+                                  className="loader d-flex justify-content-center align-items-center"
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  <BeatLoader
+                                    color={"#FF5733"}
+                                    loading={true}
+                                  />
                                 </div>
                               ) : doc.mediaType === "pdf" ? (
                                 <iframe
@@ -954,7 +1139,10 @@ const TenantDetails = () => {
                                 ></iframe>
                               ) : (
                                 <img
-                                  src={doc.documentUrl || "https://via.placeholder.com/150"}
+                                  src={
+                                    doc.documentUrl ||
+                                    "https://via.placeholder.com/150"
+                                  }
                                   alt="Document"
                                 />
                               )}
@@ -963,7 +1151,10 @@ const TenantDetails = () => {
                               <h3>{doc.idType}</h3>
                               <p className="card-subtitle">{doc.idNumber}</p>
                               <div className="card-author">
-                                <div onClick={() => deleteTenantDocument(doc.id)} className="learn-more pointer">
+                                <div
+                                  onClick={() => deleteTenantDocument(doc.id)}
+                                  className="learn-more pointer"
+                                >
                                   Delete
                                 </div>
                               </div>
@@ -971,7 +1162,6 @@ const TenantDetails = () => {
                           </div>
                         </div>
                       ))}
-
                     </div>
                   </div>
                 </TabPanel>
@@ -986,22 +1176,33 @@ const TenantDetails = () => {
                           <div className="item card-container">
                             <div className="card-image relative">
                               {uploadingDocId !== doc.id && (
-                                <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                                <label
+                                  htmlFor={`upload_img_${doc.id}`}
+                                  className="upload_img click_text by_text"
+                                >
                                   Upload PDF or Img
                                   <input
                                     type="file"
-                                    onChange={(e) => handleFileChange(e, doc.id)}
+                                    onChange={(e) =>
+                                      handleFileChange(e, doc.id)
+                                    }
                                     ref={fileInputRef}
                                     id={`upload_img_${doc.id}`}
                                   />
                                 </label>
                               )}
                               {uploadingDocId === doc.id ? (
-                                <div className="loader d-flex justify-content-center align-items-center" style={{
-                                  width: "100%",
-                                  height: "100%"
-                                }}>
-                                  <BeatLoader color={"#FF5733"} loading={true} />
+                                <div
+                                  className="loader d-flex justify-content-center align-items-center"
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  <BeatLoader
+                                    color={"#FF5733"}
+                                    loading={true}
+                                  />
                                 </div>
                               ) : doc.mediaType === "pdf" ? (
                                 <iframe
@@ -1014,7 +1215,10 @@ const TenantDetails = () => {
                                 ></iframe>
                               ) : (
                                 <img
-                                  src={doc.documentUrl || "https://via.placeholder.com/150"}
+                                  src={
+                                    doc.documentUrl ||
+                                    "https://via.placeholder.com/150"
+                                  }
                                   alt="Document"
                                 />
                               )}
@@ -1023,7 +1227,10 @@ const TenantDetails = () => {
                               <h3>{doc.idType}</h3>
                               <p className="card-subtitle">{doc.idNumber}</p>
                               <div className="card-author">
-                                <div onClick={() => deleteTenantDocument(doc.id)} className="learn-more pointer">
+                                <div
+                                  onClick={() => deleteTenantDocument(doc.id)}
+                                  className="learn-more pointer"
+                                >
                                   Delete
                                 </div>
                               </div>
@@ -1031,7 +1238,6 @@ const TenantDetails = () => {
                           </div>
                         </div>
                       ))}
-
                     </div>
                   </div>
                 </TabPanel>
@@ -1046,22 +1252,33 @@ const TenantDetails = () => {
                           <div className="item card-container">
                             <div className="card-image relative">
                               {uploadingDocId !== doc.id && (
-                                <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
+                                <label
+                                  htmlFor={`upload_img_${doc.id}`}
+                                  className="upload_img click_text by_text"
+                                >
                                   Upload PDF or Img
                                   <input
                                     type="file"
-                                    onChange={(e) => handleFileChange(e, doc.id)}
+                                    onChange={(e) =>
+                                      handleFileChange(e, doc.id)
+                                    }
                                     ref={fileInputRef}
                                     id={`upload_img_${doc.id}`}
                                   />
                                 </label>
                               )}
                               {uploadingDocId === doc.id ? (
-                                <div className="loader d-flex justify-content-center align-items-center" style={{
-                                  width: "100%",
-                                  height: "100%"
-                                }}>
-                                  <BeatLoader color={"#FF5733"} loading={true} />
+                                <div
+                                  className="loader d-flex justify-content-center align-items-center"
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  <BeatLoader
+                                    color={"#FF5733"}
+                                    loading={true}
+                                  />
                                 </div>
                               ) : doc.mediaType === "pdf" ? (
                                 <iframe
@@ -1074,7 +1291,10 @@ const TenantDetails = () => {
                                 ></iframe>
                               ) : (
                                 <img
-                                  src={doc.documentUrl || "https://via.placeholder.com/150"}
+                                  src={
+                                    doc.documentUrl ||
+                                    "https://via.placeholder.com/150"
+                                  }
                                   alt="Document"
                                 />
                               )}
@@ -1083,7 +1303,10 @@ const TenantDetails = () => {
                               <h3>{doc.idType}</h3>
                               <p className="card-subtitle">{doc.idNumber}</p>
                               <div className="card-author">
-                                <div onClick={() => deleteTenantDocument(doc.id)} className="learn-more pointer">
+                                <div
+                                  onClick={() => deleteTenantDocument(doc.id)}
+                                  className="learn-more pointer"
+                                >
                                   Delete
                                 </div>
                               </div>
@@ -1091,27 +1314,21 @@ const TenantDetails = () => {
                           </div>
                         </div>
                       ))}
-
                     </div>
                   </div>
                 </TabPanel>
-
               </Tabs>
             </div>
-
-
-
-
-
-
-
 
             {!editingField && user && user.role === "admin" && (
               <>
                 <div className="vg22"></div>
                 <div className="divider"></div>
                 <div className="vg10"></div>
-                <div onClick={handleShowModal} className="delete_bottom">
+                <div
+                  onClick={() => handleShowModal("deleteTenant")}
+                  className="delete_bottom"
+                >
                   <span className="material-symbols-outlined">delete</span>
                   <span>Delete Tenant</span>
                 </div>
@@ -1121,7 +1338,7 @@ const TenantDetails = () => {
             <SureDelete
               show={showModal}
               handleClose={handleCloseModal}
-              handleDelete={deleteTenant}
+              handleDelete={handleDelete} // This will now handle different actions
             />
 
             {/* <div>
@@ -1135,13 +1352,13 @@ const TenantDetails = () => {
                 />
                 <div className="d-flex">
                   <button
-                    className="product_edit_save_btn"
+                    className="product_edit_theme_btn btn_fill text-center no_icon"
                     onClick={() => handleSaveClick("idNumber")}
                   >
                     Save
                   </button>
                   <button
-                    className="product_edit_save_btn cancel-btn"
+                    className="product_edit_theme_btn btn_fill text-center no_icon cancel-btn"
                     onClick={() => handleCancelClick("idNumber")}
                     style={{ marginLeft: "10px" }}
                   >
@@ -1177,13 +1394,13 @@ const TenantDetails = () => {
                 />
                 <div className="d-flex">
                   <button
-                    className="product_edit_save_btn"
+                    className="product_edit_theme_btn btn_fill text-center no_icon"
                     onClick={() => handleSaveClick("rentStartDate")}
                   >
                     Save
                   </button>
                   <button
-                    className="product_edit_save_btn cancel-btn"
+                    className="product_edit_theme_btn btn_fill text-center no_icon cancel-btn"
                     onClick={() => handleCancelClick("rentStartDate")}
                     style={{ marginLeft: "10px" }}
                   >
@@ -1216,13 +1433,13 @@ const TenantDetails = () => {
                 />
                 <div className="d-flex">
                   <button
-                    className="product_edit_save_btn"
+                    className="product_edit_theme_btn btn_fill text-center no_icon"
                     onClick={() => handleSaveClick("rentEndDate")}
                   >
                     Save
                   </button>
                   <button
-                    className="product_edit_save_btn cancel-btn"
+                    className="product_edit_theme_btn btn_fill text-center no_icon cancel-btn"
                     onClick={() => handleCancelClick("rentEndDate")}
                     style={{ marginLeft: "10px" }}
                   >
