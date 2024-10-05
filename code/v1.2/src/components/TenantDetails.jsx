@@ -15,6 +15,7 @@ import PhoneInput from "react-phone-input-2";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+import ImageModal from "../pdpages/imageModal/ImageModal";
 
 const TenantDetails = () => {
   const location = useLocation();
@@ -384,6 +385,32 @@ const TenantDetails = () => {
     }
   };
 
+    // image modal code start
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+    const [imageModalTitle, setImageModalTitle] = useState("");
+    // handleImageClick to accept a title parameter
+    const handleImageClick = (imageUrl, modalTitle) => {
+      if (imageUrl === "/assets/img/dummy_user.png") {
+        setSelectedImageUrl("/assets/img/dummy_user.png"); // Set dummy image
+        setImageModalTitle(
+          <span
+            style={{
+              fontSize: "18px",
+              color: "var(--theme-red)",
+            }}
+          >
+            🚫 No photo uploaded yet!
+          </span>
+        ); // Set the fallback message
+      } else {
+        setSelectedImageUrl(imageUrl); // Set the actual image
+        setImageModalTitle(modalTitle); // Set the actual modal title
+      }
+      setShowImageModal(true);
+    };
+    // image modal code end
+
   return (
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
@@ -455,7 +482,25 @@ const TenantDetails = () => {
                       <>
                         <img
                           alt="="
-                          src={imageURL || "/assets/img/upload_img_small.png"}
+                          src={imageURL || "/assets/img/dummy_user.png"}
+                          className="pointer"
+                          onClick={() =>
+                            handleImageClick(
+                              imageURL || "/assets/img/dummy_user.png",
+                              <>
+                                Here's How{" "}
+                                <span
+                                  style={{
+                                    fontWeight: "500",
+                                    color: "var(--theme-blue)",
+                                  }}
+                                >
+                                 {tenantInfo && tenantInfo.name ? tenantInfo.name : "Tenant" }
+                                </span>{" "}
+                                Looks
+                              </>
+                            )
+                          } // Pass dynamic title
                         />
                         <label htmlFor="upload" className="upload_img">
                           <input
@@ -464,6 +509,9 @@ const TenantDetails = () => {
                             ref={fileInputRef}
                             id="upload"
                           />
+                            <span className="material-symbols-outlined">
+                    photo_camera
+                  </span>
                         </label>
 
                         {imageURL && (
@@ -905,6 +953,12 @@ const TenantDetails = () => {
                 </div>
               </div>
             </div>
+            <ImageModal
+        show={showImageModal}
+        handleClose={() => setShowImageModal(false)}
+        imageUrl={selectedImageUrl}
+        imageModalTitle={imageModalTitle} // Pass the dynamic title as a prop
+      />
             <div className="vg22_m15"></div>
             <div className="pg_header d-flex align-items-center justify-content-between my_big_card">
               <div className="left">

@@ -712,7 +712,29 @@ label.upload_img {
   z-index: 0;
   cursor: pointer;
 }
-
+.tenant_detail_pg label.upload_img {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  z-index: 1;
+  cursor: pointer;
+  background: var(--theme-green);
+  color: white;
+  left: inherit;
+  top: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tenant_detail_pg label.upload_img span{
+font-size: 17px;
+display: flex;
+align-items: center;
+justify-content: center;
+}
 .property_docs_pg .card-image.relative {
   width: 100%;
   aspect-ratio: 3 / 2;
