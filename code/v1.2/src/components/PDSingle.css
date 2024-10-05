@@ -512,7 +512,7 @@
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   background: var(--white-color);
   border-radius: 15px;
-  padding: 8px;
+  padding: 14px;
   width: fit-content;
   width: 25%;
 }
@@ -1327,6 +1327,54 @@ label.upload_img input {
     height: 38px !important;
     font-size: 22px !important;
   }
+  .tenant_detail_pg .t_name {
+    font-size: 16px;
+  }
+  .tenant_detail_pg .tenant_detail .t_number {
+    font-size: 14px;
+}
+.tenant_mobile_full_card {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.tenant_mobile_full_card .tc_single{
+  box-shadow: none;
+  border-radius: 0px;
+  border-bottom: 1px solid var(--theme-blue);
+}
+.tenant_detail_pg .tcs_single {
+  gap: 8px;
+  padding: 3px;
+  align-items: center;
+}
+.tenant_detail_pg .tcs_single h5 { 
+  font-size: 14px;
+}
+.tenant_detail_pg .edit_field input {
+  font-size: 14px;
+}
+.tenant_detail_pg .edit_field {
+  padding: 6px; 
+  margin: 4px 0px;
+}
+.tenant_detail_pg .tcs_single h6 {
+  font-size: 14px;
+}
+.tenant_detail_pg .my_big_card{
+  border-radius: 0px;
+  box-shadow: none;
+  margin-left: -15px;
+  margin-right: -15px;
+  border-bottom: 1px solid var(--theme-blue);
+  flex-direction: column;
+  justify-content: inherit !important;
+  align-items: inherit !important;
+  gap: 15px;
+  text-align: center;
+}
+.tenant_detail_pg  .blog_sect .card-body { 
+  padding: 8px 15px; 
+}
 }
 
 @media only screen and (max-width: 575px) {

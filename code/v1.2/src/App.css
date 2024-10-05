@@ -324,6 +324,9 @@ img.excel_dowanload {
 .vg22 {
     height: 22px;
 }
+.vg22_m15 {
+    height: 22px;
+}
 
 .mt10 {
     margin-top: 10px;
@@ -430,7 +433,9 @@ img.excel_dowanload {
     .m22 {
         font-size: 18px;
     }
-
+    .vg22_m15 {
+        height: 15px;
+    }
     .r18 {
         font-size: 16px;
     }

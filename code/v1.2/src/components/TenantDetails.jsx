@@ -433,12 +433,14 @@ const TenantDetails = () => {
             </div>
           </div>
           <QuickAccessMenu menuItems={menuItems} />
-          <div className="vg22"></div>
+          <div className="vg22_m15"></div>
           <div className="">
-            <div className="row">
-              <div className="col-md-4">
+            <div className="row" style={{
+              rowGap:"15px"
+            }}>
+              <div className="col-lg-4 tenant_mobile_full_card">
                 <div
-                  className={`tc_single ${
+                  className={`tc_single${
                     tenantInfo && tenantInfo.status === "inactive"
                       ? "t_inactive"
                       : ""
@@ -594,6 +596,7 @@ const TenantDetails = () => {
                       )}
                     </h6>
                   </div>
+                  {tenantInfo && tenantInfo.mobile &&
                   <div className="wha_call_icon">
                     <Link
                       className="call_icon wc_single"
@@ -609,10 +612,10 @@ const TenantDetails = () => {
                     >
                       <img src="/assets/img/whatsapp_simple.png" alt="" />
                     </Link>
-                  </div>
+                  </div>}
                 </div>
               </div>
-              <div className="col-md-8">
+              <div className="col-lg-8 tenant_mobile_full_card">
                 <div className="tc_single">
                   <div className="tcs_single">
                     <h5>Rent Start Date</h5>
@@ -902,8 +905,8 @@ const TenantDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="vg22"></div>
-            <div className="pg_header d-flex align-items-center justify-content-between">
+            <div className="vg22_m15"></div>
+            <div className="pg_header d-flex align-items-center justify-content-between my_big_card">
               <div className="left">
                 <h2 className="m22 mb-1">Documents</h2>
                 <h4 className="r16 light_black">
@@ -923,7 +926,7 @@ const TenantDetails = () => {
             </div>
             {showAIForm && (
               <>
-                <div className="vg22"></div>
+                <div className="vg22_m15"></div>
                 <section className="my_big_card">
                   <h2 className="card_title">Select document type</h2>
                   <div className="aai_form">
@@ -995,17 +998,17 @@ const TenantDetails = () => {
                     </div>
                   </div>
                   <div className="row mt-3">
-                    <div className="col-sm-2">
+                    <div className="col-md-2 col-6">
                       <div
-                        className="theme_btn btn_border text-center"
+                        className="theme_btn btn_border text-center no_icon"
                         onClick={isUploading ? null : handleShowAIForm}
                       >
                         Cancel
                       </div>
                     </div>
-                    <div className="col-sm-3">
+                    <div className="col-md-3 col-6">
                       <div
-                        className={`theme_btn btn_fill text-center ${
+                        className={`theme_btn btn_fill text-center no_icon ${
                           isUploading ? "disabled" : ""
                         }`}
                         onClick={isUploading ? null : addTenantDocuments}
@@ -1078,7 +1081,11 @@ const TenantDetails = () => {
             </div> */}
             <div className="theme_tab prop_doc_tab">
               <Tabs>
-                <TabList className="tabs">
+                <TabList className="tabs"
+                style={{
+                  justifyContent:"center"
+                }}
+                >
                   <Tab className="pointer">
                     Tenant KYC Document ({filteredTenantDocLength})
                   </Tab>
@@ -1093,10 +1100,10 @@ const TenantDetails = () => {
                   <div className="blog_sect">
                     <div className="row">
                       {filteredTenantDocLength === 0 && (
-                        <h5 className="m20 text_red mt-4">No data found</h5>
+                        <h5 className="m20 text_red mt-4 text-center">No data found</h5>
                       )}
                       {filteredTenantDocuments.map((doc, index) => (
-                        <div className="col-md-4" key={index}>
+                        <div className="col-lg-4 col-sm-6 " key={index}>
                           <div className="item card-container">
                             <div className="card-image relative">
                               {uploadingDocId !== doc.id && (
@@ -1169,10 +1176,10 @@ const TenantDetails = () => {
                   <div className="blog_sect">
                     <div className="row">
                       {filteredPoliceVerificationDocLength === 0 && (
-                        <h5 className="m20 text_red mt-4">No data found</h5>
+                        <h5 className="m20 text_red mt-4 text-center">No data found</h5>
                       )}
                       {filteredPoliceVerificationDocuments.map((doc, index) => (
-                        <div className="col-md-4" key={index}>
+                        <div className="col-lg-4 col-sm-6 " key={index}>
                           <div className="item card-container">
                             <div className="card-image relative">
                               {uploadingDocId !== doc.id && (
@@ -1245,10 +1252,10 @@ const TenantDetails = () => {
                   <div className="blog_sect">
                     <div className="row">
                       {filteredRentAgreementDocLength === 0 && (
-                        <h5 className="m20 text_red mt-4">No data found</h5>
+                        <h5 className="m20 text_red mt-4 text-center">No data found</h5>
                       )}
                       {filteredRentAgreementDocuments.map((doc, index) => (
-                        <div className="col-md-4" key={index}>
+                        <div className="col-lg-4 col-sm-6 " key={index}>
                           <div className="item card-container">
                             <div className="card-image relative">
                               {uploadingDocId !== doc.id && (
@@ -1322,7 +1329,7 @@ const TenantDetails = () => {
 
             {!editingField && user && user.role === "admin" && (
               <>
-                <div className="vg22"></div>
+                <div className="vg22_m15"></div>
                 <div className="divider"></div>
                 <div className="vg10"></div>
                 <div
@@ -1332,7 +1339,7 @@ const TenantDetails = () => {
                   <span className="material-symbols-outlined">delete</span>
                   <span>Delete Tenant</span>
                 </div>
-                <div className="vg22"></div>
+                <div className="vg22_m15"></div>
               </>
             )}
             <SureDelete
