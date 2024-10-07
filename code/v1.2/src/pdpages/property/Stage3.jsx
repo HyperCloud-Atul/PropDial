@@ -641,7 +641,7 @@ export default function Stage3(props) {
               {/* Balcony Facing */}
               {propertyDocument &&
                 propertyDocument.numberOfBalcony &&
-                propertyDocument.numberOfBalcony === "0" ? (
+                propertyDocument.numberOfBalcony === 0 ? (
                 ""
               ) : (
                 <div className="col-md-6">

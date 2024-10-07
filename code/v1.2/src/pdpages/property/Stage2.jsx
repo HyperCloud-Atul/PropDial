@@ -127,7 +127,7 @@ const Stage2 = (props) => {
           : "0",
         NumberOfBalcony: propertyDocument.numberOfBalcony
           ? propertyDocument.numberOfBalcony
-          : "0",
+          : 0,
         NumberOfKitchen: propertyDocument.numberOfKitchen
           ? propertyDocument.numberOfKitchen
           : "0",
@@ -435,7 +435,7 @@ const Stage2 = (props) => {
   function incrementInput(input) {
     var inputValue = document.getElementById(input).value;
     if (inputValue === "99") {
-      //Don't do anything
+      // Don't do anything
     } else {
       inputValue++;
       if (input === "bedroomNumberInput") {
@@ -454,10 +454,13 @@ const Stage2 = (props) => {
           NumberOfBalcony: inputValue,
         });
       } else if (input === "kitchenNumberInput") {
-        setPropertyDetails({
-          ...propertyDetails,
-          NumberOfKitchen: inputValue,
-        });
+        // Ensure the value doesn't exceed 2
+        if (inputValue <= 2) {
+          setPropertyDetails({
+            ...propertyDetails,
+            NumberOfKitchen: inputValue,
+          });
+        }
       } else if (input === "livingAreaNumberInput") {
         setPropertyDetails({
           ...propertyDetails,
@@ -478,9 +481,8 @@ const Stage2 = (props) => {
           setPropertyDetails({
             ...propertyDetails,
             FloorNo: inputValue,
-            NumberOfFloors: inputValue
+            NumberOfFloors: inputValue,
           });
-
         }
       } else if (input === "numberOfFloorsInput") {
         setPropertyDetails({
@@ -515,6 +517,7 @@ const Stage2 = (props) => {
       }
     }
   }
+  
 
 
 
@@ -1334,7 +1337,7 @@ const Stage2 = (props) => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="plus_minus_input_wrapper">
+                <div className="plus_minus_input_wrapper">
                   <span className="pmi_label">Kitchen</span>
                   <div className="plus_minus_input">
                     <div
@@ -1361,7 +1364,7 @@ const Stage2 = (props) => {
                       <span className="material-symbols-outlined">add</span>
                     </div>
                   </div>
-                </div> */}
+                </div>
                 {/* <div className="plus_minus_input_wrapper">
                   <span className="pmi_label">Living Area</span>
                   <div className="plus_minus_input">

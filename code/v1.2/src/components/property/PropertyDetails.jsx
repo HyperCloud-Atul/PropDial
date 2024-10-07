@@ -3295,7 +3295,7 @@ const PropertyDetails = () => {
                           </div>
                         )}
                       {/* Balcony  */}
-                      {propertyDocument && propertyDocument.numberOfBalcony && (
+                      {propertyDocument && propertyDocument.numberOfBalcony !== 0  && (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -3433,7 +3433,7 @@ const PropertyDetails = () => {
                       )}
                       {/* Balcony  */}
                       {propertyDocument &&
-                        propertyDocument.numberOfBalcony &&
+                        propertyDocument.numberOfBalcony !== 0 &&
                         propertyDocument.balconyFacing && (
                           <div className="p_info_single">
                             <div className="pd_icon">
@@ -3793,7 +3793,7 @@ const PropertyDetails = () => {
                         </div>
                       )}
                       {/* Carpet Area  */}
-                      {propertyDocument && propertyDocument.carpetArea !== "0" && (
+                      {propertyDocument && propertyDocument.carpetArea !== "0" && propertyDocument.carpetArea && (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -3823,7 +3823,7 @@ const PropertyDetails = () => {
                     <div className="p_info">
                       {/* Covered Parking  */}
                       {propertyDocument &&
-                        propertyDocument.numberOfClosedCarParking && (
+                        propertyDocument.numberOfCoveredCarParking === 0 || propertyDocument.numberOfCoveredCarParking === "0" ? (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
@@ -3834,27 +3834,59 @@ const PropertyDetails = () => {
                             <div className="pis_content">
                               <h6>Covered Car Parking</h6>
                               <h5>
-                                {propertyDocument.numberOfClosedCarParking}
+                             No
+                              </h5>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/car-parking.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Covered Car Parking</h6>
+                              <h5>
+                                {propertyDocument.numberOfCoveredCarParking}
                               </h5>
                             </div>
                           </div>
                         )}
                       {/* Open car parking  */}
-                      {propertyDocument.numberOfOpenCarParking !== 0 && (
-
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/car-parking.png"
-                              alt=""
-                            />
+                      {propertyDocument &&
+                        propertyDocument.numberOfOpenCarParking === 0 || propertyDocument.numberOfOpenCarParking === "0" ? (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/car-parking.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Open Car Parking</h6>
+                              <h5>
+                             No
+                              </h5>
+                            </div>
                           </div>
-                          <div className="pis_content">
-                            <h6>Open Car Parking</h6>
-                            <h5>{propertyDocument.numberOfOpenCarParking}</h5>
+                        ) : (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/car-parking.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Open Car Parking</h6>
+                              <h5>
+                                {propertyDocument.numberOfOpenCarParking}
+                              </h5>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}                    
                       {/* 2 Wheeler Parking  */}
                       {propertyDocument &&
                         propertyDocument.twoWheelarParking && (
@@ -3942,7 +3974,20 @@ const PropertyDetails = () => {
                           </div>
                         )}
                       {/* number of lifts  */}
-                      {propertyDocument && propertyDocument.numberOfLifts && (
+                      {propertyDocument && propertyDocument.numberOfLifts == 0 ? (
+                        <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/lift.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          <h6>Lift</h6>
+                          <h5>No</h5>
+                        </div>
+                      </div>
+                      ) : (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -3955,6 +4000,7 @@ const PropertyDetails = () => {
                             <h5>{propertyDocument.numberOfLifts}</h5>
                           </div>
                         </div>
+                        
                       )}
                       {/* Power Backup  */}
                       {propertyDocument && propertyDocument.powerBackup && (
