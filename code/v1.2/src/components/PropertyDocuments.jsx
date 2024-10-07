@@ -278,6 +278,33 @@ const PropertyDocuments = () => {
   };
   // prop summary click start
 
+  // Convert digit into comma formate start
+function formatNumberWithCommas(number) {
+  // Convert number to a string if it's not already
+  let numStr = number.toString();
+
+  // Handle decimal part if present
+  const [integerPart, decimalPart] = numStr.split(".");
+
+  // Regular expression for Indian comma format
+  const lastThreeDigits = integerPart.slice(-3);
+  const otherDigits = integerPart.slice(0, -3);
+
+  const formattedNumber =
+    otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+    (otherDigits ? "," : "") +
+    lastThreeDigits;
+
+  // Return the formatted number with decimal part if it exists
+  return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
+}
+
+// Use replace() to remove all commas
+function removeCommas(stringWithCommas) {
+  const stringWithoutCommas = stringWithCommas.replace(/,/g, '');
+  return stringWithoutCommas;
+}
+
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
      <ScrollToTop/>
@@ -365,12 +392,14 @@ const PropertyDocuments = () => {
                           {propertydoc.pid}
                         </span>
                         {" "}{" "}
-                        <span className="card_badge">
+                        <span className={`card_badge ${propertydoc.isActiveInactiveReview.toLowerCase()}`}>
                           {propertydoc.isActiveInactiveReview}
                         </span>
                       </div>
                       <h6 className="demand">
-                        <span>₹</span>{propertydoc.demandPrice}
+                        <span>₹</span>
+                        {(propertydoc.flag.toLowerCase() === "pms only" || propertydoc.flag.toLowerCase() === "pms after rent" || propertydoc.flag.toLowerCase() === "available for rent" || propertydoc.flag.toLowerCase() === "rented out") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) : (propertydoc.flag.toLowerCase() === "rent and sale" || propertydoc.flag.toLowerCase() === "rented but sale") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) + " / ₹" + propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale) : propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale)}
+
                         {propertydoc.maintenancecharges !== '' && <span
                           style={{
                             fontSize: "10px",
@@ -408,15 +437,17 @@ const PropertyDocuments = () => {
                           </span>
                         </div>
                         <h6 className="demand">
-                          <span>₹</span> {propertydoc.demandPrice}
-                          {propertydoc.maintenancecharges !== '' && <span
-                            style={{
-                              fontSize: "10px",
-                            }}
-                          >
-                            + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
-                          </span>}
-                        </h6>
+                        <span>₹</span>
+                        {(propertydoc.flag.toLowerCase() === "pms only" || propertydoc.flag.toLowerCase() === "pms after rent" || propertydoc.flag.toLowerCase() === "available for rent" || propertydoc.flag.toLowerCase() === "rented out") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) : (propertydoc.flag.toLowerCase() === "rent and sale" || propertydoc.flag.toLowerCase() === "rented but sale") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) + " / ₹" + propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale) : propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale)}
+
+                        {propertydoc.maintenancecharges !== '' && <span
+                          style={{
+                            fontSize: "10px",
+                          }}
+                        >
+                          + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
+                        </span>}
+                      </h6>                   
                         <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
                         <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
                         <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>

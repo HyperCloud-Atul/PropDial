@@ -2942,13 +2942,15 @@ const CreateProperty = () => {
               {formSuccess && <p className="success_new">{formSuccess}</p>}
             </div>
             <div className="col-12">
-              <button
-                id="btn_create"
-                className="theme_btn btn_fill full_width no_icon"
-                onClick={(e) => handleSubmit(e, "Next")}
-              >
-                Create
-              </button>
+            <button
+  id="btn_create"
+  className="theme_btn btn_fill full_width no_icon"
+  onClick={(e) => handleSubmit(e, "Next")}
+  disabled={formSuccess ? true : false} // Apply disabled conditionally
+>
+  Create
+</button>
+
             </div>
           </div>
         </div>

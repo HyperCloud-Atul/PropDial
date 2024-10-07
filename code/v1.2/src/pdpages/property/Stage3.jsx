@@ -2358,7 +2358,7 @@ export default function Stage3(props) {
                           <div className="vg10"></div>
                           <div className="d-flex justify-content-between">
                             <div
-                              className="theme_btn btn_border"
+                              className="theme_btn btn_border no_icon"
                               onClick={handleCancelPropDesc}
                               style={{
                                 width: "fit-content",
@@ -2367,7 +2367,7 @@ export default function Stage3(props) {
                               Cancel
                             </div>
                             <div
-                              className="theme_btn btn_fill"
+                              className="theme_btn btn_fill no_icon"
                               onClick={handleSavePropDesc}
                               style={{
                                 width: "fit-content",
@@ -2431,7 +2431,8 @@ export default function Stage3(props) {
                           <div className="vg10"></div>
                           <div className="d-flex justify-content-between">
                             <div
-                              className="theme_btn btn_border"
+                              className="theme_btn btn_border no_icon
+no_icon"
                               onClick={handleCancelOwnerInstruction}
                               style={{
                                 width: "fit-content",
@@ -2440,7 +2441,8 @@ export default function Stage3(props) {
                               Cancel
                             </div>
                             <div
-                              className="theme_btn btn_fill"
+                              className="theme_btn btn_fill no_icon
+no_icon"
                               onClick={handleSaveOwnerInstruction}
                               style={{
                                 width: "fit-content",
