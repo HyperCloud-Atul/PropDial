@@ -35,7 +35,7 @@ const SearchPropAgentProperty = ({ activeOption, propagentProperties }) => {
                         {property.images.length > 0 ? <img src={property.images[0]} alt={property.bhk} /> : <img src="/assets/img/property/p2.jpg" alt="" />}
                     </div>
                     <div className="ppss_header">
-                        <h5>{property.bhk} | {property.purpose}</h5>
+                        <h5>{property.bhk} | {activeOption.toLowerCase() === 'rent' ? "Rent" : "Sale"}</h5>
                         <h5>{property.locality}</h5>
                         <h6 className="location">{property.city}, {property.state}</h6>
                     </div>

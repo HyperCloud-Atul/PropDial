@@ -85,7 +85,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                       {property.furnishing === ""
                         ? ""
                         : property.furnishing + " Furnished | "}{" "}
-                      {property.status}
+                      {activeOption.toLowerCase() === 'rent' ? "Available for Rent" : "Available for Sale"}
                     </h4>
                     <h6 className="property_location">
                       {property.locality}, {property.city} | {property.state}
