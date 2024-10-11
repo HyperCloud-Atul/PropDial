@@ -558,7 +558,7 @@ const PropertyCard = ({ propertyid }) => {
               </Link>} */}
             </div>
 
-            {user && user.role === "admin" && propertydoc && (
+            {/* {user && user.role === "admin" && propertydoc && (
               <div className="form_field st-2 outline">
                 <div className="radio_group">
                   <div className="radio_group_single">
@@ -656,7 +656,7 @@ const PropertyCard = ({ propertyid }) => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

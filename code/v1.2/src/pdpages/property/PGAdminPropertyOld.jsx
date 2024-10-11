@@ -5,14 +5,15 @@ import { useCollection } from "../../hooks/useCollection";
 import PropertyCard from "../../components/property/PropertyCard";
 import PropertyTable from "../../components/property/PropertyTable";
 import Switch from "react-switch";
-import Filters from "../../components/Filters"; // Using your existing Filters component
-
+// import filter
+import Filters from "../../components/Filters";
 const propertyFilter = ["Residential", "Commercial"];
-const statusFilter = ["In-Review", "Active", "Inactive"]; // Define the isActiveInactiveReview options
 
-const PGAdminProperty = () => {
+const PGAdminPropertyOld = () => {
   const { user } = useAuthContext();
-  const { filterOption } = useParams();
+
+  const { filterOption } = useParams()
+  // console.log("filter Option: ", filterOption)
 
   const { documents: allproperties, error: propertieserror } =
     useCollection("properties", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
@@ -27,53 +28,64 @@ const PGAdminProperty = () => {
 
   const [propertyListWithUsers, setPropertyListWithUsers] = useState();
   const [properties, setProperties] = useState();
+  // console.log("properties: ", properties)
 
   useEffect(() => {
     let _properties = null;
     if (filterOption === 'all') {
       _properties = allproperties
-    } else {
+
+    }
+    else {
       _properties = allproperties &&
-        allproperties.filter((item) =>
-          (filterOption.toLowerCase() === "in-review" || filterOption.toLowerCase() === "active" || filterOption.toLowerCase() === "inactive") ? item.isActiveInactiveReview.trim().toUpperCase() === filterOption.toUpperCase() : (filterOption.toLowerCase() === "residential" || filterOption.toLowerCase() === "commercial") ? item.category.trim().toUpperCase() === filterOption.toUpperCase() : item.purpose.trim().toUpperCase() === filterOption.toUpperCase()
+        allproperties.filter(
+          (item) =>
+            (filterOption.toLowerCase() === "in-review" || filterOption.toLowerCase() === "active" || filterOption.toLowerCase() === "inactive") ? item.isActiveInactiveReview.trim().toUpperCase() === filterOption.toUpperCase() : (filterOption.toLowerCase() === "residential" || filterOption.toLowerCase() === "commercial") ? item.category.trim().toUpperCase() === filterOption.toUpperCase() : item.purpose.trim().toUpperCase() === filterOption.toUpperCase()
         );
     }
 
-    setProperties(_properties);
+    setProperties(_properties)
 
-    let _propertyListWithUsers = [];
+    // console.log("_properties: ", _properties)
+
+
+    let _propertyListWithUsers = []
     _properties && _properties.forEach(prop => {
-      let assigneduserList = assignedPopertyUserList && assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id);
-      let userDetails = '';
+      let assigneduserList = assignedPopertyUserList && assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id)
+      let userDetails = ''
 
+      // console.log("assigneduserList: ", assigneduserList)
+
+      // console.log('assigneduserList : ', assigneduserList)
       if (assigneduserList && assigneduserList.length > 0) {
         assigneduserList.forEach(user => {
-          let userObt = userList.filter(userDoc => userDoc.id === user.userId);
-          userDetails = userDetails + (userObt && userObt[0] && (' ' + userObt[0].fullName + ' ' + userObt[0].phoneNumber));
+          let userObt = userList.filter(userDoc => userDoc.id === user.userId)
+          // console.log('userObt :', userObt)
+
+          userDetails = userDetails + (userObt && userObt[0] && (' ' + userObt[0].fullName + ' ' + userObt[0].phoneNumber))
+
         });
       }
 
       prop = {
         ...prop,
         userList: userDetails
-      };
+      }
 
-      _propertyListWithUsers.push(prop);
+      _propertyListWithUsers.push(prop)
+
     });
 
-    setPropertyListWithUsers(_propertyListWithUsers);
+    setPropertyListWithUsers(_propertyListWithUsers)
+
   }, [assignedPopertyUserList, allproperties, userList]);
 
-  // Existing property filter state
+  // console.log('propertyListWithUsers: ', propertyListWithUsers)
+
+  // Filter state
   const [filter, setFilter] = useState(propertyFilter[0]);
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
-  };
-
-  // New isActiveInactiveReview filter state
-  const [status, setStatus] = useState("In-Review"); // Default to 'In-Review'
-  const changeStatusFilter = (newStatus) => {
-    setStatus(newStatus);
   };
 
   // Rent/Sale switch state
@@ -84,9 +96,16 @@ const PGAdminProperty = () => {
 
   // Search input state
   const [searchInput, setSearchInput] = useState("");
+
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
+
+  //access level restriction
+  // console.log('user accessType: ', user.accessType)
+  // console.log('user accessValue: ', user.accessValue)
+
+
 
   let caseFilter = user.accessType;
   const accessedPropertyList = propertyListWithUsers
@@ -94,27 +113,33 @@ const PGAdminProperty = () => {
       switch (caseFilter) {
         case "country":
           const lowerCaseCountryArray = user.accessValue.map(element => element.toLowerCase());
-          return document.country && lowerCaseCountryArray.includes(document.country.toLowerCase());
+          return document.country && lowerCaseCountryArray.includes(document.country.toLowerCase())
         case "region":
           const lowerCaseRegionArray = user.accessValue.map(element => element.toLowerCase());
-          return document.region && lowerCaseRegionArray.includes(document.region.toLowerCase());
+          return document.region && lowerCaseRegionArray.includes(document.region.toLowerCase())
         case "state":
           const lowerCaseStateArray = user.accessValue.map(element => element.toLowerCase());
-          return document.state && lowerCaseStateArray.includes(document.state.toLowerCase());
+          return document.state && lowerCaseStateArray.includes(document.state.toLowerCase())
         case "city":
           const lowerCaseCityArray = user.accessValue.map(element => element.toLowerCase());
-          return document.city && lowerCaseCityArray.includes(document.city.toLowerCase());
+          return document.city && lowerCaseCityArray.includes(document.city.toLowerCase())
+
         default: return true;
       }
     }) : null;
 
-  // Filter properties based on search input, isActiveInactiveReview, and other filters
+  // console.log("accessed PropertyList: ", accessedPropertyList)
+
+
+  // Filter properties based on search input and other filters
   const filterProperties = accessedPropertyList
     ? accessedPropertyList.filter((document) => {
+      // console.log("property document: ", document)
       let categoryMatch = true;
       let purposeMatch = true;
       let searchMatch = true;
-      let statusMatch = true;
+
+
 
       // Filter by category
       switch (filter) {
@@ -129,7 +154,8 @@ const PGAdminProperty = () => {
       }
 
       // Filter by purpose
-      purposeMatch = document.purpose.toUpperCase() === rentSaleFilter.toUpperCase();
+      purposeMatch =
+        document.purpose.toUpperCase() === rentSaleFilter.toUpperCase();
 
       // Filter by search input
       searchMatch = searchInput
@@ -140,12 +166,12 @@ const PGAdminProperty = () => {
         )
         : true;
 
-      // Filter by status
-      statusMatch = document.isActiveInactiveReview.toUpperCase() === status.toUpperCase();
-
-      return categoryMatch && searchMatch && statusMatch;
+      // return categoryMatch && purposeMatch && searchMatch;
+      return categoryMatch && searchMatch;
     })
     : null;
+
+  // console.log("filterProperties", filterProperties);
 
   // View mode state
   const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
@@ -230,20 +256,8 @@ const PGAdminProperty = () => {
             </div>
 
           </div>
-         
           <div className="right">
-          <div className="user_filters new_inline">
-          
-          {properties && (
-            <Filters
-                    changeFilter={changeStatusFilter}
-                    filterList={statusFilter}
-                    filterLength={filterProperties.length}
-                  />
-                )}
-        </div>
             <div className="user_filters new_inline">
-          
               {properties && (
                 <Filters
                   changeFilter={changeFilter}
@@ -324,4 +338,4 @@ const PGAdminProperty = () => {
   );
 };
 
-export default PGAdminProperty;
+export default PGAdminPropertyOld;
