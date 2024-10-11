@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from '../../hooks/useCollection';
+import { useDocument } from "../../hooks/useDocument"
 import { useParams } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,15 +13,29 @@ import "react-phone-input-2/lib/style.css";
 const AddEnquiry = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    console.log("property id: ", id)
+    // console.log("property id: ", id)
     // add enquiry with add document start
     const { addDocument, updateDocument, deleteDocument, error } =
         useFirestore("enquiry");
 
     // const { documents: propertyDoc, error: propertyDocError } = useCollection("properties", ["postedBy", "==", "Propdial"]);
-    const { documents: propertyDoc, error: propertyDocError } = useCollection("properties", ["id", "==", id]);
-    console.log("propertyDoc: ", propertyDoc)
+    // const { documents: propertyDoc, error: propertyDocError } = useCollection("properties", ["id", "==", id]);
+    const { document: propertyDoc, error: propertyDocError } = useDocument('properties', id)
+    // console.log("propertyDoc: ", propertyDoc)
 
+    // const { documents: propertyUsers, errors: propertyUsersError } =
+    //     useCollection("propertyusers", ["propertyId", "==", id]);
+    // console.log("propertyUsers: ", propertyUsers)
+
+    // const propertyOwners =
+    //     propertyUsers &&
+    //     propertyUsers.filter((doc) => doc.userType === "propertyowner");
+
+    // console.log("propertyOwners: ", propertyOwners)
+    // console.log("propertyOwners.userId: ", propertyOwners && propertyOwners[0].userId)
+
+    // const { documents: allUsers, error: allUsersError } = useCollection("users");
+    // console.log("All Users: ", allUsers)
 
     const [enquiryFrom, setEnquiryFrom] = useState("");
     const [referredBy, setReferredBy] = useState("");
@@ -36,16 +51,30 @@ const AddEnquiry = () => {
     const [enquiryStatus, setEnquiryStatus] = useState("open");
     const [remark, setRemark] = useState("");
     const [isUploading, setIsUploading] = useState(false);
+    // const [userDoc, setUserDoc] = useState();
+
+    // let userid = propertyOwners && propertyOwners[0].userId;
+    // console.log("user id: ", userid)
+
+    // if (userid) {
+    //     const userDoc =
+    //         allUsers &&
+    //         allUsers.filter((doc) => doc.id === userid);
+
+    //     console.log("user Doc: ", userDoc)
+    //     // setUserDoc(userDoc)
+    // }
 
     useEffect(() => {
         if (propertyDoc) {
             setPropertyName(propertyDoc && propertyDoc.propertyName)
         }
+
+
+
     }, [propertyDoc])
 
     const [errors, setErrors] = useState({});
-
-
 
     const handleFieldChange = (setter) => (event) => {
         const { name, value } = event.target;
