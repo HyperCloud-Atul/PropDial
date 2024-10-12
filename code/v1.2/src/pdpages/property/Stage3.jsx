@@ -71,7 +71,7 @@ export default function Stage3(props) {
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
     RichTextEditor.createValueFromString(
       propertyDocument &&
-      propertyDocument.ownerInstructions + editedOwnerInstruction,
+        propertyDocument.ownerInstructions + editedOwnerInstruction,
       "html"
     )
   );
@@ -178,145 +178,154 @@ export default function Stage3(props) {
         // Visiting days Values
         MondayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Monday")
+          propertyDocument.visitingDays.find((e) => e === "Monday")
             ? true
             : false,
         TuesdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Tuesday")
+          propertyDocument.visitingDays.find((e) => e === "Tuesday")
             ? true
             : false,
         WednesdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Wednesday")
+          propertyDocument.visitingDays.find((e) => e === "Wednesday")
             ? true
             : false,
         ThursdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Thursday")
+          propertyDocument.visitingDays.find((e) => e === "Thursday")
             ? true
             : false,
         FridayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Friday")
+          propertyDocument.visitingDays.find((e) => e === "Friday")
             ? true
             : false,
         SaturdayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Saturday")
+          propertyDocument.visitingDays.find((e) => e === "Saturday")
             ? true
             : false,
         SundayClick:
           propertyDocument.visitingDays &&
-            propertyDocument.visitingDays.find((e) => e === "Sunday")
+          propertyDocument.visitingDays.find((e) => e === "Sunday")
             ? true
             : false,
-
 
         //Balcony Values
         // Overlooking Values
         EastClick:
           propertyDocument.balconyFacing &&
-            propertyDocument.balconyFacing.find((e) => e === "East")
+          propertyDocument.balconyFacing.find((e) => e === "East")
             ? true
             : false,
         WestClick:
           propertyDocument.balconyFacing &&
-            propertyDocument.balconyFacing.find((e) => e === "West")
+          propertyDocument.balconyFacing.find((e) => e === "West")
             ? true
             : false,
         NorthClick:
           propertyDocument.balconyFacing &&
-            propertyDocument.balconyFacing.find((e) => e === "North")
+          propertyDocument.balconyFacing.find((e) => e === "North")
             ? true
             : false,
         SouthClick:
           propertyDocument.balconyFacing &&
-            propertyDocument.balconyFacing.find((e) => e === "South")
+          propertyDocument.balconyFacing.find((e) => e === "South")
             ? true
             : false,
         NorthEastClick:
           propertyDocument.balconyFacing &&
-            propertyDocument.balconyFacing.find((e) => e === "North East")
+          propertyDocument.balconyFacing.find((e) => e === "North East")
             ? true
             : false,
         NorthWestClick:
           propertyDocument.balconyFacing &&
-            propertyDocument.balconyFacing.find((e) => e === "North West")
+          propertyDocument.balconyFacing.find((e) => e === "North West")
             ? true
             : false,
         SouthEastClick:
           propertyDocument.balconyFacing &&
-            propertyDocument.balconyFacing.find((e) => e === "South East")
+          propertyDocument.balconyFacing.find((e) => e === "South East")
             ? true
             : false,
         SouthWestClick:
           propertyDocument.balconyFacing &&
-            propertyDocument.balconyFacing.find((e) => e === "South West")
+          propertyDocument.balconyFacing.find((e) => e === "South West")
             ? true
             : false,
 
         // Overlooking Values
         ClubClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Club")
+          propertyDocument.overLooking.find((e) => e === "Club")
             ? true
             : false,
         GardenParkClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Garden/Park")
+          propertyDocument.overLooking.find((e) => e === "Garden/Park")
             ? true
             : false,
-        RoadClick:
+        MainRoadClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Road")
+          propertyDocument.overLooking.find((e) => e === "Main Road")
             ? true
             : false,
+            SocietyInternalRoadClick:
+            propertyDocument.overLooking &&
+            propertyDocument.overLooking.find((e) => e === "Society Internal Road")
+              ? true
+              : false,
         SwimmingPoolClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Swimming Pool")
+          propertyDocument.overLooking.find((e) => e === "Swimming Pool")
             ? true
             : false,
         CentralParkClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Central Park")
+          propertyDocument.overLooking.find((e) => e === "Central Park")
             ? true
             : false,
         GolfClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Golf")
+          propertyDocument.overLooking.find((e) => e === "Golf")
             ? true
             : false,
         HillViewClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Hill View")
+          propertyDocument.overLooking.find((e) => e === "Hill View")
             ? true
             : false,
         BeachClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Beach")
+          propertyDocument.overLooking.find((e) => e === "Beach")
             ? true
             : false,
         LakeClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Lake")
+          propertyDocument.overLooking.find((e) => e === "Lake")
             ? true
             : false,
         RiverClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "River")
+          propertyDocument.overLooking.find((e) => e === "River")
             ? true
             : false,
         ForestClick:
           propertyDocument.overLooking &&
-            propertyDocument.overLooking.find((e) => e === "Forest")
+          propertyDocument.overLooking.find((e) => e === "Forest")
             ? true
             : false,
-            OtherSocietyClick:
+        OtherSocietyClick:
+          propertyDocument.overLooking &&
+          propertyDocument.overLooking.find((e) => e === "Other Society")
+            ? true
+            : false,
+            SameSocietyTowerClick:
             propertyDocument.overLooking &&
-              propertyDocument.overLooking.find((e) => e === "Other Society")
+            propertyDocument.overLooking.find((e) => e === "Same Society Tower")
               ? true
-              : false,
+              : false,            
       });
     }
   }, [propertyDocument]);
@@ -333,7 +342,9 @@ export default function Stage3(props) {
       overLooking: propertyDetails.OverLooking
         ? propertyDetails.OverLooking
         : [],
-      balconyFacing: propertyDetails.BalconyFacing ? propertyDetails.BalconyFacing : [],
+      balconyFacing: propertyDetails.BalconyFacing
+        ? propertyDetails.BalconyFacing
+        : [],
       visitingHrsFrom: propertyDetails.VisitingHrsFrom,
       visitingHrsTo: propertyDetails.VisitingHrsTo,
       visitingDays: propertyDetails.VisitingDays
@@ -640,8 +651,8 @@ export default function Stage3(props) {
 
               {/* Balcony Facing */}
               {propertyDocument &&
-                propertyDocument.numberOfBalcony &&
-                propertyDocument.numberOfBalcony === 0 ? (
+              propertyDocument.numberOfBalcony &&
+              propertyDocument.numberOfBalcony === 0 ? (
                 ""
               ) : (
                 <div className="col-md-6">
@@ -671,7 +682,12 @@ export default function Stage3(props) {
                                   EastClick: !propertyDetails.EastClick,
                                 });
                               } else {
-                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                if (
+                                  !propertyDetails.BalconyFacing ||
+                                  (propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.length <
+                                      propertyDocument.numberOfBalcony)
+                                ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
                                     BalconyFacing: [
@@ -681,11 +697,8 @@ export default function Stage3(props) {
                                     EastClick: !propertyDetails.EastClick,
                                   });
                                 }
-
                               }
-
                             }}
-
                           />
                           <label htmlFor="east_balconyfacing">
                             <div className="radio_icon">
@@ -723,7 +736,12 @@ export default function Stage3(props) {
                                   WestClick: !propertyDetails.WestClick,
                                 });
                               } else {
-                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                if (
+                                  !propertyDetails.BalconyFacing ||
+                                  (propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.length <
+                                      propertyDocument.numberOfBalcony)
+                                ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
                                     BalconyFacing: [
@@ -733,10 +751,8 @@ export default function Stage3(props) {
                                     WestClick: !propertyDetails.WestClick,
                                   });
                                 }
-
                               }
                             }}
-
                           />
                           <label htmlFor="west_balconyfacing">
                             <div className="radio_icon">
@@ -763,9 +779,7 @@ export default function Stage3(props) {
                             type="checkbox"
                             id="north_balconyfacing"
                             onClick={(e) => {
-
                               if (propertyDetails.NorthClick) {
-
                                 setPropertyDetails({
                                   ...propertyDetails,
                                   BalconyFacing:
@@ -775,9 +789,13 @@ export default function Stage3(props) {
                                     ),
                                   NorthClick: !propertyDetails.NorthClick,
                                 });
-
                               } else {
-                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                if (
+                                  !propertyDetails.BalconyFacing ||
+                                  (propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.length <
+                                      propertyDocument.numberOfBalcony)
+                                ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
                                     BalconyFacing: [
@@ -788,11 +806,9 @@ export default function Stage3(props) {
                                   });
                                 }
                               }
-
                             }}
-
                           />
-                          < label htmlFor="north_balconyfacing" >
+                          <label htmlFor="north_balconyfacing">
                             <div className="radio_icon">
                               <span className="material-symbols-outlined add">
                                 add
@@ -827,9 +843,13 @@ export default function Stage3(props) {
                                     ),
                                   SouthClick: !propertyDetails.SouthClick,
                                 });
-
                               } else {
-                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                if (
+                                  !propertyDetails.BalconyFacing ||
+                                  (propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.length <
+                                      propertyDocument.numberOfBalcony)
+                                ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
                                     BalconyFacing: [
@@ -875,18 +895,24 @@ export default function Stage3(props) {
                                     propertyDetails.BalconyFacing.filter(
                                       (elem) => elem !== "North East"
                                     ),
-                                  NorthEastClick: !propertyDetails.NorthEastClick,
+                                  NorthEastClick:
+                                    !propertyDetails.NorthEastClick,
                                 });
-
                               } else {
-                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                if (
+                                  !propertyDetails.BalconyFacing ||
+                                  (propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.length <
+                                      propertyDocument.numberOfBalcony)
+                                ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
                                     BalconyFacing: [
                                       ...propertyDetails.BalconyFacing,
                                       "North East",
                                     ],
-                                    NorthEastClick: !propertyDetails.NorthEastClick,
+                                    NorthEastClick:
+                                      !propertyDetails.NorthEastClick,
                                   });
                                 }
                               }
@@ -925,18 +951,24 @@ export default function Stage3(props) {
                                     propertyDetails.BalconyFacing.filter(
                                       (elem) => elem !== "North West"
                                     ),
-                                  NorthWestClick: !propertyDetails.NorthWestClick,
+                                  NorthWestClick:
+                                    !propertyDetails.NorthWestClick,
                                 });
-
                               } else {
-                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                if (
+                                  !propertyDetails.BalconyFacing ||
+                                  (propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.length <
+                                      propertyDocument.numberOfBalcony)
+                                ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
                                     BalconyFacing: [
                                       ...propertyDetails.BalconyFacing,
                                       "North West",
                                     ],
-                                    NorthWestClick: !propertyDetails.NorthWestClick,
+                                    NorthWestClick:
+                                      !propertyDetails.NorthWestClick,
                                   });
                                 }
                               }
@@ -975,18 +1007,24 @@ export default function Stage3(props) {
                                     propertyDetails.BalconyFacing.filter(
                                       (elem) => elem !== "South East"
                                     ),
-                                  SouthEastClick: !propertyDetails.SouthEastClick,
+                                  SouthEastClick:
+                                    !propertyDetails.SouthEastClick,
                                 });
-
                               } else {
-                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                if (
+                                  !propertyDetails.BalconyFacing ||
+                                  (propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.length <
+                                      propertyDocument.numberOfBalcony)
+                                ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
                                     BalconyFacing: [
                                       ...propertyDetails.BalconyFacing,
                                       "South East",
                                     ],
-                                    SouthEastClick: !propertyDetails.SouthEastClick,
+                                    SouthEastClick:
+                                      !propertyDetails.SouthEastClick,
                                   });
                                 }
                               }
@@ -1025,18 +1063,24 @@ export default function Stage3(props) {
                                     propertyDetails.BalconyFacing.filter(
                                       (elem) => elem !== "South West"
                                     ),
-                                  SouthWestClick: !propertyDetails.SouthWestClick,
+                                  SouthWestClick:
+                                    !propertyDetails.SouthWestClick,
                                 });
-
                               } else {
-                                if (!propertyDetails.BalconyFacing || (propertyDetails.BalconyFacing && propertyDetails.BalconyFacing.length < propertyDocument.numberOfBalcony)) {
+                                if (
+                                  !propertyDetails.BalconyFacing ||
+                                  (propertyDetails.BalconyFacing &&
+                                    propertyDetails.BalconyFacing.length <
+                                      propertyDocument.numberOfBalcony)
+                                ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
                                     BalconyFacing: [
                                       ...propertyDetails.BalconyFacing,
                                       "South West",
                                     ],
-                                    SouthWestClick: !propertyDetails.SouthWestClick,
+                                    SouthWestClick:
+                                      !propertyDetails.SouthWestClick,
                                   });
                                 }
                               }
@@ -1164,38 +1208,38 @@ export default function Stage3(props) {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.RoadClick
+                          propertyDetails.MainRoadClick
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
                       >
                         <input
                           type="checkbox"
-                          id="road_overlooking"
+                          id="main_road_overlooking"
                           onClick={(e) => {
-                            if (propertyDetails.RoadClick) {
+                            if (propertyDetails.MainRoadClick) {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 OverLooking:
                                   propertyDetails.OverLooking &&
                                   propertyDetails.OverLooking.filter(
-                                    (elem) => elem !== "Road"
+                                    (elem) => elem !== "Main Road"
                                   ),
-                                RoadClick: !propertyDetails.RoadClick,
+                                MainRoadClick: !propertyDetails.MainRoadClick,
                               });
                             } else {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 OverLooking: [
                                   ...propertyDetails.OverLooking,
-                                  "Road",
+                                  "Main Road",
                                 ],
-                                RoadClick: !propertyDetails.RoadClick,
+                                MainRoadClick: !propertyDetails.MainRoadClick,
                               });
                             }
                           }}
                         />
-                        <label htmlFor="road_overlooking">
+                        <label htmlFor="main_road_overlooking">
                           <div className="radio_icon">
                             <span className="material-symbols-outlined add">
                               add
@@ -1204,10 +1248,58 @@ export default function Stage3(props) {
                               done
                             </span>
                           </div>
-                          <h6>Road</h6>
+                          <h6>Main Road</h6>
                         </label>
                       </div>
                     </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.SocietyInternalRoadClick
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="si_road_overlooking"
+                          onClick={(e) => {
+                            if (propertyDetails.SocietyInternalRoadClick) {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking:
+                                  propertyDetails.OverLooking &&
+                                  propertyDetails.OverLooking.filter(
+                                    (elem) => elem !== "Society Internal Road"
+                                  ),
+                                SocietyInternalRoadClick: !propertyDetails.SocietyInternalRoadClick,
+                              });
+                            } else {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking: [
+                                  ...propertyDetails.OverLooking,
+                                  "Society Internal Road",
+                                ],
+                                SocietyInternalRoadClick: !propertyDetails.SocietyInternalRoadClick,
+                              });
+                            }
+                          }}
+                        />
+                        <label htmlFor="si_road_overlooking">
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Society Internal Road</h6>
+                        </label>
+                      </div>
+                    </div>
+                    
                     <div className="radio_group_single">
                       <div
                         className={
@@ -1588,7 +1680,55 @@ export default function Stage3(props) {
                         </label>
                       </div>
                     </div>
-
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.SameSocietyTowerClick
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="same_society_tower_overlooking"
+                          onClick={(e) => {
+                            if (propertyDetails.SameSocietyTowerClick) {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking:
+                                  propertyDetails.OverLooking &&
+                                  propertyDetails.OverLooking.filter(
+                                    (elem) => elem !== "Same Society Tower"
+                                  ),
+                                SameSocietyTowerClick:
+                                  !propertyDetails.SameSocietyTowerClick,
+                              });
+                            } else {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking: [
+                                  ...propertyDetails.OverLooking,
+                                  "Same Society Tower",
+                                ],
+                                SameSocietyTowerClick:
+                                  !propertyDetails.SameSocietyTowerClick,
+                              });
+                            }
+                          }}
+                        />
+                        <label htmlFor="same_society_tower_overlooking">
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                          </div>
+                          <h6>Same Society Tower</h6>
+                        </label>
+                      </div>
+                    </div>
                     <div className="radio_group_single">
                       <div
                         className={
@@ -1609,7 +1749,8 @@ export default function Stage3(props) {
                                   propertyDetails.OverLooking.filter(
                                     (elem) => elem !== "Other Society"
                                   ),
-                                OtherSocietyClick: !propertyDetails.OtherSocietyClick,
+                                OtherSocietyClick:
+                                  !propertyDetails.OtherSocietyClick,
                               });
                             } else {
                               setPropertyDetails({
@@ -1618,7 +1759,8 @@ export default function Stage3(props) {
                                   ...propertyDetails.OverLooking,
                                   "Other Society",
                                 ],
-                                OtherSocietyClick: !propertyDetails.OtherSocietyClick,
+                                OtherSocietyClick:
+                                  !propertyDetails.OtherSocietyClick,
                               });
                             }
                           }}
@@ -1635,7 +1777,9 @@ export default function Stage3(props) {
                           <h6>Other Society</h6>
                         </label>
                       </div>
-                    </div>
+                    </div>                    
+                    
+                    
                   </div>
                 </div>
               </div>
@@ -1647,7 +1791,9 @@ export default function Stage3(props) {
                   <div className="form_field_inner">
                     <input
                       type="time"
-                      min="09:00" max="18:00" step="1800"
+                      min="09:00"
+                      max="18:00"
+                      step="1800"
                       // placeholder="dd/mm/yyyy"
                       value={propertyDetails.VisitingHrsFrom}
                       // value="10:00"
@@ -1668,7 +1814,9 @@ export default function Stage3(props) {
                   <div className="form_field_inner">
                     <input
                       type="time"
-                      min="10:00" max="18:00" step="1800"
+                      min="10:00"
+                      max="18:00"
+                      step="1800"
                       // placeholder="dd/mm/yyyy"
                       value={propertyDetails.VisitingHrsTo}
                       onChange={(e) => {
@@ -2626,7 +2774,7 @@ no_icon"
             Submit
           </button>
         </div>
-      </form >
+      </form>
     </>
   );
 }

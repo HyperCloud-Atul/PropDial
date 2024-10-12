@@ -348,7 +348,18 @@ const PropertyCard = ({ propertyid }) => {
                 </div>
                 <div className="more_row">
                   <div className="left">
-                    <span className="card_badge">{propertydoc.pid}</span>
+                    <span className="card_badge">
+                      <span className="status_dot"
+                      style={{
+                        backgroundColor:
+                          propertydoc.isActiveInactiveReview === "Active"
+                            ? "var(--success-color)" // Green for Active
+                            : propertydoc.isActiveInactiveReview === "Inactive"
+                            ? "var(--theme-red)" // Red for Inactive
+                            : "var(--theme-blue)" // Dark Gold for In-Review (or any of the options above)
+                      }}
+                      ></span>
+                      {propertydoc.pid}</span>
                   </div>
                   {/* <div className="right">
                   <span className={`property_status card_badge ${propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT' ? "for_rent" : "for_sale"}`}>

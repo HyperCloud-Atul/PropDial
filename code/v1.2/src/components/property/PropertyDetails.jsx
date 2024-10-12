@@ -3763,9 +3763,14 @@ const PropertyDetails = () => {
                                     src="/assets/img/property-detail-icon/park.png"
                                     alt=""
                                   />
-                                ) : item === "Road" ? (
+                                ) : item === "Main Road" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/road.png"
+                                    alt=""
+                                  />
+                                ) : item === "Society Internal Road" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/societyroad.png"
                                     alt=""
                                   />
                                 ) : item === "Swimming Pool" ? (
@@ -3801,6 +3806,11 @@ const PropertyDetails = () => {
                                 ) : item === "Other Society" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/skyline.png"
+                                    alt=""
+                                  />
+                                ) : item === "Same Society Tower" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/singletower.png"
                                     alt=""
                                   />
                                 ) : item === "Beach" ? (
