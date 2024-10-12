@@ -2062,7 +2062,86 @@ const Stage2 = (props) => {
             </div>
           )}
 
-
+  {/* Entrance Gallery */}
+  <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Entrance Gallery</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.EntranceGallery === "Yes"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="entrancegallery_yes"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              EntranceGallery: "Yes",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="entrancegallery_yes"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.EntranceGallery === "No"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="entrancegallery_no"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              EntranceGallery: "No",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="entrancegallery_no"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           {/* Passages */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
@@ -2143,86 +2222,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-          {/* Entrance Gallery */}
-          <div className="col-md-4">
-            <div className="form_field st-2 label_top">
-              <label htmlFor="">Entrance Gallery</label>
-              <div className="form_field_inner">
-                <div className="form_field_container">
-                  <div className="radio_group">
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.EntranceGallery === "Yes"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="entrancegallery_yes"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              EntranceGallery: "Yes",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="entrancegallery_yes"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>Yes</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="radio_group_single">
-                      <div
-                        className={
-                          propertyDetails.EntranceGallery === "No"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="entrancegallery_no"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              EntranceGallery: "No",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="entrancegallery_no"
-                          style={{ paddingTop: "7px" }}
-                        >
-                          <div className="radio_icon">
-                            <span className="material-symbols-outlined add">
-                              add
-                            </span>
-                            <span className="material-symbols-outlined check">
-                              done
-                            </span>
-                          </div>
-                          <h6>No</h6>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        
           {/* Year of Construction */}
           <div className="col-md-4">
             <div className="form_field label_top">

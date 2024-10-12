@@ -400,7 +400,7 @@
   border: none;
 }
 
-.aai_form .form_field input {
+.aai_form .form_field input, .aai_form .form_field textarea  {
   border-radius: 8px;
   font-size: 16px;
   padding: 6px;
@@ -413,7 +413,7 @@
 .aai_form .form_field.price_input::after{
   left: 6px !important;
 }
-.aai_form .form_field input:focus {
+.aai_form .form_field input:focus, .aai_form .form_field textarea:focus {
   outline: none;
   border-color: #498fff;
 }
@@ -1433,7 +1433,7 @@ label.upload_img input {
     font-size: 10px;
     top: 0px;
   }
-  .aai_form .form_field input {  
+  .aai_form .form_field input, .aai_form .form_field textarea {  
     font-size: 14px;
     width: 100%;
    

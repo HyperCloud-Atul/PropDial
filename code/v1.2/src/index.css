@@ -24,7 +24,7 @@
   --theme-purple-bg: #efe5ff;
   --theme-blue-bg: #dae7ff;
   --theme-blue-light-bg: #eef3ff;
-
+--theme-inreview:#FFC107;
   --theme-purple-bg-light: #f9f5ff80;
   --theme-orange-bg: #ffefe5;
   --page-bg: #f5f5f5;
@@ -469,14 +469,7 @@ form.auth-form .theme_btn {
     position: unset;
   }
 }
-@media (max-width: 575px) {
-.on_mobile_575{
-  display: block !important;
-}
-.on_desktop_hide_575{
-  display: none !important;
-}
-}
+
 /* form fields style 2 */
 .modal-header,
 .modal-body,
@@ -634,6 +627,9 @@ select {
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 10px;
   grid-row-gap: 10px;
+}
+.form_field.st-2 .radio_group.air {
+  grid-template-columns: repeat(3, 1fr); 
 }
 
 .form_field.st-2 .radio_group_single label {
@@ -916,3 +912,14 @@ h2.card_title {
     gap: 15px;
   }
 }
+@media (max-width: 575px) {
+  .on_mobile_575{
+    display: block !important;
+  }
+  .form_field.st-2 .radio_group.air {
+    grid-template-columns: repeat(3, 1fr); 
+  }
+  .on_desktop_hide_575{
+    display: none !important;
+  }
+  }
