@@ -19,7 +19,11 @@ const PropertyKeyDetail = () => {
   const { addDocument, updateDocument, deleteDocument, error } =
     useFirestore("propertyKeys");
   const { documents: propertyKeyDoc, errors: propertyKeyDocError } =
-    useCollection("propertyKeys", ["propertyId", "==", propertyId]);
+    useCollection(
+      "propertyKeys",
+      ["propertyId", "==", propertyId],
+      ["createdAt", "desc"]
+    );
   const { document: propertydoc, error: propertyerror } = useDocument(
     "properties",
     propertyId
@@ -29,12 +33,20 @@ const PropertyKeyDetail = () => {
   const [showAIForm, setShowAIForm] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [editIndex, setEditIndex] = useState(null); // For tracking which row is being edited
+  const [isEditing, setIsEditing] = useState(false); // Track if in edit mode
   const [docToDelete, setDocToDelete] = useState(null);
-  const handleShowAIForm = () => setShowAIForm(!showAIForm);
+  const handleShowAIForm = () => {
+    setDocToEdit(null); // Reset docToEdit to ensure form is for adding new key
+    setKeyRows([{ keyFor: "", keyNumber: "", numberOfKey: "", keyRemark: "" }]); // Reset the form fields
+    setShowAIForm(!showAIForm);
+  };
+  const [docToEdit, setDocToEdit] = useState(null); // New state for editing
   // all functions
 
+  // State for key rows
   const [keyRows, setKeyRows] = useState([
-    { keyFor: "", keyNumber: "", numberOfKey: "", keyRemark: "" }, // Default one row
+    { keyFor: "", keyNumber: "", numberOfKey: "", keyRemark: "" },
   ]);
 
   // Add more rows
@@ -60,7 +72,8 @@ const PropertyKeyDetail = () => {
     setKeyRows(newKeyRows);
   };
 
-  const addPropertyKey = async () => {
+  // Add or edit property keys
+  const addOrUpdatePropertyKey = async () => {
     if (
       keyRows.some((row) => !row.keyFor || !row.keyNumber || !row.numberOfKey)
     ) {
@@ -70,23 +83,43 @@ const PropertyKeyDetail = () => {
 
     try {
       setIsUploading(true);
-      // Save the rows (array of maps) to Firestore
-      const docRef = await addDocument({
-        propertyId,
-        pid: propertydoc.pid,
-        postedBy: "Propdial",
-        keys: keyRows, // Save rows as an array of maps
-      });
+
+      if (docToEdit) {
+        // Update document
+        await updateDocument(docToEdit.id, {
+          propertyId,
+          pid: propertydoc.pid,
+          postedBy: "Propdial",
+          keys: keyRows,
+        });
+      } else {
+        // Add new document
+        await addDocument({
+          propertyId,
+          pid: propertydoc.pid,
+          postedBy: "Propdial",
+          keys: keyRows,
+        });
+      }
+
       setKeyRows([
         { keyFor: "", keyNumber: "", numberOfKey: "", keyRemark: "" },
       ]); // Reset after save
       setIsUploading(false);
+      setDocToEdit(null); // Reset docToEdit after editing
       setShowAIForm(!showAIForm);
     } catch (error) {
-      console.error("Error adding document:", error);
+      console.error("Error adding or updating document:", error);
       setIsUploading(false);
       setShowAIForm(!showAIForm);
     }
+  };
+
+  // Handle edit click
+  const handleEditClick = (doc) => {
+    setDocToEdit(doc); // Set the document to be edited
+    setKeyRows(doc.keys); // Populate form with existing values
+    setShowAIForm(true); // Show the form
   };
 
   const handleDeleteClick = (docId) => {
@@ -370,75 +403,67 @@ const PropertyKeyDetail = () => {
                 {keyRows.map((row, index) => (
                   <div className="row fields_box" key={index}>
                     <div className="col-md-3">
-                      <div className="add_info_text w-100">
-                        <div className="form_field w-100">
-                          <input
-                            type="text"
-                            value={row.keyFor}
-                            onChange={(e) =>
-                              handleInputChange(index, "keyFor", e.target.value)
-                            }
-                            placeholder="For (e.g. Main Door, Bedroom, Almiras ... )"
-                            className="w-100"
-                          />
-                        </div>{" "}
-                      </div>{" "}
-                    </div>
-                    <div className="col-md-3">
-                      <div className="add_info_text w-100">
-                        <div className="form_field w-100">
-                          <input
-                            type="text"
-                            value={row.keyNumber}
-                            onChange={(e) =>
-                              handleInputChange(
-                                index,
-                                "keyNumber",
-                                e.target.value
-                              )
-                            }
-                            placeholder="Key number"
-                            className="w-100"
-                          />
-                        </div>
+                      <div className="form_field w-100">
+                        <input
+                          type="text"
+                          value={row.keyFor}
+                          onChange={(e) =>
+                            handleInputChange(index, "keyFor", e.target.value)
+                          }
+                          placeholder="For (e.g. Main Door, Bedroom, Almiras ... )"
+                          className="w-100"
+                        />
                       </div>
                     </div>
                     <div className="col-md-3">
-                      <div className="add_info_text w-100">
-                        <div className="form_field w-100">
-                          <input
-                            type="number"
-                            value={row.numberOfKey}
-                            onChange={(e) =>
-                              handleInputChange(
-                                index,
-                                "numberOfKey",
-                                e.target.value
-                              )
-                            }
-                            placeholder="Number of keys"
-                            className="w-100"
-                          />
-                        </div>
+                      <div className="form_field w-100">
+                        <input
+                          type="text"
+                          value={row.keyNumber}
+                          onChange={(e) =>
+                            handleInputChange(
+                              index,
+                              "keyNumber",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Key number"
+                          className="w-100"
+                        />
                       </div>
                     </div>
                     <div className="col-md-3">
-                      <div className="add_info_text w-100">
-                        <div className="form_field w-100">
-                          <input
-                            type="text"
-                            value={row.keyRemark}
-                            onChange={(e) =>
-                              handleInputChange(
-                                index,
-                                "keyRemark",
-                                e.target.value
-                              )
-                            }
-                            placeholder="Remark"
-                            className="w-100"
-                          />
-                        </div>
+                      <div className="form_field w-100">
+                        <input
+                          type="number"
+                          value={row.numberOfKey}
+                          onChange={(e) =>
+                            handleInputChange(
+                              index,
+                              "numberOfKey",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Number of keys"
+                          className="w-100"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-3">
+                      <div className="form_field w-100">
+                        <input
+                          type="text"
+                          value={row.keyRemark}
+                          onChange={(e) =>
+                            handleInputChange(
+                              index,
+                              "keyRemark",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Remark"
+                          className="w-100"
+                        />
                       </div>
                     </div>
 
@@ -455,13 +480,7 @@ const PropertyKeyDetail = () => {
                   </div>
                 ))}
 
-                <div
-                  className="addmore mt-2"
-                  onClick={handleAddKeyRow}
-                  style={{
-                    marginLeft: "auto",
-                  }}
-                >
+                <div className="addmore mt-2" onClick={handleAddKeyRow}>
                   Add More
                 </div>
               </div>
@@ -470,7 +489,10 @@ const PropertyKeyDetail = () => {
                 <div className="col-sm-2 col-6">
                   <div
                     className="theme_btn btn_border text-center no_icon"
-                    onClick={isUploading ? null : handleShowAIForm}
+                    onClick={() => {
+                      setDocToEdit(null); // Reset docToEdit when cancelling
+                      handleShowAIForm();
+                    }}
                   >
                     Cancel
                   </div>
@@ -480,9 +502,9 @@ const PropertyKeyDetail = () => {
                     className={`theme_btn btn_fill text-center no_icon ${
                       isUploading ? "disabled" : ""
                     }`}
-                    onClick={isUploading ? null : addPropertyKey}
+                    onClick={isUploading ? null : addOrUpdatePropertyKey}
                   >
-                    {isUploading ? "Uploading..." : "Save"}
+                    {isUploading ? "Saving..." : docToEdit ? "Update" : "Save"}
                   </div>
                 </div>
               </div>
@@ -510,9 +532,18 @@ const PropertyKeyDetail = () => {
           {propertyKeyDoc &&
             propertyKeyDoc.map((doc, index) => (
               <div className="key_card_single relative" key={index}>
-                <div className="top">
+                <div className="top relative">
                   By <b>Sanskar Solanki</b>, On{" "}
                   <b>{format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}</b>
+                  {user && doc.createdBy === user.uid && index === 0 && (
+                    <span
+                      class="material-symbols-outlined keys_edit"
+                      onClick={() => handleEditClick(doc)}
+                      
+                    >
+                      edit_square
+                    </span>
+                  )}
                 </div>
                 <div className="key_details">
                   {Array.isArray(doc.keys) &&
@@ -540,8 +571,9 @@ const PropertyKeyDetail = () => {
                       </div>
                     ))}
                 </div>
-                {user && user.role === "admin" && (
+                {/* {user && user.role === "admin" && (
                   <>
+                  
                     <div
                       onClick={() => handleDeleteClick(doc.id)}
                       className="text_red pointer delete_box_top"
@@ -564,20 +596,20 @@ const PropertyKeyDetail = () => {
                       <div className="yes_no_btn">
                         <div
                           className="theme_btn full_width no_icon text-center btn_border"
-                          onClick={confirmDeleteDocument} 
+                          onClick={confirmDeleteDocument}
                         >
                           Yes
                         </div>
                         <div
                           className="theme_btn full_width no_icon text-center btn_fill"
-                          onClick={handleConfirmClose} 
+                          onClick={handleConfirmClose}
                         >
                           No
                         </div>
                       </div>
                     </Modal>
                   </>
-                )}
+                )} */}
               </div>
             ))}
         </div>
