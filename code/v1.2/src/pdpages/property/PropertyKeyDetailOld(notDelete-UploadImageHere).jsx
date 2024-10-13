@@ -27,14 +27,13 @@ const PropertyKeyDetail = () => {
 
   // all usestates
   const [showAIForm, setShowAIForm] = useState(false);
+  const [keyFor, setKeyFor] = useState("");
+  const [keyRemark, setKeyRemark] = useState("");
   const [keyNumber, setKeyNumber] = useState("");
   const [numberOfKey, setNumberOfKey] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [documentFile, setDocumentFile] = useState(null);
   const [checkedStates, setCheckedStates] = useState({});
-  const [documentFiles, setDocumentFiles] = useState([]); // Store selected files
-const [imageUrls, setImageUrls] = useState([]); // Store URLs of uploaded images
-
   const [newDocId, setNewDocId] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
@@ -44,15 +43,15 @@ const [imageUrls, setImageUrls] = useState([]); // Store URLs of uploaded images
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const handleKeyNumberChange = (event) => setKeyNumber(event.target.value);
   const handleNumberOfKeyChange = (event) => setNumberOfKey(event.target.value);
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    if (files.length + documentFiles.length > 5) {
-      alert("You can upload a maximum of 5 images.");
-      return;
+  const handleKeyForChange = (event) => setKeyFor(event.target.value);
+  const handleKeyRemarkChange = (event) => setKeyRemark(event.target.value);
+  const handleFileChange = (event, docId) => {
+    const file = event.target.files[0];
+    if (file) {
+      setDocumentFile(file);
+      setNewDocId(docId);
     }
-    setDocumentFiles((prevFiles) => [...prevFiles, ...files]);
   };
-  
 
   const getFileType = (file) => {
     const fileExtension = file.name.split(".").pop().toLowerCase();
@@ -60,61 +59,69 @@ const [imageUrls, setImageUrls] = useState([]); // Store URLs of uploaded images
   };
 
   const addPropertyKey = async () => {
-    if (keyNumber === "" || numberOfKey === "") {
+    if ("") {
       alert("All fields are required!");
       return;
     }
-  
+
     try {
       setIsUploading(true);
       const docRef = await addDocument({
         keyNumber,
         numberOfKey,
+        keyFor,
+        keyRemark,
         propertyId,
         pid: propertydoc.pid,
         postedBy: "Propdial",
       });
       setKeyNumber("");
       setNumberOfKey("");
-      
-      // Start uploading all images
-      await Promise.all(documentFiles.map(file => uploadDocumentImage(docRef.id, file)));
-      
-      setDocumentFiles([]); // Clear the files after uploading
+      setKeyRemark("");
+      setKeyFor("");
       setIsUploading(false);
+      setNewDocId(docRef.id);
     } catch (error) {
       console.error("Error adding document:", error);
+      setKeyNumber("");
+      setNumberOfKey("");
+      setKeyRemark("");
+      setKeyFor("");
       setIsUploading(false);
+      setShowAIForm(!showAIForm);
     }
   };
-  
-
-  
 
   useEffect(() => {
     if (newDocId && documentFile) {
       uploadDocumentImage();
     }
   }, [newDocId, documentFile]);
-  const uploadDocumentImage = async (newDocId, file) => {
+
+  const uploadDocumentImage = async () => {
     try {
-      const fileType = getFileType(file);
-      const storageRef = projectStorage.ref(`docs/${newDocId}/${file.name}`);
-      await storageRef.put(file);
+      setIsUploading(true);
+      setUploadingDocId(newDocId);
+      const fileType = getFileType(documentFile);
+      const storageRef = projectStorage.ref(
+        `docs/${newDocId}/${documentFile.name}`
+      );
+      await storageRef.put(documentFile);
       const fileURL = await storageRef.getDownloadURL();
-      setImageUrls(prevUrls => [...prevUrls, fileURL]); // Store uploaded image URLs
       await updateDocument(newDocId, {
         keyImageUrl: fileURL,
         mediaType: fileType,
       });
+      setDocumentFile(null);
+      setIsUploading(false);
+      setUploadingDocId(null);
+      fileInputRef.current.value = "";
     } catch (error) {
       console.error("Error uploading document image:", error);
+      setIsUploading(false);
+      setUploadingDocId(null);
     }
   };
-  const handleDeleteImage = (index) => {
-    setImageUrls(prevUrls => prevUrls.filter((_, i) => i !== index));
-  };
-  
 
   const handleDeleteClick = (docId) => {
     setDocToDelete(docId);
@@ -157,6 +164,33 @@ const [imageUrls, setImageUrls] = useState([]); // Store URLs of uploaded images
     }
   };
   // prop summary click start
+
+  // Convert digit into comma formate start
+  function formatNumberWithCommas(number) {
+    // Convert number to a string if it's not already
+    let numStr = number.toString();
+
+    // Handle decimal part if present
+    const [integerPart, decimalPart] = numStr.split(".");
+
+    // Regular expression for Indian comma format
+    const lastThreeDigits = integerPart.slice(-3);
+    const otherDigits = integerPart.slice(0, -3);
+
+    const formattedNumber =
+      otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+      (otherDigits ? "," : "") +
+      lastThreeDigits;
+
+    // Return the formatted number with decimal part if it exists
+    return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
+  }
+
+  // Use replace() to remove all commas
+  function removeCommas(stringWithCommas) {
+    const stringWithoutCommas = stringWithCommas.replace(/,/g, "");
+    return stringWithoutCommas;
+  }
 
   return (
     <div className="top_header_pg pg_bg property_keys_pg">
@@ -217,13 +251,34 @@ const [imageUrls, setImageUrls] = useState([]); // Store URLs of uploaded images
                     <div className="detail">
                       <div>
                         <span className="card_badge">{propertydoc.pid}</span>{" "}
-                        <span className="card_badge">
+                        <span
+                          className={`card_badge ${propertydoc.isActiveInactiveReview.toLowerCase()}`}
+                        >
                           {propertydoc.isActiveInactiveReview}
                         </span>
                       </div>
                       <h6 className="demand">
                         <span>₹</span>
-                        {propertydoc.demandPrice}
+                        {propertydoc.flag.toLowerCase() === "pms only" ||
+                        propertydoc.flag.toLowerCase() === "pms after rent" ||
+                        propertydoc.flag.toLowerCase() ===
+                          "available for rent" ||
+                        propertydoc.flag.toLowerCase() === "rented out"
+                          ? propertydoc.demandPriceRent &&
+                            formatNumberWithCommas(propertydoc.demandPriceRent)
+                          : propertydoc.flag.toLowerCase() ===
+                              "rent and sale" ||
+                            propertydoc.flag.toLowerCase() === "rented but sale"
+                          ? propertydoc.demandPriceRent &&
+                            formatNumberWithCommas(
+                              propertydoc.demandPriceRent
+                            ) +
+                              " / ₹" +
+                              propertydoc.demandPriceSale &&
+                            formatNumberWithCommas(propertydoc.demandPriceSale)
+                          : propertydoc.demandPriceSale &&
+                            formatNumberWithCommas(propertydoc.demandPriceSale)}
+
                         {propertydoc.maintenancecharges !== "" && (
                           <span
                             style={{
@@ -281,7 +336,34 @@ const [imageUrls, setImageUrls] = useState([]); // Store URLs of uploaded images
                           </span>
                         </div>
                         <h6 className="demand">
-                          <span>₹</span> {propertydoc.demandPrice}
+                          <span>₹</span>
+                          {propertydoc.flag.toLowerCase() === "pms only" ||
+                          propertydoc.flag.toLowerCase() === "pms after rent" ||
+                          propertydoc.flag.toLowerCase() ===
+                            "available for rent" ||
+                          propertydoc.flag.toLowerCase() === "rented out"
+                            ? propertydoc.demandPriceRent &&
+                              formatNumberWithCommas(
+                                propertydoc.demandPriceRent
+                              )
+                            : propertydoc.flag.toLowerCase() ===
+                                "rent and sale" ||
+                              propertydoc.flag.toLowerCase() ===
+                                "rented but sale"
+                            ? propertydoc.demandPriceRent &&
+                              formatNumberWithCommas(
+                                propertydoc.demandPriceRent
+                              ) +
+                                " / ₹" +
+                                propertydoc.demandPriceSale &&
+                              formatNumberWithCommas(
+                                propertydoc.demandPriceSale
+                              )
+                            : propertydoc.demandPriceSale &&
+                              formatNumberWithCommas(
+                                propertydoc.demandPriceSale
+                              )}
+
                           {propertydoc.maintenancecharges !== "" && (
                             <span
                               style={{
@@ -326,6 +408,19 @@ const [imageUrls, setImageUrls] = useState([]); // Store URLs of uploaded images
             <section className="my_big_card add_doc_form">
               <div className="aai_form">
                 <div className="row" style={{ rowGap: "18px" }}>
+                <div className="col-md-3">
+                    <div className="add_info_text w-100">
+                      <div className="form_field w-100">
+                        <input
+                          type="text"
+                          value={keyFor}
+                          onChange={handleKeyForChange}
+                          placeholder="For"
+                          className="w-100"
+                        />
+                      </div>
+                    </div>
+                  </div>
                   <div className="col-md-3">
                     <div className="add_info_text w-100">
                       <div className="form_field w-100">
@@ -352,6 +447,20 @@ const [imageUrls, setImageUrls] = useState([]); // Store URLs of uploaded images
                       </div>
                     </div>
                   </div>
+                  <div className="col-md-3">
+                    <div className="add_info_text w-100">
+                      <div className="form_field w-100">
+                        <textarea                        
+                          value={keyRemark}
+                          onChange={handleKeyRemarkChange}
+                          placeholder="Remark"
+                          className="w-100"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <span>Add more</span>
+                  <>Close</>
                 </div>
               </div>
               <div className="row mt-3">
@@ -401,24 +510,50 @@ const [imageUrls, setImageUrls] = useState([]); // Store URLs of uploaded images
                 className="my_small_card notification_card relative"
                 key={index}
               >
-                             <input
-  type="file"
-  multiple
-  onChange={handleFileChange}
-  ref={fileInputRef}
-/>
-
-                <div className="uploaded-images">
-  {imageUrls.map((url, index) => (
-    <div key={index} className="uploaded-image">
-      <img src={url} alt={`Uploaded Preview ${index + 1}`} />
-      <button onClick={() => handleDeleteImage(index)}>Delete</button>
-    </div>
-  ))}
-</div>
                 <div className="left">
-   
-
+                  <div className="img_div relative">
+                    {uploadingDocId !== doc.id && (
+                      <label
+                        htmlFor={`upload_img_${doc.id}`}
+                        className="upload_img click_text by_text"
+                      >
+                        Upload Key Img
+                        <input
+                          type="file"
+                          onChange={(e) => handleFileChange(e, doc.id)}
+                          ref={fileInputRef}
+                          id={`upload_img_${doc.id}`}
+                        />
+                      </label>
+                    )}
+                    {uploadingDocId === doc.id ? (
+                      <div
+                        className="loader d-flex justify-content-center align-items-center"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        <BeatLoader color={"#FF5733"} loading={true} />
+                      </div>
+                    ) : doc.mediaType === "pdf" ? (
+                      <iframe
+                        title="PDF Viewer"
+                        src={doc.keyImageUrl}
+                        style={{
+                          width: "100%",
+                          aspectRatio: "3/2",
+                        }}
+                      ></iframe>
+                    ) : (
+                      <img
+                        src={
+                          doc.keyImageUrl || "/assets/img/icons/key-chain.png"
+                        }
+                        alt="Document"
+                      />
+                    )}
+                  </div>
                   <div className="right">
                     <div className="right_inner">
                       <div className="ri_single">

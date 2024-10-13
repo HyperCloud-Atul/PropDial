@@ -7,7 +7,6 @@ const MakeInactivePopup = ({
   propertyDocument,
   handleSelectedReasonChange,
   handleInactiveRemarkChange,
-  inactiveRemark,
   handleSaveChanges,
 }) => {
   const reasonsForInactive = [
@@ -90,7 +89,6 @@ const MakeInactivePopup = ({
         <div className="form_field w-100" >
           <div className="relative">
             <textarea             
-              // value={inactiveRemark}
               onChange={handleInactiveRemarkChange}
               placeholder="Remark"
               className="w-100"
@@ -104,10 +102,10 @@ const MakeInactivePopup = ({
        
         <div className="vg22"></div>
         <div className="d-flex align-items-center justify-content-between">
-          <div className="cancel_btn" onClick={handleClose}>
+          <div className="theme_btn btn_border no_icon text-center" onClick={handleClose}>
             Cancel
           </div>
-          <div className="done_btn" onClick={handleSaveChanges}>
+          <div className="theme_btn btn_fill no_icon text-center" onClick={handleSaveChanges}>
             Make Inactive
           </div>
         </div>

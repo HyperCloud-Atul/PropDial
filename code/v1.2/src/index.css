@@ -561,7 +561,7 @@ select {
   cursor: pointer;
 }
 
-.form_field.outline {
+.form_field.outline, .fields_box {
   background: #f0f5ff;
   border: none;
   border-radius: 8px;
@@ -917,7 +917,7 @@ h2.card_title {
     display: block !important;
   }
   .form_field.st-2 .radio_group.air {
-    grid-template-columns: repeat(3, 1fr); 
+    grid-template-columns: repeat(1, 1fr); 
   }
   .on_desktop_hide_575{
     display: none !important;

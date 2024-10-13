@@ -830,24 +830,26 @@ const PropertyDetails = () => {
   // END CODE FOR EDIT TEXT USING TEXT EDITOR
 
   const handleIsActiveInactiveReview = async (e, option) => {
-    // console.log("In handleIsActiveInactiveReview")
-    console.log("option: ", option);
-    // console.log("selectedpropertyid: ", selectedpropertyid)
-    // const propid = document.getElementById("propertydocid")
-    // console.log("propid: ", propid)
-    console.log("propertyid: ", propertyid);
-
     e.preventDefault();
 
-    const updatedProperty = {
-      isActiveInactiveReview: option,
-      updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
-    };
+    // Base updatedProperty object
+    const updatedProperty = {};
 
-    // console.log("updatedProperty", updatedProperty);
-    // console.log('propertydoc: ', propertydoc)
+    // Check if option is 'Active' or 'In-Review' and add corresponding fields
+    if (option === "Active") {
+      updatedProperty.isActiveInactiveReview = option;
+      updatedProperty.isActiveUpdatedAt = timestamp.fromDate(new Date());
+      updatedProperty.isActiveUpdatedBy = user.uid;
+    } else if (option === "In-Review") {
+      updatedProperty.isActiveInactiveReview = option;
+      updatedProperty.isReviewUpdatedAt = timestamp.fromDate(new Date());
+      updatedProperty.isReviewUpdatedBy = user.uid;
+    }
 
+    // Optionally, you can log the updated object for debugging
+    console.log("Updated Property:", updatedProperty);
+
+    // Update the document with the updated property data
     await updateDocument(propertyid, updatedProperty);
   };
 
@@ -969,8 +971,8 @@ const PropertyDetails = () => {
       isActiveInactiveReview: "Inactive",
       resonForInactiveProperty: selectedReason,
       remarkForInactiveProperty: inactiveRemark,
-      updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
+      isInactiveUpdatedAt: timestamp.fromDate(new Date()),
+      isInactiveUpdatedBy: user.uid,
     };
 
     // console.log("updatedProperty", updatedProperty);
@@ -1169,7 +1171,7 @@ const PropertyDetails = () => {
                   //     </div>
                   //   </div>
                   // </div>
-                  <div className="property_card_single mobile_full_card">
+                  <div className="property_card_single mobile_full_card overflow_unset">
                     <div className="more_detail_card_inner">
                       {/* <h2 className="card_title">About Property</h2> */}
                       <div className="p_info">
@@ -1190,16 +1192,6 @@ const PropertyDetails = () => {
                           </div>
                         </div>
 
-                        {/* <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/Property_status.png" alt="" />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Property Status</h6>
-                              <h5> Active</h5>
-                            </div>
-
-                          </div> */}
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -1329,10 +1321,38 @@ const PropertyDetails = () => {
                                         done
                                       </span>
                                     </div>
-                                    {propertyDocument.isActiveInactiveReview ===
-                                    "Active"
-                                      ? "Active"
-                                      : "Make Active"}
+                                    <div className="d-flex justify-content-between w-100 align-items-center">
+                                      <div>
+                                        {propertyDocument.isActiveInactiveReview ===
+                                        "Active"
+                                          ? "Active"
+                                          : "Make Active"}
+                                      </div>
+                                      <div>
+                                        {propertyDocument.isActiveInactiveReview ===
+                                          "Active" &&
+                                          propertyDocument.isActiveUpdatedAt && (
+                                            <div>
+                                              <div className="info_icon">
+                                                <span class="material-symbols-outlined">
+                                                  info
+                                                </span>
+                                                <div className="info_icon_inner">
+                                                  <b className="text_green2">
+                                                  Active</b> by{" "}
+                                                  <b>Sanskar Solanki</b> on{" "}
+                                                  <b>
+                                                    {format(
+                                                      propertyDocument.isActiveUpdatedAt.toDate(),
+                                                      "dd-MMM-yy hh:mm a"
+                                                    )}
+                                                  </b>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          )}
+                                      </div>
+                                    </div>
                                   </label>
                                 </div>
                               </div>
@@ -1347,9 +1367,10 @@ const PropertyDetails = () => {
                                 >
                                   <input
                                     type="checkbox"
-                                    id={"toggleFlag_inactive" + propertyid}                                   
+                                    id={"toggleFlag_inactive" + propertyid}
                                     onClick={
-                                      propertyDocument.isActiveInactiveReview === "Inactive"
+                                      propertyDocument.isActiveInactiveReview ===
+                                      "Inactive"
                                         ? null // Disable onClick if already inactive
                                         : handleShowWhyInactive
                                     }
@@ -1372,10 +1393,40 @@ const PropertyDetails = () => {
                                         done
                                       </span>
                                     </div>
-                                    {propertyDocument.isActiveInactiveReview ===
-                                    "Inactive"
-                                      ? "Inactive"
-                                      : "Make Inactive"}
+                                    <div className="d-flex justify-content-between w-100 align-items-center">
+                                      <div>
+                                        {propertyDocument.isActiveInactiveReview ===
+                                        "Inactive"
+                                          ? "Inactive"
+                                          : "Make Inactive"}
+                                      </div>
+                                      <div>
+                                        {propertyDocument.isActiveInactiveReview ===
+                                          "Inactive" &&
+                                          propertyDocument.isInactiveUpdatedAt && (
+                                            <div>
+                                              <div className="info_icon">
+                                                <span class="material-symbols-outlined">
+                                                  info
+                                                </span>
+                                                <div className="info_icon_inner">
+                                                  <b className="text_red">Inactive</b> by{" "}
+                                                  <b>Sanskar Solanki</b> on,{" "}
+                                                  <b>
+                                                    {format(
+                                                      propertyDocument.isInactiveUpdatedAt.toDate(),
+                                                      "dd-MMM-yy hh:mm a"
+                                                    )}
+                                                  </b>
+                                                  ,{" "}
+                                                  reason <b>{propertyDocument.resonForInactiveProperty}</b> <br />
+                                                <div className="mt-1">"{propertyDocument.remarkForInactiveProperty}"</div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          )}
+                                      </div>
+                                    </div>
                                   </label>
                                 </div>
                               </div>
@@ -1752,51 +1803,6 @@ const PropertyDetails = () => {
                   <div className="extra_info_card_property mobile_full_card">
                     <div className="card_upcoming">
                       <div className="parent">
-                        <div className="child coming_soon">
-                          <div className="left">
-                            <h5>0-0-0</h5>
-                            <div className="line">
-                              <div
-                                className="line_fill"
-                                style={{
-                                  width: "25%",
-                                  background: "#00a300",
-                                }}
-                              ></div>
-                            </div>
-                            <h6>Keys</h6>
-                          </div>
-                        </div>
-                        <div className="child coming_soon">
-                          <div className="left">
-                            <h5>0-0-0</h5>
-                            <div className="line">
-                              <div
-                                className="line_fill"
-                                style={{
-                                  width: "25%",
-                                  background: "#00a300",
-                                }}
-                              ></div>
-                            </div>
-                            <h6>Utility Bills</h6>
-                          </div>
-                        </div>
-                        <div className="child coming_soon">
-                          <div className="left">
-                            <h5>0-0-0</h5>
-                            <div className="line">
-                              <div
-                                className="line_fill"
-                                style={{
-                                  width: "25%",
-                                  background: "#00a300",
-                                }}
-                              ></div>
-                            </div>
-                            <h6>Advertisement</h6>
-                          </div>
-                        </div>
                         <div className="child coming_soon">
                           <div className="left">
                             <h5>0-0-0</h5>

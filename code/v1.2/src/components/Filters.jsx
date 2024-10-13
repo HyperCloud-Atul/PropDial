@@ -67,7 +67,7 @@ export default function Filters({ changeFilter, filterList, filterLength }) {
     useEffect(() => {
         const updateMaxVisibleFilters = () => {
             if (window.innerWidth < 767) {
-                setMaxVisibleFilters(2);
+                setMaxVisibleFilters(3);
             } else {
                 setMaxVisibleFilters(5);
             }

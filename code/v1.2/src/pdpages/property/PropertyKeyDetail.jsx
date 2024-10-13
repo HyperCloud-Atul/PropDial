@@ -27,89 +27,65 @@ const PropertyKeyDetail = () => {
 
   // all usestates
   const [showAIForm, setShowAIForm] = useState(false);
-  const [keyNumber, setKeyNumber] = useState("");
-  const [numberOfKey, setNumberOfKey] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-  const [documentFile, setDocumentFile] = useState(null);
-  const [checkedStates, setCheckedStates] = useState({});
-  const [newDocId, setNewDocId] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [docToDelete, setDocToDelete] = useState(null);
-  const [uploadingDocId, setUploadingDocId] = useState(null); // Track uploading document ID
-
-  // all functions
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
-  const handleKeyNumberChange = (event) => setKeyNumber(event.target.value);
-  const handleNumberOfKeyChange = (event) => setNumberOfKey(event.target.value);
-  const handleFileChange = (event, docId) => {
-    const file = event.target.files[0];
-    if (file) {
-      setDocumentFile(file);
-      setNewDocId(docId);
-    }
+  // all functions
+
+  const [keyRows, setKeyRows] = useState([
+    { keyFor: "", keyNumber: "", numberOfKey: "", keyRemark: "" }, // Default one row
+  ]);
+
+  // Add more rows
+  const handleAddKeyRow = () => {
+    setKeyRows([
+      ...keyRows,
+      { keyFor: "", keyNumber: "", numberOfKey: "", keyRemark: "" },
+    ]);
   };
 
-  const getFileType = (file) => {
-    const fileExtension = file.name.split(".").pop().toLowerCase();
-    return fileExtension === "pdf" ? "pdf" : "image";
+  // Remove a row
+  const handleRemoveKeyRow = (index) => {
+    const newKeyRows = keyRows.filter(
+      (_, keyRowIndex) => keyRowIndex !== index
+    );
+    setKeyRows(newKeyRows);
+  };
+
+  // Handle input change for dynamic rows
+  const handleInputChange = (index, field, value) => {
+    const newKeyRows = [...keyRows];
+    newKeyRows[index][field] = value;
+    setKeyRows(newKeyRows);
   };
 
   const addPropertyKey = async () => {
-    if ("") {
-      alert("All fields are required!");
+    if (
+      keyRows.some((row) => !row.keyFor || !row.keyNumber || !row.numberOfKey)
+    ) {
+      alert("All fields are required for each row!");
       return;
     }
 
     try {
       setIsUploading(true);
+      // Save the rows (array of maps) to Firestore
       const docRef = await addDocument({
-        keyNumber,
-        numberOfKey,
         propertyId,
         pid: propertydoc.pid,
         postedBy: "Propdial",
+        keys: keyRows, // Save rows as an array of maps
       });
-      setKeyNumber("");
-      setNumberOfKey("");
-      setIsUploading(false);
-      setNewDocId(docRef.id);
-    } catch (error) {
-      console.error("Error adding document:", error);
-      setKeyNumber("");
-      setNumberOfKey("");
+      setKeyRows([
+        { keyFor: "", keyNumber: "", numberOfKey: "", keyRemark: "" },
+      ]); // Reset after save
       setIsUploading(false);
       setShowAIForm(!showAIForm);
-    }
-  };
-
-  useEffect(() => {
-    if (newDocId && documentFile) {
-      uploadDocumentImage();
-    }
-  }, [newDocId, documentFile]);
-
-  const uploadDocumentImage = async () => {
-    try {
-      setIsUploading(true);
-      setUploadingDocId(newDocId);
-      const fileType = getFileType(documentFile);
-      const storageRef = projectStorage.ref(
-        `docs/${newDocId}/${documentFile.name}`
-      );
-      await storageRef.put(documentFile);
-      const fileURL = await storageRef.getDownloadURL();
-      await updateDocument(newDocId, {
-        keyImageUrl: fileURL,
-        mediaType: fileType,
-      });
-      setDocumentFile(null);
-      setIsUploading(false);
-      setUploadingDocId(null);
-      fileInputRef.current.value = "";
     } catch (error) {
-      console.error("Error uploading document image:", error);
+      console.error("Error adding document:", error);
       setIsUploading(false);
-      setUploadingDocId(null);
+      setShowAIForm(!showAIForm);
     }
   };
 
@@ -155,32 +131,26 @@ const PropertyKeyDetail = () => {
   };
   // prop summary click start
 
-    // Convert digit into comma formate start
-function formatNumberWithCommas(number) {
-  // Convert number to a string if it's not already
-  let numStr = number.toString();
+  // Convert digit into comma formate start
+  function formatNumberWithCommas(number) {
+    // Convert number to a string if it's not already
+    let numStr = number.toString();
 
-  // Handle decimal part if present
-  const [integerPart, decimalPart] = numStr.split(".");
+    // Handle decimal part if present
+    const [integerPart, decimalPart] = numStr.split(".");
 
-  // Regular expression for Indian comma format
-  const lastThreeDigits = integerPart.slice(-3);
-  const otherDigits = integerPart.slice(0, -3);
+    // Regular expression for Indian comma format
+    const lastThreeDigits = integerPart.slice(-3);
+    const otherDigits = integerPart.slice(0, -3);
 
-  const formattedNumber =
-    otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
-    (otherDigits ? "," : "") +
-    lastThreeDigits;
+    const formattedNumber =
+      otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+      (otherDigits ? "," : "") +
+      lastThreeDigits;
 
-  // Return the formatted number with decimal part if it exists
-  return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
-}
-
-// Use replace() to remove all commas
-function removeCommas(stringWithCommas) {
-  const stringWithoutCommas = stringWithCommas.replace(/,/g, '');
-  return stringWithoutCommas;
-}
+    // Return the formatted number with decimal part if it exists
+    return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
+  }
 
   return (
     <div className="top_header_pg pg_bg property_keys_pg">
@@ -196,57 +166,103 @@ function removeCommas(stringWithCommas) {
                   className="theme_btn btn_fill no_icon text-center short_btn"
                   onClick={handleShowAIForm}
                 >
-                  Add New Key
+                  Add Keys
                 </div>
               )}
             </div>
           </div>
           <div className="col-lg-6">
-            {propertydoc &&
-              <div className="title_card short_prop_summary relative pointer" onClick={handleClick}>
+            {propertydoc && (
+              <div
+                className="title_card short_prop_summary relative pointer"
+                onClick={handleClick}
+              >
                 {expanded && (
                   <div className="top on_mobile_575">
-                    <div className="d-flex align-items-center" style={{
-                      gap: "5px"
-                    }} >
-                      <h6 style={{
-                        fontSize: "14px",
-                        fontWeight: "400"
-                      }}>{propertydoc.unitNumber} | {propertydoc.society} </h6>
+                    <div
+                      className="d-flex align-items-center"
+                      style={{
+                        gap: "5px",
+                      }}
+                    >
+                      <h6
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "400",
+                        }}
+                      >
+                        {propertydoc.unitNumber} | {propertydoc.society}{" "}
+                      </h6>
                     </div>
                   </div>
                 )}
                 <div className="on_desktop_hide_575">
                   <div className="left">
                     <div className="img">
-                      {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
-                        : <img src="/assets/img/admin_banner.jpg" alt="" />}
+                      {propertydoc.images.length > 0 ? (
+                        <img
+                          src={propertydoc.images[0]}
+                          alt={propertydoc.bhk}
+                        />
+                      ) : (
+                        <img src="/assets/img/admin_banner.jpg" alt="" />
+                      )}
                     </div>
                     <div className="detail">
                       <div>
-                        <span className="card_badge">
-                          {propertydoc.pid}
-                        </span>
-                        {" "}{" "}
-                        <span className={`card_badge ${propertydoc.isActiveInactiveReview.toLowerCase()}`}>
+                        <span className="card_badge">{propertydoc.pid}</span>{" "}
+                        <span
+                          className={`card_badge ${propertydoc.isActiveInactiveReview.toLowerCase()}`}
+                        >
                           {propertydoc.isActiveInactiveReview}
                         </span>
                       </div>
                       <h6 className="demand">
                         <span>₹</span>
-                        {(propertydoc.flag.toLowerCase() === "pms only" || propertydoc.flag.toLowerCase() === "pms after rent" || propertydoc.flag.toLowerCase() === "available for rent" || propertydoc.flag.toLowerCase() === "rented out") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) : (propertydoc.flag.toLowerCase() === "rent and sale" || propertydoc.flag.toLowerCase() === "rented but sale") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) + " / ₹" + propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale) : propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale)}
+                        {propertydoc.flag.toLowerCase() === "pms only" ||
+                        propertydoc.flag.toLowerCase() === "pms after rent" ||
+                        propertydoc.flag.toLowerCase() ===
+                          "available for rent" ||
+                        propertydoc.flag.toLowerCase() === "rented out"
+                          ? propertydoc.demandPriceRent &&
+                            formatNumberWithCommas(propertydoc.demandPriceRent)
+                          : propertydoc.flag.toLowerCase() ===
+                              "rent and sale" ||
+                            propertydoc.flag.toLowerCase() === "rented but sale"
+                          ? propertydoc.demandPriceRent &&
+                            formatNumberWithCommas(
+                              propertydoc.demandPriceRent
+                            ) +
+                              " / ₹" +
+                              propertydoc.demandPriceSale &&
+                            formatNumberWithCommas(propertydoc.demandPriceSale)
+                          : propertydoc.demandPriceSale &&
+                            formatNumberWithCommas(propertydoc.demandPriceSale)}
 
-                        {propertydoc.maintenancecharges !== '' && <span
-                          style={{
-                            fontSize: "10px",
-                          }}
-                        >
-                          + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
-                        </span>}
+                        {propertydoc.maintenancecharges !== "" && (
+                          <span
+                            style={{
+                              fontSize: "10px",
+                            }}
+                          >
+                            + ₹{propertydoc.maintenancecharges} (
+                            {propertydoc.maintenancechargesfrequency})
+                          </span>
+                        )}
                       </h6>
-                      <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
-                      <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
-                      <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
+                      <h6>
+                        {propertydoc.unitNumber} | {propertydoc.society}{" "}
+                      </h6>
+                      <h6>
+                        {propertydoc.bhk} | {propertydoc.propertyType}{" "}
+                        {propertydoc.furnishing === ""
+                          ? ""
+                          : " | " + propertydoc.furnishing + "Furnished"}{" "}
+                      </h6>
+                      <h6>
+                        {propertydoc.locality}, {propertydoc.city} |{" "}
+                        {propertydoc.state}
+                      </h6>
                     </div>
                   </div>
                 </div>
@@ -254,41 +270,84 @@ function removeCommas(stringWithCommas) {
                   {!expanded && (
                     <div className="left">
                       <div className="img w-100 d-flex align-items-center">
-                        {propertydoc.images.length > 0 ? <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
-                          : <img src="/assets/img/admin_banner.jpg" alt="" />}
-                        <Link to={(`/propertydetails/${propertyId}`)} className='text_green text-center' style={{
-                          flexGrow: "1"
-                        }}>
+                        {propertydoc.images.length > 0 ? (
+                          <img
+                            src={propertydoc.images[0]}
+                            alt={propertydoc.bhk}
+                          />
+                        ) : (
+                          <img src="/assets/img/admin_banner.jpg" alt="" />
+                        )}
+                        <Link
+                          to={`/propertydetails/${propertyId}`}
+                          className="text_green text-center"
+                          style={{
+                            flexGrow: "1",
+                          }}
+                        >
                           View Detail
                         </Link>
                       </div>
                       <div className="detail">
                         <div>
-                          <span className="card_badge">
-                            {propertydoc.pid}
-                          </span>
-                          {" "}{" "}
+                          <span className="card_badge">{propertydoc.pid}</span>{" "}
                           <span className="card_badge">
                             {propertydoc.isActiveInactiveReview}
                           </span>
                         </div>
                         <h6 className="demand">
-                        <span>₹</span>
-                        {(propertydoc.flag.toLowerCase() === "pms only" || propertydoc.flag.toLowerCase() === "pms after rent" || propertydoc.flag.toLowerCase() === "available for rent" || propertydoc.flag.toLowerCase() === "rented out") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) : (propertydoc.flag.toLowerCase() === "rent and sale" || propertydoc.flag.toLowerCase() === "rented but sale") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) + " / ₹" + propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale) : propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale)}
+                          <span>₹</span>
+                          {propertydoc.flag.toLowerCase() === "pms only" ||
+                          propertydoc.flag.toLowerCase() === "pms after rent" ||
+                          propertydoc.flag.toLowerCase() ===
+                            "available for rent" ||
+                          propertydoc.flag.toLowerCase() === "rented out"
+                            ? propertydoc.demandPriceRent &&
+                              formatNumberWithCommas(
+                                propertydoc.demandPriceRent
+                              )
+                            : propertydoc.flag.toLowerCase() ===
+                                "rent and sale" ||
+                              propertydoc.flag.toLowerCase() ===
+                                "rented but sale"
+                            ? propertydoc.demandPriceRent &&
+                              formatNumberWithCommas(
+                                propertydoc.demandPriceRent
+                              ) +
+                                " / ₹" +
+                                propertydoc.demandPriceSale &&
+                              formatNumberWithCommas(
+                                propertydoc.demandPriceSale
+                              )
+                            : propertydoc.demandPriceSale &&
+                              formatNumberWithCommas(
+                                propertydoc.demandPriceSale
+                              )}
 
-                        {propertydoc.maintenancecharges !== '' && <span
-                          style={{
-                            fontSize: "10px",
-                          }}
-                        >
-                          + ₹{propertydoc.maintenancecharges} ({propertydoc.maintenancechargesfrequency})
-                        </span>}
-                      </h6>                   
-                        <h6>{propertydoc.unitNumber} | {propertydoc.society} </h6>
-                        <h6>{propertydoc.bhk} | {propertydoc.propertyType} {propertydoc.furnishing === "" ? "" : " | " + propertydoc.furnishing + "Furnished"}  </h6>
-                        <h6>{propertydoc.locality}, {propertydoc.city} | {propertydoc.state}</h6>
-
-
+                          {propertydoc.maintenancecharges !== "" && (
+                            <span
+                              style={{
+                                fontSize: "10px",
+                              }}
+                            >
+                              + ₹{propertydoc.maintenancecharges} (
+                              {propertydoc.maintenancechargesfrequency})
+                            </span>
+                          )}
+                        </h6>
+                        <h6>
+                          {propertydoc.unitNumber} | {propertydoc.society}{" "}
+                        </h6>
+                        <h6>
+                          {propertydoc.bhk} | {propertydoc.propertyType}{" "}
+                          {propertydoc.furnishing === ""
+                            ? ""
+                            : " | " + propertydoc.furnishing + "Furnished"}{" "}
+                        </h6>
+                        <h6>
+                          {propertydoc.locality}, {propertydoc.city} |{" "}
+                          {propertydoc.state}
+                        </h6>
                       </div>
                     </div>
                   )}
@@ -300,7 +359,7 @@ function removeCommas(stringWithCommas) {
                   </span>
                 </div>
               </div>
-            }
+            )}
           </div>
         </div>
         {showAIForm && (
@@ -308,35 +367,105 @@ function removeCommas(stringWithCommas) {
             <div className="vg22"></div>
             <section className="my_big_card add_doc_form">
               <div className="aai_form">
-                <div className="row" style={{ rowGap: "18px" }}>
-                  <div className="col-md-3">
-                    <div className="add_info_text w-100">
-                      <div className="form_field w-100">
-                        <input
-                          type="text"
-                          value={keyNumber}
-                          onChange={handleKeyNumberChange}
-                          placeholder="Key number"
-                          className="w-100"
-                        />
+                {keyRows.map((row, index) => (
+                  <div className="row fields_box" key={index}>
+                    <div className="col-md-3">
+                      <div className="add_info_text w-100">
+                        <div className="form_field w-100">
+                          <input
+                            type="text"
+                            value={row.keyFor}
+                            onChange={(e) =>
+                              handleInputChange(index, "keyFor", e.target.value)
+                            }
+                            placeholder="For (e.g. Main Door, Bedroom, Almiras ... )"
+                            className="w-100"
+                          />
+                        </div>{" "}
+                      </div>{" "}
+                    </div>
+                    <div className="col-md-3">
+                      <div className="add_info_text w-100">
+                        <div className="form_field w-100">
+                          <input
+                            type="text"
+                            value={row.keyNumber}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "keyNumber",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Key number"
+                            className="w-100"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="add_info_text w-100">
-                      <div className="form_field w-100">
-                        <input
-                          type="number"
-                          value={numberOfKey}
-                          onChange={handleNumberOfKeyChange}
-                          placeholder="Number of key"
-                          className="w-100"
-                        />
+                    <div className="col-md-3">
+                      <div className="add_info_text w-100">
+                        <div className="form_field w-100">
+                          <input
+                            type="number"
+                            value={row.numberOfKey}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "numberOfKey",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Number of keys"
+                            className="w-100"
+                          />
+                        </div>
                       </div>
                     </div>
+                    <div className="col-md-3">
+                      <div className="add_info_text w-100">
+                        <div className="form_field w-100">
+                          <input
+                            type="text"
+                            value={row.keyRemark}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "keyRemark",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Remark"
+                            className="w-100"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      {index !== 0 && (
+                        <span
+                          className="pointer close_field"
+                          onClick={() => handleRemoveKeyRow(index)}
+                        >
+                          X
+                        </span>
+                      )}
+                    </div>
                   </div>
+                ))}
+
+                <div
+                  className="addmore mt-2"
+                  onClick={handleAddKeyRow}
+                  style={{
+                    marginLeft: "auto",
+                  }}
+                >
+                  Add More
                 </div>
               </div>
+
               <div className="row mt-3">
                 <div className="col-sm-2 col-6">
                   <div
@@ -363,8 +492,8 @@ function removeCommas(stringWithCommas) {
         {propertyKeyDoc && propertyKeyDoc.length !== 0 && (
           <>
             <div className="vg22"></div>
-            <hr />
-            <div className="vg22"></div>
+            {/* <hr />
+            <div className="vg22"></div> */}
           </>
         )}
         {propertyKeyDoc && propertyKeyDoc.length === 0 && (
@@ -377,91 +506,44 @@ function removeCommas(stringWithCommas) {
             <div>No Property Key Yet!</div>
           </div>
         )}
-        <div className="my_small_card_parent">
+        <div className="keys_card">
           {propertyKeyDoc &&
             propertyKeyDoc.map((doc, index) => (
-              <div
-                className="my_small_card notification_card relative"
-                key={index}
-              >
-                <div className="left">
-                  <div className="img_div relative">
-                    {uploadingDocId !== doc.id && (
-                      <label
-                        htmlFor={`upload_img_${doc.id}`}
-                        className="upload_img click_text by_text"
-                      >
-                        Upload Key Img
-                        <input
-                          type="file"
-                          onChange={(e) => handleFileChange(e, doc.id)}
-                          ref={fileInputRef}
-                          id={`upload_img_${doc.id}`}
-                        />
-                      </label>
-                    )}
-                    {uploadingDocId === doc.id ? (
-                      <div
-                        className="loader d-flex justify-content-center align-items-center"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      >
-                        <BeatLoader color={"#FF5733"} loading={true} />
+              <div className="key_card_single relative" key={index}>
+                <div className="top">
+                  By <b>Sanskar Solanki</b>, On{" "}
+                  <b>{format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}</b>
+                </div>
+                <div className="key_details">
+                  {Array.isArray(doc.keys) &&
+                    doc.keys.map((keySingle, keyindex) => (
+                      <div className="kd_single relative" key={keyindex}>
+                        <div className="left">
+                          <h6>{keySingle.keyNumber}</h6>
+                          <h6>{keySingle.keyFor}</h6>
+                        </div>
+                        <div className="right">
+                          <h5>{keySingle.numberOfKey}</h5>
+                        </div>
+                        {keySingle.keyRemark && (
+                          <div className="remark_info">
+                            <div className="info_icon">
+                              <span class="material-symbols-outlined">
+                                info
+                              </span>
+                              <div className="key_remark">
+                                {keySingle.keyRemark}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    ) : doc.mediaType === "pdf" ? (
-                      <iframe
-                        title="PDF Viewer"
-                        src={doc.keyImageUrl}
-                        style={{
-                          width: "100%",
-                          aspectRatio: "3/2",
-                        }}
-                      ></iframe>
-                    ) : (
-                      <img
-                        src={
-                          doc.keyImageUrl || "/assets/img/icons/key-chain.png"
-                        }
-                        alt="Document"
-                      />
-                    )}
-                  </div>
-                  <div className="right">
-                    <div className="right_inner">
-                      <div className="ri_single">
-                        <h5 className="title">{doc.keyNumber}</h5>
-                        <h6 className="sub_title text-capitalize">
-                          Key Number
-                        </h6>
-                      </div>
-                      <div className="ri_single">
-                        <h5 className="title">{doc.numberOfKey}</h5>
-                        <h6 className="sub_title text-capitalize">
-                          Number Of Key
-                        </h6>
-                      </div>
-                      <div className="ri_single">
-                        <h5 className="title">
-                          {" "}
-                          {format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}
-                        </h5>
-                        <h6 className="sub_title text-capitalize">Added At</h6>
-                      </div>
-                      <div className="ri_single">
-                        <h5 className="title text-capitalize">
-                          Sanskar Solanki
-                        </h5>
-                        <h6 className="sub_title text-capitalize">Added By</h6>
-                      </div>
-                    </div>
-                  </div>
+                    ))}
                 </div>
                 {user && user.role === "admin" && (
                   <>
                     <div
-                      onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
+                      onClick={() => handleDeleteClick(doc.id)}
                       className="text_red pointer delete_box_top"
                     >
                       <span class="material-symbols-outlined">
@@ -477,18 +559,18 @@ function removeCommas(stringWithCommas) {
                       <div className="alert_text text-center">Alert</div>
 
                       <div className="sure_content text-center">
-                        Are you sure you want to remove this utility bill?
+                        Are you sure you want to remove this keys?
                       </div>
                       <div className="yes_no_btn">
                         <div
                           className="theme_btn full_width no_icon text-center btn_border"
-                          onClick={confirmDeleteDocument} // Confirm and delete
+                          onClick={confirmDeleteDocument} 
                         >
                           Yes
                         </div>
                         <div
                           className="theme_btn full_width no_icon text-center btn_fill"
-                          onClick={handleConfirmClose} // Close modal without deleting
+                          onClick={handleConfirmClose} 
                         >
                           No
                         </div>

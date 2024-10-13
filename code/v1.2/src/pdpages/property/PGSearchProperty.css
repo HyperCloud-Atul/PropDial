@@ -215,6 +215,9 @@ span.material-symbols-outlined.fav {
     background: white;
     overflow: hidden;
 }
+.property_card_single.overflow_unset{
+    overflow: unset !important;
+}
 
 .property_card_single .id_badge {
     position: absolute;
