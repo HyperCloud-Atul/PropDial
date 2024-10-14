@@ -829,8 +829,43 @@ const PropertyDetails = () => {
 
   // END CODE FOR EDIT TEXT USING TEXT EDITOR
 
-  const handleIsActiveInactiveReview = async (e, option) => {
-    e.preventDefault();
+  // code for active or review property start
+
+  // State to handle modal visibility and the option selected (Active/In-Review)
+  const [showActiveReviewModal, setShowActiveReviewModal] = useState(false);
+  const [selectedAorROption, setSelectedAorROption] = useState(null); // Store selected option (Active/In-Review)
+  const [isProcessing, setIsProcessing] = useState(false); // For tracking the processing state
+
+  // Function to show the modal and store the selected option
+  const handleShowActiveReviewModal = (option) => {
+    setSelectedAorROption(option); // Set the option clicked (Active/In-Review)
+    setShowActiveReviewModal(true); // Show modal
+  };
+
+  // Function to close the modal
+  const handleCloseActiveReviewModal = () => {
+    setShowActiveReviewModal(false); // Close modal
+    setSelectedAorROption(null); // Reset the option
+  };
+
+  // Function to handle confirmation when user clicks "Yes"
+  const handleConfirm = async () => {
+    if (selectedAorROption) {
+      setIsProcessing(true); // Set processing state to true when clicked
+      try {
+        await handleIsActiveInactiveReview(selectedAorROption); // Pass the selected option (Active/In-Review)
+        setShowActiveReviewModal(false); // Close modal after successful update
+        setSelectedAorROption(null); // Reset option
+      } catch (error) {
+        console.error("Error updating property:", error); // Handle error case
+      } finally {
+        setIsProcessing(false); // Set processing state to false after completion
+      }
+    }
+  };
+
+  const handleIsActiveInactiveReview = async (option) => {
+    // e.preventDefault();
 
     // Base updatedProperty object
     const updatedProperty = {};
@@ -852,7 +887,7 @@ const PropertyDetails = () => {
     // Update the document with the updated property data
     await updateDocument(propertyid, updatedProperty);
   };
-
+  // code for active or review property end
   // modal controls start
   // start modal for property layout in detail
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -1261,12 +1296,15 @@ const PropertyDetails = () => {
                                   <input
                                     type="checkbox"
                                     id={"toggleFlag_inreview" + propertyid}
-                                    onClick={(e) =>
-                                      handleIsActiveInactiveReview(
-                                        e,
-                                        "In-Review"
-                                      )
-                                    }
+                                    // onClick={(e) =>
+                                    //   handleIsActiveInactiveReview(
+                                    //     e,
+                                    //     "In-Review"
+                                    //   )
+                                    // }
+                                    onClick={() =>
+                                      handleShowActiveReviewModal("In-Review")
+                                    } // Show modal on click
                                   />
                                   <label
                                     htmlFor={"toggleFlag_inreview" + propertyid}
@@ -1281,10 +1319,40 @@ const PropertyDetails = () => {
                                         done
                                       </span>
                                     </div>
-                                    {propertyDocument.isActiveInactiveReview ===
-                                    "In-Review"
-                                      ? "In-Review"
-                                      : "Make In-Review"}
+
+                                    <div className="d-flex justify-content-between w-100 align-items-center">
+                                      <div>
+                                        {propertyDocument.isActiveInactiveReview ===
+                                        "In-Review"
+                                          ? "In-Review"
+                                          : "Make In-Review"}
+                                      </div>
+                                      <div>
+                                        {propertyDocument.isActiveInactiveReview ===
+                                          "In-Review" &&
+                                          propertyDocument.isReviewUpdatedAt && (
+                                            <div>
+                                              <div className="info_icon">
+                                                <span class="material-symbols-outlined">
+                                                  info
+                                                </span>
+                                                <div className="info_icon_inner">
+                                                  <b className="text_blue">
+                                                    In-Review
+                                                  </b>{" "}
+                                                  by <b>Sanskar Solanki</b> on,{" "}
+                                                  <b>
+                                                    {format(
+                                                      propertyDocument.isReviewUpdatedAt.toDate(),
+                                                      "dd-MMM-yy hh:mm a"
+                                                    )}
+                                                  </b>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          )}
+                                      </div>
+                                    </div>
                                   </label>
                                 </div>
                               </div>
@@ -1300,9 +1368,12 @@ const PropertyDetails = () => {
                                   <input
                                     type="checkbox"
                                     id={"toggleFlag_active" + propertyid}
-                                    onClick={(e) =>
-                                      handleIsActiveInactiveReview(e, "Active")
-                                    }
+                                    // onClick={(e) =>
+                                    //   handleIsActiveInactiveReview(e, "Active")
+                                    // }
+                                    onClick={() =>
+                                      handleShowActiveReviewModal("Active")
+                                    } // Show modal on click
                                   />
                                   <label
                                     htmlFor={"toggleFlag_active" + propertyid}
@@ -1339,8 +1410,9 @@ const PropertyDetails = () => {
                                                 </span>
                                                 <div className="info_icon_inner">
                                                   <b className="text_green2">
-                                                  Active</b> by{" "}
-                                                  <b>Sanskar Solanki</b> on{" "}
+                                                    Active
+                                                  </b>{" "}
+                                                  by <b>Sanskar Solanki</b> on{" "}
                                                   <b>
                                                     {format(
                                                       propertyDocument.isActiveUpdatedAt.toDate(),
@@ -1356,6 +1428,56 @@ const PropertyDetails = () => {
                                   </label>
                                 </div>
                               </div>
+                              {/* Modal for confirmation */}
+                              <Modal
+                                show={showActiveReviewModal}
+                                onHide={handleCloseActiveReviewModal}
+                                centered
+                              >
+                                <Modal.Header
+                                  className="justify-content-center"
+                                  style={{
+                                    paddingBottom: "0px",
+                                    border: "none",
+                                  }}
+                                >
+                                  <h5>Confirmation</h5>
+                                </Modal.Header>
+                                <Modal.Body
+                                  className="text-center"
+                                  style={{
+                                    color: "#303030",
+                                    fontSize: "20px",
+                                    border: "none",
+                                  }}
+                                >
+                               Are you sure you want to <span style={{ color: selectedAorROption === "Active" ? "var(--theme-green2)" : selectedAorROption === "In-Review" ? "var(--theme-blue)" : "inherit" }}>
+  Make This {selectedAorROption}?
+</span>
+
+                                </Modal.Body>
+                                <Modal.Footer
+                                  className="d-grid"
+                                  style={{ border: "none", gap: "15px", gridTemplateColumns:"repeat(2,1fr)" }}
+                                >
+                                  <div
+                                    className="theme_btn btn_border no_icon text-center"
+                                    onClick={handleCloseActiveReviewModal}
+                                  >
+                                    No
+                                  </div>
+                                  <div
+                                    className={`theme_btn btn_fill no_icon text-center ${
+                                      isProcessing && "disabled"
+                                    }`}
+                                    onClick={
+                                      !isProcessing ? handleConfirm : null
+                                    } // Disable click when processing
+                                  >
+                                    {isProcessing ? "Processing..." : "Yes"}
+                                  </div>
+                                </Modal.Footer>
+                              </Modal>
                               <div className="radio_group_single">
                                 <div
                                   className={
@@ -1410,17 +1532,30 @@ const PropertyDetails = () => {
                                                   info
                                                 </span>
                                                 <div className="info_icon_inner">
-                                                  <b className="text_red">Inactive</b> by{" "}
-                                                  <b>Sanskar Solanki</b> on,{" "}
+                                                  <b className="text_red">
+                                                    Inactive
+                                                  </b>{" "}
+                                                  by <b>Sanskar Solanki</b> on,{" "}
                                                   <b>
                                                     {format(
                                                       propertyDocument.isInactiveUpdatedAt.toDate(),
                                                       "dd-MMM-yy hh:mm a"
                                                     )}
                                                   </b>
-                                                  ,{" "}
-                                                  reason <b>{propertyDocument.resonForInactiveProperty}</b> <br />
-                                                <div className="mt-1">"{propertyDocument.remarkForInactiveProperty}"</div>
+                                                  , reason{" "}
+                                                  <b>
+                                                    {
+                                                      propertyDocument.resonForInactiveProperty
+                                                    }
+                                                  </b>{" "}
+                                                  <br />
+                                                  <div className="mt-1">
+                                                    "
+                                                    {
+                                                      propertyDocument.remarkForInactiveProperty
+                                                    }
+                                                    "
+                                                  </div>
                                                 </div>
                                               </div>
                                             </div>

@@ -398,11 +398,11 @@ const PropertyKeyDetail = () => {
         {showAIForm && (
           <>
             <div className="vg22"></div>
-            <section className="my_big_card add_doc_form">
+            <section className="my_big_card add_doc_form mobile_full_575">
               <div className="aai_form">
                 {keyRows.map((row, index) => (
                   <div className="row fields_box" key={index}>
-                    <div className="col-md-3">
+                    <div className="col-lg-3 col-md-6 col-12">
                       <div className="form_field w-100">
                         <input
                           type="text"
@@ -410,12 +410,12 @@ const PropertyKeyDetail = () => {
                           onChange={(e) =>
                             handleInputChange(index, "keyFor", e.target.value)
                           }
-                          placeholder="For (e.g. Main Door, Bedroom, Almiras ... )"
+                          placeholder="For (e.g. Main Door, Bedroom, Almiras ..."
                           className="w-100"
                         />
                       </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-lg-3 col-md-6 col-6">
                       <div className="form_field w-100">
                         <input
                           type="text"
@@ -432,7 +432,7 @@ const PropertyKeyDetail = () => {
                         />
                       </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-lg-3 col-md-6 col-6">
                       <div className="form_field w-100">
                         <input
                           type="number"
@@ -449,7 +449,7 @@ const PropertyKeyDetail = () => {
                         />
                       </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-lg-3 col-md-6 col-12">
                       <div className="form_field w-100">
                         <input
                           type="text"
@@ -467,7 +467,7 @@ const PropertyKeyDetail = () => {
                       </div>
                     </div>
 
-                    <div>
+                    
                       {index !== 0 && (
                         <span
                           className="pointer close_field"
@@ -476,11 +476,13 @@ const PropertyKeyDetail = () => {
                           X
                         </span>
                       )}
-                    </div>
+                    
                   </div>
                 ))}
 
-                <div className="addmore mt-2" onClick={handleAddKeyRow}>
+                <div className="addmore mt-2" onClick={handleAddKeyRow} style={{
+                  marginLeft:"auto"
+                }}>
                   Add More
                 </div>
               </div>

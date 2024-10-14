@@ -799,6 +799,7 @@
           height: 8px;
           border-radius: 50%;
           line-height: 0px;
+          margin-top: 1px;
         }
       }
 
@@ -1011,16 +1012,16 @@
     }
   }
 }
-.info_icon{
+.info_icon {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  .material-symbols-outlined{
-    font-size: 16px;  
+  .material-symbols-outlined {
+    font-size: 16px;
     cursor: pointer;
   }
-  .info_icon_inner{
+  .info_icon_inner {
     position: absolute;
     line-height: normal;
     background: #e6e6e6;
@@ -1035,17 +1036,16 @@
     top: 18px;
     color: var(--light-black);
     font-weight: 400;
-    b{
-      font-weight: 500 ;
+    b {
+      font-weight: 500;
     }
   }
-  &:hover{
-    .info_icon_inner{
+  &:hover {
+    .info_icon_inner {
       transition: 0.3s;
       opacity: 1;
     }
   }
-
 }
 .my_small_card_parent {
   display: grid;
@@ -1273,6 +1273,7 @@
   .aai_form {
     .fields_box {
       margin-top: 15px;
+      row-gap: 15px;
       &:first-child {
         margin-top: 0px;
       }
@@ -1283,17 +1284,17 @@
       }
     }
   }
-  .keys_card{
+  .keys_card {
     display: flex;
     flex-direction: column;
     row-gap: 22px;
     .key_card_single {
-      border: 1px solid #dfdfdf;  
+      border: 1px solid #dfdfdf;
       border-radius: 10px;
       background: var(--white-color);
       border-top-color: #91b8ff;
       .top {
-        background: rgb(239, 239, 239);
+        background: rgb(226 226 226);
         padding: 8px 15px;
         text-align: center;
         font-size: 14px;
@@ -1307,19 +1308,19 @@
           right: 15px;
           font-size: 21px;
           cursor: pointer;
-      }
+        }
       }
       .key_details {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
         .kd_single {
-          width: 15%;
           padding: 12px;
           border-right: 1px solid #e1e1e1;
           border-bottom: 1px solid #e1e1e1;
           display: flex;
           justify-content: space-between;
           align-items: end;
+          gap: 3px;
           .left {
             h6 {
               color: var(--light-black);
@@ -1360,8 +1361,8 @@
               opacity: 0;
               top: 18px;
             }
-            &:hover{
-              .key_remark{
+            &:hover {
+              .key_remark {
                 transition: 0.3s;
                 opacity: 1;
               }
@@ -1371,7 +1372,6 @@
       }
     }
   }
- 
 }
 .delete_box_top {
   width: 20px;
@@ -1916,6 +1916,19 @@
 .price_input input {
   padding-left: 13px !important;
 }
+
+@media only screen and (max-width: 1199px) {
+  .property_keys_pg {
+    .keys_card {
+      .key_card_single {
+        .key_details {
+          grid-template-columns: repeat(5, 1fr);
+        }
+      }
+    }
+  }
+}
+
 @media only screen and (max-width: 991px) {
   section.graphs {
     grid-template-columns: repeat(1, 1fr) !important;
@@ -1927,6 +1940,15 @@
     align-items: inherit;
     gap: 12px;
     margin-top: 7px;
+  }
+  .property_keys_pg {
+    .keys_card {
+      .key_card_single {
+        .key_details {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+    }
   }
 }
 
@@ -1986,6 +2008,15 @@
         width: 30px;
         span {
           font-size: 18px;
+        }
+      }
+    }
+  }
+  .property_keys_pg {
+    .keys_card {
+      .key_card_single {
+        .key_details {
+          grid-template-columns: repeat(3, 1fr);
         }
       }
     }
@@ -2197,6 +2228,47 @@
         border-radius: 5px;
         font-size: 12px;
         padding: 4px 8px;
+      }
+    }
+  }
+  .property_keys_pg {
+    .keys_card {
+      .key_card_single {
+        border-radius: 0px;
+        margin-right: -15px;
+        margin-left: -15px;
+        border-top: none;
+        border-bottom: 1px solid var(--theme-blue);
+        .top{
+          font-size: 12px;
+          padding-right: 38px;
+          text-align: inherit;
+          .keys_edit{
+            font-size: 17px;
+          }
+        }
+        .key_details {
+          grid-template-columns: repeat(2, 1fr);
+          .kd_single{
+            padding: 8px 15px;
+            .left{
+              h6{
+                font-size: 13px;
+              }
+            }
+            .right{
+              h5{
+                font-size: 17px;
+              }
+            }
+            .remark_info{
+              right: 15px;
+              span{
+                font-size: 14px;
+              }
+            }
+          }
+        }
       }
     }
   }
