@@ -142,7 +142,7 @@ const CollapsibleGroup = () => {
                     data-bs-parent="#a1accordion_section2"
                   >
                     <div className="accordion-body">
-                      We only provide renting services to those properties which are coming to us for Property Management Services and properties who are managed by only Prodial.
+                      We only provide renting services to those properties which are coming to us for Property Management Services and properties who are managed by only Propdial.
                     </div>
                   </div>
                 </div>
