@@ -90,10 +90,38 @@
 
 @media only screen and (max-width: 575px) {
     .propdial_users {
-        grid-template-columns: repeat(1, 1fr);
-
-    }
+        grid-template-columns: repeat(1, 1fr);}
+        .user_pg{
+            .filters{
+                .right, .left{
+                    width: 100%;
+                    justify-content: end;
+                }
+            }
+            .rt_global_search{
+                width: 100%;
+            }
+        }
     .access_manage {       
         grid-template-columns: 40% 60%;
+    }
+    .user_filters{
+        width: 100%;
+        &.new_inline{
+            .project-filter{
+                width: 100%;
+                nav{
+                    flex-wrap: wrap;
+                    width: 100%;
+                    button{
+                        width: 33.33%;
+                       
+                    }
+                    select{
+                        width: 100%;
+                    }
+                }
+            }
+        }
     }
 }

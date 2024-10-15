@@ -337,28 +337,6 @@ const TenantDetails = () => {
   // filter for property utility document end
   // filters end
 
-  // data of quick access menu  start
-  const menuItems = [
-    {
-      name: "Dashboard",
-      link: "/dashboard",
-      icon: "/assets/img/icons/qa_dashboard.png",
-    },
-    {
-      name: "Property",
-      link: "/propertydetails/" + editedFields.propertyId,
-      icon: "/assets/img/icons/qa_property.png",
-    },
-
-    // { name: 'Tenant', link: '/', icon: '/assets/img/icons/qa_tenant.png' },
-    // { name: 'Document', link: '/', icon: '/assets/img/icons/qa_documentation.png' },
-
-    // { name: 'Transaction', link: '/', icon: '/assets/img/icons/qa_transaction.png' },
-    // { name: 'Bills', link: '/', icon: '/assets/img/icons/qa_bilss.png' },
-    // { name: 'Enquiry', link: '/', icon: '/assets/img/icons/qa_support.png' },
-  ];
-  // data of quick access menu  end
-
   // modal controls
   // modal controls start
   const [showModal, setShowModal] = useState(false);
@@ -415,6 +393,28 @@ const TenantDetails = () => {
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
         <div className="page_spacing">
+        <div className="row row_reverse_991">
+          <div className="col-lg-6">
+            <div className="title_card mobile_full_575 mobile_gap h-100">
+              <h2 className="text-center mb-4">OnePlace for Property Keys</h2>
+              {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
+              {!showAIForm && (
+                  <div
+                    className="theme_btn btn_fill no_icon text-center short_btn"
+                    onClick={handleShowAIForm}
+                  >
+                    Add document
+                  </div>
+                )}
+            </div>
+          </div>
+          {/* <PropertySummaryCard
+            propertydoc={propertydoc}
+            propertyId={propertyId}
+          /> */}
+        </div>
+
+
           {/* 9 dots html  */}
           <div
             onClick={openMoreAddOptions}
@@ -459,7 +459,7 @@ const TenantDetails = () => {
               </Link>
             </div>
           </div>
-          <QuickAccessMenu menuItems={menuItems} />
+        
           <div className="vg22_m15"></div>
           <div className="">
             <div className="row" style={{
@@ -968,14 +968,7 @@ const TenantDetails = () => {
                 </h4>
               </div>
               <div className="right">
-                {!showAIForm && (
-                  <div
-                    className="theme_btn btn_fill"
-                    onClick={handleShowAIForm}
-                  >
-                    Add document
-                  </div>
-                )}
+               
               </div>
             </div>
             {showAIForm && (

@@ -47,7 +47,7 @@ const MakeInactivePopup = ({
   ];
 
   return (
-    <Modal show={show} onHide={handleClose} className="my_modal margin_top">
+    <Modal show={show} onHide={handleClose} centered className="my_modal margin_top">
       <span class="material-symbols-outlined modal_close" onClick={handleClose}>
         close
       </span>

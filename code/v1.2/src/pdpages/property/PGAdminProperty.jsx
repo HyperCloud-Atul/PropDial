@@ -232,7 +232,7 @@ const PGAdminProperty = () => {
           </div>
          
           <div className="right">
-          <div className="user_filters new_inline">
+          <div className="new_inline">
           
           {properties && (
             <Filters
@@ -242,7 +242,7 @@ const PGAdminProperty = () => {
                   />
                 )}
         </div>
-            <div className="user_filters new_inline">
+            <div className="new_inline">
           
               {properties && (
                 <Filters

@@ -2370,9 +2370,8 @@ const PropertyDetails = () => {
                       setShowPropertyLayoutComponent
                     }
                   ></PropertyLayoutComponent>
-                )}
-
-                {propertyLayouts && (
+                )}             
+                {propertyLayouts && (propertyLayouts.length > 0 || (user && user.role === "admin")) &&  (
                   <section className="property_card_single full_width_sec with_blue">
                     <span className="verticall_title">
                       Layout : {propertyLayouts && propertyLayouts.length}

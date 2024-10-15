@@ -285,7 +285,7 @@ export default function MasterStateList() {
                   </div>
                 </div>
                 <div className="right">
-                  <div className="user_filters new_inline">
+                  <div className="new_inline">
                     {filteredData && (
                       <Filters
                         changeFilter={changeFilter}

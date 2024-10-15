@@ -137,7 +137,7 @@ const UserList = () => {
   };
 
   return (
-    <div className="top_header_pg pg_bg">
+    <div className="top_header_pg pg_bg user_pg">
       <div className="page_spacing">
         <div className="pg_header d-flex justify-content-between">
           <div className="left">

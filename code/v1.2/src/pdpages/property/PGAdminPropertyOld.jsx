@@ -257,7 +257,7 @@ const PGAdminPropertyOld = () => {
 
           </div>
           <div className="right">
-            <div className="user_filters new_inline">
+            <div className="new_inline">
               {properties && (
                 <Filters
                   changeFilter={changeFilter}

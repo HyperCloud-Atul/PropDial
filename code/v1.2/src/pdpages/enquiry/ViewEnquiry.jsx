@@ -511,7 +511,7 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
               </div>
             </label>
           </div>
-          <div className="user_filters new_inline">
+          <div className="new_inline">
             {enquiryDocs && (
               <Filters
                 changeFilter={changeFilter}

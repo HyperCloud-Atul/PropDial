@@ -81,76 +81,76 @@ precacheAndRoute(self.__WB_MANIFEST);
 // );
 
 // Cache First for static images (e.g., logos, icons)
-registerRoute(
-  ({ request }) => request.destination === "image",
-  new CacheFirst({
-    cacheName: "propdial-static-images-cache",
-    plugins: [
-      // You can add additional plugins here if needed
-      new ExpirationPlugin({
-        maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-      }),
-    ],
-  })
-);
+// registerRoute(
+//   ({ request }) => request.destination === "image",
+//   new CacheFirst({
+//     cacheName: "propdial-static-images-cache",
+//     plugins: [
+//       // You can add additional plugins here if needed
+//       new ExpirationPlugin({
+//         maxEntries: 60,
+//         maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+//       }),
+//     ],
+//   })
+// );
 
 // Stale While Revalidate for dynamic images (e.g., user avatars)
-registerRoute(
-  ({ request }) => request.destination === "image",
-  new StaleWhileRevalidate({
-    cacheName: "propdial-dynamic-images-cache",
-    plugins: [
-      // You can add additional plugins here if needed
-    ],
-  })
-);
+// registerRoute(
+//   ({ request }) => request.destination === "image",
+//   new StaleWhileRevalidate({
+//     cacheName: "propdial-dynamic-images-cache",
+//     plugins: [
+//       // You can add additional plugins here if needed
+//     ],
+//   })
+// );
 
 // Cache First for core stylesheets and scripts
-registerRoute(
-  ({ request }) =>
-    request.destination === "style" || request.destination === "script",
-  new CacheFirst({
-    cacheName: "propdial-core-assets-cache",
-    plugins: [
-      // You can add additional plugins here if needed
-    ],
-  })
-);
+// registerRoute(
+//   ({ request }) =>
+//     request.destination === "style" || request.destination === "script",
+//   new CacheFirst({
+//     cacheName: "propdial-core-assets-cache",
+//     plugins: [
+//       // You can add additional plugins here if needed
+//     ],
+//   })
+// );
 
 // Stale While Revalidate for dynamic stylesheets and scripts
-registerRoute(
-  ({ request }) =>
-    request.destination === "style" || request.destination === "script",
-  new StaleWhileRevalidate({
-    cacheName: "propdial-dynamic-assets-cache",
-    plugins: [
-      // You can add additional plugins here if needed
-    ],
-  })
-);
+// registerRoute(
+//   ({ request }) =>
+//     request.destination === "style" || request.destination === "script",
+//   new StaleWhileRevalidate({
+//     cacheName: "propdial-dynamic-assets-cache",
+//     plugins: [
+//       // You can add additional plugins here if needed
+//     ],
+//   })
+// );
 
 // Network First for real-time API requests
-registerRoute(
-  ({ url }) => url.origin === "https://firestore.googleapis.com",
-  new NetworkFirst({
-    cacheName: "propdial-firestore-real-time-data-cache",
-    plugins: [
-      // You can add additional plugins here if needed
-    ],
-  })
-);
+// registerRoute(
+//   ({ url }) => url.origin === "https://firestore.googleapis.com",
+//   new NetworkFirst({
+//     cacheName: "propdial-firestore-real-time-data-cache",
+//     plugins: [
+//       // You can add additional plugins here if needed
+//     ],
+//   })
+// );
 
 // Stale While Revalidate for non-critical API requests
-registerRoute(
-  ({ url }) => url.origin === "https://firebasestorage.googleapis.com",
-  new StaleWhileRevalidate({
-    cacheName: "propdial-fbstorage-data-cache",
-    plugins: [
-      // You can add additional plugins here if needed
-    ],
-  })
-);
+// registerRoute(
+//   ({ url }) => url.origin === "https://firebasestorage.googleapis.com",
+//   new StaleWhileRevalidate({
+//     cacheName: "propdial-fbstorage-data-cache",
+//     plugins: [
+//       // You can add additional plugins here if needed
+//     ],
+//   })
+// );
 
 // Stale While Revalidate for non-critical API requests
 // registerRoute(
