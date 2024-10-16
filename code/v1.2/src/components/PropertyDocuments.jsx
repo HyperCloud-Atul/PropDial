@@ -265,7 +265,7 @@ const PropertyDocuments = () => {
   return (
     <div className="top_header_pg pg_bg property_docs_pg">
      <ScrollToTop/>
-      <div className="page_spacing">
+      <div className="page_spacing pg_min_height">
         {/* 9 dots html  */}
         <div
           onClick={openMoreAddOptions}
@@ -522,8 +522,9 @@ const PropertyDocuments = () => {
                         <div className="card-body">
                           <h3>{doc.idType}</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
-                          {(user && user.role === "admin") && (
+                          {(user && user.role === "superAdmin") && (
                             <div className="d-flex justify-content-between w-100">
+                              
                               <div className="card-author">
                                 <div
                                   onClick={() => deletePropertyDocument(doc.id)}
@@ -607,8 +608,9 @@ const PropertyDocuments = () => {
                           {/* <h3>{doc.idType}</h3> */}
                           <h3>Property Maintainance</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
-                          {(user && user.role === "admin") && (
+                          {(user && user.role === "superAdmin") && (
                             <div className="d-flex justify-content-between w-100">
+                              
                               <div className="card-author">
                                 <div
                                   onClick={() => deletePropertyDocument(doc.id)}
@@ -683,8 +685,9 @@ const PropertyDocuments = () => {
                           {/* <h3>{doc.idType}</h3> */}
                           <h3>Utility Bills</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
-                          {(user && user.role === "admin") && (
+                          {(user && user.role === "superAdmin") && (
                             <div className="d-flex justify-content-between w-100">
+                              
                               <div className="card-author">
                                 <div
                                   onClick={() => deletePropertyDocument(doc.id)}
@@ -759,8 +762,9 @@ const PropertyDocuments = () => {
                           {/* <h3>{doc.idType}</h3> */}
                           <h3>Property Tax</h3>
                           <p className="card-subtitle">{doc.idNumber}</p>
-                          {(user && user.role === "admin") && (
+                          {(user && user.role === "superAdmin") && (
                             <div className="d-flex justify-content-between w-100">
+                              
                               <div className="card-author">
                                 <div
                                   onClick={() => deletePropertyDocument(doc.id)}
