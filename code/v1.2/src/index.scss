@@ -1148,6 +1148,7 @@
     }
   }
 }
+
 .pg_utility_bill .my_small_card_parent .my_small_card .left {
   margin-top: 13px;
 }
@@ -1930,7 +1931,9 @@
     grid-template-columns: repeat(1, 1fr) !important;
     grid-row-gap: 22px;
   }
-
+  .pg_utility_bill .my_small_card_parent{
+    grid-template-columns: repeat(2, 1fr);
+  }
   .pg_adminproperty .filters {
     flex-direction: column;
     align-items: inherit;
@@ -1953,7 +1956,9 @@
     border-radius: 20px;
     padding: 15px;
   }
-
+  .pg_utility_bill .my_small_card_parent{
+    grid-template-columns: repeat(1, 1fr);
+  }
   .page .propagent_dashboard_inner .all_payments {
     grid-template-columns: repeat(2, 1fr) !important;
     grid-column-gap: 15px;

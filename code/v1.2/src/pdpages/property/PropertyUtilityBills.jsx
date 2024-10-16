@@ -244,11 +244,11 @@ const PropertyUtilityBills = () => {
         {showAIForm && (
           <>
             <div className="vg22"></div>
-            <section className="my_big_card add_doc_form">
+            <section className="my_big_card add_doc_form mobile_full_575 ">
               {/* <h2 className="card_title">Select any one document ID</h2> */}
               <div className="aai_form">
                 <div className="row align-items-center">
-                  <div className="col-md-8">
+                  <div className="col-xl-8 col-lg-7 col-12">
                     <div className="form_field">
                       <div className="field_box theme_radio_new">
                         <div className="theme_radio_container">
@@ -269,11 +269,12 @@ const PropertyUtilityBills = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-xl-4 col-lg-5 col-12">
+                    <div className="vg22_991"></div>
                     <div className="row" style={{ rowGap: "18px" }}>
-                      <div className="col-md-6">
-                        <div className="add_info_text">
-                          <div className="form_field">
+                      <div className="col-sm-6">
+                      <div className="add_info_text w-100">
+                      <div className="form_field w-100">
                             <div className="relative">
                               <input
                                 type="text"
@@ -287,9 +288,9 @@ const PropertyUtilityBills = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-6">
-                        <div className="add_info_text">
-                          <div className="form_field">
+                      <div className="col-sm-6">
+                      <div className="add_info_text w-100">
+                      <div className="form_field w-100">
                             <div className="relative">
                               <input
                                 type="text"
@@ -305,7 +306,7 @@ const PropertyUtilityBills = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-12">
+                      <div className="col-12">
                         <div className="form_field">
                           <div className="field_box theme_radio_new">
                             <div className="theme_radio_container">
@@ -326,9 +327,9 @@ const PropertyUtilityBills = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-6">
-                        <div className="add_info_text">
-                          <div className="form_field price_input relative">
+                      <div className="col-sm-6">
+                      <div className="add_info_text w-100">
+                          <div className="form_field price_input relative w-100">
                             <input
                               type="number"
                               value={amountDue}
@@ -339,7 +340,7 @@ const PropertyUtilityBills = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-sm-6">
                         <div className="add_info_text w-100">
                           <div className="form_field w-100">
                             <div className="relative">
@@ -386,8 +387,8 @@ const PropertyUtilityBills = () => {
         )}
         {utilityBillsDoc && utilityBillsDoc.length !== 0 && (
           <>
-            <div className="vg22"></div>
-            <hr />
+            {/* <div className="vg22"></div>
+            <hr /> */}
             <div className="vg22"></div>
           </>
         )}
@@ -443,15 +444,17 @@ const PropertyUtilityBills = () => {
                         <h5 className="title">{doc.authorityName}</h5>
                         <h6 className="sub_title">{doc.paymentType}</h6>
                       </div>
-                      <div
-                        onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
-                        className="text_red pointer"
-                        style={{
-                          fontSize: "12px",
-                        }}
-                      >
-                        Remove
-                      </div>
+                     {user && user.role === "superAdmin" && (
+                       <div
+                       onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
+                       className="text_red pointer"
+                       style={{
+                         fontSize: "12px",
+                       }}
+                     >
+                       Remove
+                     </div>
+                     )}
                       <Modal
                         show={showConfirmModal}
                         onHide={handleConfirmClose}
