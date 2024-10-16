@@ -266,6 +266,16 @@ export default function Stage3(props) {
           propertyDocument.overLooking.find((e) => e === "Garden/Park")
             ? true
             : false,
+            ChildrenPlayArea:
+            propertyDocument.overLooking &&
+            propertyDocument.overLooking.find((e) => e === "Children Play Area")
+              ? true
+              : false,
+              OpenGymnasium:
+              propertyDocument.overLooking &&
+              propertyDocument.overLooking.find((e) => e === "Open Gymnasium")
+                ? true
+                : false,              
         MainRoadClick:
           propertyDocument.overLooking &&
           propertyDocument.overLooking.find((e) => e === "Main Road")
@@ -1202,6 +1212,107 @@ export default function Stage3(props) {
                             </span>
                           </div>
                           <h6>Garden/Park</h6>
+                        </label>
+                      </div>
+                    </div>
+                
+                
+               
+                <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.ChildrenPlayArea
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="childrenplayarea_overlooking"
+                          onClick={(e) => {
+                            if (propertyDetails.ChildrenPlayArea) {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking:
+                                  propertyDetails.OverLooking &&
+                                  propertyDetails.OverLooking.filter(
+                                    (elem) => elem !== "Children Play Area"
+                                  ),
+                                ChildrenPlayArea:
+                                  !propertyDetails.ChildrenPlayArea,
+                              });
+                            } else {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking: [
+                                  ...propertyDetails.OverLooking,
+                                  "Children Play Area",
+                                ],
+                                ChildrenPlayArea:
+                                  !propertyDetails.ChildrenPlayArea,
+                              });
+                            }
+                          }}
+                        />
+                        <label htmlFor="childrenplayarea_overlooking">
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Children Play Area</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OpenGymnasium
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="OpenGymnasium_overlooking"
+                          onClick={(e) => {
+                            if (propertyDetails.OpenGymnasium) {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking:
+                                  propertyDetails.OverLooking &&
+                                  propertyDetails.OverLooking.filter(
+                                    (elem) => elem !== "Open Gymnasium"
+                                  ),
+                                OpenGymnasium:
+                                  !propertyDetails.OpenGymnasium,
+                              });
+                            } else {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking: [
+                                  ...propertyDetails.OverLooking,
+                                  "Open Gymnasium",
+                                ],
+                                OpenGymnasium:
+                                  !propertyDetails.OpenGymnasium,
+                              });
+                            }
+                          }}
+                        />
+                        <label htmlFor="OpenGymnasium_overlooking">
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Open Gymnasium</h6>
                         </label>
                       </div>
                     </div>

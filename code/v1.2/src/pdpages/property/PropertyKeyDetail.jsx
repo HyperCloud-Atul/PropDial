@@ -76,7 +76,7 @@ const PropertyKeyDetail = () => {
   // Add or edit property keys
   const addOrUpdatePropertyKey = async () => {
     if (
-      keyRows.some((row) => !row.keyFor || !row.keyNumber || !row.numberOfKey)
+      keyRows.some((row) => !row.keyFor || !row.numberOfKey)
     ) {
       alert("All fields are required for each row!");
       return;
@@ -315,7 +315,7 @@ const PropertyKeyDetail = () => {
                 <div className="top relative">
                   By <b>Sanskar Solanki</b>, On{" "}
                   <b>{format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}</b>
-                  {user && doc.createdBy === user.uid && index === 0 && (
+                  {user && user.role === "superAdmin" && (
                     <span
                       class="material-symbols-outlined keys_edit"
                       onClick={() => handleEditClick(doc)}
@@ -329,8 +329,9 @@ const PropertyKeyDetail = () => {
                     doc.keys.map((keySingle, keyindex) => (
                       <div className="kd_single relative" key={keyindex}>
                         <div className="left">
-                          <h6>{keySingle.keyNumber}</h6>
-                          <h6>{keySingle.keyFor}</h6>
+                        <h6>{keySingle.keyFor}</h6>
+                          <h6>{keySingle.keyNumber ? keySingle.keyNumber : "No key number" }</h6>
+                     
                         </div>
                         <div className="right">
                           <h5>{keySingle.numberOfKey}</h5>
@@ -350,7 +351,7 @@ const PropertyKeyDetail = () => {
                       </div>
                     ))}
                 </div>
-                {/* {user && user.role === "admin" && (
+                {user && user.role === "superAdmin" && (
                   <>
                   
                     <div
@@ -388,7 +389,7 @@ const PropertyKeyDetail = () => {
                       </div>
                     </Modal>
                   </>
-                )} */}
+                )}
               </div>
             ))}
         </div>

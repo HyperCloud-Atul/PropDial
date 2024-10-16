@@ -381,6 +381,7 @@ const Stage1 = (props) => {
     Package: "",
     Flag: "",
     Source: "",
+    OwnerShip:"",
     Category: "",
     UnitNumber: "",
     DemandPriceRent: "",
@@ -500,6 +501,7 @@ const Stage1 = (props) => {
         Package: propertyDocument.package,
         Flag: propertyDocument.flag,
         Source: propertyDocument.source,
+        OwnerShip: propertyDocument.ownership,
         Category: propertyDocument.category
           ? propertyDocument.category
           : "Residential",
@@ -824,6 +826,7 @@ const Stage1 = (props) => {
       package: propertyDetails.Package,
       flag: propertyDetails.Flag,
       source: propertyDetails.Source,
+      ownership: propertyDetails.OwnerShip,
       category: propertyDetails.Category
         ? propertyDetails.Category
         : "Residential",
@@ -1466,7 +1469,7 @@ const Stage1 = (props) => {
             </div>
           </div>
           {/* Property Source */}
-          <div className="col-md-6">
+          <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Propery Source</label>
               <div className="form_field_inner">
@@ -1546,7 +1549,7 @@ const Stage1 = (props) => {
               </div>
             </div>
           </div>
-
+{/* Category  */}
           <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Category</label>
@@ -1621,6 +1624,87 @@ const Stage1 = (props) => {
                         </label>
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            {/* Ownership */}
+            <div className="col-xl-4 col-lg-6">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Ownership</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OwnerShip === "Freehold"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="ownership_freehold"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              OwnerShip: "Freehold"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="ownership_freehold"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Freehold
+                        </label>
+                      </div>
+                    </div>}
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OwnerShip === "Leasehold"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="ownership_leasehold"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              OwnerShip: "Leasehold"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="ownership_leasehold"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Leasehold
+                        </label>
+                      </div>
+                    </div>}
+
                   </div>
                 </div>
               </div>
