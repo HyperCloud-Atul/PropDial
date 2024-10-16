@@ -135,8 +135,8 @@ const PropertyAds = () => {
     },   
   ];
   return (
-    <div className="top_header_pg pg_bg property_docs_pg">
-      <div className="page_spacing">
+    <div className="top_header_pg pg_bg property_adv_pg">
+      <div className="page_spacing pg_min_height">
         <div className="row row_reverse_991">
           <div className="col-lg-6">
             <div className="title_card mobile_full_575 mobile_gap h-100">
@@ -162,7 +162,7 @@ const PropertyAds = () => {
         {showAIForm && (
           <>
             <div className="vg22"></div>
-            <section className="my_big_card add_doc_form">
+            <section className="my_big_card mobile_full_575 ">
               {/* <h2 className="card_title">Select any one document ID</h2> */}
               <div className="aai_form">
                 <div className="row" style={{ rowGap: "18px" }}>
@@ -231,7 +231,7 @@ const PropertyAds = () => {
                             type="text"
                             value={advLink}
                             onChange={handleAdvLinkChange}
-                            placeholder="Link"
+                            placeholder="Link (e.g. https://example.com/)"
                             className="w-100"
                           />
                         </div>
@@ -241,7 +241,7 @@ const PropertyAds = () => {
                 </div>
               </div>
               <div className="row mt-3">
-                <div className="col-sm-2 col-6">
+                <div className="col-md-2 col-6">
                   <div
                     className="theme_btn btn_border text-center no_icon"
                     onClick={isUploading ? null : handleShowAIForm}
@@ -249,7 +249,7 @@ const PropertyAds = () => {
                     Cancel
                   </div>
                 </div>
-                <div className="col-sm-3 col-6">
+                <div className="col-md-3 col-6">
                   <div
                     className={`theme_btn btn_fill text-center no_icon ${
                       isUploading ? "disabled" : ""
@@ -265,8 +265,7 @@ const PropertyAds = () => {
         )}
         {advDoc && advDoc.length !== 0 && (
           <>
-            <div className="vg22"></div>
-            <hr />
+            
             <div className="vg22"></div>
           </>
         )}
@@ -299,12 +298,17 @@ const PropertyAds = () => {
                   <div className="right">
                     <div className="d-flex justify-content-between align-items-center">
                       <div>
-                        <h5 className="title">{doc.advPortal}</h5>
+                        <h5 className="title">{doc.advPortal}{" "}
+                           <span className="sub_title">
+                           (For {doc.propertyType})
+                          </span>
+                           </h5>
                         <h6 className="sub_title">
-                          {doc.portalPropId}, {doc.propertyType}
+                          ID:- {doc.portalPropId}
                         </h6>
                       </div>
-                      <div
+                      {user && user.role === "superAdmin" && (
+                        <div
                         onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
                         className="text_red pointer"
                         style={{
@@ -313,6 +317,7 @@ const PropertyAds = () => {
                       >
                         Remove
                       </div>
+                      )}
                     </div>
                     <Link
                       className="click_text"
