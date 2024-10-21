@@ -329,6 +329,11 @@ const Stage1 = (props) => {
   let statesOptionsSorted = useRef([]);
   let citiesOptions = useRef([]);
   let citiesOptionsSorted = useRef([]);
+  let localitiesOptions = useRef([]);
+  let societiesOptions = useRef([]);
+  let localitiesOptionsSorted = useRef([]);
+  let societiesOptionsSorted = useRef([]);
+
   var distinctCityList = [];
   var distinctLocalityList = [];
   var distinctSocietyList = [];
@@ -337,15 +342,27 @@ const Stage1 = (props) => {
     label: "Select City",
     value: "Select City",
   });
+  const [locality, setLocality] = useState({
+    label: "Select Locality",
+    value: "Select Locality",
+  });
+
+  const [society, setSociety] = useState({
+    label: "Select Society",
+    value: "Select Society",
+  });
+
+  const [distinctValuesCity, setdistinctValuesCity] = useState([]);
   const [distinctValuesLocality, setdistinctValuesLocality] = useState([]);
   const [distinctValuesSociety, setdistinctValuesSociety] = useState([]);
+
   const [formError, setFormError] = useState(null);
   const [formSuccess, setFormSuccess] = useState(null);
   // const { amountToWords, response: amountToWordsResponse } = useCommon();
   // const { camelCase } = useCommon();
   // const { formatAmount, response: formatAmountResponse } = useCommon();
   // const { formatPhoneNumber } = useCommon();
-  const [distinctValuesCity, setdistinctValuesCity] = useState([]);
+
   const [onboardingDate, setOnboardingDate] = useState(new Date());
   const [newProperty, setNewProperty] = useState(null);
 
@@ -374,6 +391,18 @@ const Stage1 = (props) => {
     "m_cities",
     ["status", "==", "active"]
   );
+
+  const { documents: dblocalitiesdocuments, error: dblocalitieserror } = useCollection(
+    "m_localities",
+    ["status", "==", "active"]
+  );
+
+  const { documents: dbsocietiesdocuments, error: dbsocietieserror } = useCollection(
+    "m_societies",
+    ["status", "==", "active"]
+  );
+
+  console.log("dbsocietiesdocuments: ", dbsocietiesdocuments)
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
@@ -412,34 +441,13 @@ const Stage1 = (props) => {
 
   // dbpropertiesdocuments &&
   //   dbpropertiesdocuments.map((doc) => {
-  //     if (!distinctCityList.find((e) => e.city === doc.city)) {
-  //       distinctCityList.push({
-  //         state: doc.state,
-  //         city: doc.city,
+  //     if (!distinctSocietyList.find((e) => e.society === doc.society)) {
+  //       distinctSocietyList.push({
+  //         locality: doc.locality,
+  //         society: doc.society,
   //       });
   //     }
   //   });
-
-  dbpropertiesdocuments &&
-    dbpropertiesdocuments.map((doc) => {
-      if (!distinctLocalityList.find((e) => e.locality === doc.locality)) {
-        distinctLocalityList.push({
-          city: doc.city,
-          locality: doc.locality,
-        });
-      }
-    });
-  // console.log('distinctLocalityList: ', distinctLocalityList)
-
-  dbpropertiesdocuments &&
-    dbpropertiesdocuments.map((doc) => {
-      if (!distinctSocietyList.find((e) => e.society === doc.society)) {
-        distinctSocietyList.push({
-          locality: doc.locality,
-          society: doc.society,
-        });
-      }
-    });
 
   useEffect(() => {
     statesOptions.current =
@@ -492,6 +500,96 @@ const Stage1 = (props) => {
         value: "Select City",
       });
     }
+
+
+
+    if (propertyDocument && propertyDocument.locality) {
+      // console.log("propertyDocument.locality: ", propertyDocument.locality)
+      const localityData = dblocalitiesdocuments.find(doc => doc.id === propertyDocument.locality);
+      console.log('localityData: ', localityData)
+
+      if (localityData) {
+        setLocality({
+          label: localityData.locality,
+          value: localityData.id,
+        });
+        handleLocalityChange({
+          label: localityData.locality,
+          value: localityData.id,
+        });
+      }
+    }
+    else {
+      setLocality({ label: "Select Locality", value: "Select Locality" });
+      handleLocalityChange({
+        label: "Select Locality",
+        value: "Select Locality",
+      });
+    }
+
+    if (propertyDocument && propertyDocument.society) {
+      const societyData = dbsocietiesdocuments.find(doc => doc.id === propertyDocument.society);
+      // console.log('societyData: ', societyData)
+
+      if (societyData) {
+        setSociety({
+          label: societyData.society,
+          value: societyData.id,
+        });
+        handleSocietyChange({
+          label: societyData.society,
+          value: societyData.id,
+        });
+      }
+    }
+    else {
+      setSociety({ label: "Select Society", value: "Select Society" });
+      handleSocietyChange({
+        label: "Select Society",
+        value: "Select Society",
+      });
+    }
+
+    if (propertyDocument && propertyDocument.society) {
+      // console.log("propertyDocument.locality: ", propertyDocument.locality)
+      const societyData = dbsocietiesdocuments.find(doc => doc.id === propertyDocument.society);
+      console.log('societyData: ', societyData)
+
+      if (societyData) {
+        setSociety({
+          label: societyData.society,
+          value: societyData.id,
+        });
+        handleSocietyChange({
+          label: societyData.society,
+          value: societyData.id,
+        });
+      }
+    }
+    else {
+      setSociety({ label: "Select Locality", value: "Select Locality" });
+      handleSocietyChange({
+        label: "Select Locality",
+        value: "Select Locality",
+      });
+    }
+
+    //   dblocalitiesdocuments &&
+    //     dblocalitiesdocuments.map((doc) => {
+    //       // console.log("Locality Doc: ", doc)
+    //       if (dblocalitiesdocuments.find((e) => e.id === propertyDocument.locality)) {
+    //         // console.log("Locality Doc: ", doc)
+    //         // console.log("propertyDocument.locality: ", propertyDocument.locality)
+
+    //       }
+    //     });
+    // } else {
+    //   setLocality({ label: "Select Locality", value: "Select Locality" });
+    //   handleLocalityChange({
+    //     label: "Select Locality",
+    //     value: "Select Locality",
+    //   });
+    // }
 
     if (propertyDocument) {
       setPropertyDetails({
@@ -629,12 +727,80 @@ const Stage1 = (props) => {
     setCity({ label: "Select City", value: "Select City" });
   };
 
+  // const handleCityChange = async (option) => {
+  //   setCity(option);
+
+  //   // console.log('City option: ', option)
+
+  //   setSearchedCity(option.value);
+  // };
+
   const handleCityChange = async (option) => {
     setCity(option);
+    let cityname = option.label;
+    console.log('city name:  ', cityname)
+
+    // let localityListCityWise = [];
+    // localityListCityWise = distinctLocalityList.filter((e) => e.city === cityname);
+
+    // localityListCityWise = dblocalitiesdocuments.filter((e) => e.city === cityname);
+
+    // console.log('dblocalitiesdocuments:', dblocalitiesdocuments)
+
+    // // const dataList = dblocalitiesdocuments && dblocalitiesdocuments.map((doc) => doc.city);
+    // const dataList = dblocalitiesdocuments.filter((e) => e.city === cityname);
+    // console.log("dataList: ", dataList)
+    // // distinctValuesCity = [...new Set(dataCity)];
+    // setdistinctValuesLocality([...new Set(dataList)]);
+    // // console.log('distinctValuesCity:', distinctValuesCity)
+
+
+    const dataList = dblocalitiesdocuments.filter((e) => e.city === cityname);
+
+    //Localities Dropdown List as per city
+    localitiesOptions.current =
+      dataList &&
+      dataList.map((localtyData) => ({
+        label: localtyData.locality,
+        value: localtyData.id,
+      }));
+
+    localitiesOptionsSorted.current =
+      localitiesOptions.current &&
+      localitiesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
+
+    setLocality({ label: "Select Locality", value: "Select Locality" });
+  };
+
+  const handleLocalityChange = async (option) => {
+    setLocality(option);
+    let localityname = option.label;
+    console.log('locality name:  ', localityname)
+
+    const dataList = dbsocietiesdocuments.filter((e) => e.city === localityname);
+    console.log("Society dataList: ", dataList)
+
+    //Localities Dropdown List as per city
+    societiesOptions.current =
+      dataList &&
+      dataList.map((societyData) => ({
+        label: societyData.society,
+        value: societyData.id,
+      }));
+
+    societiesOptionsSorted.current =
+      societiesOptions.current &&
+      societiesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
+
+    setSociety({ label: "Select Society", value: "Select Society" });
+  };
+
+  const handleSocietyChange = async (option) => {
+    setSociety(option);
 
     // console.log('City option: ', option)
 
-    setSearchedCity(option.value);
+    setSearchedSociety(option.value);
   };
 
   function setSearchedCity(cityname) {
@@ -855,7 +1021,8 @@ const Stage1 = (props) => {
       state: state.label,
       city: city.label,
       // city: camelCase(propertyDetails.City.toLowerCase().trim()),
-      locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
+      locality: locality.value,
+      // locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
       society: camelCase(propertyDetails.Society.toLowerCase().trim()),
       pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
       propertyName:
@@ -2592,6 +2759,32 @@ const Stage1 = (props) => {
 
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
+              <label htmlFor="">New Locality</label>
+
+              <div className="form_field_inner">
+                <Select
+                  className=""
+                  onChange={handleLocalityChange}
+                  options={localitiesOptionsSorted.current}
+                  value={locality}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      outline: "none",
+                      background: "#efefef",
+                      border: "none",
+                      borderBottom: "none",
+                      paddingLeft: "10px",
+                      textTransform: "capitalize",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* <div className="col-xl-4 col-lg-6">
+            <div className="form_field label_top">
               <label htmlFor="">Locality</label>
               <div className="form_field_inner">
                 <SearchBarAutoComplete
@@ -2606,6 +2799,31 @@ const Stage1 = (props) => {
                   queryValue={propertyDetails ? propertyDetails.Locality : ""}
                   setRedirectFlag={setRedirectFlag}
                 ></SearchBarAutoComplete>
+              </div>
+            </div>
+          </div> */}
+          <div className="col-xl-4 col-lg-6">
+            <div className="form_field label_top">
+              <label htmlFor="">New Society</label>
+
+              <div className="form_field_inner">
+                <Select
+                  className=""
+                  onChange={handleSocietyChange}
+                  options={societiesOptionsSorted.current}
+                  value={society}
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      outline: "none",
+                      background: "#efefef",
+                      border: "none",
+                      borderBottom: "none",
+                      paddingLeft: "10px",
+                      textTransform: "capitalize",
+                    }),
+                  }}
+                />
               </div>
             </div>
           </div>
