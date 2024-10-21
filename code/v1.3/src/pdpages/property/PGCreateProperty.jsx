@@ -192,9 +192,14 @@ const CreateProperty = () => {
   let statesOptionsSorted = useRef([]);
   let citiesOptions = useRef([]);
   let citiesOptionsSorted = useRef([]);
-  var distinctCityList = [];
-  var distinctLocalityList = [];
-  var distinctSocietyList = [];
+  let localitiesOptions = useRef([]);
+  let societiesOptions = useRef([]);
+  let localitiesOptionsSorted = useRef([]);
+  let societiesOptionsSorted = useRef([]);
+
+  // var distinctCityList = [];
+  // var distinctLocalityList = [];
+  // var distinctSocietyList = [];
   const [state, setState] = useState({
     label: "Select State",
     value: "Select State",
@@ -203,6 +208,16 @@ const CreateProperty = () => {
     label: "Select City",
     value: "Select City",
   });
+  const [locality, setLocality] = useState({
+    label: "Select Locality",
+    value: "Select Locality",
+  });
+
+  const [society, setSociety] = useState({
+    label: "Select Society",
+    value: "Select Society",
+  });
+
   const [distinctValuesLocality, setdistinctValuesLocality] = useState([]);
   const [distinctValuesSociety, setdistinctValuesSociety] = useState([]);
   const [formError, setFormError] = useState(null);
@@ -239,16 +254,31 @@ const CreateProperty = () => {
   const navigate = useNavigate();
 
   const { documents: dbstatesdocuments, error: dbstateserror } = useCollection(
-    "m_states",
-    ["country", "==", "INDIA"]
+    "m_states", ["status", "==", "active"]
+    // ,["state", "asc"]
   );
+
+  console.log("dbstatesdocuments: ", dbstatesdocuments)
 
   const { documents: dbcitiesdocuments, error: dbcitieserror } = useCollection(
     "m_cities",
     ["status", "==", "active"]
+    // ,["city", "asc"]
   );
 
+  console.log("dbcitiesdocuments: ", dbcitiesdocuments)
 
+  const { documents: dblocalitiesdocuments, error: dblocalitieserror } = useCollection(
+    "m_localities",
+    ["status", "==", "active"]
+  );
+
+  const { documents: dbsocietiesdocuments, error: dbsocietieserror } = useCollection(
+    "m_societies",
+    ["status", "==", "active"]
+  );
+
+  console.log("dbsocietiesdocuments: ", dbsocietiesdocuments)
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
@@ -281,17 +311,17 @@ const CreateProperty = () => {
   };
 
   useEffect(() => {
-
     statesOptions.current =
       dbstatesdocuments &&
       dbstatesdocuments.map((stateData) => ({
         label: stateData.state,
-        value: stateData.statecode,
+        value: stateData.id,
       }));
-    // // console.log('statesOptions:', statesOptions)
+
     statesOptionsSorted.current =
       statesOptions.current &&
       statesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
+    // console.log('statesOptionsSorted:', statesOptionsSorted)
 
     statesOptionsSorted.current &&
       statesOptionsSorted.current.unshift({
@@ -300,26 +330,27 @@ const CreateProperty = () => {
       });
 
     //Not required Distinct list, Just fetch Cities from m_cities collection as per the city status as active
-    dbcitiesdocuments &&
-      dbcitiesdocuments.map((doc) => {
-        // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
-        if (!distinctCityList.find((e) => e.city === doc.city)) {
-          distinctCityList.push({
-            state: doc.state,
-            city: doc.city,
-          });
-        }
-      });
+    // dbcitiesdocuments &&
+    //   dbcitiesdocuments.map((doc) => {
+    //     // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
+    //     if (!distinctCityList.find((e) => e.city === doc.city)) {
+    //       distinctCityList.push({
+    //         state: doc.state,
+    //         city: doc.city,
+    //       });
+    //     }
+    //   });
 
-    dbpropertiesdocuments &&
-      dbpropertiesdocuments.map((doc) => {
-        if (!distinctLocalityList.find((e) => e.locality === doc.locality)) {
-          distinctLocalityList.push({
-            city: doc.city,
-            locality: doc.locality,
-          });
-        }
-      });
+    // dbpropertiesdocuments &&
+    //   dbpropertiesdocuments.map((doc) => {
+    //     if (!distinctLocalityList.find((e) => e.locality === doc.locality)) {
+    //       distinctLocalityList.push({
+    //         city: doc.city,
+    //         locality: doc.locality,
+    //       });
+    //     }
+    //   });
+
     // console.log('distinctLocalityList: ', distinctLocalityList)
 
     // dbpropertiesdocuments &&
@@ -333,7 +364,7 @@ const CreateProperty = () => {
     //   });
 
 
-  }, [dbstatesdocuments, dbpropertiesdocuments, dbcitiesdocuments, distinctCityList, distinctLocalityList]);
+  }, [dbstatesdocuments]);
 
   // dbpropertiesdocuments &&
   //   dbpropertiesdocuments.map((doc) => {
@@ -346,15 +377,15 @@ const CreateProperty = () => {
   //   });
   // // console.log('distinctLocalityList: ', distinctLocalityList)
 
-  dbpropertiesdocuments &&
-    dbpropertiesdocuments.map((doc) => {
-      if (!distinctSocietyList.find((e) => e.society === doc.society)) {
-        distinctSocietyList.push({
-          locality: doc.locality,
-          society: doc.society,
-        });
-      }
-    });
+  // dbpropertiesdocuments &&
+  //   dbpropertiesdocuments.map((doc) => {
+  //     if (!distinctSocietyList.find((e) => e.society === doc.society)) {
+  //       distinctSocietyList.push({
+  //         locality: doc.locality,
+  //         society: doc.society,
+  //       });
+  //     }
+  //   });
 
   // const setPurpose = (option) => {
   //   // console.log("setPurpose e.target.value:", option);
@@ -372,16 +403,21 @@ const CreateProperty = () => {
   const handleStateChange = async (option) => {
     setState(option);
     let statename = option.label;
-    // console.log('state name:  ', statename)
-    let cityListStateWise = [];
-    cityListStateWise = distinctCityList.filter((e) => e.state === statename);
-    // console.log('cityListStateWise:', cityListStateWise)
+    console.log('state name:  ', statename)
 
-    const dataList =
-      cityListStateWise && cityListStateWise.map((doc) => doc.city);
-    // distinctValuesCity = [...new Set(dataCity)];
-    setdistinctValuesCity([...new Set(dataList)]);
-    // console.log('distinctValuesCity:', distinctValuesCity)
+    console.log("statesOptionsSorted.current: ", statesOptionsSorted.current)
+    const stateid = (statesOptionsSorted.current && statesOptionsSorted.current.find((e) => e.label === statename)).value
+    console.log("stateid: ", stateid)
+
+    let cityListStateWise = [];
+    cityListStateWise = dbcitiesdocuments.filter((e) => e.state === stateid);
+    console.log('cityListStateWise:', cityListStateWise)
+
+    // const dataList =
+    //   cityListStateWise && cityListStateWise.map((doc) => doc.city);
+    // // distinctValuesCity = [...new Set(dataCity)];
+    // setdistinctValuesCity([...new Set(dataList)]);
+    // // console.log('distinctValuesCity:', distinctValuesCity)
 
     //City Dropdown List as per state
     citiesOptions.current =
@@ -407,50 +443,104 @@ const CreateProperty = () => {
 
   const handleCityChange = async (option) => {
     setCity(option);
+    let cityname = option.label;
+    // console.log('city name:  ', cityname)
+
+    // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
+    const cityid = (dbcitiesdocuments && dbcitiesdocuments.find((e) => e.city === cityname)).id
+    // console.log("cityid: ", cityid)
+
+    const dataList = dblocalitiesdocuments.filter((e) => e.city === cityid);
+    // console.log("Locality dataList: ", dataList)
+
+    //Localities Dropdown List as per city
+    localitiesOptions.current =
+      dataList &&
+      dataList.map((localtyData) => ({
+        label: localtyData.locality,
+        value: localtyData.id,
+      }));
+
+    localitiesOptionsSorted.current =
+      localitiesOptions.current &&
+      localitiesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
+
+    setLocality({ label: "Select Locality", value: "Select Locality" });
+  };
+
+  const handleLocalityChange = async (option) => {
+    setLocality(option);
+    let localityname = option.label;
+    // console.log('locality name:  ', localityname)
+
+    // console.log("dblocalitiesdocuments: ", dblocalitiesdocuments)
+    const localityid = (dblocalitiesdocuments && dblocalitiesdocuments.find((e) => e.locality === localityname)).id
+    // console.log("localityid: ", localityid)
+
+    const dataList = dbsocietiesdocuments.filter((e) => e.locality === localityid);
+    // console.log("Society dataList: ", dataList)
+
+    //Localities Dropdown List as per city
+    societiesOptions.current =
+      dataList &&
+      dataList.map((societyData) => ({
+        label: societyData.society,
+        value: societyData.id,
+      }));
+
+    societiesOptionsSorted.current =
+      societiesOptions.current &&
+      societiesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
+
+    setSociety({ label: "Select Society", value: "Select Society" });
+  };
+
+  const handleSocietyChange = async (option) => {
+    setSociety(option);
 
     // console.log('City option: ', option)
 
-    setSearchedCity(option.value);
+    setSearchedSociety(option.value);
   };
 
-  function setSearchedCity(cityname) {
-    // console.log('cityname', cityname);
-    setPropertyDetails({
-      ...propertyDetails,
-      City: cityname,
-    });
+  // function setSearchedCity(cityname) {
+  //   // console.log('cityname', cityname);
+  //   setPropertyDetails({
+  //     ...propertyDetails,
+  //     City: cityname,
+  //   });
 
-    let localityListStateWise = [];
-    localityListStateWise = distinctLocalityList.filter(
-      (e) => e.city === cityname
-    );
-    // console.log('localityListStateWise:', localityListStateWise)
+  //   let localityListStateWise = [];
+  //   localityListStateWise = distinctLocalityList.filter(
+  //     (e) => e.city === cityname
+  //   );
+  //   // console.log('localityListStateWise:', localityListStateWise)
 
-    const dataList =
-      localityListStateWise && localityListStateWise.map((doc) => doc.locality);
-    setdistinctValuesLocality([...new Set(dataList)]);
+  //   const dataList =
+  //     localityListStateWise && localityListStateWise.map((doc) => doc.locality);
+  //   setdistinctValuesLocality([...new Set(dataList)]);
 
-    // console.log("Locality dataList: ", dataList);
-  }
+  //   // console.log("Locality dataList: ", dataList);
+  // }
 
-  function setSearchedLocality(localityname) {
-    // console.log('localityname: ', localityname);
-    setPropertyDetails({
-      ...propertyDetails,
-      Locality: localityname,
-    });
-    let societyListStateWise = [];
-    // console.log("distinctSocietyList:", distinctSocietyList);
-    societyListStateWise = distinctSocietyList.filter(
-      (e) => e.locality.toLowerCase() === localityname.toLowerCase()
-    );
-    // console.log("societyListStateWise:", societyListStateWise);
+  // function setSearchedLocality(localityname) {
+  //   // console.log('localityname: ', localityname);
+  //   setPropertyDetails({
+  //     ...propertyDetails,
+  //     Locality: localityname,
+  //   });
+  //   let societyListStateWise = [];
+  //   // console.log("distinctSocietyList:", distinctSocietyList);
+  //   societyListStateWise = distinctSocietyList.filter(
+  //     (e) => e.locality.toLowerCase() === localityname.toLowerCase()
+  //   );
+  //   // console.log("societyListStateWise:", societyListStateWise);
 
-    const dataList =
-      societyListStateWise && societyListStateWise.map((doc) => doc.society);
-    setdistinctValuesSociety([...new Set(dataList)]);
-    // console.log("distinctValuesSociety:", distinctValuesSociety);
-  }
+  //   const dataList =
+  //     societyListStateWise && societyListStateWise.map((doc) => doc.society);
+  //   setdistinctValuesSociety([...new Set(dataList)]);
+  //   // console.log("distinctValuesSociety:", distinctValuesSociety);
+  // }
 
   function setSearchedSociety(societyname) {
     // console.log('societyname', societyname);
@@ -2843,6 +2933,32 @@ const CreateProperty = () => {
 
             <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
+                <label htmlFor="">New Locality</label>
+
+                <div className="form_field_inner">
+                  <Select
+                    className=""
+                    onChange={handleLocalityChange}
+                    options={localitiesOptionsSorted.current}
+                    value={locality}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: "#efefef",
+                        border: "none",
+                        borderBottom: "none",
+                        paddingLeft: "10px",
+                        textTransform: "capitalize",
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="col-xl-4 col-lg-6">
+              <div className="form_field label_top">
                 <label htmlFor="">Locality</label>
                 <div className="form_field_inner">
                   <SearchBarAutoComplete
@@ -2859,8 +2975,33 @@ const CreateProperty = () => {
                   ></SearchBarAutoComplete>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="col-xl-4 col-lg-6">
+              <div className="form_field label_top">
+                <label htmlFor="">New Society</label>
+
+                <div className="form_field_inner">
+                  <Select
+                    className=""
+                    onChange={handleSocietyChange}
+                    options={societiesOptionsSorted.current}
+                    value={society}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: "#efefef",
+                        border: "none",
+                        borderBottom: "none",
+                        paddingLeft: "10px",
+                        textTransform: "capitalize",
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            {/* <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
                 <label htmlFor="">Society</label>
                 <div className="form_field_inner">
@@ -2878,7 +3019,7 @@ const CreateProperty = () => {
                   ></SearchBarAutoComplete>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* Unit No */}
             <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
@@ -2942,14 +3083,14 @@ const CreateProperty = () => {
               {formSuccess && <p className="success_new">{formSuccess}</p>}
             </div>
             <div className="col-12">
-            <button
-  id="btn_create"
-  className="theme_btn btn_fill full_width no_icon"
-  onClick={(e) => handleSubmit(e, "Next")}
-  disabled={formSuccess ? true : false} // Apply disabled conditionally
->
-  Create
-</button>
+              <button
+                id="btn_create"
+                className="theme_btn btn_fill full_width no_icon"
+                onClick={(e) => handleSubmit(e, "Next")}
+                disabled={formSuccess ? true : false} // Apply disabled conditionally
+              >
+                Create
+              </button>
 
             </div>
           </div>

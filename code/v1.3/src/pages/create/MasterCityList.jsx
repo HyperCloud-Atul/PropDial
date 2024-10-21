@@ -2,25 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
+import { useCommon } from "../../hooks/useCommon";
 import Select from "react-select";
 import Filters from "../../components/Filters";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "./Create.css";
 import NineDots from "../../components/NineDots";
-
-function camelCase(str) {
-  return (
-    str
-      .replace(/\s(.)/g, function (a) {
-        return a.toUpperCase();
-      })
-      // .replace(/\s/g, '')
-      .replace(/^(.)/, function (b) {
-        return b.toUpperCase();
-      })
-  );
-}
 
 const dataFilter = ["INDIA", "USA", "OTHERS", "INACTIVE"];
 export default function MasterCityList() {
@@ -29,6 +17,7 @@ export default function MasterCityList() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+  const { camelCase } = useCommon();
   // Scroll to the top of the page whenever the location changes end
   const { addDocument, response: responseAddDocument } =
     useFirestore("m_cities");
@@ -41,12 +30,17 @@ export default function MasterCityList() {
     "",
     ["city", "asc"]
   );
+  const { documents: masterState, error: masterStateerror } = useCollection(
+    "m_states",
+    "",
+    ["state", "asc"]
+  );
   // const { documents: masterState, error: masterStateerror } = useCollection('m_states')
   const { documents: masterCountry, error: masterCountryerror } =
     useCollection("m_countries");
   // console.log('masterCountry:', masterCountry)
 
-  const [country, setCountry] = useState({ label: "INDIA", value: "INDIA" });
+  const [country, setCountry] = useState();
   const [countryList, setCountryList] = useState();
   const [state, setState] = useState();
   // const [stateList, setStateList] = useState()
@@ -66,7 +60,7 @@ export default function MasterCityList() {
     if (masterCountry) {
       countryOptions.current = masterCountry.map((countryData) => ({
         label: countryData.country,
-        value: countryData.country,
+        value: countryData.id,
       }));
 
       countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
@@ -75,41 +69,46 @@ export default function MasterCityList() {
 
       setCountryList(countryOptionsSorted.current);
 
-      handleCountryChange(country);
+      setCountry({
+        label: countryOptionsSorted.current[0].label,
+        value: countryOptionsSorted.current[0].value,
+      })
+
+      handleCountryChange({
+        label: countryOptionsSorted.current[0].label,
+        value: countryOptionsSorted.current[0].value,
+      });
     }
   }, [masterCountry]);
 
   //Country select onchange
   const handleCountryChange = async (option) => {
-    setCountry(option);
+    // setCountry(option);
     let countryname = option.label;
     // console.log('countryname:', countryname)
+    const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
+    // console.log('countryid:', countryid)
     const ref = await projectFirestore
       .collection("m_states")
-      .where("country", "==", countryname);
+      .where("country", "==", countryid);
     ref.onSnapshot(
       async (snapshot) => {
         if (snapshot.docs) {
           stateOptions.current = snapshot.docs.map((stateData) => ({
             label: stateData.data().state,
-            value: stateData.data().state,
+            value: stateData.id,
           }));
           // console.log('stateOptions:', stateOptions)
           stateOptionsSorted.current = stateOptions.current.sort((a, b) =>
             a.label.localeCompare(b.label)
           );
 
-          // console.log('stateOptionsSorted.current:', stateOptionsSorted.current)
-          // setStateList(stateOptionsSorted.current)
 
-          if (countryname === "INDIA") {
-            setState({ label: "Delhi", value: "Delhi" });
-          } else {
-            setState({
-              label: stateOptionsSorted.current[0].label,
-              value: stateOptionsSorted.current[0].value,
-            });
-          }
+          setState({
+            label: stateOptionsSorted.current[0].label,
+            value: stateOptionsSorted.current[0].value,
+          });
+
         } else {
           // setError('No such document exists')
         }
@@ -129,7 +128,7 @@ export default function MasterCityList() {
 
     let _addCityFlag = false;
 
-    let cityname = city.trim().toUpperCase();
+    let cityname = camelCase(city.trim());
     // console.log('cityname:', cityname)
     // console.log("Updated currentDocid: ", currentDocid)
     if (currentDocid != null) {
@@ -137,8 +136,8 @@ export default function MasterCityList() {
       setFormError("Updated Successfully");
       // sethandleAddSectionFlag(!handleAddSectionFlag);
       await updateDocument(currentDocid, {
-        country: country.label,
-        state: state.label,
+        country: country.value,
+        state: state.value,
         city: cityname,
       });
 
@@ -154,8 +153,8 @@ export default function MasterCityList() {
         // console.log("results.length: ", results.length)
         if (results.length === 0) {
           const dataSet = {
-            country: country.label,
-            state: state.label,
+            country: country.value,
+            state: state.value,
             city: cityname,
             status: "active",
           };
@@ -209,8 +208,14 @@ export default function MasterCityList() {
     setCurrentDocid(docid);
     window.scrollTo(0, 0);
     setFormError(null);
-    setCountry({ label: doccountry, value: doccountry });
-    setState({ label: docstate, value: docstate });
+
+    // console.log("country id: ", doccountry)
+    const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
+    // console.log("country name: ", countryname)
+    const statename = (masterState && masterState.find((e) => e.id === docstate)).state
+
+    setCountry({ label: countryname, value: doccountry });
+    setState({ label: statename, value: docstate });
     setCity(doccity);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update City");
@@ -230,17 +235,21 @@ export default function MasterCityList() {
       // Role and country-based filtering
       switch (filter) {
         case "INDIA":
-          if (document.country === "INDIA") {
+          const indiaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "INDIA").id
+          if (document.country === indiaid) {
             isFiltered = true;
           }
           break;
         case "USA":
-          if (document.country === "USA") {
+          const usaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "USA").id
+          if (document.country === usaid) {
             isFiltered = true;
           }
           break;
         case "OTHERS":
-          if (document.country !== "INDIA" && document.country !== "USA") {
+          const indiaid1 = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "INDIA").id
+          const usaid1 = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "USA").id
+          if (document.country !== indiaid1 && document.country !== usaid1) {
             isFiltered = true;
           }
           break;
@@ -379,6 +388,7 @@ export default function MasterCityList() {
                 </div>
               </div>
             </div>
+
             <hr></hr>
           </>
         )}
@@ -557,7 +567,12 @@ export default function MasterCityList() {
                                     transform: "translateY(5px)",
                                   }}
                                 >
-                                  {camelCase(data.state)}, {data.country}
+                                  {/* {camelCase(data.state)}, */}
+                                  {(masterState && masterState.find((e) => e.id === data.state)).state}
+                                  {" "}
+                                  {(masterCountry && masterCountry.find((e) => e.id === data.country)).country}
+                                  {/* {data.country} */}
+
                                 </small>
                               </div>
                               <div
