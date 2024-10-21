@@ -3903,6 +3903,17 @@ const PropertyDetails = () => {
                                     src="/assets/img/property-detail-icon/park.png"
                                     alt=""
                                   />
+                                ) : item === "Children Play Area" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/slide.png"
+                                    alt=""
+                                  />
+                                ) : item === "Open Gymnasium" ? (
+                                  <img
+                                    src="/assets/img/property-detail-icon/weightlifter.png"
+                                    alt=""
+                                  />                                 
+                                  
                                 ) : item === "Main Road" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/road.png"

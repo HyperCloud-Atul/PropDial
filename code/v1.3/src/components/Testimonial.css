@@ -1,0 +1,126 @@
+.testimonial_single {
+    padding: 50px;
+    border: 6px solid var(--white-color);
+    border-radius: 40px;
+    margin: 25px;
+    text-align: center  ;
+}
+.testimonial_single h5{
+   
+}
+.testimonial_sect{
+    background: var(--theme-orange);
+}
+.quote img {
+    width: 80px !important;
+    height: auto;  
+}
+.quote {
+    position: absolute;  
+    background: var(--theme-orange);
+    
+}
+.quote_down.quote {
+    padding-left: 12px;
+    top: -35px;
+    left: -30px;
+    transform: rotate(180deg);
+}
+.quote_up.quote{
+    bottom: -35px;
+    right: -30px;
+    padding-left: 12px;
+}
+.client_info_div .client_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+.client_info_div .client_img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.client_info_div {
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    gap: 14px;
+}
+audio.c_interview {
+    margin: 25px 0px;
+}
+.testimonial_sect .section_title h3 {
+    color: white;
+}
+.carousel_container {  
+    margin-top: 40px;
+    padding-bottom: 35px;
+}
+.testimonial_sect .section_title_effect { 
+    -webkit-text-stroke-color: #ffffff70;   
+}
+.testimonial_single h5 {
+    color: var(--white-color);
+    font-weight: 400;
+    font-size: 16px;
+    opacity: 0.8;
+}
+.client_info {
+    color: var(--white-color);
+}
+.client_info h6 {
+    opacity: 0.8;
+    font-weight: 400;
+    font-size: 16px;
+}
+.client_info h4 {
+    font-size: 20px;
+}
+
+
+@media (max-width: 767px) {
+    audio.c_interview {     
+        max-width: 210px;
+        width: 100%;
+      
+    }
+.testimonial_single {
+    padding: 20px;
+    border: 4px solid white;  
+    margin: 10px;
+}
+.quote img {
+    width: 40px !important;
+    height: auto;
+}
+.quote_down.quote { 
+    top: -15px;
+    left: -12px;  
+}
+.quote_up.quote {
+    bottom: -15px;
+    right: -12px;
+}
+.testimonial_single h5 {
+    font-size: 14px;
+    margin-top: 4px !important;
+}
+.client_info_div {   
+    margin-top: 10px;  
+}
+.client_info_div .client_img {
+    width: 55px;
+    height: 55px;  
+}
+.client_info h4 {
+    font-size: 16px;
+}
+.client_info h6 {
+    font-size: 14px;
+}
+
+
+}

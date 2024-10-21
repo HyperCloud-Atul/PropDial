@@ -16,6 +16,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import ImageModal from "../pdpages/imageModal/ImageModal";
+import PropertySummaryCard from "../pdpages/property/PropertySummaryCard";
 
 const TenantDetails = () => {
   const location = useLocation();
@@ -363,42 +364,51 @@ const TenantDetails = () => {
     }
   };
 
-    // image modal code start
-    const [showImageModal, setShowImageModal] = useState(false);
-    const [selectedImageUrl, setSelectedImageUrl] = useState(null);
-    const [imageModalTitle, setImageModalTitle] = useState("");
-    // handleImageClick to accept a title parameter
-    const handleImageClick = (imageUrl, modalTitle) => {
-      if (imageUrl === "/assets/img/dummy_user.png") {
-        setSelectedImageUrl("/assets/img/dummy_user.png"); // Set dummy image
-        setImageModalTitle(
-          <span
-            style={{
-              fontSize: "18px",
-              color: "var(--theme-red)",
-            }}
-          >
-            🚫 No photo uploaded yet!
-          </span>
-        ); // Set the fallback message
-      } else {
-        setSelectedImageUrl(imageUrl); // Set the actual image
-        setImageModalTitle(modalTitle); // Set the actual modal title
-      }
-      setShowImageModal(true);
-    };
-    // image modal code end
+  // image modal code start
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+  const [imageModalTitle, setImageModalTitle] = useState("");
+  // handleImageClick to accept a title parameter
+  const handleImageClick = (imageUrl, modalTitle) => {
+    if (imageUrl === "/assets/img/dummy_user.png") {
+      setSelectedImageUrl("/assets/img/dummy_user.png"); // Set dummy image
+      setImageModalTitle(
+        <span
+          style={{
+            fontSize: "18px",
+            color: "var(--theme-red)",
+          }}
+        >
+          🚫 No photo uploaded yet!
+        </span>
+      ); // Set the fallback message
+    } else {
+      setSelectedImageUrl(imageUrl); // Set the actual image
+      setImageModalTitle(modalTitle); // Set the actual modal title
+    }
+    setShowImageModal(true);
+  };
+  // image modal code end
+  // const propSummaryId = tenantInfo && tenantInfo.propertyId
+  // const { document: propertydoc, error: propertyerror } = useDocument(
+  //   "properties",
+  //   ["propertyId", "===", propSummaryId],
+    
+  // );
+
 
   return (
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
-        <div className="page_spacing">
-        <div className="row row_reverse_991">
-          <div className="col-lg-6">
-            <div className="title_card mobile_full_575 mobile_gap h-100">
-              <h2 className="text-center mb-4">OnePlace for Property Keys</h2>
-              {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
-              {!showAIForm && (
+        <div className="page_spacing pg_min_height">
+          <div className="row row_reverse_991">
+            <div className="col-lg-6">
+              <div className="title_card mobile_full_575 mobile_gap h-100">
+                <h2 className="text-center mb-1">Tenant Documents</h2>
+                <h6 className="text-center mt-1 mb-4">
+                  Add new, show and download documents
+                </h6>
+                {!showAIForm && (
                   <div
                     className="theme_btn btn_fill no_icon text-center short_btn"
                     onClick={handleShowAIForm}
@@ -406,14 +416,109 @@ const TenantDetails = () => {
                     Add document
                   </div>
                 )}
+              </div>
             </div>
-          </div>
-          {/* <PropertySummaryCard
+            {/* <PropertySummaryCard
             propertydoc={propertydoc}
-            propertyId={propertyId}
+            propertyId={propSummaryId}
           /> */}
-        </div>
+          </div>
+          {showAIForm && (
+            <>
+              <div className="vg22_m15"></div>
+              <section className="my_big_card">
+                <h2 className="card_title">Select document type</h2>
+                <div className="aai_form">
+                  <div className="row" style={{ rowGap: "18px" }}>
+                    <div className="col-12">
+                      <div className="form_field">
+                        <div className="field_box theme_radio_new tab_type_radio">
+                          <div className="theme_radio_container">
+                            {docCategories.map((category) => (
+                              <div className="radio_single" key={category.id}>
+                                <input
+                                  type="radio"
+                                  name="doc_cat"
+                                  id={category.id}
+                                  value={category.value}
+                                  onChange={handleDocCatChange}
+                                  checked={selectedDocCat === category.value}
+                                />
+                                <label htmlFor={category.id}>
+                                  {category.label}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
+                    {docTypes[selectedDocCat] && (
+                      <div className="col-12">
+                        <div className="form_field">
+                          <div className="field_box theme_radio_new">
+                            <div className="theme_radio_container">
+                              {docTypes[selectedDocCat].map((radio) => (
+                                <div className="radio_single" key={radio.id}>
+                                  <input
+                                    type="radio"
+                                    name="aai_type"
+                                    id={radio.id}
+                                    value={radio.value}
+                                    onChange={handleRadioChange}
+                                    checked={selectedIdType === radio.value}
+                                  />
+                                  <label htmlFor={radio.id}>
+                                    {radio.label}
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="col-md-11">
+                      <div className="add_info_text">
+                        <div className="form_field">
+                          <div className="relative">
+                            <input
+                              type="text"
+                              value={idNumber}
+                              onChange={handleIdNumberChange}
+                              placeholder="Document ID (optional)"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row mt-3">
+                  <div className="col-md-2 col-6">
+                    <div
+                      className="theme_btn btn_border text-center no_icon"
+                      onClick={isUploading ? null : handleShowAIForm}
+                    >
+                      Cancel
+                    </div>
+                  </div>
+                  <div className="col-md-3 col-6">
+                    <div
+                      className={`theme_btn btn_fill text-center no_icon ${
+                        isUploading ? "disabled" : ""
+                      }`}
+                      onClick={isUploading ? null : addTenantDocuments}
+                    >
+                      {isUploading ? "Uploading..." : "Create"}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </>
+          )}
 
           {/* 9 dots html  */}
           <div
@@ -459,12 +564,15 @@ const TenantDetails = () => {
               </Link>
             </div>
           </div>
-        
+
           <div className="vg22_m15"></div>
           <div className="">
-            <div className="row" style={{
-              rowGap:"15px"
-            }}>
+            <div
+              className="row"
+              style={{
+                rowGap: "15px",
+              }}
+            >
               <div className="col-lg-4 tenant_mobile_full_card">
                 <div
                   className={`tc_single${
@@ -495,7 +603,9 @@ const TenantDetails = () => {
                                     color: "var(--theme-blue)",
                                   }}
                                 >
-                                 {tenantInfo && tenantInfo.name ? tenantInfo.name : "Tenant" }
+                                  {tenantInfo && tenantInfo.name
+                                    ? tenantInfo.name
+                                    : "Tenant"}
                                 </span>{" "}
                                 Looks
                               </>
@@ -509,15 +619,17 @@ const TenantDetails = () => {
                             ref={fileInputRef}
                             id="upload"
                           />
-                            <span className="material-symbols-outlined">
-                    photo_camera
-                  </span>
+                          <span className="material-symbols-outlined">
+                            photo_camera
+                          </span>
                         </label>
 
                         {imageURL && (
                           <span
-                            className="material-symbols-outlined delete_icon"                           
-                            onClick={() => handleShowModal("deleteTenantProfile")}
+                            className="material-symbols-outlined delete_icon"
+                            onClick={() =>
+                              handleShowModal("deleteTenantProfile")
+                            }
                           >
                             delete_forever
                           </span>
@@ -644,23 +756,24 @@ const TenantDetails = () => {
                       )}
                     </h6>
                   </div>
-                  {tenantInfo && tenantInfo.mobile &&
-                  <div className="wha_call_icon">
-                    <Link
-                      className="call_icon wc_single"
-                      to={`tel:${tenantInfo && tenantInfo.mobile}`}
-                      target="_blank"
-                    >
-                      <img src="/assets/img/simple_call.png" alt="" />
-                    </Link>
-                    <Link
-                      className="wha_icon wc_single"
-                      to={`https://wa.me/${tenantInfo && tenantInfo.mobile}`}
-                      target="_blank"
-                    >
-                      <img src="/assets/img/whatsapp_simple.png" alt="" />
-                    </Link>
-                  </div>}
+                  {tenantInfo && tenantInfo.mobile && (
+                    <div className="wha_call_icon">
+                      <Link
+                        className="call_icon wc_single"
+                        to={`tel:${tenantInfo && tenantInfo.mobile}`}
+                        target="_blank"
+                      >
+                        <img src="/assets/img/simple_call.png" alt="" />
+                      </Link>
+                      <Link
+                        className="wha_icon wc_single"
+                        to={`https://wa.me/${tenantInfo && tenantInfo.mobile}`}
+                        target="_blank"
+                      >
+                        <img src="/assets/img/whatsapp_simple.png" alt="" />
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-lg-8 tenant_mobile_full_card">
@@ -954,185 +1067,14 @@ const TenantDetails = () => {
               </div>
             </div>
             <ImageModal
-        show={showImageModal}
-        handleClose={() => setShowImageModal(false)}
-        imageUrl={selectedImageUrl}
-        imageModalTitle={imageModalTitle} // Pass the dynamic title as a prop
-      />
-            <div className="vg22_m15"></div>
-            <div className="pg_header d-flex align-items-center justify-content-between my_big_card">
-              <div className="left">
-                <h2 className="m22 mb-1">Documents</h2>
-                <h4 className="r16 light_black">
-                  Add new, show and download documents{" "}
-                </h4>
-              </div>
-              <div className="right">
-               
-              </div>
-            </div>
-            {showAIForm && (
-              <>
-                <div className="vg22_m15"></div>
-                <section className="my_big_card">
-                  <h2 className="card_title">Select document type</h2>
-                  <div className="aai_form">
-                    <div className="row" style={{ rowGap: "18px" }}>
-                      <div className="col-12">
-                        <div className="form_field">
-                          <div className="field_box theme_radio_new tab_type_radio">
-                            <div className="theme_radio_container">
-                              {docCategories.map((category) => (
-                                <div className="radio_single" key={category.id}>
-                                  <input
-                                    type="radio"
-                                    name="doc_cat"
-                                    id={category.id}
-                                    value={category.value}
-                                    onChange={handleDocCatChange}
-                                    checked={selectedDocCat === category.value}
-                                  />
-                                  <label htmlFor={category.id}>
-                                    {category.label}
-                                  </label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {docTypes[selectedDocCat] && (
-                        <div className="col-12">
-                          <div className="form_field">
-                            <div className="field_box theme_radio_new">
-                              <div className="theme_radio_container">
-                                {docTypes[selectedDocCat].map((radio) => (
-                                  <div className="radio_single" key={radio.id}>
-                                    <input
-                                      type="radio"
-                                      name="aai_type"
-                                      id={radio.id}
-                                      value={radio.value}
-                                      onChange={handleRadioChange}
-                                      checked={selectedIdType === radio.value}
-                                    />
-                                    <label htmlFor={radio.id}>
-                                      {radio.label}
-                                    </label>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="col-md-11">
-                        <div className="add_info_text">
-                          <div className="form_field">
-                            <div className="relative">
-                              <input
-                                type="text"
-                                value={idNumber}
-                                onChange={handleIdNumberChange}
-                                placeholder="Document ID (optional)"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row mt-3">
-                    <div className="col-md-2 col-6">
-                      <div
-                        className="theme_btn btn_border text-center no_icon"
-                        onClick={isUploading ? null : handleShowAIForm}
-                      >
-                        Cancel
-                      </div>
-                    </div>
-                    <div className="col-md-3 col-6">
-                      <div
-                        className={`theme_btn btn_fill text-center no_icon ${
-                          isUploading ? "disabled" : ""
-                        }`}
-                        onClick={isUploading ? null : addTenantDocuments}
-                      >
-                        {isUploading ? "Uploading..." : "Create"}
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              </>
-            )}
-
-            {/* <div className="blog_sect">
-              <div className="row">
-                {tenantDocs &&
-                  tenantDocs.map((doc, index) => (
-                    <div className="col-md-4" key={index}>
-                      <div className="item card-container">
-                        <div className="card-image relative" style={{
-                          width: "100%",
-                          aspectRatio: "3/2"
-                        }}>
-                          {uploadingDocId !== doc.id && (
-                            <label htmlFor={`upload_img_${doc.id}`} className="upload_img click_text by_text">
-                              Upload PDF or Img
-                              <input
-                                type="file"
-                                onChange={(e) => handleFileChange(e, doc.id)}
-                                ref={fileInputRef}
-                                id={`upload_img_${doc.id}`}
-                              />
-                            </label>
-                          )}
-                          {uploadingDocId === doc.id ? (
-                            <div className="loader d-flex justify-content-center align-items-center" style={{
-                              width: "100%",
-                              height: "100%"
-                            }}>
-                              <BeatLoader color={"#FF5733"} loading={true} />
-                            </div>
-                          ) : doc.mediaType === "pdf" ? (
-                            <iframe
-                              title="PDF Viewer"
-                              src={doc.documentUrl}
-                              style={{
-                                width: "100%",
-                                aspectRatio: "3/2",
-                              }}
-                            ></iframe>
-                          ) : (
-                            <img
-                              src={doc.documentUrl || "https://via.placeholder.com/150"}
-                              alt="Document"
-                            />
-                          )}
-                        </div>
-                        <div className="card-body">
-                          <h3>{doc.idType}</h3>
-                          <p className="card-subtitle">{doc.idNumber}</p>
-                          <div className="card-author">
-                            <div onClick={() => deleteTenantDocument(doc.id)} className="learn-more pointer">
-                              Delete
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div> */}
+              show={showImageModal}
+              handleClose={() => setShowImageModal(false)}
+              imageUrl={selectedImageUrl}
+              imageModalTitle={imageModalTitle} // Pass the dynamic title as a prop
+            />
             <div className="theme_tab prop_doc_tab">
               <Tabs>
-                <TabList className="tabs"
-                style={{
-                  justifyContent:"center"
-                }}
-                >
+                <TabList className="tabs">
                   <Tab className="pointer">
                     Tenant KYC Document ({filteredTenantDocLength})
                   </Tab>
@@ -1147,12 +1089,17 @@ const TenantDetails = () => {
                   <div className="blog_sect">
                     <div className="row">
                       {filteredTenantDocLength === 0 && (
-                        <h5 className="m20 text_red mt-4 text-center">No data found</h5>
+                        <h5 className="m20 text_red mt-4">No data found</h5>
                       )}
                       {filteredTenantDocuments.map((doc, index) => (
                         <div className="col-lg-4 col-sm-6 " key={index}>
                           <div className="item card-container">
-                            <div className="card-image relative">
+                            <div
+                              className="card-image relative w-100"
+                              style={{
+                                aspectRatio: "3/2",
+                              }}
+                            >
                               {uploadingDocId !== doc.id && (
                                 <label
                                   htmlFor={`upload_img_${doc.id}`}
@@ -1204,14 +1151,16 @@ const TenantDetails = () => {
                             <div className="card-body">
                               <h3>{doc.idType}</h3>
                               <p className="card-subtitle">{doc.idNumber}</p>
-                              <div className="card-author">
-                                <div
-                                  onClick={() => deleteTenantDocument(doc.id)}
-                                  className="learn-more pointer"
-                                >
-                                  Delete
+                              {user && user.role === "superAdmin" && (
+                                <div className="card-author">
+                                  <div
+                                    onClick={() => deleteTenantDocument(doc.id)}
+                                    className="learn-more pointer"
+                                  >
+                                    Delete
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1223,12 +1172,17 @@ const TenantDetails = () => {
                   <div className="blog_sect">
                     <div className="row">
                       {filteredPoliceVerificationDocLength === 0 && (
-                        <h5 className="m20 text_red mt-4 text-center">No data found</h5>
+                        <h5 className="m20 text_red mt-4">No data found</h5>
                       )}
                       {filteredPoliceVerificationDocuments.map((doc, index) => (
                         <div className="col-lg-4 col-sm-6 " key={index}>
                           <div className="item card-container">
-                            <div className="card-image relative">
+                            <div
+                              className="card-image relative w-100"
+                              style={{
+                                aspectRatio: "3/2",
+                              }}
+                            >
                               {uploadingDocId !== doc.id && (
                                 <label
                                   htmlFor={`upload_img_${doc.id}`}
@@ -1280,14 +1234,16 @@ const TenantDetails = () => {
                             <div className="card-body">
                               <h3>{doc.idType}</h3>
                               <p className="card-subtitle">{doc.idNumber}</p>
-                              <div className="card-author">
-                                <div
-                                  onClick={() => deleteTenantDocument(doc.id)}
-                                  className="learn-more pointer"
-                                >
-                                  Delete
+                              {user && user.role === "superAdmin" && (
+                                <div className="card-author">
+                                  <div
+                                    onClick={() => deleteTenantDocument(doc.id)}
+                                    className="learn-more pointer"
+                                  >
+                                    Delete
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1299,12 +1255,17 @@ const TenantDetails = () => {
                   <div className="blog_sect">
                     <div className="row">
                       {filteredRentAgreementDocLength === 0 && (
-                        <h5 className="m20 text_red mt-4 text-center">No data found</h5>
+                        <h5 className="m20 text_red mt-4">No data found</h5>
                       )}
                       {filteredRentAgreementDocuments.map((doc, index) => (
                         <div className="col-lg-4 col-sm-6 " key={index}>
                           <div className="item card-container">
-                            <div className="card-image relative">
+                            <div
+                              className="card-image relative w-100"
+                              style={{
+                                aspectRatio: "3/2",
+                              }}
+                            >
                               {uploadingDocId !== doc.id && (
                                 <label
                                   htmlFor={`upload_img_${doc.id}`}
@@ -1356,14 +1317,16 @@ const TenantDetails = () => {
                             <div className="card-body">
                               <h3>{doc.idType}</h3>
                               <p className="card-subtitle">{doc.idNumber}</p>
-                              <div className="card-author">
-                                <div
-                                  onClick={() => deleteTenantDocument(doc.id)}
-                                  className="learn-more pointer"
-                                >
-                                  Delete
+                              {user && user.role === "superAdmin" && (
+                                <div className="card-author">
+                                  <div
+                                    onClick={() => deleteTenantDocument(doc.id)}
+                                    className="learn-more pointer"
+                                  >
+                                    Delete
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1374,7 +1337,7 @@ const TenantDetails = () => {
               </Tabs>
             </div>
 
-            {!editingField && user && user.role === "admin" && (
+            {!editingField && user && user.role === "superAdmin" && (
               <>
                 <div className="vg22_m15"></div>
                 <div className="divider"></div>
