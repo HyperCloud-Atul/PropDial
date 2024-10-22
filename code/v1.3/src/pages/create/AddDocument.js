@@ -33,7 +33,7 @@ export default function AddDocument(props) {
     useDocument("documents", ["propertyid", "==", propertyid]);
 
   const { user } = useAuthContext();
-  const { documents } = useCollection("users");
+  const { documents } = useCollection("users-propdial");
   const [users, setUsers] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailError, setThumbnailError] = useState(null);

@@ -38,9 +38,9 @@ const PhoneLogin_reCaptchaV3 = () => {
     const [resendOTPFlag, setResendOTPFlag] = useState(false);
 
     const { updateDocument, response: responseUpdateDocument } =
-        useFirestore("users");
+        useFirestore("users-propdial");
 
-    const { documents: dbUsers, error: dbuserserror } = useCollection("users");
+    const { documents: dbUsers, error: dbuserserror } = useCollection("users-propdial");
     // console.log('dbuser:', dbUsers)
 
     const handleWheel = (e) => {
@@ -96,7 +96,7 @@ const PhoneLogin_reCaptchaV3 = () => {
                     });
 
                     projectFirestore
-                        .collection("users")
+                        .collection("users-propdial")
                         .doc(user.uid)
                         .set({
                             online: true,
@@ -122,7 +122,7 @@ const PhoneLogin_reCaptchaV3 = () => {
                     console.log("Existing user signed in with Google");
                     console.log("existing user:", user);
                     let role = 'owner';
-                    const docRef = projectFirestore.collection("users").doc(user.uid)
+                    const docRef = projectFirestore.collection("users-propdial").doc(user.uid)
                     // Get the document snapshot
                     const docSnapshot = await docRef.get();
                     // Check if the document exists
@@ -295,7 +295,7 @@ const PhoneLogin_reCaptchaV3 = () => {
                     });
 
                     projectFirestore
-                        .collection("users")
+                        .collection("users-propdial")
                         .doc(user.uid)
                         .set({
                             online: true,
@@ -318,7 +318,7 @@ const PhoneLogin_reCaptchaV3 = () => {
                 } else {
                     console.log("Existing user signed in with phone number");
                     let role = 'owner';
-                    const docRef = projectFirestore.collection("users").doc(user.uid)
+                    const docRef = projectFirestore.collection("users-propdial").doc(user.uid)
                     // Get the document snapshot
                     const docSnapshot = await docRef.get();
                     // Check if the document exists

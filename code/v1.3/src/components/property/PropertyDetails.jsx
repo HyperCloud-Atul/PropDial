@@ -64,7 +64,7 @@ const PropertyDetails = () => {
   const [propertyOnboardingDateFormatted, setPropertyOnboardingDateFormatted] =
     useState();
 
-  const { documents: dbUsers, error: dbuserserror } = useCollection("users", [
+  const { documents: dbUsers, error: dbuserserror } = useCollection("users-propdial", [
     "status",
     "==",
     "active",
@@ -340,7 +340,7 @@ const PropertyDetails = () => {
 
     if (propertyDocument && propertyDocument.propertyManager) {
       const propertyManagerRef = projectFirestore
-        .collection("users")
+        .collection("users-propdial")
         .doc(propertyDocument.propertyManager);
 
       const unsubscribe = propertyManagerRef.onSnapshot(
@@ -361,7 +361,7 @@ const PropertyDetails = () => {
     //Property Owner Document
     if (propertyDocument && propertyDocument.propertyOwner) {
       const propertyOwnerRef = projectFirestore
-        .collection("users")
+        .collection("users-propdial")
         .doc(propertyDocument.propertyOwner);
 
       const unsubscribe = propertyOwnerRef.onSnapshot(
@@ -382,7 +382,7 @@ const PropertyDetails = () => {
     //Property Owner Document
     if (propertyDocument && propertyDocument.propertyCoOwner) {
       const propertyCoOwnerRef = projectFirestore
-        .collection("users")
+        .collection("users-propdial")
         .doc(propertyDocument.propertyCoOwner);
 
       const unsubscribe = propertyCoOwnerRef.onSnapshot(
@@ -403,7 +403,7 @@ const PropertyDetails = () => {
     //Property Owner POC Document
     if (propertyDocument && propertyDocument.propertyPOC) {
       const propertyPOCRef = projectFirestore
-        .collection("users")
+        .collection("users-propdial")
         .doc(propertyDocument.propertyPOC);
 
       const unsubscribe = propertyPOCRef.onSnapshot(
@@ -2398,8 +2398,8 @@ const PropertyDetails = () => {
                         )}
                         <div
                           className={`${user && (user.role === "admin" || user.role === "superAdmin")
-                              ? "col-sm-11 col-10"
-                              : "col-12"
+                            ? "col-sm-11 col-10"
+                            : "col-12"
                             }`}
                         >
                           <div className="property_layout_card">
@@ -2806,8 +2806,8 @@ const PropertyDetails = () => {
                           )}
                           <div
                             className={`${user && (user.role === "admin" || user.role === "superAdmin")
-                                ? "col-sm-11 col-10"
-                                : "col-12"
+                              ? "col-sm-11 col-10"
+                              : "col-12"
                               }`}
                           >
                             <div className="tenant_card">
@@ -2841,8 +2841,8 @@ const PropertyDetails = () => {
                                     <SwiperSlide key={index}>
                                       <div
                                         className={`tc_single relative item ${tenant.status === "inactive"
-                                            ? "t_inactive"
-                                            : ""
+                                          ? "t_inactive"
+                                          : ""
                                           }`}
                                       >
                                         <Link
@@ -2860,8 +2860,8 @@ const PropertyDetails = () => {
                                           </div>
                                           <div
                                             className={`tenant_detail ${editingTenantId === tenant.id
-                                                ? "td_edit"
-                                                : ""
+                                              ? "td_edit"
+                                              : ""
                                               }`}
                                           >
                                             <h6 className="t_name">
@@ -2945,8 +2945,8 @@ const PropertyDetails = () => {
                             )}
                             <div
                               className={`${user && (user.role === "admin" || user.role === "superAdmin")
-                                  ? "col-sm-11 col-10"
-                                  : "col-12"
+                                ? "col-sm-11 col-10"
+                                : "col-12"
                                 }`}
                             >
                               <div className="tenant_card">
@@ -3024,8 +3024,8 @@ const PropertyDetails = () => {
                                                       : ""
                                                   }
                                                   className={`t_name ${user && (user.role === "admin" || user.role === "superAdmin")
-                                                      ? "pointer"
-                                                      : ""
+                                                    ? "pointer"
+                                                    : ""
                                                     }`}
                                                 >
                                                   {propUser.fullName}
@@ -3305,8 +3305,8 @@ const PropertyDetails = () => {
                             )}
                             <div
                               className={`${user && (user.role === "admin" || user.role === "superAdmin")
-                                  ? "col-sm-11 col-10"
-                                  : "col-12"
+                                ? "col-sm-11 col-10"
+                                : "col-12"
                                 }`}
                             >
                               <div className="tenant_card">
@@ -3388,8 +3388,8 @@ const PropertyDetails = () => {
                                                       : ""
                                                   }
                                                   className={`t_name ${user && (user.role === "admin" || user.role === "superAdmin")
-                                                      ? "pointer"
-                                                      : ""
+                                                    ? "pointer"
+                                                    : ""
                                                     }`}
                                                 >
                                                   {propUser.fullName}

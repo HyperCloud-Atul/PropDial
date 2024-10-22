@@ -26,7 +26,7 @@ export const AuthContextProvider = ({ children }) => {
     const unsub = projectAuth.onAuthStateChanged((user) => {
       // update online status
       if (user) {
-        const documentRef = projectFirestore.collection("users").doc(user.uid);
+        const documentRef = projectFirestore.collection("users-propdial").doc(user.uid);
         const unsubscribe = documentRef.onSnapshot((snapshot) => {
           // need to make sure the doc exists & has data
           if (snapshot.data()) {

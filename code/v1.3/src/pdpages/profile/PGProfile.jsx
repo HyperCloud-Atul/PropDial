@@ -32,7 +32,7 @@ export default function PGProfile() {
 
   if (!user) navigate("/login")
 
-  const { updateDocument, response } = useFirestore("users");
+  const { updateDocument, response } = useFirestore("users-propdial");
 
   const [userPhoneNumber, setUserPhoneNumber] = useState(user && user.phoneNumber);
 

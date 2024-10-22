@@ -47,7 +47,7 @@ const UserSinglecard = ({ users }) => {
 
   // update role and status
   const { user } = useAuthContext();
-  const { updateDocument } = useFirestore("users");
+  const { updateDocument } = useFirestore("users-propdial");
   const handleSaveChanges = async () => {
     if (!selectedUser) return;
     try {

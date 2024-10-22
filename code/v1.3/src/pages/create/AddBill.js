@@ -42,7 +42,7 @@ export default function AddBill() {
     useDocument("master", "BILLTYPE");
 
   const { user } = useAuthContext();
-  const { documents } = useCollection("users");
+  const { documents } = useCollection("users-propdial");
   const [users, setUsers] = useState([]);
   const [toggleFlag, setToggleFlag] = useState(false);
 

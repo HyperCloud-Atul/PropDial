@@ -77,7 +77,7 @@ const PropertyCard = ({ propertyid }) => {
   //---------------- Start of Change User ----------------------
   const { updateDocument, response: updateDocumentResponse } =
     useFirestore("properties-propdial");
-  const { documents: dbUsers, error: dbuserserror } = useCollection("users", [
+  const { documents: dbUsers, error: dbuserserror } = useCollection("users-propdial", [
     "status",
     "==",
     "active",

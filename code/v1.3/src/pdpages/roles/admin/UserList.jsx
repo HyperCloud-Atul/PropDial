@@ -30,7 +30,7 @@ const userFilter = [
 const UserList = () => {
   const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
-  const { documents, error } = useCollection("users");
+  const { documents, error } = useCollection("users-propdial");
   const [filter, setFilter] = useState(userFilter[0]);
 
   useEffect(() => {
@@ -52,58 +52,58 @@ const UserList = () => {
 
   const users = documents
     ? documents.filter((document) => {
-        let roleMatch = true;
-        let searchMatch = true;
+      let roleMatch = true;
+      let searchMatch = true;
 
-        // Filter by role
-        switch (filter) {
-          case "Owner":
-            roleMatch =
-              document.rolePropDial === "owner" ||
-              document.rolePropDial === "coowner";
-            break;
-          case "Frontdesk":
-            roleMatch = document.rolePropDial === "frontdesk";
-            break;
-          case "Manager":
-            roleMatch = document.rolePropDial === "manager";
-            break;
-          case "Admin":
-            roleMatch = document.rolePropDial === "admin";
-            break;
-          case "Super Admin":
-            roleMatch = document.rolePropDial === "superAdmin";
-            break;
-          case "Inactive":
-            roleMatch = document.status === "inactive";
-            break;
-          case "Tenant":
-            roleMatch = document.rolePropDial === "tenant";
-            break;
-          case "Prospective Tenant":
-            roleMatch = document.rolePropDial === "prospectiveTenant";
-            break;
-          case "Buyer":
-            roleMatch = document.rolePropDial === "buyer";
-            break;
-          case "Prospective Buyer":
-            roleMatch = document.rolePropDial === "prospectiveBuyer";
-            break;
-          default:
-            roleMatch = true;
-        }
+      // Filter by role
+      switch (filter) {
+        case "Owner":
+          roleMatch =
+            document.rolePropDial === "owner" ||
+            document.rolePropDial === "coowner";
+          break;
+        case "Frontdesk":
+          roleMatch = document.rolePropDial === "frontdesk";
+          break;
+        case "Manager":
+          roleMatch = document.rolePropDial === "manager";
+          break;
+        case "Admin":
+          roleMatch = document.rolePropDial === "admin";
+          break;
+        case "Super Admin":
+          roleMatch = document.rolePropDial === "superAdmin";
+          break;
+        case "Inactive":
+          roleMatch = document.status === "inactive";
+          break;
+        case "Tenant":
+          roleMatch = document.rolePropDial === "tenant";
+          break;
+        case "Prospective Tenant":
+          roleMatch = document.rolePropDial === "prospectiveTenant";
+          break;
+        case "Buyer":
+          roleMatch = document.rolePropDial === "buyer";
+          break;
+        case "Prospective Buyer":
+          roleMatch = document.rolePropDial === "prospectiveBuyer";
+          break;
+        default:
+          roleMatch = true;
+      }
 
-        // Filter by search input
-        searchMatch = searchInput
-          ? Object.values(document).some(
-              (field) =>
-                typeof field === "string" &&
-                field.toUpperCase().includes(searchInput.toUpperCase())
-            )
-          : true;
+      // Filter by search input
+      searchMatch = searchInput
+        ? Object.values(document).some(
+          (field) =>
+            typeof field === "string" &&
+            field.toUpperCase().includes(searchInput.toUpperCase())
+        )
+        : true;
 
-        return roleMatch && searchMatch;
-      })
+      return roleMatch && searchMatch;
+    })
     : null;
 
   // card and table view mode functionality start
@@ -184,9 +184,8 @@ const UserList = () => {
             </div>
             <div className="button_filter diff_views">
               <div
-                className={`bf_single ${
-                  viewMode === "card_view" ? "active" : ""
-                }`}
+                className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                  }`}
                 onClick={() => handleModeChange("card_view")}
               >
                 <span className="material-symbols-outlined">
@@ -194,9 +193,8 @@ const UserList = () => {
                 </span>
               </div>
               <div
-                className={`bf_single ${
-                  viewMode === "table_view" ? "active" : ""
-                }`}
+                className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                  }`}
                 onClick={() => handleModeChange("table_view")}
               >
                 <span className="material-symbols-outlined">view_list</span>

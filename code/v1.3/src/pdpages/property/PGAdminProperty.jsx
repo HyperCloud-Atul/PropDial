@@ -24,7 +24,7 @@ const PGAdminProperty = () => {
   );
 
   const { documents: userList, error: erruserList } = useCollection(
-    "users"
+    "users-propdial"
   );
 
   const [propertyListWithUsers, setPropertyListWithUsers] = useState();

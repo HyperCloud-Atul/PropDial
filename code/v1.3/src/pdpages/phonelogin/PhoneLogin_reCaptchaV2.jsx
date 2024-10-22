@@ -88,24 +88,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [isOtpHidden, setIsOtpHidden] = useState(true); // By default, OTP is hidden
 
   const { updateDocument, response: responseUpdateDocument } =
-    useFirestore("users");
-  // const { documents: dbuserdocuments, error: dbusererror } = useCollection(
-  //   "users",
-  //   ["status", "==", "active"]
-  // );
-
-  // const { documents: dbuserdocuments, error: dbuserserror } = useCollection("users", [
-  //   "rolePropDial",
-  //   "in",
-  //   ["admin", "owner", "coowner", 'tenant', 'frontdesk', 'propertymanager']
-  // ]);
-  const { documents: dbUsers, error: dbuserserror } = useCollection("users");
-  // console.log('dbuserdocuments:', dbuserdocuments)
-
-  // const dbUsers =
-  //   dbuserdocuments && dbuserdocuments.filter((item) => item.status === 'active');
-
-  // console.log('dbuser:', dbUsers)
+    useFirestore("users-propdial");
 
   const handleWheel = (e) => {
     // Prevent scrolling changes
@@ -161,7 +144,7 @@ const PhoneLogin_reCaptchaV2 = () => {
           });
 
           projectFirestore
-            .collection("users")
+            .collection("users-propdial")
             .doc(user.uid)
             .set({
               online: true,
@@ -189,7 +172,7 @@ const PhoneLogin_reCaptchaV2 = () => {
           console.log("Existing user signed in with Google");
           console.log("existing user:", user);
           let role = "owner";
-          const docRef = projectFirestore.collection("users").doc(user.uid);
+          const docRef = projectFirestore.collection("users-propdial").doc(user.uid);
           // Get the document snapshot
           const docSnapshot = await docRef.get();
           // Check if the document exists
@@ -343,7 +326,7 @@ const PhoneLogin_reCaptchaV2 = () => {
       });
 
       projectFirestore
-        .collection("users")
+        .collection("users-propdial")
         .doc(user.uid)
         .set({
           online: true,
@@ -394,7 +377,7 @@ const PhoneLogin_reCaptchaV2 = () => {
         <img src="./assets/img/login_img2.png" alt="" />
       </div>
       <div className="left col_left">
-     
+
         {mobilenoSliderState && (
           <>
             <div className="left_inner col_left_inner">
@@ -508,22 +491,22 @@ const PhoneLogin_reCaptchaV2 = () => {
 
               <div className="vg22"></div>
               <div className="otp_input"
-              style={{
-                width:"fit-content",
-                margin:"auto"
-              }}
+                style={{
+                  width: "fit-content",
+                  margin: "auto"
+                }}
               >
                 <label htmlFor="" className="w-100 relative">Enter 6 digit OTP
                   <span onClick={toggleOtpVisibility} className="hs_otp pointer click_text"
-                  style={{
-                    position:"absolute",
-                    top:"0",
-                    right:"0"
-                  }}
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      right: "0"
+                    }}
                   >
-                  {isOtpHidden ? "Show" : "Hide"}
+                    {isOtpHidden ? "Show" : "Hide"}
                   </span>
-                
+
                 </label>
                 <OtpInput
                   value={otp}

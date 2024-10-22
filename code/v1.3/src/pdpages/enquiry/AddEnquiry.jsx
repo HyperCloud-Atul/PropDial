@@ -34,7 +34,7 @@ const AddEnquiry = () => {
     // console.log("propertyOwners: ", propertyOwners)
     // console.log("propertyOwners.userId: ", propertyOwners && propertyOwners[0].userId)
 
-    // const { documents: allUsers, error: allUsersError } = useCollection("users");
+    // const { documents: allUsers, error: allUsersError } = useCollection("users-propdial");
     // console.log("All Users: ", allUsers)
 
     const [enquiryFrom, setEnquiryFrom] = useState("");

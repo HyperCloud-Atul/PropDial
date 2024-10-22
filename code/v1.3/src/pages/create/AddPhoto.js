@@ -42,7 +42,7 @@ export default function AddPhoto(props) {
   const { documents: photosdocuments, error: photoserror } = useCollection("photos", ["propertyid", "==", propertyid]);
 
   const { user } = useAuthContext();
-  const { documents: appusers } = useCollection("users");
+  const { documents: appusers } = useCollection("users-propdial");
   const [users, setUsers] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailError, setThumbnailError] = useState(null);
