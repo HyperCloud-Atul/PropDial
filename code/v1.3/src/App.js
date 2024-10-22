@@ -108,32 +108,32 @@ import FCMNotification from "./components/FCMNotification";
 
 function App() {
   //---------------------- Copy Collection Code - Start -----------------------------------
-  const { documents: dbCollectionDocument, error: dbCollectionDocumentError } =
-    useCollection("properties");  // name of existing documets collection
+  // const { documents: dbCollectionDocument, error: dbCollectionDocumentError } =
+  //   useCollection("users");  // name of existing documets collection
 
-  console.log(" Number of documents in the existing collection: ", dbCollectionDocument);
+  // console.log(" Number of documents in the existing collection: ", dbCollectionDocument);
 
-  // Function to handle the button click and copy documents
-  const handleCopy = async () => {
-    const cartCollectionRef = projectFirestore.collection("properties-propagent");  // collection name of copy docs here
+  // // Function to handle the button click and copy documents
+  // const handleCopy = async () => {
+  //   const cartCollectionRef = projectFirestore.collection("users-propagent");  // collection name of copy docs here
 
-    try {
-      // Loop through each user document
-      for (const userDoc of dbCollectionDocument) {
-        const docData = userDoc; // Already the document data
-        const docId = userDoc.id; // Get document ID
+  //   try {
+  //     // Loop through each user document
+  //     for (const userDoc of dbCollectionDocument) {
+  //       const docData = userDoc; // Already the document data
+  //       const docId = userDoc.id; // Get document ID
 
-        // Copy the entire document data to the 'cart' collection
-        await cartCollectionRef.doc(docId).set(docData);
+  //       // Copy the entire document data to the 'cart' collection
+  //       await cartCollectionRef.doc(docId).set(docData);
 
-        console.log(`Documents copied: ${docId}`);
-      }
+  //       console.log(`Documents copied: ${docId}`);
+  //     }
 
-      console.log("All documents copied successfully into new collection!");
-    } catch (error) {
-      console.error("Error copying users to cart: ", error);
-    }
-  }
+  //     console.log("All documents copied successfully into new collection!");
+  //   } catch (error) {
+  //     console.error("Error copying users to cart: ", error);
+  //   }
+  // }
 
   // ---------------- Copy Collection Code - End ------------------------------
 
