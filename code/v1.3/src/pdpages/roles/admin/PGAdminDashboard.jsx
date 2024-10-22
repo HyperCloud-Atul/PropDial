@@ -37,10 +37,10 @@ const PGAdminDashboard = () => {
   //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
 
   const { documents: properties, error: propertieserror } = useCollection(
-    "properties-propdial",
-    "",
-    ["createdAt", "desc"]
+    "properties-propdial"
   );
+
+  console.log("properties: ", properties)
 
   let totalProperties = "50";
 
