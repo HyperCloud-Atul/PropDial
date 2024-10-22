@@ -188,10 +188,10 @@ function App() {
   useEffect(() => {
 
     //FCM Message Permission by End Users and get the user token
-    requestPermission();
+    // requestPermission();
 
     // Handle incoming messages
-    handleIncomingMessages();
+    // handleIncomingMessages();
 
   }, []);
 

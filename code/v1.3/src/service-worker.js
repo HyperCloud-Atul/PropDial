@@ -20,27 +20,27 @@ precacheAndRoute(self.__WB_MANIFEST);
 //-------------------------- Strategies -------------------------------------------
 
 // Register a route to cache Google Fonts URLs with a stale-while-revalidate strategy
-registerRoute(
-    ({ url }) => url.origin === 'https://fonts.googleapis.com',
-    new StaleWhileRevalidate({
-        cacheName: 'google-fonts-stylesheet',
-        plugins: [
-            // Optionally, you can cache responses based on specific criteria,
-            // such as font types (e.g., WOFF, WOFF2) or font families.
-            // Here's an example of caching only WOFF and WOFF2 font files:
-            {
-                requestWillFetch: async ({ request }) => {
-                    if (request.url.includes('.woff') || request.url.includes('.woff2')) {
-                        // Cache only WOFF and WOFF2 font files
-                        return request;
-                    }
-                    // Skip caching for other requests
-                    return null;
-                },
-            },
-        ],
-    })
-);
+// registerRoute(
+//     ({ url }) => url.origin === 'https://fonts.googleapis.com',
+//     new StaleWhileRevalidate({
+//         cacheName: 'google-fonts-stylesheet',
+//         plugins: [
+//             // Optionally, you can cache responses based on specific criteria,
+//             // such as font types (e.g., WOFF, WOFF2) or font families.
+//             // Here's an example of caching only WOFF and WOFF2 font files:
+//             {
+//                 requestWillFetch: async ({ request }) => {
+//                     if (request.url.includes('.woff') || request.url.includes('.woff2')) {
+//                         // Cache only WOFF and WOFF2 font files
+//                         return request;
+//                     }
+//                     // Skip caching for other requests
+//                     return null;
+//                 },
+//             },
+//         ],
+//     })
+// );
 
 // Register a route to cache requests for Google Fonts URLs using CacheFirst strategy
 registerRoute(
