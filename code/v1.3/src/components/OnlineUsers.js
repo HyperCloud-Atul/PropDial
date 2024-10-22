@@ -8,7 +8,7 @@ import Avatar from './Avatar'
 import './OnlineUsers.css'
 
 export default function OnlineUsers(props) {
-  const { isPending, error, documents } = useCollection('users');
+  const { isPending, error, documents } = useCollection("users-propdial");
 
   const [onlineUsers, setOnlineUsers] = useState(false);
   function openOnlineUser() {

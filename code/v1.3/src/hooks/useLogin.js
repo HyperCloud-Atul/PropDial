@@ -25,7 +25,7 @@ export const useLogin = () => {
       }
 
       // update online status
-      const documentRef = projectFirestore.collection('users').doc(res.user.uid)
+      const documentRef = projectFirestore.collection("users-propdial").doc(res.user.uid)
       await documentRef.update({
         online: true,
         lastLoginTimestamp: timestamp.fromDate(new Date())
@@ -67,7 +67,7 @@ export const useLogin = () => {
           setIsPending(false)
           setError(null)
           // }  
-          
+
         }
         else {
           // setError('No such document exists')

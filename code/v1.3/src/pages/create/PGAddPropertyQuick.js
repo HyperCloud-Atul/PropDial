@@ -39,7 +39,7 @@ export default function PGAddPropertyQuick({ propertyid }) {
     const { user } = useAuthContext()
     const [users, setUsers] = useState([])
 
-    const { documents } = useCollection('users')
+    const { documents } = useCollection("users-propdial")
 
     const [toggleFlag, setToggleFlag] = useState(false)
 

@@ -20,7 +20,7 @@ export default function Create() {
   const navigate = useNavigate()
   const { addDocument, response } = useFirestore('projects')
   const { user } = useAuthContext()
-  const { documents } = useCollection('users')
+  const { documents } = useCollection("users-propdial")
   const [users, setUsers] = useState([])
 
   // form field values

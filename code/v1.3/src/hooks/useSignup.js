@@ -57,7 +57,7 @@ export const useSignup = () => {
       console.log('email verificationLink:', verificationLink)
 
       // create a user document
-      await projectFirestore.collection('users').doc(res.user.uid).set({
+      await projectFirestore.collection("users-propdial").doc(res.user.uid).set({
         online: true,
         displayName: firstName,
         fullName: displayName,

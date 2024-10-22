@@ -8,7 +8,7 @@ import ReactTable from '../../../components/ReactTable';
 
 const UserTable = ({ users }) => {
   const { user } = useAuthContext();
-  const { updateDocument } = useFirestore('users');
+  const { updateDocument } = useFirestore("users-propdial");
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [show, setShow] = useState(false);
@@ -70,12 +70,12 @@ const UserTable = ({ users }) => {
         accessor: (row, i) => i + 1,
         id: 'serialNumber',
         Cell: ({ row }) => row.index + 1,
-        disableFilters: true,      
+        disableFilters: true,
       },
       {
         Header: 'Name',
         accessor: 'fullName',
-  
+
         Cell: ({ row }) => (
           <div onClick={() => handleEdit(row.original)} className='pointer mobile_min_width'>
             <span className='text-capitalize'>{row.original.fullName}</span>
@@ -90,17 +90,17 @@ const UserTable = ({ users }) => {
           <div className="phone-number mobile_min_width">
             <span>{formatPhoneNumber(value)}</span>
           </div>
-        ),  
+        ),
       },
       {
         Header: 'Email',
-        accessor: 'email', 
+        accessor: 'email',
         Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
         Header: 'Contact',
         accessor: 'actions',
-  
+
         Cell: ({ row }) => (
           <div className="contact_btn mobile_min_width">
             <Link
@@ -119,8 +119,8 @@ const UserTable = ({ users }) => {
             </Link>
           </div>
         ),
-      },   
-    
+      },
+
       {
         Header: 'On-Boarded',
         accessor: 'createdAt',
@@ -138,7 +138,7 @@ const UserTable = ({ users }) => {
       {
         Header: 'Status',
         accessor: 'status',
-  
+
         Cell: ({ value }) => (
           <span className={`text-capitalize  ${value === 'active' ? 'text_green2' : 'text_red'}`}>
             {value}

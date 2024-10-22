@@ -42,7 +42,7 @@ const PropertyCard = ({ propertyid }) => {
     "properties-propdial",
     propertyid
   );
-  // const { document: userDoc, error: userDocError } = useDocument('users', propertydoc && propertydoc.createdBy)
+  // const { document: userDoc, error: userDocError } = useDocument("users-propdial", propertydoc && propertydoc.createdBy)
 
   // const { documents: myproperties, error: errMyProperties } = useCollection(
   //   "propertyusers",
