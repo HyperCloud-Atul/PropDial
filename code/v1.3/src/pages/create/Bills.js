@@ -125,8 +125,8 @@ export default function PGPropertyBills({ propertyid }) {
     const { documents: coownerList } = useCollection('users', ["role", "==", "coowner"])
     const { documents: propertymanagerList } = useCollection('users', ["role", "==", "propertymanager"])
 
-    const { document: property, error: propertyerror } = useDocument("properties", propertyid);
-    const { updateDocument, updateResponse } = useFirestore("properties"); // Firestore collection name
+    const { document: property, error: propertyerror } = useDocument("properties-propdial", propertyid);
+    const { updateDocument, updateResponse } = useFirestore("properties-propdial"); // Firestore collection name
 
 
     // set property document values into form

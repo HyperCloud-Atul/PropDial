@@ -15,7 +15,7 @@ export default function PGPropertyDetails() {
   const { state } = useLocation();
   const { propertyid } = state;
   const { user } = useAuthContext();
-  const { updateDocument, response } = useFirestore("properties");
+  const { updateDocument, response } = useFirestore("properties-propdial");
   const [filter, setFilter] = useState("BILLS");
   const { documents: billsdocuments, error: billserror } = useCollection(
     "bills",

@@ -14,7 +14,9 @@ import PropertyList from "../../../components/PropertyList";
 export default function TenantDashboard() {
   const { user } = useAuthContext();
   const { logout, isPending } = useLogout();
-  const { documents, error } = useCollection("properties", ["postedBy", "==", "Propdial"]);
+  // const { documents, error } = useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
+  const { documents, error } = useCollection("properties-propdial");
+
   const [filter, setFilter] = useState("all");
   // const navigate = useNavigate();
 

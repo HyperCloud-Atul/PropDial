@@ -24,8 +24,11 @@ const PGSearchProperty = () => {
   const [checked, setChecked] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Residential");
 
-  const { documents: propdialProperties, error: propdialPropertiesError } = useCollection("properties", ["postedBy", "==", "Propdial"]);
-  const { documents: propagentProperties, error: propagentPropertiesError } = useCollection("properties", ["postedBy", "==", "Agent"]);
+  // const { documents: propdialProperties, error: propdialPropertiesError } = useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
+  const { documents: propdialProperties, error: propdialPropertiesError } = useCollection("properties-propdial");
+
+  // const { documents: propagentProperties, error: propagentPropertiesError } = useCollection("properties-propagent", ["postedBy", "==", "Agent"]);
+  const { documents: propagentProperties, error: propagentPropertiesError } = useCollection("properties-propagent");
 
   // functionality for fav start 
   const [favoritedProperties, setFavoritedProperties] = useState([]);
@@ -60,12 +63,15 @@ const PGSearchProperty = () => {
   //   .slice(0, 3);
   const filteredPropdialPropertiesRecent = propdialProperties && propdialProperties
     .filter((property) => (
-      (activeOption === "Rent" ? property.purpose.toLowerCase() === "rent" || property.purpose === "RentSaleBoth" :
-        (activeOption === "Sale" ? property.purpose.toLowerCase() === "sale" || property.purpose === "RentSaleBoth" :
+      (activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" || property.flag.toLowerCase() === "rent and sale" :
+        (activeOption === "Sale" ? property.flag.toLowerCase() === "available for sale" || property.flag.toLowerCase() === "rent and sale" || property.flag.toLowerCase() === "rented but sale" :
           (activeOption === "RentSaleBoth" ? property.purpose === "RentSaleBoth" : true))) &&
       (property.category === activeCategory)
     ))
     .slice(0, 3);
+
+  console.log("All propdialProperties: ", propdialProperties)
+  console.log("All filteredPropdialPropertiesRecent: ", filteredPropdialPropertiesRecent)
 
   // previous Filter for  recent properties end
 
@@ -88,9 +94,9 @@ const PGSearchProperty = () => {
 
     // Filter by purpose
     purposeMatch = (activeOption === "Rent"
-      ? property.purpose.toLowerCase() === "rent" || property.purpose === "RentSaleBoth"
+      ? property.flag.toLowerCase() === "available for rent" || property.flag.toLowerCase() === "rent and sale"
       : activeOption === "Sale"
-        ? property.purpose.toLowerCase() === "sale" || property.purpose === "RentSaleBoth"
+        ? property.flag.toLowerCase() === "available for sale" || property.flag.toLowerCase() === "rent and sale" || property.flag.toLowerCase() === "rented but sale"
         : activeOption === "RentSaleBoth"
           ? property.purpose.toLowerCase() === "rentsaleboth"
           : true);

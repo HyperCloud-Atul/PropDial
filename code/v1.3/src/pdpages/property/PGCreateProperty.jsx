@@ -230,15 +230,17 @@ const CreateProperty = () => {
   const [onboardingDate, setOnboardingDate] = useState(new Date());
   const [newProperty, setNewProperty] = useState(null);
 
+  // const { documents: dbpropertiesdocuments, error: propertieserror } =
+  //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
   const { documents: dbpropertiesdocuments, error: propertieserror } =
-    useCollection("properties", ["postedBy", "==", "Propdial"]);
+    useCollection("properties-propdial");
 
   // console.log("dbpropertiesdocuments: ", dbpropertiesdocuments)
 
   const {
     addDocument: addNewPropertyDocument,
     response: addNewPropertyDocumentResponse,
-  } = useFirestore("properties");
+  } = useFirestore("properties-propdial");
 
   const {
     addDocument: addProperyUsersDocument,
@@ -258,7 +260,7 @@ const CreateProperty = () => {
     // ,["state", "asc"]
   );
 
-  console.log("dbstatesdocuments: ", dbstatesdocuments)
+  // console.log("dbstatesdocuments: ", dbstatesdocuments)
 
   const { documents: dbcitiesdocuments, error: dbcitieserror } = useCollection(
     "m_cities",
@@ -266,7 +268,7 @@ const CreateProperty = () => {
     // ,["city", "asc"]
   );
 
-  console.log("dbcitiesdocuments: ", dbcitiesdocuments)
+  // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
 
   const { documents: dblocalitiesdocuments, error: dblocalitieserror } = useCollection(
     "m_localities",
@@ -278,7 +280,7 @@ const CreateProperty = () => {
     ["status", "==", "active"]
   );
 
-  console.log("dbsocietiesdocuments: ", dbsocietiesdocuments)
+  // console.log("dbsocietiesdocuments: ", dbsocietiesdocuments)
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
@@ -721,13 +723,13 @@ const CreateProperty = () => {
         errorFlag = true;
       }
 
-      if (propertyDetails.Locality === "") {
+      if (locality.label === "" || locality == undefined || locality === "Select Locality") {
         if (errorMsg === "Error: Please select ")
           errorMsg = errorMsg + "Locality";
         else errorMsg = errorMsg + ", Locality";
         errorFlag = true;
       }
-      if (propertyDetails.Society === "") {
+      if (society === "" || society === undefined || society === "Select Society") {
         if (errorMsg === "Error: Please select ")
           errorMsg = errorMsg + "Society";
         else errorMsg = errorMsg + ", Society";
@@ -778,8 +780,10 @@ const CreateProperty = () => {
         state: state.label,
         city: city.label,
         // city: camelCase(propertyDetails.City.toLowerCase().trim()),
-        locality: camelCase(propertyDetails.Locality.toLowerCase().trim()),
-        society: camelCase(propertyDetails.Society.toLowerCase().trim()),
+        locality: locality.label,
+        // locality:  camelCase(propertyDetails.Locality.toLowerCase().trim()),
+        society: society.label,
+        // society: camelCase(propertyDetails.Society.toLowerCase().trim()),
         pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
         propertyName: propertyDetails.UnitNumber + ", " + camelCase(propertyDetails.Society.toLowerCase().trim()),
       };
@@ -859,7 +863,12 @@ const CreateProperty = () => {
         // const nextPropertySeqCounter = "PID: " + state.value + "-" + (propertiesCount + 1)
         // console.log("nextPropertySeqCounter: ", nextPropertySeqCounter)
 
-        const formattedId = `PID: ${state.value}-${String(
+        // console.log("state value: ", state.value)
+        // console.log("dbstatesdocuments: ", dbstatesdocuments)
+        const statecode = (dbstatesdocuments && dbstatesdocuments.find((e) => e.id === state.value)).stateCode
+        // console.log("statecode: ", statecode)
+
+        const formattedId = `PID: ${statecode}-${String(
           propertiesCount
         ).padStart(5, "0")}`;
         // console.log("formattedId: ", formattedId)
@@ -874,13 +883,13 @@ const CreateProperty = () => {
         console.log("_propertyWithSeqCounter: ", _propertyWithSeqCounter)
 
         // const newpropid = await addNewPropertyDocument(_propertyWithSeqCounter);        
-        const collectionRef = projectFirestore.collection('properties');
+        const collectionRef = projectFirestore.collection("properties-propdial");
         // Add the document to the collection
         const docRef = await collectionRef.add(_propertyWithSeqCounter);
 
         // Get the ID of the newly created document
         const newpropid = docRef.id;
-        console.log("New Property ID: ", newpropid)
+        // console.log("New Property ID: ", newpropid)
 
         setFormSuccess("Property Created Successfully");
         // Clear the success message after 3 seconds

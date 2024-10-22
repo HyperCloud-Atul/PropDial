@@ -28,12 +28,12 @@ export default function Stage3(props) {
   //   useImageUpload();
 
   const { document: propertyDocument, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyid
   );
 
   const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties");
+    useFirestore("properties-propdial");
 
   //Popup Flags
   const [showPopupFlag, setShowPopupFlag] = useState(false);
@@ -71,7 +71,7 @@ export default function Stage3(props) {
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
     RichTextEditor.createValueFromString(
       propertyDocument &&
-        propertyDocument.ownerInstructions + editedOwnerInstruction,
+      propertyDocument.ownerInstructions + editedOwnerInstruction,
       "html"
     )
   );
@@ -178,37 +178,37 @@ export default function Stage3(props) {
         // Visiting days Values
         MondayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Monday")
+            propertyDocument.visitingDays.find((e) => e === "Monday")
             ? true
             : false,
         TuesdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Tuesday")
+            propertyDocument.visitingDays.find((e) => e === "Tuesday")
             ? true
             : false,
         WednesdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Wednesday")
+            propertyDocument.visitingDays.find((e) => e === "Wednesday")
             ? true
             : false,
         ThursdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Thursday")
+            propertyDocument.visitingDays.find((e) => e === "Thursday")
             ? true
             : false,
         FridayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Friday")
+            propertyDocument.visitingDays.find((e) => e === "Friday")
             ? true
             : false,
         SaturdayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Saturday")
+            propertyDocument.visitingDays.find((e) => e === "Saturday")
             ? true
             : false,
         SundayClick:
           propertyDocument.visitingDays &&
-          propertyDocument.visitingDays.find((e) => e === "Sunday")
+            propertyDocument.visitingDays.find((e) => e === "Sunday")
             ? true
             : false,
 
@@ -216,126 +216,126 @@ export default function Stage3(props) {
         // Overlooking Values
         EastClick:
           propertyDocument.balconyFacing &&
-          propertyDocument.balconyFacing.find((e) => e === "East")
+            propertyDocument.balconyFacing.find((e) => e === "East")
             ? true
             : false,
         WestClick:
           propertyDocument.balconyFacing &&
-          propertyDocument.balconyFacing.find((e) => e === "West")
+            propertyDocument.balconyFacing.find((e) => e === "West")
             ? true
             : false,
         NorthClick:
           propertyDocument.balconyFacing &&
-          propertyDocument.balconyFacing.find((e) => e === "North")
+            propertyDocument.balconyFacing.find((e) => e === "North")
             ? true
             : false,
         SouthClick:
           propertyDocument.balconyFacing &&
-          propertyDocument.balconyFacing.find((e) => e === "South")
+            propertyDocument.balconyFacing.find((e) => e === "South")
             ? true
             : false,
         NorthEastClick:
           propertyDocument.balconyFacing &&
-          propertyDocument.balconyFacing.find((e) => e === "North East")
+            propertyDocument.balconyFacing.find((e) => e === "North East")
             ? true
             : false,
         NorthWestClick:
           propertyDocument.balconyFacing &&
-          propertyDocument.balconyFacing.find((e) => e === "North West")
+            propertyDocument.balconyFacing.find((e) => e === "North West")
             ? true
             : false,
         SouthEastClick:
           propertyDocument.balconyFacing &&
-          propertyDocument.balconyFacing.find((e) => e === "South East")
+            propertyDocument.balconyFacing.find((e) => e === "South East")
             ? true
             : false,
         SouthWestClick:
           propertyDocument.balconyFacing &&
-          propertyDocument.balconyFacing.find((e) => e === "South West")
+            propertyDocument.balconyFacing.find((e) => e === "South West")
             ? true
             : false,
 
         // Overlooking Values
         ClubClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Club")
+            propertyDocument.overLooking.find((e) => e === "Club")
             ? true
             : false,
         GardenParkClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Garden/Park")
+            propertyDocument.overLooking.find((e) => e === "Garden/Park")
             ? true
             : false,
-            ChildrenPlayArea:
-            propertyDocument.overLooking &&
+        ChildrenPlayArea:
+          propertyDocument.overLooking &&
             propertyDocument.overLooking.find((e) => e === "Children Play Area")
-              ? true
-              : false,
-              OpenGymnasium:
-              propertyDocument.overLooking &&
-              propertyDocument.overLooking.find((e) => e === "Open Gymnasium")
-                ? true
-                : false,              
+            ? true
+            : false,
+        OpenGymnasium:
+          propertyDocument.overLooking &&
+            propertyDocument.overLooking.find((e) => e === "Open Gymnasium")
+            ? true
+            : false,
         MainRoadClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Main Road")
+            propertyDocument.overLooking.find((e) => e === "Main Road")
             ? true
             : false,
-            SocietyInternalRoadClick:
-            propertyDocument.overLooking &&
+        SocietyInternalRoadClick:
+          propertyDocument.overLooking &&
             propertyDocument.overLooking.find((e) => e === "Society Internal Road")
-              ? true
-              : false,
+            ? true
+            : false,
         SwimmingPoolClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Swimming Pool")
+            propertyDocument.overLooking.find((e) => e === "Swimming Pool")
             ? true
             : false,
         CentralParkClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Central Park")
+            propertyDocument.overLooking.find((e) => e === "Central Park")
             ? true
             : false,
         GolfClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Golf")
+            propertyDocument.overLooking.find((e) => e === "Golf")
             ? true
             : false,
         HillViewClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Hill View")
+            propertyDocument.overLooking.find((e) => e === "Hill View")
             ? true
             : false,
         BeachClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Beach")
+            propertyDocument.overLooking.find((e) => e === "Beach")
             ? true
             : false,
         LakeClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Lake")
+            propertyDocument.overLooking.find((e) => e === "Lake")
             ? true
             : false,
         RiverClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "River")
+            propertyDocument.overLooking.find((e) => e === "River")
             ? true
             : false,
         ForestClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Forest")
+            propertyDocument.overLooking.find((e) => e === "Forest")
             ? true
             : false,
         OtherSocietyClick:
           propertyDocument.overLooking &&
-          propertyDocument.overLooking.find((e) => e === "Other Society")
+            propertyDocument.overLooking.find((e) => e === "Other Society")
             ? true
             : false,
-            SameSocietyTowerClick:
-            propertyDocument.overLooking &&
+        SameSocietyTowerClick:
+          propertyDocument.overLooking &&
             propertyDocument.overLooking.find((e) => e === "Same Society Tower")
-              ? true
-              : false,            
+            ? true
+            : false,
       });
     }
   }, [propertyDocument]);
@@ -661,8 +661,8 @@ export default function Stage3(props) {
 
               {/* Balcony Facing */}
               {propertyDocument &&
-              propertyDocument.numberOfBalcony &&
-              propertyDocument.numberOfBalcony === 0 ? (
+                propertyDocument.numberOfBalcony &&
+                propertyDocument.numberOfBalcony === 0 ? (
                 ""
               ) : (
                 <div className="col-md-6">
@@ -696,7 +696,7 @@ export default function Stage3(props) {
                                   !propertyDetails.BalconyFacing ||
                                   (propertyDetails.BalconyFacing &&
                                     propertyDetails.BalconyFacing.length <
-                                      propertyDocument.numberOfBalcony)
+                                    propertyDocument.numberOfBalcony)
                                 ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
@@ -750,7 +750,7 @@ export default function Stage3(props) {
                                   !propertyDetails.BalconyFacing ||
                                   (propertyDetails.BalconyFacing &&
                                     propertyDetails.BalconyFacing.length <
-                                      propertyDocument.numberOfBalcony)
+                                    propertyDocument.numberOfBalcony)
                                 ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
@@ -804,7 +804,7 @@ export default function Stage3(props) {
                                   !propertyDetails.BalconyFacing ||
                                   (propertyDetails.BalconyFacing &&
                                     propertyDetails.BalconyFacing.length <
-                                      propertyDocument.numberOfBalcony)
+                                    propertyDocument.numberOfBalcony)
                                 ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
@@ -858,7 +858,7 @@ export default function Stage3(props) {
                                   !propertyDetails.BalconyFacing ||
                                   (propertyDetails.BalconyFacing &&
                                     propertyDetails.BalconyFacing.length <
-                                      propertyDocument.numberOfBalcony)
+                                    propertyDocument.numberOfBalcony)
                                 ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
@@ -913,7 +913,7 @@ export default function Stage3(props) {
                                   !propertyDetails.BalconyFacing ||
                                   (propertyDetails.BalconyFacing &&
                                     propertyDetails.BalconyFacing.length <
-                                      propertyDocument.numberOfBalcony)
+                                    propertyDocument.numberOfBalcony)
                                 ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
@@ -969,7 +969,7 @@ export default function Stage3(props) {
                                   !propertyDetails.BalconyFacing ||
                                   (propertyDetails.BalconyFacing &&
                                     propertyDetails.BalconyFacing.length <
-                                      propertyDocument.numberOfBalcony)
+                                    propertyDocument.numberOfBalcony)
                                 ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
@@ -1025,7 +1025,7 @@ export default function Stage3(props) {
                                   !propertyDetails.BalconyFacing ||
                                   (propertyDetails.BalconyFacing &&
                                     propertyDetails.BalconyFacing.length <
-                                      propertyDocument.numberOfBalcony)
+                                    propertyDocument.numberOfBalcony)
                                 ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
@@ -1081,7 +1081,7 @@ export default function Stage3(props) {
                                   !propertyDetails.BalconyFacing ||
                                   (propertyDetails.BalconyFacing &&
                                     propertyDetails.BalconyFacing.length <
-                                      propertyDocument.numberOfBalcony)
+                                    propertyDocument.numberOfBalcony)
                                 ) {
                                   setPropertyDetails({
                                     ...propertyDetails,
@@ -1215,10 +1215,10 @@ export default function Stage3(props) {
                         </label>
                       </div>
                     </div>
-                
-                
-               
-                <div className="radio_group_single">
+
+
+
+                    <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.ChildrenPlayArea
@@ -1410,7 +1410,7 @@ export default function Stage3(props) {
                         </label>
                       </div>
                     </div>
-                    
+
                     <div className="radio_group_single">
                       <div
                         className={
@@ -1888,9 +1888,9 @@ export default function Stage3(props) {
                           <h6>Other Society</h6>
                         </label>
                       </div>
-                    </div>                    
-                    
-                    
+                    </div>
+
+
                   </div>
                 </div>
               </div>

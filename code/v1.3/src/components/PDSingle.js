@@ -22,7 +22,7 @@ const PDSingle = () => {
     // console.log('property id: ', id)
     const { user } = useAuthContext();
 
-    const { document: propertyDoc, error: propertyDocError } = useDocument('properties', id)
+    const { document: propertyDoc, error: propertyDocError } = useDocument("properties-propdial", id)
 
     // console.log('property document - unitNumber:', propertyDoc.unitNumber);
 
@@ -36,7 +36,7 @@ const PDSingle = () => {
     // const { user } = useAuthContext();
     // get user from useauthcontext
     // const { documents: propertiesdocuments, error: propertieserror } =
-    //     useCollection("properties");
+    //     useCollection("properties-propdial");
 
     // switch 
     const [checked, setChecked] = useState(false);

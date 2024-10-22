@@ -40,12 +40,12 @@ export default function Stage4(props) {
   // Scroll to the top of the page whenever the location changes end
 
   const { document: propertyDocument, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyid
   );
 
   const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties");
+    useFirestore("properties-propdial");
 
   const [propertyDetails, setPropertyDetails] = useState({
     MainDoorFacing: "",

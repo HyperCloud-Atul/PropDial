@@ -39,7 +39,7 @@ const PropertyCard = ({ propertyid }) => {
 
   const { user } = useAuthContext();
   const { document: propertydoc, error: errPropertyDoc } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyid
   );
   // const { document: userDoc, error: userDocError } = useDocument('users', propertydoc && propertydoc.createdBy)
@@ -76,7 +76,7 @@ const PropertyCard = ({ propertyid }) => {
 
   //---------------- Start of Change User ----------------------
   const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties");
+    useFirestore("properties-propdial");
   const { documents: dbUsers, error: dbuserserror } = useCollection("users", [
     "status",
     "==",
@@ -350,14 +350,14 @@ const PropertyCard = ({ propertyid }) => {
                   <div className="left">
                     <span className="card_badge">
                       <span className="status_dot"
-                      style={{
-                        backgroundColor:
-                          propertydoc.isActiveInactiveReview === "Active"
-                            ? "var(--success-color)" // Green for Active
-                            : propertydoc.isActiveInactiveReview === "Inactive"
-                            ? "var(--theme-red)" // Red for Inactive
-                            : "var(--theme-blue)" // Dark Gold for In-Review (or any of the options above)
-                      }}
+                        style={{
+                          backgroundColor:
+                            propertydoc.isActiveInactiveReview === "Active"
+                              ? "var(--success-color)" // Green for Active
+                              : propertydoc.isActiveInactiveReview === "Inactive"
+                                ? "var(--theme-red)" // Red for Inactive
+                                : "var(--theme-blue)" // Dark Gold for In-Review (or any of the options above)
+                        }}
                       ></span>
                       {propertydoc.pid}</span>
                   </div>

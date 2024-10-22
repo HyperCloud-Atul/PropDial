@@ -14,7 +14,7 @@ const PropertyAds = () => {
   const { propertyId } = useParams();
   // get property document
   const { document: propertydoc, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyId
   );
 
@@ -25,9 +25,9 @@ const PropertyAds = () => {
   // get adv document
   const { documents: advDoc, errors: advDocError } = useCollection(
     "advertisements",
-    ["propertyId", "==", propertyId],   
-    ["createdAt", "desc"]); 
-  
+    ["propertyId", "==", propertyId],
+    ["createdAt", "desc"]);
+
 
   // all use states
   const [showAIForm, setShowAIForm] = useState(false);
@@ -91,7 +91,7 @@ const PropertyAds = () => {
         advPortal: selectedAdvPortal,
         pid: propertydoc.pid,
         portalPropId,
-        propertyType:selectedPropertyType,
+        propertyType: selectedPropertyType,
         propertyId,
         postedBy: "Propdial",
       });
@@ -132,7 +132,7 @@ const PropertyAds = () => {
       id: "sale",
       value: "Sale",
       label: "Sale",
-    },   
+    },
   ];
   return (
     <div className="top_header_pg pg_bg property_adv_pg">
@@ -251,9 +251,8 @@ const PropertyAds = () => {
                 </div>
                 <div className="col-md-3 col-6">
                   <div
-                    className={`theme_btn btn_fill text-center no_icon ${
-                      isUploading ? "disabled" : ""
-                    }`}
+                    className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
+                      }`}
                     onClick={isUploading ? null : addAdvertisements}
                   >
                     {isUploading ? "Uploading..." : "Save"}
@@ -265,7 +264,7 @@ const PropertyAds = () => {
         )}
         {advDoc && advDoc.length !== 0 && (
           <>
-            
+
             <div className="vg22"></div>
           </>
         )}
@@ -299,24 +298,24 @@ const PropertyAds = () => {
                     <div className="d-flex justify-content-between align-items-center">
                       <div>
                         <h5 className="title">{doc.advPortal}{" "}
-                           <span className="sub_title">
-                           (For {doc.propertyType})
+                          <span className="sub_title">
+                            (For {doc.propertyType})
                           </span>
-                           </h5>
+                        </h5>
                         <h6 className="sub_title">
                           ID:- {doc.portalPropId}
                         </h6>
                       </div>
                       {user && user.role === "superAdmin" && (
                         <div
-                        onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
-                        className="text_red pointer"
-                        style={{
-                          fontSize: "12px",
-                        }}
-                      >
-                        Remove
-                      </div>
+                          onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
+                          className="text_red pointer"
+                          style={{
+                            fontSize: "12px",
+                          }}
+                        >
+                          Remove
+                        </div>
                       )}
                     </div>
                     <Link

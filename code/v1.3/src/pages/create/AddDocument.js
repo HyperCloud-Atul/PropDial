@@ -20,9 +20,9 @@ export default function AddDocument(props) {
   const { propertyid } = state;
   const navigate = useNavigate();
   const { addDocument, response } = useFirestore("documents");
-  // const { document, error } = useDocument('properties', propertyid)
+  // const { document, error } = useDocument('properties-propdial', propertyid)
   const { document: property, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyid
   );
   const {

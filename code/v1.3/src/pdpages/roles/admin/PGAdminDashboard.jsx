@@ -34,11 +34,11 @@ const PGAdminDashboard = () => {
 
   const { user } = useAuthContext();
   // const { documents: properties, error: propertieserror } =
-  //   useCollection("properties", ["postedBy", "==", "Propdial"]);
+  //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
 
   const { documents: properties, error: propertieserror } = useCollection(
-    "properties",
-    ["postedBy", "==", "Propdial"],
+    "properties-propdial",
+    "",
     ["createdAt", "desc"]
   );
 

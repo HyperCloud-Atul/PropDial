@@ -13,7 +13,7 @@ import './PGUpdateProperty.css'
 const PGUpdateProperty = () => {
   const { propertyid } = useParams();
   const { document: propertydoc, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyid
   );
   const [propertyObj, setPropertyObj] = useState(null)

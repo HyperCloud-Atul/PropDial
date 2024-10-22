@@ -32,9 +32,9 @@ export default function PGAddPropertyQuick({ propertyid }) {
     }, [location]);
     // Scroll to the top of the page whenever the location changes end
     const navigate = useNavigate()
-    const { document: propertyDocument, error: propertyerror } = useDocument('properties', propertyid)
-    const { addDocument, response: addDocumentResponse } = useFirestore('properties')
-    const { updateDocument, response: updateDocumentResponse } = useFirestore('properties')
+    const { document: propertyDocument, error: propertyerror } = useDocument("properties-propdial", propertyid)
+    const { addDocument, response: addDocumentResponse } = useFirestore("properties-propdial")
+    const { updateDocument, response: updateDocumentResponse } = useFirestore("properties-propdial")
 
     const { user } = useAuthContext()
     const [users, setUsers] = useState([])

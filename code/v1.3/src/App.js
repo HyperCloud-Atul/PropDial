@@ -2,9 +2,10 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAuthContext } from "./hooks/useAuthContext";
 import { useDocument } from "./hooks/useDocument";
 import { useEffect, useState } from "react";
-import { projectMsg } from "./firebase/config";
-import toast, { Toaster } from "react-hot-toast"; // You can use any toast notification library or create your custom popup
+import { projectMsg, projectFirestore } from "./firebase/config";
+import { useCollection } from "./hooks/useCollection";
 
+import toast, { Toaster } from "react-hot-toast"; // You can use any toast notification library or create your custom popup
 
 // components
 import Navbar from "./components/Navbar";
@@ -106,6 +107,36 @@ import FCMNotification from "./components/FCMNotification";
 // New component import end
 
 function App() {
+  //---------------------- Copy Collection Code - Start -----------------------------------
+  const { documents: dbCollectionDocument, error: dbCollectionDocumentError } =
+    useCollection("properties");  // name of existing documets collection
+
+  console.log(" Number of documents in the existing collection: ", dbCollectionDocument);
+
+  // Function to handle the button click and copy documents
+  const handleCopy = async () => {
+    const cartCollectionRef = projectFirestore.collection("properties-propagent");  // collection name of copy docs here
+
+    try {
+      // Loop through each user document
+      for (const userDoc of dbCollectionDocument) {
+        const docData = userDoc; // Already the document data
+        const docId = userDoc.id; // Get document ID
+
+        // Copy the entire document data to the 'cart' collection
+        await cartCollectionRef.doc(docId).set(docData);
+
+        console.log(`Documents copied: ${docId}`);
+      }
+
+      console.log("All documents copied successfully into new collection!");
+    } catch (error) {
+      console.error("Error copying users to cart: ", error);
+    }
+  }
+
+  // ---------------- Copy Collection Code - End ------------------------------
+
   const { authIsReady, user } = useAuthContext();
   const [fcmMessage, setFCMMessage] = useState(null);
 
@@ -227,6 +258,9 @@ function App() {
   }, [dbDisplayModeDocuments]);
 
   return (
+
+
+
     <div className={currentModeStatus === "dark" ? "dark" : "light"}>
       {fcmMessage && (
         <FCMNotification
@@ -236,6 +270,10 @@ function App() {
           onClose={handleCloseFCMNotification}
         />
       )}
+
+      {/* Copy Collection Button  */}
+      {/* <button onClick={handleCopy}>Copy Collection docs to other collection</button> */}
+
       <div className="page">
         {authIsReady && (
           <BrowserRouter>
@@ -297,11 +335,11 @@ function App() {
                     path="/notification"
                     element={<PGNotification />}
                   ></Route>
-                    <Route
+                  <Route
                     path="/how-use"
                     element={<HowUse />}
                   ></Route>
-                  
+
                   <Route path="/privacypolicy" element={<PGPriacyPolicy />}></Route>
                   <Route path="/terms" element={<PGTerms />}></Route>
                   <Route path="/about-us" element={<PGAboutUs />}></Route>
@@ -333,18 +371,18 @@ function App() {
                     path="/propertydocumentdetails/:propertyId"
                     element={<PropertyDocuments />}
                   ></Route>
-                    <Route
+                  <Route
                     path="/property-ads/:propertyId"
                     element={<PropertyAds />}
                   ></Route>
-                   <Route
+                  <Route
                     path="/property-utility-bills/:propertyId"
                     element={<PropertyUtilityBills />}
-                  ></Route>                
-                    <Route
+                  ></Route>
+                  <Route
                     path="/property-keys/:propertyId"
                     element={<PropertyKeyDetail />}
-                  ></Route> 
+                  ></Route>
                   <Route
                     path="/propertyinspectiondocument/:propertyId"
                     element={<PropertyInspectionDocuments />}

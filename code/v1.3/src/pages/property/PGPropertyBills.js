@@ -24,12 +24,12 @@ export default function PGPropertyBills() {
     // const { state } = useLocation();
     // const { propertyid } = state;
     // const { user } = useAuthContext();
-    // const { updateDocument, response } = useFirestore("properties");
+    // const { updateDocument, response } = useFirestore("properties-propdial");
     // const { documents: propertydocument, error: propertyerror } = useCollection(
-    //     "properties",
+    //     "properties-propdial",
     //     ["propertyid", "==", propertyid]
     // );
-    const { document: propertydoc, error: propertydocerror } = useDocument('properties', propertyid)
+    const { document: propertydoc, error: propertydocerror } = useDocument('properties-propdial', propertyid)
     console.log('property document:', propertydoc)
 
     const [filter, setFilter] = useState("PENDING");

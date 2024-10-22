@@ -16,7 +16,7 @@ const PropertyUtilityBills = () => {
   const { propertyId } = useParams();
   // get property document
   const { document: propertydoc, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyId
   );
 
@@ -273,8 +273,8 @@ const PropertyUtilityBills = () => {
                     <div className="vg22_991"></div>
                     <div className="row" style={{ rowGap: "18px" }}>
                       <div className="col-sm-6">
-                      <div className="add_info_text w-100">
-                      <div className="form_field w-100">
+                        <div className="add_info_text w-100">
+                          <div className="form_field w-100">
                             <div className="relative">
                               <input
                                 type="text"
@@ -282,15 +282,15 @@ const PropertyUtilityBills = () => {
                                 onChange={handleauthorityNameChange}
                                 placeholder="Name of authority"
                                 className="w-100"
-                              
+
                               />
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="col-sm-6">
-                      <div className="add_info_text w-100">
-                      <div className="form_field w-100">
+                        <div className="add_info_text w-100">
+                          <div className="form_field w-100">
                             <div className="relative">
                               <input
                                 type="text"
@@ -299,7 +299,7 @@ const PropertyUtilityBills = () => {
                                 placeholder="Bill ID"
                                 className="w-100"
                                 style={{
-                                  background:"whitesmoke"
+                                  background: "whitesmoke"
                                 }}
                               />
                             </div>
@@ -328,7 +328,7 @@ const PropertyUtilityBills = () => {
                         </div>
                       </div>
                       <div className="col-sm-6">
-                      <div className="add_info_text w-100">
+                        <div className="add_info_text w-100">
                           <div className="form_field price_input relative w-100">
                             <input
                               type="number"
@@ -350,7 +350,7 @@ const PropertyUtilityBills = () => {
                                 dateFormat="dd/MM/yyyy"
                                 placeholderText="Amount due date"
                                 className="w-100"
-                                // isClearable
+                              // isClearable
                               />
                             </div>
                           </div>
@@ -368,9 +368,8 @@ const PropertyUtilityBills = () => {
                           </div>
                           <div className="col-6">
                             <div
-                              className={`theme_btn btn_fill text-center no_icon ${
-                                isUploading ? "disabled" : ""
-                              }`}
+                              className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
+                                }`}
                               onClick={isUploading ? null : addUtilityBill}
                             >
                               {isUploading ? "Uploading..." : "Save"}
@@ -409,7 +408,7 @@ const PropertyUtilityBills = () => {
                 <div className="left">
                   <div className="img_div">
                     {doc.billType === "Common Area Maintenance (CAM)" ||
-                    doc.billType.toLowerCase() === "maintenance" ? (
+                      doc.billType.toLowerCase() === "maintenance" ? (
                       <img src="/assets/img/icons/maintainance.png" alt="" />
                     ) : doc.billType.toLowerCase() === "club" ? (
                       <img src="/assets/img/icons/clubill.png" alt="" />
@@ -444,17 +443,17 @@ const PropertyUtilityBills = () => {
                         <h5 className="title">{doc.authorityName}</h5>
                         <h6 className="sub_title">{doc.paymentType}</h6>
                       </div>
-                     {user && user.role === "superAdmin" && (
-                       <div
-                       onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
-                       className="text_red pointer"
-                       style={{
-                         fontSize: "12px",
-                       }}
-                     >
-                       Remove
-                     </div>
-                     )}
+                      {user && user.role === "superAdmin" && (
+                        <div
+                          onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
+                          className="text_red pointer"
+                          style={{
+                            fontSize: "12px",
+                          }}
+                        >
+                          Remove
+                        </div>
+                      )}
                       <Modal
                         show={showConfirmModal}
                         onHide={handleConfirmClose}

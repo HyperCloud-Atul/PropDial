@@ -47,8 +47,10 @@ const PropdialAllProperties = () => {
         soldOutFilteredCount: 0
     })
 
+    // const { documents: dbpropertiesdocuments, error: dbpropertieserror } =
+    //     useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
     const { documents: dbpropertiesdocuments, error: dbpropertieserror } =
-        useCollection("properties", ["postedBy", "==", "Propdial"]);
+        useCollection("properties-propdial");
 
     useEffect(() => {
         let propList = [];

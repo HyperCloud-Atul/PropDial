@@ -15,8 +15,10 @@ const PGAdminPropertyOld = () => {
   const { filterOption } = useParams()
   // console.log("filter Option: ", filterOption)
 
+  // const { documents: allproperties, error: propertieserror } =
+  //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
   const { documents: allproperties, error: propertieserror } =
-    useCollection("properties", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
+    useCollection("properties-propdial", "", ["createdAt", "desc"]);
 
   const { documents: assignedPopertyUserList, error: errassignedPopertyUserList } = useCollection(
     "propertyusers"

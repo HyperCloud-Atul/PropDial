@@ -44,12 +44,12 @@ const Stage2 = (props) => {
     value: "Year of Construction",
   });
   const { document: propertyDocument, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyid
   );
   // console.log('propertyDocument:', propertyDocument)
   const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties");
+    useFirestore("properties-propdial");
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
@@ -517,7 +517,7 @@ const Stage2 = (props) => {
       }
     }
   }
-  
+
 
 
 
@@ -2062,8 +2062,8 @@ const Stage2 = (props) => {
             </div>
           )}
 
-  {/* Entrance Gallery */}
-  <div className="col-md-4">
+          {/* Entrance Gallery */}
+          <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Entrance Gallery</label>
               <div className="form_field_inner">
@@ -2222,7 +2222,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
-        
+
           {/* Year of Construction */}
           <div className="col-md-4">
             <div className="form_field label_top">

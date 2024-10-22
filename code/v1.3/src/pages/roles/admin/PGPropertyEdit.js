@@ -11,7 +11,7 @@ import PGUpdateProperty from "../../../pdpages/property/PGUpdateProperty";
 
 export default function PGPropertyEdit() {
   const { id } = useParams();
-  const { document, error } = useDocument("properties", id);
+  const { document, error } = useDocument("properties-propdial", id);
 
   if (error) {
     return <div className="error">{error}</div>;

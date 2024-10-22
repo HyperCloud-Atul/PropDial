@@ -35,7 +35,7 @@ export default function AddBill() {
   const navigate = useNavigate();
   const { addDocument, response } = useFirestore("bills");
   const { document: property, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyid
   );
   const { document: masterDataBillType, error: masterDataBillTyperror } =

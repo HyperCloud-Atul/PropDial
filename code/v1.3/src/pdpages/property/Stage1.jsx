@@ -190,7 +190,7 @@ const Stage1 = (props) => {
   // console.log('firebase projectid:', projectID)
 
   const { document: propertyDocument, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyid
   );
   function setRedirectFlag(flag, key) { }
@@ -238,9 +238,9 @@ const Stage1 = (props) => {
   const [newProperty, setNewProperty] = useState(null);
 
   const { addDocument, response: addDocumentResponse } =
-    useFirestore("properties");
+    useFirestore("properties-propdial");
   const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties");
+    useFirestore("properties-propdial");
 
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
@@ -250,8 +250,10 @@ const Stage1 = (props) => {
   // Scroll to the top of the page whenever the location changes end
   const navigate = useNavigate();
 
+  // const { documents: dbpropertiesdocuments, error: propertieserror } =
+  //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
   const { documents: dbpropertiesdocuments, error: propertieserror } =
-    useCollection("properties", ["postedBy", "==", "Propdial"]);
+    useCollection("properties-propdial");
 
   // const { documents: dbstatesdocuments, error: dbstateserror } = useCollection(
   //   "m_states",

@@ -22,7 +22,7 @@ const PropertyKeyDetail = () => {
   const { documents: propertyKeyDoc, errors: propertyKeyDocError } =
     useCollection("propertyKeys", ["propertyId", "==", propertyId]);
   const { document: propertydoc, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyId
   );
 
@@ -177,7 +177,7 @@ const PropertyKeyDetail = () => {
             <section className="my_big_card add_doc_form">
               <div className="aai_form">
                 <div className="row" style={{ rowGap: "18px" }}>
-                <div className="col-md-3">
+                  <div className="col-md-3">
                     <div className="add_info_text w-100">
                       <div className="form_field w-100">
                         <input
@@ -219,7 +219,7 @@ const PropertyKeyDetail = () => {
                   <div className="col-md-3">
                     <div className="add_info_text w-100">
                       <div className="form_field w-100">
-                        <textarea                        
+                        <textarea
                           value={keyRemark}
                           onChange={handleKeyRemarkChange}
                           placeholder="Remark"
@@ -243,9 +243,8 @@ const PropertyKeyDetail = () => {
                 </div>
                 <div className="col-sm-3 col-6">
                   <div
-                    className={`theme_btn btn_fill text-center no_icon ${
-                      isUploading ? "disabled" : ""
-                    }`}
+                    className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
+                      }`}
                     onClick={isUploading ? null : addPropertyKey}
                   >
                     {isUploading ? "Uploading..." : "Save"}

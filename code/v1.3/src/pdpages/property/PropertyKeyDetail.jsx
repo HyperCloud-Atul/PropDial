@@ -26,7 +26,7 @@ const PropertyKeyDetail = () => {
       ["createdAt", "desc"]
     );
   const { document: propertydoc, error: propertyerror } = useDocument(
-    "properties",
+    "properties-propdial",
     propertyId
   );
 
@@ -279,9 +279,8 @@ const PropertyKeyDetail = () => {
                 </div>
                 <div className="col-sm-3 col-6">
                   <div
-                    className={`theme_btn btn_fill text-center no_icon ${
-                      isUploading ? "disabled" : ""
-                    }`}
+                    className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
+                      }`}
                     onClick={isUploading ? null : addOrUpdatePropertyKey}
                   >
                     {isUploading ? "Saving..." : docToEdit ? "Update" : "Save"}
@@ -329,9 +328,9 @@ const PropertyKeyDetail = () => {
                     doc.keys.map((keySingle, keyindex) => (
                       <div className="kd_single relative" key={keyindex}>
                         <div className="left">
-                        <h6>{keySingle.keyFor}</h6>
-                          <h6>{keySingle.keyNumber ? keySingle.keyNumber : "No key number" }</h6>
-                     
+                          <h6>{keySingle.keyFor}</h6>
+                          <h6>{keySingle.keyNumber ? keySingle.keyNumber : "No key number"}</h6>
+
                         </div>
                         <div className="right">
                           <h5>{keySingle.numberOfKey}</h5>
@@ -353,7 +352,7 @@ const PropertyKeyDetail = () => {
                 </div>
                 {user && user.role === "superAdmin" && (
                   <>
-                  
+
                     <div
                       onClick={() => handleDeleteClick(doc.id)}
                       className="text_red pointer delete_box_top"

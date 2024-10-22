@@ -50,7 +50,7 @@ const PGTransactions = () => {
     console.log("property id: ", propertyid)
 
 
-    const { document: propertydoc, error: propertydocError } = useDocument('properties', propertyid)
+    const { document: propertydoc, error: propertydocError } = useDocument("properties-propdial", propertyid)
     console.log("property doc:  ", propertydoc)
 
     const { documents: transactions, error: transactionserror } = useCollection("transactions", ["propertyid", "==", propertyid]);

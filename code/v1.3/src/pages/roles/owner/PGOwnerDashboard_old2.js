@@ -24,8 +24,10 @@ export default function PGOwnerDashboard_old2() {
   // Scroll to the top of the page whenever the location changes en
   const { user } = useAuthContext();
   const { logout, isPending } = useLogout();
+  // const { documents: propertiesdocuments, error: propertieserror } =
+  //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
   const { documents: propertiesdocuments, error: propertieserror } =
-    useCollection("properties", ["postedBy", "==", "Propdial"]);
+    useCollection("properties-propdial");
 
   const [filter, setFilter] = useState("ALL");
 

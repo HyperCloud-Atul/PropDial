@@ -42,7 +42,7 @@ const TenantDetails = () => {
     tenantId
   );
   console.log("Tenant Info: ", tenantInfo);
-  // const { document: propertyInfo, error: propertyInfoError } = useDocument("properties", editedFields.propertyId);
+  // const { document: propertyInfo, error: propertyInfoError } = useDocument("properties-propdial", editedFields.propertyId);
   // console.log('Property Details:', propertyInfo)
   const { documents: tenantDocs, errors: tenantDocsError } = useCollection(
     "docs",
@@ -391,9 +391,9 @@ const TenantDetails = () => {
   // image modal code end
   // const propSummaryId = tenantInfo && tenantInfo.propertyId
   // const { document: propertydoc, error: propertyerror } = useDocument(
-  //   "properties",
+  //   "properties-propdial",
   //   ["propertyId", "===", propSummaryId],
-    
+
   // );
 
 
@@ -507,9 +507,8 @@ const TenantDetails = () => {
                   </div>
                   <div className="col-md-3 col-6">
                     <div
-                      className={`theme_btn btn_fill text-center no_icon ${
-                        isUploading ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
+                        }`}
                       onClick={isUploading ? null : addTenantDocuments}
                     >
                       {isUploading ? "Uploading..." : "Create"}
@@ -575,11 +574,10 @@ const TenantDetails = () => {
             >
               <div className="col-lg-4 tenant_mobile_full_card">
                 <div
-                  className={`tc_single${
-                    tenantInfo && tenantInfo.status === "inactive"
+                  className={`tc_single${tenantInfo && tenantInfo.status === "inactive"
                       ? "t_inactive"
                       : ""
-                  }`}
+                    }`}
                 >
                   <div className="tcs_img_container relative">
                     {loading ? (
@@ -847,13 +845,13 @@ const TenantDetails = () => {
                             min={
                               editedFields.onBoardingDate
                                 ? new Date(
-                                    new Date(
-                                      editedFields.onBoardingDate
-                                    ).getTime() +
-                                      24 * 60 * 60 * 1000
-                                  )
-                                    .toISOString()
-                                    .split("T")[0]
+                                  new Date(
+                                    editedFields.onBoardingDate
+                                  ).getTime() +
+                                  24 * 60 * 60 * 1000
+                                )
+                                  .toISOString()
+                                  .split("T")[0]
                                 : ""
                             }
                           />
@@ -952,9 +950,8 @@ const TenantDetails = () => {
                       ) : (
                         <>
                           <span
-                            className={`text-capitalize ${
-                              tenantInfo && tenantInfo.status
-                            }`}
+                            className={`text-capitalize ${tenantInfo && tenantInfo.status
+                              }`}
                           >
                             {tenantInfo && tenantInfo.status}
                           </span>

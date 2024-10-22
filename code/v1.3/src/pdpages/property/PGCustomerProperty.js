@@ -9,10 +9,10 @@ const PGCustomerProperty = () => {
 
     const { user } = useAuthContext();
     // const { documents: properties, error: propertieserror } = useCollection(
-    //     "properties"
+    //     "properties-propdial"
     // );
     const { documents: properties, error: propertieserror } = useCollection(
-        "properties",
+        "properties-propdial",
         ["access", "array-contains", user.uid]
     );
 

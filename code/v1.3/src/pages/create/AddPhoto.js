@@ -34,8 +34,8 @@ export default function AddPhoto(props) {
   console.log('property id: ', propertyid)
   const navigate = useNavigate();
   const { addDocument, response } = useFirestore("photos");
-  // const { document, error } = useDocument('properties', propertyid)
-  // const { document: property, error: propertyerror } = useDocument('properties', propertyid)
+  // const { document, error } = useDocument('properties-propdial', propertyid)
+  // const { document: property, error: propertyerror } = useDocument('properties-propdial', propertyid)
   const { document: masterDataPhotoType, error: masterDataPhotoTypeerror } =
     useDocument("master", "PHOTOTYPE");
   // const { document: photosDocuments, error: photosDocumentserror } = useCollection('photos', ['propertyid', '==', propertyid])

@@ -11,7 +11,7 @@ import PropertyList from '../../components/PropertyList'
 
 export default function Dashboard() {
   const { user } = useAuthContext()
-  const { documents, error } = useCollection('properties')
+  const { documents, error } = useCollection("properties-propdial")
   const [filter, setFilter] = useState('all')
 
   const changeFilter = (newFilter) => {

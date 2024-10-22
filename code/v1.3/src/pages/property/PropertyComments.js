@@ -7,7 +7,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 export default function PropertyComments({ property }) {
     const { user } = useAuthContext()
-    const { updateDocument, response } = useFirestore('properties')
+    const { updateDocument, response } = useFirestore("properties-propdial")
     const [newComment, setNewComment] = useState('')
 
     const handleSubmit = async (e) => {
