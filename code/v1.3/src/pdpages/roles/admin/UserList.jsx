@@ -30,7 +30,10 @@ const userFilter = [
 const UserList = () => {
   const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
-  const { documents, error } = useCollection("users-propdial");
+  const { documents, error } = useCollection("users-propdial", "", ["createdAt", "desc"]);
+  // const { documents: inspections, errors: inspectionsError } = useCollection("propertyinspections",
+  //   ["propertyId", "==", propertyId],
+  //   ["createdAt", "desc"]);
   const [filter, setFilter] = useState(userFilter[0]);
 
   useEffect(() => {
