@@ -20,11 +20,12 @@ const userFilter = [
   "Manager",
   "Admin",
   "Super Admin",
-  "Inactive",
+  "Agent",
   "Tenant",
   "Prospective Tenant",
   "Buyer",
   "Prospective Buyer",
+  "Inactive",
 ];
 
 const UserList = () => {
@@ -37,7 +38,7 @@ const UserList = () => {
   const [filter, setFilter] = useState(userFilter[0]);
 
   useEffect(() => {
-    let flag = user && (user.role === "admin" || user.role === "superAdmin");
+    let flag = user && user.role === "superAdmin";
     if (!flag) {
       logout();
     }
@@ -77,6 +78,9 @@ const UserList = () => {
         case "Super Admin":
           roleMatch = document.rolePropDial === "superAdmin";
           break;
+          case "Agent":
+            roleMatch = document.status === "agent";
+            break;
         case "Inactive":
           roleMatch = document.status === "inactive";
           break;
@@ -141,7 +145,8 @@ const UserList = () => {
 
   return (
     <div className="top_header_pg pg_bg user_pg">
-      <div className="page_spacing">
+      <div className="page_spacing pg_min_height
+      ">
         <div className="pg_header d-flex justify-content-between">
           <div className="left">
             <h2 className="m22">

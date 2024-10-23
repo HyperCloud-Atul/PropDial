@@ -86,7 +86,7 @@ const UserSinglecard = ({ users }) => {
       {users &&
         users.map((userObj) => (
           <div
-            className="pu_single"
+            className={`pu_single ${userObj.status === "inactive" && "inactive"}`}
             style={{
               opacity: userObj.status === "inactive" ? 0.4 : 1,
             }}
