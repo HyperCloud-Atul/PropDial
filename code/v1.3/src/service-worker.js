@@ -10,12 +10,12 @@ import { CacheableResponsePlugin } from "workbox-cacheable-response";
 
 //This clientsClaim should be on top level of the service worker
 //not inside of e.g. an event handler
-// clientsClaim();
+clientsClaim();
 
 //Not wrapping it in a 'message' event as per the new update
-// self.skipWaiting();
+self.skipWaiting();
 
-// precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST);
 
 //-------------------------- Strategies -------------------------------------------
 
