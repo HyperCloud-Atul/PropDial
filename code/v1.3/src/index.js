@@ -19,7 +19,7 @@ root.render(
 );
 
 // Register service worker
-serviceWorkerRegistration.register();
+// serviceWorkerRegistration.register();
 
 //Register service worker for FCM Messaging
 // if ('serviceWorker' in navigator) {

@@ -10,12 +10,12 @@ import { CacheableResponsePlugin } from "workbox-cacheable-response";
 
 //This clientsClaim should be on top level of the service worker
 //not inside of e.g. an event handler
-clientsClaim();
+// clientsClaim();
 
 //Not wrapping it in a 'message' event as per the new update
-self.skipWaiting();
+// self.skipWaiting();
 
-precacheAndRoute(self.__WB_MANIFEST);
+// precacheAndRoute(self.__WB_MANIFEST);
 
 //-------------------------- Strategies -------------------------------------------
 
@@ -43,103 +43,103 @@ precacheAndRoute(self.__WB_MANIFEST);
 // );
 
 // Register a route to cache requests for Google Fonts URLs using CacheFirst strategy
-registerRoute(
-    ({ url }) => url.origin === 'https://fonts.googleapis.com',
-    new CacheFirst({
-        cacheName: 'google-fonts-stylesheet',
-        plugins: [
-            // Optionally, you can configure additional plugins here
-            // Ensure that only requests that result in a 200 status are cached...
-            new CacheableResponsePlugin({
-                statuses: [200]
-            }),
-            new ExpirationPlugin({
-                maxEntries: 30,
-                maxAgeSeconds: 365 * 24 * 60 * 60 // 365 Days
-            }),
-        ],
-    })
-);
+// registerRoute(
+//     ({ url }) => url.origin === 'https://fonts.googleapis.com',
+//     new CacheFirst({
+//         cacheName: 'google-fonts-stylesheet',
+//         plugins: [
+//             // Optionally, you can configure additional plugins here
+//             // Ensure that only requests that result in a 200 status are cached...
+//             new CacheableResponsePlugin({
+//                 statuses: [200]
+//             }),
+//             new ExpirationPlugin({
+//                 maxEntries: 30,
+//                 maxAgeSeconds: 365 * 24 * 60 * 60 // 365 Days
+//             }),
+//         ],
+//     })
+// );
 
 // Register a route to cache requests for Google Fonts URLs using CacheFirst strategy
-registerRoute(
-    ({ url }) => url.origin === "https://fonts.googleapis.com",
-    new CacheFirst({
-        cacheName: "google-fonts-webfonts",
-        plugins: [
-            // Optionally, you can configure additional plugins here
-            // Ensure that only requests that result in a 200 status are cached...
-            new CacheableResponsePlugin({
-                statuses: [200],
-            }),
-            new ExpirationPlugin({
-                maxEntries: 30,
-                maxAgeSeconds: 365 * 24 * 60 * 60, // 365 Days
-            }),
-        ],
-    })
-);
+// registerRoute(
+//     ({ url }) => url.origin === "https://fonts.googleapis.com",
+//     new CacheFirst({
+//         cacheName: "google-fonts-webfonts",
+//         plugins: [
+//             // Optionally, you can configure additional plugins here
+//             // Ensure that only requests that result in a 200 status are cached...
+//             new CacheableResponsePlugin({
+//                 statuses: [200],
+//             }),
+//             new ExpirationPlugin({
+//                 maxEntries: 30,
+//                 maxAgeSeconds: 365 * 24 * 60 * 60, // 365 Days
+//             }),
+//         ],
+//     })
+// );
 
 // Cache First for static images (e.g., logos, icons)
-registerRoute(
-    ({ request }) => request.destination === "image",
-    new CacheFirst({
-        cacheName: "propdial-static-images-cache",
-        plugins: [
-            // You can add additional plugins here if needed
-            new ExpirationPlugin({
-                maxEntries: 60,
-                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-            }),
-        ],
-    })
-);
+// registerRoute(
+//     ({ request }) => request.destination === "image",
+//     new CacheFirst({
+//         cacheName: "propdial-static-images-cache",
+//         plugins: [
+//             // You can add additional plugins here if needed
+//             new ExpirationPlugin({
+//                 maxEntries: 60,
+//                 maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+//             }),
+//         ],
+//     })
+// );
 
 // Stale While Revalidate for dynamic images (e.g., user avatars)
-registerRoute(
-    ({ request }) => request.destination === "image",
-    new StaleWhileRevalidate({
-        cacheName: "propdial-dynamic-images-cache",
-        plugins: [
-            // You can add additional plugins here if needed
-        ],
-    })
-);
+// registerRoute(
+//     ({ request }) => request.destination === "image",
+//     new StaleWhileRevalidate({
+//         cacheName: "propdial-dynamic-images-cache",
+//         plugins: [
+//             // You can add additional plugins here if needed
+//         ],
+//     })
+// );
 
 // Cache First for core stylesheets and scripts
-registerRoute(
-    ({ request }) =>
-        request.destination === "style" || request.destination === "script",
-    new CacheFirst({
-        cacheName: "propdial-core-assets-cache",
-        plugins: [
-            // You can add additional plugins here if needed
-        ],
-    })
-);
+// registerRoute(
+//     ({ request }) =>
+//         request.destination === "style" || request.destination === "script",
+//     new CacheFirst({
+//         cacheName: "propdial-core-assets-cache",
+//         plugins: [
+//             // You can add additional plugins here if needed
+//         ],
+//     })
+// );
 
 // Stale While Revalidate for dynamic stylesheets and scripts
-registerRoute(
-    ({ request }) =>
-        request.destination === "style" || request.destination === "script",
-    new StaleWhileRevalidate({
-        cacheName: "propdial-dynamic-assets-cache",
-        plugins: [
-            // You can add additional plugins here if needed
-        ],
-    })
-);
+// registerRoute(
+//     ({ request }) =>
+//         request.destination === "style" || request.destination === "script",
+//     new StaleWhileRevalidate({
+//         cacheName: "propdial-dynamic-assets-cache",
+//         plugins: [
+//             // You can add additional plugins here if needed
+//         ],
+//     })
+// );
 
 // Network First for real-time API requests
-registerRoute(
-    ({ url }) => url.origin === "https://firestore.googleapis.com",
-    new NetworkFirst({
-        cacheName: "propdial-firestore-real-time-data-cache",
-        plugins: [
-            // You can add additional plugins here if needed
-        ],
-    })
-);
+// registerRoute(
+//     ({ url }) => url.origin === "https://firestore.googleapis.com",
+//     new NetworkFirst({
+//         cacheName: "propdial-firestore-real-time-data-cache",
+//         plugins: [
+//             // You can add additional plugins here if needed
+//         ],
+//     })
+// );
 
 // Stale While Revalidate for non-critical API requests
 // registerRoute(
