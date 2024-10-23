@@ -29,7 +29,6 @@ const PGMoreMenu = () => {
   const [showPopupFlag, setShowPopupFlag] = useState(false);
   const [popupReturn, setPopupReturn] = useState(false);
 
-
   const { document: appTypeDocument, error: appTypeDocumentError } =
     useDocument("settings", "AppType");
   const { document: appDisplayMode, error: appDisplayModeerror } = useDocument(
@@ -53,7 +52,6 @@ const PGMoreMenu = () => {
     setShowPopupFlag(true);
     setPopupReturn(false);
   };
-
 
   // START CODE FOR LIGHT/DARK MODE
   const toggleDarkMode = async (productId, currentModeStatus) => {
@@ -109,94 +107,77 @@ const PGMoreMenu = () => {
             <section className="more_quick_card card_shadow card_border_radius bg_white">
               <Link className="mqc_single" to="/dashboard">
                 <div className="icon click_icon">
-                  <span className="material-symbols-outlined">
-                    dashboard
-                  </span>
+                  <span className="material-symbols-outlined">dashboard</span>
                 </div>
-                <h6 className="dr16 click_text">
-                  Dashboard
-                </h6>
+                <h6 className="dr16 click_text">Dashboard</h6>
               </Link>
               <Link className="mqc_single" to="/profile">
                 <div className="icon click_icon">
                   <span className="material-symbols-outlined">person</span>
                 </div>
-                <h6 className="dr16 click_text">
-                  My account
-                </h6>
+                <h6 className="dr16 click_text">My account</h6>
               </Link>
               <Link className="mqc_single" to="/notification">
                 <div className="icon click_icon">
-                  <span className="material-symbols-outlined">notifications</span>
+                  <span className="material-symbols-outlined">
+                    notifications
+                  </span>
                 </div>
-                <h6 className="dr16 click_text">
-                  Notifications
-                </h6>
+                <h6 className="dr16 click_text">Notifications</h6>
               </Link>
-
             </section>
           )}
           {user && (user.role === "admin" || user.role === "superAdmin") && (
             <section className="more_quick_card card_shadow card_border_radius bg_white">
               <Link className="mqc_single" to="/dashboard">
                 <div className="icon click_icon">
-                  <span className="material-symbols-outlined">
-                    dashboard
-                  </span>
+                  <span className="material-symbols-outlined">dashboard</span>
                 </div>
-                <h6 className="dr16 click_text">
-                  Dashboard
-                </h6>
+                <h6 className="dr16 click_text">Dashboard</h6>
               </Link>
               <Link className="mqc_single" to="/profile">
                 <div className="icon click_icon">
                   <span className="material-symbols-outlined">person</span>
                 </div>
-                <h6 className="dr16 click_text">
-                  My account
-                </h6>
+                <h6 className="dr16 click_text">My account</h6>
               </Link>
               <Link className="mqc_single" to="/notification">
                 <div className="icon click_icon">
-                  <span className="material-symbols-outlined">notifications</span>
+                  <span className="material-symbols-outlined">
+                    notifications
+                  </span>
                 </div>
-                <h6 className="dr16 click_text">
-                  Notifications
-                </h6>
+                <h6 className="dr16 click_text">Notifications</h6>
               </Link>
-
             </section>
           )}
 
           {/* Admin cards */}
-          {user && (user.role === "superAdmin" || (user.role === "admin" || user.role === "superAdmin")) && (
+          {user && (user.role === "admin" || user.role === "superAdmin") && (
             <div className="admin_div">
               <div className="dvg22"></div>
               <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
                 <h6 className="title dm20 light_black">Admin</h6>
                 <div className="inner">
                   <Link className="mm_single" to="/newproperty">
-                    <span className="material-symbols-outlined mms_icon">add</span>
+                    <span className="material-symbols-outlined mms_icon">
+                      add
+                    </span>
                     <h5 className="dr16">add property</h5>
                     <h6>Easily list your property</h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
                   </Link>
-                  <Link className="mm_single" to="/addnotification/new">
-                    <span className="material-symbols-outlined mms_icon">
-                      notification_important
-                    </span>
-                    <h5 className="dr16"> add notification</h5>
-                    <h6>Create and manage your custom alerts and notifications</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
+                
                   <Link className="mm_single coming_soon r0" to="">
-                    <span className="material-symbols-outlined mms_icon">receipt_long</span>
-                    <h5 className="dr16">  add bills </h5>
-                    <h6>Enter and manage your billing information and payments</h6>
+                    <span className="material-symbols-outlined mms_icon">
+                      receipt_long
+                    </span>
+                    <h5 className="dr16"> add bills </h5>
+                    <h6>
+                      Enter and manage your billing information and payments
+                    </h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -206,27 +187,21 @@ const PGMoreMenu = () => {
                       real_estate_agent
                     </span>
                     <h5 className="dr16">property lists</h5>
-                    <h6>View and manage the complete list of available properties</h6>
+                    <h6>
+                      View and manage the complete list of available properties
+                    </h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
-                  </Link>
-                  <Link className="mm_single" to="/userlist">
-                    <span className="material-symbols-outlined mms_icon">
-                      group
-                    </span>
-                    <h5 className="dr16">user list</h5>
-                    <h6>View and manage all registered users</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
+                  </Link>                
                   <Link className="mm_single coming_soon r0" to="">
                     <span className="material-symbols-outlined mms_icon">
                       confirmation_number
                     </span>
                     <h5 className="dr16">Manage tickets</h5>
-                    <h6>Oversee and respond to all support tickets and inquiries</h6>
+                    <h6>
+                      Oversee and respond to all support tickets and inquiries
+                    </h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -246,127 +221,9 @@ const PGMoreMenu = () => {
                       headphones
                     </span>
                     <h5 className="dr16">Enquiry</h5>
-                    <h6>View and respond to all customer enquiries and leads</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
-
-                </div>
-              </section>
-              <div className="dvg22"></div>
-              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
-                <h6 className="title dm20 light_black">Master data</h6>
-                <div className="inner">
-                  <Link className="mm_single" to="/countrylist">
-                    <span className="material-symbols-outlined mms_icon">flag</span>
-                    <h5 className="dr16">Country's list</h5>
-                    <h6>Add and manage countries for your listings and settings</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
-                  <Link className="mm_single" to="/statelist">
-                    <span className="material-symbols-outlined mms_icon">
-                      emoji_transportation
-                    </span>
-                    <h5 className="dr16">State's list</h5>
-                    <h6>Add and manage states for your listings and settings</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
-                  <Link className="mm_single" to="/citylist">
-                    <span className="material-symbols-outlined mms_icon">
-                      holiday_village
-                    </span>
-                    <h5 className="dr16">City's list</h5>
-                    <h6>Add and manage cites for your listings and settings</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
-                  <Link className="mm_single" to="/localitylist">
-                    <span className="material-symbols-outlined mms_icon">
-                      location_city
-                    </span>
-                    <h5 className="dr16">Locality's list</h5>
-                    <h6>Add and manage localites for your listings and settings</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
-                  <Link className="mm_single" to="/societylist">
-                    <span className="material-symbols-outlined mms_icon">
-                      location_home
-                    </span>
-                    <h5 className="dr16">Society's list</h5>
-                    <h6>Add and manage societies for your listings and settings</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
-                </div>
-              </section>
-              <div className="dvg22"></div>
-              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white coming_soon r0">
-                <h6 className="title dm20 light_black">setting</h6>
-                <div className="inner">
-                  <Link className="mm_single" to="/adminsettings">
-                    <span className="material-symbols-outlined mms_icon">flag</span>
-                    <h5 className="dr16">Country</h5>
-                    <h6>set your current location</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
-                  <Link className="mm_single" to="/adminsettings">
-                    <span className="material-symbols-outlined mms_icon">diamond</span>
-                    <h5 className="dr16">Logo</h5>
-                    <h6>Upload and update the logo displayed on your site</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
-                  <Link className="mm_single" to="">
-                    <span className="material-symbols-outlined mms_icon">
-                      contrast
-                    </span>
-                    <h5 className="dr16">Theme</h5>
-                    <h6>Choose and apply a new theme for your site's appearance</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      <DarkModeToggle
-                        onChange={() =>
-                          toggleDarkMode(
-                            appDisplayMode && appDisplayMode.id,
-                            appDisplayMode &&
-                            appDisplayMode.displayMode
-                          )
-                        }
-                        checked={
-                          appDisplayMode &&
-                          appDisplayMode.displayMode == "dark"
-                        }
-                        size={50}
-                      />
-                    </span>
-                  </Link>
-                  <Link className="mm_single" to="">
-                    <span className="material-symbols-outlined mms_icon">
-                      g_translate
-                    </span>
-                    <h5 className="dr16">Site Language</h5>
-                    <h6>Select and set the preferred language for your website</h6>
-                    <span className="material-symbols-outlined mms_ra">
-                      chevron_right
-                    </span>
-                  </Link>
-                  <Link className="mm_single" to="">
-                    <span className="material-symbols-outlined mms_icon">
-                      credit_card
-                    </span>
-                    <h5 className="dr16">Payment Gateway</h5>
-                    <h6>Configure and switch your payment processing provider</h6>
+                    <h6>
+                      View and respond to all customer enquiries and leads
+                    </h6>
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
@@ -375,6 +232,181 @@ const PGMoreMenu = () => {
               </section>
             </div>
           )}
+          {user && user.role === "superAdmin" && (
+              <div className="admin_div">
+                <div className="dvg22"></div>
+                <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
+                  <h6 className="title dm20 light_black">Super Admin</h6>
+                  <div className="inner">                   
+                    <Link className="mm_single" to="/addnotification/new">
+                      <span className="material-symbols-outlined mms_icon">
+                        notification_important
+                      </span>
+                      <h5 className="dr16"> add notification</h5>
+                      <h6>
+                        Create and manage your custom alerts and notifications
+                      </h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>               
+              
+                    <Link className="mm_single" to="/userlist">
+                      <span className="material-symbols-outlined mms_icon">
+                        group
+                      </span>
+                      <h5 className="dr16">user list</h5>
+                      <h6>View and manage all registered users</h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>                 
+                    
+                    
+                  </div>
+                </section>
+                <div className="dvg22"></div>
+                <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
+                  <h6 className="title dm20 light_black">Master data</h6>
+                  <div className="inner">
+                    <Link className="mm_single" to="/countrylist">
+                      <span className="material-symbols-outlined mms_icon">
+                        flag
+                      </span>
+                      <h5 className="dr16">Country's list</h5>
+                      <h6>
+                        Add and manage countries for your listings and settings
+                      </h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>
+                    <Link className="mm_single" to="/statelist">
+                      <span className="material-symbols-outlined mms_icon">
+                        emoji_transportation
+                      </span>
+                      <h5 className="dr16">State's list</h5>
+                      <h6>
+                        Add and manage states for your listings and settings
+                      </h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>
+                    <Link className="mm_single" to="/citylist">
+                      <span className="material-symbols-outlined mms_icon">
+                        holiday_village
+                      </span>
+                      <h5 className="dr16">City's list</h5>
+                      <h6>
+                        Add and manage cites for your listings and settings
+                      </h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>
+                    <Link className="mm_single" to="/localitylist">
+                      <span className="material-symbols-outlined mms_icon">
+                        location_city
+                      </span>
+                      <h5 className="dr16">Locality's list</h5>
+                      <h6>
+                        Add and manage localites for your listings and settings
+                      </h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>
+                    <Link className="mm_single" to="/societylist">
+                      <span className="material-symbols-outlined mms_icon">
+                        location_home
+                      </span>
+                      <h5 className="dr16">Society's list</h5>
+                      <h6>
+                        Add and manage societies for your listings and settings
+                      </h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>
+                  </div>
+                </section>
+                <div className="dvg22"></div>
+                <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white coming_soon r0">
+                  <h6 className="title dm20 light_black">setting</h6>
+                  <div className="inner">
+                    <Link className="mm_single" to="/adminsettings">
+                      <span className="material-symbols-outlined mms_icon">
+                        flag
+                      </span>
+                      <h5 className="dr16">Country</h5>
+                      <h6>set your current location</h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>
+                    <Link className="mm_single" to="/adminsettings">
+                      <span className="material-symbols-outlined mms_icon">
+                        diamond
+                      </span>
+                      <h5 className="dr16">Logo</h5>
+                      <h6>Upload and update the logo displayed on your site</h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>
+                    <Link className="mm_single" to="">
+                      <span className="material-symbols-outlined mms_icon">
+                        contrast
+                      </span>
+                      <h5 className="dr16">Theme</h5>
+                      <h6>
+                        Choose and apply a new theme for your site's appearance
+                      </h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        <DarkModeToggle
+                          onChange={() =>
+                            toggleDarkMode(
+                              appDisplayMode && appDisplayMode.id,
+                              appDisplayMode && appDisplayMode.displayMode
+                            )
+                          }
+                          checked={
+                            appDisplayMode &&
+                            appDisplayMode.displayMode == "dark"
+                          }
+                          size={50}
+                        />
+                      </span>
+                    </Link>
+                    <Link className="mm_single" to="">
+                      <span className="material-symbols-outlined mms_icon">
+                        g_translate
+                      </span>
+                      <h5 className="dr16">Site Language</h5>
+                      <h6>
+                        Select and set the preferred language for your website
+                      </h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>
+                    <Link className="mm_single" to="">
+                      <span className="material-symbols-outlined mms_icon">
+                        credit_card
+                      </span>
+                      <h5 className="dr16">Payment Gateway</h5>
+                      <h6>
+                        Configure and switch your payment processing provider
+                      </h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link>
+                  </div>
+                </section>
+              </div>
+            )}
 
           {/* Owner Cards */}
           {/* {user && user.role === "owner" && (
@@ -425,7 +457,9 @@ const PGMoreMenu = () => {
                 </span>
               </Link>
               <Link className="mm_single" to="/notification">
-                <span className="material-symbols-outlined mms_icon">notifications_active</span>
+                <span className="material-symbols-outlined mms_icon">
+                  notifications_active
+                </span>
                 <h5 className="dr16">notification</h5>
                 <h6>Review your recent alerts and updates</h6>
                 <span className="material-symbols-outlined mms_ra">
@@ -472,21 +506,23 @@ const PGMoreMenu = () => {
                 </span>
               </Link>
               <Link className="mm_single r0" to=" ">
-                <span className="material-symbols-outlined mms_icon">contrast</span>
+                <span className="material-symbols-outlined mms_icon">
+                  contrast
+                </span>
                 <h5 className="dr16">Display mode</h5>
                 <h6>change your app mode to dark & light</h6>
                 <span className="mms_ra">
                   <DarkModeToggle
                     onChange={() => toggleUserDarkMode()}
-                    checked={
-                      localStorage.getItem("mode") === "dark"
-                    }
+                    checked={localStorage.getItem("mode") === "dark"}
                     size={50}
                   />
                 </span>
               </Link>
               <Link className="mm_single" to="/privacypolicy">
-                <span className="material-symbols-outlined mms_icon">report</span>
+                <span className="material-symbols-outlined mms_icon">
+                  report
+                </span>
                 <h5 className="dr16">Privacy Policy</h5>
                 <h6>understanding our privacy commitments</h6>
                 <span className="material-symbols-outlined mms_ra">
@@ -494,37 +530,44 @@ const PGMoreMenu = () => {
                 </span>
               </Link>
               <Link className="mm_single" to="/terms">
-                <span className="material-symbols-outlined mms_icon">gavel</span>
+                <span className="material-symbols-outlined mms_icon">
+                  gavel
+                </span>
                 <h5 className="dr16">Terms & Condition</h5>
                 <h6>guidelines for usage and conduct</h6>
                 <span className="material-symbols-outlined mms_ra">
                   chevron_right
                 </span>
               </Link>
-              {user ? (<Link className="mm_single" to="" onClick={showPopup}>
-                <span className="material-symbols-outlined mms_icon">logout</span>
-                <h5 className="dr16">Logout</h5>
-                <h6>sign out to login with other mobile no</h6>
-                <span className="material-symbols-outlined mms_ra">
-                  chevron_right
-                </span>
-              </Link>) :
-                (<Link className="mm_single" to="/login">
-                  <span className="material-symbols-outlined mms_icon">login</span>
+              {user ? (
+                <Link className="mm_single" to="" onClick={showPopup}>
+                  <span className="material-symbols-outlined mms_icon">
+                    logout
+                  </span>
+                  <h5 className="dr16">Logout</h5>
+                  <h6>sign out to login with other mobile no</h6>
+                  <span className="material-symbols-outlined mms_ra">
+                    chevron_right
+                  </span>
+                </Link>
+              ) : (
+                <Link className="mm_single" to="/login">
+                  <span className="material-symbols-outlined mms_icon">
+                    login
+                  </span>
                   <h5 className="dr16">Login</h5>
                   <h6>sign in with your mobile no</h6>
                   <span className="material-symbols-outlined mms_ra">
                     chevron_right
                   </span>
-                </Link>)}
+                </Link>
+              )}
             </div>
           </section>
           <div className="dvg22"></div>
         </div>
-
       </div>
     </div>
-
   );
 };
 
