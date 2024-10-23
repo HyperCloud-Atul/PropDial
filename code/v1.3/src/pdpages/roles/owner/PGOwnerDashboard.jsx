@@ -1,15 +1,14 @@
 import React from "react";
-
 import { useState, useEffect } from "react";
 import LinearProgressBar from "../../../pages/roles/owner/LinearProgressBar";
 import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useCollection } from "../../../hooks/useCollection";
-import { useFirestore } from "../../../hooks/useFirestore";
-import { projectStorage, projectFirestore } from "../../../firebase/config";
+// import { useFirestore } from "../../../hooks/useFirestore";
+// import { projectStorage, projectFirestore } from "../../../firebase/config";
 
-import Table from 'react-bootstrap/Table';
-import { Link } from "react-router-dom";
+// import Table from 'react-bootstrap/Table';
+// import { Link } from "react-router-dom";
 
 // owl carousel
 import OwlCarousel from "react-owl-carousel";
