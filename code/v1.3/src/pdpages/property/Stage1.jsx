@@ -2662,7 +2662,7 @@ const Stage1 = (props) => {
 
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
-              <label htmlFor="">New Locality</label>
+              <label htmlFor="">Locality</label>
 
               <div className="form_field_inner">
                 <Select
