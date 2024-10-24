@@ -35,7 +35,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
 
   // add enquiry with modal and add document start
   const { addDocument, updateDocument, deleteDocument, error } =
-    useFirestore("enquiry");
+    useFirestore("enquiry-propdial");
   const [showEnquiryModal, setShowEnquiryModal] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
 
@@ -212,6 +212,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
         show={showEnquiryModal}
         handleClose={handleEnquiryModalClose}
         selectedProperty={selectedProperty}
+        activeOption={activeOption}
       />
     </>
   );

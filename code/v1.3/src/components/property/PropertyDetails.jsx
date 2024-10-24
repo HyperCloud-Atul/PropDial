@@ -26,6 +26,7 @@ import "swiper/swiper.min.css";
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import MakeInactivePopup from "./MakeInactivePopup";
 import "./UserList.css";
+import InactiveUserCard from "../InactiveUserCard";
 
 // component
 import PropertyImageGallery from "../PropertyImageGallery";
@@ -54,7 +55,7 @@ const PropertyDetails = () => {
     ["propertyId", "==", propertyid]
   );
   const { documents: enquiryDocs, error: enquiryDocsError } = useCollection(
-    "enquiry",
+    "enquiry-propdial",
     ["propId", "==", propertyid]
   );
   const [propertyManagerDoc, setpropertyManagerDoc] = useState(null);
@@ -967,7 +968,7 @@ const PropertyDetails = () => {
   // modal controls end
 
   // add enquiry with modal and add document start
-  const { addDocument } = useFirestore("enquiry");
+  const { addDocument } = useFirestore("enquiry-propdial");
   const [showEnquiryModal, setShowEnquiryModal] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
 
@@ -1110,7 +1111,7 @@ const PropertyDetails = () => {
       </div>
       {/* Change User Popup - End */}
       {/* 9 dots html start  */}
-      {user && (user.role === "admin" || user.role === "superAdmin") && (
+      {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
         <div
           onClick={openMoreAddOptions}
           className="property-list-add-property"
@@ -1154,7 +1155,7 @@ const PropertyDetails = () => {
         </div>
       </div>
       {/* 9 dots html end*/}
-      {user && (user.role === "admin" || user.role === "superAdmin") && (
+      {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
         <Link
           to={`/updateproperty/${propertyid}`}
           className="property-list-add-property with_9dot"
@@ -1177,7 +1178,7 @@ const PropertyDetails = () => {
           <div className="property_cards">
             {propertyDocument && (
               <div className="">
-                {user && (user.role === "admin" || user.role === "superAdmin") && (
+                {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                   // <div className="property_card_single quick_detail_show mobile_full_card">
                   //   <div className="more_detail_card_inner">
                   //     <div className="row align-items-center">
@@ -1281,7 +1282,7 @@ const PropertyDetails = () => {
                             </h5>
                           </div>
                         </div>
-                        {user && (user.role === "admin" || user.role === "superAdmin") && propertyDocument && (
+                        {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && propertyDocument && (
                           <div className="form_field st-2 outline">
                             <div className="radio_group air">
                               <div className="radio_group_single">
@@ -1617,7 +1618,7 @@ const PropertyDetails = () => {
                           alt=""
                         />
                       )}
-                      {user && (user.role === "admin" || user.role === "superAdmin") && (
+                      {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                         <div
                           className="d-flex align-items-center justify-content-center gap-2"
                           style={{ margin: "15px 0px" }}
@@ -1667,7 +1668,7 @@ const PropertyDetails = () => {
                     <div className="pcs_main_detail">
                       <div className="pmd_top">
                         <h4>
-                          {user && user.role !== "guest" && (
+                          {user && user.status === "active" && user.role !== "guest" && (
                             <>{propertyDocument.unitNumber},</>
                           )}{" "}
                           {propertyDocument.society}
@@ -1907,12 +1908,8 @@ const PropertyDetails = () => {
                           </div>
                         </div>
 
-                        {!(
-                          (user && user.role === "owner") ||
-                          (user && user.role === "coowner") ||
-                          (user && (user.role === "admin" || user.role === "superAdmin"))
-                        ) && (
-                            <div className="right">
+                    
+                            {/* <div className="right">
                               <div
                                 className="theme_btn no_icon btn_fill"
                                 style={{ padding: "5px 20px" }}
@@ -1927,8 +1924,7 @@ const PropertyDetails = () => {
                                 handleClose={handleEnquiryModalClose}
                                 selectedProperty={selectedProperty}
                               />
-                            </div>
-                          )}
+                            </div> */}
                       </div>
                     </div>
                   </div>
@@ -1973,6 +1969,7 @@ const PropertyDetails = () => {
                 )}
 
                 {user &&
+                user.status === "active" &&
                   (user.role === "owner" ||
                     user.role === "coowner" ||
                     (user.role === "admin" || user.role === "superAdmin")) && (
@@ -2377,7 +2374,7 @@ const PropertyDetails = () => {
                     </span>
                     <div className="more_detail_card_inner">
                       <div className="row">
-                        {user && (user.role === "admin" || user.role === "superAdmin") && (
+                        {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                           <div
                             className="col-sm-1 col-2"
                             style={{
@@ -2397,7 +2394,7 @@ const PropertyDetails = () => {
                           </div>
                         )}
                         <div
-                          className={`${user && (user.role === "admin" || user.role === "superAdmin")
+                          className={`${user  && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
                             ? "col-sm-11 col-10"
                             : "col-12"
                             }`}
@@ -2529,7 +2526,7 @@ const PropertyDetails = () => {
                                           className="view_edit d-flex justify-content-between mt-2"
                                           style={{ marginLeft: "7px" }}
                                         >
-                                          {user && (user.role === "admin" || user.role === "superAdmin") && (
+                                          {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                                             <span
                                               className="click_text pointer"
                                               onClick={() =>
@@ -2719,7 +2716,7 @@ const PropertyDetails = () => {
                                       </div>
                                     )}
 
-                                  {user && (user.role === "admin" || user.role === "superAdmin") && (
+                                  {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                                     <div className="modal_footer">
                                       <div
                                         onClick={handleConfirmShow}
@@ -2775,7 +2772,9 @@ const PropertyDetails = () => {
                 {/* property layout section end  */}
 
                 {/* tenant card start */}
-                {((user && user.role === "owner") ||
+                {
+                user && user.status === "active" && 
+                ((user && user.role === "owner") ||
                   (user && user.role === "coowner") ||
                   (user && (user.role === "admin" || user.role === "superAdmin"))) && (
                     <section className="property_card_single full_width_sec with_orange">
@@ -2785,7 +2784,7 @@ const PropertyDetails = () => {
                       </span>
                       <div className="more_detail_card_inner">
                         <div className="row">
-                          {user && (user.role === "admin" || user.role === "superAdmin") && (
+                          {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                             <div
                               className="col-sm-1 col-2"
                               style={{
@@ -2805,7 +2804,7 @@ const PropertyDetails = () => {
                             </div>
                           )}
                           <div
-                            className={`${user && (user.role === "admin" || user.role === "superAdmin")
+                            className={`${user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
                               ? "col-sm-11 col-10"
                               : "col-12"
                               }`}
@@ -2911,7 +2910,9 @@ const PropertyDetails = () => {
                 {/* tenant card end  */}
 
                 {/* property user card  start */}
-                {((user && user.role === "owner") ||
+                {
+                user && user.status === "active" &&
+                ((user && user.role === "owner") ||
                   (user && user.role === "coowner") ||
                   (user && (user.role === "admin" || user.role === "superAdmin"))) && (
                     <>
@@ -2922,7 +2923,7 @@ const PropertyDetails = () => {
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
-                            {user && (user.role === "admin" || user.role === "superAdmin") && (
+                            {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                               <div
                                 className="col-sm-1 col-2"
                                 style={{
@@ -2944,7 +2945,7 @@ const PropertyDetails = () => {
                               </div>
                             )}
                             <div
-                              className={`${user && (user.role === "admin" || user.role === "superAdmin")
+                              className={`${user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
                                 ? "col-sm-11 col-10"
                                 : "col-12"
                                 }`}
@@ -2983,7 +2984,7 @@ const PropertyDetails = () => {
                                             <div
                                               className="property_people_designation d-flex align-items-end justify-content-center pointer"
                                               onClick={
-                                                user && (user.role === "admin" || user.role === "superAdmin")
+                                                user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
                                                   ? (e) =>
                                                     handleShowOwnerTags(
                                                       e,
@@ -2994,7 +2995,7 @@ const PropertyDetails = () => {
                                               }
                                             >
                                               {propUser.userTag}
-                                              {user && (user.role === "admin" || user.role === "superAdmin") && (
+                                              {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                                                 <span
                                                   className="material-symbols-outlined click_icon text_near_icon"
                                                   style={{ fontSize: "10px" }}
@@ -3016,7 +3017,7 @@ const PropertyDetails = () => {
                                               <div className="tenant_detail">
                                                 <h5
                                                   onClick={
-                                                    user && (user.role === "admin" || user.role === "superAdmin")
+                                                    user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
                                                       ? () =>
                                                         openChangeUser(
                                                           propUser.id
@@ -3029,7 +3030,7 @@ const PropertyDetails = () => {
                                                     }`}
                                                 >
                                                   {propUser.fullName}
-                                                  {user &&
+                                                  {user && user.status === "active" &&
                                                     (user.role === "admin" || user.role === "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
@@ -3042,7 +3043,7 @@ const PropertyDetails = () => {
                                                     "+$1 $2-$3"
                                                   )}
                                                 </h6>
-                                                {user &&
+                                                {user && user.status === "active" &&
                                                   (user.role === "admin" || user.role === "superAdmin") && (
                                                     <h6
                                                       className="text_red pointer"
@@ -3271,7 +3272,9 @@ const PropertyDetails = () => {
                 {/* property user card end  */}
 
                 {/* propdial managers / users card  start */}
-                {((user && user.role === "owner") ||
+                {
+                user && user.status === "active" &&
+                ((user && user.role === "owner") ||
                   (user && user.role === "coowner") ||
                   (user && (user.role === "admin" || user.role === "superAdmin"))) && (
                     <>
@@ -3282,7 +3285,7 @@ const PropertyDetails = () => {
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
-                            {user && (user.role === "admin" || user.role === "superAdmin") && (
+                            {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                               <div
                                 className="col-sm-1 col-2"
                                 style={{
@@ -3304,7 +3307,7 @@ const PropertyDetails = () => {
                               </div>
                             )}
                             <div
-                              className={`${user && (user.role === "admin" || user.role === "superAdmin")
+                              className={`${user  && (user.role === "admin" || user.role === "superAdmin")
                                 ? "col-sm-11 col-10"
                                 : "col-12"
                                 }`}
@@ -3344,7 +3347,7 @@ const PropertyDetails = () => {
                                               className="property_people_designation d-flex align-items-end justify-content-center"
                                               onClick={(e) => {
                                                 if (
-                                                  user &&
+                                                  user && user.status === "active" &&
                                                   (user.role === "admin" || user.role === "superAdmin")
                                                 ) {
                                                   handleShowOwnerTags(
@@ -3356,7 +3359,7 @@ const PropertyDetails = () => {
                                               }}
                                             >
                                               {propUser.userTag}
-                                              {user && (user.role === "admin" || user.role === "superAdmin") && (
+                                              {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                                                 <span
                                                   class="material-symbols-outlined click_icon text_near_icon"
                                                   style={{
@@ -3380,7 +3383,7 @@ const PropertyDetails = () => {
                                               <div className="tenant_detail">
                                                 <h5
                                                   onClick={
-                                                    user && (user.role === "admin" || user.role === "superAdmin")
+                                                    user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
                                                       ? () =>
                                                         openChangeUser(
                                                           propUser.id
@@ -3393,7 +3396,7 @@ const PropertyDetails = () => {
                                                     }`}
                                                 >
                                                   {propUser.fullName}
-                                                  {user &&
+                                                  {user && user.status === "active" &&
                                                     (user.role === "admin" || user.role === "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
@@ -3406,7 +3409,7 @@ const PropertyDetails = () => {
                                                     "+$1 $2-$3"
                                                   )}
                                                 </h6>
-                                                {(user.role === "admin" || user.role === "superAdmin") && (
+                                                {user && user.status === "active" &&(user.role === "admin" || user.role === "superAdmin") && (
                                                   <h6
                                                     className="text_red pointer"
                                                     style={{
@@ -4597,7 +4600,7 @@ const PropertyDetails = () => {
                                 }}
                               ></p>
                               {!isPropDescEdit &&
-                                user &&
+                                user && user.status === "active" &&
                                 (user.role === "owner" ||
                                   (user.role === "admin" || user.role === "superAdmin")) && (
                                   <span
@@ -4616,7 +4619,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                   {/* Owner Instruction  */}
-                  {user && user.role !== "guest" && (
+                  {user && user.status === "active" && user.role !== "guest" && (
                     <div className="col-lg-6">
                       <div className="property_card_single mobile_full_card">
                         <div className="more_detail_card_inner">
@@ -4666,6 +4669,7 @@ const PropertyDetails = () => {
                                 ></p>
                                 {!isEditingOwnerInstruction &&
                                   user &&
+                                  user.status === "active" &&
                                   user.role == "admin" && (
                                     <span
                                       class="material-symbols-outlined click_icon text_near_icon"
@@ -4689,8 +4693,8 @@ const PropertyDetails = () => {
               </div>
             )}
 
-            {/* {(user && user.role === "owner") ||
-              (user && (user.role === "admin" || user.role === "superAdmin") && (
+            {/* {(user && user.status === "active" && user.role === "owner") ||
+              (user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
                 <div className="property_card_single">
                   <div className="more_detail_card_inner">
                     <div className="row no-gutters">

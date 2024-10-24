@@ -95,6 +95,7 @@ const CreateTicket = () => {
                   <option>General Inquiries</option>
                   {/* <option>Billing and Account Management</option> */}
                   <option>Technical Issues</option>
+                  <option>Deactive account support</option>
                   {/* <option>Training Requests</option> */}
                 </select>
                 <div className="field_icon">

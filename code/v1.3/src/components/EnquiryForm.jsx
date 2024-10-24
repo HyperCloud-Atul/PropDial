@@ -5,7 +5,7 @@ import PhoneInput from "react-phone-input-2";
 const EnquiryForm = () => {
   // add enquiry with add document start
   const { addDocument, updateDocument, deleteDocument, error } =
-    useFirestore("enquiry");
+    useFirestore("enquiry-propdial");
 
   const [iAm, setIam] = useState("");
   const [enquiryType, setEnquiryType] = useState("");

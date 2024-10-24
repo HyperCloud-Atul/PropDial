@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import DatePicker from "react-datepicker"; // Import the DatePicker component
 import "react-datepicker/dist/react-datepicker.css"; // Import the necessary CSS
 import PropertySummaryCard from "./PropertySummaryCard";
+import InactiveUserCard from "../../components/InactiveUserCard";
 const PropertyUtilityBills = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
@@ -217,163 +218,164 @@ const PropertyUtilityBills = () => {
   ];
 
   return (
+    <>
+    {user && user.status === "active" ? (
     <div className="top_header_pg pg_bg pg_utility_bill ">
-      <div className="page_spacing pg_min_height">
-        <div className="row row_reverse_991">
-          <div className="col-lg-6">
-            <div className="title_card mobile_full_575 mobile_gap h-100">
-              <h2 className="text-center mb-4">
-                OnePlace for Property Utility Bills
-              </h2>
-              {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
-              {!showAIForm && (
-                <div
-                  className="theme_btn btn_fill no_icon text-center short_btn"
-                  onClick={handleShowAIForm}
-                >
-                  Add New Utility Bill
-                </div>
-              )}
-            </div>
+    <div className="page_spacing pg_min_height">
+      <div className="row row_reverse_991">
+        <div className="col-lg-6">
+          <div className="title_card mobile_full_575 mobile_gap h-100">
+            <h2 className="text-center mb-4">
+              OnePlace for Property Utility Bills
+            </h2>
+            {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
+            {!showAIForm && (
+              <div
+                className="theme_btn btn_fill no_icon text-center short_btn"
+                onClick={handleShowAIForm}
+              >
+                Add New Utility Bill
+              </div>
+            )}
           </div>
-          <PropertySummaryCard
-            propertydoc={propertydoc}
-            propertyId={propertyId}
-          />
         </div>
-        {showAIForm && (
-          <>
-            <div className="vg22"></div>
-            <section className="my_big_card add_doc_form mobile_full_575 ">
-              {/* <h2 className="card_title">Select any one document ID</h2> */}
-              <div className="aai_form">
-                <div className="row align-items-center">
-                  <div className="col-xl-8 col-lg-7 col-12">
-                    <div className="form_field">
-                      <div className="field_box theme_radio_new">
-                        <div className="theme_radio_container">
-                          {billType.map((bill) => (
-                            <div className="radio_single" key={bill.id}>
-                              <input
-                                type="radio"
-                                name="bill_type"
-                                id={bill.id}
-                                value={bill.value}
-                                onChange={handleBillTypeChange}
-                                checked={selectedBillType === bill.value}
-                              />
-                              <label htmlFor={bill.id}>{bill.label}</label>
-                            </div>
-                          ))}
-                        </div>
+        <PropertySummaryCard
+          propertydoc={propertydoc}
+          propertyId={propertyId}
+        />
+      </div>
+      {showAIForm && (
+        <>
+          <div className="vg22"></div>
+          <section className="my_big_card add_doc_form mobile_full_575 ">
+            {/* <h2 className="card_title">Select any one document ID</h2> */}
+            <div className="aai_form">
+              <div className="row align-items-center">
+                <div className="col-xl-8 col-lg-7 col-12">
+                  <div className="form_field">
+                    <div className="field_box theme_radio_new">
+                      <div className="theme_radio_container">
+                        {billType.map((bill) => (
+                          <div className="radio_single" key={bill.id}>
+                            <input
+                              type="radio"
+                              name="bill_type"
+                              id={bill.id}
+                              value={bill.value}
+                              onChange={handleBillTypeChange}
+                              checked={selectedBillType === bill.value}
+                            />
+                            <label htmlFor={bill.id}>{bill.label}</label>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
-                  <div className="col-xl-4 col-lg-5 col-12">
-                    <div className="vg22_991"></div>
-                    <div className="row" style={{ rowGap: "18px" }}>
-                      <div className="col-sm-6">
-                        <div className="add_info_text w-100">
-                          <div className="form_field w-100">
-                            <div className="relative">
-                              <input
-                                type="text"
-                                value={authorityName}
-                                onChange={handleauthorityNameChange}
-                                placeholder="Name of authority"
-                                className="w-100"
-
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-sm-6">
-                        <div className="add_info_text w-100">
-                          <div className="form_field w-100">
-                            <div className="relative">
-                              <input
-                                type="text"
-                                value={billId}
-                                onChange={handleBillIdChange}
-                                placeholder="Bill ID"
-                                className="w-100"
-                                style={{
-                                  background: "whitesmoke"
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-12">
-                        <div className="form_field">
-                          <div className="field_box theme_radio_new">
-                            <div className="theme_radio_container">
-                              {paymentType.map((pt) => (
-                                <div className="radio_single" key={pt.id}>
-                                  <input
-                                    type="radio"
-                                    name="payment_type"
-                                    id={pt.id}
-                                    value={pt.value}
-                                    onChange={handlePaymentTypeChange}
-                                    checked={selectedPaymentType === pt.value}
-                                  />
-                                  <label htmlFor={pt.id}>{pt.label}</label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-sm-6">
-                        <div className="add_info_text w-100">
-                          <div className="form_field price_input relative w-100">
+                </div>
+                <div className="col-xl-4 col-lg-5 col-12">
+                  <div className="vg22_991"></div>
+                  <div className="row" style={{ rowGap: "18px" }}>
+                    <div className="col-sm-6">
+                      <div className="add_info_text w-100">
+                        <div className="form_field w-100">
+                          <div className="relative">
                             <input
-                              type="number"
-                              value={amountDue}
-                              onChange={handleAmountDueChange}
-                              placeholder="Amount due"
+                              type="text"
+                              value={authorityName}
+                              onChange={handleauthorityNameChange}
+                              placeholder="Name of authority"
                               className="w-100"
+
                             />
                           </div>
                         </div>
                       </div>
-                      <div className="col-sm-6">
-                        <div className="add_info_text w-100">
-                          <div className="form_field w-100">
-                            <div className="relative">
-                              <DatePicker
-                                selected={rawDate}
-                                onChange={handleDueDateChange}
-                                dateFormat="dd/MM/yyyy"
-                                placeholderText="Amount due date"
-                                className="w-100"
-                              // isClearable
-                              />
-                            </div>
+                    </div>
+                    <div className="col-sm-6">
+                      <div className="add_info_text w-100">
+                        <div className="form_field w-100">
+                          <div className="relative">
+                            <input
+                              type="text"
+                              value={billId}
+                              onChange={handleBillIdChange}
+                              placeholder="Bill ID"
+                              className="w-100"
+                              style={{
+                                background: "whitesmoke"
+                              }}
+                            />
                           </div>
                         </div>
                       </div>
-                      <div className="col-12">
-                        <div className="row">
-                          <div className="col-6">
-                            <div
-                              className="theme_btn btn_border text-center no_icon"
-                              onClick={isUploading ? null : handleShowAIForm}
-                            >
-                              Cancel
-                            </div>
+                    </div>
+                    <div className="col-12">
+                      <div className="form_field">
+                        <div className="field_box theme_radio_new">
+                          <div className="theme_radio_container">
+                            {paymentType.map((pt) => (
+                              <div className="radio_single" key={pt.id}>
+                                <input
+                                  type="radio"
+                                  name="payment_type"
+                                  id={pt.id}
+                                  value={pt.value}
+                                  onChange={handlePaymentTypeChange}
+                                  checked={selectedPaymentType === pt.value}
+                                />
+                                <label htmlFor={pt.id}>{pt.label}</label>
+                              </div>
+                            ))}
                           </div>
-                          <div className="col-6">
-                            <div
-                              className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
-                                }`}
-                              onClick={isUploading ? null : addUtilityBill}
-                            >
-                              {isUploading ? "Uploading..." : "Save"}
-                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-sm-6">
+                      <div className="add_info_text w-100">
+                        <div className="form_field price_input relative w-100">
+                          <input
+                            type="number"
+                            value={amountDue}
+                            onChange={handleAmountDueChange}
+                            placeholder="Amount due"
+                            className="w-100"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-sm-6">
+                      <div className="add_info_text w-100">
+                        <div className="form_field w-100">
+                          <div className="relative">
+                            <DatePicker
+                              selected={rawDate}
+                              onChange={handleDueDateChange}
+                              dateFormat="dd/MM/yyyy"
+                              placeholderText="Amount due date"
+                              className="w-100"
+                            // isClearable
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <div className="row">
+                        <div className="col-6">
+                          <div
+                            className="theme_btn btn_border text-center no_icon"
+                            onClick={isUploading ? null : handleShowAIForm}
+                          >
+                            Cancel
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div
+                            className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
+                              }`}
+                            onClick={isUploading ? null : addUtilityBill}
+                          >
+                            {isUploading ? "Uploading..." : "Save"}
                           </div>
                         </div>
                       </div>
@@ -381,135 +383,141 @@ const PropertyUtilityBills = () => {
                   </div>
                 </div>
               </div>
-            </section>
-          </>
-        )}
-        {utilityBillsDoc && utilityBillsDoc.length !== 0 && (
-          <>
-            {/* <div className="vg22"></div>
-            <hr /> */}
-            <div className="vg22"></div>
-          </>
-        )}
-        {utilityBillsDoc && utilityBillsDoc.length === 0 && (
-          <div
-            className="pg_msg"
-            style={{
-              height: "calc(55vh)",
-            }}
-          >
-            <div>No Utility Bill Yet!</div>
-          </div>
-        )}
-        <div className="my_small_card_parent">
-          {utilityBillsDoc &&
-            utilityBillsDoc.map((doc, index) => (
-              <div className="my_small_card notification_card" key={index}>
-                <div className="left">
-                  <div className="img_div">
-                    {doc.billType === "Common Area Maintenance (CAM)" ||
-                      doc.billType.toLowerCase() === "maintenance" ? (
-                      <img src="/assets/img/icons/maintainance.png" alt="" />
-                    ) : doc.billType.toLowerCase() === "club" ? (
-                      <img src="/assets/img/icons/clubill.png" alt="" />
-                    ) : doc.billType === "Common Area Electricity (CAE)" ||
-                      doc.billType.toLowerCase() === "electricity" ? (
-                      <img src="/assets/img/icons/electicitybill.png" alt="" />
-                    ) : doc.billType.toLowerCase() === "water" ? (
-                      <img src="/assets/img/icons/waterbill.png" alt="" />
-                    ) : doc.billType === "PNG/LPG" ? (
-                      <img src="/assets/img/icons/lpgbill.png" alt="" />
-                    ) : doc.billType === "Power Back-up" ? (
-                      <img src="/assets/img/icons/powerbackup.png" alt="" />
-                    ) : doc.billType === "Property Tax" ? (
-                      <img src="/assets/img/icons/propertytax.png" alt="" />
-                    ) : doc.billType === "Main + Elect + Water" ||
-                      doc.billType === "CAM & CAE & Water" ? (
-                      <img src="/assets/img/icons/emw.png" alt="" />
-                    ) : doc.billType === "Maintenance & Electricity" ||
-                      doc.billType === "CAM & CAE" ? (
-                      <img src="/assets/img/icons/em.png" alt="" />
-                    ) : doc.billType === "Electricity & Water" ? (
-                      <img src="/assets/img/icons/ew.png" alt="" />
-                    ) : doc.billType === "Water & Sewerage" ? (
-                      <img src="/assets/img/icons/sw.png" alt="" />
-                    ) : doc.billType === "Electricity / Utility Bill" ? (
-                      <img src="/assets/img/icons/ue.png" alt="" />
-                    ) : null}
-                  </div>
-                  <div className="right">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h5 className="title">{doc.authorityName}</h5>
-                        <h6 className="sub_title">{doc.paymentType}</h6>
-                      </div>
-                      {user && user.role === "superAdmin" && (
-                        <div
-                          onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
-                          className="text_red pointer"
-                          style={{
-                            fontSize: "12px",
-                          }}
-                        >
-                          Remove
-                        </div>
-                      )}
-                      <Modal
-                        show={showConfirmModal}
-                        onHide={handleConfirmClose}
-                        className="delete_modal"
-                        centered
-                      >
-                        <div className="alert_text text-center">Alert</div>
-
-                        <div className="sure_content text-center">
-                          Are you sure you want to remove this utility bill?
-                        </div>
-                        <div className="yes_no_btn">
-                          <div
-                            className="theme_btn full_width no_icon text-center btn_border"
-                            onClick={confirmDeleteDocument} // Confirm and delete
-                          >
-                            Yes
-                          </div>
-                          <div
-                            className="theme_btn full_width no_icon text-center btn_fill"
-                            onClick={handleConfirmClose} // Close modal without deleting
-                          >
-                            No
-                          </div>
-                        </div>
-                      </Modal>
-                    </div>
-                    <h6 className="sub_title text-capitalize">Bill ID:-{" "}{doc.billId}</h6>
-                  </div>
-                </div>
-                <h4 className="top_right_content">
-                  <span>
-                    {format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}
-                  </span>
-                </h4>
-                <h4 className="top_left_content">
-                  <span className="text-capitalize">{doc.billType}</span>
-                </h4>
-
-                <div className="bottom_strip">
-                  <div className="bs_left">
-                    <h5>
-                      {doc.dueDate}
-                      <span>(Due Date)</span>
-                    </h5>
-                    <h6></h6>
-                  </div>
-                  <div className="bs_right">
-                    <h4>₹ {formatNumberWithCommas(doc.amountDue)}</h4>
-                  </div>
-                </div>
-              </div>
-            ))}
+            </div>
+          </section>
+        </>
+      )}
+      {utilityBillsDoc && utilityBillsDoc.length !== 0 && (
+        <>
+          {/* <div className="vg22"></div>
+          <hr /> */}
+          <div className="vg22"></div>
+        </>
+      )}
+      {utilityBillsDoc && utilityBillsDoc.length === 0 && (
+        <div
+          className="pg_msg"
+          style={{
+            height: "calc(55vh)",
+          }}
+        >
+          <div>No Utility Bill Yet!</div>
         </div>
+      )}
+      <div className="my_small_card_parent">
+        {utilityBillsDoc &&
+          utilityBillsDoc.map((doc, index) => (
+            <div className="my_small_card notification_card" key={index}>
+              <div className="left">
+                <div className="img_div">
+                  {doc.billType === "Common Area Maintenance (CAM)" ||
+                    doc.billType.toLowerCase() === "maintenance" ? (
+                    <img src="/assets/img/icons/maintainance.png" alt="" />
+                  ) : doc.billType.toLowerCase() === "club" ? (
+                    <img src="/assets/img/icons/clubill.png" alt="" />
+                  ) : doc.billType === "Common Area Electricity (CAE)" ||
+                    doc.billType.toLowerCase() === "electricity" ? (
+                    <img src="/assets/img/icons/electicitybill.png" alt="" />
+                  ) : doc.billType.toLowerCase() === "water" ? (
+                    <img src="/assets/img/icons/waterbill.png" alt="" />
+                  ) : doc.billType === "PNG/LPG" ? (
+                    <img src="/assets/img/icons/lpgbill.png" alt="" />
+                  ) : doc.billType === "Power Back-up" ? (
+                    <img src="/assets/img/icons/powerbackup.png" alt="" />
+                  ) : doc.billType === "Property Tax" ? (
+                    <img src="/assets/img/icons/propertytax.png" alt="" />
+                  ) : doc.billType === "Main + Elect + Water" ||
+                    doc.billType === "CAM & CAE & Water" ? (
+                    <img src="/assets/img/icons/emw.png" alt="" />
+                  ) : doc.billType === "Maintenance & Electricity" ||
+                    doc.billType === "CAM & CAE" ? (
+                    <img src="/assets/img/icons/em.png" alt="" />
+                  ) : doc.billType === "Electricity & Water" ? (
+                    <img src="/assets/img/icons/ew.png" alt="" />
+                  ) : doc.billType === "Water & Sewerage" ? (
+                    <img src="/assets/img/icons/sw.png" alt="" />
+                  ) : doc.billType === "Electricity / Utility Bill" ? (
+                    <img src="/assets/img/icons/ue.png" alt="" />
+                  ) : null}
+                </div>
+                <div className="right">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 className="title">{doc.authorityName}</h5>
+                      <h6 className="sub_title">{doc.paymentType}</h6>
+                    </div>
+                    {user && user.role === "superAdmin" && (
+                      <div
+                        onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
+                        className="text_red pointer"
+                        style={{
+                          fontSize: "12px",
+                        }}
+                      >
+                        Remove
+                      </div>
+                    )}
+                    <Modal
+                      show={showConfirmModal}
+                      onHide={handleConfirmClose}
+                      className="delete_modal"
+                      centered
+                    >
+                      <div className="alert_text text-center">Alert</div>
+
+                      <div className="sure_content text-center">
+                        Are you sure you want to remove this utility bill?
+                      </div>
+                      <div className="yes_no_btn">
+                        <div
+                          className="theme_btn full_width no_icon text-center btn_border"
+                          onClick={confirmDeleteDocument} // Confirm and delete
+                        >
+                          Yes
+                        </div>
+                        <div
+                          className="theme_btn full_width no_icon text-center btn_fill"
+                          onClick={handleConfirmClose} // Close modal without deleting
+                        >
+                          No
+                        </div>
+                      </div>
+                    </Modal>
+                  </div>
+                  <h6 className="sub_title text-capitalize">Bill ID:-{" "}{doc.billId}</h6>
+                </div>
+              </div>
+              <h4 className="top_right_content">
+                <span>
+                  {format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}
+                </span>
+              </h4>
+              <h4 className="top_left_content">
+                <span className="text-capitalize">{doc.billType}</span>
+              </h4>
+
+              <div className="bottom_strip">
+                <div className="bs_left">
+                  <h5>
+                    {doc.dueDate}
+                    <span>(Due Date)</span>
+                  </h5>
+                  <h6></h6>
+                </div>
+                <div className="bs_right">
+                  <h4>₹ {formatNumberWithCommas(doc.amountDue)}</h4>
+                </div>
+              </div>
+            </div>
+          ))}
       </div>
     </div>
+  </div>
+    ):(
+      <InactiveUserCard/>
+    )}
+  </>
+  
   );
 };
 

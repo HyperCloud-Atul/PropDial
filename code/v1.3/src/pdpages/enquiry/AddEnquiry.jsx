@@ -16,7 +16,7 @@ const AddEnquiry = () => {
     // console.log("property id: ", id)
     // add enquiry with add document start
     const { addDocument, updateDocument, deleteDocument, error } =
-        useFirestore("enquiry");
+        useFirestore("enquiry-propdial");
 
     // const { documents: propertyDoc, error: propertyDocError } = useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
     // const { documents: propertyDoc, error: propertyDocError } = useCollection("properties-propdial", ["id", "==", id]);

@@ -86,10 +86,7 @@ const UserSinglecard = ({ users }) => {
       {users &&
         users.map((userObj) => (
           <div
-            className={`pu_single ${userObj.status === "inactive" && "inactive"}`}
-            style={{
-              opacity: userObj.status === "inactive" ? 0.4 : 1,
-            }}
+            className={`pu_single ${userObj.status === "inactive" && "inactive"}`}         
           >
             <div className="tc_single relative item">
               <div className="left">
@@ -159,6 +156,11 @@ const UserSinglecard = ({ users }) => {
                   <img src="/assets/img/whatsapp_simple.png" alt="" />
                 </Link>
               </div>
+              {userObj.status === "inactive" && (
+                <div className="inactive_tag">
+                  Inactive
+                </div>
+              )}
             </div>
             <div className="dates">
               <div className="date_single">

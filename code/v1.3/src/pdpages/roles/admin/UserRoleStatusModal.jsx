@@ -59,12 +59,45 @@ const UserRoleStatusModal = ({
                 <input
                   type="radio"
                   name="user_role"
-                  value="manager"
-                  id="manager"
-                  checked={selectedUser.rolePropDial === "manager"}
-                  onChange={() => handleRoleChange("manager")}
+                  value="executive"
+                  id="executive"
+                  checked={selectedUser.rolePropDial === "executive"}
+                  onChange={() => handleRoleChange("executive")}
                 />
-                <label htmlFor="manager">manager</label>
+                <label htmlFor="executive">executive</label>
+              </div>
+              <div className="radio_single">
+                <input
+                  type="radio"
+                  name="user_role"
+                  value="admin"
+                  id="admin"
+                  checked={selectedUser.rolePropDial === "admin"}
+                  onChange={() => handleRoleChange("admin")}
+                />
+                <label htmlFor="admin">Admin</label>
+              </div>
+              <div className="radio_single">
+                <input
+                  type="radio"
+                  name="user_role"
+                  value="agent"
+                  id="agent"
+                  checked={selectedUser.rolePropDial === "agent"}
+                  onChange={() => handleRoleChange("agent")}
+                />
+                <label htmlFor="agent">agent</label>
+              </div>
+              <div className="radio_single">
+                <input
+                  type="radio"
+                  name="user_role"
+                  value="superAdmin"
+                  id="superAdmin"
+                  checked={selectedUser.rolePropDial === "superAdmin"}
+                  onChange={() => handleRoleChange("superAdmin")}
+                />
+                <label htmlFor="superAdmin">Super Admin</label>
               </div>
               <div className="radio_single">
                 <input
@@ -110,17 +143,7 @@ const UserRoleStatusModal = ({
                 />
                 <label htmlFor="prospectiveBuyer">prospective Buyer</label>
               </div>
-              <div className="radio_single">
-                <input
-                  type="radio"
-                  name="user_role"
-                  value="admin"
-                  id="admin"
-                  checked={selectedUser.rolePropDial === "admin"}
-                  onChange={() => handleRoleChange("admin")}
-                />
-                <label htmlFor="admin">Admin</label>
-              </div>
+             
             </div>
           </div>
         </div>
@@ -240,7 +263,9 @@ const UserRoleStatusModal = ({
                   checked={selectedUser.status === "active"}
                   onChange={() => handleStatusChange("active")}
                 />
-                <label htmlFor="active">Active</label>
+                <label htmlFor="active" 
+                style={selectedUser.status === "active" ? { background: "var(--theme-green2)" } : {}}
+                >Active</label>
               </div>
               <div className="radio_single">
                 <input
@@ -251,7 +276,9 @@ const UserRoleStatusModal = ({
                   checked={selectedUser.status === "inactive"}
                   onChange={() => handleStatusChange("inactive")}
                 />
-                <label htmlFor="inactive">Inactive</label>
+                <label htmlFor="inactive"
+                 style={selectedUser.status === "inactive" ? { background: "var(--theme-red)" } : {}}
+                >Inactive</label>
               </div>
             </div>
           </div>

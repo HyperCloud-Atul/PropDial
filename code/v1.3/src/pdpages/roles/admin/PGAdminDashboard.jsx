@@ -19,6 +19,7 @@ import MyLineGraph from "../../graphs/MyLineGraph";
 import MyColumnChart from "../../graphs/MyColumnChart";
 import MyPieChart from "../../graphs/MyPieChart";
 import CircularProgressBar from "../../../pages/roles/admin/CircularProgressBar";
+import InactiveUserCard from "../../../components/InactiveUserCard";
 
 // css
 import "./PGAdminDashboard.scss";
@@ -40,7 +41,7 @@ const PGAdminDashboard = () => {
     "properties-propdial"
   );
 
-  console.log("properties: ", properties)
+  console.log("properties: ", properties);
 
   let totalProperties = "50";
 
@@ -99,9 +100,7 @@ const PGAdminDashboard = () => {
   // sold out
   const soldoutProperties =
     properties &&
-    properties.filter(
-      (item) => item.flag.trim().toLowerCase() === "sold out"
-    );
+    properties.filter((item) => item.flag.trim().toLowerCase() === "sold out");
 
   // rent or sale
   const rentorsaleProperties =
@@ -120,9 +119,7 @@ const PGAdminDashboard = () => {
   // pms only
   const pmsonlyProperties =
     properties &&
-    properties.filter(
-      (item) => item.flag.trim().toLowerCase() === "pms only"
-    );
+    properties.filter((item) => item.flag.trim().toLowerCase() === "pms only");
 
   // pms after rent
   const pmsafterrentProperties =
@@ -255,7 +252,6 @@ const PGAdminDashboard = () => {
   };
   // advertisement img option in owl carousel
 
-
   // const searchPropertiesByFilter = (filterOption) => {
   //   // console.log("Filter Option: ", filterOption)
 
@@ -285,122 +281,153 @@ const PGAdminDashboard = () => {
 
   return (
     <div>
-      {/* 9 dots html  */}
-      <Link
-        to="/newproperty"
-        className="property-list-add-property with_9dot"
-      >
-        <span class="material-symbols-outlined">add</span>
-      </Link>
-      <div onClick={openMoreAddOptions} className="property-list-add-property">
-        <span className="material-symbols-outlined">apps</span>
-      </div>
-      <div
-        className={
-          handleMoreOptionsClick
-            ? "more-add-options-div open"
-            : "more-add-options-div"
-        }
-        onClick={closeMoreAddOptions}
-        id="moreAddOptions"
-      >
-        <div className="more-add-options-inner-div">
-          <div className="more-add-options-icons">
-            <h1>Close</h1>
-            <span className="material-symbols-outlined">close</span>
-          </div>
-
-          <Link to="/newproperty" className="more-add-options-icons">
-            <h1>Add property</h1>
-            <span className="material-symbols-outlined">location_city</span>
+      {user && user.status === "active" ? (
+        <>
+          {/* 9 dots html  */}
+          <Link
+            to="/newproperty"
+            className="property-list-add-property with_9dot"
+          >
+            <span class="material-symbols-outlined">add</span>
           </Link>
-
-          <Link to="/allproperties/all" className="more-add-options-icons">
-            <h1>Properties</h1>
-            <span class="material-symbols-outlined">real_estate_agent</span>
-          </Link>
-        </div>
-      </div>
-      {/* 9 dots html  */}
-      <div className="top_header_pg pg_bg propagent_dashboard">
-        <div className="page_spacing">
-          <div className="pg_header">
-            <h2 className="m22 mb-1">Admin Dashboard</h2>
-            <h4 className="r18 light_black">
-              Welcome <b> {user.displayName} </b>to Propdial
-            </h4>
+          <div
+            onClick={openMoreAddOptions}
+            className="property-list-add-property"
+          >
+            <span className="material-symbols-outlined">apps</span>
           </div>
-          <div className="vg22"></div>
-          <div className="pg_body">
-            <div className="propagent_dashboard_inner">
-              <section className="row">
-                <div className="col-xl-5">
-                  <div className="total_prop_card relative">
-                    <div className="bg_icon">
-                      <img src="/assets/img/flats.png" alt="" />
-                    </div>
-                    <div className="inner">
-                      <div className="icon">
-                        <img src="/assets/img/flats.png" alt="" />
-                      </div>
-                      <div className="content">
-                        <h4 className="title">My Properties</h4>
-                        <div className="bar">
-                          <LinearProgressBar total="55" current="20" />
-                        </div>
+          <div
+            className={
+              handleMoreOptionsClick
+                ? "more-add-options-div open"
+                : "more-add-options-div"
+            }
+            onClick={closeMoreAddOptions}
+            id="moreAddOptions"
+          >
+            <div className="more-add-options-inner-div">
+              <div className="more-add-options-icons">
+                <h1>Close</h1>
+                <span className="material-symbols-outlined">close</span>
+              </div>
 
-                        <h6>360&deg; Property Management Solutions</h6>
-                      </div>
-                      <div className="number">
-                        {properties && properties.length}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <Link to="/newproperty" className="more-add-options-icons">
+                <h1>Add property</h1>
+                <span className="material-symbols-outlined">location_city</span>
+              </Link>
 
-                <div className="col-xl-7 bg_575">
-                  <div className="vg22_1199"></div>
-                  <div className="property_status">
-                    <Link to="/allproperties/in-review" className="ps_single pending">
-                      <h5>{pendingProperties && pendingProperties.length}</h5>
-                      <h6>In-Review</h6>
-                    </Link>
-                    <Link to="/allproperties/active" className="ps_single active">
-                      <h5>{activeProperties && activeProperties.length}</h5>
-                      <h6>Active</h6>
-                    </Link>
-                    <Link to="/allproperties/inactive" className="ps_single inactive">
-                      <h5>{inactiveProperties && inactiveProperties.length}</h5>
-                      <h6>Inactive</h6>
-                    </Link>
-                  </div>
-                </div>
-              </section>
+              <Link to="/allproperties/all" className="more-add-options-icons">
+                <h1>Properties</h1>
+                <span class="material-symbols-outlined">real_estate_agent</span>
+              </Link>
+            </div>
+          </div>
+          {/* 9 dots html  */}
+          <div className="top_header_pg pg_bg propagent_dashboard">
+            <div className="page_spacing pg_min_height">
+              <div className="pg_header">
+                <h2 className="m22 mb-1">Admin Dashboard</h2>
+                <h4 className="r18 light_black">
+                  Welcome <b> {user.displayName} </b>to Propdial
+                </h4>
+              </div>
               <div className="vg22"></div>
-              <section className="property_status assign">
-                {/* <div className="ps_single one">
+              <div className="pg_body">
+                <div className="propagent_dashboard_inner">
+                  <section className="row">
+                    <div className="col-xl-5">
+                      <div className="total_prop_card relative">
+                        <div className="bg_icon">
+                          <img src="/assets/img/flats.png" alt="" />
+                        </div>
+                        <div className="inner">
+                          <div className="icon">
+                            <img src="/assets/img/flats.png" alt="" />
+                          </div>
+                          <div className="content">
+                            <h4 className="title">My Properties</h4>
+                            <div className="bar">
+                              <LinearProgressBar total="55" current="20" />
+                            </div>
+
+                            <h6>360&deg; Property Management Solutions</h6>
+                          </div>
+                          <div className="number">
+                            {properties && properties.length}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-xl-7 bg_575">
+                      <div className="vg22_1199"></div>
+                      <div className="property_status">
+                        <Link
+                          to="/allproperties/in-review"
+                          className="ps_single pending"
+                        >
+                          <h5>
+                            {pendingProperties && pendingProperties.length}
+                          </h5>
+                          <h6>In-Review</h6>
+                        </Link>
+                        <Link
+                          to="/allproperties/active"
+                          className="ps_single active"
+                        >
+                          <h5>{activeProperties && activeProperties.length}</h5>
+                          <h6>Active</h6>
+                        </Link>
+                        <Link
+                          to="/allproperties/inactive"
+                          className="ps_single inactive"
+                        >
+                          <h5>
+                            {inactiveProperties && inactiveProperties.length}
+                          </h5>
+                          <h6>Inactive</h6>
+                        </Link>
+                      </div>
+                    </div>
+                  </section>
+                  <div className="vg22"></div>
+                  <section className="property_status assign">
+                    {/* <div className="ps_single one">
                   <h5>5</h5>
                   <h6>Not Assign To <br /> Executive - In Progress </h6>
                 </div> */}
-                {/* <div className="ps_single two">
+                    {/* <div className="ps_single two">
                   <h5>8</h5>
                   <h6>Not Assign To <br /> Manager - In Progress </h6>
                 </div> */}
-                {/* <div className="ps_single three">
+                    {/* <div className="ps_single three">
                   <h5>2</h5>
                   <h6>Not Assign To <br /> Tenant - In Progress </h6>
                 </div> */}
-                <Link to="/allproperties/residential" className="ps_single four">
-                  <h5>{residentialProperties &&
-                    residentialProperties.length}</h5>
-                  <h6>Property Category <br /> Residential </h6>
-                </Link>
-                <Link to="/allproperties/commercial" className="ps_single five">
-                  <h5>{commercialProperties && commercialProperties.length}</h5>
-                  <h6>Property Category <br /> Commercial </h6>
-                </Link>
-              </section>
-              {/* <div className="vg22"></div>
+                    <Link
+                      to="/allproperties/residential"
+                      className="ps_single four"
+                    >
+                      <h5>
+                        {residentialProperties && residentialProperties.length}
+                      </h5>
+                      <h6>
+                        Property Category <br /> Residential{" "}
+                      </h6>
+                    </Link>
+                    <Link
+                      to="/allproperties/commercial"
+                      className="ps_single five"
+                    >
+                      <h5>
+                        {commercialProperties && commercialProperties.length}
+                      </h5>
+                      <h6>
+                        Property Category <br /> Commercial{" "}
+                      </h6>
+                    </Link>
+                  </section>
+                  {/* <div className="vg22"></div>
               <section className="upcoming">
                 <div className="parent">
                   <div className="">
@@ -466,359 +493,379 @@ const PGAdminDashboard = () => {
                   </div>
                 </div>
               </section> */}
-              <div className="vg22"></div>
-              <section className="self_property_detail">
-                <Link to="/allproperties/rent" className="spd_single">
-                  <div className="left rent">
-                    <img src="/assets/img/key.png" alt="" />
-                  </div>
-                  <div className="right">
-                    <h6>Available For Rent</h6>
-                    <h5>{availableForRentProperties && availableForRentProperties.length}</h5>
-                  </div>
-                </Link>
-                <Link to="/allproperties/sale" className="spd_single">
-                  <div className="left sale">
-                    <img src="/assets/img/growth.png  " alt="" />
-                  </div>
-                  <div className="right ">
-                    <h6>Available For Sale</h6>
-                    <h5>{availableForSaleProperties && availableForSaleProperties.length}</h5>
-                  </div>
-                </Link>
-                <Link to="/allproperties/rented out" className="spd_single">
-                  <div className="left rent">
-                    <img src="/assets/img/rented_out.png" alt="" />
-                  </div>
-                  <div className="right">
-                    <h6>Rented Out</h6>
-                    <h5>{rentedoutProperties && rentedoutProperties.length}</h5>
-                  </div>
-                </Link>
-                <Link to="/allproperties/sold out" className="spd_single">
-                  <div className="left sale">
-                    <img src="/assets/img/sold_out.png  " alt="" />
-                  </div>
-                  <div className="right ">
-                    <h6>Sold Out</h6>
-                    <h5>{soldoutProperties && soldoutProperties.length}</h5>
-                  </div>
-                </Link>
-                <div className="spd_single">
-                  <div className="left residential">
-                    <img src="/assets/img/house.png" alt="" />
-                  </div>
-                  <div className="right">
-                    <h6>Rent And Sale</h6>
-                    <h5>{rentorsaleProperties && rentorsaleProperties.length}</h5>
-                  </div>
-                </div>
-                <div className="spd_single">
-                  <div className="left commercial">
-                    <img src="/assets/img/buildings.png" alt="" />
-                  </div>
-                  <div className="right">
-                    <h6>Rented But Sale</h6>
-                    <h5>{rentedbutsaleProperties && rentedbutsaleProperties.length}</h5>
-                  </div>
-                </div>
-                <div className="spd_single">
-                  <div className="left commercial">
-                    <img src="/assets/img/buildings.png" alt="" />
-                  </div>
-                  <div className="right">
-                    <h6>PMS Only</h6>
-                    <h5>{pmsonlyProperties && pmsonlyProperties.length}</h5>
-                  </div>
-                </div>
-                <div className="spd_single">
-                  <div className="left commercial">
-                    <img src="/assets/img/buildings.png" alt="" />
-                  </div>
-                  <div className="right">
-                    <h6>PMS After Rent</h6>
-                    <h5>{pmsafterrentProperties && pmsafterrentProperties.length}</h5>
-                  </div>
-                </div>
-              </section>
-              <div className="vg22"></div>
-              <div className="row">
-                <div className="col-lg-6">
-
-                  <div className="properties_map">
-                    <h2
-                      className="p_title"
-                      style={{
-                        fontSize: "21px",
-                        fontWeight: "500",
-                        marginBottom: "6px",
-                      }}
-                    >
-                      Properties in major states
-                    </h2>
-                    <div className="pi_cities row">
-                      <div className="left col-6">
-                        <div className="pi_cities_single mt-4">
-                          <h6>Chandigarh</h6>
-                          <h5>
-                            {chandigarhProperties &&
-                              chandigarhProperties.length > 0
-                              ? chandigarhProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((chandigarhProperties &&
-                                    chandigarhProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Delhi</h6>
-                          <h5>
-                            {delhiProperties && delhiProperties.length > 0
-                              ? delhiProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((delhiProperties && delhiProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Goa</h6>
-                          <h5>
-                            {goaProperties && goaProperties.length > 0
-                              ? goaProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((goaProperties && goaProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Gujarat</h6>
-                          <h5>
-                            {gujaratProperties && gujaratProperties.length > 0
-                              ? gujaratProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((gujaratProperties &&
-                                    gujaratProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Haryana</h6>
-                          <h5>
-                            {haryanaProperties && haryanaProperties.length > 0
-                              ? haryanaProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((haryanaProperties &&
-                                    haryanaProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-
-                        <div className="pi_cities_single mt-4">
-                          <h6>Karnataka</h6>
-                          <h5>
-                            {karnatakaProperties &&
-                              karnatakaProperties.length > 0
-                              ? karnatakaProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((karnatakaProperties &&
-                                    karnatakaProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
+                  <div className="vg22"></div>
+                  <section className="self_property_detail">
+                    <Link to="/allproperties/rent" className="spd_single">
+                      <div className="left rent">
+                        <img src="/assets/img/key.png" alt="" />
                       </div>
-                      <div className="right col-6">
-                        <div className="pi_cities_single mt-4">
-                          <h6>Maharashtra</h6>
-                          <h5>
-                            {maharashtraProperties &&
-                              maharashtraProperties.length > 0
-                              ? maharashtraProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((maharashtraProperties &&
-                                    maharashtraProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
+                      <div className="right">
+                        <h6>Available For Rent</h6>
+                        <h5>
+                          {availableForRentProperties &&
+                            availableForRentProperties.length}
+                        </h5>
+                      </div>
+                    </Link>
+                    <Link to="/allproperties/sale" className="spd_single">
+                      <div className="left sale">
+                        <img src="/assets/img/growth.png  " alt="" />
+                      </div>
+                      <div className="right ">
+                        <h6>Available For Sale</h6>
+                        <h5>
+                          {availableForSaleProperties &&
+                            availableForSaleProperties.length}
+                        </h5>
+                      </div>
+                    </Link>
+                    <Link to="/allproperties/rented out" className="spd_single">
+                      <div className="left rent">
+                        <img src="/assets/img/rented_out.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6>Rented Out</h6>
+                        <h5>
+                          {rentedoutProperties && rentedoutProperties.length}
+                        </h5>
+                      </div>
+                    </Link>
+                    <Link to="/allproperties/sold out" className="spd_single">
+                      <div className="left sale">
+                        <img src="/assets/img/sold_out.png  " alt="" />
+                      </div>
+                      <div className="right ">
+                        <h6>Sold Out</h6>
+                        <h5>{soldoutProperties && soldoutProperties.length}</h5>
+                      </div>
+                    </Link>
+                    <div className="spd_single">
+                      <div className="left residential">
+                        <img src="/assets/img/house.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6>Rent And Sale</h6>
+                        <h5>
+                          {rentorsaleProperties && rentorsaleProperties.length}
+                        </h5>
+                      </div>
+                    </div>
+                    <div className="spd_single">
+                      <div className="left commercial">
+                        <img src="/assets/img/buildings.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6>Rented But Sale</h6>
+                        <h5>
+                          {rentedbutsaleProperties &&
+                            rentedbutsaleProperties.length}
+                        </h5>
+                      </div>
+                    </div>
+                    <div className="spd_single">
+                      <div className="left commercial">
+                        <img src="/assets/img/buildings.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6>PMS Only</h6>
+                        <h5>{pmsonlyProperties && pmsonlyProperties.length}</h5>
+                      </div>
+                    </div>
+                    <div className="spd_single">
+                      <div className="left commercial">
+                        <img src="/assets/img/buildings.png" alt="" />
+                      </div>
+                      <div className="right">
+                        <h6>PMS After Rent</h6>
+                        <h5>
+                          {pmsafterrentProperties &&
+                            pmsafterrentProperties.length}
+                        </h5>
+                      </div>
+                    </div>
+                  </section>
+                  <div className="vg22"></div>
+                  <div className="row">
+                    <div className="col-lg-6">
+                      <div className="properties_map">
+                        <h2
+                          className="p_title"
+                          style={{
+                            fontSize: "21px",
+                            fontWeight: "500",
+                            marginBottom: "6px",
+                          }}
+                        >
+                          Properties in major states
+                        </h2>
+                        <div className="pi_cities row">
+                          <div className="left col-6">
+                            <div className="pi_cities_single mt-4">
+                              <h6>Chandigarh</h6>
+                              <h5>
+                                {chandigarhProperties &&
+                                chandigarhProperties.length > 0
+                                  ? chandigarhProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((chandigarhProperties &&
+                                        chandigarhProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className="pi_cities_single mt-4">
+                              <h6>Delhi</h6>
+                              <h5>
+                                {delhiProperties && delhiProperties.length > 0
+                                  ? delhiProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((delhiProperties &&
+                                        delhiProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className="pi_cities_single mt-4">
+                              <h6>Goa</h6>
+                              <h5>
+                                {goaProperties && goaProperties.length > 0
+                                  ? goaProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((goaProperties && goaProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className="pi_cities_single mt-4">
+                              <h6>Gujarat</h6>
+                              <h5>
+                                {gujaratProperties &&
+                                gujaratProperties.length > 0
+                                  ? gujaratProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((gujaratProperties &&
+                                        gujaratProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className="pi_cities_single mt-4">
+                              <h6>Haryana</h6>
+                              <h5>
+                                {haryanaProperties &&
+                                haryanaProperties.length > 0
+                                  ? haryanaProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((haryanaProperties &&
+                                        haryanaProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
 
-                        <div className="pi_cities_single mt-4">
-                          <h6>Rajasthan</h6>
-                          <h5>
-                            {rajasthanProperties &&
-                              rajasthanProperties.length > 0
-                              ? rajasthanProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((rajasthanProperties &&
-                                    rajasthanProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
+                            <div className="pi_cities_single mt-4">
+                              <h6>Karnataka</h6>
+                              <h5>
+                                {karnatakaProperties &&
+                                karnatakaProperties.length > 0
+                                  ? karnatakaProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((karnatakaProperties &&
+                                        karnatakaProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Tamilnadu</h6>
-                          <h5>
-                            {tamilnaduProperties &&
-                              tamilnaduProperties.length > 0
-                              ? tamilnaduProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((tamilnaduProperties &&
-                                    tamilnaduProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Talangana</h6>
-                          <h5>
-                            {telanganaProperties &&
-                              telanganaProperties.length > 0
-                              ? telanganaProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((telanganaProperties &&
-                                    telanganaProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Uttar Pradesh</h6>
-                          <h5>
-                            {uttarpradeshProperties &&
-                              uttarpradeshProperties.length > 0
-                              ? uttarpradeshProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((uttarpradeshProperties &&
-                                    uttarpradeshProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="pi_cities_single mt-4">
-                          <h6>Uttrakhand</h6>
-                          <h5>
-                            {uttarakhandProperties &&
-                              uttarakhandProperties.length > 0
-                              ? uttarakhandProperties.length
-                              : "0"}
-                          </h5>
-                          <div className="bar">
-                            <div
-                              className="bar_fill"
-                              style={{
-                                width:
-                                  ((uttarakhandProperties &&
-                                    uttarakhandProperties.length) /
-                                    (properties && properties.length)) *
-                                  100,
-                              }}
-                            ></div>
+                          <div className="right col-6">
+                            <div className="pi_cities_single mt-4">
+                              <h6>Maharashtra</h6>
+                              <h5>
+                                {maharashtraProperties &&
+                                maharashtraProperties.length > 0
+                                  ? maharashtraProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((maharashtraProperties &&
+                                        maharashtraProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+
+                            <div className="pi_cities_single mt-4">
+                              <h6>Rajasthan</h6>
+                              <h5>
+                                {rajasthanProperties &&
+                                rajasthanProperties.length > 0
+                                  ? rajasthanProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((rajasthanProperties &&
+                                        rajasthanProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className="pi_cities_single mt-4">
+                              <h6>Tamilnadu</h6>
+                              <h5>
+                                {tamilnaduProperties &&
+                                tamilnaduProperties.length > 0
+                                  ? tamilnaduProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((tamilnaduProperties &&
+                                        tamilnaduProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className="pi_cities_single mt-4">
+                              <h6>Talangana</h6>
+                              <h5>
+                                {telanganaProperties &&
+                                telanganaProperties.length > 0
+                                  ? telanganaProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((telanganaProperties &&
+                                        telanganaProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className="pi_cities_single mt-4">
+                              <h6>Uttar Pradesh</h6>
+                              <h5>
+                                {uttarpradeshProperties &&
+                                uttarpradeshProperties.length > 0
+                                  ? uttarpradeshProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((uttarpradeshProperties &&
+                                        uttarpradeshProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            <div className="pi_cities_single mt-4">
+                              <h6>Uttrakhand</h6>
+                              <h5>
+                                {uttarakhandProperties &&
+                                uttarakhandProperties.length > 0
+                                  ? uttarakhandProperties.length
+                                  : "0"}
+                              </h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width:
+                                      ((uttarakhandProperties &&
+                                        uttarakhandProperties.length) /
+                                        (properties && properties.length)) *
+                                      100,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="col-lg-6">
-                  <div className="vg22_991"></div>
-                  <section style={{
-                    display: "grid",
-                    gap: "22px"
-                  }}>
-                    {/* <CircularProgressBar
+                    <div className="col-lg-6">
+                      <div className="vg22_991"></div>
+                      <section
+                        style={{
+                          display: "grid",
+                          gap: "22px",
+                        }}
+                      >
+                        {/* <CircularProgressBar
                       rentProperties={availableForRentProperties}
                       saleProperties={availableForSaleProperties}
                       rentedoutProperties={rentedoutProperties}
@@ -827,34 +874,32 @@ const PGAdminDashboard = () => {
                       residentialProperties={residentialProperties}
                       totalProperties={totalProperties}
                     /> */}
-                    <Link
-                      className="theme_btn btn_fill text-center no_icon"
-                      to="/newproperty"
-                    >
-                      Add New Property
-                    </Link>
-                    <Link
-                      className="theme_btn btn_fill text-center no_icon"
-                      to="/allproperties/all"
-                    >
-                      View All Properties
-                    </Link>
-                  </section>
-                </div>
-              </div>
+                        <Link
+                          className="theme_btn btn_fill text-center no_icon"
+                          to="/newproperty"
+                        >
+                          Add New Property
+                        </Link>
+                        <Link
+                          className="theme_btn btn_fill text-center no_icon"
+                          to="/allproperties/all"
+                        >
+                          View All Properties
+                        </Link>
+                      </section>
+                    </div>
+                  </div>
 
-              <div className="vg22"></div>
+                  <div className="vg22"></div>
 
-
-
-              {/* <section className="property_cards_parent">
+                  {/* <section className="property_cards_parent">
                 {properties &&
                   properties.map((property) => (
                     <PropertyCard propertyid={property.id} />
                   ))}
               </section> */}
 
-              {/* <>
+                  {/* <>
                 <div className="vg22"></div>
                 <hr />
                 <div className="vg22"></div>
@@ -981,49 +1026,53 @@ const PGAdminDashboard = () => {
                 <hr />
               </> */}
 
-              {/* <div className="vg22"></div> */}
-              <section className="add_section row">
-                <div className="add_single col-lg-6">
-                  <OwlCarousel className="owl-theme" {...addImgOptions2}>
-                    <div className="item">
-                      <img
-                        src="/assets/img/banner1.png"
-                        alt=""
-                        className="add_img"
-                      />
+                  {/* <div className="vg22"></div> */}
+                  <section className="add_section row">
+                    <div className="add_single col-lg-6">
+                      <OwlCarousel className="owl-theme" {...addImgOptions2}>
+                        <div className="item">
+                          <img
+                            src="/assets/img/banner1.png"
+                            alt=""
+                            className="add_img"
+                          />
+                        </div>
+                        <div className="item">
+                          <img
+                            src="/assets/img/banner2.png"
+                            alt=""
+                            className="add_img"
+                          />
+                        </div>
+                      </OwlCarousel>
                     </div>
-                    <div className="item">
-                      <img
-                        src="/assets/img/banner2.png"
-                        alt=""
-                        className="add_img"
-                      />
+                    <div className="add_single col-lg-6 add_single_2">
+                      <OwlCarousel className="owl-theme" {...addImgOptions}>
+                        <div className="item">
+                          <img
+                            src="/assets/img/banner4.png"
+                            alt=""
+                            className="add_img"
+                          />
+                        </div>
+                        <div className="item">
+                          <img
+                            src="/assets/img/banner5.png"
+                            alt=""
+                            className="add_img"
+                          />
+                        </div>
+                      </OwlCarousel>
                     </div>
-                  </OwlCarousel>
+                  </section>
                 </div>
-                <div className="add_single col-lg-6 add_single_2">
-                  <OwlCarousel className="owl-theme" {...addImgOptions}>
-                    <div className="item">
-                      <img
-                        src="/assets/img/banner4.png"
-                        alt=""
-                        className="add_img"
-                      />
-                    </div>
-                    <div className="item">
-                      <img
-                        src="/assets/img/banner5.png"
-                        alt=""
-                        className="add_img"
-                      />
-                    </div>
-                  </OwlCarousel>
-                </div>
-              </section>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+      <InactiveUserCard/>
+      )}
     </div>
   );
 };

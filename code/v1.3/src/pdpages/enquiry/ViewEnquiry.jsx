@@ -15,7 +15,7 @@ const enquiryFilter = ["This Month", "Last 3 Months", "Last 6 Months"];
 const enquiryStatusFilter = ["Total", "Open", "Working", "Successful", "Dead"];
 
 const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
-  //  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry");
+  //  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry-propdial");
   const [filter, setFilter] = useState(enquiryFilter[0]);
   const [enquiries, setEnquiries] = useState([]);
   const [rentSaleFilter, setRentSaleFilter] = useState("rent");
