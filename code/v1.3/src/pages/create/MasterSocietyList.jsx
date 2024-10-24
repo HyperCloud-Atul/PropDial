@@ -27,7 +27,7 @@ export default function MasterSocietyList() {
     "m_states"
   );
   const { documents: masterSociety, error: masterSocietyerror } =
-    useCollection("m_societies");
+    useCollection("m_societies", "", ["society", "asc"]);
   const { documents: dblocalitiesdocuments, error: dblocalitieserror } = useCollection(
     "m_localities"
   );

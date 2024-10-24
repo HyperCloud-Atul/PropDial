@@ -21,7 +21,7 @@ export default function MasterLocalityList() {
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_localities");
   const { documents: masterLocality, error: masterLocalityerror } =
-    useCollection("m_localities");
+    useCollection("m_localities", "", ["locality", "asc"]);
   const { documents: dbcitiesdocuments, error: dbcitieserror } = useCollection(
     "m_cities"
   );
@@ -139,8 +139,8 @@ export default function MasterLocalityList() {
           );
 
           setCity({
-            label: cityOptionsSorted.current[0].label,
-            value: cityOptionsSorted.current[0].value,
+            label: cityOptionsSorted.current && cityOptionsSorted.current[0].label,
+            value: cityOptionsSorted.current && cityOptionsSorted.current[0].value,
           });
 
         } else {
