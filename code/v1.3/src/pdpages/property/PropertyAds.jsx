@@ -7,6 +7,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { Modal } from "react-bootstrap"; // Ensure you have imported Modal
 import { format } from "date-fns";
 import PropertySummaryCard from "./PropertySummaryCard";
+import InactiveUserCard from "../../components/InactiveUserCard";
 const PropertyAds = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
@@ -135,7 +136,9 @@ const PropertyAds = () => {
     },
   ];
   return (
-    <div className="top_header_pg pg_bg property_adv_pg">
+    <>
+    {user && user.status === "active" ? (
+      <div className="top_header_pg pg_bg property_adv_pg">
       <div className="page_spacing pg_min_height">
         <div className="row row_reverse_991">
           <div className="col-lg-6">
@@ -371,6 +374,11 @@ const PropertyAds = () => {
         </div>
       </div>
     </div>
+    ):(
+      <InactiveUserCard/>
+    )}
+  </>
+  
   );
 };
 

@@ -11,8 +11,9 @@ import Switch from "@mui/material/Switch";
 import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
 import { useAuthContext } from "../hooks/useAuthContext";
 import ScrollToTop from "./ScrollToTop";
+import InactiveUserCard from "./InactiveUserCard";
 import PropertySummaryCard from "../pdpages/property/PropertySummaryCard";
-const PropertyDocuments = () => {
+const PropertyDocuments = () => { 
   const { user } = useAuthContext();
   const { propertyId } = useParams();
   const navigate = useNavigate();
@@ -263,7 +264,9 @@ const PropertyDocuments = () => {
 
 
   return (
-    <div className="top_header_pg pg_bg property_docs_pg">
+    <>
+    {user && user.status === "active" ? (
+      <div className="top_header_pg pg_bg property_docs_pg">
       <ScrollToTop />
       <div className="page_spacing pg_min_height">
         {/* 9 dots html  */}
@@ -788,6 +791,11 @@ const PropertyDocuments = () => {
         </div>
       </div>
     </div>
+    ):(
+      <InactiveUserCard/>
+    )}
+  </>
+   
   );
 };
 

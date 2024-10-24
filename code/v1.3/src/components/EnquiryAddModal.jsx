@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useFirestore } from "../hooks/useFirestore";
 import PhoneInput from "react-phone-input-2";
-const EnquiryAddModal = ({ show, handleClose, selectedProperty }) => {
+const EnquiryAddModal = ({ show, handleClose, selectedProperty, activeOption }) => {
   const { addDocument, updateDocument, deleteDocument, error } =
-    useFirestore("enquiry");
+    useFirestore("enquiry-propdial");
   const [iAm, setIam] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -43,7 +43,7 @@ const EnquiryAddModal = ({ show, handleClose, selectedProperty }) => {
         referredBy: "none",
         postedBy: "Propdial",
         propId: selectedProperty.id,
-        enquiryType: selectedProperty.purpose.toLowerCase(),
+        enquiryType: activeOption.toLowerCase(),
         date: new Date().toISOString(),
         enquiryStatus: "open",
         source: "portal",

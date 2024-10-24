@@ -17,10 +17,10 @@ import Filters from "../../../components/Filters";
 const userFilter = [
   "Owner",
   "Frontdesk",
-  "Manager",
+  "Executive",
   "Admin",
-  "Super Admin",
   "Agent",
+  "Super Admin",  
   "Tenant",
   "Prospective Tenant",
   "Buyer",
@@ -63,38 +63,39 @@ const UserList = () => {
       switch (filter) {
         case "Owner":
           roleMatch =
+          document.status === "active" &&
             document.rolePropDial === "owner" ||
             document.rolePropDial === "coowner";
           break;
         case "Frontdesk":
-          roleMatch = document.rolePropDial === "frontdesk";
+          roleMatch = document.status === "active" && document.rolePropDial === "frontdesk";
           break;
-        case "Manager":
-          roleMatch = document.rolePropDial === "manager";
+        case "Executive":
+          roleMatch = document.status === "active" && document.rolePropDial === "executive";
           break;
         case "Admin":
-          roleMatch = document.rolePropDial === "admin";
+          roleMatch = document.status === "active" && document.rolePropDial === "admin";
           break;
         case "Super Admin":
-          roleMatch = document.rolePropDial === "superAdmin";
+          roleMatch = document.status === "active" && document.rolePropDial === "superAdmin";
           break;
           case "Agent":
-            roleMatch = document.status === "agent";
+            roleMatch = document.status === "active" && document.rolePropDial === "agent";
             break;
         case "Inactive":
           roleMatch = document.status === "inactive";
           break;
         case "Tenant":
-          roleMatch = document.rolePropDial === "tenant";
+          roleMatch = document.status === "active" && document.rolePropDial === "tenant";
           break;
         case "Prospective Tenant":
-          roleMatch = document.rolePropDial === "prospectiveTenant";
+          roleMatch = document.status === "active" && document.rolePropDial === "prospectiveTenant";
           break;
         case "Buyer":
-          roleMatch = document.rolePropDial === "buyer";
+          roleMatch = document.status === "active" && document.rolePropDial === "buyer";
           break;
         case "Prospective Buyer":
-          roleMatch = document.rolePropDial === "prospectiveBuyer";
+          roleMatch = document.status === "active" && document.rolePropDial === "prospectiveBuyer";
           break;
         default:
           roleMatch = true;

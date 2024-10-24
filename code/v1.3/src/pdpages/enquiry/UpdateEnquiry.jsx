@@ -15,9 +15,9 @@ const UpdateEnquiry = () => {
     const { id } = useParams();
     const { user } = useAuthContext();
     const navigate = useNavigate();
-    const { updateDocument, error } = useFirestore("enquiry");
+    const { updateDocument, error } = useFirestore("enquiry-propdial");
     const { document: enquiryDocument, error: enquiryDocError } = useDocument(
-        "enquiry",
+        "enquiry-propdial",
         id
     );
 
@@ -207,7 +207,7 @@ const UpdateEnquiry = () => {
     // table data end 
 
     // field only in readonly mode 
-    const isReadOnly = user && user.role !== 'admin' && user.role !== 'super admin';
+    const isReadOnly = user && user.role !== 'superAdmin';
 
     return (
         <div className="top_header_pg pg_bg pg_enquiry pg_enquiry_update">

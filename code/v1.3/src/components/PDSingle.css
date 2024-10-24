@@ -546,6 +546,7 @@
   padding-right: 10px;
   border-left: 1px solid #dfdfdf;
   width: 15%;
+  z-index: 2;
 }
 
 .all_tenants .tc_single .wha_call_icon:after {

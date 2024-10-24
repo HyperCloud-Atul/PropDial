@@ -7,15 +7,18 @@ import { useEffect, useState } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
 import Avatar from "../../components/Avatar";
-import { BeatLoader, } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 import { useLogout } from "../../hooks/useLogout";
 import Popup from "../../components/Popup";
 import { useImageUpload } from "../../hooks/useImageUpload";
-import { projectStorage, projectAuth, projectAuthObj } from "../../firebase/config";
+import {
+  projectStorage,
+  projectAuth,
+  projectAuthObj,
+} from "../../firebase/config";
 import { useLocation, Link } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import { Form, Button, Alert } from "react-bootstrap";
-
 
 export default function PGProfile() {
   // Scroll to the top of the page whenever the location changes start
@@ -25,20 +28,21 @@ export default function PGProfile() {
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
 
-
   const { user } = useAuthContext();
   // console.log('user:', user)
   const navigate = useNavigate();
 
-  if (!user) navigate("/login")
+  if (!user) navigate("/login");
 
   const { updateDocument, response } = useFirestore("users-propdial");
 
-  const [userPhoneNumber, setUserPhoneNumber] = useState(user && user.phoneNumber);
+  const [userPhoneNumber, setUserPhoneNumber] = useState(
+    user && user.phoneNumber
+  );
 
   const [userDetails, setUserDetails] = useState({
-    FullName: '',
-  })
+    FullName: "",
+  });
 
   const [formError, setFormError] = useState(null);
   const { logout, isPending } = useLogout();
@@ -59,22 +63,23 @@ export default function PGProfile() {
       logout();
     }
 
-    var formattedNumber = userPhoneNumber ? userPhoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3') : "";
+    var formattedNumber = userPhoneNumber
+      ? userPhoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")
+      : "";
     // console.log('userPhoneNumber formatted: ', formattedNumber)
-    setUserPhoneNumber(formattedNumber)
+    setUserPhoneNumber(formattedNumber);
 
     setUserDetails({
       DisplayName: user && user.displayName,
-      FullName: user && user.fullName ? user.fullName : user && user.displayName,
+      FullName:
+        user && user.fullName ? user.fullName : user && user.displayName,
       PhoneNumber: user && user.phoneNumber,
       Email: user && user.email,
       City: user && user.city,
       Country: user && user.country,
-      Role: user && user.role ? user.role : 'owner',
-      Roles: user && user.roles ? user.roles : ['owner']
-    })
-
-
+      Role: user && user.role ? user.role : "owner",
+      Roles: user && user.roles ? user.roles : ["owner"],
+    });
   }, [popupReturn]);
 
   //Popup Flags
@@ -147,7 +152,7 @@ export default function PGProfile() {
 
     await updateDocument(user.uid, {
       displayName: camelCase(firstName.toLowerCase()),
-      fullName: camelCase(userDetails.FullName.toLowerCase())
+      fullName: camelCase(userDetails.FullName.toLowerCase()),
     });
     // console.log('camelCase(firstName):', camelCase(firstName))
     // console.log('camelCase(userDetails.FullName):', camelCase(userDetails.FullName))
@@ -178,20 +183,19 @@ export default function PGProfile() {
   }
 
   const changeRole = async (changedRole) => {
-    console.log('userid:', user.uid)
-    console.log('changedRole:', changedRole)
+    console.log("userid:", user.uid);
+    console.log("changedRole:", changedRole);
     try {
       await updateDocument(user.uid, {
         rolePropDial: changedRole,
       });
-    }
-    catch (err) {
-      console.log('Change Role:', err)
+    } catch (err) {
+      console.log("Change Role:", err);
     }
   };
   // console.log('userDetails:', userDetails)
-  const [newPhoneNumber, setNewPhoneNumber] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
   const [verificationId, setVerificationId] = useState(null);
   const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
   const [error, setError] = useState("");
@@ -200,7 +204,11 @@ export default function PGProfile() {
     e.preventDefault();
     setError("");
     // console.log("phone:", phone);
-    if (newPhoneNumber === "" || newPhoneNumber === undefined || newPhoneNumber.length < 10) {
+    if (
+      newPhoneNumber === "" ||
+      newPhoneNumber === undefined ||
+      newPhoneNumber.length < 10
+    ) {
       return setError("Please enter valid Phone Number");
     }
     try {
@@ -208,15 +216,17 @@ export default function PGProfile() {
 
       // hide buttons
       // id_sendotpButton
-      document.getElementById('id_sendotpButton').style.display = 'none';
-
+      document.getElementById("id_sendotpButton").style.display = "none";
 
       const phoneProvider = new projectAuthObj.PhoneAuthProvider();
       // console.log('phoneProvider: ', phoneProvider)
       // const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container');
-      const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier('recaptcha-container', {
-        size: 'invisible'
-      });
+      const recaptchaVerifier = new projectAuthObj.RecaptchaVerifier(
+        "recaptcha-container",
+        {
+          size: "invisible",
+        }
+      );
 
       // console.log('recaptchaVerifier: ', recaptchaVerifier)
       var newPhoneNumberWithPlus = "+" + newPhoneNumber;
@@ -230,16 +240,14 @@ export default function PGProfile() {
       setchangeNumberScroller(true);
       // alert('Verification code sent!');
     } catch (error) {
-      console.error('Error sending verification code:', error.message);
+      console.error("Error sending verification code:", error.message);
       setError("Error sending verification code");
     }
   };
 
-
   const handleChangePhoneNumber = async () => {
     // console.log('In handleChangePhoneNumber')
     try {
-
       const credential = projectAuthObj.PhoneAuthProvider.credential(
         verificationId,
         verificationCode
@@ -252,30 +260,29 @@ export default function PGProfile() {
 
       //Logout and redirect to login page
       logout();
-
     } catch (error) {
       // Handle any errors
-      console.error('Error changing phone number:', error.message);
+      console.error("Error changing phone number:", error.message);
       setError("Error changing phone number");
     }
-  }
+  };
 
   const [changeNumberScroller, setchangeNumberScroller] = useState(false);
   const [changeNumberDisplay, setchangeNumberDisplay] = useState(false);
 
   const changeNumberBack = () => {
     // id_sendotpButton
-    document.getElementById('id_sendotpButton').style.display = 'block';
+    document.getElementById("id_sendotpButton").style.display = "block";
     setchangeNumberScroller(false);
-  }
+  };
 
   const openChangeNumber = () => {
     setchangeNumberDisplay(true);
-  }
+  };
 
   const closeChangeNumber = () => {
     setchangeNumberDisplay(false);
-  }
+  };
 
   // Unlink old Google account
   const unlinkGoogleAccount = async () => {
@@ -283,7 +290,8 @@ export default function PGProfile() {
     if (user) {
       // Check if the user is linked with Google
       const isLinkedWithGoogle = user.providerData.some(
-        (provider) => provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID
+        (provider) =>
+          provider.providerId === projectAuthObj.GoogleAuthProvider.PROVIDER_ID
       );
       if (isLinkedWithGoogle) {
         try {
@@ -298,7 +306,6 @@ export default function PGProfile() {
       } else {
         console.log("User is not linked with a Google account");
       }
-
     }
   };
 
@@ -308,7 +315,8 @@ export default function PGProfile() {
     const provider = new projectAuthObj.GoogleAuthProvider();
 
     // firebase.auth().currentUser.linkWithPopup(provider)
-    projectAuth.currentUser.linkWithPopup(provider)
+    projectAuth.currentUser
+      .linkWithPopup(provider)
       .then(async (result) => {
         await result.user.updateProfile({
           email: result.user.email,
@@ -344,13 +352,13 @@ export default function PGProfile() {
         msg={"Are you sure you want to logout?"}
       />
       <section className="hero relative">
-        <img src="/assets/img/profile_bg.jpeg" alt=''></img>
+        <img src="/assets/img/profile_bg.jpeg" alt=""></img>
       </section>
       <section className="section_name profile_card">
         <div className="container">
           <div className="sn_inner">
             <div className="user_img relative">
-              <img src={user && user.photoURL} alt=''></img>
+              <img src={user && user.photoURL} alt=""></img>
               <input
                 type="file"
                 onChange={handleFileChange}
@@ -390,16 +398,22 @@ export default function PGProfile() {
                 readOnly={isProfileEdit ? false : true}
                 // onChange={(e) => setUserFullName(e.target.value)}
                 // value={userFullName}
-                onChange={(e) => setUserDetails({
-                  ...userDetails,
-                  FullName: e.target.value
-                })}
+                onChange={(e) =>
+                  setUserDetails({
+                    ...userDetails,
+                    FullName: e.target.value,
+                  })
+                }
                 value={userDetails && userDetails.FullName}
                 style={{
-                  width: "100%"
+                  width: "100%",
                 }}
               ></input>
-              <div className={`pp_edit_icon pointer ${isProfileEdit ? "edit_done" : ""}`}>
+              <div
+                className={`pp_edit_icon pointer ${
+                  isProfileEdit ? "edit_done" : ""
+                }`}
+              >
                 <span
                   className="material-symbols-outlined"
                   style={{ display: isProfileEdit ? "none" : "" }}
@@ -427,7 +441,7 @@ export default function PGProfile() {
                 // onChange={(e) => setUserPhoneNumber(e.target.value)}
                 value={userPhoneNumber}
               ></input>
-              <div className='pp_edit_icon'>
+              <div className="pp_edit_icon">
                 <span
                   className="material-symbols-outlined"
                   onClick={openChangeNumber}
@@ -437,7 +451,11 @@ export default function PGProfile() {
               </div>
             </h5>
             <div>
-              <h5> {userDetails.City && userDetails.City.trim() + ", "} {userDetails.Country}</h5>
+              <h5>
+                {" "}
+                {userDetails.City && userDetails.City.trim() + ", "}{" "}
+                {userDetails.Country}
+              </h5>
             </div>
             <div>
               <h5>{userDetails.Email}</h5>
@@ -446,26 +464,37 @@ export default function PGProfile() {
               {user.email} <br />
               <Link onClick={changeGoogleAccount} className="click_text">Unlink Google Account</Link>
             </h5> */}
-            <div className={changeNumberDisplay ? 'pop-up-change-number-div open' : 'pop-up-change-number-div'} >
+            <div
+              className={
+                changeNumberDisplay
+                  ? "pop-up-change-number-div open"
+                  : "pop-up-change-number-div"
+              }
+            >
               <div className="direct-div">
-                <span onClick={closeChangeNumber} className="material-symbols-outlined close-button">
+                <span
+                  onClick={closeChangeNumber}
+                  className="material-symbols-outlined close-button"
+                >
                   close
                 </span>
-                <span className="r14" >Existing no : {userPhoneNumber} </span>
+                <span className="r14">Existing no : {userPhoneNumber} </span>
                 <div className="vg12"></div>
-                <div className="m22">
-                  Enter New Number
-                </div>
+                <div className="m22">Enter New Number</div>
 
                 <div className="sroll-outter-div">
                   <div className="sroll-inner-div">
-                    <div className="scroll-div" style={{ transform: changeNumberScroller ? "translateX(-100%)" : "translateX(0%)" }}>
+                    <div
+                      className="scroll-div"
+                      style={{
+                        transform: changeNumberScroller
+                          ? "translateX(-100%)"
+                          : "translateX(0%)",
+                      }}
+                    >
                       {error && <Alert variant="danger">{error}</Alert>}
 
-                      <form
-                        action=""
-                        onSubmit={handleSendVerificationCode}
-                      >
+                      <form action="" onSubmit={handleSendVerificationCode}>
                         <div className="form_field label_top">
                           <PhoneInput
                             country={"in"}
@@ -484,17 +513,33 @@ export default function PGProfile() {
                               autoFocus: true,
                             }}
                           ></PhoneInput>
-                          <div id="id_sendotpButton" className="change-number-button-div">
-                            <button onClick={closeChangeNumber} className="theme_btn no_icon btn_red" > Cancel</button>
-                            <button className="theme_btn btn_fill no_icon">Send OTP</button>
+                          <div
+                            id="id_sendotpButton"
+                            className="change-number-button-div"
+                          >
+                            <button
+                              onClick={closeChangeNumber}
+                              className="theme_btn no_icon btn_red"
+                            >
+                              {" "}
+                              Cancel
+                            </button>
+                            <button className="theme_btn btn_fill no_icon">
+                              Send OTP
+                            </button>
                           </div>
                         </div>
-
                       </form>
-
                     </div>
 
-                    <div className="scroll-div" style={{ transform: changeNumberScroller ? "translateX(-100%)" : "translateX(0%)" }}>
+                    <div
+                      className="scroll-div"
+                      style={{
+                        transform: changeNumberScroller
+                          ? "translateX(-100%)"
+                          : "translateX(0%)",
+                      }}
+                    >
                       <div className="form_field label_top">
                         <label>OTP</label>
                         <input
@@ -503,41 +548,71 @@ export default function PGProfile() {
                           value={verificationCode}
                           onChange={(e) => setVerificationCode(e.target.value)}
                           style={{
-                            background: "none"
+                            background: "none",
                           }}
                         />
                         {/* new code */}
                         <div className="change-number-button-div">
-                          <button onClick={changeNumberBack} className="theme_btn no_icon" >Back</button>
-                          <button onClick={handleChangePhoneNumber} className="theme_btn btn_fill no_icon">Confirm</button>
+                          <button
+                            onClick={changeNumberBack}
+                            className="theme_btn no_icon"
+                          >
+                            Back
+                          </button>
+                          <button
+                            onClick={handleChangePhoneNumber}
+                            className="theme_btn btn_fill no_icon"
+                          >
+                            Confirm
+                          </button>
                         </div>
                         {/* new code */}
-
                       </div>
                     </div>
                   </div>
                 </div>
-                <div style={{ display: changeNumberScroller ? "none" : "block", position: 'absolute', left: '50%', transform: 'translateX(-50%)' }} id="recaptcha-container"></div>
-                <div style={{ display: changeNumberScroller ? "none" : "block", height: '80px' }}></div>
-
+                <div
+                  style={{
+                    display: changeNumberScroller ? "none" : "block",
+                    position: "absolute",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                  }}
+                  id="recaptcha-container"
+                ></div>
+                <div
+                  style={{
+                    display: changeNumberScroller ? "none" : "block",
+                    height: "80px",
+                  }}
+                ></div>
               </div>
             </div>
-
           </div>
         </div>
       </section>
       <div className="vg22"></div>
       <div className="container">
-        <div className="visit_dashboard">
-          <span>Visit Dashboard for more deatils</span>
-          <span className="theme_btn btn_fill pointer" onClick={showDashboard}>
-            Dashboard
-            <span className="material-symbols-outlined btn_arrow ba_animation">arrow_forward</span>
-          </span>
-
-        </div>
+        {user && user.status === "active" ? (
+          <div className="visit_dashboard">
+            <span>Visit Dashboard for more deatils</span>
+            <span
+              className="theme_btn btn_fill pointer"
+              onClick={showDashboard}
+            >
+              Dashboard
+            </span>
+          </div>
+        ) : (
+          <div className="visit_dashboard">
+            <span className="text_red">Your account has been deactivated</span>
+            <Link to="/contact-us" className="theme_btn btn_fill text-center no_icon">
+                    Contact Support
+                    </Link>
+          </div>
+        )}
       </div>
-      {user && user.roles && user.roles.length > 1 &&
+      {user && user.roles && user.roles.length > 1 && (
         <div className="container">
           <div className="vg22"></div>
           <div className="vg22_991"></div>
@@ -545,19 +620,20 @@ export default function PGProfile() {
           <div className="form_field st-2 label_top">
             <label htmlFor="">Role</label>
             <div className="form_field_inner">
-
               <div className="form_field_container">
                 <div
                   className="radio_group"
                   style={{ display: "flex", alignItems: "center" }}
                 >
                   {user.roles.map((userrole) => (
-                    <div className="radio_group_single" style={{ width: "100%" }}>
+                    <div
+                      className="radio_group_single"
+                      style={{ width: "100%" }}
+                    >
                       <div
-                        className={`custom_radio_button ${user && user.role === userrole
-                          ? "radiochecked"
-                          : ""
-                          }`}
+                        className={`custom_radio_button ${
+                          user && user.role === userrole ? "radiochecked" : ""
+                        }`}
                       >
                         <input
                           type="radio"
@@ -574,16 +650,21 @@ export default function PGProfile() {
                               done
                             </span>
                           </div>
-                          <h6>{userrole === 'admin' ? 'Admin' : camelCase(userrole.toLowerCase())}</h6>
+                          <h6>
+                            {userrole === "admin"
+                              ? "Admin"
+                              : camelCase(userrole.toLowerCase())}
+                          </h6>
                         </label>
                       </div>
-                    </div>))}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-
           </div>
-        </div>}
+        </div>
+      )}
       <div className="vg22"></div>
       <div className="container">
         <div className="row no-gutters">
@@ -591,14 +672,11 @@ export default function PGProfile() {
             <div className="property-status-padding-div">
               <div className="profile-card-div">
                 <div className="address-div">
-                  <div
-                    className="icon"
-
-                  >
+                  <div className="icon">
                     <span className="material-symbols-outlined">security</span>
                   </div>
 
-                  <Link to='/how-use' className="address-text">
+                  <Link to="/how-use" className="address-text">
                     <h5>How to use this app</h5>
                     <div className="">
                       <span className="material-symbols-outlined">
@@ -616,12 +694,11 @@ export default function PGProfile() {
                 />
 
                 <div className="address-div" style={{ cursor: "pointer" }}>
-                  <div
-                    className="icon">
+                  <div className="icon">
                     <span className="material-symbols-outlined">sms</span>
                   </div>
 
-                  <Link to="/properties" className="address-text" >
+                  <Link to="/properties" className="address-text">
                     <h5>Properties</h5>
                     <div className="">
                       <span className="material-symbols-outlined">
@@ -629,7 +706,6 @@ export default function PGProfile() {
                       </span>
                     </div>
                   </Link>
-
                 </div>
               </div>
             </div>
@@ -644,11 +720,7 @@ export default function PGProfile() {
                   style={{ cursor: "pointer" }}
                   onClick={FAQ}
                 >
-
-                  <div
-                    className="icon"
-
-                  >
+                  <div className="icon">
                     <span className="material-symbols-outlined">quiz</span>
                   </div>
 
@@ -678,10 +750,7 @@ export default function PGProfile() {
                   style={{ cursor: "pointer" }}
                   onClick={showPopup}
                 >
-                  <div
-                    className="icon"
-
-                  >
+                  <div className="icon">
                     <span className="material-symbols-outlined">logout</span>
                   </div>
 
@@ -700,11 +769,9 @@ export default function PGProfile() {
             </div>
           </div>
         </div>
-      </div >
+      </div>
       <div className="vg22"></div>
       <div className="vg22"></div>
-
-
-    </div >
+    </div>
   );
 }
