@@ -31,6 +31,7 @@ export default function MasterStateList() {
     "",
     ["state", "asc"]
   );
+  // console.log("masterState: ", masterState)
   const { documents: masterCountry, error: masterCountryerror } =
     useCollection("m_countries");
 
@@ -483,7 +484,7 @@ export default function MasterStateList() {
                                       data.id,
                                       data.country,
                                       data.state,
-                                      data.stateCode,
+                                      data.statecode,
                                       data.gstStateCode
                                     )
                                   }
