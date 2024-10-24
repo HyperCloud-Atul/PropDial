@@ -559,10 +559,10 @@ export default function MasterLocalityList() {
                                   }}
                                 >
                                   {/* {dbcitiesdocuments[0].city} */}
-                                  {(dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === data.city)).city}, {" "}
+                                  {(masterLocality && dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === data.city)).city}, {" "}
                                   {/* {data.state} */}
-                                  {(dbstatesdocuments && dbstatesdocuments.find((e) => e.id === data.state)).state}, {" "}
-                                  {(masterCountry && masterCountry.find((e) => e.id === data.country)).country}
+                                  {(masterLocality && dbstatesdocuments && dbstatesdocuments.find((e) => e.id === data.state)).state}, {" "}
+                                  {(masterLocality && masterCountry && masterCountry.find((e) => e.id === data.country)).country}
                                   {/* {data.country} */}
                                 </small>
                               </div>
