@@ -18,6 +18,7 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 
 // component
 import PropertyCard from "../../../components/property/PropertyCard";
+import InactiveUserCard from "../../../components/InactiveUserCard";
 
 
 // css
@@ -206,7 +207,8 @@ const PGOwnerDashboard = () => {
 
   return (
     <div>
-      <div className="top_header_pg pg_bg propagent_dashboard">
+    {user && user.status === "active" ? (
+        <div className="top_header_pg pg_bg propagent_dashboard">
         <div className="page_spacing">
           <div className="pg_header">
             <h2 className="m22 mb-1">Dashboard</h2>
@@ -500,7 +502,12 @@ const PGOwnerDashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    ) : (
+    <InactiveUserCard/>
+    )}
+  </div>
+   
+   
   );
 };
 
