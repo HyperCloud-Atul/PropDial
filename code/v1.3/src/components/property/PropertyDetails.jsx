@@ -1468,7 +1468,7 @@ const PropertyDetails = () => {
                                                       by{" "}
                                                       <b>
                                                         {/* {activeUser ? activeUser.fullName : "Unknown"} */}
-                                                        {dbUserState && dbUserState.find((user) => user.id === propertyDocument.isActiveUpdatedBy).fullName}
+                                                        {dbUserState && dbUserState.find((user) => user.id === propertyDocument.isActiveUpdatedBy)?.fullName}
 
                                                       </b>{" "}
                                                       on{" "}
@@ -1615,7 +1615,7 @@ const PropertyDetails = () => {
                                                   .fullName}                              */}
                                                         {/* {inactiveUser ? inactiveUser.fullName : "Unknown"} */}
                                                         {/* {"Inactive User"} */}
-                                                        {dbUserState && dbUserState.find((user) => user.id === propertyDocument.isInactiveUpdateBy).fullName}
+                                                        {dbUserState && dbUserState.find((user) => user.id === propertyDocument.isInactiveUpdatedBy)?.fullName}
                                                       </b>{" "}
                                                       on,{" "}
                                                       <b>
