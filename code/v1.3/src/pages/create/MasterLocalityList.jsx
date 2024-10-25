@@ -32,9 +32,12 @@ export default function MasterLocalityList() {
   const { documents: masterCountry, error: masterCountryerror } =
     useCollection("m_countries");
   // console.log('masterCountry:', masterCountry)
+
   const [country, setCountry] = useState({ label: "INDIA", value: "INDIA" });
   const [countryList, setCountryList] = useState();
+  const [dbStateList, setdbStateList] = useState();
   const [state, setState] = useState();
+  const [dbCityList, setdbCityList] = useState();
   const [city, setCity] = useState();
   const [locality, setLocality] = useState();
   const [formError, setFormError] = useState(null);
@@ -49,6 +52,12 @@ export default function MasterLocalityList() {
   let cityOptionsSorted = useRef([]);
 
   useEffect(() => {
+    //Set dbstates in use state
+    setdbStateList(dbstatesdocuments)
+
+    //Set dbcities in use state
+    setdbCityList(dbcitiesdocuments)
+
     // console.log('in useeffect')
     if (masterCountry) {
       countryOptions.current = masterCountry.map((countryData) => ({
@@ -72,7 +81,7 @@ export default function MasterLocalityList() {
         value: countryOptionsSorted.current[0].value,
       });
     }
-  }, [masterCountry]);
+  }, [masterCountry, dbstatesdocuments, dbcitiesdocuments]);
 
   //Country select onchange
   const handleCountryChange = async (option) => {
@@ -241,7 +250,7 @@ export default function MasterLocalityList() {
     const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
     // console.log("country name: ", countryname)
     const statename = (dbstatesdocuments && dbstatesdocuments.find((e) => e.id === docstate)).state
-    const cityname = (dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === doccity)).city
+    const cityname = (dbCityList && dbCityList.find((e) => e.id === doccity)).city
 
     window.scrollTo(0, 0);
     setFormError(null);
@@ -558,11 +567,10 @@ export default function MasterLocalityList() {
                                     transform: "translateY(5px)",
                                   }}
                                 >
-                                  {/* {dbcitiesdocuments[0].city} */}
-                                  {(masterLocality && dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === data.city)).city}, {" "}
+                                  {(dbCityList && dbCityList.find((e) => e.id === data.city))?.city}, {" "}
                                   {/* {data.state} */}
-                                  {(masterLocality && dbstatesdocuments && dbstatesdocuments.find((e) => e.id === data.state)).state}, {" "}
-                                  {(masterLocality && masterCountry && masterCountry.find((e) => e.id === data.country)).country}
+                                  {(dbStateList && dbStateList.find((e) => e.id === data.state))?.state}, {" "}
+                                  {(masterCountry && masterCountry.find((e) => e.id === data.country))?.country}
                                   {/* {data.country} */}
                                 </small>
                               </div>

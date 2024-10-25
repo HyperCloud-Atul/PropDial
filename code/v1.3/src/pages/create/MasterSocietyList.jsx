@@ -38,8 +38,11 @@ export default function MasterSocietyList() {
   // console.log('masterCountry:', masterCountry)
   const [country, setCountry] = useState();
   const [countryList, setCountryList] = useState();
+  const [dbStateList, setdbStateList] = useState();
   const [state, setState] = useState();
+  const [dbCityList, setdbCityList] = useState();
   const [city, setCity] = useState();
+  const [dbLocalityList, setdbLocalityList] = useState();
   const [locality, setLocality] = useState();
   const [society, setSociety] = useState();
   const [formError, setFormError] = useState(null);
@@ -56,6 +59,11 @@ export default function MasterSocietyList() {
   let localityOptionsSorted = useRef([]);
 
   useEffect(() => {
+
+    setdbLocalityList(dblocalitiesdocuments)
+    setdbCityList(dbcitiesdocuments)
+    setdbStateList(dbstatesdocuments)
+
     // console.log('in useeffect')
     if (masterCountry) {
       countryOptions.current = masterCountry.map((countryData) => ({
@@ -172,9 +180,9 @@ export default function MasterSocietyList() {
   const handleCityChange = async (option) => {
     setCity(option);
     let cityname = option.label;
-    console.log('cityname:', cityname)
+    // console.log('cityname:', cityname)
     const cityid = dbcitiesdocuments && dbcitiesdocuments.find((e) => e.city === cityname).id
-    console.log('cityid:', cityid)
+    // console.log('cityid:', cityid)
     const ref = await projectFirestore
       .collection("m_localities")
       .where("city", "==", cityid);
@@ -191,7 +199,7 @@ export default function MasterSocietyList() {
             a.label.localeCompare(b.label)
           );
 
-          console.log("localityOptionsSorted: ", localityOptionsSorted)
+          // console.log("localityOptionsSorted: ", localityOptionsSorted)
 
           setLocality({
             label: localityOptionsSorted.current[0].label,
@@ -640,11 +648,11 @@ export default function MasterSocietyList() {
                                     }}
                                   >
                                     {/* {dblocalitiesdocuments[2].id} */}
-                                    {(dblocalitiesdocuments && dblocalitiesdocuments.find((e) => e.id === data.locality)).locality},
+                                    {(dbLocalityList && dbLocalityList.find((e) => e.id === data.locality))?.locality},
                                     {" "}
                                     {/* {data.city}, */}
-                                    {(dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === data.city)).city},{" "}
-                                    {(dbstatesdocuments && dbstatesdocuments.find((e) => e.id === data.state)).state},{" "}
+                                    {(dbCityList && dbCityList.find((e) => e.id === data.city))?.city},{" "}
+                                    {(dbStateList && dbStateList.find((e) => e.id === data.state))?.state},{" "}
                                     {(masterCountry && masterCountry.find((e) => e.id === data.country)).country}
                                   </small>
                                 </div>
