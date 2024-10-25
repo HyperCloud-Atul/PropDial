@@ -457,6 +457,7 @@ const PropertyDetails = () => {
   const [changeManagerPopup, setchangeManagerPopup] = useState(false);
   const [userdbFieldName, setUserdbFieldName] = useState();
   const [changedUser, setChangedUser] = useState();
+  const [dbUserState, setdbUserState] = useState();
 
   // const openChangeUser = () => {
   //   console.log("Open Change Manager");
@@ -653,6 +654,7 @@ const PropertyDetails = () => {
   const [filteredPropertyManagers, setfilteredPropertyManagers] = useState([]); //initialize array
 
   useEffect(() => {
+    setdbUserState(dbUsers)
     //Property Owners
     // Create a map from the selectedUsers array for quick lookup
     const selectedPropertyOwnersMap =
@@ -705,7 +707,7 @@ const PropertyDetails = () => {
       "filteredProperty manager Users: ",
       filteredPropertyManagerList
     );
-  }, [allPropertyUsers]);
+  }, [allPropertyUsers, dbUsers]);
 
   //Add Property Users
   const handleAddPropertyUser = async (e, _usertype) => {
@@ -718,17 +720,17 @@ const PropertyDetails = () => {
     const isAlreadyExist =
       _usertype === "propertyowner"
         ? propertyOwners &&
-          propertyOwners.filter(
-            (propuser) =>
-              propuser.userId === propertyDocument.createdBy &&
-              propuser.userType === _usertype
-          )
+        propertyOwners.filter(
+          (propuser) =>
+            propuser.userId === propertyDocument.createdBy &&
+            propuser.userType === _usertype
+        )
         : propertyManagers &&
-          propertyManagers.filter(
-            (propuser) =>
-              propuser.userId === propertyDocument.createdBy &&
-              propuser.userType === _usertype
-          );
+        propertyManagers.filter(
+          (propuser) =>
+            propuser.userId === propertyDocument.createdBy &&
+            propuser.userType === _usertype
+        );
 
     // console.log('isAlreadyExist: ', isAlreadyExist)
 
@@ -788,7 +790,7 @@ const PropertyDetails = () => {
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
     RichTextEditor.createValueFromString(
       propertyDocument &&
-        propertyDocument.ownerInstructions + editedOwnerInstruction,
+      propertyDocument.ownerInstructions + editedOwnerInstruction,
       "html"
     )
   );
@@ -1024,23 +1026,23 @@ const PropertyDetails = () => {
   //   modal code end
 
 
-// get update by user start
-// const [reviewUser, setReviewUser] = useState(null);
-// const [activeUser, setActiveUser] = useState(null);
-// const [inactiveUser, setInactiveUser] = useState(null);
+  // get update by user start
+  // const [reviewUser, setReviewUser] = useState(null);
+  // const [activeUser, setActiveUser] = useState(null);
+  // const [inactiveUser, setInactiveUser] = useState(null);
 
-// useEffect(() => {
-//   if (userDocs && propertyDocument) {
-//     const reviewUpdater = userDocs.find((user) => user.id === propertyDocument.isReviewUpdateBy);
-//     const activeUpdater = userDocs.find((user) => user.id === propertyDocument.isActiveUpdatedBy);
-//     const inactiveUpdater = userDocs.find((user) => user.id === propertyDocument.isInactiveUpdateBy);
+  // useEffect(() => {
+  //   if (userDocs && propertyDocument) {
+  //     const reviewUpdater = userDocs.find((user) => user.id === propertyDocument.isReviewUpdateBy);
+  //     const activeUpdater = userDocs.find((user) => user.id === propertyDocument.isActiveUpdatedBy);
+  //     const inactiveUpdater = userDocs.find((user) => user.id === propertyDocument.isInactiveUpdateBy);
 
-//     setReviewUser(reviewUpdater || null);
-//     setActiveUser(activeUpdater || null);
-//     setInactiveUser(inactiveUpdater || null);
-//   }
-// }, [userDocs, propertyDocument]);
-// get update by user end
+  //     setReviewUser(reviewUpdater || null);
+  //     setActiveUser(activeUpdater || null);
+  //     setInactiveUser(inactiveUpdater || null);
+  //   }
+  // }, [userDocs, propertyDocument]);
+  // get update by user end
 
   return (
     <>
@@ -1323,7 +1325,7 @@ const PropertyDetails = () => {
                                     <div
                                       className={
                                         propertyDocument.isActiveInactiveReview ===
-                                        "In-Review"
+                                          "In-Review"
                                           ? "custom_radio_button radiochecked"
                                           : "custom_radio_button"
                                       }
@@ -1362,7 +1364,7 @@ const PropertyDetails = () => {
                                         <div className="d-flex justify-content-between w-100 align-items-center">
                                           <div>
                                             {propertyDocument.isActiveInactiveReview ===
-                                            "In-Review"
+                                              "In-Review"
                                               ? "In-Review"
                                               : "Make In-Review"}
                                           </div>
@@ -1381,8 +1383,13 @@ const PropertyDetails = () => {
                                                       </b>{" "}
                                                       by{" "}
                                                       <b>
-                                                      {reviewUser ? reviewUser.fullName : "Unknown"}                                                   
-                                                      
+                                                        {/* {reviewUser ? reviewUser.fullName : "Unknown"} */}
+
+                                                        {dbUserState && dbUserState.find((user) => user.id === propertyDocument.isReviewUpdateBy).fullName}
+
+
+                                                        {/* userDocs.find((user) => user.id === propertyDocument.isReviewUpdateBy) */}
+
                                                       </b>{" "}
                                                       on,{" "}
                                                       <b>
@@ -1404,7 +1411,7 @@ const PropertyDetails = () => {
                                     <div
                                       className={
                                         propertyDocument.isActiveInactiveReview ===
-                                        "Active"
+                                          "Active"
                                           ? "custom_radio_button radiochecked"
                                           : "custom_radio_button"
                                       }
@@ -1426,7 +1433,7 @@ const PropertyDetails = () => {
                                         style={{
                                           background:
                                             propertyDocument.isActiveInactiveReview ===
-                                              "Active" &&
+                                            "Active" &&
                                             "var(--success-color)",
                                         }}
                                         className="pointer"
@@ -1442,7 +1449,7 @@ const PropertyDetails = () => {
                                         <div className="d-flex justify-content-between w-100 align-items-center">
                                           <div>
                                             {propertyDocument.isActiveInactiveReview ===
-                                            "Active"
+                                              "Active"
                                               ? "Active"
                                               : "Make Active"}
                                           </div>
@@ -1460,8 +1467,10 @@ const PropertyDetails = () => {
                                                         Active
                                                       </b>{" "}
                                                       by{" "}
-                                                      <b>                                                      
-                                                  {activeUser ? activeUser.fullName : "Unknown"}
+                                                      <b>
+                                                        {/* {activeUser ? activeUser.fullName : "Unknown"} */}
+                                                        {dbUserState && dbUserState.find((user) => user.id === propertyDocument.isActiveUpdatedBy).fullName}
+
                                                       </b>{" "}
                                                       on{" "}
                                                       <b>
@@ -1510,8 +1519,8 @@ const PropertyDetails = () => {
                                               ? "var(--theme-green2)"
                                               : selectedAorROption ===
                                                 "In-Review"
-                                              ? "var(--theme-blue)"
-                                              : "inherit",
+                                                ? "var(--theme-blue)"
+                                                : "inherit",
                                         }}
                                       >
                                         Make This {selectedAorROption}?
@@ -1532,9 +1541,8 @@ const PropertyDetails = () => {
                                         No
                                       </div>
                                       <div
-                                        className={`theme_btn btn_fill no_icon text-center ${
-                                          isProcessing && "disabled"
-                                        }`}
+                                        className={`theme_btn btn_fill no_icon text-center ${isProcessing && "disabled"
+                                          }`}
                                         onClick={
                                           !isProcessing ? handleConfirm : null
                                         } // Disable click when processing
@@ -1547,7 +1555,7 @@ const PropertyDetails = () => {
                                     <div
                                       className={
                                         propertyDocument.isActiveInactiveReview ===
-                                        "Inactive"
+                                          "Inactive"
                                           ? "custom_radio_button radiochecked"
                                           : "custom_radio_button"
                                       }
@@ -1557,7 +1565,7 @@ const PropertyDetails = () => {
                                         id={"toggleFlag_inactive" + propertyid}
                                         onClick={
                                           propertyDocument.isActiveInactiveReview ===
-                                          "Inactive"
+                                            "Inactive"
                                             ? null // Disable onClick if already inactive
                                             : handleShowWhyInactive
                                         }
@@ -1570,7 +1578,7 @@ const PropertyDetails = () => {
                                         style={{
                                           background:
                                             propertyDocument.isActiveInactiveReview ===
-                                              "Inactive" && "var(--theme-red)",
+                                            "Inactive" && "var(--theme-red)",
                                         }}
                                         className="pointer"
                                       >
@@ -1585,7 +1593,7 @@ const PropertyDetails = () => {
                                         <div className="d-flex justify-content-between w-100 align-items-center">
                                           <div>
                                             {propertyDocument.isActiveInactiveReview ===
-                                            "Inactive"
+                                              "Inactive"
                                               ? "Inactive"
                                               : "Make Inactive"}
                                           </div>
@@ -1606,7 +1614,9 @@ const PropertyDetails = () => {
                                                       <b>
                                                         {/* {(userDocs && userDocs.find((e) => e.id === propertyDocument.isInactiveUpdateBy))
                                                   .fullName}                              */}
-                                                    {inactiveUser ? inactiveUser.fullName : "Unknown"}
+                                                        {/* {inactiveUser ? inactiveUser.fullName : "Unknown"} */}
+                                                        {/* {"Inactive User"} */}
+                                                        {dbUserState && dbUserState.find((user) => user.id === propertyDocument.isInactiveUpdateBy).fullName}
                                                       </b>{" "}
                                                       on,{" "}
                                                       <b>
@@ -1788,7 +1798,7 @@ const PropertyDetails = () => {
                         <h4 className="property_name">
                           {propertyDocument.bhk} | For{" "}
                           {propertyDocument.purpose.toLowerCase() ===
-                          "rentsaleboth"
+                            "rentsaleboth"
                             ? "Rent / Sale"
                             : propertyDocument.purpose}
                           {/* {propertyDocument.furnishing === ""
@@ -1813,24 +1823,24 @@ const PropertyDetails = () => {
                             <span className="currency">₹</span>
                             {propertyDocument.flag.toLowerCase() ===
                               "pms only" ||
-                            propertyDocument.flag.toLowerCase() ===
+                              propertyDocument.flag.toLowerCase() ===
                               "available for rent" ||
-                            propertyDocument.flag.toLowerCase() === "rented out"
+                              propertyDocument.flag.toLowerCase() === "rented out"
                               ? new Intl.NumberFormat("en-IN").format(
-                                  propertyDocument.demandPriceRent
-                                )
+                                propertyDocument.demandPriceRent
+                              )
                               : propertyDocument.flag.toLowerCase() ===
-                                  "rent and sale" ||
+                                "rent and sale" ||
                                 propertyDocument.flag.toLowerCase() ===
-                                  "rented but sale"
-                              ? new Intl.NumberFormat("en-IN").format(
+                                "rented but sale"
+                                ? new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceRent
                                 ) +
                                 " / ₹" +
                                 new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceSale
                                 )
-                              : new Intl.NumberFormat("en-IN").format(
+                                : new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceSale
                                 )}
 
@@ -1844,24 +1854,24 @@ const PropertyDetails = () => {
                           <h6>
                             {propertyDocument.flag.toLowerCase() ===
                               "pms only" ||
-                            propertyDocument.flag.toLowerCase() ===
+                              propertyDocument.flag.toLowerCase() ===
                               "available for rent" ||
-                            propertyDocument.flag.toLowerCase() === "rented out"
+                              propertyDocument.flag.toLowerCase() === "rented out"
                               ? "Demand Price"
                               : propertyDocument.flag.toLowerCase() ===
-                                  "rent and sale" ||
+                                "rent and sale" ||
                                 propertyDocument.flag.toLowerCase() ===
-                                  "rented but sale"
-                              ? "Demand Rent / Sale"
-                              : "Demand Price"}
+                                "rented but sale"
+                                ? "Demand Rent / Sale"
+                                : "Demand Price"}
                           </h6>
                         </div>
                         {propertyDocument &&
                           (propertyDocument.purpose.toLowerCase() === "rent" ||
                             propertyDocument.purpose.toLowerCase() ===
-                              "rentsaleboth") &&
+                            "rentsaleboth") &&
                           (propertyDocument.maintenanceFlag.toLowerCase() ===
-                          "included" ? (
+                            "included" ? (
                             <div className="pdms_single">
                               <h4>Included</h4>
                               <h6>Maintenance</h6>
@@ -1887,7 +1897,7 @@ const PropertyDetails = () => {
                         {propertyDocument &&
                           (propertyDocument.purpose.toLowerCase() === "rent" ||
                             propertyDocument.purpose.toLowerCase() ===
-                              "rentsaleboth") && (
+                            "rentsaleboth") && (
                             <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
@@ -1931,7 +1941,7 @@ const PropertyDetails = () => {
                             <img src="/assets/img/new_carpet.png"></img>
                             {propertyDocument.superArea}
                             {propertyDocument.superArea &&
-                            propertyDocument.carpetArea !== "0"
+                              propertyDocument.carpetArea !== "0"
                               ? "/"
                               : ""}
                             {propertyDocument.carpetArea}
@@ -1946,7 +1956,7 @@ const PropertyDetails = () => {
                           <h6>
                             {propertyDocument.superArea && "Super Area"}
                             {propertyDocument.superArea &&
-                            propertyDocument.carpetArea !== "0"
+                              propertyDocument.carpetArea !== "0"
                               ? "/"
                               : ""}
                             {propertyDocument.carpetArea !== "0" &&
@@ -2479,14 +2489,13 @@ const PropertyDetails = () => {
                               </div>
                             )}
                           <div
-                            className={`${
-                              user &&
+                            className={`${user &&
                               user.status === "active" &&
                               (user.role === "admin" ||
                                 user.role === "superAdmin")
-                                ? "col-sm-11 col-10"
-                                : "col-12"
-                            }`}
+                              ? "col-sm-11 col-10"
+                              : "col-12"
+                              }`}
                           >
                             <div className="property_layout_card">
                               <Swiper
@@ -2789,24 +2798,24 @@ const PropertyDetails = () => {
                                     </div>
                                     {selectedRoom.roomAttachments.length !==
                                       0 && (
-                                      <div className="attached_with">
-                                        {selectedRoom.roomAttachments && (
-                                          <h6 className="text-center text_black">
-                                            Attached with
-                                          </h6>
-                                        )}
-                                        <div className="more_detail">
-                                          {selectedRoom.roomAttachments &&
-                                            selectedRoom.roomAttachments.map(
-                                              (attachment, findex) => (
-                                                <span className="more_detail_single">
-                                                  {attachment}
-                                                </span>
-                                              )
-                                            )}
+                                        <div className="attached_with">
+                                          {selectedRoom.roomAttachments && (
+                                            <h6 className="text-center text_black">
+                                              Attached with
+                                            </h6>
+                                          )}
+                                          <div className="more_detail">
+                                            {selectedRoom.roomAttachments &&
+                                              selectedRoom.roomAttachments.map(
+                                                (attachment, findex) => (
+                                                  <span className="more_detail_single">
+                                                    {attachment}
+                                                  </span>
+                                                )
+                                              )}
+                                          </div>
                                         </div>
-                                      </div>
-                                    )}
+                                      )}
 
                                     {user &&
                                       user.status === "active" &&
@@ -2904,14 +2913,13 @@ const PropertyDetails = () => {
                               </div>
                             )}
                           <div
-                            className={`${
-                              user &&
+                            className={`${user &&
                               user.status === "active" &&
                               (user.role === "admin" ||
                                 user.role === "superAdmin")
-                                ? "col-sm-11 col-10"
-                                : "col-12"
-                            }`}
+                              ? "col-sm-11 col-10"
+                              : "col-12"
+                              }`}
                           >
                             <div className="tenant_card">
                               <Swiper
@@ -2943,11 +2951,10 @@ const PropertyDetails = () => {
                                   tenantDocument.map((tenant, index) => (
                                     <SwiperSlide key={index}>
                                       <div
-                                        className={`tc_single relative item ${
-                                          tenant.status === "inactive"
-                                            ? "t_inactive"
-                                            : ""
-                                        }`}
+                                        className={`tc_single relative item ${tenant.status === "inactive"
+                                          ? "t_inactive"
+                                          : ""
+                                          }`}
                                       >
                                         <Link
                                           className="left"
@@ -2963,11 +2970,10 @@ const PropertyDetails = () => {
                                             />
                                           </div>
                                           <div
-                                            className={`tenant_detail ${
-                                              editingTenantId === tenant.id
-                                                ? "td_edit"
-                                                : ""
-                                            }`}
+                                            className={`tenant_detail ${editingTenantId === tenant.id
+                                              ? "td_edit"
+                                              : ""
+                                              }`}
                                           >
                                             <h6 className="t_name">
                                               {tenant.name
@@ -3059,14 +3065,13 @@ const PropertyDetails = () => {
                                 </div>
                               )}
                             <div
-                              className={`${
-                                user &&
+                              className={`${user &&
                                 user.status === "active" &&
                                 (user.role === "admin" ||
                                   user.role === "superAdmin")
-                                  ? "col-sm-11 col-10"
-                                  : "col-12"
-                              }`}
+                                ? "col-sm-11 col-10"
+                                : "col-12"
+                                }`}
                             >
                               <div className="tenant_card">
                                 <Swiper
@@ -3103,15 +3108,15 @@ const PropertyDetails = () => {
                                               className="property_people_designation d-flex align-items-end justify-content-center pointer"
                                               onClick={
                                                 user &&
-                                                user.status === "active" &&
-                                                (user.role === "admin" ||
-                                                  user.role === "superAdmin")
+                                                  user.status === "active" &&
+                                                  (user.role === "admin" ||
+                                                    user.role === "superAdmin")
                                                   ? (e) =>
-                                                      handleShowOwnerTags(
-                                                        e,
-                                                        propUser,
-                                                        "propowner"
-                                                      )
+                                                    handleShowOwnerTags(
+                                                      e,
+                                                      propUser,
+                                                      "propowner"
+                                                    )
                                                   : null
                                               }
                                             >
@@ -3120,7 +3125,7 @@ const PropertyDetails = () => {
                                                 user.status === "active" &&
                                                 (user.role === "admin" ||
                                                   user.role ===
-                                                    "superAdmin") && (
+                                                  "superAdmin") && (
                                                   <span
                                                     className="material-symbols-outlined click_icon text_near_icon"
                                                     style={{ fontSize: "10px" }}
@@ -3143,31 +3148,30 @@ const PropertyDetails = () => {
                                                 <h5
                                                   onClick={
                                                     user &&
-                                                    user.status === "active" &&
-                                                    (user.role === "admin" ||
-                                                      user.role ===
+                                                      user.status === "active" &&
+                                                      (user.role === "admin" ||
+                                                        user.role ===
                                                         "superAdmin")
                                                       ? () =>
-                                                          openChangeUser(
-                                                            propUser.id
-                                                          )
+                                                        openChangeUser(
+                                                          propUser.id
+                                                        )
                                                       : ""
                                                   }
-                                                  className={`t_name ${
-                                                    user &&
+                                                  className={`t_name ${user &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                        "superAdmin")
-                                                      ? "pointer"
-                                                      : ""
-                                                  }`}
+                                                      "superAdmin")
+                                                    ? "pointer"
+                                                    : ""
+                                                    }`}
                                                 >
                                                   {propUser.fullName}
                                                   {user &&
                                                     user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                        "superAdmin") && (
+                                                      "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
                                                       </span>
@@ -3183,7 +3187,7 @@ const PropertyDetails = () => {
                                                   user.status === "active" &&
                                                   (user.role === "admin" ||
                                                     user.role ===
-                                                      "superAdmin") && (
+                                                    "superAdmin") && (
                                                     <h6
                                                       className="text_red pointer"
                                                       style={{
@@ -3210,9 +3214,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `tel:${propUser.phoneNumber.replace(
-                                                        /\D/g,
-                                                        ""
-                                                      )}`
+                                                      /\D/g,
+                                                      ""
+                                                    )}`
                                                     : "#"
                                                 }
                                               >
@@ -3226,9 +3230,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `https://wa.me/${propUser.phoneNumber.replace(
-                                                        /\D/g,
-                                                        ""
-                                                      )}`
+                                                      /\D/g,
+                                                      ""
+                                                    )}`
                                                     : "#"
                                                 }
                                                 target="_blank"
@@ -3464,13 +3468,12 @@ const PropertyDetails = () => {
                                 </div>
                               )}
                             <div
-                              className={`${
-                                user &&
+                              className={`${user &&
                                 (user.role === "admin" ||
                                   user.role === "superAdmin")
-                                  ? "col-sm-11 col-10"
-                                  : "col-12"
-                              }`}
+                                ? "col-sm-11 col-10"
+                                : "col-12"
+                                }`}
                             >
                               <div className="tenant_card">
                                 <Swiper
@@ -3525,7 +3528,7 @@ const PropertyDetails = () => {
                                                 user.status === "active" &&
                                                 (user.role === "admin" ||
                                                   user.role ===
-                                                    "superAdmin") && (
+                                                  "superAdmin") && (
                                                   <span
                                                     class="material-symbols-outlined click_icon text_near_icon"
                                                     style={{
@@ -3550,31 +3553,30 @@ const PropertyDetails = () => {
                                                 <h5
                                                   onClick={
                                                     user &&
-                                                    user.status === "active" &&
-                                                    (user.role === "admin" ||
-                                                      user.role ===
+                                                      user.status === "active" &&
+                                                      (user.role === "admin" ||
+                                                        user.role ===
                                                         "superAdmin")
                                                       ? () =>
-                                                          openChangeUser(
-                                                            propUser.id
-                                                          )
+                                                        openChangeUser(
+                                                          propUser.id
+                                                        )
                                                       : ""
                                                   }
-                                                  className={`t_name ${
-                                                    user &&
+                                                  className={`t_name ${user &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                        "superAdmin")
-                                                      ? "pointer"
-                                                      : ""
-                                                  }`}
+                                                      "superAdmin")
+                                                    ? "pointer"
+                                                    : ""
+                                                    }`}
                                                 >
                                                   {propUser.fullName}
                                                   {user &&
                                                     user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                        "superAdmin") && (
+                                                      "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
                                                       </span>
@@ -3590,7 +3592,7 @@ const PropertyDetails = () => {
                                                   user.status === "active" &&
                                                   (user.role === "admin" ||
                                                     user.role ===
-                                                      "superAdmin") && (
+                                                    "superAdmin") && (
                                                     <h6
                                                       className="text_red pointer"
                                                       style={{
@@ -3617,9 +3619,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `tel:${propUser.phoneNumber.replace(
-                                                        /\D/g,
-                                                        ""
-                                                      )}`
+                                                      /\D/g,
+                                                      ""
+                                                    )}`
                                                     : "#"
                                                 }
                                               >
@@ -3633,9 +3635,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `https://wa.me/${propUser.phoneNumber.replace(
-                                                        /\D/g,
-                                                        ""
-                                                      )}`
+                                                      /\D/g,
+                                                      ""
+                                                    )}`
                                                     : "#"
                                                 }
                                                 target="_blank"
@@ -3817,7 +3819,7 @@ const PropertyDetails = () => {
                             <h6>Furnishing</h6>
                             <h5>
                               {propertyDocument.furnishing.toLowerCase() ===
-                              "raw"
+                                "raw"
                                 ? "Unfurnished"
                                 : propertyDocument.furnishing}
                             </h5>
@@ -3919,7 +3921,7 @@ const PropertyDetails = () => {
                       {/* Living Area And Dining Area Combine  */}
                       {propertyDocument &&
                         propertyDocument.livingAndDining.toLowerCase() ===
-                          "yes" && (
+                        "yes" && (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
@@ -4050,10 +4052,10 @@ const PropertyDetails = () => {
                                 {" "}
                                 {propertyDocument &&
                                   new Date().getFullYear() -
-                                    Number(
-                                      propertyDocument.yearOfConstruction
-                                    ) +
-                                    " Years"}{" "}
+                                  Number(
+                                    propertyDocument.yearOfConstruction
+                                  ) +
+                                  " Years"}{" "}
                               </h5>
                             </div>
                           </div>
@@ -4413,7 +4415,7 @@ const PropertyDetails = () => {
                       {/* Covered Parking  */}
                       {(propertyDocument &&
                         propertyDocument.numberOfCoveredCarParking === 0) ||
-                      propertyDocument.numberOfCoveredCarParking === "0" ? (
+                        propertyDocument.numberOfCoveredCarParking === "0" ? (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -4445,7 +4447,7 @@ const PropertyDetails = () => {
                       {/* Open car parking  */}
                       {(propertyDocument &&
                         propertyDocument.numberOfOpenCarParking === 0) ||
-                      propertyDocument.numberOfOpenCarParking === "0" ? (
+                        propertyDocument.numberOfOpenCarParking === "0" ? (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -4492,7 +4494,7 @@ const PropertyDetails = () => {
                       {propertyDocument &&
                         propertyDocument.evChargingPointStatus &&
                         propertyDocument.evChargingPointStatus.toLowerCase() ===
-                          "yes" && (
+                        "yes" && (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
@@ -4566,7 +4568,7 @@ const PropertyDetails = () => {
                         )}
                       {/* number of lifts  */}
                       {propertyDocument &&
-                      propertyDocument.numberOfLifts == 0 ? (
+                        propertyDocument.numberOfLifts == 0 ? (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
