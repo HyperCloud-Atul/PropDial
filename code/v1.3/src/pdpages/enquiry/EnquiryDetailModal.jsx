@@ -135,46 +135,47 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
         </ul>
       </div>
       <hr />
-      {selectedEnquiry.source &&
-        selectedEnquiry.source.toLowerCase() !== "contact us page" && (
-          <>
-            <div className="details">
-              <h6>Property Detail</h6>
-              <ul>
-                <li>
-                  <div className="left">PID</div>
-                  <div className="middle">:-</div>
-                  <div className="right">
-                    <Link
-                      className="click_text"
-                      to={`/propertydetails/${selectedEnquiry.propId}`}
-                    >
-                      {selectedEnquiry.pid}
-                    </Link>
-                  </div>
-                </li>
-                <li>
-                  <div className="left">Property</div>
-                  <div className="middle">:-</div>
-                  <div className="right">
-                    {/* C-102<span> | </span>Hiranandani<span> | </span>9 BHK
+
+      <div className="details">
+        <h6>Property Detail</h6>
+        <ul>
+          <li>
+            <div className="left">PID</div>
+            <div className="middle">:-</div>
+            <div className="right">
+              {selectedEnquiry.pid ? (
+                <Link
+                  className="click_text"
+                  to={`/propertydetails/${selectedEnquiry.propId}`}
+                >
+                  {selectedEnquiry.pid}
+                </Link>
+              ) : (
+                <div className="right">Yet to be added</div>
+              )}
+            </div>
+          </li>
+          <li>
+            <div className="left">Property</div>
+            <div className="middle">:-</div>
+            <div className="right">
+              {/* C-102<span> | </span>Hiranandani<span> | </span>9 BHK
               <span> | </span>Low Rise Apt (5-10 floor)<span> | </span>
               Devnahalli<span> | </span>Bangalore<span> | </span>Karnatak */}
-                    {selectedEnquiry.propertyName}
-                  </div>
-                </li>
-                {/* <li>
+              {selectedEnquiry.propertyName}
+            </div>
+          </li>
+          {/* <li>
               <div className="left">Property Owner</div>
               <div className="middle">:-</div>
               <div className="right text-capitalize">              
                 {selectedEnquiry.propertyOwner}
               </div>
             </li> */}
-              </ul>
-            </div>
-            <hr />
-          </>
-        )}
+        </ul>
+      </div>
+      <hr />
+
       {user &&
         (user.role === "admin" || user.role === "superAdmin") &&
         selectedEnquiry.remark && (
@@ -196,7 +197,9 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
             <hr />
           </>
         )}
-      <div className="enquiry_status">
+
+      {/* old enquiry status line  */}
+      {/* <div className="enquiry_status">
         <h6>Enquiry Status</h6>
         <div
           className={`multi_steps show_status
@@ -303,11 +306,279 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
             }
           })}
         </div>
+      </div> */}
+
+      {/* Simplified Enquiry Status Component */}
+      {/* <div className="enquiry_status">
+        <h6>Enquiry Status</h6>
+        <div
+          className={`multi_steps show_status ${selectedEnquiry.enquiryStatus}`}
+        >
+          <div className="progress_bar">
+            <div
+              className="fill"
+              style={{
+                width:
+                  selectedEnquiry.enquiryStatus === "open"
+                    ? "33.333%"
+                    : selectedEnquiry.enquiryStatus === "working"
+                    ? "66.66%"
+                    : "100%",
+              }}
+            ></div>
+          </div>
+
+          {selectedEnquiry.statusUpdates.map((e) => {
+            const statusConfig = {
+              open: { icon: "open_in_new", conditionClass: "" },
+              working: {
+                icon: "autorenew",
+                conditionClass:
+                  selectedEnquiry.enquiryStatus === "open" ? "wait" : "",
+              },
+              successful: {
+                icon: "check_circle",
+                conditionClass:
+                  selectedEnquiry.enquiryStatus === "open" ||
+                  selectedEnquiry.enquiryStatus === "working"
+                    ? "wait"
+                    : "",
+              },
+              dead: {
+                icon: "cancel",
+                conditionClass:
+                  selectedEnquiry.enquiryStatus === "open" ||
+                  selectedEnquiry.enquiryStatus === "working"
+                    ? "wait"
+                    : "",
+              },
+            };
+
+            const { icon, conditionClass } = statusConfig[e.status] || {};
+
+            return (
+              <div className={`step_single ${conditionClass}`} key={e.status}>
+                <div className="number">
+                  <span className="material-symbols-outlined">{icon}</span>
+                </div>
+                <h6 className="text-capitalize">{e.status}</h6>
+                {e.updatedAt && (
+                  <h5>{format(e.updatedAt.toDate(), "dd-MMM-yy hh:mm a")}</h5>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div> */}
+
+      {/* Simplified Enquiry Status Component with Deduplication */}
+      {/* <div className="enquiry_status">
+  <h6>Enquiry Status</h6>
+  <div
+    className={`multi_steps show_status ${selectedEnquiry.enquiryStatus}`}
+  >
+    <div className="progress_bar">
+      <div
+        className="fill"
+        style={{
+          width:
+            selectedEnquiry.enquiryStatus === "open"
+              ? "33.333%"
+              : selectedEnquiry.enquiryStatus === "working"
+              ? "66.66%"
+              : "100%",
+        }}
+      ></div>
+    </div>
+
+    {selectedEnquiry.statusUpdates
+      .filter(
+        (status, index, self) =>
+          index ===
+          self.findIndex((s) => s.status === status.status) // Filter unique statuses
+      )
+      .map((e) => {
+        const statusConfig = {
+          open: { icon: "open_in_new", conditionClass: "" },
+          working: {
+            icon: "autorenew",
+            conditionClass:
+              selectedEnquiry.enquiryStatus === "open" ? "wait" : "",
+          },
+          successful: {
+            icon: "check_circle",
+            conditionClass:
+              selectedEnquiry.enquiryStatus === "open" ||
+              selectedEnquiry.enquiryStatus === "working"
+                ? "wait"
+                : "",
+          },
+          dead: {
+            icon: "cancel",
+            conditionClass:
+              selectedEnquiry.enquiryStatus === "open" ||
+              selectedEnquiry.enquiryStatus === "working"
+                ? "wait"
+                : "",
+          },
+        };
+
+        const { icon, conditionClass } = statusConfig[e.status] || {};
+
+        return (
+          <div
+            className={`step_single ${conditionClass}`}
+            key={e.status}
+          >
+            <div className="number">
+              <span className="material-symbols-outlined">{icon}</span>
+            </div>
+            <h6 className="text-capitalize">{e.status}</h6>
+            {e.updatedAt && (
+              <h5>{format(e.updatedAt.toDate(), "dd-MMM-yy hh:mm a")}</h5>
+            )}
+          </div>
+        );
+      })}
+  </div>
+</div> */}
+
+      {/* Simplified Enquiry Status Component with Deduplication in this only update update at */}
+      <div className="enquiry_status">
+        <h6>Enquiry Status</h6>
+        <div
+          className={`multi_steps show_status ${selectedEnquiry.enquiryStatus}`}
+        >
+          <div className="progress_bar">
+            <div
+              className="fill"
+              style={{
+                width:
+                  selectedEnquiry.enquiryStatus === "open"
+                    ? "33.333%"
+                    : selectedEnquiry.enquiryStatus === "working"
+                    ? "66.66%"
+                    : "100%",
+              }}
+            ></div>
+          </div>
+
+          {Object.values(
+            selectedEnquiry.statusUpdates.reduceRight((acc, e) => {
+              // Keep only the latest update of each status
+              if (!acc[e.status]) acc[e.status] = e;
+              return acc;
+            }, {})
+          )
+            .reverse() // Reverse to maintain original order
+            .map((e) => {
+              const statusConfig = {
+                open: { icon: "open_in_new", conditionClass: "" },
+                working: {
+                  icon: "autorenew",
+                  conditionClass:
+                    selectedEnquiry.enquiryStatus === "open" ? "wait" : "",
+                },
+                successful: {
+                  icon: "check_circle",
+                  conditionClass:
+                    selectedEnquiry.enquiryStatus === "open" ||
+                    selectedEnquiry.enquiryStatus === "working"
+                      ? "wait"
+                      : "",
+                },
+                dead: {
+                  icon: "cancel",
+                  conditionClass:
+                    selectedEnquiry.enquiryStatus === "open" ||
+                    selectedEnquiry.enquiryStatus === "working"
+                      ? "wait"
+                      : "",
+                },
+              };
+
+              const { icon, conditionClass } = statusConfig[e.status] || {};
+
+              return (
+                <div className={`step_single ${conditionClass}`} key={e.status}>
+                  <div className="number">
+                    <span className="material-symbols-outlined">{icon}</span>
+                  </div>
+                  <h6 className="text-capitalize">{e.status}</h6>
+                  {e.updatedAt && (
+                    <h5>{format(e.updatedAt.toDate(), "dd-MMM-yy hh:mm a")}</h5>
+                  )}
+                </div>
+              );
+            })}
+        </div>
       </div>
 
+      {/* this is to show all updates */}
+      {/* <div className="enquiry_status">
+  <h6>Enquiry Status</h6>
+  <div
+    className={`multi_steps show_status ${selectedEnquiry.enquiryStatus}`}
+  >
+    <div className="progress_bar">
+      <div
+        className="fill"
+        style={{
+          width:
+            selectedEnquiry.enquiryStatus === "open"
+              ? "33.333%"
+              : selectedEnquiry.enquiryStatus === "working"
+              ? "66.66%"
+              : "100%",
+        }}
+      ></div>
+    </div>
 
-  
-     
+    {selectedEnquiry.statusUpdates.map((e, index) => {
+      const statusConfig = {
+        open: { icon: "open_in_new", conditionClass: "" },
+        working: {
+          icon: "autorenew",
+          conditionClass:
+            selectedEnquiry.enquiryStatus === "open" && index === 0 ? "wait" : "",
+        },
+        successful: {
+          icon: "check_circle",
+          conditionClass:
+            selectedEnquiry.enquiryStatus === "open" ||
+            selectedEnquiry.enquiryStatus === "working"
+              ? "wait"
+              : "",
+        },
+        dead: {
+          icon: "cancel",
+          conditionClass:
+            selectedEnquiry.enquiryStatus === "open" ||
+            selectedEnquiry.enquiryStatus === "working"
+              ? "wait"
+              : "",
+        },
+      };
+
+      const { icon, conditionClass } = statusConfig[e.status] || {};
+
+      return (
+        <div
+          className={`step_single ${conditionClass}`}
+          key={`${e.status}-${index}`}
+        >
+          <div className="number">
+            <span className="material-symbols-outlined">{icon}</span>
+          </div>
+          <h6 className="text-capitalize">{e.status}</h6>
+          {e.updatedAt && (
+            <h5>{format(e.updatedAt.toDate(), "dd-MMM-yy hh:mm a")}</h5>
+          )}
+        </div>
+      );
+    })}
+  </div>
+</div> */}
     </Modal>
   );
 };

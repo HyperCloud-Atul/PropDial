@@ -510,7 +510,7 @@ export default function PGProfile() {
                             inputProps={{
                               name: "newPhoneNumber",
                               required: true,
-                              autoFocus: true,
+                              // autoFocus: true,
                             }}
                           ></PhoneInput>
                           <div
