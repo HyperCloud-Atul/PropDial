@@ -457,7 +457,7 @@ const PropertyDetails = () => {
   const [changeManagerPopup, setchangeManagerPopup] = useState(false);
   const [userdbFieldName, setUserdbFieldName] = useState();
   const [changedUser, setChangedUser] = useState();
-  const [dbUserState, setdbUserState] = useState();
+  const [dbUserState, setdbUserState] = useState(dbUsers);
 
   // const openChangeUser = () => {
   //   console.log("Open Change Manager");
@@ -1385,8 +1385,7 @@ const PropertyDetails = () => {
                                                       <b>
                                                         {/* {reviewUser ? reviewUser.fullName : "Unknown"} */}
 
-                                                        {dbUserState && dbUserState.find((user) => user.id === propertyDocument.isReviewUpdateBy).fullName}
-
+                                                        {dbUserState && dbUserState.find((user) => user.id === propertyDocument.isReviewUpdatedBy)?.fullName}
 
                                                         {/* userDocs.find((user) => user.id === propertyDocument.isReviewUpdateBy) */}
 
