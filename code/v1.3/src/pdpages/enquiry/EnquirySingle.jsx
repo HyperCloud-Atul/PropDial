@@ -20,7 +20,11 @@ const EnquirySingle = ({ enquiries }) => {
       {enquiries &&
         enquiries.map((doc, index) => (
           <div
-            className={`my_small_card notification_card pointer ${user && (user.role === "admin" || user.role === "superAdmin") ? "right_gap" : ""}`}
+            className={`my_small_card notification_card pointer ${
+              user && (user.role === "admin" || user.role === "superAdmin")
+                ? "right_gap"
+                : ""
+            }`}
             key={index}
             onClick={() => handleShowEnquriyModal(doc)}
           >
@@ -75,13 +79,18 @@ const EnquirySingle = ({ enquiries }) => {
                 </Link>
               </div>
             )}
-            {/* {doc.enquiryStatus === "successful" || doc.enquiryStatus === "dead" ? "" : ( */}
-            {user && (user.role === "admin" || user.role === "superAdmin") && (
-              <Link to={`/edit-enquiry/${doc.id}`} className="enq_edit">
-                <span class="material-symbols-outlined">edit_square</span>
-              </Link>
-            )}
-            {/* )} */}
+            {(doc.enquiryStatus === "open" ||
+              doc.enquiryStatus === "working"
+            ||
+            doc.enquiryStatus === "dead" ||
+            doc.enquiryStatus === "successful"
+            ) &&
+              user &&
+              (user.role === "admin" || user.role === "superAdmin") && (
+                <Link to={`/edit-enquiry/${doc.id}`} className="enq_edit">
+                  <span className="material-symbols-outlined">edit_square</span>
+                </Link>
+              )}
           </div>
         ))}
       <EnquiryDetailModal

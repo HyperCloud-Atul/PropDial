@@ -8,10 +8,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 
-const AddEnquiry = () => {
+const AddEnquiry = ({enquiryAdded}) => {
     const navigate = useNavigate();
+    const { user } = useAuthContext();
     const { id } = useParams();
     // console.log("property id: ", id)
     // add enquiry with add document start
@@ -69,9 +71,6 @@ const AddEnquiry = () => {
         if (propertyDoc) {
             setPropertyName(propertyDoc && propertyDoc.propertyName)
         }
-
-
-
     }, [propertyDoc])
 
     const [errors, setErrors] = useState({});
@@ -152,6 +151,7 @@ const AddEnquiry = () => {
             const newStatusUpdate = {
                 status: "open",
                 updatedAt: new Date(),
+                updatedBy: user.uid,
             };
             const docRef = await addDocument({
                 iAm: "",
@@ -186,6 +186,7 @@ const AddEnquiry = () => {
             setPropertyOwner("");
             setPropertyName("");
             setIsUploading(false);
+            enquiryAdded()
             navigate("/enquiry/all");
         } catch (error) {
             console.error("Error adding document:", error);

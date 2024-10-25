@@ -562,7 +562,10 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
         </div>
       )}
       {viewMode === "table_view" && (
-        <>{enquiries && <EnquiryTable enquiries={enquiries} />}</>
+        // <>{enquiries && <EnquiryTable enquiries={enquiries} />}</>
+        <h5 className="text-center text_green">
+        Coming Soon....
+      </h5>
       )}
     </>
   );

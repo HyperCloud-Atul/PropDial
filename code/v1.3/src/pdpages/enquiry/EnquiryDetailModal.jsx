@@ -2,8 +2,19 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
+  const [previousStatus, setPreviousStatus] = useState("");
+
+  // Update previousStatus whenever selectedEnquiry changes
+  useEffect(() => {
+    if (selectedEnquiry) {
+      setPreviousStatus(selectedEnquiry.enquiryStatus);
+    }
+  }, [selectedEnquiry]);
+
+  // Return null if selectedEnquiry is null to prevent rendering errors
   if (!selectedEnquiry) return null;
   return (
     <Modal
@@ -124,63 +135,67 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
         </ul>
       </div>
       <hr />
-      {selectedEnquiry.source && selectedEnquiry.source.toLowerCase() !== "contact us page" && (
-      <>
-        <div className="details">
-          <h6>Property Detail</h6>
-          <ul>
-            <li>
-              <div className="left">PID</div>
-              <div className="middle">:-</div>
-              <div className="right">
-                <Link className="click_text"
-                 to={`/propertydetails/${selectedEnquiry.propId}`}>
-                {selectedEnquiry.pid}
-                </Link>
-              </div>
-           
-            </li>
-            <li>
-              <div className="left">Property</div>
-              <div className="middle">:-</div>
-              <div className="right">
-                {/* C-102<span> | </span>Hiranandani<span> | </span>9 BHK
+      {selectedEnquiry.source &&
+        selectedEnquiry.source.toLowerCase() !== "contact us page" && (
+          <>
+            <div className="details">
+              <h6>Property Detail</h6>
+              <ul>
+                <li>
+                  <div className="left">PID</div>
+                  <div className="middle">:-</div>
+                  <div className="right">
+                    <Link
+                      className="click_text"
+                      to={`/propertydetails/${selectedEnquiry.propId}`}
+                    >
+                      {selectedEnquiry.pid}
+                    </Link>
+                  </div>
+                </li>
+                <li>
+                  <div className="left">Property</div>
+                  <div className="middle">:-</div>
+                  <div className="right">
+                    {/* C-102<span> | </span>Hiranandani<span> | </span>9 BHK
               <span> | </span>Low Rise Apt (5-10 floor)<span> | </span>
               Devnahalli<span> | </span>Bangalore<span> | </span>Karnatak */}
-                {selectedEnquiry.propertyName}
-              </div>
-            </li>
-            {/* <li>
+                    {selectedEnquiry.propertyName}
+                  </div>
+                </li>
+                {/* <li>
               <div className="left">Property Owner</div>
               <div className="middle">:-</div>
               <div className="right text-capitalize">              
                 {selectedEnquiry.propertyOwner}
               </div>
             </li> */}
-          </ul>
-        </div>
-        <hr />
-      </>
+              </ul>
+            </div>
+            <hr />
+          </>
         )}
-      {user && (user.role === "admin" || user.role === "superAdmin") && selectedEnquiry.remark &&  (
-        <>
-          <div className="details">
-            <h6>Office Uses</h6>
-            <ul>
-              {selectedEnquiry.remark && (
-                <li>
-                  <div className="left">Remark</div>
-                  <div className="middle">:-</div>
-                  <div className="right text-break">
-                    {selectedEnquiry.remark}
-                  </div>
-                </li>
-              )}
-            </ul>
-          </div>
-          <hr />
-        </>
-      )}
+      {user &&
+        (user.role === "admin" || user.role === "superAdmin") &&
+        selectedEnquiry.remark && (
+          <>
+            <div className="details">
+              <h6>Office Uses</h6>
+              <ul>
+                {selectedEnquiry.remark && (
+                  <li>
+                    <div className="left">Remark</div>
+                    <div className="middle">:-</div>
+                    <div className="right text-break">
+                      {selectedEnquiry.remark}
+                    </div>
+                  </li>
+                )}
+              </ul>
+            </div>
+            <hr />
+          </>
+        )}
       <div className="enquiry_status">
         <h6>Enquiry Status</h6>
         <div
@@ -289,6 +304,10 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
           })}
         </div>
       </div>
+
+
+  
+     
     </Modal>
   );
 };

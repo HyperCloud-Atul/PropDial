@@ -114,7 +114,9 @@ console.log("enquiryDocs", enquiryDocs);
            </div>
 
          </div>
-         <AddEnquiry />
+         <AddEnquiry 
+         enquiryAdded={handelShowForm}
+         />
        </>
      )}
 
