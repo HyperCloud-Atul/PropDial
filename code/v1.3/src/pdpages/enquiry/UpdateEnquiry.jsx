@@ -258,27 +258,21 @@ const submitEnquiry = async (event) => {
           // Handle cases where visitDate is already a Date object or string
           return value ? format(new Date(value), "dd-MMM-yy") : "N/A";
         },
-      },
-      
-    
+      }, 
       {
         Header: "Updated At",
         accessor: "updatedAt",
         Cell: ({ value }) =>
           format(new Date(value.seconds * 1000), "dd-MMM-yy hh:mm a"),
         disableFilters: true,
-      },
-  
-      
+      },    
       {
         Header: "Updated By",
         accessor: "updatedBy",
-        Cell: ({ value }) =>        
-          
+        Cell: ({ value }) =>       
           // {(userDocs && userDocs.find((e) => e.uid === value)).fullName},
-          // <span className="text-capitalize">{value}</span>,
-          <span className="text-capitalize">{value && userDocs && (userDocs &&  userDocs.find((e) => e.id === value)).fullName}</span>,
-
+          <span className="text-capitalize">{value}</span>,
+          // <span className="text-capitalize">{value && userDocs && (userDocs &&  userDocs.find((e) => e.id === value)).fullName}</span>,
         disableFilters: true,
       },
       

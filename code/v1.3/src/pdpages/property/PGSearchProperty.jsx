@@ -31,21 +31,53 @@ const PGSearchProperty = () => {
   const { documents: propagentProperties, error: propagentPropertiesError } = useCollection("properties-propagent");
 
   // functionality for fav start 
+  // const [favoritedProperties, setFavoritedProperties] = useState([]);
+  // const [favoriteCount, setFavoriteCount] = useState(0);
+
+  // useEffect(() => {
+  //   const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  //   setFavoritedProperties(savedFavorites);
+  //   setFavoriteCount(savedFavorites.length);
+  // }, []);
+
+  // const handleUpdateFavorites = (updatedFavorites) => {
+  //   setFavoritedProperties(updatedFavorites);
+  //   setFavoriteCount(updatedFavorites.length);
+  //   localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  // };
+
+  // const filterFavoriteProperties = (properties) => {
+  //   return properties.filter((property) => favoritedProperties.includes(property.id));
+  // };
+
   const [favoritedProperties, setFavoritedProperties] = useState([]);
   const [favoriteCount, setFavoriteCount] = useState(0);
-
+  
+  // Load saved favorites on component mount and filter out any removed properties
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    setFavoritedProperties(savedFavorites);
-    setFavoriteCount(savedFavorites.length);
-  }, []);
-
+    
+    // Only filter if propdialProperties is not null or undefined
+    if (propdialProperties) {
+      const updatedFavorites = savedFavorites.filter((favId) =>
+        propdialProperties.some((property) => property.id === favId)
+      );
+  
+      setFavoritedProperties(updatedFavorites);
+      setFavoriteCount(updatedFavorites.length);
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    }
+  }, [propdialProperties]);
+  
+  
+  // Update favorites list and save to localStorage
   const handleUpdateFavorites = (updatedFavorites) => {
     setFavoritedProperties(updatedFavorites);
     setFavoriteCount(updatedFavorites.length);
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
-
+  
+  // Filter favorite properties based on IDs
   const filterFavoriteProperties = (properties) => {
     return properties.filter((property) => favoritedProperties.includes(property.id));
   };
@@ -273,6 +305,7 @@ const PGSearchProperty = () => {
                           propertiesdocuments={filterFavoriteProperties(propdialProperties)}
                           onUpdateFavorites={handleUpdateFavorites} activeOption={activeOption}
                         />
+ 
                       ) : (
                         <p>No favorite properties yet!</p>
                       )}

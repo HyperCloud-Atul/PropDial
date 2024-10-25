@@ -418,9 +418,15 @@ const PropertyCard = ({ propertyid }) => {
                       <img src="/assets/img/new_super_area.png" alt="" />
                     </div>
                     <div className="left">
-                      <h6>Floor #</h6>
+                      <h6>Floor</h6>
                       <h5>
-                        {propertydoc.floorNo} {propertydoc.numberOfFloors !== "" ? " of " + propertydoc.numberOfFloors : ""}
+                      { 
+  propertydoc.numberOfFloors.toLowerCase() === "ground"
+    ? propertydoc.numberOfFloors
+    : `${propertydoc.floorNo}${propertydoc.numberOfFloors ? " of " + propertydoc.numberOfFloors : ""}`
+}
+
+                       
                       </h5>
                     </div>
                   </div>
