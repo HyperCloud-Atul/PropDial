@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
+import { useCommon } from "../../hooks/useCommon";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -14,12 +15,19 @@ export default function MasterLocalityList() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+  const { camelCase } = useCommon();
   // Scroll to the top of the page whenever the location changes end
   const { addDocument, response } = useFirestore("m_localities");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_localities");
   const { documents: masterLocality, error: masterLocalityerror } =
     useCollection("m_localities");
+  const { documents: dbcitiesdocuments, error: dbcitieserror } = useCollection(
+    "m_cities"
+  );
+  const { documents: dbstatesdocuments, error: dbstateserror } = useCollection(
+    "m_states"
+  );
   // const { documents: masterState, error: masterStateerror } = useCollection('m_states')
   const { documents: masterCountry, error: masterCountryerror } =
     useCollection("m_countries");
@@ -45,7 +53,7 @@ export default function MasterLocalityList() {
     if (masterCountry) {
       countryOptions.current = masterCountry.map((countryData) => ({
         label: countryData.country,
-        value: countryData.country,
+        value: countryData.id,
       }));
 
       countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
@@ -54,43 +62,50 @@ export default function MasterLocalityList() {
 
       setCountryList(countryOptionsSorted.current);
 
-      handleCountryChange(country);
+      setCountry({
+        label: countryOptionsSorted.current[0].label,
+        value: countryOptionsSorted.current[0].value,
+      })
+
+      handleCountryChange({
+        label: countryOptionsSorted.current[0].label,
+        value: countryOptionsSorted.current[0].value,
+      });
     }
   }, [masterCountry]);
 
   //Country select onchange
   const handleCountryChange = async (option) => {
-    setCountry(option);
+    // setCountry(option);
     let countryname = option.label;
     // console.log('countryname:', countryname)
+    const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
+    // console.log('countryid:', countryid)
     const ref = await projectFirestore
       .collection("m_states")
-      .where("country", "==", countryname);
+      .where("country", "==", countryid);
     ref.onSnapshot(
       async (snapshot) => {
         if (snapshot.docs) {
           stateOptions.current = snapshot.docs.map((stateData) => ({
             label: stateData.data().state,
-            value: stateData.data().state,
+            value: stateData.id,
           }));
           // console.log('stateOptions:', stateOptions)
           stateOptionsSorted.current = stateOptions.current.sort((a, b) =>
             a.label.localeCompare(b.label)
           );
 
-          if (countryname === "INDIA") {
-            setState({ label: "DELHI", value: "DELHI" });
-            handleStateChange({ label: "DELHI", value: "DELHI" });
-          } else {
-            setState({
-              label: stateOptionsSorted.current[0].label,
-              value: stateOptionsSorted.current[0].value,
-            });
-            handleStateChange({
-              label: stateOptionsSorted.current[0].label,
-              value: stateOptionsSorted.current[0].value,
-            });
-          }
+          setState({
+            label: stateOptionsSorted.current[0].label,
+            value: stateOptionsSorted.current[0].value,
+          });
+
+          handleStateChange({
+            label: stateOptionsSorted.current[0].label,
+            value: stateOptionsSorted.current[0].value,
+          });
+
         } else {
           // setError('No such document exists')
         }
@@ -107,28 +122,27 @@ export default function MasterLocalityList() {
     setState(option);
     let statename = option.label;
     // console.log('statename:', statename)
+    const stateid = dbstatesdocuments && dbstatesdocuments.find((e) => e.state === statename).id
+    // console.log('stateid:', stateid)
     const ref = await projectFirestore
       .collection("m_cities")
-      .where("state", "==", statename);
+      .where("state", "==", stateid);
     ref.onSnapshot(
       async (snapshot) => {
         if (snapshot.docs) {
           cityOptions.current = snapshot.docs.map((cityData) => ({
             label: cityData.data().city,
-            value: cityData.data().city,
+            value: cityData.id,
           }));
           cityOptionsSorted.current = cityOptions.current.sort((a, b) =>
             a.label.localeCompare(b.label)
           );
 
-          if (statename === "DELHI") {
-            setCity({ label: "DELHI", value: "DELHI" });
-          } else {
-            setCity({
-              label: cityOptionsSorted.current[0].label,
-              value: cityOptionsSorted.current[0].value,
-            });
-          }
+          setCity({
+            label: cityOptionsSorted.current[0].label,
+            value: cityOptionsSorted.current[0].value,
+          });
+
         } else {
           // setError('No such document exists')
         }
@@ -145,13 +159,16 @@ export default function MasterLocalityList() {
     e.preventDefault();
     setFormError(null);
 
-    let localityname = locality.trim().toUpperCase();
+    let localityname = camelCase(locality.trim());
 
     if (currentDocid) {
+      // console.log("country.value: ", country.value)
+      // console.log("state.value: ", state.value)
+      // console.log("city.value: ", city.value)
       await updateDocument(currentDocid, {
-        country: country.label,
-        state: state.label,
-        city: city.label,
+        country: country.value,
+        state: state.value,
+        city: city.value,
         locality: localityname,
       });
       setFormError("Successfully updated");
@@ -166,9 +183,9 @@ export default function MasterLocalityList() {
 
         if (results.length === 0) {
           const dataSet = {
-            country: country.label,
-            state: state.label,
-            city: city.label,
+            country: country.value,
+            state: state.value,
+            city: city.value,
             locality: localityname,
             status: "active",
           };
@@ -219,11 +236,18 @@ export default function MasterLocalityList() {
     doclocality
   ) => {
     // console.log('data:', data)
+
+    // console.log("country id: ", doccountry)
+    const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
+    // console.log("country name: ", countryname)
+    const statename = (dbstatesdocuments && dbstatesdocuments.find((e) => e.id === docstate)).state
+    const cityname = (dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === doccity)).city
+
     window.scrollTo(0, 0);
     setFormError(null);
-    setCountry({ label: doccountry, value: doccountry });
-    setState({ label: docstate, value: docstate });
-    setCity({ label: doccity, value: doccity });
+    setCountry({ label: countryname, value: doccountry });
+    setState({ label: statename, value: docstate });
+    setCity({ label: cityname, value: doccity });
     setLocality(doclocality);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update Locality");
@@ -534,7 +558,12 @@ export default function MasterLocalityList() {
                                     transform: "translateY(5px)",
                                   }}
                                 >
-                                  {data.city}, {data.state}, {data.country}
+                                  {/* {dbcitiesdocuments[0].city} */}
+                                  {(dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === data.city)).city}, {" "}
+                                  {/* {data.state} */}
+                                  {(dbstatesdocuments && dbstatesdocuments.find((e) => e.id === data.state)).state}, {" "}
+                                  {(masterCountry && masterCountry.find((e) => e.id === data.country)).country}
+                                  {/* {data.country} */}
                                 </small>
                               </div>
                               <div

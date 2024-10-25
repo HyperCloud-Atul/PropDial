@@ -46,19 +46,20 @@ export default function MasterStateList() {
 
   let countryOptions = useRef([]);
   let countryOptionsSorted = useRef([]);
-  if (masterCountry) {
-    countryOptions.current = masterCountry.map((countryData) => ({
-      label: countryData.country,
-      value: countryData.country,
-    }));
 
-    countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
-      a.label.localeCompare(b.label)
-    );
-  }
   useEffect(() => {
     // console.log("in useeffect");
-  }, []);
+    if (masterCountry) {
+      countryOptions.current = masterCountry.map((countryData) => ({
+        label: countryData.country,
+        value: countryData.id,
+      }));
+
+      countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
+        a.label.localeCompare(b.label)
+      );
+    }
+  }, [masterCountry]);
 
   let results = [];
   const handleSubmit = async (e) => {
@@ -67,14 +68,14 @@ export default function MasterStateList() {
 
     let _addCityFlag = false;
 
-    let _state = state.trim().toUpperCase();
+    let _state = camelCase(state.trim());
     let _stateCode = stateCode.trim().toUpperCase();
     let _gstStateCode = gstStateCode.trim().toUpperCase();
     if (currentDocid != null) {
       // console.log("Updated currentDocid: ", currentDocid)
       setFormError("Updated Successfully");
       await updateDocument(currentDocid, {
-        country: country.label,
+        country: country.value,
         state: _state,
         stateCode: _stateCode,
         gstStateCode: _gstStateCode
@@ -95,7 +96,7 @@ export default function MasterStateList() {
 
         if (results.length === 0) {
           const dataSet = {
-            country: country.label,
+            country: country.value,
             state: _state,
             stateCode: _stateCode,
             gstStateCode: _gstStateCode,
@@ -132,12 +133,14 @@ export default function MasterStateList() {
       // Role and country-based filtering
       switch (filter) {
         case "INDIA":
-          if (document.country === "INDIA") {
+          const indiaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "INDIA").id
+          if (document.country === indiaid) {
             isFiltered = true;
           }
           break;
         case "USA":
-          if (document.country === "USA") {
+          const usaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "USA").id
+          if (document.country === usaid) {
             isFiltered = true;
           }
           break;
@@ -184,6 +187,8 @@ export default function MasterStateList() {
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add State");
     setState("");
+    setStateCode("")
+    setGSTStateCode("")
   };
 
   // const [cityStatus, setCityStatus] = useState();
@@ -196,13 +201,18 @@ export default function MasterStateList() {
     });
   };
 
-  const handleEditCard = (docid, doccountry, docstate) => {
+  const handleEditCard = (docid, doccountry, docstate, docstatecode, docgststatecode) => {
     // console.log('docid in handleEditCard:', docid)
     setCurrentDocid(docid);
     window.scrollTo(0, 0);
     setFormError(null);
-    setCountry({ label: doccountry, value: doccountry });
+    // console.log("country id: ", doccountry)
+    const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
+    // console.log("country name: ", countryname)
+    setCountry({ label: countryname, value: doccountry });
     setState(docstate);
+    setStateCode(docstatecode)
+    setGSTStateCode(docgststatecode)
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update State");
 
@@ -472,7 +482,9 @@ export default function MasterStateList() {
                                     handleEditCard(
                                       data.id,
                                       data.country,
-                                      data.state
+                                      data.state,
+                                      data.stateCode,
+                                      data.gstStateCode
                                     )
                                   }
                                   style={{
@@ -500,7 +512,8 @@ export default function MasterStateList() {
                                       transform: "translateY(5px)",
                                     }}
                                   >
-                                    {data.country}
+                                    {(masterCountry && masterCountry.find((e) => e.id === data.country)).country}, {" "}
+                                    {/* {data.country} */}
                                   </small>
                                 </div>
                                 <div

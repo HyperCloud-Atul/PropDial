@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
+import { useCommon } from "../../hooks/useCommon";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -14,17 +15,28 @@ export default function MasterSocietyList() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+  const { camelCase } = useCommon();
   // Scroll to the top of the page whenever the location changes end
   const { addDocument, response } = useFirestore("m_societies");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_societies");
+  const { documents: dbcitiesdocuments, error: dbcitieserror } = useCollection(
+    "m_cities"
+  );
+  const { documents: dbstatesdocuments, error: dbstateserror } = useCollection(
+    "m_states"
+  );
   const { documents: masterSociety, error: masterSocietyerror } =
     useCollection("m_societies");
+  const { documents: dblocalitiesdocuments, error: dblocalitieserror } = useCollection(
+    "m_localities"
+  );
+
   // const { documents: masterState, error: masterStateerror } = useCollection('m_states')
   const { documents: masterCountry, error: masterCountryerror } =
     useCollection("m_countries");
   // console.log('masterCountry:', masterCountry)
-  const [country, setCountry] = useState({ label: "INDIA", value: "INDIA" });
+  const [country, setCountry] = useState();
   const [countryList, setCountryList] = useState();
   const [state, setState] = useState();
   const [city, setCity] = useState();
@@ -48,53 +60,62 @@ export default function MasterSocietyList() {
     if (masterCountry) {
       countryOptions.current = masterCountry.map((countryData) => ({
         label: countryData.country,
-        value: countryData.country,
+        value: countryData.id,
       }));
+
+      console.log("countryOptions: ", countryOptions)
 
       countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
         a.label.localeCompare(b.label)
       );
 
+
       setCountryList(countryOptionsSorted.current);
 
-      handleCountryChange(country);
+      setCountry({
+        label: countryOptionsSorted.current[0].label,
+        value: countryOptionsSorted.current[0].value,
+      })
+
+      handleCountryChange({
+        label: countryOptionsSorted.current[0].label,
+        value: countryOptionsSorted.current[0].value,
+      });
     }
   }, [masterCountry]);
 
   //Country select onchange
   const handleCountryChange = async (option) => {
-    setCountry(option);
+    // setCountry(option);
     let countryname = option.label;
-    // console.log('countryname:', countryname)
+    console.log('countryname:', countryname)
+    const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
+    console.log('countryid:', countryid)
     const ref = await projectFirestore
       .collection("m_states")
-      .where("country", "==", countryname);
+      .where("country", "==", countryid);
     ref.onSnapshot(
       async (snapshot) => {
         if (snapshot.docs) {
           stateOptions.current = snapshot.docs.map((stateData) => ({
             label: stateData.data().state,
-            value: stateData.data().state,
+            value: stateData.id,
           }));
           // console.log('stateOptions:', stateOptions)
           stateOptionsSorted.current = stateOptions.current.sort((a, b) =>
             a.label.localeCompare(b.label)
           );
 
-          // console.log('stateOptionsSorted.current:', stateOptionsSorted.current)
-          if (countryname === "INDIA") {
-            setState({ label: "DELHI", value: "DELHI" });
-            handleStateChange({ label: "DELHI", value: "DELHI" });
-          } else {
-            setState({
-              label: stateOptionsSorted.current[0].label,
-              value: stateOptionsSorted.current[0].value,
-            });
-            handleStateChange({
-              label: stateOptionsSorted.current[0].label,
-              value: stateOptionsSorted.current[0].value,
-            });
-          }
+
+          setState({
+            label: stateOptionsSorted.current[0].label,
+            value: stateOptionsSorted.current[0].value,
+          });
+          handleStateChange({
+            label: stateOptionsSorted.current[0].label,
+            value: stateOptionsSorted.current[0].value,
+          });
+
         } else {
           // setError('No such document exists')
         }
@@ -111,34 +132,32 @@ export default function MasterSocietyList() {
     setState(option);
     // console.log('option.label:', option.label)
     let statename = option.label;
-
+    // console.log('statename:', statename)
+    const stateid = dbstatesdocuments && dbstatesdocuments.find((e) => e.state === statename).id
+    // console.log('stateid:', stateid)
     const ref = await projectFirestore
       .collection("m_cities")
-      .where("state", "==", statename);
+      .where("state", "==", stateid);
     ref.onSnapshot(
       async (snapshot) => {
         if (snapshot.docs) {
           cityOptions.current = snapshot.docs.map((cityData) => ({
             label: cityData.data().city,
-            value: cityData.data().city,
+            value: cityData.id,
           }));
           cityOptionsSorted.current = cityOptions.current.sort((a, b) =>
             a.label.localeCompare(b.label)
           );
 
-          if (statename === "DELHI") {
-            setCity({ label: "DELHI", value: "DELHI" });
-            handleCityChange({ label: "DELHI", value: "DELHI" });
-          } else {
-            setCity({
-              label: cityOptionsSorted.current[0].label,
-              value: cityOptionsSorted.current[0].value,
-            });
-            handleCityChange({
-              label: cityOptionsSorted.current[0].label,
-              value: cityOptionsSorted.current[0].value,
-            });
-          }
+          setCity({
+            label: cityOptionsSorted.current[0].label,
+            value: cityOptionsSorted.current[0].value,
+          });
+          handleCityChange({
+            label: cityOptionsSorted.current[0].label,
+            value: cityOptionsSorted.current[0].value,
+          });
+
         } else {
           // setError('No such document exists')
         }
@@ -153,20 +172,26 @@ export default function MasterSocietyList() {
   const handleCityChange = async (option) => {
     setCity(option);
     let cityname = option.label;
-    // console.log('statename:', statename)
+    console.log('cityname:', cityname)
+    const cityid = dbcitiesdocuments && dbcitiesdocuments.find((e) => e.city === cityname).id
+    console.log('cityid:', cityid)
     const ref = await projectFirestore
       .collection("m_localities")
-      .where("city", "==", cityname);
+      .where("city", "==", cityid);
     ref.onSnapshot(
       async (snapshot) => {
         if (snapshot.docs) {
+          console.log("snapshot.docs: ", snapshot.docs)
           localityOptions.current = snapshot.docs.map((localityData) => ({
             label: localityData.data().locality,
-            value: localityData.data().locality,
+            value: localityData.id,
           }));
+
           localityOptionsSorted.current = localityOptions.current.sort((a, b) =>
             a.label.localeCompare(b.label)
           );
+
+          console.log("localityOptionsSorted: ", localityOptionsSorted)
 
           setLocality({
             label: localityOptionsSorted.current[0].label,
@@ -174,6 +199,8 @@ export default function MasterSocietyList() {
           });
         } else {
           // setError('No such document exists')
+
+          localityOptionsSorted = null
         }
       },
       (err) => {
@@ -188,14 +215,14 @@ export default function MasterSocietyList() {
     e.preventDefault();
     setFormError(null);
 
-    let societyname = society.trim().toUpperCase();
+    let societyname = camelCase(society.trim());
 
     if (currentDocid) {
       await updateDocument(currentDocid, {
-        country: country.label,
-        state: state.label,
-        city: city.label,
-        locality: locality.label,
+        country: country.value,
+        state: state.value,
+        city: city.value,
+        locality: locality.value,
         society: societyname,
       });
       setFormError("Successfully updated");
@@ -210,10 +237,10 @@ export default function MasterSocietyList() {
 
         if (results.length === 0) {
           const dataSet = {
-            country: country.label,
-            state: state.label,
-            city: city.label,
-            locality: locality.label,
+            country: country.value,
+            state: state.value,
+            city: city.value,
+            locality: locality.value,
             society: societyname,
             status: "active",
           };
@@ -265,12 +292,19 @@ export default function MasterSocietyList() {
     docsociety
   ) => {
     // console.log('data:', data)
+    // console.log("country id: ", doccountry)
+    const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
+    // console.log("country name: ", countryname)
+    const statename = (dbstatesdocuments && dbstatesdocuments.find((e) => e.id === docstate)).state
+    const cityname = (dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === doccity)).city
+    const localityname = (dblocalitiesdocuments && dblocalitiesdocuments.find((e) => e.id === doclocality)).locality
+
     window.scrollTo(0, 0);
     setFormError(null);
-    setCountry({ label: doccountry, value: doccountry });
-    setState({ label: docstate, value: docstate });
-    setCity({ label: doccity, value: doccity });
-    setLocality({ label: doclocality, value: doclocality });
+    setCountry({ label: countryname, value: doccountry });
+    setState({ label: statename, value: docstate });
+    setCity({ label: cityname, value: doccity });
+    setLocality({ label: localityname, value: doclocality });
     setSociety(docsociety);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update Society");
@@ -605,8 +639,13 @@ export default function MasterSocietyList() {
                                       transform: "translateY(5px)",
                                     }}
                                   >
-                                    {data.locality}, {data.city}, {data.state},{" "}
-                                    {data.country}
+                                    {/* {dblocalitiesdocuments[2].id} */}
+                                    {(dblocalitiesdocuments && dblocalitiesdocuments.find((e) => e.id === data.locality)).locality},
+                                    {" "}
+                                    {/* {data.city}, */}
+                                    {(dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === data.city)).city},{" "}
+                                    {(dbstatesdocuments && dbstatesdocuments.find((e) => e.id === data.state)).state},{" "}
+                                    {(masterCountry && masterCountry.find((e) => e.id === data.country)).country}
                                   </small>
                                 </div>
                                 <div
