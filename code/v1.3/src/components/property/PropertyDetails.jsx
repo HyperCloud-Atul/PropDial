@@ -4670,7 +4670,7 @@ const PropertyDetails = () => {
                                 {!isEditingOwnerInstruction &&
                                   user &&
                                   user.status === "active" &&
-                                  user.role == "admin" && (
+                                  (user.role === "admin" || user.role === "superAdmin") && (
                                     <span
                                       class="material-symbols-outlined click_icon text_near_icon"
                                       onClick={() =>
