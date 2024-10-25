@@ -10,6 +10,7 @@ import { useDocument } from "../../hooks/useDocument";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import ReactTable from "../../components/ReactTable";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useCollection } from "../../hooks/useCollection";
 
 const UpdateEnquiry = () => {
   const { id } = useParams();
@@ -17,10 +18,14 @@ const UpdateEnquiry = () => {
   const navigate = useNavigate();
   const { updateDocument, error: updateDocumentError } =
     useFirestore("enquiry-propdial");
+    
   const { document: enquiryDocument, error: enquiryDocError } = useDocument(
     "enquiry-propdial",
     id
   );
+  // get user collection 
+  const { documents: userDocs, error: userDocsError } = useCollection("users-propdial");
+
 
   const [enquiryFrom, setEnquiryFrom] = useState("");
   const [referredBy, setReferredBy] = useState("");
@@ -268,8 +273,16 @@ const submitEnquiry = async (event) => {
       {
         Header: "Updated By",
         accessor: "updatedBy",
+        Cell: ({ value }) =>        
+          
+          // {(userDocs && userDocs.find((e) => e.uid === value)).fullName},
+          // <span className="text-capitalize">{value}</span>,
+          <span className="text-capitalize">{value && userDocs && (userDocs &&  userDocs.find((e) => e.id === value)).fullName}</span>,
+
         disableFilters: true,
       },
+      
+      
     ],
     []
   );

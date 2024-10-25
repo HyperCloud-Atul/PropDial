@@ -62,7 +62,7 @@ const PGSearchProperty = () => {
   //   .filter((property) => ((activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" : property.flag.toLowerCase() === "available for sale") && (property.category === activeCategory)))
   //   .slice(0, 3);
   const filteredPropdialPropertiesRecent = propdialProperties && propdialProperties
-    .filter((property) => (
+    .filter((property) => (property.isActiveInactiveReview.toLowerCase() === "active" &&
       (activeOption === "Rent" ? property.flag.toLowerCase() === "available for rent" || property.flag.toLowerCase() === "rent and sale" :
         (activeOption === "Sale" ? property.flag.toLowerCase() === "available for sale" || property.flag.toLowerCase() === "rent and sale" || property.flag.toLowerCase() === "rented but sale" :
           (activeOption === "RentSaleBoth" ? property.purpose === "RentSaleBoth" : true))) &&
@@ -93,7 +93,7 @@ const PGSearchProperty = () => {
     categoryMatch = property.category.toUpperCase() === activeCategory.toUpperCase();
 
     // Filter by purpose
-    purposeMatch = (activeOption === "Rent"
+    purposeMatch = property.isActiveInactiveReview.toLowerCase() === "active" && (activeOption === "Rent"
       ? property.flag.toLowerCase() === "available for rent" || property.flag.toLowerCase() === "rent and sale"
       : activeOption === "Sale"
         ? property.flag.toLowerCase() === "available for sale" || property.flag.toLowerCase() === "rent and sale" || property.flag.toLowerCase() === "rented but sale"

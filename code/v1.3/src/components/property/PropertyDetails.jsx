@@ -58,6 +58,9 @@ const PropertyDetails = () => {
     "enquiry-propdial",
     ["propId", "==", propertyid]
   );
+  // get user collection
+  const { documents: userDocs, error: userDocsError } =
+    useCollection("users-propdial");
   const [propertyManagerDoc, setpropertyManagerDoc] = useState(null);
   const [propertyOwnerDoc, setpropertyOwnerDoc] = useState(null);
   const [propertyCoOwnerDoc, setpropertyCoOwnerDoc] = useState(null);
@@ -65,11 +68,10 @@ const PropertyDetails = () => {
   const [propertyOnboardingDateFormatted, setPropertyOnboardingDateFormatted] =
     useState();
 
-  const { documents: dbUsers, error: dbuserserror } = useCollection("users-propdial", [
-    "status",
-    "==",
-    "active",
-  ]);
+  const { documents: dbUsers, error: dbuserserror } = useCollection(
+    "users-propdial",
+    ["status", "==", "active"]
+  );
 
   // add data of tenant in firebase start
   const { documents: tenantDocument, errors: tenantDocError } = useCollection(
@@ -445,8 +447,9 @@ const PropertyDetails = () => {
   };
   // share url code
   //---------------- Change Property Manager ----------------------
-  const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties-propdial");
+  const { updateDocument, response: updateDocumentResponse } = useFirestore(
+    "properties-propdial"
+  );
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(dbUsers);
@@ -715,17 +718,17 @@ const PropertyDetails = () => {
     const isAlreadyExist =
       _usertype === "propertyowner"
         ? propertyOwners &&
-        propertyOwners.filter(
-          (propuser) =>
-            propuser.userId === propertyDocument.createdBy &&
-            propuser.userType === _usertype
-        )
+          propertyOwners.filter(
+            (propuser) =>
+              propuser.userId === propertyDocument.createdBy &&
+              propuser.userType === _usertype
+          )
         : propertyManagers &&
-        propertyManagers.filter(
-          (propuser) =>
-            propuser.userId === propertyDocument.createdBy &&
-            propuser.userType === _usertype
-        );
+          propertyManagers.filter(
+            (propuser) =>
+              propuser.userId === propertyDocument.createdBy &&
+              propuser.userType === _usertype
+          );
 
     // console.log('isAlreadyExist: ', isAlreadyExist)
 
@@ -785,7 +788,7 @@ const PropertyDetails = () => {
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
     RichTextEditor.createValueFromString(
       propertyDocument &&
-      propertyDocument.ownerInstructions + editedOwnerInstruction,
+        propertyDocument.ownerInstructions + editedOwnerInstruction,
       "html"
     )
   );
@@ -1020,6 +1023,25 @@ const PropertyDetails = () => {
 
   //   modal code end
 
+
+// get update by user start
+// const [reviewUser, setReviewUser] = useState(null);
+// const [activeUser, setActiveUser] = useState(null);
+// const [inactiveUser, setInactiveUser] = useState(null);
+
+// useEffect(() => {
+//   if (userDocs && propertyDocument) {
+//     const reviewUpdater = userDocs.find((user) => user.id === propertyDocument.isReviewUpdateBy);
+//     const activeUpdater = userDocs.find((user) => user.id === propertyDocument.isActiveUpdatedBy);
+//     const inactiveUpdater = userDocs.find((user) => user.id === propertyDocument.isInactiveUpdateBy);
+
+//     setReviewUser(reviewUpdater || null);
+//     setActiveUser(activeUpdater || null);
+//     setInactiveUser(inactiveUpdater || null);
+//   }
+// }, [userDocs, propertyDocument]);
+// get update by user end
+
   return (
     <>
       {/* Change User Popup - Start */}
@@ -1111,14 +1133,16 @@ const PropertyDetails = () => {
       </div>
       {/* Change User Popup - End */}
       {/* 9 dots html start  */}
-      {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-        <div
-          onClick={openMoreAddOptions}
-          className="property-list-add-property"
-        >
-          <span className="material-symbols-outlined">apps</span>
-        </div>
-      )}
+      {user &&
+        user.status === "active" &&
+        (user.role === "admin" || user.role === "superAdmin") && (
+          <div
+            onClick={openMoreAddOptions}
+            className="property-list-add-property"
+          >
+            <span className="material-symbols-outlined">apps</span>
+          </div>
+        )}
       <div
         className={
           handleMoreOptionsClick
@@ -1155,14 +1179,16 @@ const PropertyDetails = () => {
         </div>
       </div>
       {/* 9 dots html end*/}
-      {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-        <Link
-          to={`/updateproperty/${propertyid}`}
-          className="property-list-add-property with_9dot"
-        >
-          <span class="material-symbols-outlined">edit_square</span>
-        </Link>
-      )}
+      {user &&
+        user.status === "active" &&
+        (user.role === "admin" || user.role === "superAdmin") && (
+          <Link
+            to={`/updateproperty/${propertyid}`}
+            className="property-list-add-property with_9dot"
+          >
+            <span class="material-symbols-outlined">edit_square</span>
+          </Link>
+        )}
 
       <div div className="pg_property pd_single pg_bg">
         <div className="page_spacing full_card_width">
@@ -1178,409 +1204,456 @@ const PropertyDetails = () => {
           <div className="property_cards">
             {propertyDocument && (
               <div className="">
-                {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-                  // <div className="property_card_single quick_detail_show mobile_full_card">
-                  //   <div className="more_detail_card_inner">
-                  //     <div className="row align-items-center">
-                  //       <div className="col-6 col-md-9">
-                  //         <div className="left">
-                  //           <div className="qd_single">
-                  //             <span class="material-symbols-outlined">
-                  //               home
-                  //             </span>
-                  //             <h6>
-                  //               {propertyDocument.category}-{" "}
-                  //               {propertyDocument.bhk}
-                  //             </h6>
-                  //           </div>
-                  //         </div>
-                  //       </div>
-                  //       <div className="col-6 col-md-3">
-                  //         <div className="right">
-                  //           <div className="premium text-center">
-                  //             <img src="/assets/img/premium_img.jpg" alt="" />
-                  //             <h6>PMS Premium - PMS After Rent</h6>
-                  //             <h5>On Boarding 2nd Jan'22</h5>
-                  //           </div>
-                  //         </div>
-                  //       </div>
-                  //     </div>
-                  //   </div>
-                  // </div>
-                  <div className="property_card_single mobile_full_card overflow_unset">
-                    <div className="more_detail_card_inner">
-                      {/* <h2 className="card_title">About Property</h2> */}
-                      <div className="p_info">
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/VisitingDays.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Property Added Date</h6>
-                            <h5>
-                              {propertyDocument &&
-                                propertyOnboardingDateFormatted}
-                            </h5>
-                            {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}
-                          </div>
-                        </div>
-
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/package.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Package</h6>
-                            <h5>
-                              {propertyDocument && propertyDocument.package}
-                            </h5>
-                          </div>
-                        </div>
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/property_flag.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Property Flag</h6>
-                            <h5>{propertyDocument && propertyDocument.flag}</h5>
-                          </div>
-                        </div>
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/property_source.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Property Source</h6>
-                            <h5>
-                              {propertyDocument && propertyDocument.source}
-                            </h5>
-                          </div>
-                        </div>
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/ownership.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Ownership</h6>
-                            <h5>
-                              {propertyDocument && propertyDocument.ownership}
-                            </h5>
-                          </div>
-                        </div>
-                        {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && propertyDocument && (
-                          <div className="form_field st-2 outline">
-                            <div className="radio_group air">
-                              <div className="radio_group_single">
-                                <div
-                                  className={
-                                    propertyDocument.isActiveInactiveReview ===
-                                      "In-Review"
-                                      ? "custom_radio_button radiochecked"
-                                      : "custom_radio_button"
-                                  }
-                                >
-                                  <input
-                                    type="checkbox"
-                                    id={"toggleFlag_inreview" + propertyid}
-                                    // onClick={(e) =>
-                                    //   handleIsActiveInactiveReview(
-                                    //     e,
-                                    //     "In-Review"
-                                    //   )
-                                    // }
-                                    onClick={() =>
-                                      handleShowActiveReviewModal("In-Review")
-                                    } // Show modal on click
-                                  />
-                                  <label
-                                    htmlFor={"toggleFlag_inreview" + propertyid}
-                                    className="pointer"
-                                    s
-                                  >
-                                    <div className="radio_icon">
-                                      <span className="material-symbols-outlined add">
-                                        add
-                                      </span>
-                                      <span className="material-symbols-outlined check">
-                                        done
-                                      </span>
-                                    </div>
-
-                                    <div className="d-flex justify-content-between w-100 align-items-center">
-                                      <div>
-                                        {propertyDocument.isActiveInactiveReview ===
-                                          "In-Review"
-                                          ? "In-Review"
-                                          : "Make In-Review"}
-                                      </div>
-                                      <div>
-                                        {propertyDocument.isActiveInactiveReview ===
-                                          "In-Review" &&
-                                          propertyDocument.isReviewUpdatedAt && (
-                                            <div>
-                                              <div className="info_icon">
-                                                <span class="material-symbols-outlined">
-                                                  info
-                                                </span>
-                                                <div className="info_icon_inner">
-                                                  <b className="text_blue">
-                                                    In-Review
-                                                  </b>{" "}
-                                                  by <b>Sanskar Solanki</b> on,{" "}
-                                                  <b>
-                                                    {format(
-                                                      propertyDocument.isReviewUpdatedAt.toDate(),
-                                                      "dd-MMM-yy hh:mm a"
-                                                    )}
-                                                  </b>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          )}
-                                      </div>
-                                    </div>
-                                  </label>
-                                </div>
-                              </div>
-                              <div className="radio_group_single">
-                                <div
-                                  className={
-                                    propertyDocument.isActiveInactiveReview ===
-                                      "Active"
-                                      ? "custom_radio_button radiochecked"
-                                      : "custom_radio_button"
-                                  }
-                                >
-                                  <input
-                                    type="checkbox"
-                                    id={"toggleFlag_active" + propertyid}
-                                    // onClick={(e) =>
-                                    //   handleIsActiveInactiveReview(e, "Active")
-                                    // }
-                                    onClick={() =>
-                                      handleShowActiveReviewModal("Active")
-                                    } // Show modal on click
-                                  />
-                                  <label
-                                    htmlFor={"toggleFlag_active" + propertyid}
-                                    style={{
-                                      background:
-                                        propertyDocument.isActiveInactiveReview ===
-                                        "Active" && "var(--success-color)",
-                                    }}
-                                    className="pointer"
-                                  >
-                                    <div className="radio_icon">
-                                      <span className="material-symbols-outlined add">
-                                        add
-                                      </span>
-                                      <span className="material-symbols-outlined check">
-                                        done
-                                      </span>
-                                    </div>
-                                    <div className="d-flex justify-content-between w-100 align-items-center">
-                                      <div>
-                                        {propertyDocument.isActiveInactiveReview ===
-                                          "Active"
-                                          ? "Active"
-                                          : "Make Active"}
-                                      </div>
-                                      <div>
-                                        {propertyDocument.isActiveInactiveReview ===
-                                          "Active" &&
-                                          propertyDocument.isActiveUpdatedAt && (
-                                            <div>
-                                              <div className="info_icon">
-                                                <span class="material-symbols-outlined">
-                                                  info
-                                                </span>
-                                                <div className="info_icon_inner">
-                                                  <b className="text_green2">
-                                                    Active
-                                                  </b>{" "}
-                                                  by <b>Sanskar Solanki</b> on{" "}
-                                                  <b>
-                                                    {format(
-                                                      propertyDocument.isActiveUpdatedAt.toDate(),
-                                                      "dd-MMM-yy hh:mm a"
-                                                    )}
-                                                  </b>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          )}
-                                      </div>
-                                    </div>
-                                  </label>
-                                </div>
-                              </div>
-                              {/* Modal for confirmation */}
-                              <Modal
-                                show={showActiveReviewModal}
-                                onHide={handleCloseActiveReviewModal}
-                                centered
-                              >
-                                <Modal.Header
-                                  className="justify-content-center"
-                                  style={{
-                                    paddingBottom: "0px",
-                                    border: "none",
-                                  }}
-                                >
-                                  <h5>Confirmation</h5>
-                                </Modal.Header>
-                                <Modal.Body
-                                  className="text-center"
-                                  style={{
-                                    color: "#303030",
-                                    fontSize: "20px",
-                                    border: "none",
-                                  }}
-                                >
-                                  Are you sure you want to <span style={{ color: selectedAorROption === "Active" ? "var(--theme-green2)" : selectedAorROption === "In-Review" ? "var(--theme-blue)" : "inherit" }}>
-                                    Make This {selectedAorROption}?
-                                  </span>
-
-                                </Modal.Body>
-                                <Modal.Footer
-                                  className="d-grid"
-                                  style={{ border: "none", gap: "15px", gridTemplateColumns: "repeat(2,1fr)" }}
-                                >
-                                  <div
-                                    className="theme_btn btn_border no_icon text-center"
-                                    onClick={handleCloseActiveReviewModal}
-                                  >
-                                    No
-                                  </div>
-                                  <div
-                                    className={`theme_btn btn_fill no_icon text-center ${isProcessing && "disabled"
-                                      }`}
-                                    onClick={
-                                      !isProcessing ? handleConfirm : null
-                                    } // Disable click when processing
-                                  >
-                                    {isProcessing ? "Processing..." : "Yes"}
-                                  </div>
-                                </Modal.Footer>
-                              </Modal>
-                              <div className="radio_group_single">
-                                <div
-                                  className={
-                                    propertyDocument.isActiveInactiveReview ===
-                                      "Inactive"
-                                      ? "custom_radio_button radiochecked"
-                                      : "custom_radio_button"
-                                  }
-                                >
-                                  <input
-                                    type="checkbox"
-                                    id={"toggleFlag_inactive" + propertyid}
-                                    onClick={
-                                      propertyDocument.isActiveInactiveReview ===
-                                        "Inactive"
-                                        ? null // Disable onClick if already inactive
-                                        : handleShowWhyInactive
-                                    }
-                                  />
-                                  <label
-                                    htmlFor={"toggleFlag_inactive" + propertyid}
-                                    // style={{ paddingTop: "7px" }}
-                                    style={{
-                                      background:
-                                        propertyDocument.isActiveInactiveReview ===
-                                        "Inactive" && "var(--theme-red)",
-                                    }}
-                                    className="pointer"
-                                  >
-                                    <div className="radio_icon">
-                                      <span className="material-symbols-outlined add">
-                                        add
-                                      </span>
-                                      <span className="material-symbols-outlined check">
-                                        done
-                                      </span>
-                                    </div>
-                                    <div className="d-flex justify-content-between w-100 align-items-center">
-                                      <div>
-                                        {propertyDocument.isActiveInactiveReview ===
-                                          "Inactive"
-                                          ? "Inactive"
-                                          : "Make Inactive"}
-                                      </div>
-                                      <div>
-                                        {propertyDocument.isActiveInactiveReview ===
-                                          "Inactive" &&
-                                          propertyDocument.isInactiveUpdatedAt && (
-                                            <div>
-                                              <div className="info_icon">
-                                                <span class="material-symbols-outlined">
-                                                  info
-                                                </span>
-                                                <div className="info_icon_inner">
-                                                  <b className="text_red">
-                                                    Inactive
-                                                  </b>{" "}
-                                                  by <b>Sanskar Solanki</b> on,{" "}
-                                                  <b>
-                                                    {format(
-                                                      propertyDocument.isInactiveUpdatedAt.toDate(),
-                                                      "dd-MMM-yy hh:mm a"
-                                                    )}
-                                                  </b>
-                                                  , reason{" "}
-                                                  <b>
-                                                    {
-                                                      propertyDocument.resonForInactiveProperty
-                                                    }
-                                                  </b>{" "}
-                                                  <br />
-                                                  <div className="mt-1">
-                                                    "
-                                                    {
-                                                      propertyDocument.remarkForInactiveProperty
-                                                    }
-                                                    "
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          )}
-                                      </div>
-                                    </div>
-                                  </label>
-                                </div>
-                              </div>
+                {user &&
+                  user.status === "active" &&
+                  (user.role === "admin" || user.role === "superAdmin") && (
+                    // <div className="property_card_single quick_detail_show mobile_full_card">
+                    //   <div className="more_detail_card_inner">
+                    //     <div className="row align-items-center">
+                    //       <div className="col-6 col-md-9">
+                    //         <div className="left">
+                    //           <div className="qd_single">
+                    //             <span class="material-symbols-outlined">
+                    //               home
+                    //             </span>
+                    //             <h6>
+                    //               {propertyDocument.category}-{" "}
+                    //               {propertyDocument.bhk}
+                    //             </h6>
+                    //           </div>
+                    //         </div>
+                    //       </div>
+                    //       <div className="col-6 col-md-3">
+                    //         <div className="right">
+                    //           <div className="premium text-center">
+                    //             <img src="/assets/img/premium_img.jpg" alt="" />
+                    //             <h6>PMS Premium - PMS After Rent</h6>
+                    //             <h5>On Boarding 2nd Jan'22</h5>
+                    //           </div>
+                    //         </div>
+                    //       </div>
+                    //     </div>
+                    //   </div>
+                    // </div>
+                    <div className="property_card_single mobile_full_card overflow_unset">
+                      <div className="more_detail_card_inner">
+                        {/* <h2 className="card_title">About Property</h2> */}
+                        <div className="p_info">
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/VisitingDays.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Property Added Date</h6>
+                              <h5>
+                                {propertyDocument &&
+                                  propertyOnboardingDateFormatted}
+                              </h5>
+                              {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}
                             </div>
                           </div>
-                        )}
-                        <MakeInactivePopup
-                          show={showWhyInactive}
-                          handleClose={handleCloseWhyInactive}
-                          handleSelectedReasonChange={
-                            handleSelectedReasonChange
-                          }
-                          inactiveRemark={inactiveRemark}
-                          handleInactiveRemarkChange={
-                            handleInactiveRemarkChange
-                          }
-                          handleSaveChanges={saveReasonWhyInactive}
-                        />
-                        {/* <div className="p_info_single">
+
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/package.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Package</h6>
+                              <h5>
+                                {propertyDocument && propertyDocument.package}
+                              </h5>
+                            </div>
+                          </div>
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/property_flag.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Property Flag</h6>
+                              <h5>
+                                {propertyDocument && propertyDocument.flag}
+                              </h5>
+                            </div>
+                          </div>
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/property_source.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Property Source</h6>
+                              <h5>
+                                {propertyDocument && propertyDocument.source}
+                              </h5>
+                            </div>
+                          </div>
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/ownership.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Ownership</h6>
+                              <h5>
+                                {propertyDocument && propertyDocument.ownership}
+                              </h5>
+                            </div>
+                          </div>
+                          {user &&
+                            user.status === "active" &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") &&
+                            propertyDocument && (
+                              <div className="form_field st-2 outline">
+                                <div className="radio_group air">
+                                  <div className="radio_group_single">
+                                    <div
+                                      className={
+                                        propertyDocument.isActiveInactiveReview ===
+                                        "In-Review"
+                                          ? "custom_radio_button radiochecked"
+                                          : "custom_radio_button"
+                                      }
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        id={"toggleFlag_inreview" + propertyid}
+                                        // onClick={(e) =>
+                                        //   handleIsActiveInactiveReview(
+                                        //     e,
+                                        //     "In-Review"
+                                        //   )
+                                        // }
+                                        onClick={() =>
+                                          handleShowActiveReviewModal(
+                                            "In-Review"
+                                          )
+                                        } // Show modal on click
+                                      />
+                                      <label
+                                        htmlFor={
+                                          "toggleFlag_inreview" + propertyid
+                                        }
+                                        className="pointer"
+                                        s
+                                      >
+                                        <div className="radio_icon">
+                                          <span className="material-symbols-outlined add">
+                                            add
+                                          </span>
+                                          <span className="material-symbols-outlined check">
+                                            done
+                                          </span>
+                                        </div>
+
+                                        <div className="d-flex justify-content-between w-100 align-items-center">
+                                          <div>
+                                            {propertyDocument.isActiveInactiveReview ===
+                                            "In-Review"
+                                              ? "In-Review"
+                                              : "Make In-Review"}
+                                          </div>
+                                          <div>
+                                            {propertyDocument.isActiveInactiveReview ===
+                                              "In-Review" &&
+                                              propertyDocument.isReviewUpdatedAt && (
+                                                <div>
+                                                  <div className="info_icon">
+                                                    <span class="material-symbols-outlined">
+                                                      info
+                                                    </span>
+                                                    <div className="info_icon_inner">
+                                                      <b className="text_blue">
+                                                        In-Review
+                                                      </b>{" "}
+                                                      by{" "}
+                                                      <b>
+                                                      {reviewUser ? reviewUser.fullName : "Unknown"}                                                   
+                                                      
+                                                      </b>{" "}
+                                                      on,{" "}
+                                                      <b>
+                                                        {format(
+                                                          propertyDocument.isReviewUpdatedAt.toDate(),
+                                                          "dd-MMM-yy hh:mm a"
+                                                        )}
+                                                      </b>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )}
+                                          </div>
+                                        </div>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div className="radio_group_single">
+                                    <div
+                                      className={
+                                        propertyDocument.isActiveInactiveReview ===
+                                        "Active"
+                                          ? "custom_radio_button radiochecked"
+                                          : "custom_radio_button"
+                                      }
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        id={"toggleFlag_active" + propertyid}
+                                        // onClick={(e) =>
+                                        //   handleIsActiveInactiveReview(e, "Active")
+                                        // }
+                                        onClick={() =>
+                                          handleShowActiveReviewModal("Active")
+                                        } // Show modal on click
+                                      />
+                                      <label
+                                        htmlFor={
+                                          "toggleFlag_active" + propertyid
+                                        }
+                                        style={{
+                                          background:
+                                            propertyDocument.isActiveInactiveReview ===
+                                              "Active" &&
+                                            "var(--success-color)",
+                                        }}
+                                        className="pointer"
+                                      >
+                                        <div className="radio_icon">
+                                          <span className="material-symbols-outlined add">
+                                            add
+                                          </span>
+                                          <span className="material-symbols-outlined check">
+                                            done
+                                          </span>
+                                        </div>
+                                        <div className="d-flex justify-content-between w-100 align-items-center">
+                                          <div>
+                                            {propertyDocument.isActiveInactiveReview ===
+                                            "Active"
+                                              ? "Active"
+                                              : "Make Active"}
+                                          </div>
+                                          <div>
+                                            {propertyDocument.isActiveInactiveReview ===
+                                              "Active" &&
+                                              propertyDocument.isActiveUpdatedAt && (
+                                                <div>
+                                                  <div className="info_icon">
+                                                    <span class="material-symbols-outlined">
+                                                      info
+                                                    </span>
+                                                    <div className="info_icon_inner">
+                                                      <b className="text_green2">
+                                                        Active
+                                                      </b>{" "}
+                                                      by{" "}
+                                                      <b>                                                      
+                                                  {activeUser ? activeUser.fullName : "Unknown"}
+                                                      </b>{" "}
+                                                      on{" "}
+                                                      <b>
+                                                        {format(
+                                                          propertyDocument.isActiveUpdatedAt.toDate(),
+                                                          "dd-MMM-yy hh:mm a"
+                                                        )}
+                                                      </b>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )}
+                                          </div>
+                                        </div>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  {/* Modal for confirmation */}
+                                  <Modal
+                                    show={showActiveReviewModal}
+                                    onHide={handleCloseActiveReviewModal}
+                                    centered
+                                  >
+                                    <Modal.Header
+                                      className="justify-content-center"
+                                      style={{
+                                        paddingBottom: "0px",
+                                        border: "none",
+                                      }}
+                                    >
+                                      <h5>Confirmation</h5>
+                                    </Modal.Header>
+                                    <Modal.Body
+                                      className="text-center"
+                                      style={{
+                                        color: "#303030",
+                                        fontSize: "20px",
+                                        border: "none",
+                                      }}
+                                    >
+                                      Are you sure you want to{" "}
+                                      <span
+                                        style={{
+                                          color:
+                                            selectedAorROption === "Active"
+                                              ? "var(--theme-green2)"
+                                              : selectedAorROption ===
+                                                "In-Review"
+                                              ? "var(--theme-blue)"
+                                              : "inherit",
+                                        }}
+                                      >
+                                        Make This {selectedAorROption}?
+                                      </span>
+                                    </Modal.Body>
+                                    <Modal.Footer
+                                      className="d-grid"
+                                      style={{
+                                        border: "none",
+                                        gap: "15px",
+                                        gridTemplateColumns: "repeat(2,1fr)",
+                                      }}
+                                    >
+                                      <div
+                                        className="theme_btn btn_border no_icon text-center"
+                                        onClick={handleCloseActiveReviewModal}
+                                      >
+                                        No
+                                      </div>
+                                      <div
+                                        className={`theme_btn btn_fill no_icon text-center ${
+                                          isProcessing && "disabled"
+                                        }`}
+                                        onClick={
+                                          !isProcessing ? handleConfirm : null
+                                        } // Disable click when processing
+                                      >
+                                        {isProcessing ? "Processing..." : "Yes"}
+                                      </div>
+                                    </Modal.Footer>
+                                  </Modal>
+                                  <div className="radio_group_single">
+                                    <div
+                                      className={
+                                        propertyDocument.isActiveInactiveReview ===
+                                        "Inactive"
+                                          ? "custom_radio_button radiochecked"
+                                          : "custom_radio_button"
+                                      }
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        id={"toggleFlag_inactive" + propertyid}
+                                        onClick={
+                                          propertyDocument.isActiveInactiveReview ===
+                                          "Inactive"
+                                            ? null // Disable onClick if already inactive
+                                            : handleShowWhyInactive
+                                        }
+                                      />
+                                      <label
+                                        htmlFor={
+                                          "toggleFlag_inactive" + propertyid
+                                        }
+                                        // style={{ paddingTop: "7px" }}
+                                        style={{
+                                          background:
+                                            propertyDocument.isActiveInactiveReview ===
+                                              "Inactive" && "var(--theme-red)",
+                                        }}
+                                        className="pointer"
+                                      >
+                                        <div className="radio_icon">
+                                          <span className="material-symbols-outlined add">
+                                            add
+                                          </span>
+                                          <span className="material-symbols-outlined check">
+                                            done
+                                          </span>
+                                        </div>
+                                        <div className="d-flex justify-content-between w-100 align-items-center">
+                                          <div>
+                                            {propertyDocument.isActiveInactiveReview ===
+                                            "Inactive"
+                                              ? "Inactive"
+                                              : "Make Inactive"}
+                                          </div>
+                                          <div>
+                                            {propertyDocument.isActiveInactiveReview ===
+                                              "Inactive" &&
+                                              propertyDocument.isInactiveUpdatedAt && (
+                                                <div>
+                                                  <div className="info_icon">
+                                                    <span class="material-symbols-outlined">
+                                                      info
+                                                    </span>
+                                                    <div className="info_icon_inner">
+                                                      <b className="text_red">
+                                                        Inactive
+                                                      </b>{" "}
+                                                      by{" "}
+                                                      <b>
+                                                        {/* {(userDocs && userDocs.find((e) => e.id === propertyDocument.isInactiveUpdateBy))
+                                                  .fullName}                              */}
+                                                    {inactiveUser ? inactiveUser.fullName : "Unknown"}
+                                                      </b>{" "}
+                                                      on,{" "}
+                                                      <b>
+                                                        {format(
+                                                          propertyDocument.isInactiveUpdatedAt.toDate(),
+                                                          "dd-MMM-yy hh:mm a"
+                                                        )}
+                                                      </b>
+                                                      , reason{" "}
+                                                      <b>
+                                                        {
+                                                          propertyDocument.resonForInactiveProperty
+                                                        }
+                                                      </b>{" "}
+                                                      <br />
+                                                      <div className="mt-1">
+                                                        "
+                                                        {
+                                                          propertyDocument.remarkForInactiveProperty
+                                                        }
+                                                        "
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )}
+                                          </div>
+                                        </div>
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          <MakeInactivePopup
+                            show={showWhyInactive}
+                            handleClose={handleCloseWhyInactive}
+                            handleSelectedReasonChange={
+                              handleSelectedReasonChange
+                            }
+                            inactiveRemark={inactiveRemark}
+                            handleInactiveRemarkChange={
+                              handleInactiveRemarkChange
+                            }
+                            handleSaveChanges={saveReasonWhyInactive}
+                          />
+                          {/* <div className="p_info_single">
                             <div className="pd_icon">
                               <img src="/assets/img/property-detail-icon/Purpose.png" alt="" />
                             </div>
@@ -1589,10 +1662,10 @@ const PropertyDetails = () => {
                               <h5>Rent</h5>
                             </div>
                           </div> */}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 <div className="property_card_single mobile_full_card">
                   <div className="pcs_inner pointer" to="/pdsingle">
@@ -1618,59 +1691,64 @@ const PropertyDetails = () => {
                           alt=""
                         />
                       )}
-                      {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-                        <div
-                          className="d-flex align-items-center justify-content-center gap-2"
-                          style={{ margin: "15px 0px" }}
-                        >
-                          <input
-                            type="file"
-                            accept="image/*"
-                            id="imageInput"
-                            onChange={handleImageChange}
-                            style={{ display: "none" }}
-                            ref={fileInputRef}
-                          />
-                          {!isUploading && (
-                            <button
-                              className="theme_btn btn_fill no_icon"
-                              onClick={handleAddMoreImages}
-                            >
-                              {isConfirmVisible
-                                ? "Replace Image"
-                                : "Add More Images"}
-                            </button>
-                          )}
-
-                          {selectedImage && (
-                            <img
-                              src={selectedImage}
-                              alt="Selected img"
-                              style={{
-                                maxWidth: "100px",
-                                maxHeight: "100px",
-                                borderRadius: "10px",
-                              }}
+                      {user &&
+                        user.status === "active" &&
+                        (user.role === "admin" ||
+                          user.role === "superAdmin") && (
+                          <div
+                            className="d-flex align-items-center justify-content-center gap-2"
+                            style={{ margin: "15px 0px" }}
+                          >
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="imageInput"
+                              onChange={handleImageChange}
+                              style={{ display: "none" }}
+                              ref={fileInputRef}
                             />
-                          )}
-                          {selectedImage && (
-                            <button
-                              className="theme_btn btn_fill no_icon"
-                              onClick={handleConfirmUpload}
-                              disabled={!isConfirmVisible || isUploading} // Disable button when uploading
-                            >
-                              {isUploading ? "Uploading..." : "Confirm"}
-                            </button>
-                          )}
-                        </div>
-                      )}
+                            {!isUploading && (
+                              <button
+                                className="theme_btn btn_fill no_icon"
+                                onClick={handleAddMoreImages}
+                              >
+                                {isConfirmVisible
+                                  ? "Replace Image"
+                                  : "Add More Images"}
+                              </button>
+                            )}
+
+                            {selectedImage && (
+                              <img
+                                src={selectedImage}
+                                alt="Selected img"
+                                style={{
+                                  maxWidth: "100px",
+                                  maxHeight: "100px",
+                                  borderRadius: "10px",
+                                }}
+                              />
+                            )}
+                            {selectedImage && (
+                              <button
+                                className="theme_btn btn_fill no_icon"
+                                onClick={handleConfirmUpload}
+                                disabled={!isConfirmVisible || isUploading} // Disable button when uploading
+                              >
+                                {isUploading ? "Uploading..." : "Confirm"}
+                              </button>
+                            )}
+                          </div>
+                        )}
                     </div>
                     <div className="pcs_main_detail">
                       <div className="pmd_top">
                         <h4>
-                          {user && user.status === "active" && user.role !== "guest" && (
-                            <>{propertyDocument.unitNumber},</>
-                          )}{" "}
+                          {user &&
+                            user.status === "active" &&
+                            user.role !== "guest" && (
+                              <>{propertyDocument.unitNumber},</>
+                            )}{" "}
                           {propertyDocument.society}
                         </h4>
                         {/* <h6>
@@ -1710,7 +1788,7 @@ const PropertyDetails = () => {
                         <h4 className="property_name">
                           {propertyDocument.bhk} | For{" "}
                           {propertyDocument.purpose.toLowerCase() ===
-                            "rentsaleboth"
+                          "rentsaleboth"
                             ? "Rent / Sale"
                             : propertyDocument.purpose}
                           {/* {propertyDocument.furnishing === ""
@@ -1735,24 +1813,24 @@ const PropertyDetails = () => {
                             <span className="currency">₹</span>
                             {propertyDocument.flag.toLowerCase() ===
                               "pms only" ||
-                              propertyDocument.flag.toLowerCase() ===
+                            propertyDocument.flag.toLowerCase() ===
                               "available for rent" ||
-                              propertyDocument.flag.toLowerCase() === "rented out"
+                            propertyDocument.flag.toLowerCase() === "rented out"
                               ? new Intl.NumberFormat("en-IN").format(
-                                propertyDocument.demandPriceRent
-                              )
+                                  propertyDocument.demandPriceRent
+                                )
                               : propertyDocument.flag.toLowerCase() ===
-                                "rent and sale" ||
+                                  "rent and sale" ||
                                 propertyDocument.flag.toLowerCase() ===
-                                "rented but sale"
-                                ? new Intl.NumberFormat("en-IN").format(
+                                  "rented but sale"
+                              ? new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceRent
                                 ) +
                                 " / ₹" +
                                 new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceSale
                                 )
-                                : new Intl.NumberFormat("en-IN").format(
+                              : new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceSale
                                 )}
 
@@ -1766,24 +1844,24 @@ const PropertyDetails = () => {
                           <h6>
                             {propertyDocument.flag.toLowerCase() ===
                               "pms only" ||
-                              propertyDocument.flag.toLowerCase() ===
+                            propertyDocument.flag.toLowerCase() ===
                               "available for rent" ||
-                              propertyDocument.flag.toLowerCase() === "rented out"
+                            propertyDocument.flag.toLowerCase() === "rented out"
                               ? "Demand Price"
                               : propertyDocument.flag.toLowerCase() ===
-                                "rent and sale" ||
+                                  "rent and sale" ||
                                 propertyDocument.flag.toLowerCase() ===
-                                "rented but sale"
-                                ? "Demand Rent / Sale"
-                                : "Demand Price"}
+                                  "rented but sale"
+                              ? "Demand Rent / Sale"
+                              : "Demand Price"}
                           </h6>
                         </div>
                         {propertyDocument &&
                           (propertyDocument.purpose.toLowerCase() === "rent" ||
                             propertyDocument.purpose.toLowerCase() ===
-                            "rentsaleboth") &&
+                              "rentsaleboth") &&
                           (propertyDocument.maintenanceFlag.toLowerCase() ===
-                            "included" ? (
+                          "included" ? (
                             <div className="pdms_single">
                               <h4>Included</h4>
                               <h6>Maintenance</h6>
@@ -1809,7 +1887,7 @@ const PropertyDetails = () => {
                         {propertyDocument &&
                           (propertyDocument.purpose.toLowerCase() === "rent" ||
                             propertyDocument.purpose.toLowerCase() ===
-                            "rentsaleboth") && (
+                              "rentsaleboth") && (
                             <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
@@ -1853,7 +1931,7 @@ const PropertyDetails = () => {
                             <img src="/assets/img/new_carpet.png"></img>
                             {propertyDocument.superArea}
                             {propertyDocument.superArea &&
-                              propertyDocument.carpetArea !== "0"
+                            propertyDocument.carpetArea !== "0"
                               ? "/"
                               : ""}
                             {propertyDocument.carpetArea}
@@ -1868,7 +1946,7 @@ const PropertyDetails = () => {
                           <h6>
                             {propertyDocument.superArea && "Super Area"}
                             {propertyDocument.superArea &&
-                              propertyDocument.carpetArea !== "0"
+                            propertyDocument.carpetArea !== "0"
                               ? "/"
                               : ""}
                             {propertyDocument.carpetArea !== "0" &&
@@ -1908,8 +1986,7 @@ const PropertyDetails = () => {
                           </div>
                         </div>
 
-                    
-                            {/* <div className="right">
+                        {/* <div className="right">
                               <div
                                 className="theme_btn no_icon btn_fill"
                                 style={{ padding: "5px 20px" }}
@@ -1969,10 +2046,11 @@ const PropertyDetails = () => {
                 )}
 
                 {user &&
-                user.status === "active" &&
+                  user.status === "active" &&
                   (user.role === "owner" ||
                     user.role === "coowner" ||
-                    (user.role === "admin" || user.role === "superAdmin")) && (
+                    user.role === "admin" ||
+                    user.role === "superAdmin") && (
                     <div className="extra_info_card_property">
                       <Swiper
                         spaceBetween={15}
@@ -2367,128 +2445,139 @@ const PropertyDetails = () => {
                     }
                   ></PropertyLayoutComponent>
                 )}
-                {propertyLayouts && (propertyLayouts.length > 0 || (user && (user.role === "admin" || user.role === "superAdmin"))) && (
-                  <section className="property_card_single full_width_sec with_blue">
-                    <span className="verticall_title">
-                      Layout : {propertyLayouts && propertyLayouts.length}
-                    </span>
-                    <div className="more_detail_card_inner">
-                      <div className="row">
-                        {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-                          <div
-                            className="col-sm-1 col-2"
-                            style={{
-                              paddingRight: "0px",
-                            }}
-                          >
-                            <div className="plus_icon">
-                              <Link
-                                className="plus_icon_inner"
-                                onClick={handleShowPropertyLayoutComponent}
+                {propertyLayouts &&
+                  (propertyLayouts.length > 0 ||
+                    (user &&
+                      (user.role === "admin" ||
+                        user.role === "superAdmin"))) && (
+                    <section className="property_card_single full_width_sec with_blue">
+                      <span className="verticall_title">
+                        Layout : {propertyLayouts && propertyLayouts.length}
+                      </span>
+                      <div className="more_detail_card_inner">
+                        <div className="row">
+                          {user &&
+                            user.status === "active" &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") && (
+                              <div
+                                className="col-sm-1 col-2"
+                                style={{
+                                  paddingRight: "0px",
+                                }}
                               >
-                                <span class="material-symbols-outlined">
-                                  add
-                                </span>
-                              </Link>
-                            </div>
-                          </div>
-                        )}
-                        <div
-                          className={`${user  && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
-                            ? "col-sm-11 col-10"
-                            : "col-12"
+                                <div className="plus_icon">
+                                  <Link
+                                    className="plus_icon_inner"
+                                    onClick={handleShowPropertyLayoutComponent}
+                                  >
+                                    <span class="material-symbols-outlined">
+                                      add
+                                    </span>
+                                  </Link>
+                                </div>
+                              </div>
+                            )}
+                          <div
+                            className={`${
+                              user &&
+                              user.status === "active" &&
+                              (user.role === "admin" ||
+                                user.role === "superAdmin")
+                                ? "col-sm-11 col-10"
+                                : "col-12"
                             }`}
-                        >
-                          <div className="property_layout_card">
-                            <Swiper
-                              spaceBetween={15}
-                              slidesPerView={2.5}
-                              pagination={false}
-                              freeMode={true}
-                              className="all_tenants"
-                              breakpoints={{
-                                320: {
-                                  slidesPerView: 1.1,
-                                  spaceBetween: 10,
-                                },
-                                767: {
-                                  slidesPerView: 1.5,
-                                  spaceBetween: 15,
-                                },
-                                991: {
-                                  slidesPerView: 2.5,
-                                  spaceBetween: 15,
-                                },
-                              }}
-                            >
-                              {propertyLayouts &&
-                                propertyLayouts.map((room, index) => (
-                                  <SwiperSlide key={index}>
-                                    <div className="ai_detail_show">
-                                      <div className="left relative">
-                                        {(() => {
-                                          if (room.roomType === "Bedroom") {
-                                            return (
-                                              <img
-                                                src="/assets/img/icons/illustrate_bedroom.jpg"
-                                                alt={room.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            room.roomType === "Kitchen"
-                                          ) {
-                                            return (
-                                              <img
-                                                src="/assets/img/icons/illustrate_kitchen.jpg"
-                                                alt={room.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            room.roomType === "Living Room"
-                                          ) {
-                                            return (
-                                              <img
-                                                src="/assets/img/icons/illustrate_livingroom.jpg"
-                                                alt={room.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            room.roomType === "Bathroom"
-                                          ) {
-                                            return (
-                                              <img
-                                                src="/assets/img/icons/illustrate_bathroom.jpg"
-                                                alt={room.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            room.roomType === "Dining Room"
-                                          ) {
-                                            return (
-                                              <img
-                                                src="/assets/img/icons/illustrate_dining.jpg"
-                                                alt={room.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            room.roomType === "Balcony"
-                                          ) {
-                                            return (
-                                              <img
-                                                src="/assets/img/icons/illustrate_balcony.jpg"
-                                                alt={room.roomType}
-                                              />
-                                            );
-                                          } else {
-                                            return (
-                                              <img
-                                                src="/assets/img/icons/illustrate_basment.jpg"
-                                                alt={room.roomType}
-                                              />
-                                            );
-                                          }
-                                        })()}
-                                        {/* {user && (user.role === "admin" || user.role === "superAdmin") && (
+                          >
+                            <div className="property_layout_card">
+                              <Swiper
+                                spaceBetween={15}
+                                slidesPerView={2.5}
+                                pagination={false}
+                                freeMode={true}
+                                className="all_tenants"
+                                breakpoints={{
+                                  320: {
+                                    slidesPerView: 1.1,
+                                    spaceBetween: 10,
+                                  },
+                                  767: {
+                                    slidesPerView: 1.5,
+                                    spaceBetween: 15,
+                                  },
+                                  991: {
+                                    slidesPerView: 2.5,
+                                    spaceBetween: 15,
+                                  },
+                                }}
+                              >
+                                {propertyLayouts &&
+                                  propertyLayouts.map((room, index) => (
+                                    <SwiperSlide key={index}>
+                                      <div className="ai_detail_show">
+                                        <div className="left relative">
+                                          {(() => {
+                                            if (room.roomType === "Bedroom") {
+                                              return (
+                                                <img
+                                                  src="/assets/img/icons/illustrate_bedroom.jpg"
+                                                  alt={room.roomType}
+                                                />
+                                              );
+                                            } else if (
+                                              room.roomType === "Kitchen"
+                                            ) {
+                                              return (
+                                                <img
+                                                  src="/assets/img/icons/illustrate_kitchen.jpg"
+                                                  alt={room.roomType}
+                                                />
+                                              );
+                                            } else if (
+                                              room.roomType === "Living Room"
+                                            ) {
+                                              return (
+                                                <img
+                                                  src="/assets/img/icons/illustrate_livingroom.jpg"
+                                                  alt={room.roomType}
+                                                />
+                                              );
+                                            } else if (
+                                              room.roomType === "Bathroom"
+                                            ) {
+                                              return (
+                                                <img
+                                                  src="/assets/img/icons/illustrate_bathroom.jpg"
+                                                  alt={room.roomType}
+                                                />
+                                              );
+                                            } else if (
+                                              room.roomType === "Dining Room"
+                                            ) {
+                                              return (
+                                                <img
+                                                  src="/assets/img/icons/illustrate_dining.jpg"
+                                                  alt={room.roomType}
+                                                />
+                                              );
+                                            } else if (
+                                              room.roomType === "Balcony"
+                                            ) {
+                                              return (
+                                                <img
+                                                  src="/assets/img/icons/illustrate_balcony.jpg"
+                                                  alt={room.roomType}
+                                                />
+                                              );
+                                            } else {
+                                              return (
+                                                <img
+                                                  src="/assets/img/icons/illustrate_basment.jpg"
+                                                  alt={room.roomType}
+                                                />
+                                              );
+                                            }
+                                          })()}
+                                          {/* {user && (user.role === "admin" || user.role === "superAdmin") && (
                                         <label htmlFor="imgupload" className="upload_img click_text by_text">
                                           Upload img
                                           <input
@@ -2497,206 +2586,209 @@ const PropertyDetails = () => {
                                           />
                                         </label>
                                       )} */}
-                                      </div>
-                                      <div className="right">
-                                        <h5>{room.roomName}</h5>
-                                        <div className="in_detail">
-                                          <span className="in_single">
-                                            Area: {room.roomTotalArea} SqFt
-                                          </span>
-                                          <span className="in_single">
-                                            Length: {room.roomLength} Ft
-                                          </span>
-                                          <span className="in_single">
-                                            Width: {room.roomWidth} Ft
-                                          </span>
-                                          {room.roomFixtures &&
-                                            room.roomFixtures.map(
-                                              (fixture, findex) => (
-                                                <span
-                                                  className="in_single"
-                                                  key={findex}
-                                                >
-                                                  {fixture}
-                                                </span>
-                                              )
-                                            )}
                                         </div>
-                                        <div
-                                          className="view_edit d-flex justify-content-between mt-2"
-                                          style={{ marginLeft: "7px" }}
-                                        >
-                                          {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
+                                        <div className="right">
+                                          <h5>{room.roomName}</h5>
+                                          <div className="in_detail">
+                                            <span className="in_single">
+                                              Area: {room.roomTotalArea} SqFt
+                                            </span>
+                                            <span className="in_single">
+                                              Length: {room.roomLength} Ft
+                                            </span>
+                                            <span className="in_single">
+                                              Width: {room.roomWidth} Ft
+                                            </span>
+                                            {room.roomFixtures &&
+                                              room.roomFixtures.map(
+                                                (fixture, findex) => (
+                                                  <span
+                                                    className="in_single"
+                                                    key={findex}
+                                                  >
+                                                    {fixture}
+                                                  </span>
+                                                )
+                                              )}
+                                          </div>
+                                          <div
+                                            className="view_edit d-flex justify-content-between mt-2"
+                                            style={{ marginLeft: "7px" }}
+                                          >
+                                            {user &&
+                                              user.status === "active" &&
+                                              (user.role === "admin" ||
+                                                user.role === "superAdmin") && (
+                                                <span
+                                                  className="click_text pointer"
+                                                  onClick={() =>
+                                                    editPropertyLayout(room.id)
+                                                  }
+                                                >
+                                                  Edit
+                                                </span>
+                                              )}
                                             <span
                                               className="click_text pointer"
                                               onClick={() =>
-                                                editPropertyLayout(room.id)
+                                                handleShowRoomModal(room)
                                               }
                                             >
-                                              Edit
+                                              View More
                                             </span>
-                                          )}
-                                          <span
-                                            className="click_text pointer"
-                                            onClick={() =>
-                                              handleShowRoomModal(room)
-                                            }
-                                          >
-                                            View More
-                                          </span>
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  </SwiperSlide>
-                                ))}
-                            </Swiper>
+                                    </SwiperSlide>
+                                  ))}
+                              </Swiper>
 
-                            {selectedRoom && (
-                              <>
-                                <Modal
-                                  show={showRoomModal}
-                                  onHide={handleRoomModalClose}
-                                  className="margin_top detail_modal"
-                                  centered
-                                >
-                                  <span
-                                    class="material-symbols-outlined modal_close"
-                                    onClick={handleRoomModalClose}
+                              {selectedRoom && (
+                                <>
+                                  <Modal
+                                    show={showRoomModal}
+                                    onHide={handleRoomModalClose}
+                                    className="margin_top detail_modal"
+                                    centered
                                   >
-                                    close
-                                  </span>
-                                  <h5 className="modal_title text-center">
-                                    {selectedRoom.roomName}
-                                  </h5>
-                                  <div className="modal_body">
-                                    <div className="img_area">
-                                      {(() => {
-                                        if (
-                                          selectedRoom.roomType === "Bedroom"
-                                        ) {
-                                          return (
-                                            <img
-                                              style={{
-                                                width: "100%",
-                                              }}
-                                              src="/assets/img/icons/illustrate_bedroom.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (
-                                          selectedRoom.roomType === "Kitchen"
-                                        ) {
-                                          return (
-                                            <img
-                                              style={{
-                                                width: "100%",
-                                              }}
-                                              src="/assets/img/icons/illustrate_kitchen.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (
-                                          selectedRoom.roomType ===
-                                          "Living Room"
-                                        ) {
-                                          return (
-                                            <img
-                                              style={{
-                                                width: "100%",
-                                              }}
-                                              src="/assets/img/icons/illustrate_livingroom.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (
-                                          selectedRoom.roomType === "Bathroom"
-                                        ) {
-                                          return (
-                                            <img
-                                              style={{
-                                                width: "100%",
-                                              }}
-                                              src="/assets/img/icons/illustrate_bathroom.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (
-                                          selectedRoom.roomType ===
-                                          "Dining Room"
-                                        ) {
-                                          return (
-                                            <img
-                                              style={{
-                                                width: "100%",
-                                              }}
-                                              src="/assets/img/icons/illustrate_dining.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else if (
-                                          selectedRoom.roomType === "Balcony"
-                                        ) {
-                                          return (
-                                            <img
-                                              style={{
-                                                width: "100%",
-                                              }}
-                                              src="/assets/img/icons/illustrate_balcony.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        } else {
-                                          return (
-                                            <img
-                                              style={{
-                                                width: "100%",
-                                              }}
-                                              src="/assets/img/icons/illustrate_basment.jpg"
-                                              alt={selectedRoom.roomType}
-                                            />
-                                          );
-                                        }
-                                      })()}
-                                    </div>
-                                    <div className="main_detail">
-                                      <div className="md_single">
-                                        Area:{" "}
-                                        <span className="value">
-                                          {selectedRoom.roomTotalArea}
-                                        </span>
-                                        <span className="unit"> SqFt</span>
+                                    <span
+                                      class="material-symbols-outlined modal_close"
+                                      onClick={handleRoomModalClose}
+                                    >
+                                      close
+                                    </span>
+                                    <h5 className="modal_title text-center">
+                                      {selectedRoom.roomName}
+                                    </h5>
+                                    <div className="modal_body">
+                                      <div className="img_area">
+                                        {(() => {
+                                          if (
+                                            selectedRoom.roomType === "Bedroom"
+                                          ) {
+                                            return (
+                                              <img
+                                                style={{
+                                                  width: "100%",
+                                                }}
+                                                src="/assets/img/icons/illustrate_bedroom.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (
+                                            selectedRoom.roomType === "Kitchen"
+                                          ) {
+                                            return (
+                                              <img
+                                                style={{
+                                                  width: "100%",
+                                                }}
+                                                src="/assets/img/icons/illustrate_kitchen.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (
+                                            selectedRoom.roomType ===
+                                            "Living Room"
+                                          ) {
+                                            return (
+                                              <img
+                                                style={{
+                                                  width: "100%",
+                                                }}
+                                                src="/assets/img/icons/illustrate_livingroom.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (
+                                            selectedRoom.roomType === "Bathroom"
+                                          ) {
+                                            return (
+                                              <img
+                                                style={{
+                                                  width: "100%",
+                                                }}
+                                                src="/assets/img/icons/illustrate_bathroom.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (
+                                            selectedRoom.roomType ===
+                                            "Dining Room"
+                                          ) {
+                                            return (
+                                              <img
+                                                style={{
+                                                  width: "100%",
+                                                }}
+                                                src="/assets/img/icons/illustrate_dining.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else if (
+                                            selectedRoom.roomType === "Balcony"
+                                          ) {
+                                            return (
+                                              <img
+                                                style={{
+                                                  width: "100%",
+                                                }}
+                                                src="/assets/img/icons/illustrate_balcony.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          } else {
+                                            return (
+                                              <img
+                                                style={{
+                                                  width: "100%",
+                                                }}
+                                                src="/assets/img/icons/illustrate_basment.jpg"
+                                                alt={selectedRoom.roomType}
+                                              />
+                                            );
+                                          }
+                                        })()}
                                       </div>
-                                      <div className="md_single">
-                                        Length:{" "}
-                                        <span className="value">
-                                          {selectedRoom.roomLength}
-                                        </span>
-                                        <span className="unit"> Ft</span>
+                                      <div className="main_detail">
+                                        <div className="md_single">
+                                          Area:{" "}
+                                          <span className="value">
+                                            {selectedRoom.roomTotalArea}
+                                          </span>
+                                          <span className="unit"> SqFt</span>
+                                        </div>
+                                        <div className="md_single">
+                                          Length:{" "}
+                                          <span className="value">
+                                            {selectedRoom.roomLength}
+                                          </span>
+                                          <span className="unit"> Ft</span>
+                                        </div>
+                                        <div className="md_single">
+                                          Width:{" "}
+                                          <span className="value">
+                                            {selectedRoom.roomWidth}
+                                          </span>
+                                          <span className="unit"> Ft</span>
+                                        </div>
                                       </div>
-                                      <div className="md_single">
-                                        Width:{" "}
-                                        <span className="value">
-                                          {selectedRoom.roomWidth}
-                                        </span>
-                                        <span className="unit"> Ft</span>
+                                      <div className="more_detail">
+                                        {selectedRoom.roomFixtures &&
+                                          selectedRoom.roomFixtures.map(
+                                            (fixture, index) => (
+                                              <span
+                                                className="more_detail_single"
+                                                key={index}
+                                              >
+                                                {fixture}
+                                              </span>
+                                            )
+                                          )}
                                       </div>
                                     </div>
-                                    <div className="more_detail">
-                                      {selectedRoom.roomFixtures &&
-                                        selectedRoom.roomFixtures.map(
-                                          (fixture, index) => (
-                                            <span
-                                              className="more_detail_single"
-                                              key={index}
-                                            >
-                                              {fixture}
-                                            </span>
-                                          )
-                                        )}
-                                    </div>
-                                  </div>
-                                  {selectedRoom.roomAttachments.length !==
-                                    0 && (
+                                    {selectedRoom.roomAttachments.length !==
+                                      0 && (
                                       <div className="attached_with">
                                         {selectedRoom.roomAttachments && (
                                           <h6 className="text-center text_black">
@@ -2716,67 +2808,72 @@ const PropertyDetails = () => {
                                       </div>
                                     )}
 
-                                  {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-                                    <div className="modal_footer">
+                                    {user &&
+                                      user.status === "active" &&
+                                      (user.role === "admin" ||
+                                        user.role === "superAdmin") && (
+                                        <div className="modal_footer">
+                                          <div
+                                            onClick={handleConfirmShow}
+                                            className="delete_bottom"
+                                          >
+                                            <span className="material-symbols-outlined">
+                                              delete
+                                            </span>
+                                            <span>Delete</span>
+                                          </div>
+                                        </div>
+                                      )}
+                                  </Modal>
+
+                                  <Modal
+                                    show={showConfirmModal}
+                                    onHide={handleConfirmClose}
+                                    className="delete_modal"
+                                    centered
+                                  >
+                                    <div className="alert_text text-center">
+                                      Alert
+                                    </div>
+
+                                    <div className="sure_content text-center">
+                                      Are you sure you want to delete?
+                                    </div>
+                                    <div className="yes_no_btn">
                                       <div
-                                        onClick={handleConfirmShow}
-                                        className="delete_bottom"
+                                        className="theme_btn full_width no_icon text-center btn_border"
+                                        onClick={() =>
+                                          deletePropertyLayout(selectedRoom.id)
+                                        }
                                       >
-                                        <span className="material-symbols-outlined">
-                                          delete
-                                        </span>
-                                        <span>Delete</span>
+                                        Yes
+                                      </div>
+                                      <div
+                                        className="theme_btn full_width no_icon text-center btn_fill"
+                                        onClick={handleConfirmClose}
+                                      >
+                                        No
                                       </div>
                                     </div>
-                                  )}
-                                </Modal>
-
-                                <Modal
-                                  show={showConfirmModal}
-                                  onHide={handleConfirmClose}
-                                  className="delete_modal"
-                                  centered
-                                >
-                                  <div className="alert_text text-center">
-                                    Alert
-                                  </div>
-
-                                  <div className="sure_content text-center">
-                                    Are you sure you want to delete?
-                                  </div>
-                                  <div className="yes_no_btn">
-                                    <div
-                                      className="theme_btn full_width no_icon text-center btn_border"
-                                      onClick={() =>
-                                        deletePropertyLayout(selectedRoom.id)
-                                      }
-                                    >
-                                      Yes
-                                    </div>
-                                    <div
-                                      className="theme_btn full_width no_icon text-center btn_fill"
-                                      onClick={handleConfirmClose}
-                                    >
-                                      No
-                                    </div>
-                                  </div>
-                                </Modal>
-                              </>
-                            )}
+                                  </Modal>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </section>
-                )}
+                    </section>
+                  )}
                 {/* property layout section end  */}
 
                 {/* tenant card start */}
-                {
-                user && user.status === "active" && 
-                ((user && user.role === "owner") ||
-                  (user && user.role === "coowner") ||
-                  (user && (user.role === "admin" || user.role === "superAdmin"))) && (
+                {user &&
+                  user.status === "active" &&
+                  ((user && user.role === "owner") ||
+                    (user && user.role === "coowner") ||
+                    (user &&
+                      (user.role === "admin" ||
+                        user.role === "superAdmin"))) && (
                     <section className="property_card_single full_width_sec with_orange">
                       <span className="verticall_title">
                         Tenants
@@ -2784,30 +2881,37 @@ const PropertyDetails = () => {
                       </span>
                       <div className="more_detail_card_inner">
                         <div className="row">
-                          {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-                            <div
-                              className="col-sm-1 col-2"
-                              style={{
-                                paddingRight: "0px",
-                              }}
-                            >
-                              <div className="plus_icon">
-                                <Link
-                                  className="plus_icon_inner"
-                                  onClick={handleAddTenant}
-                                >
-                                  <span class="material-symbols-outlined">
-                                    add
-                                  </span>
-                                </Link>
+                          {user &&
+                            user.status === "active" &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") && (
+                              <div
+                                className="col-sm-1 col-2"
+                                style={{
+                                  paddingRight: "0px",
+                                }}
+                              >
+                                <div className="plus_icon">
+                                  <Link
+                                    className="plus_icon_inner"
+                                    onClick={handleAddTenant}
+                                  >
+                                    <span class="material-symbols-outlined">
+                                      add
+                                    </span>
+                                  </Link>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                           <div
-                            className={`${user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
-                              ? "col-sm-11 col-10"
-                              : "col-12"
-                              }`}
+                            className={`${
+                              user &&
+                              user.status === "active" &&
+                              (user.role === "admin" ||
+                                user.role === "superAdmin")
+                                ? "col-sm-11 col-10"
+                                : "col-12"
+                            }`}
                           >
                             <div className="tenant_card">
                               <Swiper
@@ -2839,10 +2943,11 @@ const PropertyDetails = () => {
                                   tenantDocument.map((tenant, index) => (
                                     <SwiperSlide key={index}>
                                       <div
-                                        className={`tc_single relative item ${tenant.status === "inactive"
-                                          ? "t_inactive"
-                                          : ""
-                                          }`}
+                                        className={`tc_single relative item ${
+                                          tenant.status === "inactive"
+                                            ? "t_inactive"
+                                            : ""
+                                        }`}
                                       >
                                         <Link
                                           className="left"
@@ -2858,10 +2963,11 @@ const PropertyDetails = () => {
                                             />
                                           </div>
                                           <div
-                                            className={`tenant_detail ${editingTenantId === tenant.id
-                                              ? "td_edit"
-                                              : ""
-                                              }`}
+                                            className={`tenant_detail ${
+                                              editingTenantId === tenant.id
+                                                ? "td_edit"
+                                                : ""
+                                            }`}
                                           >
                                             <h6 className="t_name">
                                               {tenant.name
@@ -2910,11 +3016,13 @@ const PropertyDetails = () => {
                 {/* tenant card end  */}
 
                 {/* property user card  start */}
-                {
-                user && user.status === "active" &&
-                ((user && user.role === "owner") ||
-                  (user && user.role === "coowner") ||
-                  (user && (user.role === "admin" || user.role === "superAdmin"))) && (
+                {user &&
+                  user.status === "active" &&
+                  ((user && user.role === "owner") ||
+                    (user && user.role === "coowner") ||
+                    (user &&
+                      (user.role === "admin" ||
+                        user.role === "superAdmin"))) && (
                     <>
                       <section className="property_card_single full_width_sec with_blue property_user">
                         <span className="verticall_title">
@@ -2923,32 +3031,42 @@ const PropertyDetails = () => {
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
-                            {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-                              <div
-                                className="col-sm-1 col-2"
-                                style={{
-                                  paddingRight: "0px",
-                                }}
-                              >
-                                <div className="plus_icon">
-                                  <Link
-                                    className="plus_icon_inner"
-                                    onClick={(e) =>
-                                      handleAddPropertyUser(e, "propertyowner")
-                                    }
-                                  >
-                                    <span class="material-symbols-outlined">
-                                      add
-                                    </span>
-                                  </Link>
+                            {user &&
+                              user.status === "active" &&
+                              (user.role === "admin" ||
+                                user.role === "superAdmin") && (
+                                <div
+                                  className="col-sm-1 col-2"
+                                  style={{
+                                    paddingRight: "0px",
+                                  }}
+                                >
+                                  <div className="plus_icon">
+                                    <Link
+                                      className="plus_icon_inner"
+                                      onClick={(e) =>
+                                        handleAddPropertyUser(
+                                          e,
+                                          "propertyowner"
+                                        )
+                                      }
+                                    >
+                                      <span class="material-symbols-outlined">
+                                        add
+                                      </span>
+                                    </Link>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
                             <div
-                              className={`${user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
-                                ? "col-sm-11 col-10"
-                                : "col-12"
-                                }`}
+                              className={`${
+                                user &&
+                                user.status === "active" &&
+                                (user.role === "admin" ||
+                                  user.role === "superAdmin")
+                                  ? "col-sm-11 col-10"
+                                  : "col-12"
+                              }`}
                             >
                               <div className="tenant_card">
                                 <Swiper
@@ -2984,25 +3102,32 @@ const PropertyDetails = () => {
                                             <div
                                               className="property_people_designation d-flex align-items-end justify-content-center pointer"
                                               onClick={
-                                                user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
+                                                user &&
+                                                user.status === "active" &&
+                                                (user.role === "admin" ||
+                                                  user.role === "superAdmin")
                                                   ? (e) =>
-                                                    handleShowOwnerTags(
-                                                      e,
-                                                      propUser,
-                                                      "propowner"
-                                                    )
+                                                      handleShowOwnerTags(
+                                                        e,
+                                                        propUser,
+                                                        "propowner"
+                                                      )
                                                   : null
                                               }
                                             >
                                               {propUser.userTag}
-                                              {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-                                                <span
-                                                  className="material-symbols-outlined click_icon text_near_icon"
-                                                  style={{ fontSize: "10px" }}
-                                                >
-                                                  edit
-                                                </span>
-                                              )}
+                                              {user &&
+                                                user.status === "active" &&
+                                                (user.role === "admin" ||
+                                                  user.role ===
+                                                    "superAdmin") && (
+                                                  <span
+                                                    className="material-symbols-outlined click_icon text_near_icon"
+                                                    style={{ fontSize: "10px" }}
+                                                  >
+                                                    edit
+                                                  </span>
+                                                )}
                                             </div>
                                             <div className="left">
                                               <div className="tcs_img_container">
@@ -3017,21 +3142,32 @@ const PropertyDetails = () => {
                                               <div className="tenant_detail">
                                                 <h5
                                                   onClick={
-                                                    user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
+                                                    user &&
+                                                    user.status === "active" &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin")
                                                       ? () =>
-                                                        openChangeUser(
-                                                          propUser.id
-                                                        )
+                                                          openChangeUser(
+                                                            propUser.id
+                                                          )
                                                       : ""
                                                   }
-                                                  className={`t_name ${user && (user.role === "admin" || user.role === "superAdmin")
-                                                    ? "pointer"
-                                                    : ""
-                                                    }`}
+                                                  className={`t_name ${
+                                                    user &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin")
+                                                      ? "pointer"
+                                                      : ""
+                                                  }`}
                                                 >
                                                   {propUser.fullName}
-                                                  {user && user.status === "active" &&
-                                                    (user.role === "admin" || user.role === "superAdmin") && (
+                                                  {user &&
+                                                    user.status === "active" &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
                                                       </span>
@@ -3043,8 +3179,11 @@ const PropertyDetails = () => {
                                                     "+$1 $2-$3"
                                                   )}
                                                 </h6>
-                                                {user && user.status === "active" &&
-                                                  (user.role === "admin" || user.role === "superAdmin") && (
+                                                {user &&
+                                                  user.status === "active" &&
+                                                  (user.role === "admin" ||
+                                                    user.role ===
+                                                      "superAdmin") && (
                                                     <h6
                                                       className="text_red pointer"
                                                       style={{
@@ -3071,9 +3210,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `tel:${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                               >
@@ -3087,9 +3226,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `https://wa.me/${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                                 target="_blank"
@@ -3185,7 +3324,9 @@ const PropertyDetails = () => {
                                       name="prop_user"
                                       value="POC"
                                       id="POC"
-                                      onChange={() => handleUserTagChange("POC")}
+                                      onChange={() =>
+                                        handleUserTagChange("POC")
+                                      }
                                     />
                                     <label htmlFor="POC">POC</label>
                                   </div>
@@ -3196,7 +3337,9 @@ const PropertyDetails = () => {
                                       name="prop_user"
                                       value="POA"
                                       id="POA"
-                                      onChange={() => handleUserTagChange("POA")}
+                                      onChange={() =>
+                                        handleUserTagChange("POA")
+                                      }
                                     />
                                     <label htmlFor="POA">POA</label>
                                   </div>
@@ -3227,7 +3370,11 @@ const PropertyDetails = () => {
                               <div
                                 className="theme_btn btn_fill no_icon full_width text-center"
                                 onClick={(e) =>
-                                  handleClosePropUserTags(e, "save", "propowner")
+                                  handleClosePropUserTags(
+                                    e,
+                                    "save",
+                                    "propowner"
+                                  )
                                 }
                               >
                                 Save Changes
@@ -3239,7 +3386,9 @@ const PropertyDetails = () => {
                       {selectedPropUser && (
                         <Modal
                           show={showConfirmPropUser}
-                          onHide={(e) => handleCloseConfirmPropUser(e, "cancel")}
+                          onHide={(e) =>
+                            handleCloseConfirmPropUser(e, "cancel")
+                          }
                           className="delete_modal"
                           centered
                         >
@@ -3272,11 +3421,13 @@ const PropertyDetails = () => {
                 {/* property user card end  */}
 
                 {/* propdial managers / users card  start */}
-                {
-                user && user.status === "active" &&
-                ((user && user.role === "owner") ||
-                  (user && user.role === "coowner") ||
-                  (user && (user.role === "admin" || user.role === "superAdmin"))) && (
+                {user &&
+                  user.status === "active" &&
+                  ((user && user.role === "owner") ||
+                    (user && user.role === "coowner") ||
+                    (user &&
+                      (user.role === "admin" ||
+                        user.role === "superAdmin"))) && (
                     <>
                       <section className="property_card_single full_width_sec with_orange property_user">
                         <span className="verticall_title">
@@ -3285,32 +3436,41 @@ const PropertyDetails = () => {
                         </span>
                         <div className="more_detail_card_inner">
                           <div className="row">
-                            {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-                              <div
-                                className="col-sm-1 col-2"
-                                style={{
-                                  paddingRight: "0px",
-                                }}
-                              >
-                                <div className="plus_icon">
-                                  <Link
-                                    className="plus_icon_inner"
-                                    onClick={(e) =>
-                                      handleAddPropertyUser(e, "propertymanager")
-                                    }
-                                  >
-                                    <span class="material-symbols-outlined">
-                                      add
-                                    </span>
-                                  </Link>
+                            {user &&
+                              user.status === "active" &&
+                              (user.role === "admin" ||
+                                user.role === "superAdmin") && (
+                                <div
+                                  className="col-sm-1 col-2"
+                                  style={{
+                                    paddingRight: "0px",
+                                  }}
+                                >
+                                  <div className="plus_icon">
+                                    <Link
+                                      className="plus_icon_inner"
+                                      onClick={(e) =>
+                                        handleAddPropertyUser(
+                                          e,
+                                          "propertymanager"
+                                        )
+                                      }
+                                    >
+                                      <span class="material-symbols-outlined">
+                                        add
+                                      </span>
+                                    </Link>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
                             <div
-                              className={`${user  && (user.role === "admin" || user.role === "superAdmin")
-                                ? "col-sm-11 col-10"
-                                : "col-12"
-                                }`}
+                              className={`${
+                                user &&
+                                (user.role === "admin" ||
+                                  user.role === "superAdmin")
+                                  ? "col-sm-11 col-10"
+                                  : "col-12"
+                              }`}
                             >
                               <div className="tenant_card">
                                 <Swiper
@@ -3347,8 +3507,10 @@ const PropertyDetails = () => {
                                               className="property_people_designation d-flex align-items-end justify-content-center"
                                               onClick={(e) => {
                                                 if (
-                                                  user && user.status === "active" &&
-                                                  (user.role === "admin" || user.role === "superAdmin")
+                                                  user &&
+                                                  user.status === "active" &&
+                                                  (user.role === "admin" ||
+                                                    user.role === "superAdmin")
                                                 ) {
                                                   handleShowOwnerTags(
                                                     e,
@@ -3359,16 +3521,20 @@ const PropertyDetails = () => {
                                               }}
                                             >
                                               {propUser.userTag}
-                                              {user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
-                                                <span
-                                                  class="material-symbols-outlined click_icon text_near_icon"
-                                                  style={{
-                                                    fontSize: "10px",
-                                                  }}
-                                                >
-                                                  edit
-                                                </span>
-                                              )}
+                                              {user &&
+                                                user.status === "active" &&
+                                                (user.role === "admin" ||
+                                                  user.role ===
+                                                    "superAdmin") && (
+                                                  <span
+                                                    class="material-symbols-outlined click_icon text_near_icon"
+                                                    style={{
+                                                      fontSize: "10px",
+                                                    }}
+                                                  >
+                                                    edit
+                                                  </span>
+                                                )}
                                             </div>
                                             <div className="left">
                                               <div className="tcs_img_container">
@@ -3383,21 +3549,32 @@ const PropertyDetails = () => {
                                               <div className="tenant_detail">
                                                 <h5
                                                   onClick={
-                                                    user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin")
+                                                    user &&
+                                                    user.status === "active" &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin")
                                                       ? () =>
-                                                        openChangeUser(
-                                                          propUser.id
-                                                        )
+                                                          openChangeUser(
+                                                            propUser.id
+                                                          )
                                                       : ""
                                                   }
-                                                  className={`t_name ${user && (user.role === "admin" || user.role === "superAdmin")
-                                                    ? "pointer"
-                                                    : ""
-                                                    }`}
+                                                  className={`t_name ${
+                                                    user &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin")
+                                                      ? "pointer"
+                                                      : ""
+                                                  }`}
                                                 >
                                                   {propUser.fullName}
-                                                  {user && user.status === "active" &&
-                                                    (user.role === "admin" || user.role === "superAdmin") && (
+                                                  {user &&
+                                                    user.status === "active" &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
                                                       </span>
@@ -3409,25 +3586,29 @@ const PropertyDetails = () => {
                                                     "+$1 $2-$3"
                                                   )}
                                                 </h6>
-                                                {user && user.status === "active" &&(user.role === "admin" || user.role === "superAdmin") && (
-                                                  <h6
-                                                    className="text_red pointer"
-                                                    style={{
-                                                      width: "fit-content",
-                                                      fontSize: "10px",
-                                                      letterSpacing: "0.4px",
-                                                      marginLeft: "3px",
-                                                    }}
-                                                    onClick={(e) =>
-                                                      handleDeletePropUser(
-                                                        e,
-                                                        propUser
-                                                      )
-                                                    }
-                                                  >
-                                                    Delete
-                                                  </h6>
-                                                )}
+                                                {user &&
+                                                  user.status === "active" &&
+                                                  (user.role === "admin" ||
+                                                    user.role ===
+                                                      "superAdmin") && (
+                                                    <h6
+                                                      className="text_red pointer"
+                                                      style={{
+                                                        width: "fit-content",
+                                                        fontSize: "10px",
+                                                        letterSpacing: "0.4px",
+                                                        marginLeft: "3px",
+                                                      }}
+                                                      onClick={(e) =>
+                                                        handleDeletePropUser(
+                                                          e,
+                                                          propUser
+                                                        )
+                                                      }
+                                                    >
+                                                      Delete
+                                                    </h6>
+                                                  )}
                                               </div>
                                             </div>
                                             <div className="wha_call_icon">
@@ -3436,9 +3617,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `tel:${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                               >
@@ -3452,9 +3633,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `https://wa.me/${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                                 target="_blank"
@@ -3487,7 +3668,11 @@ const PropertyDetails = () => {
                           <span
                             class="material-symbols-outlined modal_close"
                             onClick={(e) =>
-                              handleClosePropUserTags(e, "cancel", "propmanager")
+                              handleClosePropUserTags(
+                                e,
+                                "cancel",
+                                "propmanager"
+                              )
                             }
                           >
                             close
@@ -3632,7 +3817,7 @@ const PropertyDetails = () => {
                             <h6>Furnishing</h6>
                             <h5>
                               {propertyDocument.furnishing.toLowerCase() ===
-                                "raw"
+                              "raw"
                                 ? "Unfurnished"
                                 : propertyDocument.furnishing}
                             </h5>
@@ -3734,7 +3919,7 @@ const PropertyDetails = () => {
                       {/* Living Area And Dining Area Combine  */}
                       {propertyDocument &&
                         propertyDocument.livingAndDining.toLowerCase() ===
-                        "yes" && (
+                          "yes" && (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
@@ -3865,10 +4050,10 @@ const PropertyDetails = () => {
                                 {" "}
                                 {propertyDocument &&
                                   new Date().getFullYear() -
-                                  Number(
-                                    propertyDocument.yearOfConstruction
-                                  ) +
-                                  " Years"}{" "}
+                                    Number(
+                                      propertyDocument.yearOfConstruction
+                                    ) +
+                                    " Years"}{" "}
                               </h5>
                             </div>
                           </div>
@@ -3907,7 +4092,6 @@ const PropertyDetails = () => {
                                     src="/assets/img/property-detail-icon/weightlifter.png"
                                     alt=""
                                   />
-
                                 ) : item === "Main Road" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/road.png"
@@ -4229,7 +4413,7 @@ const PropertyDetails = () => {
                       {/* Covered Parking  */}
                       {(propertyDocument &&
                         propertyDocument.numberOfCoveredCarParking === 0) ||
-                        propertyDocument.numberOfCoveredCarParking === "0" ? (
+                      propertyDocument.numberOfCoveredCarParking === "0" ? (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -4261,7 +4445,7 @@ const PropertyDetails = () => {
                       {/* Open car parking  */}
                       {(propertyDocument &&
                         propertyDocument.numberOfOpenCarParking === 0) ||
-                        propertyDocument.numberOfOpenCarParking === "0" ? (
+                      propertyDocument.numberOfOpenCarParking === "0" ? (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -4308,7 +4492,7 @@ const PropertyDetails = () => {
                       {propertyDocument &&
                         propertyDocument.evChargingPointStatus &&
                         propertyDocument.evChargingPointStatus.toLowerCase() ===
-                        "yes" && (
+                          "yes" && (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
@@ -4382,7 +4566,7 @@ const PropertyDetails = () => {
                         )}
                       {/* number of lifts  */}
                       {propertyDocument &&
-                        propertyDocument.numberOfLifts == 0 ? (
+                      propertyDocument.numberOfLifts == 0 ? (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -4600,9 +4784,11 @@ const PropertyDetails = () => {
                                 }}
                               ></p>
                               {!isPropDescEdit &&
-                                user && user.status === "active" &&
+                                user &&
+                                user.status === "active" &&
                                 (user.role === "owner" ||
-                                  (user.role === "admin" || user.role === "superAdmin")) && (
+                                  user.role === "admin" ||
+                                  user.role === "superAdmin") && (
                                   <span
                                     class="material-symbols-outlined click_icon text_near_icon"
                                     onClick={() =>
@@ -4619,76 +4805,79 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                   {/* Owner Instruction  */}
-                  {user && user.status === "active" && user.role !== "guest" && (
-                    <div className="col-lg-6">
-                      <div className="property_card_single mobile_full_card">
-                        <div className="more_detail_card_inner">
-                          <h2 className="card_title">Owner Instruction</h2>
+                  {user &&
+                    user.status === "active" &&
+                    user.role !== "guest" && (
+                      <div className="col-lg-6">
+                        <div className="property_card_single mobile_full_card">
+                          <div className="more_detail_card_inner">
+                            <h2 className="card_title">Owner Instruction</h2>
 
-                          {isEditingOwnerInstruction ? (
-                            <div>
+                            {isEditingOwnerInstruction ? (
                               <div>
-                                <RichTextEditor
-                                  value={ownerInstructionvalue}
-                                  onChange={setOwnerInstrucitonValue}
-                                />
-                              </div>
-                              <div className="vg10"></div>
-                              <div className="d-flex justify-content-between">
-                                <div
-                                  className="theme_btn btn_border no_icon"
-                                  onClick={handleCancelOwnerInstruction}
-                                  style={{
-                                    width: "fit-content",
-                                  }}
-                                >
-                                  Cancel
+                                <div>
+                                  <RichTextEditor
+                                    value={ownerInstructionvalue}
+                                    onChange={setOwnerInstrucitonValue}
+                                  />
                                 </div>
-                                <div
-                                  className="theme_btn btn_fill no_icon "
-                                  onClick={handleSaveOwnerInstruction}
-                                  style={{
-                                    width: "fit-content",
-                                  }}
-                                >
-                                  Save
+                                <div className="vg10"></div>
+                                <div className="d-flex justify-content-between">
+                                  <div
+                                    className="theme_btn btn_border no_icon"
+                                    onClick={handleCancelOwnerInstruction}
+                                    style={{
+                                      width: "fit-content",
+                                    }}
+                                  >
+                                    Cancel
+                                  </div>
+                                  <div
+                                    className="theme_btn btn_fill no_icon "
+                                    onClick={handleSaveOwnerInstruction}
+                                    style={{
+                                      width: "fit-content",
+                                    }}
+                                  >
+                                    Save
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ) : (
-                            <>
-                              <div className="d-flex align-items-center">
-                                <p
-                                  dangerouslySetInnerHTML={{
-                                    __html:
-                                      propertyDocument &&
-                                      propertyDocument.ownerInstructions.toString(
-                                        "html"
-                                      ),
-                                  }}
-                                ></p>
-                                {!isEditingOwnerInstruction &&
-                                  user &&
-                                  user.status === "active" &&
-                                  (user.role === "admin" || user.role === "superAdmin") && (
-                                    <span
-                                      class="material-symbols-outlined click_icon text_near_icon"
-                                      onClick={() =>
-                                        handleEditOwnerInstruction(
-                                          "ownerInstructions"
-                                        )
-                                      }
-                                    >
-                                      edit
-                                    </span>
-                                  )}
-                              </div>
-                            </>
-                          )}
+                            ) : (
+                              <>
+                                <div className="d-flex align-items-center">
+                                  <p
+                                    dangerouslySetInnerHTML={{
+                                      __html:
+                                        propertyDocument &&
+                                        propertyDocument.ownerInstructions.toString(
+                                          "html"
+                                        ),
+                                    }}
+                                  ></p>
+                                  {!isEditingOwnerInstruction &&
+                                    user &&
+                                    user.status === "active" &&
+                                    (user.role === "admin" ||
+                                      user.role === "superAdmin") && (
+                                      <span
+                                        class="material-symbols-outlined click_icon text_near_icon"
+                                        onClick={() =>
+                                          handleEditOwnerInstruction(
+                                            "ownerInstructions"
+                                          )
+                                        }
+                                      >
+                                        edit
+                                      </span>
+                                    )}
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               </div>
             )}
