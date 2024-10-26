@@ -1,26 +1,41 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import PDNotificationDetailModal from "./PDNotificationDetailModal";
 
 const PDNotification = ({ notification }) => {
-  // show more show less start
-  const [expanded, setExpanded] = useState(false);
-
-  const handleShowMoreClick = () => {
-    setExpanded(!expanded);
-  };
-  const parentClassName = `my_small_card notification_card ${expanded ? "showmore" : ""}`;
-  // show more show less end
-
   // Check if notification.createdAt exists before using it
   const createdAt = notification.createdAt && notification.createdAt.toDate();
+  const notificationSingle = notification; // Keep full notification object
+
+  const [selectedNotification, setSelectedNotification] = useState(null);
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+
+  const handleNotificationModalClose = () => setShowNotificationModal(false);
+  const handleShowNotificationModal = (notificationSingle) => {
+    setSelectedNotification(notificationSingle);
+    setShowNotificationModal(true);
+  };
+
+  useEffect(() => {
+    console.log("Notification data:", notification); // Debugging output
+  }, [notification]);
 
   return (
-    <div className={parentClassName}>
-      <div className="left">       
-          <div className="img_div">
-            <img src="./assets/img/loudspeaker.jpg" alt="" />
-          </div>      
+   <>
+    <div className="my_small_card notification_card pointer" onClick={() => handleShowNotificationModal(notificationSingle)}>
+      <div className="left">
+        <div className="img_div">
+          {notification.type === "App Updates" ? (
+            <img src="/assets/img/icons/app_update.png" alt="" />
+          ) : notification.type === "Discount" ? (
+            <img src="/assets/img/icons/discount.png" alt="" />
+          ) : notification.type === "Offer" ? (
+            <img src="/assets/img/icons/offer.png" alt="" />         
+          ) : (
+            <img src="./assets/img/icons/notifications_icon.png" alt="" />
+          )}
+        </div>
         <div className="right">
           <h5 className="title">{notification.shortDescription}</h5>
           <h6 className="sub_title">{notification.description}</h6>
@@ -35,14 +50,14 @@ const PDNotification = ({ notification }) => {
             : ""}
         </span>
       </h4>
-      {notification.description.length > 110 ? (
-        <h6 onClick={handleShowMoreClick} className="expand_line pointer bottom_line_content">
-          {expanded ? "show less" : "show more"}
-        </h6>
-      ) : (
-        ""
-      )}
+      <h4 className="top_left_content">{notification.type}</h4>
     </div>
+    <PDNotificationDetailModal
+        show={showNotificationModal}
+        handleClose={handleNotificationModalClose}
+        selectedNotification={selectedNotification}
+      />
+   </>
   );
 };
 
