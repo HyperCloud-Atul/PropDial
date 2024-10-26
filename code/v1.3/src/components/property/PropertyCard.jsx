@@ -30,7 +30,7 @@ function formatNumberWithCommas(number) {
 
 // Use replace() to remove all commas
 function removeCommas(stringWithCommas) {
-  const stringWithoutCommas = stringWithCommas.replace(/,/g, '');
+  const stringWithoutCommas = stringWithCommas.replace(/,/g, "");
   return stringWithoutCommas;
 }
 
@@ -75,13 +75,13 @@ const PropertyCard = ({ propertyid }) => {
   }, [propertydoc]);
 
   //---------------- Start of Change User ----------------------
-  const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("properties-propdial");
-  const { documents: dbUsers, error: dbuserserror } = useCollection("users-propdial", [
-    "status",
-    "==",
-    "active",
-  ]);
+  const { updateDocument, response: updateDocumentResponse } = useFirestore(
+    "properties-propdial"
+  );
+  const { documents: dbUsers, error: dbuserserror } = useCollection(
+    "users-propdial",
+    ["status", "==", "active"]
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(dbUsers);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -166,11 +166,11 @@ const PropertyCard = ({ propertyid }) => {
   //Manage In-Review | Active |Inactive
   const handleIsActiveInactiveReview = async (e, option) => {
     // console.log("In handleIsActiveInactiveReview")
-    console.log("option: ", option)
+    console.log("option: ", option);
     // console.log("selectedpropertyid: ", selectedpropertyid)
     // const propid = document.getElementById("propertydocid")
     // console.log("propid: ", propid)
-    console.log("propertyid: ", propertyid)
+    console.log("propertyid: ", propertyid);
 
     e.preventDefault();
 
@@ -301,21 +301,36 @@ const PropertyCard = ({ propertyid }) => {
                 )}
               </div>
               <div className="left_side relative">
-                {user && (user.role === "admin" || user.role === "superAdmin") && (
-                  <Link
-                    className="prop_edit"
-                    to={`/updateproperty/${propertydoc.id}`}
-                    key={propertydoc.propertyid}
-                  >
-                    <span className="material-symbols-outlined">
-                      edit_square
-                    </span>
-                  </Link>
-                )}
+                {user &&
+                  (user.role === "admin" || user.role === "superAdmin") && (
+                    <Link
+                      className="prop_edit"
+                      to={`/updateproperty/${propertydoc.id}`}
+                      key={propertydoc.propertyid}
+                    >
+                      <span className="material-symbols-outlined">
+                        edit_square
+                      </span>
+                    </Link>
+                  )}
                 <h5 className="demand">
                   <span>₹</span>
                   {/* <span>{propertydoc.demandPriceRent}</span> */}
-                  {(propertydoc.flag.toLowerCase() === "pms only" || propertydoc.flag.toLowerCase() === "pms after rent" || propertydoc.flag.toLowerCase() === "available for rent" || propertydoc.flag.toLowerCase() === "rented out") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) : (propertydoc.flag.toLowerCase() === "rent and sale" || propertydoc.flag.toLowerCase() === "rented but sale") ? propertydoc.demandPriceRent && formatNumberWithCommas(propertydoc.demandPriceRent) + " / ₹" + propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale) : propertydoc.demandPriceSale && formatNumberWithCommas(propertydoc.demandPriceSale)}
+                  {propertydoc.flag.toLowerCase() === "pms only" ||
+                  propertydoc.flag.toLowerCase() === "pms after rent" ||
+                  propertydoc.flag.toLowerCase() === "available for rent" ||
+                  propertydoc.flag.toLowerCase() === "rented out"
+                    ? propertydoc.demandPriceRent &&
+                      formatNumberWithCommas(propertydoc.demandPriceRent)
+                    : propertydoc.flag.toLowerCase() === "rent and sale" ||
+                      propertydoc.flag.toLowerCase() === "rented but sale"
+                    ? propertydoc.demandPriceRent &&
+                      formatNumberWithCommas(propertydoc.demandPriceRent) +
+                        " / ₹" +
+                        propertydoc.demandPriceSale &&
+                      formatNumberWithCommas(propertydoc.demandPriceSale)
+                    : propertydoc.demandPriceSale &&
+                      formatNumberWithCommas(propertydoc.demandPriceSale)}
 
                   {propertydoc.maintenanceCharges !== "" && (
                     <span
@@ -349,17 +364,20 @@ const PropertyCard = ({ propertyid }) => {
                 <div className="more_row">
                   <div className="left">
                     <span className="card_badge">
-                      <span className="status_dot"
+                      <span
+                        className="status_dot"
                         style={{
                           backgroundColor:
                             propertydoc.isActiveInactiveReview === "Active"
                               ? "var(--success-color)" // Green for Active
-                              : propertydoc.isActiveInactiveReview === "Inactive"
-                                ? "var(--theme-red)" // Red for Inactive
-                                : "var(--theme-blue)" // Dark Gold for In-Review (or any of the options above)
+                              : propertydoc.isActiveInactiveReview ===
+                                "Inactive"
+                              ? "var(--theme-red)" // Red for Inactive
+                              : "var(--theme-blue)", // Dark Gold for In-Review (or any of the options above)
                         }}
                       ></span>
-                      {propertydoc.pid}</span>
+                      {propertydoc.pid}
+                    </span>
                   </div>
                   {/* <div className="right">
                   <span className={`property_status card_badge ${propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT' ? "for_rent" : "for_sale"}`}>
@@ -383,9 +401,19 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_carpet.png" alt="" />
                   </div>
                   <div className="left">
-                    <h6>Super Area</h6>
-                    <h5>
-                      {propertydoc.superArea} {propertydoc.superAreaUnit}{" "}
+                    <h6>
+                      {propertydoc.superArea
+                        ? "Super Area"
+                        : propertydoc.carpetArea
+                        ? "Carpet Area"
+                        : "Area"}
+                    </h6>
+                    <h5>                      
+                      {propertydoc.superArea
+                        ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
+                        : propertydoc.carpetArea
+                        ? `${propertydoc.carpetArea} ${propertydoc.superAreaUnit}`
+                        : "Yet to added"}
                     </h5>
                   </div>
                 </div>
@@ -412,67 +440,73 @@ const PropertyCard = ({ propertyid }) => {
             {expanded
               ? ""
               : propertydoc && (
-                <div className="middle_single">
-                  <div className="ms_child">
-                    <div className="icon_container">
-                      <img src="/assets/img/new_super_area.png" alt="" />
+                  <div className="middle_single">
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_super_area.png" alt="" />
+                      </div>
+                      <div className="left">
+                        <h6>Floor</h6>
+                        <h5>
+                          {propertydoc.floorNo
+                            ? propertydoc.floorNo === "Ground"
+                              ? "Ground"
+                              : propertydoc.floorNo === "Stilt"
+                              ? "Stilt"
+                              : propertydoc.floorNo === "Basement"
+                              ? "Basement "
+                              : `${propertydoc.floorNo}${
+                                  propertydoc.numberOfFloors
+                                    ? " of " + propertydoc.numberOfFloors
+                                    : ""
+                                }`
+                            : ""}
+                        </h5>
+                      </div>
                     </div>
-                    <div className="left">
-                      <h6>Floor</h6>
-                      <h5>
-                      { 
-  propertydoc.numberOfFloors.toLowerCase() === "ground"
-    ? propertydoc.numberOfFloors
-    : `${propertydoc.floorNo}${propertydoc.numberOfFloors ? " of " + propertydoc.numberOfFloors : ""}`
-}
-
-                       
-                      </h5>
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_bhk.png" alt="" />
+                      </div>
+                      <div className="left">
+                        <h6>BHK</h6>
+                        <h5>{propertydoc.bhk}</h5>
+                      </div>
+                    </div>
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_furniture.png" alt="" />
+                      </div>
+                      <div className="left">
+                        <h6>furnishing</h6>
+                        <h5>{propertydoc.furnishing}</h5>
+                      </div>
                     </div>
                   </div>
-                  <div className="ms_child">
-                    <div className="icon_container">
-                      <img src="/assets/img/new_bhk.png" alt="" />
-                    </div>
-                    <div className="left">
-                      <h6>BHK</h6>
-                      <h5>{propertydoc.bhk}</h5>
-                    </div>
-                  </div>
-                  <div className="ms_child">
-                    <div className="icon_container">
-                      <img src="/assets/img/new_furniture.png" alt="" />
-                    </div>
-                    <div className="left">
-                      <h6>furnishing</h6>
-                      <h5>{propertydoc.furnishing}</h5>
-                    </div>
-                  </div>
-                </div>
-              )}
+                )}
             {expanded
               ? ""
               : propertydoc && (
-                <div className="middle_single addtional_rooms">
-                  <div className="ms_child">
-                    <div className="icon_container">
-                      <img src="/assets/img/new_room.png" alt="" />
-                    </div>
-                    <div className="left">
-                      <h6>{propertydoc.displayName}</h6>
-                      <h5>
-                        {propertydoc.additionalRooms.length > 0
-                          ? propertydoc.additionalRooms.map(
-                            (additionalroom) => (
-                              <span>{additionalroom}</span>
-                            )
-                          )
-                          : "No Additional Rooms"}
-                      </h5>
+                  <div className="middle_single addtional_rooms">
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_room.png" alt="" />
+                      </div>
+                      <div className="left">
+                        <h6>{propertydoc.displayName}</h6>
+                        <h5>
+                          {propertydoc.additionalRooms.length > 0
+                            ? propertydoc.additionalRooms.map(
+                                (additionalroom) => (
+                                  <span>{additionalroom}</span>
+                                )
+                              )
+                            : "No Additional Rooms"}
+                        </h5>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
           </div>
           <div className="card_upcoming">
             <div className="parent">

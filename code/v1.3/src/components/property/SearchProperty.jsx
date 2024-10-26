@@ -93,31 +93,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                   </div>
                   <div className="pmd_body">
                     <div className="property_information">
-                      <div className="pi_single">
-                        <h6>Bedrooms</h6>
-                        <h5>{property.numberOfBedrooms}</h5>
-                      </div>
-                      <div className="pi_single">
-                        <h6>Bathroom</h6>
-                        <h5>{property.numberOfBathrooms}</h5>
-                      </div>
-                      <div className="pi_single">
-                        <h6>Balcony</h6>
-                        <h5>{property.numberOfBalcony}</h5>
-                      </div>
-                      <div className="pi_single">
-                        <h6>Floor number</h6>
-                        <h5>
-                          {property.floorNo}{" "}
-                          {property.numberOfFloors && "Of"}{" "}
-                          {property.numberOfFloors}
-                        </h5>
-                      </div>
-                      <div className="pi_single">
-                        <h6>Lift</h6>
-                        <h5>{property.numberOfLifts}</h5>
-                      </div>
-                      <div className="pi_single">
+                    <div className="pi_single">
                         <h6>
                           {property.superArea && "Super "}
                           {property.superArea &&
@@ -136,6 +112,52 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                           {property.carpetArea}&nbsp;{property.superAreaUnit}
                         </h5>
                       </div>
+                      <div className="pi_single">
+                        <h6>Bedrooms</h6>
+                        <h5>{property.numberOfBedrooms}</h5>
+                      </div>
+                      <div className="pi_single">
+                        <h6>Bathroom</h6>
+                        <h5>{property.numberOfBathrooms}</h5>
+                      </div>                     
+                      <div className="pi_single">
+                        <h6>
+                        {property.floorNo
+                              ? ["Ground", "Stilt", "Basement"].includes(
+                                  property.floorNo
+                                )
+                                ? "Floor"
+                                : "Floor no"
+                              : ""}
+                        </h6>
+                        <h5>
+                        {property.floorNo
+                              ? property.floorNo ===
+                                "Ground"
+                                ? "Ground"
+                                : property.floorNo ===
+                                  "Stilt"
+                                ? "Stilt"
+                                : property.floorNo ===
+                                  "Basement"
+                                ? "Basement "
+                                : `${property.floorNo}${
+                                    property.numberOfFloors
+                                      ? " of " + property.numberOfFloors
+                                      : ""
+                                  }`
+                              : ""}
+                        </h5>
+                      </div>
+                      <div className="pi_single">
+                        <h6>BHK</h6>
+                        <h5>{property.bhk}</h5>
+                      </div>
+                      <div className="pi_single">
+                        <h6>Furnishing</h6>
+                        <h5>{property.furnishing}</h5>
+                      </div>
+                    
                     </div>
                   </div>
                 </div>
