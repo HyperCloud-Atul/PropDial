@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import PDNotification from '../../components/PDNotification';
+import './PGNotification.scss'
 
 const PGNotification = () => {
 
@@ -20,7 +21,7 @@ const PGNotification = () => {
   // Scroll to the top of the page whenever the location changes end
   //Get Notifications from DB
   const { documents: dbnotifications, error: dbnotificationserror } =
-    useCollection("notifications", ["postedBy", "==", "propdial"]);
+    useCollection("notifications-propdial");
 
   // console.log('dbpropertiesdocuments:', dbpropertiesdocuments)
 
@@ -31,7 +32,7 @@ const PGNotification = () => {
     dbnotifications.filter((item) => item.status === "active");
 
   return (
-    <div className="top_header_pg pg_bg">
+    <div className="top_header_pg pg_bg pg_notification">
       <div className={`page_spacing ${activeNotifications && activeNotifications.length === 0 ? "pg_min_height" : ""}`}>
         {activeNotifications && activeNotifications.length === 0 && (
           <div className="pg_msg">

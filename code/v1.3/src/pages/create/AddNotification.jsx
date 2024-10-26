@@ -20,9 +20,9 @@ const AddNotification = () => {
   const { user } = useAuthContext();
   const [formError, setFormError] = useState(null);
   const { addDocument, response: addDocumentResponse } =
-    useFirestore("notifications");
+    useFirestore("notifications-propdial");
   const { updateDocument, response: updateDocumentResponse } =
-    useFirestore("notifications");
+    useFirestore("notifications-propdial");
 
   const [notificationFields, setNotificationFields] = useState({
     Type: "app updates",
@@ -88,7 +88,7 @@ const AddNotification = () => {
   };
   return (
     <div className="top_header_pg pg_bg">
-      <div className="page_spacing">
+      <div className="page_spacing pg_min_height">
         <div className="pg_header">
           <h2 className="m22 mb-1">Add Notification</h2>
           <h4 className="r18 light_black">
@@ -161,7 +161,7 @@ const AddNotification = () => {
               </div>
               <div className="col-md-6">
                 <div className="form_field">
-                  <label htmlFor="">Short Description</label>
+                  <label htmlFor="">Title</label>
                   <div className="form_field_inner">
                     <input
                       required
@@ -211,9 +211,10 @@ const AddNotification = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-md-12 text-center top_margin">
+              <div className="col-8"></div>
+              <div className="col-md-4 text-center top_margin">
                 <div className="ff_gap"></div>
-                <button type="submit" className="theme_btn btn_fill no_icon">
+                <button type="submit" className="theme_btn btn_fill no_icon full_width">
                   {notificationid === "new"
                     ? "Add Notification"
                     : "Update Notification"}

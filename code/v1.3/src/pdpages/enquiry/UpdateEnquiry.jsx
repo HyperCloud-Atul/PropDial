@@ -18,14 +18,16 @@ const UpdateEnquiry = () => {
   const navigate = useNavigate();
   const { updateDocument, error: updateDocumentError } =
     useFirestore("enquiry-propdial");
-    
+
   const { document: enquiryDocument, error: enquiryDocError } = useDocument(
     "enquiry-propdial",
     id
   );
-  // get user collection 
-  const { documents: userDocs, error: userDocsError } = useCollection("users-propdial");
-
+  // get user collection
+  const { documents: dbUsers, error: dbuserserror } = useCollection(
+    "users-propdial",
+    ["status", "==", "active"]
+  );
 
   const [enquiryFrom, setEnquiryFrom] = useState("");
   const [referredBy, setReferredBy] = useState("");
@@ -44,8 +46,10 @@ const UpdateEnquiry = () => {
   const [updateForOwner, setUpdateForOwner] = useState("");
   const [visitDate, setVisitDate] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [dbUserState, setdbUserState] = useState(dbUsers);
 
   useEffect(() => {
+    setdbUserState(dbUsers);
     if (enquiryDocument) {
       setEnquiryFrom(enquiryDocument.enquiryFrom || "");
       setReferredBy(enquiryDocument.referredBy || "");
@@ -61,7 +65,10 @@ const UpdateEnquiry = () => {
       setEnquiryStatus(enquiryDocument.enquiryStatus || "open");
       setRemark(enquiryDocument.remark || "");
     }
-  }, [enquiryDocument]);
+  }, [enquiryDocument, dbUsers]);
+
+console.log("dbUserState", dbUserState);
+
 
   const [errors, setErrors] = useState({});
 
@@ -100,88 +107,82 @@ const UpdateEnquiry = () => {
     setVisitDate(date); // Update state with selected date
   };
 
-  
-
   const validateFields = () => {
     let errors = {};
 
     if (!updateType) errors.updateType = "Update type is a required field";
     // Check if updateType is 'visit' and visitDate is not provided
     if (updateType === "visit" && !visitDate) {
-        errors.visitDate = "Please select visiting date";
-      }
-    if (!enquiryStatus || enquiryStatus === "open") {
-        errors.esForWorking = "Please select  enquiry status";
-      }
-    if (!updateForOwner) {
-        errors.updateForOwner = "Update for owner is a required field";
+      errors.visitDate = "Please select visiting date";
     }
-    else if (updateForOwner.length < 50) {
-        errors.updateForOwner = "Update for owner must be at least 50 characters long";
-    }  
+    if (!enquiryStatus || enquiryStatus === "open") {
+      errors.esForWorking = "Please select  enquiry status";
+    }
+    if (!updateForOwner) {
+      errors.updateForOwner = "Update for owner is a required field";
+    } else if (updateForOwner.length < 50) {
+      errors.updateForOwner =
+        "Update for owner must be at least 50 characters long";
+    }
 
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-
-
-const submitEnquiry = async (event) => {
-    event.preventDefault();   
+  const submitEnquiry = async (event) => {
+    event.preventDefault();
     if (!validateFields()) {
-        return;
-      }
-    try {
-        setIsUploading(true);
-
-        const newStatusUpdate = {
-            status: enquiryStatus,
-            // timestamp: new Date().toISOString(),
-            updatedAt: (new Date()),
-            remark,
-            updateType,
-            updateForOwner,
-            visitDate,
-            updatedBy: user.uid
-
-        };
-
-        const updatedDocument = {
-            enquiryFrom,
-            referredBy,
-            enquiryType,
-            name,
-            phone,
-            email,
-            date: new Date(date).toISOString(),
-            enquiryStatus,
-            remark,
-            source,
-            employeeName,
-            propertyOwner,
-            propertyName,
-        };
-
-        if (enquiryDocument?.statusUpdates) {
-            updatedDocument.statusUpdates = [
-                ...enquiryDocument.statusUpdates,
-                newStatusUpdate,
-            ];
-        } else {
-            updatedDocument.statusUpdates = [newStatusUpdate];
-        }
-        await updateDocument(id, updatedDocument);
-        setIsUploading(false);
-        navigate("/enquiry/all");
-    } catch (error) {
-        console.error("Error updating document:", error);
-        setIsUploading(false);
+      return;
     }
-};
+    try {
+      setIsUploading(true);
 
-//   get enquiry status
+      const newStatusUpdate = {
+        status: enquiryStatus,
+        // timestamp: new Date().toISOString(),
+        updatedAt: new Date(),
+        remark,
+        updateType,
+        updateForOwner,
+        visitDate,
+        updatedBy: user.uid,
+      };
 
-  
+      const updatedDocument = {
+        enquiryFrom,
+        referredBy,
+        enquiryType,
+        name,
+        phone,
+        email,
+        date: new Date(date).toISOString(),
+        enquiryStatus,
+        remark,
+        source,
+        employeeName,
+        propertyOwner,
+        propertyName,
+      };
+
+      if (enquiryDocument?.statusUpdates) {
+        updatedDocument.statusUpdates = [
+          ...enquiryDocument.statusUpdates,
+          newStatusUpdate,
+        ];
+      } else {
+        updatedDocument.statusUpdates = [newStatusUpdate];
+      }
+      await updateDocument(id, updatedDocument);
+      setIsUploading(false);
+      navigate("/enquiry/all");
+    } catch (error) {
+      console.error("Error updating document:", error);
+      setIsUploading(false);
+    }
+  };
+
+  //   get enquiry status
+
   useEffect(() => {
     if (enquiryDocument) {
       const lastStatus = enquiryDocument?.statusUpdates?.length
@@ -214,8 +215,10 @@ const submitEnquiry = async (event) => {
   };
 
   // table data start
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => {
+    if (!dbUserState) return []; // Return an empty array if dbUserState is not available
+  
+    return [
       {
         Header: "S.No",
         accessor: (row, i) => i + 1,
@@ -231,17 +234,13 @@ const submitEnquiry = async (event) => {
       {
         Header: "Status",
         accessor: "status",
-        Cell: ({ value }) => (
-          <span className="text-capitalize">{value}</span>
-        ),
+        Cell: ({ value }) => <span className="text-capitalize">{value}</span>,
         disableFilters: true,
       },
       {
         Header: "Type",
         accessor: "updateType",
-        Cell: ({ value }) => (
-          <span className="text-capitalize">{value}</span>
-        ),
+        Cell: ({ value }) => <span className="text-capitalize">{value}</span>,
         disableFilters: true,
       },
       {
@@ -249,37 +248,34 @@ const submitEnquiry = async (event) => {
         accessor: "visitDate",
         disableFilters: true,
         Cell: ({ value }) => {
-          // Check if visitDate exists and is a Firestore Timestamp
           if (value && value.seconds) {
             const date = new Date(value.seconds * 1000);
-            return format(date, "dd-MMM-yy"); // Format as desired
+            return format(date, "dd-MMM-yy");
           }
-          
-          // Handle cases where visitDate is already a Date object or string
           return value ? format(new Date(value), "dd-MMM-yy") : "N/A";
         },
-      }, 
+      },
       {
         Header: "Updated At",
         accessor: "updatedAt",
         Cell: ({ value }) =>
           format(new Date(value.seconds * 1000), "dd-MMM-yy hh:mm a"),
         disableFilters: true,
-      },    
+      },
       {
         Header: "Updated By",
         accessor: "updatedBy",
-        Cell: ({ value }) =>       
-          // {(userDocs && userDocs.find((e) => e.uid === value)).fullName},
-          <span className="text-capitalize">{value}</span>,
-          // <span className="text-capitalize">{value && userDocs && (userDocs &&  userDocs.find((e) => e.id === value)).fullName}</span>,
+        Cell: ({ value }) => (
+          <span className="text-capitalize">
+            {dbUserState.find((user) => user.id === value)?.fullName || "Unknown"}
+          </span>
+        ),
         disableFilters: true,
       },
-      
-      
-    ],
-    []
-  );
+    ];
+  }, [dbUserState]);
+  
+  
 
   if (!enquiryDocument) {
     return <div>Loading...</div>;
@@ -305,7 +301,10 @@ const submitEnquiry = async (event) => {
             >
               arrow_back
             </span>
-            <h2 className="m22 mb-1">Update Enquiry</h2>
+            <h2 className="m22 mb-1">Update Enquiry
+
+            {dbUserState && dbUserState[1]?.fullName}
+            </h2>
           </div>
           <div className="right">
             <div
@@ -900,31 +899,33 @@ const submitEnquiry = async (event) => {
                   </div>
                   {errors.updateType && (
                     <div className="field_error">{errors.updateType}</div>
-                  )}             
+                  )}
                 </div>
               </div>
               {updateType === "visit" && (
-        <div className="col-md-4">
-          <div className="form_field label_top">
-            <label htmlFor="">Visit Date</label>
-            <div className="form_field_inner with_icon">
-              <DatePicker
-                selected={visitDate}
-                onChange={handleChangeVisitDate}
-                minDate={new Date()} // Allow only today and future dates
-                dateFormat="dd/MM/yyyy"
-                placeholderText="Select a date"
-              />
-              <div className="field_icon">
-                <span className="material-symbols-outlined">calendar_month</span>
-              </div>
-            </div>
-            {errors.visitDate && (
-              <div className="field_error">{errors.visitDate}</div>
-            )}
-          </div>
-        </div>
-      )}
+                <div className="col-md-4">
+                  <div className="form_field label_top">
+                    <label htmlFor="">Visit Date</label>
+                    <div className="form_field_inner with_icon">
+                      <DatePicker
+                        selected={visitDate}
+                        onChange={handleChangeVisitDate}
+                        minDate={new Date()} // Allow only today and future dates
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Select a date"
+                      />
+                      <div className="field_icon">
+                        <span className="material-symbols-outlined">
+                          calendar_month
+                        </span>
+                      </div>
+                    </div>
+                    {errors.visitDate && (
+                      <div className="field_error">{errors.visitDate}</div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               <div className="col-md-12">
                 <div className="form_field label_top">
@@ -943,7 +944,6 @@ const submitEnquiry = async (event) => {
                   {errors.updateForOwner && (
                     <div className="field_error">{errors.updateForOwner}</div>
                   )}
-                  
                 </div>
               </div>
               <div
