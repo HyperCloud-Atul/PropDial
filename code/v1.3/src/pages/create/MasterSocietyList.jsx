@@ -96,9 +96,9 @@ export default function MasterSocietyList() {
   const handleCountryChange = async (option) => {
     // setCountry(option);
     let countryname = option.label;
-    console.log('countryname:', countryname)
+    // console.log('countryname:', countryname)
     const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
-    console.log('countryid:', countryid)
+    // console.log('countryid:', countryid)
     const ref = await projectFirestore
       .collection("m_states")
       .where("country", "==", countryid);
@@ -319,6 +319,28 @@ export default function MasterSocietyList() {
     setCurrentDocid(docid);
   };
 
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleSearchInputChange = (e) => {
+    // console.log("e.target.value: ", e.target.value)
+    setSearchInput(e.target.value);
+  };
+
+  const filteredData = masterSociety
+    ? masterSociety.filter((document) => {
+      // Search input filtering
+      const searchMatch = searchInput
+        ? Object.values(document).some(
+          (field) =>
+            typeof field === "string" &&
+            field.toUpperCase().includes(searchInput.toUpperCase())
+        )
+        : true;
+
+      return searchMatch;
+    })
+    : null;
+
   // nine dots menu start
   const nineDotsMenu = [
     // { title: "Country's List", link: "/countrylist", icon: "public" },
@@ -387,8 +409,8 @@ export default function MasterSocietyList() {
                   <div className="rt_global_search search_field">
                     <input
                       placeholder="Search"
-                    // value={searchInput}
-                    // onChange={handleSearchInputChange}
+                      value={searchInput}
+                      onChange={handleSearchInputChange}
                     />
                     <div className="field_icon">
                       <span className="material-symbols-outlined">search</span>
@@ -583,13 +605,13 @@ export default function MasterSocietyList() {
             </form>
             <hr />
           </div>
-          {masterSociety && masterSociety.length !== 0 && (
+          {filteredData && filteredData.length !== 0 && (
             <>
               <div className="master_data_card">
                 {viewMode === "card_view" && (
                   <>
-                    {masterSociety &&
-                      masterSociety.map((data) => (
+                    {filteredData &&
+                      filteredData.map((data) => (
                         <div className="property-status-padding-div">
                           <div
                             className="profile-card-div"
