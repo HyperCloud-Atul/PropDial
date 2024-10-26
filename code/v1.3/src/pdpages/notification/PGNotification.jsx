@@ -21,7 +21,7 @@ const PGNotification = () => {
   // Scroll to the top of the page whenever the location changes end
   //Get Notifications from DB
   const { documents: dbnotifications, error: dbnotificationserror } =
-    useCollection("notifications-propdial");
+    useCollection("notifications-propdial", "", ["createdAt", "desc"]);
 
   // console.log('dbpropertiesdocuments:', dbpropertiesdocuments)
 
