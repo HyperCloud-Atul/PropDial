@@ -3,6 +3,7 @@ import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { useCommon } from "../../hooks/useCommon";
+import Filters from "../../components/Filters";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -43,6 +44,7 @@ export default function MasterLocalityList() {
   const [formError, setFormError] = useState(null);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
+  const [filter, setFilter] = useState("INDIA");
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
   let countryOptions = useRef([]);
   let countryOptionsSorted = useRef([]);
@@ -263,6 +265,28 @@ export default function MasterLocalityList() {
     setCurrentDocid(docid);
   };
 
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleSearchInputChange = (e) => {
+    // console.log("e.target.value: ", e.target.value)
+    setSearchInput(e.target.value);
+  };
+
+  const filteredData = masterLocality
+    ? masterLocality.filter((document) => {
+      // Search input filtering
+      const searchMatch = searchInput
+        ? Object.values(document).some(
+          (field) =>
+            typeof field === "string" &&
+            field.toUpperCase().includes(searchInput.toUpperCase())
+        )
+        : true;
+
+      return searchMatch;
+    })
+    : null;
+
   // nine dots menu start
   const nineDotsMenu = [
     // { title: "Country's List", link: "/countrylist", icon: "public" },
@@ -330,8 +354,8 @@ export default function MasterLocalityList() {
                 <div className="rt_global_search search_field">
                   <input
                     placeholder="Search"
-                  // value={searchInput}
-                  // onChange={handleSearchInputChange}
+                    value={searchInput}
+                    onChange={handleSearchInputChange}
                   />
                   <div className="field_icon">
                     <span className="material-symbols-outlined">search</span>
@@ -504,13 +528,13 @@ export default function MasterLocalityList() {
           </form>
           <hr />
         </div>
-        {masterLocality && masterLocality.length !== 0 && (
+        {filteredData && filteredData.length !== 0 && (
           <>
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>
-                  {masterLocality &&
-                    masterLocality.map((data) => (
+                  {filteredData &&
+                    filteredData.map((data) => (
                       <div className="property-status-padding-div">
                         <div
                           className="profile-card-div"
