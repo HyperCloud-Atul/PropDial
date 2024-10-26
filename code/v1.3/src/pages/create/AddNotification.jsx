@@ -29,6 +29,8 @@ const AddNotification = () => {
     ShortDescription: "",
     Description: "",
     To: "all",
+    status: "active",
+    seenBy: [],  // Tracks which users have seen this notification
   });
 
   const handleSubmit = async (e) => {
@@ -57,6 +59,7 @@ const AddNotification = () => {
         ...notification,
         status: "active",
         postedBy: "propdial",
+        viewedBy: [],
       };
       console.log("newNotification:", newNotification);
       if (!errorFlag) {
@@ -195,7 +198,7 @@ const AddNotification = () => {
                   <textarea
                     required
                     type="text"
-                    maxLength={300}
+                    // maxLength={300}
                     placeholder="Write something about notification"
                     onChange={(e) =>
                       setNotificationFields({

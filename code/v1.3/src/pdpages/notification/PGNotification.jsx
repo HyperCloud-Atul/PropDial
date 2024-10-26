@@ -4,6 +4,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useFirestore } from '../../hooks/useFirestore';
 
 import PDNotification from '../../components/PDNotification';
 import './PGNotification.scss'
@@ -22,14 +23,26 @@ const PGNotification = () => {
   //Get Notifications from DB
   const { documents: dbnotifications, error: dbnotificationserror } =
     useCollection("notifications-propdial", "", ["createdAt", "desc"]);
-
-  // console.log('dbpropertiesdocuments:', dbpropertiesdocuments)
+    const { updateDocument, response: updateDocumentResponse } =
+    useFirestore("notifications-propdial");
 
   const activeNotifications =
-    // user &&
-    // user.uid &&
+    
     dbnotifications &&
     dbnotifications.filter((item) => item.status === "active");
+
+    // After fetching notifications in PGNotification
+useEffect(() => {
+  if (activeNotifications && user) {
+    activeNotifications.forEach(async (notification) => {
+      if (!notification.viewedBy.includes(user.uid)) {
+        await updateDocument(notification.id, {
+          viewedBy: [...notification.viewedBy, user.uid],
+        });
+      }
+    });
+  }
+}, [activeNotifications, user]);
 
   return (
     <div className="top_header_pg pg_bg pg_notification">

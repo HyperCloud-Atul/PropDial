@@ -3,7 +3,8 @@ import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-
+import { useCollection } from "../hooks/useCollection";
+import { projectFirestore } from "../firebase/config";
 // styles & images
 import "./Navbar.css";
 
@@ -21,8 +22,7 @@ export default function Navbar() {
       // User is not logged in, navigate to "/"
       navigate("/search-property");
       return; // Exit the function to prevent further checks
-    }
-    else {
+    } else {
       navigate("/dashboard");
     }
   };
@@ -32,8 +32,7 @@ export default function Navbar() {
       // User is not logged in, navigate to "/"
       navigate("/properties");
       return; // Exit the function to prevent further checks
-    }
-    else {
+    } else {
       navigate("/dashboard");
     }
   };
@@ -42,14 +41,11 @@ export default function Navbar() {
       // User is not logged in, navigate to "/"
       navigate("/about-us");
       return; // Exit the function to prevent further checks
-    }
-    else {
+    } else {
       // console.log('showThirdPage')
-      if (user.role === 'admin' || user.role === 'superAdmin')
+      if (user.role === "admin" || user.role === "superAdmin")
         navigate("/allproperties/all");
-      else
-        navigate('/contact-us')
-
+      else navigate("/contact-us");
     }
   };
 
@@ -102,7 +98,6 @@ export default function Navbar() {
     thirdMenu = "Contact";
   }
 
-
   // Add class on scroll start
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
@@ -121,38 +116,125 @@ export default function Navbar() {
     : "navbar sticky-top";
   // Add class on scroll end
 
-
   // arrrays start
 
-
   // array of more class active on desktop
-  const moreDesktopActivePaths = ["/more-menu", "/faq",
-    "/countrylist", "/statelist", "/citylist", "/localitylist", "/societylist", "/newproperty"];
-  const shouldMoreDesktopActive = moreDesktopActivePaths.includes(location.pathname);
-  const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? "active" : ""}`;
-  // array of more class active on desktop 
+  const moreDesktopActivePaths = [
+    "/more-menu",
+    "/faq",
+    "/countrylist",
+    "/statelist",
+    "/citylist",
+    "/localitylist",
+    "/societylist",
+    "/newproperty",
+  ];
+  const shouldMoreDesktopActive = moreDesktopActivePaths.includes(
+    location.pathname
+  );
+  const moreDesktopActiveClass = `menu_single pointer ${
+    shouldMoreDesktopActive ? "active" : ""
+  }`;
+  // array of more class active on desktop
 
-  // display navbar on top Array 
+  // display navbar on top Array
   const excludedPaths = ["/", "/about-us", "/contact-us", "/faq"];
   const shouldOnTop = excludedPaths.includes(location.pathname);
   const navbarClassName = `navbarparent ${shouldOnTop ? "" : "on_top"}`;
-  // display navbar on top Array 
+  // display navbar on top Array
 
   // array for header social media hide after login
   const socialMediaHidePaths = ["/", "aboutus", "contactus", "more-menu"];
-  const shouldSocialMediaHide = socialMediaHidePaths.includes(location.pathname);
-  const socialMediaClass = `menu_social_media ${shouldSocialMediaHide ? "" : "d_none"}`;
-  // array for header social media hide after login 
+  const shouldSocialMediaHide = socialMediaHidePaths.includes(
+    location.pathname
+  );
+  const socialMediaClass = `menu_social_media ${
+    shouldSocialMediaHide ? "" : "d_none"
+  }`;
+  // array for header social media hide after login
 
-  // hide navbar array 
+  // hide navbar array
   // const navbarHidePaths = ["/login"];
   const navbarHidePaths = [""];
   const shouldNavbarHide = navbarHidePaths.includes(location.pathname);
   const navbarHideClass = `${shouldNavbarHide ? "navbarhide" : ""}`;
-  // hide navbar array 
-
+  // hide navbar array
 
   // arrrays  end
+
+  // code of notification seen only for user start
+  const { documents: notifications } = useCollection(
+    "notifications-propdial",
+    "",
+    ["createdAt", "desc"]
+  );
+
+  // Filter for unread notifications
+  const unreadNotifications = notifications?.filter(
+    (notification) => (notification.viewedBy || []).includes(user && user.uid) === false
+  );
+  // code of notification seen only for user end
+
+  // code of notification seen by user and guest both start
+  // const [unseenCount, setUnseenCount] = useState(0);
+
+  // // Fetch unseen notifications
+  // useEffect(() => {
+  //   if (user) {
+  //     // For logged-in users, fetch unseen notifications from Firestore
+  //     const unsubscribe = projectFirestore
+  //       .collection("notifications-propdial")
+  //       .where("seenBy", "not-in", [user.uid])
+  //       .onSnapshot((snapshot) => {
+  //         setUnseenCount(snapshot.size);
+  //       });
+
+  //     return () => unsubscribe();
+  //   } else {
+  //     // For guest users, check unseen notifications in session storage
+  //     const storedNotifications = JSON.parse(sessionStorage.getItem("seenNotifications") || "[]");
+
+  //     projectFirestore
+  //       .collection("notifications-propdial")
+  //       .get()
+  //       .then((snapshot) => {
+  //         const unseen = snapshot.docs.filter(
+  //           (doc) => !storedNotifications.includes(doc.id)
+  //         );
+  //         setUnseenCount(unseen.length);
+  //       });
+  //   }
+  // }, [user]);
+
+  // // Clear the notification count when notifications page is opened
+  // const handleNotificationClick = () => {
+  //   if (user) {
+  //     // For logged-in users, update Firestore
+  //     projectFirestore
+  //       .collection("notifications-propdial")
+  //       .get()
+  //       .then((snapshot) => {
+  //         snapshot.docs.forEach((doc) => {
+  //           if (!doc.data().seenBy.includes(user.uid)) {
+  //             projectFirestore.collection("notifications-propdial").doc(doc.id).update({
+  //               seenBy: [...doc.data().seenBy, user.uid],
+  //             });
+  //           }
+  //         });
+  //       });
+  //   } else {
+  //     // For guest users, update session storage
+  //     projectFirestore
+  //       .collection("notifications-propdial")
+  //       .get()
+  //       .then((snapshot) => {
+  //         const notificationIds = snapshot.docs.map((doc) => doc.id);
+  //         sessionStorage.setItem("seenNotifications", JSON.stringify(notificationIds));
+  //       });
+  //   }
+  //   setUnseenCount(0); // Remove bell indicator
+  // };
+  // code of notification seen by user and guest both end
   return (
     <div className={navbarHideClass}>
       <header className={navbarClassName}>
@@ -164,35 +246,45 @@ export default function Navbar() {
             <li className="main_menus">
               <div
                 onClick={showHome}
-                className={`menu_single pointer ${location.pathname === "/" ? "active" : ""
-                  }`}
+                className={`menu_single pointer ${
+                  location.pathname === "/" ? "active" : ""
+                }`}
               >
-                <span className="material-symbols-outlined">{firstMenuIcon}</span>
+                <span className="material-symbols-outlined">
+                  {firstMenuIcon}
+                </span>
                 {firstMenu}
               </div>
 
               <div
                 onClick={showSecondPage}
-                className={`menu_single pointer ${location.pathname === "/dashboard" ? "active" : ""
-                  }`}
+                className={`menu_single pointer ${
+                  location.pathname === "/dashboard" ? "active" : ""
+                }`}
               >
-                <span className="material-symbols-outlined">{secondMenuIcon}</span>
+                <span className="material-symbols-outlined">
+                  {secondMenuIcon}
+                </span>
                 {secondMenu}
               </div>
 
               <div
                 onClick={showThirdPage}
-                className={`menu_single pointer ${location.pathname === "/contact-us" || location.pathname === "/allproperties" ? "active" : ""
-                  }`}
+                className={`menu_single pointer ${
+                  location.pathname === "/contact-us" ||
+                  location.pathname === "/allproperties"
+                    ? "active"
+                    : ""
+                }`}
               >
-                <span className="material-symbols-outlined">{thirdMenuIcon}</span>
+                <span className="material-symbols-outlined">
+                  {thirdMenuIcon}
+                </span>
                 {thirdMenu}
               </div>
 
               <Link to="/more-menu">
-                <div
-                  className={moreDesktopActiveClass}
-                >
+                <div className={moreDesktopActiveClass}>
                   <span className="material-symbols-outlined">More</span>
                   More
                 </div>
@@ -200,8 +292,9 @@ export default function Navbar() {
               {user ? (
                 <Link
                   to="/profile"
-                  className={`menu_single profile pointer ${location.pathname === "/profile" ? "active" : ""
-                    }`}
+                  className={`menu_single profile pointer ${
+                    location.pathname === "/profile" ? "active" : ""
+                  }`}
                 >
                   <span>Hi, {user.displayName}</span>
                   <div className="user_img">
@@ -218,8 +311,9 @@ export default function Navbar() {
               ) : (
                 <Link to="/login">
                   <div
-                    className={`menu_single login pointer ${location.pathname === "/login" ? "active" : ""
-                      }`}
+                    className={`menu_single login pointer ${
+                      location.pathname === "/login" ? "active" : ""
+                    }`}
                   >
                     <span className="material-symbols-outlined ba_animation">
                       login
@@ -228,22 +322,36 @@ export default function Navbar() {
                   </div>
                 </Link>
               )}
-
             </li>
             <li className="menu_social_media">
               {/* <Link to="/ticketdetail">
                 <img src="./assets/img/home/ticketicon_navbar.png" alt=""
                   className="pointer" />
               </Link> */}
-              <Link to="/notification">
-                <img src="./assets/img/home/notification.png" alt=""
-                  className="pointer"
-                  style={{
-                    width: "22px",
-                    height: "auto"
-                  }}
+
+              <Link to="/notification" className="notification_icon relative">
+                <img
+                  src="./assets/img/home/notification.png"
+                  alt=""
+                  className="pointer"                 
                 />
+                {unreadNotifications && unreadNotifications.length > 0 && (
+                  <span className="notification-badge">
+                    {unreadNotifications.length}
+                    
+                  </span>
+                )}
               </Link>
+
+              {/* html for notification both guest and user  */}
+              {/* <Link to="/notification" onClick={handleNotificationClick}>
+                <span className="notification-bell">
+                  🔔
+                  {unseenCount > 0 && (
+                    <span className="notification-count">{unseenCount}</span>
+                  )}
+                </span>
+              </Link> */}
             </li>
           </ul>
         </nav>
