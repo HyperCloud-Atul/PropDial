@@ -20,50 +20,45 @@ export default function MasterSocietyList() {
   const { addDocument, response } = useFirestore("m_societies");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_societies");
-  const { documents: dbcitiesdocuments, error: dbcitieserror } = useCollection(
+
+  //Master Data Loading Initialisation - Start
+  const { documents: masterCountry, error: masterCountryerror } =
+    useCollection("m_countries", "", ["country", "asc"]);
+
+  const { documents: masterState, error: masterStateError } = useCollection(
+    "m_states", "", ["state", "asc"]
+  );
+  const { documents: masterCity, error: masterCityError } = useCollection(
     "m_cities"
   );
-  const { documents: dbstatesdocuments, error: dbstateserror } = useCollection(
-    "m_states"
-  );
-  const { documents: masterSociety, error: masterSocietyerror } =
-    useCollection("m_societies", "", ["society", "asc"]);
-  const { documents: dblocalitiesdocuments, error: dblocalitieserror } = useCollection(
+  const { documents: masterLocality, error: masterLocalityError } = useCollection(
     "m_localities"
   );
+  const { documents: masterSociety, error: masterSocietyError } =
+    useCollection("m_societies", "", ["society", "asc"]);
 
-  // const { documents: masterState, error: masterStateerror } = useCollection('m_states')
-  const { documents: masterCountry, error: masterCountryerror } =
-    useCollection("m_countries");
-  // console.log('masterCountry:', masterCountry)
+
   const [country, setCountry] = useState();
-  const [countryList, setCountryList] = useState();
-  const [dbStateList, setdbStateList] = useState();
   const [state, setState] = useState();
-  const [dbCityList, setdbCityList] = useState();
   const [city, setCity] = useState();
-  const [dbLocalityList, setdbLocalityList] = useState();
   const [locality, setLocality] = useState();
   const [society, setSociety] = useState();
+
+  let countryOptions = useRef([]);
+  let stateOptions = useRef([]);
+  let cityOptions = useRef([]);
+  let localityOptions = useRef([]);
+  let societyOptions = useRef([]);
+
+  //Master Data Loading Initialisation - End
+
   const [formError, setFormError] = useState(null);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
-  let countryOptions = useRef([]);
-  let countryOptionsSorted = useRef([]);
-  let stateOptions = useRef([]);
-  let stateOptionsSorted = useRef([]);
-  let cityOptions = useRef([]);
-  let cityOptionsSorted = useRef([]);
-  let localityOptions = useRef([]);
-  let localityOptionsSorted = useRef([]);
+
 
   useEffect(() => {
-
-    setdbLocalityList(dblocalitiesdocuments)
-    setdbCityList(dbcitiesdocuments)
-    setdbStateList(dbstatesdocuments)
-
     // console.log('in useeffect')
     if (masterCountry) {
       countryOptions.current = masterCountry.map((countryData) => ({
@@ -71,37 +66,22 @@ export default function MasterSocietyList() {
         value: countryData.id,
       }));
 
-      console.log("countryOptions: ", countryOptions)
-
-      countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
-        a.label.localeCompare(b.label)
-      );
-
-
-      setCountryList(countryOptionsSorted.current);
-
-      setCountry({
-        label: countryOptionsSorted.current[0].label,
-        value: countryOptionsSorted.current[0].value,
-      })
-
-      handleCountryChange({
-        label: countryOptionsSorted.current[0].label,
-        value: countryOptionsSorted.current[0].value,
-      });
+      // console.log("countryOptions: ", countryOptions)
     }
   }, [masterCountry]);
 
+  // Populate Master Data - Start
   //Country select onchange
   const handleCountryChange = async (option) => {
-    // setCountry(option);
-    let countryname = option.label;
+    setCountry(option);
+    // let countryname = option.label;
     // console.log('countryname:', countryname)
-    const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
+    // const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
     // console.log('countryid:', countryid)
     const ref = await projectFirestore
       .collection("m_states")
-      .where("country", "==", countryid);
+      .where("country", "==", option.value)
+      .orderBy("state", "asc");
     ref.onSnapshot(
       async (snapshot) => {
         if (snapshot.docs) {
@@ -109,20 +89,17 @@ export default function MasterSocietyList() {
             label: stateData.data().state,
             value: stateData.id,
           }));
-          // console.log('stateOptions:', stateOptions)
-          stateOptionsSorted.current = stateOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
 
-
-          setState({
-            label: stateOptionsSorted.current[0].label,
-            value: stateOptionsSorted.current[0].value,
-          });
-          handleStateChange({
-            label: stateOptionsSorted.current[0].label,
-            value: stateOptionsSorted.current[0].value,
-          });
+          if (stateOptions.current.length === 0) {
+            console.log("No State")
+            handleStateChange(null)
+          }
+          else {
+            handleStateChange({
+              label: stateOptions.current[0].label,
+              value: stateOptions.current[0].value,
+            });
+          }
 
         } else {
           // setError('No such document exists')
@@ -138,14 +115,11 @@ export default function MasterSocietyList() {
   //Stae select onchange
   const handleStateChange = async (option) => {
     setState(option);
-    // console.log('option.label:', option.label)
-    let statename = option.label;
-    // console.log('statename:', statename)
-    const stateid = dbstatesdocuments && dbstatesdocuments.find((e) => e.state === statename).id
-    // console.log('stateid:', stateid)
+    // console.log('state.id:', option.value)    
     const ref = await projectFirestore
       .collection("m_cities")
-      .where("state", "==", stateid);
+      .where("state", "==", option.value)
+      .orderBy("city", "asc");
     ref.onSnapshot(
       async (snapshot) => {
         if (snapshot.docs) {
@@ -153,18 +127,17 @@ export default function MasterSocietyList() {
             label: cityData.data().city,
             value: cityData.id,
           }));
-          cityOptionsSorted.current = cityOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
 
-          setCity({
-            label: cityOptionsSorted.current[0].label,
-            value: cityOptionsSorted.current[0].value,
-          });
-          handleCityChange({
-            label: cityOptionsSorted.current[0].label,
-            value: cityOptionsSorted.current[0].value,
-          });
+          if (cityOptions.current.length === 0) {
+            // console.log("No City")
+            handleCityChange(null)
+          }
+          else {
+            handleCityChange({
+              label: cityOptions.current[0].label,
+              value: cityOptions.current[0].value,
+            });
+          }
 
         } else {
           // setError('No such document exists')
@@ -176,47 +149,88 @@ export default function MasterSocietyList() {
       }
     );
   };
+
   //City select onchange
   const handleCityChange = async (option) => {
     setCity(option);
-    let cityname = option.label;
-    // console.log('cityname:', cityname)
-    const cityid = dbcitiesdocuments && dbcitiesdocuments.find((e) => e.city === cityname).id
-    // console.log('cityid:', cityid)
-    const ref = await projectFirestore
-      .collection("m_localities")
-      .where("city", "==", cityid);
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          console.log("snapshot.docs: ", snapshot.docs)
-          localityOptions.current = snapshot.docs.map((localityData) => ({
-            label: localityData.data().locality,
-            value: localityData.id,
-          }));
+    // console.log('city.id:', option)
 
-          localityOptionsSorted.current = localityOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
+    if (option) {
+      const ref = await projectFirestore
+        .collection("m_localities")
+        .where("city", "==", option.value)
+        .orderBy("locality", "asc");
+      ref.onSnapshot(
+        async (snapshot) => {
+          if (snapshot.docs) {
+            localityOptions.current = snapshot.docs.map((localityData) => ({
+              label: localityData.data().locality,
+              value: localityData.id,
+            }));
 
-          // console.log("localityOptionsSorted: ", localityOptionsSorted)
+            // console.log("localityOptions: ", localityOptions)
 
-          setLocality({
-            label: localityOptionsSorted.current[0].label,
-            value: localityOptionsSorted.current[0].value,
-          });
-        } else {
-          // setError('No such document exists')
+            if (localityOptions.current.length === 0) {
+              // console.log("No Locality")
+              handleLocalityChange(null)
+            }
+            else {
+              handleLocalityChange({
+                label: localityOptions.current[0].label,
+                value: localityOptions.current[0].value,
+              });
+            }
 
-          localityOptionsSorted = null
+          } else {
+            handleLocalityChange(null)
+            // setError('No such document exists')
+          }
+        },
+        (err) => {
+          console.log(err.message);
+          // setError('failed to get document')
         }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
+      );
+    }
   };
+
+  //Locality select onchange
+  const handleLocalityChange = async (option) => {
+    setLocality(option);
+    // console.log('locality.id:', option.value)
+
+    if (option) {
+      const ref = await projectFirestore
+        .collection("m_societies")
+        .where("locality", "==", option.value)
+        .orderBy("society", "asc");
+      ref.onSnapshot(
+        async (snapshot) => {
+          if (snapshot.docs) {
+            societyOptions.current = snapshot.docs.map((societyData) => ({
+              label: societyData.data().society,
+              value: societyData.id,
+            }));
+
+          } else {
+            // handleSocietyChange(null)
+          }
+        },
+        (err) => {
+          console.log(err.message);
+          // setError('failed to get document')
+        }
+      );
+    }
+  };
+
+  //Society select onchange
+  // const handleSocietyChange = async (option) => {
+  //   setSociety(option);
+  //   // console.log('society.id:', option.value)
+  // };
+
+  // Populate Master Data - End
 
   let results = [];
   const handleSubmit = async (e) => {
@@ -276,7 +290,10 @@ export default function MasterSocietyList() {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add Society");
-    handleCountryChange(country);
+    setCountry(null);
+    setState(null)
+    setCity(null)
+    setLocality(null)
     setSociety("");
     setCurrentDocid(null);
   };
@@ -303,9 +320,9 @@ export default function MasterSocietyList() {
     // console.log("country id: ", doccountry)
     const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
     // console.log("country name: ", countryname)
-    const statename = (dbstatesdocuments && dbstatesdocuments.find((e) => e.id === docstate)).state
-    const cityname = (dbcitiesdocuments && dbcitiesdocuments.find((e) => e.id === doccity)).city
-    const localityname = (dblocalitiesdocuments && dblocalitiesdocuments.find((e) => e.id === doclocality)).locality
+    const statename = (masterState && masterState.find((e) => e.id === docstate)).state
+    const cityname = (masterCity && masterCity.find((e) => e.id === doccity)).city
+    const localityname = (masterLocality && masterLocality.find((e) => e.id === doclocality)).locality
 
     window.scrollTo(0, 0);
     setFormError(null);
@@ -467,7 +484,7 @@ export default function MasterSocietyList() {
                         className=""
                         onChange={handleCountryChange}
                         // options={countryOptionsSorted.current}
-                        options={countryList}
+                        options={countryOptions.current}
                         value={country}
                         styles={{
                           control: (baseStyles, state) => ({
@@ -488,7 +505,7 @@ export default function MasterSocietyList() {
                       <Select
                         className=""
                         onChange={handleStateChange}
-                        options={stateOptionsSorted.current}
+                        options={stateOptions.current}
                         // options={stateList}
                         value={state}
                         styles={{
@@ -511,7 +528,7 @@ export default function MasterSocietyList() {
                       <Select
                         className=""
                         onChange={handleCityChange}
-                        options={cityOptionsSorted.current}
+                        options={cityOptions.current}
                         // options={stateList}
                         value={city}
                         styles={{
@@ -534,7 +551,7 @@ export default function MasterSocietyList() {
                       <Select
                         className=""
                         onChange={(option) => setLocality(option)}
-                        options={localityOptionsSorted.current}
+                        options={localityOptions.current}
                         // options={stateList}
                         value={locality}
                         styles={{
@@ -551,12 +568,12 @@ export default function MasterSocietyList() {
                 </div>
                 <div className="col-xl-4 col-lg-6">
                   <div className="form_field label_top">
-                    <label htmlFor="">New Society</label>
+                    <label htmlFor="">Society</label>
                     <div className="form_field_inner">
                       <input
                         required
                         type="text"
-                        placeholder="Entry Locality Name"
+                        placeholder="Entry Society Name"
                         onChange={(e) => setSociety(e.target.value)}
                         value={society}
                         styles={{
@@ -670,11 +687,11 @@ export default function MasterSocietyList() {
                                     }}
                                   >
                                     {/* {dblocalitiesdocuments[2].id} */}
-                                    {(dbLocalityList && dbLocalityList.find((e) => e.id === data.locality))?.locality},
+                                    {(masterLocality && masterLocality.find((e) => e.id === data.locality))?.locality},
                                     {" "}
                                     {/* {data.city}, */}
-                                    {(dbCityList && dbCityList.find((e) => e.id === data.city))?.city},{" "}
-                                    {(dbStateList && dbStateList.find((e) => e.id === data.state))?.state},{" "}
+                                    {(masterCity && masterCity.find((e) => e.id === data.city))?.city},{" "}
+                                    {(masterState && masterState.find((e) => e.id === data.state))?.state},{" "}
                                     {(masterCountry && masterCountry.find((e) => e.id === data.country)).country}
                                   </small>
                                 </div>

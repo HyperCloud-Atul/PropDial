@@ -23,37 +23,43 @@ export default function MasterCityList() {
     useFirestore("m_cities");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_cities");
-  // const { documents: masterCity, error: masterCityerror } =
-  //   useCollection("m_cities");
-  const { documents: masterCity, error: masterCityerror } = useCollection(
-    "m_cities",
-    "",
-    ["city", "asc"]
-  );
-  const { documents: masterState, error: masterStateerror } = useCollection(
-    "m_states",
-    "",
-    ["state", "asc"]
-  );
-  // const { documents: masterState, error: masterStateerror } = useCollection('m_states')
+
+  //Master Data Loading Initialisation - Start
   const { documents: masterCountry, error: masterCountryerror } =
-    useCollection("m_countries");
-  // console.log('masterCountry:', masterCountry)
+    useCollection("m_countries", "", ["country", "asc"]);
+
+  const { documents: masterState, error: masterStateError } = useCollection(
+    "m_states", "", ["state", "asc"]
+  );
+  const { documents: masterCity, error: masterCityError } = useCollection(
+    "m_cities", "", ["city", "asc"]
+  );
+  // const { documents: masterLocality, error: masterLocalityerror } =
+  //   useCollection("m_localities", "", ["locality", "asc"]);
+
+  // const { documents: masterSociety, error: masterSocietyError } =
+  //   useCollection("m_societies", "", ["society", "asc"]);
+
 
   const [country, setCountry] = useState();
-  const [countryList, setCountryList] = useState();
   const [state, setState] = useState();
-  // const [stateList, setStateList] = useState()
   const [city, setCity] = useState();
+  const [locality, setLocality] = useState();
+  const [society, setSociety] = useState();
+
+  let countryOptions = useRef([]);
+  let stateOptions = useRef([]);
+  let cityOptions = useRef([]);
+  let localityOptions = useRef([]);
+  let societyOptions = useRef([]);
+
+  //Master Data Loading Initialisation - End
+
   const [formError, setFormError] = useState(null);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [filter, setFilter] = useState("INDIA");
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
-  let countryOptions = useRef([]);
-  let countryOptionsSorted = useRef([]);
-  let stateOptions = useRef([]);
-  let stateOptionsSorted = useRef([]);
 
   useEffect(() => {
     // console.log('in useeffect')
@@ -62,35 +68,21 @@ export default function MasterCityList() {
         label: countryData.country,
         value: countryData.id,
       }));
-
-      countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
-        a.label.localeCompare(b.label)
-      );
-
-      setCountryList(countryOptionsSorted.current);
-
-      setCountry({
-        label: countryOptionsSorted.current[0].label,
-        value: countryOptionsSorted.current[0].value,
-      })
-
-      handleCountryChange({
-        label: countryOptionsSorted.current[0].label,
-        value: countryOptionsSorted.current[0].value,
-      });
     }
   }, [masterCountry]);
 
+  // Populate Master Data - Start
   //Country select onchange
   const handleCountryChange = async (option) => {
-    // setCountry(option);
-    let countryname = option.label;
+    setCountry(option);
+    // let countryname = option.label;
     // console.log('countryname:', countryname)
-    const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
+    // const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
     // console.log('countryid:', countryid)
     const ref = await projectFirestore
       .collection("m_states")
-      .where("country", "==", countryid);
+      .where("country", "==", option.value)
+      .orderBy("state", "asc");
     ref.onSnapshot(
       async (snapshot) => {
         if (snapshot.docs) {
@@ -98,16 +90,17 @@ export default function MasterCityList() {
             label: stateData.data().state,
             value: stateData.id,
           }));
-          // console.log('stateOptions:', stateOptions)
-          stateOptionsSorted.current = stateOptions.current.sort((a, b) =>
-            a.label.localeCompare(b.label)
-          );
 
-
-          setState({
-            label: stateOptionsSorted.current[0].label,
-            value: stateOptionsSorted.current[0].value,
-          });
+          if (stateOptions.current.length === 0) {
+            console.log("No State")
+            handleStateChange(null)
+          }
+          else {
+            handleStateChange({
+              label: stateOptions.current[0].label,
+              value: stateOptions.current[0].value,
+            });
+          }
 
         } else {
           // setError('No such document exists')
@@ -119,6 +112,115 @@ export default function MasterCityList() {
       }
     );
   };
+
+  //Stae select onchange
+  const handleStateChange = async (option) => {
+    setState(option);
+    // console.log('state.id:', option.value)    
+    const ref = await projectFirestore
+      .collection("m_cities")
+      .where("state", "==", option.value)
+      .orderBy("city", "asc");
+    ref.onSnapshot(
+      async (snapshot) => {
+        if (snapshot.docs) {
+          cityOptions.current = snapshot.docs.map((cityData) => ({
+            label: cityData.data().city,
+            value: cityData.id,
+          }));
+
+          // if (cityOptions.current.length === 0) {
+          //   // console.log("No City")
+          //   handleCityChange(null)
+          // }
+          // else {
+          //   handleCityChange({
+          //     label: cityOptions.current[0].label,
+          //     value: cityOptions.current[0].value,
+          //   });
+          // }
+
+        } else {
+          // handleCityChange(null)
+          // setError('No such document exists')
+        }
+      },
+      (err) => {
+        console.log(err.message);
+        // setError('failed to get document')
+      }
+    );
+  };
+
+  //City select onchange
+  // const handleCityChange = async (option) => {
+  //   setCity(option);
+  //   // console.log('city.id:', option)
+
+  //   if (option) {
+  //     const ref = await projectFirestore
+  //       .collection("m_localities")
+  //       .where("city", "==", option.value)
+  //       .orderBy("locality", "asc");
+  //     ref.onSnapshot(
+  //       async (snapshot) => {
+  //         if (snapshot.docs) {
+  //           localityOptions.current = snapshot.docs.map((localityData) => ({
+  //             label: localityData.data().locality,
+  //             value: localityData.id,
+  //           }));
+
+  //           // console.log("localityOptions: ", localityOptions)           
+
+  //         } else {
+  //           // setError('No such document exists')
+  //         }
+  //       },
+  //       (err) => {
+  //         console.log(err.message);
+  //         // setError('failed to get document')
+  //       }
+  //     );
+  //   }
+  // };
+
+  //Locality select onchange
+  // const handleLocalityChange = async (option) => {
+  //   setLocality(option);
+  //   // console.log('locality.id:', option.value)
+
+  //   if (option) {
+  //     const ref = await projectFirestore
+  //       .collection("m_societies")
+  //       .where("locality", "==", option.value)
+  //       .orderBy("society", "asc");
+  //     ref.onSnapshot(
+  //       async (snapshot) => {
+  //         if (snapshot.docs) {
+  //           societyOptions.current = snapshot.docs.map((societyData) => ({
+  //             label: societyData.data().society,
+  //             value: societyData.id,
+  //           }));
+
+  //         } else {
+  //           // handleSocietyChange(null)
+  //         }
+  //       },
+  //       (err) => {
+  //         console.log(err.message);
+  //         // setError('failed to get document')
+  //       }
+  //     );
+  //   }
+  // };
+
+  //Society select onchange
+  // const handleSocietyChange = async (option) => {
+  //   setSociety(option);
+  //   // console.log('society.id:', option.value)
+  // };
+
+  // Populate Master Data - End
 
   let results = [];
 
@@ -189,7 +291,8 @@ export default function MasterCityList() {
     setFormError("");
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add");
-    handleCountryChange(country);
+    setCountry(null)
+    setState(null)
     setCity("");
   };
 
@@ -409,8 +512,7 @@ export default function MasterCityList() {
                   <Select
                     className=""
                     onChange={handleCountryChange}
-                    // options={countryOptionsSorted.current}
-                    options={countryList}
+                    options={countryOptions.current}
                     value={country}
                     styles={{
                       control: (baseStyles, state) => ({
@@ -431,7 +533,7 @@ export default function MasterCityList() {
                   <Select
                     className=""
                     onChange={(option) => setState(option)}
-                    options={stateOptionsSorted.current}
+                    options={stateOptions.current}
                     // options={stateList}
                     value={state}
                     styles={{
