@@ -299,8 +299,7 @@ export default function MasterCityList() {
   return (
     <div className="top_header_pg pg_bg pg_adminproperty">
       <div
-        className={`page_spacing ${masterCity && masterCity.length === 0 && "pg_min_height"
-          }`}
+        className="page_spacing pg_min_height"
       >
         <NineDots nineDotsMenu={nineDotsMenu} />
 

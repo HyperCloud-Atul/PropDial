@@ -46,7 +46,7 @@ useEffect(() => {
 
   return (
     <div className="top_header_pg pg_bg pg_notification">
-      <div className={`page_spacing ${activeNotifications && activeNotifications.length === 0 ? "pg_min_height" : ""}`}>
+      <div className={`page_spacing pg_min_height ${activeNotifications && activeNotifications.length === 0 ? "pg_min_height" : ""}`}>
         {activeNotifications && activeNotifications.length === 0 && (
           <div className="pg_msg">
             No notifications available at this time

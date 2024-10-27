@@ -249,8 +249,7 @@ const PGMoreMenu = () => {
                       <span className="material-symbols-outlined mms_ra">
                         chevron_right
                       </span>
-                    </Link>               
-              
+                    </Link>            
                     <Link className="mm_single" to="/userlist">
                       <span className="material-symbols-outlined mms_icon">
                         group
@@ -260,7 +259,18 @@ const PGMoreMenu = () => {
                       <span className="material-symbols-outlined mms_ra">
                         chevron_right
                       </span>
-                    </Link>                 
+                    </Link> 
+                    <Link className="mm_single" to="/agents">
+                      <span className="material-symbols-outlined mms_icon">
+                        group
+                      </span>
+                      <h5 className="dr16">agent list</h5>
+                      <h6>View and manage all registered agent</h6>
+                      <span className="material-symbols-outlined mms_ra">
+                        chevron_right
+                      </span>
+                    </Link> 
+                                    
                     
                     
                   </div>
