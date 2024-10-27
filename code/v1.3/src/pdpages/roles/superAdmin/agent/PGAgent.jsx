@@ -2,6 +2,7 @@ import React from "react";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { useState, useEffect } from "react";
 import { useFirestore } from "../../../../hooks/useFirestore";
+import { useCollection } from "../../../../hooks/useCollection";
 import PhoneInput from "react-phone-input-2";
 
 // component
@@ -13,11 +14,16 @@ const PGAgent = () => {
   const { user } = useAuthContext();
   // add document
   const {
-    addDocument: addAgentDocument,
-    updateDocument: updateAgentDocument,
-    deleteDocument: deleteAgentDocument,
+    addDocument: addAgentDoc,
+    updateDocument: updateAgentDoc,
+    deleteDocument: deleteAgentDoc,
     error: addingError,
   } = useFirestore("agent-propdial");
+
+   // get document
+   const { documents: agentDoc, errors: agentDocError } = useCollection(
+    "agent-propdial",
+    );
 
   // all useStates
   const [showAIForm, setShowAIForm] = useState(false);
@@ -50,7 +56,7 @@ const PGAgent = () => {
 
     try {
       setIsUploading(true);
-      const docRef = await addAgentDocument({
+      const docRef = await addAgentDoc({
         agentName,
         agentCompnayName,
         agentPhone,
@@ -82,7 +88,6 @@ const PGAgent = () => {
 
   // nine dots menu start
   const nineDotsMenu = [
-    // { title: "Country's List", link: "/countrylist", icon: "public" },
     { title: "User List", link: "/userlist", icon: "group" },
   ];
   // nine dots menu end
@@ -99,9 +104,9 @@ const PGAgent = () => {
                 <div className="left">
                   <h2 className="m22">
                     Total Agent:{" "}
-                    {/* {masterCity && (
-                        <span className="text_orange">{masterCity.length}</span>
-                      )} */}
+                    {agentDoc && (
+                        <span className="text_orange">{agentDoc.length}</span>
+                      )}
                   </h2>
                 </div>
                 <div className="right">
@@ -361,7 +366,19 @@ const PGAgent = () => {
                 <hr />
               </>
             )}
+             <>
+      {agentDoc &&
+        agentDoc.map((doc) => (
+          <div
+            className={`pu_single`}         
+          >
+           {doc.agentName}
+          </div>
+        ))}
+    
+    </>
             {/* )} */}
+
           </div>
         </div>
       ) : (
