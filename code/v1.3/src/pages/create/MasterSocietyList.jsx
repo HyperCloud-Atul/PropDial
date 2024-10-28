@@ -29,10 +29,10 @@ export default function MasterSocietyList() {
     "m_states", "", ["state", "asc"]
   );
   const { documents: masterCity, error: masterCityError } = useCollection(
-    "m_cities"
+    "m_cities", "", ["city", "asc"]
   );
   const { documents: masterLocality, error: masterLocalityError } = useCollection(
-    "m_localities"
+    "m_localities", "", ["locality", "asc"]
   );
   const { documents: masterSociety, error: masterSocietyError } =
     useCollection("m_societies", "", ["society", "asc"]);

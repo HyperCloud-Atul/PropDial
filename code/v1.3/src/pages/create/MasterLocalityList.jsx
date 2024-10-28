@@ -30,7 +30,7 @@ export default function MasterLocalityList() {
     "m_states", "", ["state", "asc"]
   );
   const { documents: masterCity, error: masterCityError } = useCollection(
-    "m_cities"
+    "m_cities", "", ["city", "asc"]
   );
   const { documents: masterLocality, error: masterLocalityerror } =
     useCollection("m_localities", "", ["locality", "asc"]);
