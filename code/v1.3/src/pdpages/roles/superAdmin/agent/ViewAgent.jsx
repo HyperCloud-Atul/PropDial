@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-// import component 
+// import component
 import AgentSingle from "./AgentSingle";
 
 const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
@@ -76,9 +76,12 @@ const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
       {/* view agent pg header and filters end  */}
 
       {/* agent card and table  */}
-      <AgentSingle 
-      agentDoc={agentDoc}
-      />
+      {viewMode === "card_view" && <AgentSingle agentDoc={agentDoc} />}
+      {viewMode === "table_view" && (
+              <h5 className="text-center text_green">
+                Coming Soon....
+              </h5>
+            )}
     </>
   );
 };

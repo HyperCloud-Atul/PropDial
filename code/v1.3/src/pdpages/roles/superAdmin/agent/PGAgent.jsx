@@ -18,7 +18,7 @@ const PGAgent = () => {
 
   // get agent document start
   const { documents: agentDoc, errors: agentDocError } =
-    useCollection("agent-propdial");
+    useCollection("agent-propdial", "", ["createdAt", "desc"]);
   // get agent document end
 
   // nine dots menu start
