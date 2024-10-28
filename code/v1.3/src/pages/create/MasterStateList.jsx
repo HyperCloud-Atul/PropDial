@@ -24,19 +24,38 @@ export default function MasterStateList() {
   const { addDocument, response } = useFirestore("m_states");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_states");
-  // const { documents: masterState, error: masterStateerror } =
-  //   useCollection("m_states");
-  const { documents: masterState, error: masterStateerror } = useCollection(
-    "m_states",
-    "",
-    ["state", "asc"]
-  );
-  // console.log("masterState: ", masterState)
+
+  //Master Data Loading Initialisation - Start
   const { documents: masterCountry, error: masterCountryerror } =
-    useCollection("m_countries");
+    useCollection("m_countries", "", ["country", "asc"]);
+
+  const { documents: masterState, error: masterStateError } = useCollection(
+    "m_states", "", ["state", "asc"]
+  );
+  const { documents: masterCity, error: masterCityError } = useCollection(
+    "m_cities", "", ["city", "asc"]
+  );
+  const { documents: masterLocality, error: masterLocalityerror } =
+    useCollection("m_localities", "", ["locality", "asc"]);
+
+  // const { documents: masterSociety, error: masterSocietyError } =
+  //   useCollection("m_societies", "", ["society", "asc"]);
+
 
   const [country, setCountry] = useState();
-  const [state, setState] = useState("");
+  const [state, setState] = useState();
+  const [city, setCity] = useState();
+  const [locality, setLocality] = useState();
+  const [society, setSociety] = useState();
+
+  let countryOptions = useRef([]);
+  let stateOptions = useRef([]);
+  let cityOptions = useRef([]);
+  let localityOptions = useRef([]);
+  let societyOptions = useRef([]);
+
+  //Master Data Loading Initialisation - End
+
   const [stateCode, setStateCode] = useState("");
   const [gstStateCode, setGSTStateCode] = useState("");
   const [formError, setFormError] = useState(null);
@@ -45,8 +64,6 @@ export default function MasterStateList() {
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
   const [filter, setFilter] = useState("INDIA");
 
-  let countryOptions = useRef([]);
-  let countryOptionsSorted = useRef([]);
 
   useEffect(() => {
     // console.log("in useeffect");
@@ -56,9 +73,6 @@ export default function MasterStateList() {
         value: countryData.id,
       }));
 
-      countryOptionsSorted.current = countryOptions.current.sort((a, b) =>
-        a.label.localeCompare(b.label)
-      );
     }
   }, [masterCountry]);
 
@@ -187,6 +201,7 @@ export default function MasterStateList() {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add State");
+    setCountry(null)
     setState("");
     setStateCode("")
     setGSTStateCode("")
@@ -356,7 +371,7 @@ export default function MasterStateList() {
                       <Select
                         className=""
                         onChange={(option) => setCountry(option)}
-                        options={countryOptionsSorted.current}
+                        options={countryOptions.current}
                         value={country}
                         styles={{
                           control: (baseStyles, state) => ({
@@ -484,7 +499,7 @@ export default function MasterStateList() {
                                       data.id,
                                       data.country,
                                       data.state,
-                                      data.statecode,
+                                      data.stateCode,
                                       data.gstStateCode
                                     )
                                   }
