@@ -22,6 +22,7 @@ const PGEnquiry = () => {
 console.log("enquiryDocs", enquiryDocs);
 
   const enquiryDocsById = id === "all" ? enquiryDocs : (enquiryDocs && enquiryDocs.filter(doc => (doc.propId === id)));
+  
   console.log("enquiryDocsById", enquiryDocsById, id);
   // render ViewEnquiry by url id end
 
@@ -119,8 +120,6 @@ console.log("enquiryDocs", enquiryDocs);
          />
        </>
      )}
-
-
    </div>
  </div>
     ):(

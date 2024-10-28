@@ -383,4 +383,8 @@ li.main_menus {
 }
 
 }
-
+@media only screen and (max-width: 991px) {
+.notification_icon img{
+  width: 36px;
+}
+}

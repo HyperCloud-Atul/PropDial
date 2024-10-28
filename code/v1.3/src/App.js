@@ -35,6 +35,7 @@ import HowUse from "./pdpages/howUse/HowUse";
 // pages
 // superadmin
 import PGAgent from "./pdpages/roles/superAdmin/agent/PGAgent";
+import UpdateAgent from "./pdpages/roles/superAdmin/agent/UpdateAgent";
 // admin
 import PGAdminDashboard from "./pages/roles/admin/PGAdminDashboard";
 import PGAdminProperties from "./pages/roles/admin/PGAdminProperties";
@@ -349,10 +350,31 @@ function App() {
                       )
                     }
                   ></Route>
-                  <Route
+                   <Route
                     path="/edit-enquiry/:id"
-                    element={<UpdateEnquiry></UpdateEnquiry>}
-                  />
+                    element={
+                      user && user                    
+                    ? (
+                        <UpdateEnquiry />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
+                    }
+                  ></Route>  
+
+                     <Route
+                    path="/edit-agent/:id"
+                    element={
+                      user && user                    
+                    ? (
+                        <UpdateAgent />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
+                    }
+                  ></Route>             
+
+               
                   <Route path="/properties" element={<PGProperties />}></Route>
                   <Route
                     path="/propertydetails/:propertyid"
