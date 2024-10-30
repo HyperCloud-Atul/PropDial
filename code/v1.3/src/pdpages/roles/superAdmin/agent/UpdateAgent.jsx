@@ -25,17 +25,17 @@ const UpdateAgent = () => {
   //Master Data Loading Initialisation - Start
   const { documents: masterState, error: masterStateError } = useCollection(
     "m_states",
-    "",
+    ["status", "==", "active"],
     ["state", "asc"]
   );
   const { documents: masterCity, error: masterCityError } = useCollection(
     "m_cities",
-    "",
+    ["status", "==", "active"],
     ["city", "asc"]
   );
   const { documents: masterLocality, error: masterLocalityError } = useCollection(
     "m_localities",
-    "",
+    ["status", "==", "active"],
     ["locality", "asc"]
   );
   const [state, setState] = useState();
@@ -64,21 +64,6 @@ const UpdateAgent = () => {
         value: stateData.id,
       }));
     }
-
-    // if (agentDoc && agentDoc.state) {
-    //   console.log("agentDoc.state: ", agentDoc.state)
-    //   setState({
-    //     label: agentDoc.state,
-    //     value: agentDoc.state,
-    //   });
-
-    //   handleStateChange({
-    //     label: agentDoc.state,
-    //     value: agentDoc.state,
-    //   });
-    // }
-
-
   }, [masterState]);
 
   // Populate Master Data - Start

@@ -8,7 +8,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 
-import { timestamp } from "../../firebase/config";
+import { projectFirestore, timestamp } from "../../firebase/config";
 import SearchBarAutoComplete from "../../pages/search/SearchBarAutoComplete";
 
 // import { projectID } from 'firebase-functions/params';
@@ -189,43 +189,20 @@ const Stage1 = (props) => {
   const { propertyid } = useParams();
   // console.log('firebase projectid:', projectID)
 
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
+  const navigate = useNavigate();
+
   const { document: propertyDocument, error: propertyerror } = useDocument(
     "properties-propdial",
     propertyid
   );
   function setRedirectFlag(flag, key) { }
   const { user } = useAuthContext();
-
-  let statesOptions = useRef([]);
-  let statesOptionsSorted = useRef([]);
-  let citiesOptions = useRef([]);
-  let citiesOptionsSorted = useRef([]);
-  let localitiesOptions = useRef([]);
-  let societiesOptions = useRef([]);
-  let localitiesOptionsSorted = useRef([]);
-  let societiesOptionsSorted = useRef([]);
-
-  var distinctCityList = [];
-  var distinctLocalityList = [];
-  var distinctSocietyList = [];
-  const [state, setState] = useState();
-  const [city, setCity] = useState({
-    label: "Select City",
-    value: "Select City",
-  });
-  const [locality, setLocality] = useState({
-    label: "Select Locality",
-    value: "Select Locality",
-  });
-
-  const [society, setSociety] = useState({
-    label: "Select Society",
-    value: "Select Society",
-  });
-
-  const [distinctValuesCity, setdistinctValuesCity] = useState([]);
-  const [distinctValuesLocality, setdistinctValuesLocality] = useState([]);
-  const [distinctValuesSociety, setdistinctValuesSociety] = useState([]);
 
   const [formError, setFormError] = useState(null);
   const [formSuccess, setFormSuccess] = useState(null);
@@ -242,50 +219,41 @@ const Stage1 = (props) => {
   const { updateDocument, response: updateDocumentResponse } =
     useFirestore("properties-propdial");
 
-  // Scroll to the top of the page whenever the location changes start
-  const location = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
-  // Scroll to the top of the page whenever the location changes end
-  const navigate = useNavigate();
-
-  // const { documents: dbpropertiesdocuments, error: propertieserror } =
-  //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
   const { documents: dbpropertiesdocuments, error: propertieserror } =
     useCollection("properties-propdial");
 
-  // const { documents: dbstatesdocuments, error: dbstateserror } = useCollection(
-  //   "m_states",
-  //   ["country", "==", "INDIA"]
-  // );
-
-  const { documents: dbstatesdocuments, error: dbstateserror } = useCollection(
-    "m_states", ["status", "==", "active"]
-    // ,["state", "asc"]
+  //Master Data Loading Initialisation - Start
+  const { documents: masterState, error: masterStateError } = useCollection(
+    "m_states",
+    ["status", "==", "active"],
+    ["state", "asc"]
   );
-
-  // console.log("dbstatesdocuments: ", dbstatesdocuments)
-
-  const { documents: dbcitiesdocuments, error: dbcitieserror } = useCollection(
+  const { documents: masterCity, error: masterCityError } = useCollection(
     "m_cities",
-    ["status", "==", "active"]
-    // ,["city", "asc"]
+    ["status", "==", "active"],
+    ["city", "asc"]
   );
-
-  // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
-
-  const { documents: dblocalitiesdocuments, error: dblocalitieserror } = useCollection(
+  const { documents: masterLocality, error: masterLocalityError } = useCollection(
     "m_localities",
-    ["status", "==", "active"]
+    ["status", "==", "active"],
+    ["locality", "asc"]
   );
+  const [state, setState] = useState();
+  const [city, setCity] = useState();
+  const [locality, setLocality] = useState();
+  const [society, setSociety] = useState();
 
-  const { documents: dbsocietiesdocuments, error: dbsocietieserror } = useCollection(
-    "m_societies",
-    ["status", "==", "active"]
-  );
+  let stateOptions = useRef([]);
+  let cityOptions = useRef([]);
+  let localityOptions = useRef([]);
+  let societyOptions = useRef([]);
 
-  // console.log("dbsocietiesdocuments: ", dbsocietiesdocuments)
+  // stateOptions.current = masterState && masterState.map((stateData) => ({
+  //   label: stateData.state,
+  //   value: stateData.state,
+  // }));
+
+  //Master Data Loading Initialisation - End
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
@@ -312,138 +280,17 @@ const Stage1 = (props) => {
   });
 
   useEffect(() => {
-    statesOptions.current =
-      dbstatesdocuments &&
-      dbstatesdocuments.map((stateData) => ({
+    // console.log('in useeffect')
+    // Master data: State Populate
+    if (masterState) {
+      stateOptions.current = masterState.map((stateData) => ({
         label: stateData.state,
         value: stateData.id,
       }));
-
-    statesOptionsSorted.current =
-      statesOptions.current &&
-      statesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
-
-    // console.log('statesOptionsSorted:', statesOptionsSorted)
-
-    statesOptionsSorted.current &&
-      statesOptionsSorted.current.unshift({
-        label: "Select State",
-        value: "Select State",
-      });
-
-    if (propertyDocument && propertyDocument.state) {
-      setState({
-        label: propertyDocument.state,
-        value: propertyDocument.state,
-      });
-      handleStateChange({
-        label: propertyDocument.state,
-        value: propertyDocument.state,
-      });
-    } else {
-      setState({ label: "Select State", value: "Select State" });
-      handleStateChange({
-        label: "Select State",
-        value: "Select State",
-      });
     }
+  }, [masterState]);
 
-    if (propertyDocument && propertyDocument.city) {
-      setCity({
-        label: propertyDocument.city,
-        value: propertyDocument.city,
-      });
-      handleCityChange({
-        label: propertyDocument.city,
-        value: propertyDocument.city,
-      });
-    } else {
-      setCity({ label: "Select City", value: "Select City" });
-      handleCityChange({
-        label: "Select City",
-        value: "Select City",
-      });
-    }
-
-
-
-    if (propertyDocument && propertyDocument.locality) {
-      // console.log("propertyDocument.locality: ", propertyDocument.locality)
-      const localityData = dblocalitiesdocuments.find(doc => doc.id === propertyDocument.locality);
-      // console.log('localityData: ', localityData)
-
-      // if (localityData) {
-      //   setLocality({
-      //     label: localityData.locality,
-      //     value: localityData.id,
-      //   });
-
-      setLocality({
-        label: propertyDocument.locality,
-        value: propertyDocument.locality,
-      });
-
-      handleLocalityChange({
-        label: propertyDocument.locality,
-        value: propertyDocument.locality,
-      });
-      // }
-    }
-    else {
-      setLocality({ label: "Select Locality", value: "Select Locality" });
-      handleLocalityChange({
-        label: "Select Locality",
-        value: "Select Locality",
-      });
-    }
-
-    if (propertyDocument && propertyDocument.society) {
-      const societyData = dbsocietiesdocuments.find(doc => doc.id === propertyDocument.society);
-      // console.log('societyData: ', societyData)
-
-      // if (societyData) {
-      setSociety({
-        label: propertyDocument.society,
-        value: propertyDocument.society,
-      });
-      handleSocietyChange({
-        label: propertyDocument.society,
-        value: propertyDocument.society,
-      });
-      // }
-    }
-    else {
-      setSociety({ label: "Select Society", value: "Select Society" });
-      handleSocietyChange({
-        label: "Select Society",
-        value: "Select Society",
-      });
-    }
-
-    if (propertyDocument && propertyDocument.society) {
-      // console.log("propertyDocument.locality: ", propertyDocument.locality)
-      const societyData = dbsocietiesdocuments.find(doc => doc.id === propertyDocument.society);
-      // console.log('societyData: ', societyData)
-
-      if (societyData) {
-        setSociety({
-          label: societyData.society,
-          value: societyData.id,
-        });
-        handleSocietyChange({
-          label: societyData.society,
-          value: societyData.id,
-        });
-      }
-    }
-    else {
-      setSociety({ label: "Select Locality", value: "Select Locality" });
-      handleSocietyChange({
-        label: "Select Locality",
-        value: "Select Locality",
-      });
-    }
-
+  useEffect(() => {
     if (propertyDocument) {
       setPropertyDetails({
         // All select type
@@ -490,8 +337,332 @@ const Stage1 = (props) => {
           camelCase(propertyDocument.society.toLowerCase().trim()),
         FullAddress: camelCase(propertyDocument.fullAddress && propertyDocument.fullAddress.toLowerCase().trim())
       });
+
+      setState({
+        label: propertyDocument.state || "",
+        value: propertyDocument.state || ""
+      });
+      setCity({
+        label: propertyDocument.city || "",
+        value: propertyDocument.city || ""
+      });
+      setLocality({
+        label: propertyDocument.locality || "",
+        value: propertyDocument.locality || ""
+      });
+      setSociety({
+        label: propertyDocument.society || "",
+        value: propertyDocument.society || ""
+      });
+
+      handleStateChange({
+        label: propertyDocument.state || "",
+        value: propertyDocument.state || ""
+      }, {
+        label: propertyDocument.city || "",
+        value: propertyDocument.city || ""
+      },
+        {
+          label: propertyDocument.locality || "",
+          value: propertyDocument.locality || ""
+        }, {
+        label: propertyDocument.society || "",
+        value: propertyDocument.society || ""
+      })
+
+      handleCityChange({
+        label: propertyDocument.city || "",
+        value: propertyDocument.city || "",
+      }, {
+        label: propertyDocument.locality || "",
+        value: propertyDocument.locality || ""
+      }, {
+        label: propertyDocument.society || "",
+        value: propertyDocument.society || ""
+      }
+      )
+
+      handleLocalityChange({
+        label: propertyDocument.locality || "",
+        value: propertyDocument.locality || ""
+      }, {
+        label: propertyDocument.society || "",
+        value: propertyDocument.society || ""
+      })
+
     }
-  }, [dbstatesdocuments, dbpropertiesdocuments, propertyDocument]);
+  }, [propertyDocument]);
+
+  // Populate Master Data - Start
+  //State select onchange
+  const handleStateChange = async (option, selectedCity, selectedLocality, selectedSociety) => {
+    setState(option);
+    console.log('state option:', option, state)
+    const statename = option.label
+
+    if (state && state.label !== option.label) {
+      setCity({
+        label: '',
+        value: ''
+      })
+      setLocality({
+        label: '',
+        value: ''
+      })
+      setSociety({
+        label: '',
+        value: ''
+      })
+      selectedCity = {
+        label: '',
+        value: ''
+      }
+      selectedLocality = {
+        label: '',
+        value: ''
+      }
+      selectedSociety = {
+        label: '',
+        value: ''
+      }
+    }
+    console.log('selectedCity', selectedCity, 'selectedLocality', selectedLocality, 'selectedSociety', selectedSociety)
+    const stateid = (masterState && masterState.find((e) => e.state.toLowerCase() === statename.toLowerCase())).id
+    const ref = await projectFirestore
+      .collection("m_cities")
+      .where("state", "==", stateid)
+      .orderBy("city", "asc");
+    ref.onSnapshot(
+      async (snapshot) => {
+        if (snapshot.docs) {
+          cityOptions.current = snapshot.docs.map((cityData) => ({
+            label: cityData.data().city,
+            value: cityData.id,
+          }));
+
+          if (cityOptions.current.length === 0) {
+            console.log("No City");
+            handleCityChange({
+              label: '',
+              value: ''
+            }, {
+              label: '',
+              value: ''
+            }, {
+              label: '',
+              value: ''
+            });
+          } else {
+            if (selectedCity.label === '') {
+              console.log('selectedCity', selectedCity, cityOptions.current)
+              setCity({
+                label: cityOptions.current[0].label,
+                value: cityOptions.current[0].label,
+              })
+              handleCityChange({
+                label: cityOptions.current[0].label,
+                value: cityOptions.current[0].label,
+              }, {
+                label: '',
+                value: ''
+              }, {
+                label: '',
+                value: ''
+              }
+              );
+            }
+            else {
+              console.log('selectedLocality : ', selectedLocality)
+              handleCityChange({
+                label: selectedCity.label,
+                value: selectedCity.label,
+              }, selectedLocality, selectedSociety);
+              // setCity()
+              setCity(selectedCity);
+
+            }
+            // handleCityChange()
+          }
+        } else {
+          // setError('No such document exists')
+        }
+      },
+      (err) => {
+        console.log(err.message);
+        // setError('failed to get document')
+      }
+    );
+  };
+
+  //City select onchange
+  const handleCityChange = async (option, selectedLocality, selectedSociety) => {
+    setCity(option);
+    console.log('city option:', option, city, 'selectedLocality', selectedLocality)
+    if (city && city.label !== option.label) {
+      setLocality({
+        label: '',
+        value: ''
+      })
+      setSociety({
+        label: '',
+        value: ''
+      })
+
+      selectedLocality = {
+        label: '',
+        value: ''
+      }
+      selectedSociety = {
+        label: '',
+        value: ''
+      }
+    }
+
+    if (option) {
+
+      const cityname = option.label
+
+      const cityid = (masterCity && masterCity.find((e) => e.city.toLowerCase() === cityname.toLowerCase())).id
+
+      const ref = await projectFirestore
+        .collection("m_localities")
+        .where("city", "==", cityid)
+        .orderBy("locality", "asc");
+      ref.onSnapshot(
+        async (snapshot) => {
+          if (snapshot.docs) {
+            localityOptions.current = snapshot.docs.map((localityData) => ({
+              label: localityData.data().locality,
+              value: localityData.id,
+            }));
+
+            console.log("localityOptions: ", localityOptions);
+
+            if (localityOptions.current.length === 0) {
+              console.log("No Locality");
+              handleLocalityChange({
+                label: '',
+                value: '',
+              }, {
+                label: '',
+                value: '',
+              });
+            } else {
+              if (selectedLocality && selectedLocality.label !== '') {
+                handleLocalityChange(selectedLocality, selectedSociety);
+                setLocality(selectedLocality);
+
+              } else {
+                handleLocalityChange({
+                  label: localityOptions.current[0].label,
+                  value: localityOptions.current[0].value,
+                },
+                  {
+                    label: '',
+                    value: '',
+                  });
+                setLocality({
+                  label: localityOptions.current[0].label,
+                  value: localityOptions.current[0].value,
+                })
+              }
+            }
+          } else {
+            handleLocalityChange({
+              label: '',
+              value: '',
+            }, selectedSociety);
+            // setError('No such document exists')
+          }
+
+        },
+        (err) => {
+          console.log(err.message);
+          // setError('failed to get document')
+        }
+      );
+    }
+  };
+
+  //Locality select onchange
+  const handleLocalityChange = async (option, selectedSociety) => {
+    setLocality(option);
+    console.log('locality option:', option, 'selectedSociety', selectedSociety)
+    if (locality && locality.label !== option.label) {
+      selectedSociety = {
+        label: '',
+        value: ''
+      };
+
+      setSociety({
+        label: '',
+        value: ''
+      })
+    }
+    if (option) {
+      const localityname = option.label
+
+      console.log("masterLocality: ", masterLocality)
+      const localityid = (masterLocality && masterLocality.find((e) => e.locality.toLowerCase() === localityname.toLowerCase())).id
+      console.log('localityid', localityid)
+      const ref = await projectFirestore
+        .collection("m_societies")
+        .where("locality", "==", localityid)
+        .orderBy("society", "asc");
+      ref.onSnapshot(
+        async (snapshot) => {
+
+          if (snapshot.docs) {
+            societyOptions.current = snapshot.docs.map((societyData) => ({
+              label: societyData.data().society,
+              value: societyData.id,
+            }));
+
+            console.log("societyOptions.current: ", societyOptions.current);
+
+            if (societyOptions.current.length === 0) {
+              console.log("No Society");
+              handleSocietyChange({
+                label: '',
+                value: ''
+              });
+            } else {
+              if (selectedSociety && selectedSociety.label !== '') {
+                handleSocietyChange(selectedSociety);
+                setSociety(selectedSociety);
+              } else {
+                handleSocietyChange({
+                  label: societyOptions.current[0].label,
+                  value: societyOptions.current[0].value,
+                });
+                setSociety({
+                  label: societyOptions.current[0].label,
+                  value: societyOptions.current[0].value,
+                });
+              }
+            }
+          } else {
+            handleSocietyChange({
+              label: '',
+              value: '',
+            });
+          }
+
+        },
+        (err) => {
+          console.log(err.message);
+          // setError('failed to get document')
+        }
+      );
+    }
+  };
+
+  //Society select onchange
+  const handleSocietyChange = async (option) => {
+    setSociety(option);
+    // console.log('society.id:', option.value)
+  };
+  // Populate Master Data - End
 
   const setPurpose = (option) => {
     // console.log("setPurpose e.target.value:", option);
@@ -506,185 +677,6 @@ const Stage1 = (props) => {
       : (obj_maintenance.style.display = "flex");
   };
 
-  const handleStateChange = async (option) => {
-    setState(option);
-    let statename = option.label;
-    // console.log('state name:  ', statename)
-
-    // console.log("statesOptionsSorted.current: ", statesOptionsSorted.current)
-    const stateid = (statesOptionsSorted.current && statesOptionsSorted.current.find((e) => e.label === statename)).value
-    // console.log("stateid: ", stateid)
-
-    let _newRegion = "";
-
-    if (statename === "Delhi" || statename === "Haryana" || statename === "Himachal Pradesh" || statename === "Jammu and Kashmir" || statename === "Punjab" || statename === "Uttar Pradesh" || statename === "Uttarakhand") {
-      _newRegion = "North India"
-    }
-    else if (statename === "Andhra Pradesh" || statename === "Karnataka" || statename === "Kerala" || statename === "Tamilnadu" || statename === "Telangana") {
-      _newRegion = "South India"
-    }
-    else if (statename === "Arunachal Pradesh" || statename === "Assam" || statename === "Bihar" || statename === "Jharkhand" || statename === "Manipur" || statename === "Meghalaya" || statename === "Mizoram" || statename === "Nagaland" || statename === "Odisha" || statename === "Sikkim" || statename === "Tripura") {
-      _newRegion = "East India"
-    }
-    else {
-      _newRegion = "West India"
-    }
-
-    propertyDetails.Region = _newRegion
-
-    let cityListStateWise = [];
-    // cityListStateWise = distinctCityList.filter((e) => e.state === statename);
-    cityListStateWise = dbcitiesdocuments.filter((e) => e.state === stateid);
-
-    // console.log('cityListStateWise:', cityListStateWise)
-
-    // const dataList =
-    //   cityListStateWise && cityListStateWise.map((doc) => doc.city);
-    // // distinctValuesCity = [...new Set(dataCity)];
-    // setdistinctValuesCity([...new Set(dataList)]);
-    // // console.log('distinctValuesCity:', distinctValuesCity)
-
-    //City Dropdown List as per state
-    citiesOptions.current =
-      cityListStateWise &&
-      cityListStateWise.map((cityData) => ({
-        label: cityData.city,
-        value: cityData.city,
-      }));
-    // // console.log('statesOptions:', statesOptions)
-
-    citiesOptionsSorted.current =
-      citiesOptions.current &&
-      citiesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
-
-    setCity({ label: "Select City", value: "Select City" });
-  };
-
-  const handleCityChange = async (option) => {
-    setCity(option);
-    let cityname = option.label;
-    // console.log('city name:  ', cityname)
-
-    // console.log("dbcitiesdocuments: ", dbcitiesdocuments)
-    const cityid = (dbcitiesdocuments && dbcitiesdocuments.find((e) => e.city === cityname)).id
-    // console.log("cityid: ", cityid)
-
-    const dataList = dblocalitiesdocuments.filter((e) => e.city === cityid);
-    // console.log("Locality dataList: ", dataList)
-
-    //Localities Dropdown List as per city
-    localitiesOptions.current =
-      dataList &&
-      dataList.map((localtyData) => ({
-        label: localtyData.locality,
-        value: localtyData.id,
-      }));
-
-    localitiesOptionsSorted.current =
-      localitiesOptions.current &&
-      localitiesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
-
-    setLocality({ label: "Select Locality", value: "Select Locality" });
-  };
-
-  const handleLocalityChange = async (option) => {
-    setLocality(option);
-    let localityname = option.label;
-    // console.log('locality name:  ', localityname)
-
-    // console.log("dblocalitiesdocuments: ", dblocalitiesdocuments)
-    const localityid = (dblocalitiesdocuments && dblocalitiesdocuments.find((e) => e.locality === localityname)).id
-    // console.log("localityid: ", localityid)
-
-    const dataList = dbsocietiesdocuments.filter((e) => e.locality === localityid);
-    // console.log("Society dataList: ", dataList)
-
-    //Localities Dropdown List as per city
-    societiesOptions.current =
-      dataList &&
-      dataList.map((societyData) => ({
-        label: societyData.society,
-        value: societyData.id,
-      }));
-
-    societiesOptionsSorted.current =
-      societiesOptions.current &&
-      societiesOptions.current.sort((a, b) => a.label.localeCompare(b.label));
-
-    setSociety({ label: "Select Society", value: "Select Society" });
-  };
-
-  const handleSocietyChange = async (option) => {
-    setSociety(option);
-
-    // console.log('City option: ', option)
-
-    setSearchedSociety(option.value);
-  };
-
-  function setSearchedCity(cityname) {
-    // console.log('cityname', cityname);
-    setPropertyDetails({
-      ...propertyDetails,
-      City: cityname,
-    });
-
-    let localityListStateWise = [];
-    localityListStateWise = distinctLocalityList.filter(
-      (e) => e.city === cityname
-    );
-    // console.log('localityListStateWise:', localityListStateWise)
-
-    // const dataList =
-    //   localityListStateWise && localityListStateWise.map((doc) => doc.locality);
-    // setdistinctValuesLocality([...new Set(dataList)]);
-
-    // console.log("Locality dataList: ", dataList);
-  }
-
-  function setSearchedLocality(localityname) {
-    // console.log('localityname', localityname);
-    setPropertyDetails({
-      ...propertyDetails,
-      Locality: localityname,
-    });
-    let societyListStateWise = [];
-    societyListStateWise = distinctSocietyList.filter(
-      (e) => e.locality === localityname
-    );
-    // console.log("societyListStateWise:", societyListStateWise);
-
-    // const dataList =
-    //   societyListStateWise && societyListStateWise.map((doc) => doc.society);
-    // setdistinctValuesSociety([...new Set(dataList)]);
-  }
-  function setSearchedSociety(societyname) {
-    // console.log('societyname', societyname);
-    setPropertyDetails({
-      ...propertyDetails,
-      Society: societyname,
-    });
-  }
-
-  // const cloneImage = async (sourcePath, destinationPath) => {
-  //   try {
-  //     // Create a reference to the source image in Firebase Storage
-  //     const sourceRef = projectStorage.refFromURL(sourcePath);
-
-  //     // Get the download URL of the source image
-  //     const downloadURL = await sourceRef.getDownloadURL();
-
-  //     // Create a reference to the destination image in Firebase Storage
-  //     const destinationRef = projectStorage.ref().child(destinationPath);
-
-  //     // Copy the image from the source path to the destination path
-  //     await destinationRef.putString(downloadURL, 'data_url');
-
-  //     console.log('Image cloned successfully!');
-  //   } catch (error) {
-  //     console.error('Error cloning image:', error.message);
-  //   }
-  // }
   useEffect(() => {
     // console.log('addDocumentResponse', addDocumentResponse)
     try {
@@ -699,13 +691,6 @@ const Stage1 = (props) => {
         props.setStateFlag("stage2");
         navigate("/updateproperty/" + addDocumentResponse.document.id);
 
-        //add a default property image into storage for newly created propertyid
-        // const sourceImagePath = 'gs://your-project-id.appspot.com/images/source.jpg';
-        // const sourceImagePath = 'gs://' + projectID + '/masterData/icons/icon_propertyDefault.jpg'
-        // console.log('sourceImagePath:', sourceImagePath)
-        // const destinationImagePath = 'properties/' + addDocumentResponse.document.id + '/Images/' + timestamp.fromDate(new Date()) + ".png";
-        // console.log('destinationImagePath:', destinationImagePath)
-        // cloneImage(sourceImagePath, destinationImagePath);
       }
     } catch (error) {
       console.error("Error cloning image:", error.message);
@@ -2464,8 +2449,14 @@ const Stage1 = (props) => {
               <div className="form_field_inner">
                 <Select
                   className=""
-                  onChange={handleStateChange}
-                  options={statesOptionsSorted.current}
+                  onChange={(e) => {
+                    console.log("e: ", e)
+                    handleStateChange({
+                      label: e.label,
+                      value: e.label,
+                    }, city, locality, society)
+                  }}
+                  options={stateOptions.current}
                   value={state}
                   styles={{
                     control: (baseStyles, state) => ({
@@ -2641,8 +2632,13 @@ const Stage1 = (props) => {
               <div className="form_field_inner">
                 <Select
                   className=""
-                  onChange={handleCityChange}
-                  options={citiesOptionsSorted.current}
+                  onChange={(e) => {
+                    handleCityChange({
+                      label: e.label,
+                      value: e.label
+                    }, locality, society)
+                  }}
+                  options={cityOptions.current}
                   value={city}
                   styles={{
                     control: (baseStyles, state) => ({
@@ -2667,8 +2663,13 @@ const Stage1 = (props) => {
               <div className="form_field_inner">
                 <Select
                   className=""
-                  onChange={handleLocalityChange}
-                  options={localitiesOptionsSorted.current}
+                  onChange={(e) => {
+                    handleLocalityChange({
+                      label: e.label,
+                      value: e.label
+                    }, society)
+                  }}
+                  options={localityOptions.current}
                   value={locality}
                   styles={{
                     control: (baseStyles, state) => ({
@@ -2707,13 +2708,13 @@ const Stage1 = (props) => {
           </div> */}
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
-              <label htmlFor="">New Society</label>
+              <label htmlFor="">Society</label>
 
               <div className="form_field_inner">
                 <Select
                   className=""
                   onChange={handleSocietyChange}
-                  options={societiesOptionsSorted.current}
+                  options={societyOptions.current}
                   value={society}
                   styles={{
                     control: (baseStyles, state) => ({
