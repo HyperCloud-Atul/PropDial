@@ -463,28 +463,28 @@ const UpdateAgent = () => {
       setIsUploading(true);
 
       // Log data before update
-      console.log("Updating with data:", {
-        agentName,
-        agentCompnayName,
-        agentPhone,
-        agentEmail,
-        agentPancard,
-        agentGstNumber,
-        country: "India",
-        state: state?.label || "",
-        city: city?.label || "",
-        locality: locality?.label || "",
-        society: society?.label || "",
-        status: "active",
-      });
+      // console.log("Updating with data:", {
+      //   agentName,
+      //   agentCompnayName,
+      //   agentPhone,
+      //   agentEmail,
+      //   agentPancard,
+      //   agentGstNumber,
+      //   country: "India",
+      //   state: state?.label || "",
+      //   city: city?.label || "",
+      //   locality: locality?.label || "",
+      //   society: society?.label || "",
+      //   status: "active",
+      // });
 
       const updatedAgentDoc = {
         agentName,
         agentCompnayName,
         agentPhone,
         agentEmail,
-        agentPancard,
-        agentGstNumber,
+        agentPancard: agentPancard.toUpperCase(),
+        agentGstNumber: agentGstNumber.toUpperCase(),
         country: "India",
         state: state?.label || "",
         city: city?.label || "",

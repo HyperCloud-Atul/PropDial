@@ -31,24 +31,31 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   let localityOptions = useRef([]);
   let societyOptions = useRef([]);
 
+  if (masterState) {
+    stateOptions.current = masterState.map((stateData) => ({
+      label: stateData.state,
+      value: stateData.id,
+    }));
+  }
+
   //Master Data Loading Initialisation - End
 
   useEffect(() => {
     // console.log('in useeffect')
     // Master data: State Populate
-    if (masterState) {
-      stateOptions.current = masterState.map((stateData) => ({
-        label: stateData.state,
-        value: stateData.id,
-      }));
+    // if (masterState) {
+    //   stateOptions.current = masterState.map((stateData) => ({
+    //     label: stateData.state,
+    //     value: stateData.id,
+    //   }));
 
-      // console.log("stateOptions: ", stateOptions)
+    //   // console.log("stateOptions: ", stateOptions)
 
-      // handleStateChange({
-      //   label: stateOptions.current[0].label,
-      //   value: stateOptions.current[0].value,
-      // });
-    }
+    //   // handleStateChange({
+    //   //   label: stateOptions.current[0].label,
+    //   //   value: stateOptions.current[0].value,
+    //   // });
+    // }
   }, [masterState]);
 
   // Populate Master Data - Start
@@ -105,7 +112,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
             value: localityData.id,
           }));
 
-          console.log("localityOptions: ", localityOptions);
+          // console.log("localityOptions: ", localityOptions);
 
           if (localityOptions.current.length === 0) {
             console.log("No Locality");
@@ -145,7 +152,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
             value: societyData.id,
           }));
 
-          console.log("societyOptions.current: ", societyOptions.current);
+          // console.log("societyOptions.current: ", societyOptions.current);
 
           if (societyOptions.current.length === 0) {
             console.log("No Society");
@@ -221,8 +228,8 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
       agentEmail: !agentEmail
         ? "Email is required"
         : !isValidEmail(agentEmail)
-        ? "Invalid email format"
-        : "",
+          ? "Invalid email format"
+          : "",
       state: !state ? "State is required" : "",
       city: !city ? "City is required" : "",
       locality: !locality ? "Locality is required" : "",
@@ -243,8 +250,8 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
         agentCompnayName,
         agentPhone,
         agentEmail,
-        agentPancard,
-        agentGstNumber,
+        agentPancard: agentPancard.toUpperCase(),
+        agentGstNumber: agentGstNumber.toUpperCase(),
         country: "India",
         state: state.label,
         city: city.label,
