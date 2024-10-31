@@ -11,7 +11,7 @@ import "react-phone-input-2/lib/style.css";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 
-const AddEnquiry = ({enquiryAdded}) => {
+const AddEnquiry = ({ enquiryAdded }) => {
     const navigate = useNavigate();
     const { user } = useAuthContext();
     const { id } = useParams();
@@ -25,19 +25,13 @@ const AddEnquiry = ({enquiryAdded}) => {
     const { document: propertyDoc, error: propertyDocError } = useDocument('properties-propdial', id)
     // console.log("propertyDoc: ", propertyDoc)
 
-    // const { documents: propertyUsers, errors: propertyUsersError } =
-    //     useCollection("propertyusers", ["propertyId", "==", id]);
+    const { documents: propertyUsers, errors: propertyUsersError } =
+        useCollection("propertyusers", ["propertyId", "==", id]);
     // console.log("propertyUsers: ", propertyUsers)
 
-    // const propertyOwners =
-    //     propertyUsers &&
-    //     propertyUsers.filter((doc) => doc.userType === "propertyowner");
-
-    // console.log("propertyOwners: ", propertyOwners)
-    // console.log("propertyOwners.userId: ", propertyOwners && propertyOwners[0].userId)
-
-    // const { documents: allUsers, error: allUsersError } = useCollection("users-propdial");
+    const { documents: allUsers, error: allUsersError } = useCollection("users-propdial");
     // console.log("All Users: ", allUsers)
+
 
     const [enquiryFrom, setEnquiryFrom] = useState("");
     const [referredBy, setReferredBy] = useState("");
@@ -55,19 +49,23 @@ const AddEnquiry = ({enquiryAdded}) => {
     const [isUploading, setIsUploading] = useState(false);
     // const [userDoc, setUserDoc] = useState();
 
-    // let userid = propertyOwners && propertyOwners[0].userId;
-    // console.log("user id: ", userid)
-
-    // if (userid) {
-    //     const userDoc =
-    //         allUsers &&
-    //         allUsers.filter((doc) => doc.id === userid);
-
-    //     console.log("user Doc: ", userDoc)
-    //     // setUserDoc(userDoc)
-    // }
-
     useEffect(() => {
+        const propertyOwners =
+            propertyUsers &&
+            propertyUsers.filter((doc) => (doc.userType === "propertyowner" && doc.userTag !== "Admin"));
+
+        // console.log("propertyOwners: ", propertyOwners)
+        // console.log("propertyOwners.userId: ", propertyOwners && propertyOwners.length > 0 && propertyOwners[0].userId)
+
+        if (propertyOwners && propertyOwners.length > 0) {
+            const ownersUserDetails = (allUsers && allUsers.find((e) => e.id === propertyOwners[0].userId))
+            // console.log('ownersUserDetails: ', ownersUserDetails && ownersUserDetails.fullName)
+
+            if (ownersUserDetails)
+                setPropertyOwner(ownersUserDetails && ownersUserDetails.fullName)
+        }
+
+
         if (propertyDoc) {
             setPropertyName(propertyDoc && propertyDoc.propertyName)
         }

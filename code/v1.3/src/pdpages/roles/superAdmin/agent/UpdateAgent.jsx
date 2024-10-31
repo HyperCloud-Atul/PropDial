@@ -70,7 +70,7 @@ const UpdateAgent = () => {
   //State select onchange
   const handleStateChange = async (option, selectedCity, selectedLocality, selectedSociety) => {
     setState(option);
-    console.log('state option:', option, state)
+    // console.log('state option:', option, state)
     const statename = option.label
 
     if (state && state.label !== option.label) {
@@ -99,7 +99,7 @@ const UpdateAgent = () => {
         value: ''
       }
     }
-    console.log('selectedCity', selectedCity, 'selectedLocality', selectedLocality, 'selectedSociety', selectedSociety)
+    // console.log('selectedCity', selectedCity, 'selectedLocality', selectedLocality, 'selectedSociety', selectedSociety)
     const stateid = (masterState && masterState.find((e) => e.state.toLowerCase() === statename.toLowerCase())).id
     const ref = await projectFirestore
       .collection("m_cities")
@@ -145,7 +145,7 @@ const UpdateAgent = () => {
               );
             }
             else {
-              console.log('selectedLocality : ', selectedLocality)
+              // console.log('selectedLocality : ', selectedLocality)
               handleCityChange({
                 label: selectedCity.label,
                 value: selectedCity.label,
@@ -170,7 +170,7 @@ const UpdateAgent = () => {
   //City select onchange
   const handleCityChange = async (option, selectedLocality, selectedSociety) => {
     setCity(option);
-    console.log('city option:', option, city, 'selectedLocality', selectedLocality)
+    // console.log('city option:', option, city, 'selectedLocality', selectedLocality)
     if (city && city.label !== option.label) {
       setLocality({
         label: '',
@@ -209,7 +209,7 @@ const UpdateAgent = () => {
               value: localityData.id,
             }));
 
-            console.log("localityOptions: ", localityOptions);
+            // console.log("localityOptions: ", localityOptions);
 
             if (localityOptions.current.length === 0) {
               console.log("No Locality");
@@ -260,7 +260,7 @@ const UpdateAgent = () => {
   //Locality select onchange
   const handleLocalityChange = async (option, selectedSociety) => {
     setLocality(option);
-    console.log('locality option:', option, 'selectedSociety', selectedSociety)
+    // console.log('locality option:', option, 'selectedSociety', selectedSociety)
     if (locality && locality.label !== option.label) {
       selectedSociety = {
         label: '',
@@ -275,9 +275,9 @@ const UpdateAgent = () => {
     if (option) {
       const localityname = option.label
 
-      console.log("masterLocality: ", masterLocality)
+      // console.log("masterLocality: ", masterLocality)
       const localityid = (masterLocality && masterLocality.find((e) => e.locality.toLowerCase() === localityname.toLowerCase())).id
-      console.log('localityid', localityid)
+      // console.log('localityid', localityid)
       const ref = await projectFirestore
         .collection("m_societies")
         .where("locality", "==", localityid)
@@ -291,7 +291,7 @@ const UpdateAgent = () => {
               value: societyData.id,
             }));
 
-            console.log("societyOptions.current: ", societyOptions.current);
+            // console.log("societyOptions.current: ", societyOptions.current);
 
             if (societyOptions.current.length === 0) {
               console.log("No Society");
