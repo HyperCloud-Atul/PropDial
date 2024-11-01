@@ -167,7 +167,7 @@ const AgentDetailModal = ({ show, handleClose, selectedAgent, user }) => {
                  <h6 className="text-capitalize">
                    {format(selectedAgent.updatedAt.toDate(), "dd-MMM-yy, hh:mm a")}
                  </h6>
-                 <h5>Created At</h5>
+                 <h5>Updated At</h5>
                </div>
                <div className={`step_single`}>
                  <div className="number">
@@ -179,7 +179,7 @@ const AgentDetailModal = ({ show, handleClose, selectedAgent, user }) => {
                        (user) => user.id === selectedAgent.updatedBy
                      )?.fullName}
                  </h6>
-                 <h5>Created By</h5>
+                 <h5>Updated By</h5>
                </div>
              </div>
            </div>

@@ -7,6 +7,7 @@ import { projectFirestore } from "../../../../firebase/config";
 import { useDocument } from "../../../../hooks/useDocument";
 import Select from "react-select";
 import PhoneInput from "react-phone-input-2";
+import { timestamp } from "../../../../firebase/config";
 
 const UpdateAgent = () => {
   const { id } = useParams();
@@ -432,6 +433,7 @@ const UpdateAgent = () => {
     city: "",
     locality: "",
     society: "",
+
   });
 
   const someError = errors.agentName || errors.agentEmail;
@@ -476,6 +478,8 @@ const UpdateAgent = () => {
         locality: locality?.label || "",
         society: society?.label || "",
         status: "active",
+        updatedAt: timestamp.fromDate(new Date()),
+        updatedBy:user.uid,
       };
 
       // Execute updateDocument
