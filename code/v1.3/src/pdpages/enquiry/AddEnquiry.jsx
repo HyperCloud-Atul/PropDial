@@ -9,6 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { projectFirestore, timestamp } from "../../firebase/config";
+import Select from "react-select";
 
 
 const AddEnquiry = ({ enquiryAdded }) => {
@@ -31,7 +33,6 @@ const AddEnquiry = ({ enquiryAdded }) => {
 
     const { documents: allUsers, error: allUsersError } = useCollection("users-propdial");
     // console.log("All Users: ", allUsers)
-
 
     const [enquiryFrom, setEnquiryFrom] = useState("");
     const [referredBy, setReferredBy] = useState("");
@@ -136,9 +137,6 @@ const AddEnquiry = ({ enquiryAdded }) => {
         return Object.keys(errors).length === 0;
     };
 
-
-
-
     const submitEnquiry = async (event) => {
         event.preventDefault();
         if (!validateFields()) {
@@ -192,8 +190,228 @@ const AddEnquiry = ({ enquiryAdded }) => {
         }
     };
     // add enquiry with add document end
+
+
+    const ownerListforPropertyId = (_propertyId) => {
+
+    }
+
+    const [proeprtyListforUserIdState, setproeprtyListforUserIdState] = useState("");
+    const proeprtyListforUserId = async (_userId) => {
+        // console.log("_userId: ", _userId)
+        let results = []
+        const ref = await projectFirestore
+            .collection("propertyusers")
+            .where("userId", "==", _userId)
+
+        console.log("ref: ", ref)
+        const unsubscribe = ref.onSnapshot(async snapshot => {
+            snapshot.docs.forEach(doc => {
+                // console.log("user mapping doc: ", doc.data())
+                results.push({ ...doc.data(), id: doc.id })
+            });
+            // console.log("results: ", results)
+            setproeprtyListforUserIdState(results)
+        })
+
+        // console.log("results: ", results)
+
+    }
+
+
+    //---------------- Change Property Manager ----------------------
+    // const {
+    //     updateDocument: updateProperyUsersDocument,
+    //     error: errProperyUsersDocument,
+    // } = useFirestore("propertyusers");
+    // const { updateDocument: changeUserUpdateDocument , response: updateDocumentResponse } = useFirestore(
+    //     "properties-propdial"
+    // );
+
+    const { documents: onlyOwners, error: onlyOwnersError } = useCollection("users-propdial", ["rolePropDial", "==", "owner"]);
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredUsers, setFilteredUsers] = useState(onlyOwners);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [changeManagerPopup, setchangeManagerPopup] = useState(false);
+    // const [userdbFieldName, setUserdbFieldName] = useState();
+    const [changedUser, setChangedUser] = useState();
+    // const [dbUserState, setdbUserState] = useState(onlyOwners);
+
+    // const openChangeUser = () => {
+    //   console.log("Open Change Manager");
+    //   setchangeManagerPopup(true);
+    // }
+    const openChangeUser = (docId) => {
+        console.log("Open Change User");
+        setchangeManagerPopup(true);
+        // setUserdbFieldName(option);
+        setChangedUser(docId);
+    };
+
+    const closeChangeManager = () => {
+        setchangeManagerPopup(false);
+    };
+
+
+    const [ownersProeprtyList, setOwnersProeprtyList] = useState();
+    const { documents: allProperties, error: allPropertiesError } = useCollection("properties-propdial");
+
+    const confirmChangeUser = async () => {
+        console.log("selected user: ", selectedUser)
+        const _userDoc = (onlyOwners && onlyOwners.find((e) => e.id === selectedUser))
+        console.log("_userDoc: ", _userDoc)
+        const formattedPhoneNumber = _userDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")
+        const _propertyOwner = _userDoc && (_userDoc.fullName + " ( " + formattedPhoneNumber + " )")
+        setPropertyOwner(_propertyOwner)
+
+        proeprtyListforUserId(selectedUser)
+        console.log("propertyListofSelectedUser: ", proeprtyListforUserIdState)
+        console.log(" Property List Count: ", proeprtyListforUserIdState.length)
+
+        // const ref = await projectFirestore
+        //     .collection("properties-propdial")
+        // let results = []
+        // const unsubscribe = ref.onSnapshot(async snapshot => {
+        //     snapshot.docs.forEach(doc => {
+        //         console.log("properties docs: ", doc.data())
+        //         results.push({ ...doc.data(), id: doc.id })
+        //     });
+        //     console.log("results: ", results)
+        // })
+
+        let results = []
+        proeprtyListforUserIdState &&
+            proeprtyListforUserIdState.map((property) => {
+                const _prop = allProperties.find((e) => e.id === property.propertyId)
+                results.push({ ..._prop })
+            })
+        console.log("results: ", results)
+
+        setOwnersProeprtyList(
+            results.map((data) => ({
+                label: data.propertyName,
+                value: data.propertyName,
+            })))
+
+        setchangeManagerPopup(false);
+    };
+
+    const handleSearchChange = (event) => {
+        const query = event.target.value;
+        setSearchQuery(query);
+        filterUsers(query);
+    };
+
+    const filterUsers = (query) => {
+        // console.log('query: ', query)
+        const filtered =
+            onlyOwners &&
+            onlyOwners.filter(
+                (user) =>
+                    user.fullName.toLowerCase().includes(query.toLowerCase()) ||
+                    user.phoneNumber.includes(query)
+            );
+        console.log("filtered: ", filtered);
+        setFilteredUsers(filtered);
+    };
+
+    const handleUserSelect = (userId) => {
+        setSelectedUser(userId);
+    };
+
+    //------------ End of Change Property Manager ---------
+
     return (
         <>
+            {/* Change User Popup - Start */}
+            <div
+                className={
+                    changeManagerPopup
+                        ? "pop-up-change-number-div open"
+                        : "pop-up-change-number-div"
+                }
+            >
+                <div className="direct-div">
+                    <span
+                        onClick={closeChangeManager}
+                        className="material-symbols-outlined modal_close"
+                    >
+                        close
+                    </span>
+                    <h5 className="text_orange text-center">Change User</h5>
+                    <div className="vg12"></div>
+                    <div>
+                        <div className="enq_fields">
+                            <div className="form_field st-2">
+                                <div className="field_inner">
+                                    <input
+                                        type="text"
+                                        value={searchQuery}
+                                        onChange={handleSearchChange}
+                                        placeholder="Search users by mobile no or name..."
+                                    />
+                                    <div className="field_icon">
+                                        <span className="material-symbols-outlined">search</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* <ul>
+              {filteredUsers && filteredUsers.map((user) => (
+                <li key={user.id}>{user.fullName} ({user.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')})</li>
+              ))}
+            </ul> */}
+                        <ul className="search_results">
+                            {filteredUsers &&
+                                filteredUsers.map((user) => (
+                                    <li className="search_result_single" key={user.id}>
+                                        <label>
+                                            <input
+                                                name="selectedUser"
+                                                // type="checkbox"
+                                                // checked={selectedUsers.includes(user.id)}
+                                                type="radio"
+                                                checked={selectedUser === user.id}
+                                                onChange={() => handleUserSelect(user.id)}
+                                            />
+                                            <div>
+                                                <strong> {user.fullName} </strong> (
+                                                {user.phoneNumber.replace(
+                                                    /(\d{2})(\d{5})(\d{5})/,
+                                                    "+$1 $2-$3"
+                                                )}
+                                                )<br></br> {user.email}, {user.city}, {user.country}
+                                            </div>
+                                        </label>
+                                    </li>
+                                ))}
+                        </ul>
+                    </div>
+                    <div className="vg12"></div>
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(2,1fr)",
+                            gap: "15px",
+                        }}
+                    >
+                        <button
+                            onClick={closeChangeManager}
+                            className="theme_btn full_width btn_border no_icon"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={confirmChangeUser}
+                            className="theme_btn full_width btn_fill no_icon"
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {/* Change User Popup - End */}
             <hr />
             <div className="add_enquiry">
                 <div className="vg12">
@@ -435,7 +653,8 @@ const AddEnquiry = ({ enquiryAdded }) => {
                                         id="propowner"
                                     />
                                     <div className="field_icon">
-                                        <span class="material-symbols-outlined">
+                                        <span class="material-symbols-outlined"
+                                            onClick={(e) => openChangeUser(e)}>
                                             search
                                         </span>
                                     </div>
@@ -458,6 +677,21 @@ const AddEnquiry = ({ enquiryAdded }) => {
                                         onChange={handleChangePropertyName}
                                         id="propname"
                                     />
+
+                                    <Select
+                                        className=""
+                                        options={ownersProeprtyList}
+                                        value={propertyName}
+                                        styles={{
+                                            control: (baseStyles, state) => ({
+                                                ...baseStyles,
+                                                outline: "none",
+                                                background: "#eee",
+                                                borderBottom: " 1px solid var(--theme-blue)",
+                                            }),
+                                        }}
+                                    />
+
                                     <div className="field_icon">
                                         <span class="material-symbols-outlined">
                                             search
