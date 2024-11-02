@@ -42,12 +42,12 @@ const UpdateAgent = () => {
   const [state, setState] = useState();
   const [city, setCity] = useState();
   const [locality, setLocality] = useState();
-  const [society, setSociety] = useState();
+  // const [society, setSociety] = useState();
 
   let stateOptions = useRef([]);
   let cityOptions = useRef([]);
   let localityOptions = useRef([]);
-  let societyOptions = useRef([]);
+  // let societyOptions = useRef([]);
 
   // stateOptions.current = masterState && masterState.map((stateData) => ({
   //   label: stateData.state,
@@ -69,127 +69,140 @@ const UpdateAgent = () => {
 
   // Populate Master Data - Start
   //State select onchange
-  const handleStateChange = async (option, selectedCity, selectedLocality, selectedSociety) => {
+  // const handleStateChange = async (option, selectedCity, selectedLocality, selectedSociety) => {
+  const handleStateChange = async (option, selectedCity, selectedLocality) => {
     setState(option);
-    // console.log('state option:', option, state)
-    const statename = option.label
+    console.log('state option:', option, state, selectedCity, selectedLocality)
+    if (option) {
+      const statename = option.label
 
-    if (state && state.label !== option.label) {
-      setCity({
-        label: '',
-        value: ''
-      })
-      setLocality({
-        label: '',
-        value: ''
-      })
-      setSociety({
-        label: '',
-        value: ''
-      })
-      selectedCity = {
-        label: '',
-        value: ''
-      }
-      selectedLocality = {
-        label: '',
-        value: ''
-      }
-      selectedSociety = {
-        label: '',
-        value: ''
-      }
-    }
-    // console.log('selectedCity', selectedCity, 'selectedLocality', selectedLocality, 'selectedSociety', selectedSociety)
-    const stateid = (masterState && masterState.find((e) => e.state.toLowerCase() === statename.toLowerCase())).id
-    const ref = await projectFirestore
-      .collection("m_cities")
-      .where("state", "==", stateid)
-      .orderBy("city", "asc");
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          cityOptions.current = snapshot.docs.map((cityData) => ({
-            label: cityData.data().city,
-            value: cityData.id,
-          }));
-
-          if (cityOptions.current.length === 0) {
-            console.log("No City");
-            handleCityChange({
-              label: '',
-              value: ''
-            }, {
-              label: '',
-              value: ''
-            }, {
-              label: '',
-              value: ''
-            });
-          } else {
-            if (selectedCity.label === '') {
-              console.log('selectedCity', selectedCity, cityOptions.current)
-              setCity({
-                label: cityOptions.current[0].label,
-                value: cityOptions.current[0].label,
-              })
-              handleCityChange({
-                label: cityOptions.current[0].label,
-                value: cityOptions.current[0].label,
-              }, {
-                label: '',
-                value: ''
-              }, {
-                label: '',
-                value: ''
-              }
-              );
-            }
-            else {
-              // console.log('selectedLocality : ', selectedLocality)
-              handleCityChange({
-                label: selectedCity.label,
-                value: selectedCity.label,
-              }, selectedLocality, selectedSociety);
-              // setCity()
-              setCity(selectedCity);
-
-            }
-            // handleCityChange()
-          }
-        } else {
-          // setError('No such document exists')
+      if (state && state.label !== option.label) {
+        setCity({
+          label: '',
+          value: ''
+        })
+        setLocality([]
+          //   {
+          //   label: '',
+          //   value: ''
+          // }
+        )
+        // setSociety({
+        //   label: '',
+        //   value: ''
+        // })
+        selectedCity = {
+          label: '',
+          value: ''
         }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
+        selectedLocality = []
+        // selectedLocality = {
+        //   label: '',
+        //   value: ''
+        // }
+        // selectedSociety = {
+        //   label: '',
+        //   value: ''
+        // }
       }
-    );
+      // console.log('selectedCity', selectedCity, 'selectedLocality', selectedLocality, 'selectedSociety', selectedSociety)
+      const stateid = (masterState && masterState.find((e) => e.state.toLowerCase() === statename.toLowerCase())).id
+      const ref = await projectFirestore
+        .collection("m_cities")
+        .where("state", "==", stateid)
+        .orderBy("city", "asc");
+      ref.onSnapshot(
+        async (snapshot) => {
+          if (snapshot.docs) {
+            cityOptions.current = snapshot.docs.map((cityData) => ({
+              label: cityData.data().city,
+              value: cityData.id,
+            }));
+
+            if (cityOptions.current.length === 0) {
+              console.log("No City");
+              handleCityChange({
+                label: '',
+                value: ''
+              }, {
+                label: '',
+                value: ''
+              }, {
+                label: '',
+                value: ''
+              });
+            } else {
+              if (selectedCity.label === '') {
+                console.log('selectedCity', selectedCity, cityOptions.current)
+                setCity({
+                  label: cityOptions.current[0].label,
+                  value: cityOptions.current[0].label,
+                })
+                handleCityChange({
+                  label: cityOptions.current[0].label,
+                  value: cityOptions.current[0].label,
+                }, {
+                  label: '',
+                  value: ''
+                }, {
+                  label: '',
+                  value: ''
+                }
+                );
+              }
+              else {
+                // console.log('selectedLocality : ', selectedLocality)
+                handleCityChange({
+                  label: selectedCity.label,
+                  value: selectedCity.label,
+                }, selectedLocality
+                  // , selectedSociety
+                );
+                // setCity()
+                setCity(selectedCity);
+
+              }
+              // handleCityChange()
+            }
+          } else {
+            // setError('No such document exists')
+          }
+        },
+        (err) => {
+          console.log(err.message);
+          // setError('failed to get document')
+        }
+      );
+    }
+
   };
 
   //City select onchange
+  // const handleCityChange = async (option, selectedLocality, selectedSociety) => {
   const handleCityChange = async (option, selectedLocality, selectedSociety) => {
     setCity(option);
+
     // console.log('city option:', option, city, 'selectedLocality', selectedLocality)
     if (city && city.label !== option.label) {
-      setLocality({
-        label: '',
-        value: ''
-      })
-      setSociety({
-        label: '',
-        value: ''
-      })
-
-      selectedLocality = {
-        label: '',
-        value: ''
-      }
-      selectedSociety = {
-        label: '',
-        value: ''
-      }
+      setLocality([]
+        //   {
+        //   label: '',
+        //   value: ''
+        // }
+      )
+      // setSociety({
+      //   label: '',
+      //   value: ''
+      // })
+      selectedLocality = []
+      // selectedLocality = {
+      //   label: '',
+      //   value: ''
+      // }
+      // selectedSociety = {
+      //   label: '',
+      //   value: ''
+      // }
     }
 
     if (option) {
@@ -214,38 +227,51 @@ const UpdateAgent = () => {
 
             if (localityOptions.current.length === 0) {
               console.log("No Locality");
-              handleLocalityChange({
-                label: '',
-                value: '',
-              }, {
-                label: '',
-                value: '',
-              });
+              handleLocalityChange([]
+                //   {
+                //   label: '',
+                //   value: '',
+                // }, {
+                //   label: '',
+                //   value: '',
+                // }
+              );
             } else {
-              if (selectedLocality && selectedLocality.label !== '') {
-                handleLocalityChange(selectedLocality, selectedSociety);
+              console.log("selectedLocality: ", selectedLocality)
+
+              if (selectedLocality && selectedLocality[0] && selectedLocality[0].label !== '') {
+                // handleLocalityChange(selectedLocality, selectedSociety);
+                handleLocalityChange(selectedLocality);
                 setLocality(selectedLocality);
 
               } else {
-                handleLocalityChange({
-                  label: localityOptions.current[0].label,
-                  value: localityOptions.current[0].value,
-                },
-                  {
-                    label: '',
-                    value: '',
-                  });
-                setLocality({
-                  label: localityOptions.current[0].label,
-                  value: localityOptions.current[0].value,
-                })
+                handleLocalityChange([]
+                  //   {
+                  //   label: localityOptions.current[0].label,
+                  //   value: localityOptions.current[0].value,
+                  // }
+                  // ,
+                  // {
+                  //   label: '',
+                  //   value: '',
+                  // }
+                );
+                setLocality([]
+                  //   {
+                  //   label: localityOptions.current[0].label,
+                  //   value: localityOptions.current[0].value,
+                  // }
+                )
               }
             }
           } else {
-            handleLocalityChange({
-              label: '',
-              value: '',
-            }, selectedSociety);
+            handleLocalityChange([]
+              //   {
+              //   label: '',
+              //   value: '',
+              // }
+              // , selectedSociety
+            );
             // setError('No such document exists')
           }
 
@@ -259,83 +285,86 @@ const UpdateAgent = () => {
   };
 
   //Locality select onchange
-  const handleLocalityChange = async (option, selectedSociety) => {
+  // const handleLocalityChange = async (option, selectedSociety) => {
+  const handleLocalityChange = async (option) => {
     setLocality(option);
-    // console.log('locality option:', option, 'selectedSociety', selectedSociety)
-    if (locality && locality.label !== option.label) {
-      selectedSociety = {
-        label: '',
-        value: ''
-      };
+    console.log('locality option:', option)
+    console.log('locality :', locality)
 
-      setSociety({
-        label: '',
-        value: ''
-      })
+    if (locality && locality[0] && locality[0].label !== option.label) {
+      // selectedSociety = {
+      //   label: '',
+      //   value: ''
+      // };
+
+      // setSociety({
+      //   label: '',
+      //   value: ''
+      // })
     }
-    if (option) {
-      const localityname = option.label
+    // if (option) {
+    //   const localityname = option.label
 
-      // console.log("masterLocality: ", masterLocality)
-      const localityid = (masterLocality && masterLocality.find((e) => e.locality.toLowerCase() === localityname.toLowerCase())).id
-      // console.log('localityid', localityid)
-      const ref = await projectFirestore
-        .collection("m_societies")
-        .where("locality", "==", localityid)
-        .orderBy("society", "asc");
-      ref.onSnapshot(
-        async (snapshot) => {
+    //   // console.log("masterLocality: ", masterLocality)
+    //   const localityid = (masterLocality && masterLocality.find((e) => e.locality.toLowerCase() === localityname.toLowerCase())).id
+    //   // console.log('localityid', localityid)
+    //   const ref = await projectFirestore
+    //     .collection("m_societies")
+    //     .where("locality", "==", localityid)
+    //     .orderBy("society", "asc");
+    //   ref.onSnapshot(
+    //     async (snapshot) => {
 
-          if (snapshot.docs) {
-            societyOptions.current = snapshot.docs.map((societyData) => ({
-              label: societyData.data().society,
-              value: societyData.id,
-            }));
+    //       if (snapshot.docs) {
+    //         societyOptions.current = snapshot.docs.map((societyData) => ({
+    //           label: societyData.data().society,
+    //           value: societyData.id,
+    //         }));
 
-            // console.log("societyOptions.current: ", societyOptions.current);
+    //         // console.log("societyOptions.current: ", societyOptions.current);
 
-            if (societyOptions.current.length === 0) {
-              console.log("No Society");
-              handleSocietyChange({
-                label: '',
-                value: ''
-              });
-            } else {
-              if (selectedSociety && selectedSociety.label !== '') {
-                handleSocietyChange(selectedSociety);
-                setSociety(selectedSociety);
-              } else {
-                handleSocietyChange({
-                  label: societyOptions.current[0].label,
-                  value: societyOptions.current[0].value,
-                });
-                setSociety({
-                  label: societyOptions.current[0].label,
-                  value: societyOptions.current[0].value,
-                });
-              }
-            }
-          } else {
-            handleSocietyChange({
-              label: '',
-              value: '',
-            });
-          }
+    //         if (societyOptions.current.length === 0) {
+    //           console.log("No Society");
+    //           handleSocietyChange({
+    //             label: '',
+    //             value: ''
+    //           });
+    //         } else {
+    //           if (selectedSociety && selectedSociety.label !== '') {
+    //             handleSocietyChange(selectedSociety);
+    //             setSociety(selectedSociety);
+    //           } else {
+    //             handleSocietyChange({
+    //               label: societyOptions.current[0].label,
+    //               value: societyOptions.current[0].value,
+    //             });
+    //             setSociety({
+    //               label: societyOptions.current[0].label,
+    //               value: societyOptions.current[0].value,
+    //             });
+    //           }
+    //         }
+    //       } else {
+    //         handleSocietyChange({
+    //           label: '',
+    //           value: '',
+    //         });
+    //       }
 
-        },
-        (err) => {
-          console.log(err.message);
-          // setError('failed to get document')
-        }
-      );
-    }
+    //     },
+    //     (err) => {
+    //       console.log(err.message);
+    //       // setError('failed to get document')
+    //     }
+    //   );
+    // }
   };
 
   //Society select onchange
-  const handleSocietyChange = async (option) => {
-    setSociety(option);
-    // console.log('society.id:', option.value)
-  };
+  // const handleSocietyChange = async (option) => {
+  //   setSociety(option);
+  //   // console.log('society.id:', option.value)
+  // };
   // Populate Master Data - End
 
   // all useStates
@@ -349,6 +378,8 @@ const UpdateAgent = () => {
 
   useEffect(() => {
     if (agentDoc) {
+      console.log("agentDoc: ", agentDoc)
+
       setAgentName(agentDoc.agentName || "");
       setAgentCompnayName(agentDoc.agentCompnayName || "");
       setAgentPhone(agentDoc.agentPhone || "");
@@ -364,14 +395,16 @@ const UpdateAgent = () => {
         label: agentDoc.city || "",
         value: agentDoc.city || ""
       });
-      setLocality({
-        label: agentDoc.locality || "",
-        value: agentDoc.locality || ""
-      });
-      setSociety({
-        label: agentDoc.society || "",
-        value: agentDoc.society || ""
-      });
+      setLocality(agentDoc.locality
+        //   {
+        //   label: agentDoc.locality || "",
+        //   value: agentDoc.locality || ""
+        // }
+      );
+      // setSociety({
+      //   label: agentDoc.society || "",
+      //   value: agentDoc.society || ""
+      // });
 
       handleStateChange({
         label: agentDoc.state || "",
@@ -380,34 +413,45 @@ const UpdateAgent = () => {
         label: agentDoc.city || "",
         value: agentDoc.city || ""
       },
-        {
-          label: agentDoc.locality || "",
-          value: agentDoc.locality || ""
-        }, {
-        label: agentDoc.society || "",
-        value: agentDoc.society || ""
-      })
+
+        agentDoc.locality
+        ,
+        // {
+        //   label: agentDoc.locality || "",
+        //   value: agentDoc.locality || ""
+        // }
+        //   , {
+        //   label: agentDoc.society || "",
+        //   value: agentDoc.society || ""
+        // }
+      )
 
       handleCityChange({
         label: agentDoc.city || "",
         value: agentDoc.city || "",
-      }, {
-        label: agentDoc.locality || "",
-        value: agentDoc.locality || ""
-      }, {
-        label: agentDoc.society || "",
-        value: agentDoc.society || ""
-      }
+      },
+        agentDoc.locality
+        // {
+        //   label: agentDoc.locality || "",
+        //   value: agentDoc.locality || ""
+        // }
+        // , {
+        //   label: agentDoc.society || "",
+        //   value: agentDoc.society || ""
+        // }
       )
 
 
-      handleLocalityChange({
-        label: agentDoc.locality || "",
-        value: agentDoc.locality || ""
-      }, {
-        label: agentDoc.society || "",
-        value: agentDoc.society || ""
-      })
+      handleLocalityChange(agentDoc.locality
+        //   {
+        //   label: agentDoc.locality || "",
+        //   value: agentDoc.locality || ""
+        // }
+        // , {
+        //   label: agentDoc.society || "",
+        //   value: agentDoc.society || ""
+        // }
+      )
 
     }
   }, [agentDoc]);
@@ -432,7 +476,7 @@ const UpdateAgent = () => {
     state: "",
     city: "",
     locality: "",
-    society: "",
+    // society: "",
 
   });
 
@@ -450,21 +494,6 @@ const UpdateAgent = () => {
       setIsUploading(true);
 
       // Log data before update
-      // console.log("Updating with data:", {
-      //   agentName,
-      //   agentCompnayName,
-      //   agentPhone,
-      //   agentEmail,
-      //   agentPancard,
-      //   agentGstNumber,
-      //   country: "India",
-      //   state: state?.label || "",
-      //   city: city?.label || "",
-      //   locality: locality?.label || "",
-      //   society: society?.label || "",
-      //   status: "active",
-      // });
-
       const updatedAgentDoc = {
         agentName,
         agentCompnayName,
@@ -475,11 +504,11 @@ const UpdateAgent = () => {
         country: "India",
         state: state?.label || "",
         city: city?.label || "",
-        locality: locality?.label || "",
-        society: society?.label || "",
+        locality: locality,
+        // society: society?.label || "",
         status: "active",
         updatedAt: timestamp.fromDate(new Date()),
-        updatedBy:user.uid,
+        updatedBy: user.uid,
       };
 
       // Execute updateDocument
@@ -698,7 +727,9 @@ const UpdateAgent = () => {
                       handleStateChange({
                         label: e.label,
                         value: e.label,
-                      }, city, locality, society)
+                      }, city, locality
+                        // , society
+                      )
                     }}
                     options={stateOptions.current}
                     value={state}
@@ -727,7 +758,9 @@ const UpdateAgent = () => {
                       handleCityChange({
                         label: e.label,
                         value: e.label
-                      }, locality, society)
+                      }, locality
+                        // , society
+                      )
                     }}
                     options={cityOptions.current}
                     value={city}
@@ -751,12 +784,17 @@ const UpdateAgent = () => {
                 <label htmlFor="">Locality*</label>
                 <div className="form_field_inner">
                   <Select
+                    isMulti
                     className=""
                     onChange={(e) => {
-                      handleLocalityChange({
-                        label: e.label,
-                        value: e.label
-                      }, society)
+                      console.log("e: ", e)
+                      handleLocalityChange(e
+                        // {
+                        //   label: e.label,
+                        //   value: e.label
+                        // }
+                        // , society
+                      )
                     }}
                     options={localityOptions.current}
                     value={locality}
@@ -775,7 +813,7 @@ const UpdateAgent = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-4 col-lg-6">
+            {/* <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
                 <label htmlFor="">Society*</label>
                 <div className="form_field_inner">
@@ -798,7 +836,7 @@ const UpdateAgent = () => {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="vg22"></div>
           {updateAgentDocError && (

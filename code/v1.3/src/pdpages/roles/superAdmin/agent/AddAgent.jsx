@@ -62,77 +62,81 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   //State select onchange
   const handleStateChange = async (option) => {
     setState(option);
-    // console.log('state.id:', option.value)
-    const ref = await projectFirestore
-      .collection("m_cities")
-      .where("state", "==", option.value)
-      .orderBy("city", "asc");
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          cityOptions.current = snapshot.docs.map((cityData) => ({
-            label: cityData.data().city,
-            value: cityData.id,
-          }));
+    if (option) {
+      // console.log('state.id:', option.value)
+      const ref = await projectFirestore
+        .collection("m_cities")
+        .where("state", "==", option.value)
+        .orderBy("city", "asc");
+      ref.onSnapshot(
+        async (snapshot) => {
+          if (snapshot.docs) {
+            cityOptions.current = snapshot.docs.map((cityData) => ({
+              label: cityData.data().city,
+              value: cityData.id,
+            }));
 
-          if (cityOptions.current.length === 0) {
-            console.log("No City");
-            handleCityChange(null);
+            if (cityOptions.current.length === 0) {
+              console.log("No City");
+              handleCityChange(null);
+            } else {
+              handleCityChange({
+                label: cityOptions.current[0].label,
+                value: cityOptions.current[0].value,
+              });
+            }
           } else {
-            handleCityChange({
-              label: cityOptions.current[0].label,
-              value: cityOptions.current[0].value,
-            });
+            // setError('No such document exists')
           }
-        } else {
-          // setError('No such document exists')
+        },
+        (err) => {
+          console.log(err.message);
+          // setError('failed to get document')
         }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
+      );
+    }
   };
 
   //City select onchange
   const handleCityChange = async (option) => {
     setCity(option);
     // console.log('city.id:', option.value)
+    if (option) {
+      const ref = await projectFirestore
+        .collection("m_localities")
+        .where("city", "==", option.value)
+        .orderBy("locality", "asc");
+      ref.onSnapshot(
+        async (snapshot) => {
+          if (snapshot.docs) {
+            localityOptions.current = snapshot.docs.map((localityData) => ({
+              label: localityData.data().locality,
+              value: localityData.id,
+            }));
 
-    const ref = await projectFirestore
-      .collection("m_localities")
-      .where("city", "==", option.value)
-      .orderBy("locality", "asc");
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          localityOptions.current = snapshot.docs.map((localityData) => ({
-            label: localityData.data().locality,
-            value: localityData.id,
-          }));
+            // console.log("localityOptions: ", localityOptions);
 
-          // console.log("localityOptions: ", localityOptions);
-
-          if (localityOptions.current.length === 0) {
-            console.log("No Locality");
-            handleLocalityChange(null);
+            if (localityOptions.current.length === 0) {
+              console.log("No Locality");
+              handleLocalityChange(null);
+            } else {
+              handleLocalityChange({
+                label: localityOptions.current[0].label,
+                value: localityOptions.current[0].value,
+              });
+            }
           } else {
-            handleLocalityChange({
-              label: localityOptions.current[0].label,
-              value: localityOptions.current[0].value,
-            });
+            handleLocalityChange(null);
+            // setError('No such document exists')
           }
-        } else {
-          handleLocalityChange(null);
-          // setError('No such document exists')
+        },
+        (err) => {
+          console.log(err.message);
+          // setError('failed to get document')
         }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
+      );
+    }
+
   };
 
   //Locality select onchange
@@ -140,38 +144,40 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
     setLocality(option);
     // console.log('locality.id:', option.value)
 
-    const ref = await projectFirestore
-      .collection("m_societies")
-      .where("locality", "==", option.value)
-      .orderBy("society", "asc");
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          societyOptions.current = snapshot.docs.map((societyData) => ({
-            label: societyData.data().society,
-            value: societyData.id,
-          }));
+    if (option) {
+      const ref = await projectFirestore
+        .collection("m_societies")
+        .where("locality", "==", option.value)
+        .orderBy("society", "asc");
+      ref.onSnapshot(
+        async (snapshot) => {
+          if (snapshot.docs) {
+            societyOptions.current = snapshot.docs.map((societyData) => ({
+              label: societyData.data().society,
+              value: societyData.id,
+            }));
 
-          // console.log("societyOptions.current: ", societyOptions.current);
+            // console.log("societyOptions.current: ", societyOptions.current);
 
-          if (societyOptions.current.length === 0) {
-            console.log("No Society");
-            handleSocietyChange(null);
+            if (societyOptions.current.length === 0) {
+              console.log("No Society");
+              handleSocietyChange(null);
+            } else {
+              handleSocietyChange({
+                label: societyOptions.current[0].label,
+                value: societyOptions.current[0].value,
+              });
+            }
           } else {
-            handleSocietyChange({
-              label: societyOptions.current[0].label,
-              value: societyOptions.current[0].value,
-            });
+            handleSocietyChange(null);
           }
-        } else {
-          handleSocietyChange(null);
+        },
+        (err) => {
+          console.log(err.message);
+          // setError('failed to get document')
         }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
+      );
+    }
   };
 
   //Society select onchange
@@ -233,7 +239,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
       state: !state ? "State is required" : "",
       city: !city ? "City is required" : "",
       locality: !locality ? "Locality is required" : "",
-      society: !society ? "Society is required" : "",
+      // society: !society ? "Society is required" : "",
     };
 
     setErrors(newErrors);
@@ -255,10 +261,12 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
         country: "India",
         state: state.label,
         city: city.label,
-        locality: locality.label,
-        society: society.label,
+        locality: locality,
+        // society: society.label,
         status: "active",
       };
+
+      console.log("dataSet: ", dataSet)
 
       const docRef = await addAgentDoc(dataSet);
 
@@ -272,7 +280,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
       setState("");
       setLocality("");
       setCity("");
-      setSociety("");
+      // setSociety("");
       setErrors({});
       setIsUploading(false);
       setShowAIForm(!showAIForm);
@@ -479,6 +487,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
             <label htmlFor="">Locality*</label>
             <div className="form_field_inner">
               <Select
+                isMulti
                 className=""
                 onChange={handleLocalityChange}
                 options={localityOptions.current}
@@ -498,7 +507,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
             </div>
           </div>
         </div>
-        <div className="col-xl-4 col-lg-6">
+        {/* <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
             <label htmlFor="">Society*</label>
             <div className="form_field_inner">
@@ -521,7 +530,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
               )}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="vg22"></div>
       {addingError && (

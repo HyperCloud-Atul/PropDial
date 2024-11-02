@@ -253,7 +253,6 @@ const AddEnquiry = ({ enquiryAdded }) => {
         setchangeManagerPopup(false);
     };
 
-
     const [ownersProeprtyList, setOwnersProeprtyList] = useState();
     const { documents: allProperties, error: allPropertiesError } = useCollection("properties-propdial");
 
