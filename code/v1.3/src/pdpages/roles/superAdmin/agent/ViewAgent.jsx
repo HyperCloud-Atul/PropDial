@@ -5,6 +5,33 @@ import { useState, useEffect } from "react";
 import AgentSingle from "./AgentSingle";
 
 const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
+
+  // Search input state
+  const [searchInput, setSearchInput] = useState("");
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  // console.log("agent doc: ", agentDoc)
+
+  // Filter agentlist
+  const filteredAgentList = agentDoc
+    ? agentDoc.filter((document) => {
+      let searchMatch = true;
+
+      // Filter by search input
+      searchMatch = searchInput
+        ? Object.values(document).some(
+          (field) =>
+            typeof field === "string" &&
+            field.toUpperCase().includes(searchInput.toUpperCase())
+        )
+        : true;
+
+      return searchMatch;
+    })
+    : null;
+
   // View mode start
   const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
   const handleModeChange = (newViewMode) => {
@@ -35,8 +62,8 @@ const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
           <div className="rt_global_search search_field">
             <input
               placeholder="Search"
-              // value={searchInput}
-              // onChange={handleSearchInputChange}
+              value={searchInput}
+              onChange={handleSearchInputChange}
             />
             <div className="field_icon">
               <span className="material-symbols-outlined">search</span>
@@ -46,9 +73,8 @@ const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
         <div className="right">
           <div className="button_filter diff_views">
             <div
-              className={`bf_single ${
-                viewMode === "card_view" ? "active" : ""
-              }`}
+              className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                }`}
               onClick={() => handleModeChange("card_view")}
             >
               <span className="material-symbols-outlined">
@@ -56,9 +82,8 @@ const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
               </span>
             </div>
             <div
-              className={`bf_single ${
-                viewMode === "table_view" ? "active" : ""
-              }`}
+              className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                }`}
               onClick={() => handleModeChange("table_view")}
             >
               <span className="material-symbols-outlined">view_list</span>
@@ -76,12 +101,13 @@ const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
       {/* view agent pg header and filters end  */}
 
       {/* agent card and table  */}
-      {viewMode === "card_view" && <AgentSingle agentDoc={agentDoc} />}
+      {viewMode === "card_view" && filteredAgentList && <AgentSingle agentDoc={filteredAgentList} />}
+
       {viewMode === "table_view" && (
-              <h5 className="text-center text_green">
-                Coming Soon....
-              </h5>
-            )}
+        <h5 className="text-center text_green">
+          Coming Soon....
+        </h5>
+      )}
     </>
   );
 };
