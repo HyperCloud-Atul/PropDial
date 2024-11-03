@@ -325,13 +325,14 @@ export default function MasterCityList() {
 
   };
 
-  const [searchInput, setSearchInput] = useState("");
-
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
+
   };
 
-  const filteredData = masterCity
+  const [searchInput, setSearchInput] = useState("");
+
+  let filteredData = masterCity
     ? masterCity.filter((document) => {
       let isFiltered = false;
 
@@ -365,9 +366,18 @@ export default function MasterCityList() {
           isFiltered = true;
       }
 
+      // console.log("document: ", document)
+      let _searchkey;
+      let _state = masterState.find(e => e.id === document.state).state;
+      _searchkey = {
+        city: document.city,
+        state: _state
+      }
+      // console.log("_searchkey: ", _searchkey)
+
       // Search input filtering
       const searchMatch = searchInput
-        ? Object.values(document).some(
+        ? Object.values(_searchkey).some(
           (field) =>
             typeof field === "string" &&
             field.toUpperCase().includes(searchInput.toUpperCase())
@@ -379,7 +389,8 @@ export default function MasterCityList() {
     : null;
 
 
-  // nine dots menu start
+  // nine dots menu start  
+
   const nineDotsMenu = [
     // { title: "Country's List", link: "/countrylist", icon: "public" },
     { title: "State's List", link: "/statelist", icon: "map" },

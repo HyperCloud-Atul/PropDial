@@ -345,9 +345,17 @@ export default function MasterSocietyList() {
 
   const filteredData = masterSociety
     ? masterSociety.filter((document) => {
+      let _searchkey;
+      let _locality = masterLocality.find(e => e.id === document.locality).locality;
+      _searchkey = {
+        society: document.society,
+        locality: _locality
+      }
+      // console.log("_searchkey: ", _searchkey)
+
       // Search input filtering
       const searchMatch = searchInput
-        ? Object.values(document).some(
+        ? Object.values(_searchkey).some(
           (field) =>
             typeof field === "string" &&
             field.toUpperCase().includes(searchInput.toUpperCase())

@@ -333,13 +333,32 @@ export default function MasterLocalityList() {
   const filteredData = masterLocality
     ? masterLocality.filter((document) => {
       // Search input filtering
+
+      // console.log("document: ", document)
+      let _searchkey;
+      let _city = masterCity.find(e => e.id === document.city).city;
+      _searchkey = {
+        locality: document.locality,
+        city: _city
+      }
+      // console.log("_searchkey: ", _searchkey)
+
+      // Search input filtering
       const searchMatch = searchInput
-        ? Object.values(document).some(
+        ? Object.values(_searchkey).some(
           (field) =>
             typeof field === "string" &&
             field.toUpperCase().includes(searchInput.toUpperCase())
         )
         : true;
+
+      // const searchMatch = searchInput
+      //   ? Object.values(document).some(
+      //     (field) =>
+      //       typeof field === "string" &&
+      //       field.toUpperCase().includes(searchInput.toUpperCase())
+      //   )
+      //   : true;
 
       return searchMatch;
     })
