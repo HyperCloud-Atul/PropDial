@@ -110,26 +110,26 @@ const AgentSingle = ({ agentDoc }) => {
             <div className="tc_single relative item">
               <div className="left">
                 <div className="tcs_img_container">
-                {uploadingDocId !== doc.id && (
+                  {uploadingDocId !== doc.id && (
                     <label
                       htmlFor={`upload_img_${doc.id}`}
                       className="upload_btn pointer"
                       style={{
-                        position:"absolute",
-                        bottom:"0",
-                        display:"flex",
-                        alignItems:'center',
-                        justifyContent:'center',
-                        borderRadius:"50%",
-                        color:"var(--white-color)",
-                        background:"var(--theme-green)",
-                        padding:"4px",
-                        left:"0"
+                        position: "absolute",
+                        bottom: "0",
+                        display: "flex",
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: "50%",
+                        color: "var(--white-color)",
+                        background: "var(--theme-green)",
+                        padding: "4px",
+                        left: "0"
 
                       }}
                     >
                       <span class="material-symbols-outlined" style={{
-                        fontSize:"14px"
+                        fontSize: "14px"
                       }}>upload</span>
                       <input
                         type="file"
@@ -146,7 +146,7 @@ const AgentSingle = ({ agentDoc }) => {
                       style={{
                         width: "100%",
                         height: "100%",
-                      }}                    
+                      }}
                     >
                       <BeatLoader color={"#FF5733"} loading={true} />
                     </div>
@@ -202,7 +202,7 @@ const AgentSingle = ({ agentDoc }) => {
                       }
                       alt="Document"
                     />
-                  )}             
+                  )}
                 </div>
                 <div className="tenant_detail">
                   <h6 className="t_name pointer">
@@ -240,7 +240,7 @@ const AgentSingle = ({ agentDoc }) => {
                     </h6>
                   )}
                   <h6 className="t_number">
-                    {doc.state}, {doc.city}
+                    {doc.city}, {doc.state}
                   </h6>
                 </div>
               </div>

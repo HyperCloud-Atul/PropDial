@@ -91,11 +91,21 @@ const AgentDetailModal = ({ show, handleClose, selectedAgent, user }) => {
           )}
           {selectedAgent.state && (
             <li>
-              <div className="left">Email</div>
+              <div className="left">City</div>
               <div className="middle">:-</div>
               <div className="right">
-                {selectedAgent.state}, {selectedAgent.city},{" "}
-                {selectedAgent.locality}, {selectedAgent.society}
+                {selectedAgent.city}, {selectedAgent.state}
+              </div>
+            </li>
+          )}
+
+          {selectedAgent.locality.length > 0 && (
+            <li>
+              <div className="left">Locality</div>
+              <div className="middle">:-</div>
+              <div className="right">
+                {selectedAgent.locality.map(local =>
+                  local.label).join(", ")}
               </div>
             </li>
           )}
@@ -138,54 +148,54 @@ const AgentDetailModal = ({ show, handleClose, selectedAgent, user }) => {
           )}
         </ul>
       </div>
-     {selectedAgent.updatedAt && (
-           <>
-           <hr></hr>
-           <div className="enquiry_status">
-             <div
-               className={`multi_steps show_status successful`}
-               style={{
-                 marginTop: "0px",
-                 gridTemplateColumns: "repeat(2,1fr)",
-               }}
-             >
-               <div className="progress_bar">
-                 <div
-                   className="fill"
-                   style={{
-                     width: "100%",
-                   }}
-                 ></div>
-               </div>
-               <div className={`step_single`}>
-                 <div className="number">
-                   <span className="material-symbols-outlined">
-                     {" "}
-                     calendar_month
-                   </span>
-                 </div>
-                 <h6 className="text-capitalize">
-                   {format(selectedAgent.updatedAt.toDate(), "dd-MMM-yy, hh:mm a")}
-                 </h6>
-                 <h5>Updated At</h5>
-               </div>
-               <div className={`step_single`}>
-                 <div className="number">
-                   <span className="material-symbols-outlined">person</span>
-                 </div>
-                 <h6 className="text-capitalize">
-                   {dbUserState &&
-                     dbUserState.find(
-                       (user) => user.id === selectedAgent.updatedBy
-                     )?.fullName}
-                 </h6>
-                 <h5>Updated By</h5>
-               </div>
-             </div>
-           </div>
-         </>
-     )
-     }
+      {selectedAgent.updatedAt && (
+        <>
+          <hr></hr>
+          <div className="enquiry_status">
+            <div
+              className={`multi_steps show_status successful`}
+              style={{
+                marginTop: "0px",
+                gridTemplateColumns: "repeat(2,1fr)",
+              }}
+            >
+              <div className="progress_bar">
+                <div
+                  className="fill"
+                  style={{
+                    width: "100%",
+                  }}
+                ></div>
+              </div>
+              <div className={`step_single`}>
+                <div className="number">
+                  <span className="material-symbols-outlined">
+                    {" "}
+                    calendar_month
+                  </span>
+                </div>
+                <h6 className="text-capitalize">
+                  {format(selectedAgent.updatedAt.toDate(), "dd-MMM-yy, hh:mm a")}
+                </h6>
+                <h5>Updated At</h5>
+              </div>
+              <div className={`step_single`}>
+                <div className="number">
+                  <span className="material-symbols-outlined">person</span>
+                </div>
+                <h6 className="text-capitalize">
+                  {dbUserState &&
+                    dbUserState.find(
+                      (user) => user.id === selectedAgent.updatedBy
+                    )?.fullName}
+                </h6>
+                <h5>Updated By</h5>
+              </div>
+            </div>
+          </div>
+        </>
+      )
+      }
 
       <hr></hr>
       <div className="enquiry_status">
