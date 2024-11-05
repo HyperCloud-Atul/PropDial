@@ -1030,6 +1030,17 @@ const PropertyDetails = () => {
 
   //   modal code end
 
+// Get agent document start
+const { documents: agentDoc, errors: agentDocError } = useCollection(
+  "agent-propdial",
+"",
+  ["createdAt", "desc"]
+  
+);
+// Get agent document end
+console.log("agentDoc", agentDoc && agentDoc);
+console.log("propertyDocument.city", propertyDocument && propertyDocument.city);
+
   return (
     <>
       {/* Change User Popup - Start */}
