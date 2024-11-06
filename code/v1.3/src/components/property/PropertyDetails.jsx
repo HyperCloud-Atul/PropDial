@@ -1030,16 +1030,23 @@ const PropertyDetails = () => {
 
   //   modal code end
 
-// Get agent document start
-const { documents: agentDoc, errors: agentDocError } = useCollection(
-  "agent-propdial",
-"",
-  ["createdAt", "desc"]
-  
-);
-// Get agent document end
-console.log("agentDoc", agentDoc && agentDoc);
-console.log("propertyDocument.city", propertyDocument && propertyDocument.city);
+// Fetch all agent documents from the collection
+// const { documents: agentDoc, errors: agentDocError } = useCollection(
+//   "agent-propdial",
+//   "",
+//   ["createdAt", "desc"]
+// );
+
+// // Check if documents are available and then apply city and locality filters
+// const filteredAgentDocs = agentDoc
+//   ? agentDoc.filter(doc => 
+//       doc.city === propertyDocument.city && 
+//       doc.locality && doc.locality.includes(propertyDocument.locality) 
+      
+//     )
+//   : [];
+// // Debugging logs to check the filtered results
+
 
   return (
     <>

@@ -168,6 +168,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
         name,
         phone,
         email,
+        propId:id,
         date: new Date(date).toISOString(), // save as ISO string including time
         enquiryStatus,
         remark,
@@ -193,7 +194,13 @@ const AddEnquiry = ({ enquiryAdded }) => {
       setPropertyName("");
       setIsUploading(false);
       enquiryAdded();
-      navigate("/enquiry/all");
+   // Corrected navigation
+   if (id === "all") {
+    navigate("/enquiry/all");
+  } else {
+    navigate(`/enquiry/${id}`);
+  }  
+  // navigate("/enquiry/all");    
     } catch (error) {
       console.error("Error adding document:", error);
       setIsUploading(false);

@@ -644,7 +644,7 @@ const UpdateAgent = () => {
             </div>
             <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
-                <label htmlFor="">Email*</label>
+                <label htmlFor="">Email</label>
                 <div className="form_field_inner">
                   <input
                     type="text"

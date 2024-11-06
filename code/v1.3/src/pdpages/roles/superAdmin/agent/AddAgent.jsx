@@ -209,7 +209,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   const [errors, setErrors] = useState({
     agentName: "",
     agentPhone: "",
-    agentEmail: "",
+    // agentEmail: "",
     state: "",
     city: "",
     locality: "",
@@ -231,11 +231,11 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
     const newErrors = {
       agentName: !agentName ? "Name is required" : "",
       agentPhone: !agentPhone ? "Phone number is required" : "",
-      agentEmail: !agentEmail
-        ? "Email is required"
-        : !isValidEmail(agentEmail)
-          ? "Invalid email format"
-          : "",
+      // agentEmail: !agentEmail
+      //   ? "Email is required"
+      //   : !isValidEmail(agentEmail)
+      //     ? "Invalid email format"
+      //     : "",
       state: !state ? "State is required" : "",
       city: !city ? "City is required" : "",
       locality: !locality ? "Locality is required" : "",
@@ -365,7 +365,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
         </div>
         <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
-            <label htmlFor="">Email*</label>
+            <label htmlFor="">Email</label>
             <div className="form_field_inner">
               <input
                 type="text"
