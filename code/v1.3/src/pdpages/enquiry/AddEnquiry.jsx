@@ -136,9 +136,9 @@ const AddEnquiry = ({ enquiryAdded }) => {
     if (!phone) errors.phone = "Contact is a required field";
     if (email && !/\S+@\S+\.\S+/.test(email))
       errors.email = "Email is not in the correct format";
-    if (!remark) {
-      errors.remark = "Remark is a required field";
-    }
+    // if (!remark) {
+    //   errors.remark = "Remark is a required field";
+    // }
     // else if (remark.length < 50) {
     //     errors.remark = "Remark must be at least 50 characters long";
     // }
@@ -866,7 +866,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
 
             <div className="col-md-12">
               <div className="form_field label_top">
-                <label htmlFor="remark">Remarks (For Office Use Only)*</label>
+                <label htmlFor="remark">Remarks (For Office Use Only)</label>
                 <div className="form_field_inner with_icon">
                   <textarea
                     placeholder="Enter remarks"

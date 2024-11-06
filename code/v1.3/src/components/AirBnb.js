@@ -37,6 +37,29 @@ const AirBnb = () => {
     },
   };
 
+  const blogOptions = {
+    items: 3,
+    dots: false,
+    loop: true,
+    margin: 30,
+    nav: false,
+    smartSpeed: 1500,
+    autoplay: true,
+    autoplayTimeout: 3000,
+    responsive: {
+      // Define breakpoints and the number of items to show at each breakpoint
+      0: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+      992: {
+        items: 3,
+      },
+    },
+  };
+
   const responsiveimg = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -57,17 +80,20 @@ const AirBnb = () => {
   };
   return (
     <section
-      className="sect_padding ari_bnb"
+      className="blog_sect sect_padding"
+      // ari_bnb
       style={{
         backgroundImage: "url('./assets/img/home/aribnb_bg.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "top",
       }}
     >
       <div className="container">
         <div className="section_title">
-          <h2 className="section_title_effect">Air BNB</h2>
-          <h3>Service Apartments - Short Time Rental</h3>
+          <h2 className="section_title_effect">Rental Fraud</h2>
+          <h3>Stay Informed: Latest News and Alerts on Rental Scams</h3>
         </div>
-        <OwlCarousel className="owl-theme ab_p_carousel" {...options}>
+        {/* <OwlCarousel className="owl-theme ab_p_carousel" {...options}>
           <Link className="item card_single" to="https://www.airbnb.co.in/rooms/966417708640526996?guests=1&adults=1&viralityEntryPoint=1&s=76&source_impression_id=p3_1695556775_fA6WCaHp3etyoJem" target="_blank">
             <div className="card_img">
               <Carousel
@@ -242,6 +268,70 @@ const AirBnb = () => {
               </Link>
             </div>
           </Link>
+        </OwlCarousel> */}
+        <OwlCarousel className="owl-theme" {...blogOptions}>
+          <div className="item card-container">
+            <div className="card-image">
+              <img src="./assets/img/rental/img1.webp" />
+            </div>
+            <div className="card-body">
+              {/* <span className="card-badge">Business</span> */}
+              {/* <div className="blog_source">
+                <img src="./assets/img/home/blog_source1.webp" alt="" />
+              </div> */}
+              <h3>
+              Drug lab found in Dwarka house rented two days ago; two foreigners flee the scene
+              </h3>
+              <p className="card-subtitle">
+              NEW DELHI: A drug testing and manufacturing lab allegedly run by two men of African origin from the second floor of a building in 
+              </p>
+              <div className="card-author">
+                <img src="./assets/img/rental/img1.webp" alt="author avatar" />
+                <div className="author-info">
+                  {/* <p className="author-name">John Doe</p>
+                <p className="post-timestamp">2h ago</p> */}
+                  <Link
+                    className="learn-more pointer"
+                    to="https://timesofindia.indiatimes.com/city/delhi/busted-drug-lab-discovered-in-dwarka-as-foreign-nationals-escape/articleshow/114918634.cms"
+                  >
+                    Read More
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="item card-container">
+            <div className="card-image">
+              <img src="./assets/img/rental/img2.png" />
+            </div>
+            <div className="card-body">
+              {/* <span className="card-badge">Propdial</span> */}
+              {/* <div className="blog_source">
+                <img src="./assets/img/home/blog_source2.svg" alt="" />
+              </div> */}
+              <h3>           
+
+              Property consultancy cheats Bengaluru homeowners in 'multi-crore scam'
+              </h3>
+              <p className="card-subtitle">
+              Bengaluru: A property management consultancy has been accused of swindling many people out of crores of rupees.
+              </p>
+              <div className="card-author">
+                <img src="./assets/img/rental/img2.png" alt="author avatar" />
+                <div className="author-info">
+                  {/* <p className="author-name">John Doe</p>
+                <p className="post-timestamp">2h ago</p> */}
+                  <Link
+                    className="learn-more pointer"
+                    to="https://www.deccanherald.com/india/karnataka/bengaluru/property-consultancy-cheats-homeowners-in-multi-crore-scam-3079325"
+                  >
+                    Read More
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+     
         </OwlCarousel>
       </div>
     </section>
