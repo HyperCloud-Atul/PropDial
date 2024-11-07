@@ -10,6 +10,7 @@ import { BeatLoader } from "react-spinners";
 // import component
 import ImageModal from "../../../imageModal/ImageModal";
 import AgentDetailModal from "./AgentDetailModal";
+import SureDelete from "../../../sureDelete/SureDelete";
 
 const AgentSingle = ({ agentDoc }) => {
   const { user } = useAuthContext();
@@ -22,6 +23,9 @@ const AgentSingle = ({ agentDoc }) => {
   const [newDocId, setNewDocId] = useState("");
   const [uploadingDocId, setUploadingDocId] = useState(null); // Track uploading document ID
   // const [checked, setChecked] = React.useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState(null);
+
   const handleFileChange = (event, docId) => {
     const file = event.target.files[0];
     if (file) {
@@ -90,9 +94,37 @@ const AgentSingle = ({ agentDoc }) => {
     }
     setShowImageModal(true);
   };
+
+  // Delete confirmation modal
+  const handleShowDeleteModal = (imageUrl, docId) => {
+    setImageToDelete({ imageUrl, docId });
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setImageToDelete(null);
+  };
+
+  const handleDelete = async () => {
+    if (imageToDelete) {
+      const { imageUrl, docId } = imageToDelete;
+      const storageRef = projectStorage.refFromURL(imageUrl);
+      try {
+        await storageRef.delete();
+        await updateDocument(docId, { agentImageUrl: "" });
+        setImageToDelete(null);
+        setShowModal(false);
+      } catch (error) {
+        console.error("Error deleting image:", error);
+      }
+    }
+  };
+
   // image modal code end
 
   // modal code start
+
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [showAgentModal, setShowAgentModal] = useState(false);
 
@@ -118,19 +150,23 @@ const AgentSingle = ({ agentDoc }) => {
                         position: "absolute",
                         bottom: "0",
                         display: "flex",
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        alignItems: "center",
+                        justifyContent: "center",
                         borderRadius: "50%",
                         color: "var(--white-color)",
                         background: "var(--theme-green)",
                         padding: "4px",
-                        left: "0"
-
+                        left: "0",
                       }}
                     >
-                      <span class="material-symbols-outlined" style={{
-                        fontSize: "14px"
-                      }}>upload</span>
+                      <span
+                        class="material-symbols-outlined"
+                        style={{
+                          fontSize: "14px",
+                        }}
+                      >
+                        upload
+                      </span>
                       <input
                         type="file"
                         onChange={(e) => handleFileChange(e, doc.id)}
@@ -203,7 +239,22 @@ const AgentSingle = ({ agentDoc }) => {
                       alt="Document"
                     />
                   )}
+                  {doc.agentImageUrl && (
+                      <span
+                      className="material-symbols-outlined delete_icon"
+                      style={{
+                        right:"0"
+                      }}
+                      onClick={() =>
+                        handleShowDeleteModal(doc.agentImageUrl, doc.id) }
+                    >
+                      delete_forever
+                    </span>
+ 
+                  )}
+               
                 </div>
+
                 <div className="tenant_detail">
                   <h6 className="t_name pointer">
                     {doc.agentName}
@@ -226,7 +277,7 @@ const AgentSingle = ({ agentDoc }) => {
                       )}
                     </h6>
                   )}
-                  {doc.agentEmail && (
+                  {/* {doc.agentEmail && (
                     <h6
                       className="t_number"
                       style={{
@@ -238,7 +289,7 @@ const AgentSingle = ({ agentDoc }) => {
                     >
                       {doc.agentEmail}
                     </h6>
-                  )}
+                  )} */}
                   <h6 className="t_number">
                     {doc.city}, {doc.state}
                   </h6>
@@ -286,6 +337,12 @@ const AgentSingle = ({ agentDoc }) => {
         handleClose={handleAgentModalClose}
         selectedAgent={selectedAgent}
         user={user}
+      />
+      {/* SureDelete Confirmation Modal */}
+      <SureDelete
+        show={showModal}
+        handleClose={handleCloseModal}
+        handleDelete={handleDelete}
       />
     </div>
   );

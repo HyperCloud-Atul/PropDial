@@ -4,7 +4,7 @@ import { Modal, Button } from "react-bootstrap";
 
 const SureDelete = ({ show, handleClose, handleDelete }) => {
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose} centered>
       <Modal.Header className="justify-content-center" style={{
         paddingBottom: "0px",
         border: "none"

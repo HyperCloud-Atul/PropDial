@@ -133,7 +133,17 @@ const AddEnquiry = ({ enquiryAdded }) => {
     if (!propertyName)
       errors.propertyName = "Property name is a required field";
     if (!name) errors.name = "Name is a required field";
-    if (!phone) errors.phone = "Contact is a required field";
+    // if (!phone) errors.phone = "Contact is a required field";
+    if (!phone) {
+      errors.phone = "Contact is a required field";
+    } else if (
+      phone.startsWith("+91") && 
+      phone.replace(/\D/g, "").length !== 12
+    ) {
+      errors.phone = "Indian phone numbers must have exactly 10 digits excluding the country code";
+    } else if (phone.replace(/\D/g, "").length > 10) {
+      errors.phone = "Contact number should be a maximum of 10 digits excluding country code";
+    }
     if (email && !/\S+@\S+\.\S+/.test(email))
       errors.email = "Email is not in the correct format";
     // if (!remark) {
