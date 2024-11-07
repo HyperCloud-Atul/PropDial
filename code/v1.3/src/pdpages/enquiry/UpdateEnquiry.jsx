@@ -59,7 +59,7 @@ const UpdateEnquiry = () => {
   const [ownersProeprtyList, setOwnersProeprtyList] = useState();
 
   const proeprtyListforUserId = async (_userId) => {
-    console.log("_userId: ", _userId)
+    // console.log("_userId: ", _userId)
     let results = [];
     let propertyList = [];
     const ref = await projectFirestore
@@ -72,16 +72,15 @@ const UpdateEnquiry = () => {
         // console.log("user mapping doc: ", doc.data())
         results.push({ ...doc.data(), id: doc.id });
       });
-      console.log("results 1: ", results)
+      // console.log("results 1: ", results)
       // setproeprtyListforUserIdState(results);
-
 
       results &&
         results.map((property) => {
           const _prop = allProperties.find((e) => e.id === property.propertyId);
           propertyList.push({ ..._prop });
         });
-      console.log("propertyList: ", propertyList);
+      // console.log("propertyList: ", propertyList);
 
       setOwnersProeprtyList(
         propertyList.map((data) => ({
@@ -115,12 +114,12 @@ const UpdateEnquiry = () => {
       setDate(new Date(enquiryDocument.date) || new Date());
       setEnquiryStatus(enquiryDocument.enquiryStatus || "open");
       setRemark(enquiryDocument.remark || "");
+
+
+      //Load Properties of assigned Owners
+      proeprtyListforUserId(enquiryDocument.propertyOwnerId)
     }
 
-    //Load Properties of assigned Owners
-    proeprtyListforUserId(enquiryDocument.propertyOwnerId)
-    // console.log("") 
-    // proeprtyListforUserIdState
 
   }, [enquiryDocument, dbUsers]);
 

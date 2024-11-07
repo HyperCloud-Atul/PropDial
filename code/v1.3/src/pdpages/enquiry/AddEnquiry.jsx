@@ -197,7 +197,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
         source,
         employeeName,
         propertyOwner,
-        ProertyOwnerId: propertyOwnerId,
+        propertyOwnerId,
         propertyName: propertyName.label,
         pid: "",
         statusUpdates: [newStatusUpdate], // Initialize statusUpdates with default status
@@ -318,17 +318,6 @@ const AddEnquiry = ({ enquiryAdded }) => {
     proeprtyListforUserId(selectedUser);
     console.log("propertyListofSelectedUser: ", proeprtyListforUserIdState);
     console.log(" Property List Count: ", proeprtyListforUserIdState.length);
-
-    // const ref = await projectFirestore
-    //     .collection("properties-propdial")
-    // let results = []
-    // const unsubscribe = ref.onSnapshot(async snapshot => {
-    //     snapshot.docs.forEach(doc => {
-    //         console.log("properties docs: ", doc.data())
-    //         results.push({ ...doc.data(), id: doc.id })
-    //     });
-    //     console.log("results: ", results)
-    // })
 
     let results = [];
     proeprtyListforUserIdState &&
