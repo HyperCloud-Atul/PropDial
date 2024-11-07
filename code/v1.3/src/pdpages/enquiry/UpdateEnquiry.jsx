@@ -11,6 +11,8 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import ReactTable from "../../components/ReactTable";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
+import Select from "react-select";
+import { projectFirestore, timestamp } from "../../firebase/config";
 
 const UpdateEnquiry = () => {
   const { id } = useParams();
@@ -48,6 +50,54 @@ const UpdateEnquiry = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [dbUserState, setdbUserState] = useState(dbUsers);
 
+
+  const { documents: allProperties, error: allPropertiesError } = useCollection(
+    "properties-propdial"
+  );
+  const [proeprtyListforUserIdState, setproeprtyListforUserIdState] =
+    useState("");
+  const [ownersProeprtyList, setOwnersProeprtyList] = useState();
+
+  const proeprtyListforUserId = async (_userId) => {
+    console.log("_userId: ", _userId)
+    let results = [];
+    let propertyList = [];
+    const ref = await projectFirestore
+      .collection("propertyusers")
+      .where("userId", "==", _userId);
+
+    // console.log("ref: ", ref);
+    const unsubscribe = ref.onSnapshot(async (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        // console.log("user mapping doc: ", doc.data())
+        results.push({ ...doc.data(), id: doc.id });
+      });
+      console.log("results 1: ", results)
+      // setproeprtyListforUserIdState(results);
+
+
+      results &&
+        results.map((property) => {
+          const _prop = allProperties.find((e) => e.id === property.propertyId);
+          propertyList.push({ ..._prop });
+        });
+      console.log("propertyList: ", propertyList);
+
+      setOwnersProeprtyList(
+        propertyList.map((data) => ({
+          label: data.propertyName,
+          value: data.id,
+        }))
+      );
+
+    });
+
+    // console.log("results: ", results)
+
+    // let results = [];
+
+  };
+
   useEffect(() => {
     setdbUserState(dbUsers);
     if (enquiryDocument) {
@@ -58,16 +108,23 @@ const UpdateEnquiry = () => {
       setName(enquiryDocument.name || "");
       setEmployeeName(enquiryDocument.employeeName || "");
       setPropertyOwner(enquiryDocument.propertyOwner || "");
-      setPropertyName(enquiryDocument.propertyName || "");
+      // setPropertyName(enquiryDocument.propertyName || "");
+      setPropertyName({ label: enquiryDocument.propertyName, value: enquiryDocument.propId });
       setPhone(enquiryDocument.phone || "");
       setEmail(enquiryDocument.email || "");
       setDate(new Date(enquiryDocument.date) || new Date());
       setEnquiryStatus(enquiryDocument.enquiryStatus || "open");
       setRemark(enquiryDocument.remark || "");
     }
+
+    //Load Properties of assigned Owners
+    proeprtyListforUserId("NaCYu3VdsfVeCktk1f3xqu7eeDh1")
+    // console.log("") 
+    // proeprtyListforUserIdState
+
   }, [enquiryDocument, dbUsers]);
 
-console.log("dbUserState", dbUserState);
+  // console.log("dbUserState", dbUserState);
 
 
   const [errors, setErrors] = useState({});
@@ -96,7 +153,7 @@ console.log("dbUserState", dbUserState);
   const handleChangeEmployeeName = (event) =>
     setEmployeeName(event.target.value);
   const handleChangePropertyName = (event) =>
-    setPropertyName(event.target.value);
+    setPropertyName({ label: event.target.label, value: event.target.value });
   const handleChangePropertyOwner = (event) =>
     setPropertyOwner(event.target.value);
   // const handleChangeUpdateType = (event) => setUpdateType(event.target.value);
@@ -106,6 +163,10 @@ console.log("dbUserState", dbUserState);
   const handleChangeVisitDate = (date) => {
     setVisitDate(date); // Update state with selected date
   };
+
+  const handlePropertyName = async (option) => {
+    setPropertyName(option)
+  }
 
   const validateFields = () => {
     let errors = {};
@@ -187,8 +248,8 @@ console.log("dbUserState", dbUserState);
     if (enquiryDocument) {
       const lastStatus = enquiryDocument?.statusUpdates?.length
         ? enquiryDocument.statusUpdates[
-            enquiryDocument.statusUpdates.length - 1
-          ].status
+          enquiryDocument.statusUpdates.length - 1
+        ].status
         : "open";
       setEnquiryStatus(lastStatus);
     }
@@ -217,7 +278,7 @@ console.log("dbUserState", dbUserState);
   // table data start
   const columns = useMemo(() => {
     if (!dbUserState) return []; // Return an empty array if dbUserState is not available
-  
+
     return [
       {
         Header: "S.No",
@@ -274,8 +335,8 @@ console.log("dbUserState", dbUserState);
       },
     ];
   }, [dbUserState]);
-  
-  
+
+
 
   if (!enquiryDocument) {
     return <div>Loading...</div>;
@@ -284,6 +345,8 @@ console.log("dbUserState", dbUserState);
 
   // field only in readonly mode
   const isReadOnly = user && user.role !== "superAdmin";
+
+
 
   return (
     <div className="top_header_pg pg_bg pg_enquiry pg_enquiry_update">
@@ -303,7 +366,7 @@ console.log("dbUserState", dbUserState);
             </span>
             <h2 className="m22 mb-1">Update Enquiry
 
-            {dbUserState && dbUserState[1]?.fullName}
+              {dbUserState && dbUserState[1]?.fullName}
             </h2>
           </div>
           <div className="right">
@@ -370,9 +433,8 @@ console.log("dbUserState", dbUserState);
                       />
                       <label
                         htmlFor="rent"
-                        className={`radio_label ${
-                          isReadOnly ? "no-drop-cursor" : ""
-                        }`}
+                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                          }`}
                       >
                         rent
                       </label>
@@ -389,9 +451,8 @@ console.log("dbUserState", dbUserState);
                       />
                       <label
                         htmlFor="sale"
-                        className={`radio_label ${
-                          isReadOnly ? "no-drop-cursor" : ""
-                        }`}
+                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                          }`}
                       >
                         sale
                       </label>
@@ -418,9 +479,8 @@ console.log("dbUserState", dbUserState);
                         />
                         <label
                           htmlFor="tenant"
-                          className={`radio_label ${
-                            isReadOnly ? "no-drop-cursor" : ""
-                          }`}
+                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                            }`}
                         >
                           prospective tenant
                         </label>
@@ -439,9 +499,8 @@ console.log("dbUserState", dbUserState);
                         />
                         <label
                           htmlFor="buyer"
-                          className={`radio_label ${
-                            isReadOnly ? "no-drop-cursor" : ""
-                          }`}
+                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                            }`}
                         >
                           prospective buyer
                         </label>
@@ -459,9 +518,8 @@ console.log("dbUserState", dbUserState);
                       />
                       <label
                         htmlFor="agent"
-                        className={`radio_label ${
-                          isReadOnly ? "no-drop-cursor" : ""
-                        }`}
+                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                          }`}
                       >
                         Agent
                       </label>
@@ -487,9 +545,8 @@ console.log("dbUserState", dbUserState);
                       />
                       <label
                         htmlFor="owner"
-                        className={`radio_label ${
-                          isReadOnly ? "no-drop-cursor" : ""
-                        }`}
+                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                          }`}
                       >
                         owner
                       </label>
@@ -506,9 +563,8 @@ console.log("dbUserState", dbUserState);
                       />
                       <label
                         htmlFor="propdial"
-                        className={`radio_label ${
-                          isReadOnly ? "no-drop-cursor" : ""
-                        }`}
+                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                          }`}
                       >
                         propdial
                       </label>
@@ -525,9 +581,8 @@ console.log("dbUserState", dbUserState);
                       />
                       <label
                         htmlFor="employee"
-                        className={`radio_label ${
-                          isReadOnly ? "no-drop-cursor" : ""
-                        }`}
+                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                          }`}
                       >
                         employee
                       </label>
@@ -554,9 +609,8 @@ console.log("dbUserState", dbUserState);
                         />
                         <label
                           htmlFor="99acres"
-                          className={`radio_label ${
-                            isReadOnly ? "no-drop-cursor" : ""
-                          }`}
+                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                            }`}
                         >
                           99acres
                         </label>
@@ -573,9 +627,8 @@ console.log("dbUserState", dbUserState);
                         />
                         <label
                           htmlFor="magicBricks"
-                          className={`radio_label ${
-                            isReadOnly ? "no-drop-cursor" : ""
-                          }`}
+                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                            }`}
                         >
                           magicbricks
                         </label>
@@ -592,9 +645,8 @@ console.log("dbUserState", dbUserState);
                         />
                         <label
                           htmlFor="housing"
-                          className={`radio_label ${
-                            isReadOnly ? "no-drop-cursor" : ""
-                          }`}
+                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                            }`}
                         >
                           housing
                         </label>
@@ -611,9 +663,8 @@ console.log("dbUserState", dbUserState);
                         />
                         <label
                           htmlFor="other"
-                          className={`radio_label ${
-                            isReadOnly ? "no-drop-cursor" : ""
-                          }`}
+                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
+                            }`}
                         >
                           other
                         </label>
@@ -662,6 +713,33 @@ console.log("dbUserState", dbUserState);
                 </div>
               </div>
               <div className="col-md-6">
+                <div className="form_field label_top">
+                  <label htmlFor="propname">Property Name*</label>
+                  <div className="form_field_inner with_icon">
+
+                    <Select
+                      className=""
+                      onChange={handlePropertyName}
+                      options={ownersProeprtyList}
+                      value={propertyName}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                        }),
+                      }}
+                    />
+
+
+                  </div>
+                  {errors.propertyName && (
+                    <div className="field_error">{errors.propertyName}</div>
+                  )}
+                </div>
+              </div>
+              {/* <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Property Name</label>
                   <div className="form_field_inner with_icon">
@@ -677,17 +755,17 @@ console.log("dbUserState", dbUserState);
                     </div>{" "}
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-4">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">
                     {enquiryFrom === "agent"
                       ? "agent"
                       : enquiryFrom === "prospective tenant"
-                      ? "Prospective Tenant"
-                      : enquiryFrom === "prospective buyer"
-                      ? "Prospective Buyer"
-                      : ""}{" "}
+                        ? "Prospective Tenant"
+                        : enquiryFrom === "prospective buyer"
+                          ? "Prospective Buyer"
+                          : ""}{" "}
                     Name
                   </label>
                   <div className="form_field_inner with_icon">
@@ -710,10 +788,10 @@ console.log("dbUserState", dbUserState);
                     {enquiryFrom === "agent"
                       ? "agent"
                       : enquiryFrom === "prospective tenant"
-                      ? "Prospective Tenant"
-                      : enquiryFrom === "prospective buyer"
-                      ? "Prospective Buyer"
-                      : ""}{" "}
+                        ? "Prospective Tenant"
+                        : enquiryFrom === "prospective buyer"
+                          ? "Prospective Buyer"
+                          : ""}{" "}
                     Contact
                   </label>
                   <div className="form_field_inner with_icon">
@@ -754,10 +832,10 @@ console.log("dbUserState", dbUserState);
                     {enquiryFrom === "agent"
                       ? "agent"
                       : enquiryFrom === "prospective tenant"
-                      ? "Prospective Tenant"
-                      : enquiryFrom === "prospective buyer"
-                      ? "Prospective Buyer"
-                      : ""}{" "}
+                        ? "Prospective Tenant"
+                        : enquiryFrom === "prospective buyer"
+                          ? "Prospective Buyer"
+                          : ""}{" "}
                     Email
                   </label>
                   <div className="form_field_inner with_icon">

@@ -15,7 +15,7 @@ import Select from "react-select";
 const AddEnquiry = ({ enquiryAdded }) => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const { id } = useParams();
+  let { id } = useParams();
   // console.log("property id: ", id)
   // add enquiry with add document start
   const { addDocument, updateDocument, deleteDocument, error } =
@@ -118,6 +118,11 @@ const AddEnquiry = ({ enquiryAdded }) => {
     });
   };
 
+  const handlePropertyName = async (option) => {
+    setPropertyName(option)
+  }
+
+
   const validateFields = () => {
     let errors = {};
 
@@ -137,11 +142,11 @@ const AddEnquiry = ({ enquiryAdded }) => {
     if (!phone) {
       errors.phone = "Contact is a required field";
     } else if (
-      phone.startsWith("+91") && 
+      phone.startsWith("+91") &&
       phone.replace(/\D/g, "").length !== 12
     ) {
       errors.phone = "Indian phone numbers must have exactly 10 digits excluding the country code";
-    } else if (phone.replace(/\D/g, "").length > 10) {
+    } else if (phone.replace(/\D/g, "").length > 12) {
       errors.phone = "Contact number should be a maximum of 10 digits excluding country code";
     }
     if (email && !/\S+@\S+\.\S+/.test(email))
@@ -169,6 +174,12 @@ const AddEnquiry = ({ enquiryAdded }) => {
         updatedAt: new Date(),
         updatedBy: user.uid,
       };
+      if (id === "all") {
+        console.log("all option: ")
+        console.log(" propertyName: ", propertyName)
+        id = propertyName !== '' ? propertyName.value : ""
+      }
+
       const docRef = await addDocument({
         iAm: "",
         description: "",
@@ -178,14 +189,14 @@ const AddEnquiry = ({ enquiryAdded }) => {
         name,
         phone,
         email,
-        propId:id,
+        propId: id,
         date: new Date(date).toISOString(), // save as ISO string including time
         enquiryStatus,
         remark,
         source,
         employeeName,
         propertyOwner,
-        propertyName,
+        propertyName: propertyName.label,
         pid: "",
         statusUpdates: [newStatusUpdate], // Initialize statusUpdates with default status
       });
@@ -204,13 +215,13 @@ const AddEnquiry = ({ enquiryAdded }) => {
       setPropertyName("");
       setIsUploading(false);
       enquiryAdded();
-   // Corrected navigation
-   if (id === "all") {
-    navigate("/enquiry/all");
-  } else {
-    navigate(`/enquiry/${id}`);
-  }  
-  // navigate("/enquiry/all");    
+      // Corrected navigation
+      if (id === "all") {
+        navigate("/enquiry/all");
+      } else {
+        navigate(`/enquiry/${id}`);
+      }
+      // navigate("/enquiry/all");    
     } catch (error) {
       console.error("Error adding document:", error);
       setIsUploading(false);
@@ -218,7 +229,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
   };
   // add enquiry with add document end
 
-  const ownerListforPropertyId = (_propertyId) => {};
+  const ownerListforPropertyId = (_propertyId) => { };
 
   const [proeprtyListforUserIdState, setproeprtyListforUserIdState] =
     useState("");
@@ -284,11 +295,14 @@ const AddEnquiry = ({ enquiryAdded }) => {
     "properties-propdial"
   );
 
+  // console.log("allProperties: ", allProperties)
+
   const confirmChangeUser = async () => {
     console.log("selected user: ", selectedUser);
     const _userDoc =
       onlyOwners && onlyOwners.find((e) => e.id === selectedUser);
     console.log("_userDoc: ", _userDoc);
+
     const formattedPhoneNumber = _userDoc.phoneNumber.replace(
       /(\d{2})(\d{5})(\d{5})/,
       "+$1 $2-$3"
@@ -323,7 +337,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
     setOwnersProeprtyList(
       results.map((data) => ({
         label: data.propertyName,
-        value: data.propertyName,
+        value: data.id,
       }))
     );
 
@@ -352,6 +366,8 @@ const AddEnquiry = ({ enquiryAdded }) => {
   const handleUserSelect = (userId) => {
     setSelectedUser(userId);
   };
+
+
 
   //------------ End of Change Property Manager ---------
 
@@ -733,6 +749,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
                   {id === "all" ? (
                     <Select
                       className=""
+                      onChange={handlePropertyName}
                       options={ownersProeprtyList}
                       value={propertyName}
                       styles={{
@@ -745,22 +762,22 @@ const AddEnquiry = ({ enquiryAdded }) => {
                       }}
                     />
                   ) : (
-            <>
-                    <input
-                      type="text"
-                      placeholder="Search property"
-                      value={propertyName}
-                      onChange={handleChangePropertyName}
-                      id="propname"
-                      readOnly
-                      style={{
-                        cursor: id !== "all" ? "no-drop" : "pointer",
-                      }}
-                    />
-                    
-                  <div className="field_icon">
-                  <span class="material-symbols-outlined">search</span>
-                </div></>
+                    <>
+                      <input
+                        type="text"
+                        placeholder="Search property"
+                        value={propertyName}
+                        onChange={handleChangePropertyName}
+                        id="propname"
+                        readOnly
+                        style={{
+                          cursor: id !== "all" ? "no-drop" : "pointer",
+                        }}
+                      />
+
+                      <div className="field_icon">
+                        <span class="material-symbols-outlined">search</span>
+                      </div></>
                   )}
 
                 </div>
@@ -776,10 +793,10 @@ const AddEnquiry = ({ enquiryAdded }) => {
                   {enquiryFrom === "agent"
                     ? "agent"
                     : enquiryFrom === "prospective tenant"
-                    ? "Prospective Tenant"
-                    : enquiryFrom === "prospective buyer"
-                    ? "Prospective Buyer"
-                    : ""}{" "}
+                      ? "Prospective Tenant"
+                      : enquiryFrom === "prospective buyer"
+                        ? "Prospective Buyer"
+                        : ""}{" "}
                   Name*
                 </label>
                 <div className="form_field_inner with_icon">
@@ -805,10 +822,10 @@ const AddEnquiry = ({ enquiryAdded }) => {
                   {enquiryFrom === "agent"
                     ? "agent"
                     : enquiryFrom === "prospective tenant"
-                    ? "Prospective Tenant"
-                    : enquiryFrom === "prospective buyer"
-                    ? "Prospective Buyer"
-                    : ""}{" "}
+                      ? "Prospective Tenant"
+                      : enquiryFrom === "prospective buyer"
+                        ? "Prospective Buyer"
+                        : ""}{" "}
                   Contact*
                 </label>
                 <div className="form_field_inner with_icon">
@@ -850,10 +867,10 @@ const AddEnquiry = ({ enquiryAdded }) => {
                   {enquiryFrom === "agent"
                     ? "agent"
                     : enquiryFrom === "prospective tenant"
-                    ? "Prospective Tenant"
-                    : enquiryFrom === "prospective buyer"
-                    ? "Prospective Buyer"
-                    : ""}{" "}
+                      ? "Prospective Tenant"
+                      : enquiryFrom === "prospective buyer"
+                        ? "Prospective Buyer"
+                        : ""}{" "}
                   Email
                 </label>
                 <div className="form_field_inner with_icon">
