@@ -249,7 +249,23 @@ const AddEnquiry = ({ enquiryAdded }) => {
         results.push({ ...doc.data(), id: doc.id });
       });
       // console.log("results: ", results)
-      setproeprtyListforUserIdState(results);
+      // setproeprtyListforUserIdState(results);
+
+      results &&
+        results.map((property) => {
+          const _prop = allProperties.find((e) => e.id === property.propertyId);
+          results.push({ ..._prop });
+        });
+      console.log("results: ", results);
+
+      setOwnersProeprtyList(
+        results.map((data) => ({
+          label: data.propertyName,
+          value: data.id,
+        }))
+      );
+
+
     });
 
     // console.log("results: ", results)
@@ -319,20 +335,20 @@ const AddEnquiry = ({ enquiryAdded }) => {
     console.log("propertyListofSelectedUser: ", proeprtyListforUserIdState);
     console.log(" Property List Count: ", proeprtyListforUserIdState.length);
 
-    let results = [];
-    proeprtyListforUserIdState &&
-      proeprtyListforUserIdState.map((property) => {
-        const _prop = allProperties.find((e) => e.id === property.propertyId);
-        results.push({ ..._prop });
-      });
-    console.log("results: ", results);
+    // let results = [];
+    // proeprtyListforUserIdState &&
+    //   proeprtyListforUserIdState.map((property) => {
+    //     const _prop = allProperties.find((e) => e.id === property.propertyId);
+    //     results.push({ ..._prop });
+    //   });
+    // console.log("results: ", results);
 
-    setOwnersProeprtyList(
-      results.map((data) => ({
-        label: data.propertyName,
-        value: data.id,
-      }))
-    );
+    // setOwnersProeprtyList(
+    //   results.map((data) => ({
+    //     label: data.propertyName,
+    //     value: data.id,
+    //   }))
+    // );
 
     setchangeManagerPopup(false);
   };
