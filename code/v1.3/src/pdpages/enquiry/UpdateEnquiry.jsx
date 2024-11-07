@@ -118,7 +118,7 @@ const UpdateEnquiry = () => {
     }
 
     //Load Properties of assigned Owners
-    proeprtyListforUserId("NaCYu3VdsfVeCktk1f3xqu7eeDh1")
+    proeprtyListforUserId(enquiryDocument.propertyOwnerId)
     // console.log("") 
     // proeprtyListforUserIdState
 

@@ -44,6 +44,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
   const [name, setName] = useState("");
   const [employeeName, setEmployeeName] = useState("");
   const [propertyOwner, setPropertyOwner] = useState("");
+  const [propertyOwnerId, setPropertyOwnerId] = useState("");
   const [propertyName, setPropertyName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -196,6 +197,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
         source,
         employeeName,
         propertyOwner,
+        ProertyOwnerId: propertyOwnerId,
         propertyName: propertyName.label,
         pid: "",
         statusUpdates: [newStatusUpdate], // Initialize statusUpdates with default status
@@ -309,7 +311,9 @@ const AddEnquiry = ({ enquiryAdded }) => {
     );
     const _propertyOwner =
       _userDoc && _userDoc.fullName + " ( " + formattedPhoneNumber + " )";
+
     setPropertyOwner(_propertyOwner);
+    setPropertyOwnerId(selectedUser)
 
     proeprtyListforUserId(selectedUser);
     console.log("propertyListofSelectedUser: ", proeprtyListforUserIdState);
