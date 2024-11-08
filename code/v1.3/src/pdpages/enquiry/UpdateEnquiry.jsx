@@ -363,9 +363,7 @@ const UpdateEnquiry = () => {
             >
               arrow_back
             </span>
-            <h2 className="m22 mb-1">Update Enquiry
-
-              {dbUserState && dbUserState[1]?.fullName}
+            <h2 className="m22 mb-1">Update Enquiry              
             </h2>
           </div>
           <div className="right">
@@ -375,11 +373,11 @@ const UpdateEnquiry = () => {
                 gap: "22px",
               }}
             >
-              <Link to="/enquiry/all" className="theme_btn btn_border">
+              <Link to="/enquiry/all" className="theme_btn btn_border no_icon text-center">
                 Cancel
               </Link>
               <button
-                className="theme_btn btn_fill"
+                className="theme_btn btn_fill no_icon text-center"
                 onClick={submitEnquiry}
                 disabled={isUploading}
               >
@@ -702,7 +700,7 @@ const UpdateEnquiry = () => {
                       type="text"
                       value={propertyOwner}
                       onChange={handleChangePropertyOwner}
-                      readOnly={isReadOnly}
+                    readOnly
                       className={isReadOnly ? "no-drop-cursor" : ""}
                     />
                     <div className="field_icon">
@@ -717,7 +715,7 @@ const UpdateEnquiry = () => {
                   <div className="form_field_inner with_icon">
 
                     <Select
-                      readOnly
+                      isDisabled
                       className=""
                       onChange={handlePropertyName}
                       options={ownersProeprtyList}
@@ -1030,11 +1028,11 @@ const UpdateEnquiry = () => {
                   gap: "22px",
                 }}
               >
-                <Link to="/enquiry/all" className="theme_btn btn_border">
+                <Link to="/enquiry/all" className="theme_btn btn_border no_icon text-center">
                   Cancel
                 </Link>
                 <button
-                  className="theme_btn btn_fill"
+                  className="theme_btn btn_fill no_icon text-center"
                   onClick={submitEnquiry}
                   disabled={isUploading}
                 >
