@@ -231,10 +231,6 @@ const AddEnquiry = ({ enquiryAdded }) => {
   };
   // add enquiry with add document end
 
-  const ownerListforPropertyId = (_propertyId) => { };
-
-  const [proeprtyListforUserIdState, setproeprtyListforUserIdState] =
-    useState("");
   const proeprtyListforUserId = async (_userId) => {
     // console.log("_userId: ", _userId)
     let results = [];
@@ -302,6 +298,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
     setchangeManagerPopup(true);
     // setUserdbFieldName(option);
     setChangedUser(docId);
+    setOwnersProeprtyList({ lable: "", value: "" });
   };
 
   const closeChangeManager = () => {
@@ -317,6 +314,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
 
   const confirmChangeUser = async () => {
     console.log("selected user: ", selectedUser);
+    setOwnersProeprtyList({ lable: "", value: "" });
     const _userDoc =
       onlyOwners && onlyOwners.find((e) => e.id === selectedUser);
     console.log("_userDoc: ", _userDoc);
@@ -332,8 +330,8 @@ const AddEnquiry = ({ enquiryAdded }) => {
     setPropertyOwnerId(selectedUser)
 
     proeprtyListforUserId(selectedUser);
-    console.log("propertyListofSelectedUser: ", proeprtyListforUserIdState);
-    console.log(" Property List Count: ", proeprtyListforUserIdState.length);
+    // console.log("propertyListofSelectedUser: ", proeprtyListforUserIdState);
+    // console.log(" Property List Count: ", proeprtyListforUserIdState.length);
 
     // let results = [];
     // proeprtyListforUserIdState &&

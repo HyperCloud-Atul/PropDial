@@ -220,8 +220,8 @@ const UpdateEnquiry = () => {
         remark,
         source,
         employeeName,
-        propertyOwner,
-        propertyName,
+        // propertyOwner,
+        // propertyName,
       };
 
       if (enquiryDocument?.statusUpdates) {
@@ -699,6 +699,7 @@ const UpdateEnquiry = () => {
                   <label htmlFor="">Property Owner</label>
                   <div className="form_field_inner with_icon">
                     <input
+                      readOnly
                       type="text"
                       value={propertyOwner}
                       onChange={handleChangePropertyOwner}
@@ -717,6 +718,7 @@ const UpdateEnquiry = () => {
                   <div className="form_field_inner with_icon">
 
                     <Select
+                      readOnly
                       className=""
                       onChange={handlePropertyName}
                       options={ownersProeprtyList}
