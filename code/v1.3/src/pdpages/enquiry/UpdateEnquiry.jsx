@@ -699,7 +699,6 @@ const UpdateEnquiry = () => {
                   <label htmlFor="">Property Owner</label>
                   <div className="form_field_inner with_icon">
                     <input
-                      readOnly
                       type="text"
                       value={propertyOwner}
                       onChange={handleChangePropertyOwner}
