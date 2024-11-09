@@ -158,10 +158,7 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
           <li>
             <div className="left">Property</div>
             <div className="middle">:-</div>
-            <div className="right">
-              {/* C-102<span> | </span>Hiranandani<span> | </span>9 BHK
-              <span> | </span>Low Rise Apt (5-10 floor)<span> | </span>
-              Devnahalli<span> | </span>Bangalore<span> | </span>Karnatak */}
+            <div className="right">            
               {selectedEnquiry.propertyName}
             </div>
           </li>

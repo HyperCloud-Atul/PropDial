@@ -175,10 +175,11 @@ const AddEnquiry = ({ enquiryAdded }) => {
         updatedAt: new Date(),
         updatedBy: user.uid,
       };
+      let UrlId 
       if (id === "all") {
         console.log("all option: ")
         console.log(" propertyName: ", propertyName)
-        id = propertyName !== '' ? propertyName.value : ""
+        UrlId = propertyName !== '' ? propertyName.value : ""
       }
 
 
@@ -195,7 +196,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
         name,
         phone,
         email,
-        propId: id,
+        propId: UrlId,
         date: new Date(date).toISOString(), // save as ISO string including time
         enquiryStatus,
         remark,
@@ -926,7 +927,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
 
             <div className="col-md-12">
               <button
-                className="theme_btn btn_fill"
+                className="theme_btn btn_fill no_icon"
                 onClick={submitEnquiry}
                 disabled={isUploading}
               >
