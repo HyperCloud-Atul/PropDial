@@ -181,6 +181,11 @@ const AddEnquiry = ({ enquiryAdded }) => {
         id = propertyName !== '' ? propertyName.value : ""
       }
 
+
+      const _propertyName = propertyName.label
+      const propertyPID = _propertyName.slice(_propertyName.indexOf(':') + 1, _propertyName.indexOf(')')).trim()
+      // console.log("get pid from property name: ", propertyPID)
+
       const docRef = await addDocument({
         iAm: "",
         description: "",
@@ -198,8 +203,8 @@ const AddEnquiry = ({ enquiryAdded }) => {
         employeeName,
         propertyOwner,
         propertyOwnerId,
-        propertyName: propertyName.label,
-        pid: "",
+        propertyName: _propertyName,
+        pid: propertyPID,
         statusUpdates: [newStatusUpdate], // Initialize statusUpdates with default status
       });
       setEnquiryFrom("");
@@ -233,34 +238,35 @@ const AddEnquiry = ({ enquiryAdded }) => {
 
   const proeprtyListforUserId = async (_userId) => {
     // console.log("_userId: ", _userId)
-    let results = [];
+    let _propertyUsers = [];
+    let _ownersProperties = [];
     const ref = await projectFirestore
       .collection("propertyusers")
       .where("userId", "==", _userId);
 
-    console.log("ref: ", ref);
+    // console.log("ref: ", ref);
+
     const unsubscribe = ref.onSnapshot(async (snapshot) => {
       snapshot.docs.forEach((doc) => {
         // console.log("user mapping doc: ", doc.data())
-        results.push({ ...doc.data(), id: doc.id });
+        _propertyUsers.push({ ...doc.data(), id: doc.id });
       });
       // console.log("results: ", results)
       // setproeprtyListforUserIdState(results);
 
-      results &&
-        results.map((property) => {
+      _propertyUsers &&
+        _propertyUsers.map((property) => {
           const _prop = allProperties.find((e) => e.id === property.propertyId);
-          results.push({ ..._prop });
+          _ownersProperties.push({ ..._prop });
         });
-      console.log("results: ", results);
+      console.log("_ownersProperties : ", _ownersProperties);
 
       setOwnersProeprtyList(
-        results.map((data) => ({
-          label: data.propertyName,
+        _ownersProperties.map((data) => ({
+          label: data.propertyName + " (" + data.pid + ")",
           value: data.id,
         }))
       );
-
 
     });
 
