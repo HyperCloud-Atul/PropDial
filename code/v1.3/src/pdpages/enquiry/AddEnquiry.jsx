@@ -175,16 +175,25 @@ const AddEnquiry = ({ enquiryAdded }) => {
         updatedAt: new Date(),
         updatedBy: user.uid,
       };
-      let UrlId 
+
+      let UrlId;
+      let _propertyName;
+      let propertyPID;
       if (id === "all") {
         console.log("all option: ")
         console.log(" propertyName: ", propertyName)
         UrlId = propertyName !== '' ? propertyName.value : ""
+
+        _propertyName = propertyName.label
+        propertyPID = _propertyName.slice(_propertyName.indexOf(':') + 1, _propertyName.indexOf(')')).trim()
+      }
+      else {
+        console.log("propertyDoc: ", propertyDoc)
+        UrlId = propertyDoc.id
+        _propertyName = propertyDoc.propertyName
+        propertyPID = propertyDoc.pid
       }
 
-
-      const _propertyName = propertyName.label
-      const propertyPID = _propertyName.slice(_propertyName.indexOf(':') + 1, _propertyName.indexOf(')')).trim()
       // console.log("get pid from property name: ", propertyPID)
 
       const docRef = await addDocument({
