@@ -11,7 +11,7 @@ const Back = ({ pageTitle }) => {
     return (
         <div className="back_with_title">
             <div className="left d-flex align-items-center pointer" onClick={handleGoBack}>
-                <span class="material-symbols-outlined pointer" >
+                <span className="material-symbols-outlined pointer" >
                     arrow_back
                 </span>
                 <span className="r18">

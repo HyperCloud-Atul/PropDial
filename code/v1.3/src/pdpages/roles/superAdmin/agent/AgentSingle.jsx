@@ -160,7 +160,7 @@ const AgentSingle = ({ agentDoc }) => {
                       }}
                     >
                       <span
-                        class="material-symbols-outlined"
+                        className="material-symbols-outlined"
                         style={{
                           fontSize: "14px",
                         }}
@@ -240,19 +240,19 @@ const AgentSingle = ({ agentDoc }) => {
                     />
                   )}
                   {doc.agentImageUrl && (
-                      <span
+                    <span
                       className="material-symbols-outlined delete_icon"
                       style={{
-                        right:"0"
+                        right: "0"
                       }}
                       onClick={() =>
-                        handleShowDeleteModal(doc.agentImageUrl, doc.id) }
+                        handleShowDeleteModal(doc.agentImageUrl, doc.id)}
                     >
                       delete_forever
                     </span>
- 
+
                   )}
-               
+
                 </div>
 
                 <div className="tenant_detail">

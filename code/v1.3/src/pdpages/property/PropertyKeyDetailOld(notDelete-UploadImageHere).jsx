@@ -358,7 +358,7 @@ const PropertyKeyDetail = () => {
                       onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
                       className="text_red pointer delete_box_top"
                     >
-                      <span class="material-symbols-outlined">
+                      <span className="material-symbols-outlined">
                         delete_forever
                       </span>
                     </div>

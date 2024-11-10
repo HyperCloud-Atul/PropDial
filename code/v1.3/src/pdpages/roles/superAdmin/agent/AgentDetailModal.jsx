@@ -25,13 +25,13 @@ const AgentDetailModal = ({ show, handleClose, selectedAgent, user }) => {
       }}
       centered
     >
-      <span class="material-symbols-outlined modal_close" onClick={handleClose}>
+      <span className="material-symbols-outlined modal_close" onClick={handleClose}>
         close
       </span>
       {/* <div className="modal_top_bar">
         <div className="left">
-          <span class="material-symbols-outlined">calendar_month</span>
-          <span class="material-symbols-outlined">schedule</span>
+          <span className="material-symbols-outlined">calendar_month</span>
+          <span className="material-symbols-outlined">schedule</span>
         </div>
         <div className="right">
         {format(selectedAgent.createdAt.toDate(), "dd-MMM-yy, hh:mm a")}
@@ -99,7 +99,7 @@ const AgentDetailModal = ({ show, handleClose, selectedAgent, user }) => {
             </li>
           )}
 
-          {selectedAgent.locality.length > 0 && (
+          {selectedAgent.locality && selectedAgent.locality.length > 0 && (
             <li>
               <div className="left">Locality</div>
               <div className="middle">:-</div>

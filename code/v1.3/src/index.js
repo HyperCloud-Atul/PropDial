@@ -1,5 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+import 'core-js/features/global-this';
+
 import "./index.css";
 import "./index.scss"
 import App from "./App";
@@ -21,6 +25,8 @@ root.render(
 // Register service worker
 serviceWorkerRegistration.register();
 
+
+
 //Register service worker for FCM Messaging
 // if ('serviceWorker' in navigator) {
 //   window.addEventListener('load', () => {
@@ -34,4 +40,5 @@ serviceWorkerRegistration.register();
 //       });
 //   });
 // }
+
 

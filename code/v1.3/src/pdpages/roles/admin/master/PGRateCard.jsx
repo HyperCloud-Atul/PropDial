@@ -118,12 +118,12 @@ const PGRateCard = () => {
 
                         <Link to="" className="more-add-options-icons">
                             <h1>Add bills</h1>
-                            <span class="material-symbols-outlined">receipt_long</span>
+                            <span className="material-symbols-outlined">receipt_long</span>
                         </Link>
 
                         <Link to="/addnotification/new" className="more-add-options-icons">
                             <h1>Add notification</h1>
-                            <span class="material-symbols-outlined">notifications</span>
+                            <span className="material-symbols-outlined">notifications</span>
                         </Link>
                     </div>
                 </div>
@@ -143,9 +143,9 @@ const PGRateCard = () => {
                                 </div>
                             </div>
                             <div className="col-md-2">
-                                <div class="form_field">
+                                <div className="form_field">
                                     <label for="">Package</label>
-                                    <div class="form_field_inner">
+                                    <div className="form_field_inner">
 
                                         <select
                                             value={propertyDetails && propertyDetails.Package}
@@ -213,17 +213,17 @@ const PGRateCard = () => {
 
 
                                         </select>
-                                        <div class="field_icon">
-                                            <span class="material-symbols-outlined">description</span>
+                                        <div className="field_icon">
+                                            <span className="material-symbols-outlined">description</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             {/* Property Type */}
                             <div className="col-md-2">
-                                <div class="form_field">
+                                <div className="form_field">
                                     <label for="">Property Type</label>
-                                    <div class="form_field_inner">
+                                    <div className="form_field_inner">
 
                                         <select
                                             value={propertyDetails && propertyDetails.PropertyType}
@@ -335,17 +335,17 @@ const PGRateCard = () => {
                                             </option>
 
                                         </select>
-                                        <div class="field_icon">
-                                            <span class="material-symbols-outlined">description</span>
+                                        <div className="field_icon">
+                                            <span className="material-symbols-outlined">description</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             {/* Property Size */}
                             <div className="col-md-2">
-                                <div class="form_field">
+                                <div className="form_field">
                                     <label for="">Property Size</label>
-                                    <div class="form_field_inner">
+                                    <div className="form_field_inner">
                                         <select
                                             value={propertyDetails && propertyDetails.PropertySize}
                                             onChange={(e) => {
@@ -509,16 +509,16 @@ const PGRateCard = () => {
                                                 9+ BHK{" "}
                                             </option>
                                         </select>
-                                        <div class="field_icon">
-                                            <span class="material-symbols-outlined">description</span>
+                                        <div className="field_icon">
+                                            <span className="material-symbols-outlined">description</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-md-2">
-                                <div class="form_field">
+                                <div className="form_field">
                                     <label for="">Frequency</label>
-                                    <div class="form_field_inner">
+                                    <div className="form_field_inner">
 
                                         <select
                                             value={propertyDetails && propertyDetails.Frequency}
@@ -566,16 +566,16 @@ const PGRateCard = () => {
                                                 MONTHLY
                                             </option>
                                         </select>
-                                        <div class="field_icon">
-                                            <span class="material-symbols-outlined">description</span>
+                                        <div className="field_icon">
+                                            <span className="material-symbols-outlined">description</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-md-2">
-                                <div class="form_field">
+                                <div className="form_field">
                                     <label for="">Amount</label>
-                                    <div class="form_field_inner">
+                                    <div className="form_field_inner">
                                         <input
                                             required
                                             type="number"
@@ -589,8 +589,8 @@ const PGRateCard = () => {
                                             }
                                             value={propertyDetails && propertyDetails.Amount}
                                         />
-                                        <div class="field_icon">
-                                            <span class="material-symbols-outlined">description</span>
+                                        <div className="field_icon">
+                                            <span className="material-symbols-outlined">description</span>
                                         </div>
                                     </div>
                                 </div>

@@ -86,7 +86,7 @@ const UserSinglecard = ({ users }) => {
       {users &&
         users.map((userObj) => (
           <div
-            className={`pu_single ${userObj.status === "inactive" && "inactive"}`}         
+            className={`pu_single ${userObj.status === "inactive" && "inactive"}`}
           >
             <div className="tc_single relative item">
               <div className="left">
@@ -120,7 +120,7 @@ const UserSinglecard = ({ users }) => {
                     onClick={() => handleShow(userObj)}
                   >
                     {userObj.fullName}
-                    <span class="material-symbols-outlined click_icon text_near_icon">
+                    <span className="material-symbols-outlined click_icon text_near_icon">
                       edit
                     </span>
                   </h6>

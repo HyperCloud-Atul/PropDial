@@ -20,7 +20,7 @@ const PropertyTable = ({ properties }) => {
           <div className="d-flex align-items-center">
             <Link to={`/propertydetails/${row.original.id}`}>
               <span
-                class="material-symbols-outlined click_icon pointer"
+                className="material-symbols-outlined click_icon pointer"
                 style={{
                   fontSize: "20px",
                   marginRight: "8px",
@@ -31,7 +31,7 @@ const PropertyTable = ({ properties }) => {
             </Link>
             <Link to={`/updateproperty/${row.original.id}`}>
               <span
-                class="material-symbols-outlined click_icon pointer"
+                className="material-symbols-outlined click_icon pointer"
                 style={{
                   fontSize: "20px",
                   marginRight: "8px",
@@ -60,7 +60,7 @@ const PropertyTable = ({ properties }) => {
         Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
 
-    
+
       {
         Header: "Locality",
         accessor: "locality",

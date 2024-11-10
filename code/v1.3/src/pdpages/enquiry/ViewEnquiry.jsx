@@ -122,11 +122,11 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
                 end: new Date(),
               });
             default:
-              const selectedYear = parseInt(filter);              
+              const selectedYear = parseInt(filter);
               return createdAt.getFullYear() === selectedYear;
           }
         })();
-        
+
         const matchesEnquiryTypeFilter =
           document.enquiryType === rentSaleFilter;
 
@@ -143,17 +143,17 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
             document.enquiryStatus.toLowerCase() === "dead");
 
         // Filter based on search term
-        const matchesSearchTerm = searchTerm === "" || 
-        document.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        document.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        document.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        document.source.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearchTerm = searchTerm === "" ||
+          document.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          document.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          document.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          document.source.toLowerCase().includes(searchTerm.toLowerCase());
 
-      return matchesDateFilter && matchesEnquiryTypeFilter && matchesEnquiryStatus && matchesSearchTerm;
-    });
+        return matchesDateFilter && matchesEnquiryTypeFilter && matchesEnquiryStatus && matchesSearchTerm;
+      });
 
-    setFilteredRentCount(filteredEnquiries.filter(doc => doc.enquiryType.toLowerCase() === "rent").length);
-  setFilteredSaleCount(filteredEnquiries.filter(doc => doc.enquiryType.toLowerCase() === "sale").length);
+      setFilteredRentCount(filteredEnquiries.filter(doc => doc.enquiryType.toLowerCase() === "rent").length);
+      setFilteredSaleCount(filteredEnquiries.filter(doc => doc.enquiryType.toLowerCase() === "sale").length);
 
       setTotalDocsLength(enquiryDocs.length);
       setOpenRentEnquiryLength(
@@ -242,10 +242,10 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
 
   const years = enquiryDocs
     ? [
-        ...new Set(
-          enquiryDocs.map((doc) => format(doc.createdAt.toDate(), "yyyy"))
-        ),
-      ].sort((a, b) => b - a)
+      ...new Set(
+        enquiryDocs.map((doc) => format(doc.createdAt.toDate(), "yyyy"))
+      ),
+    ].sort((a, b) => b - a)
     : [];
 
   // view mode control start
@@ -310,9 +310,8 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
                 <div
                   key={f}
                   onClick={() => changeEnquiryStatus(f)}
-                  className={`cs_single_big ${
-                    currentFilter === f ? "active" : ""
-                  } ${f.toLowerCase()}`}
+                  className={`cs_single_big ${currentFilter === f ? "active" : ""
+                    } ${f.toLowerCase()}`}
                 >
                   <div className="inner">
                     <div className="left">
@@ -364,9 +363,8 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
                 <div
                   key={f}
                   onClick={() => changeEnquiryStatus(f)}
-                  className={`cf_single ${
-                    currentFilter === f ? "active" : ""
-                  } ${f.toLowerCase()}`}
+                  className={`cf_single ${currentFilter === f ? "active" : ""
+                    } ${f.toLowerCase()}`}
                 >
                   <div className="inner">
                     <div className="top">
@@ -390,9 +388,8 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
                 <div
                   key={f}
                   onClick={() => changeEnquiryStatus(f)}
-                  className={`cf_single ${
-                    currentFilter === f ? "active" : ""
-                  } ${f.toLowerCase()}`}
+                  className={`cf_single ${currentFilter === f ? "active" : ""
+                    } ${f.toLowerCase()}`}
                 >
                   <div className="inner">
                     <div className="top">
@@ -416,9 +413,8 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
                 <div
                   key={f}
                   onClick={() => changeEnquiryStatus(f)}
-                  className={`cf_single ${
-                    currentFilter === f ? "active" : ""
-                  } ${f.toLowerCase()}`}
+                  className={`cf_single ${currentFilter === f ? "active" : ""
+                    } ${f.toLowerCase()}`}
                 >
                   <div className="inner">
                     <div className="top">
@@ -442,9 +438,8 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
                 <div
                   key={f}
                   onClick={() => changeEnquiryStatus(f)}
-                  className={`cf_single ${
-                    currentFilter === f ? "active" : ""
-                  } ${f.toLowerCase()}`}
+                  className={`cf_single ${currentFilter === f ? "active" : ""
+                    } ${f.toLowerCase()}`}
                 >
                   <div className="inner">
                     <div className="top">
@@ -475,14 +470,14 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
       <div className="filters">
         <div className="left">
           <div className="rt_global_search search_field">
-          <input
-        type="text"
-        placeholder="Search..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-            <div class="field_icon">
-              <span class="material-symbols-outlined">search</span>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <div className="field_icon">
+              <span className="material-symbols-outlined">search</span>
             </div>
           </div>
         </div>
@@ -522,9 +517,8 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
           </div>
           <div className="button_filter diff_views">
             <div
-              className={`bf_single ${
-                viewMode === "card_view" ? "active" : ""
-              }`}
+              className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                }`}
               onClick={() => handleModeChange("card_view")}
             >
               <span className="material-symbols-outlined">
@@ -532,9 +526,8 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
               </span>
             </div>
             <div
-              className={`bf_single ${
-                viewMode === "table_view" ? "active" : ""
-              }`}
+              className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                }`}
               onClick={() => handleModeChange("table_view")}
             >
               <span className="material-symbols-outlined">view_list</span>
@@ -564,8 +557,8 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
       {viewMode === "table_view" && (
         // <>{enquiries && <EnquiryTable enquiries={enquiries} />}</>
         <h5 className="text-center text_green">
-        Coming Soon....
-      </h5>
+          Coming Soon....
+        </h5>
       )}
     </>
   );

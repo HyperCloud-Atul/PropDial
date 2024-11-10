@@ -36,7 +36,7 @@ const PGAgent = () => {
             <NineDots nineDotsMenu={nineDotsMenu} />
             <Link className="property-list-add-property with_9dot">
               <span
-                class="material-symbols-outlined"
+                className="material-symbols-outlined"
                 onClick={handleShowAIForm}
               >
                 {showAIForm ? "close" : "add"}
@@ -51,9 +51,8 @@ const PGAgent = () => {
                   No Agent Yet!
                   <div
                     onClick={handleShowAIForm}
-                    className={`theme_btn no_icon header_btn mt-3 ${
-                      showAIForm ? "btn_border" : "btn_fill"
-                    }`}
+                    className={`theme_btn no_icon header_btn mt-3 ${showAIForm ? "btn_border" : "btn_fill"
+                      }`}
                   >
                     {showAIForm ? "Cancel" : "Add New"}
                   </div>
@@ -86,7 +85,7 @@ const PGAgent = () => {
                     }}
                   >
                     <span
-                      class="material-symbols-outlined pointer"
+                      className="material-symbols-outlined pointer"
                       onClick={handleShowAIForm}
                     >
                       arrow_back

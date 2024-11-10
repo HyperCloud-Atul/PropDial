@@ -22,13 +22,13 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
       onHide={handleClose}
       className="enquiry_modal margin_top"
     >
-      <span class="material-symbols-outlined modal_close" onClick={handleClose}>
+      <span className="material-symbols-outlined modal_close" onClick={handleClose}>
         close
       </span>
       <div className="modal_top_bar">
         <div className="left">
-          <span class="material-symbols-outlined">calendar_month</span>
-          <span class="material-symbols-outlined">schedule</span>
+          <span className="material-symbols-outlined">calendar_month</span>
+          <span className="material-symbols-outlined">schedule</span>
         </div>
         <div className="right">
           {format(new Date(selectedEnquiry.date), "dd-MMM-yy, hh:mm a")}
@@ -55,11 +55,11 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
         )}
         {(selectedEnquiry.referredBy.toLowerCase() === "propdial" ||
           selectedEnquiry.referredBy.toLowerCase() === "none") && (
-          <div className="owi_single">
-            <h6>Source</h6>
-            <h5>{selectedEnquiry.source}</h5>
-          </div>
-        )}
+            <div className="owi_single">
+              <h6>Source</h6>
+              <h5>{selectedEnquiry.source}</h5>
+            </div>
+          )}
         {selectedEnquiry.referredBy.toLowerCase() === "employee" && (
           <div className="owi_single">
             <h6>Employee Name</h6>
@@ -87,13 +87,13 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
               <div className="right">
                 {user && user.role === "owner"
                   ? selectedEnquiry.phone.replace(
-                      /(\d{2})(\d{6})(\d{4})/,
-                      "+$1 ****** $3"
-                    )
+                    /(\d{2})(\d{6})(\d{4})/,
+                    "+$1 ****** $3"
+                  )
                   : selectedEnquiry.phone.replace(
-                      /(\d{2})(\d{5})(\d{5})/,
-                      "+$1 $2-$3"
-                    )}
+                    /(\d{2})(\d{5})(\d{5})/,
+                    "+$1 $2-$3"
+                  )}
               </div>
             </li>
           )}
@@ -110,10 +110,9 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
               >
                 {user && user.role === "owner"
                   ? `${selectedEnquiry.email
-                      .split("@")[0]
-                      .substring(0, 2)}***@${
-                      selectedEnquiry.email.split("@")[1]
-                    }`
+                    .split("@")[0]
+                    .substring(0, 2)}***@${selectedEnquiry.email.split("@")[1]
+                  }`
                   : selectedEnquiry.email}
               </div>
             </li>
@@ -158,7 +157,7 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
           <li>
             <div className="left">Property</div>
             <div className="middle">:-</div>
-            <div className="right">            
+            <div className="right">
               {selectedEnquiry.propertyName}
             </div>
           </li>
@@ -233,7 +232,7 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
               return (
                 <div className="step_single" key={e}>
                   <div className="number">
-                    <span class="material-symbols-outlined">open_in_new</span>
+                    <span className="material-symbols-outlined">open_in_new</span>
                   </div>
                   <h6 className="text-capitalize">{e.status}</h6>
                   {e.updatedAt && (
@@ -250,7 +249,7 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
                   key={e}
                 >
                   <div className="number">
-                    <span class="material-symbols-outlined">autorenew</span>
+                    <span className="material-symbols-outlined">autorenew</span>
                   </div>
                   <h6 className="text-capitalize">{e.status}</h6>
                   {e.updatedAt && (
@@ -270,7 +269,7 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
                   key={e}
                 >
                   <div className="number">
-                    <span class="material-symbols-outlined">check_circle</span>
+                    <span className="material-symbols-outlined">check_circle</span>
                   </div>
                   <h6 className="text-capitalize">{e.status}</h6>
                   {e.updatedAt && (
@@ -290,7 +289,7 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
                   key={e}
                 >
                   <div className="number">
-                    <span class="material-symbols-outlined">cancel</span>
+                    <span className="material-symbols-outlined">cancel</span>
                   </div>
                   <h6 className="text-capitalize">{e.status}</h6>
                   {e.updatedAt && (
@@ -454,8 +453,8 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
                   selectedEnquiry.enquiryStatus === "open"
                     ? "33.333%"
                     : selectedEnquiry.enquiryStatus === "working"
-                    ? "66.66%"
-                    : "100%",
+                      ? "66.66%"
+                      : "100%",
               }}
             ></div>
           </div>
@@ -480,7 +479,7 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
                   icon: "check_circle",
                   conditionClass:
                     selectedEnquiry.enquiryStatus === "open" ||
-                    selectedEnquiry.enquiryStatus === "working"
+                      selectedEnquiry.enquiryStatus === "working"
                       ? "wait"
                       : "",
                 },
@@ -488,7 +487,7 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
                   icon: "cancel",
                   conditionClass:
                     selectedEnquiry.enquiryStatus === "open" ||
-                    selectedEnquiry.enquiryStatus === "working"
+                      selectedEnquiry.enquiryStatus === "working"
                       ? "wait"
                       : "",
                 },

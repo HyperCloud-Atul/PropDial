@@ -67,123 +67,123 @@ const EnquiryAddModal = ({ show, handleClose, selectedProperty, activeOption }) 
 
   return (
     <Modal show={show} onHide={handleClose} centered className="margin_top">
-      <span class="material-symbols-outlined modal_close" onClick={handleClose}>
+      <span className="material-symbols-outlined modal_close" onClick={handleClose}>
         close
       </span>
       <form onSubmit={submitEnquiry} className="guest_enquiry">
-       
-       <div className="section_title mb-3">
-         <h5 className="text_orange">Enquiry</h5>
-         <h6 className="modal_subtitle">
-           Thank you for your interest in reaching out to us. Please use
-           the form below to submit any question.
-         </h6>
-       </div>
-       <div className="enq_fields">
-         <div className="form_field st-2">
-           <div className="field_inner select">
-             <select value={iAm} onChange={handleChangeIam}>
-               <option value="" disabled>
-                 I am
-               </option>
-               <option value="Tenant">Tenant</option>
-               <option value="Agent">Agent</option>
-             </select>
-             <div className="field_icon">
-               <span className="material-symbols-outlined">person</span>
-             </div>
-           </div>
-         </div>
-         <div className="form_field st-2">
-           <div className="field_inner">
-             <input
-               type="text"
-               value={name}
-               onChange={handleChangeName}
-               placeholder="Name"
-             />
-             <div className="field_icon">
-               <span className="material-symbols-outlined">person</span>
-             </div>
-           </div>
-         </div>
-         <div className="form_field st-2">
-           <div className="field_inner">
-             <input
-               type="email"
-               value={email}
-               onChange={handleChangeEmail}
-               placeholder="Email"
-             />
-             <div className="field_icon">
-               <span className="material-symbols-outlined">email</span>{" "}
-               {/* Updated icon to 'email' */}
-             </div>
-           </div>
-         </div>
-         <div className="form_field st-2" style={{
-          border:"none"
-         }}>
-           <div className="field_inner">
-             <PhoneInput
-               country={"in"}
-               value={phone}
-               onChange={handleChangePhone}
-               international
-               keyboardType="phone-pad"
-               countryCodeEditable={true}
-               placeholder="Country code + mobile number"
-               inputProps={{
-                 name: "phone",
-                 required: true,
-                 autoFocus: false,
-               }}
-               inputStyle={{
-                 width: "100%",
-                 paddingLeft: "45px",
-                 fontSize: "16px",
-                 borderRadius: "5px",
-                 border: "1px solid #00A8A8",
-               }}
-               buttonStyle={{
-                 borderRadius: "5px",
-                 textAlign: "left",
-                 border: "1px solid #00A8A8",
-               }}
-             />
-             <div className="field_icon">
-               <span className="material-symbols-outlined">call</span>
-             </div>
-           </div>
-         </div>
-         <div className="form_field st-2" style={{
-          border:"none"
-         }}>
-           <div className="field_inner">
-             <textarea
-               value={description}
-               onChange={handleChangeDescription}
-               placeholder="Description"
-             />
-             <div className="field_icon">
-               <span className="material-symbols-outlined">
-                 description
-               </span>
-             </div>
-           </div>
-         </div>
-       </div>
-       <div className="submit_btn mt-3">
-         <button
-           type="submit"
-           className="modal_btn theme_btn no_icon btn_fill"
-           disabled={isUploading}
-         >
-           {isUploading ? "Submitting..." : "Submit"}
-         </button>
-       </div>
- 
-   </form>
+
+        <div className="section_title mb-3">
+          <h5 className="text_orange">Enquiry</h5>
+          <h6 className="modal_subtitle">
+            Thank you for your interest in reaching out to us. Please use
+            the form below to submit any question.
+          </h6>
+        </div>
+        <div className="enq_fields">
+          <div className="form_field st-2">
+            <div className="field_inner select">
+              <select value={iAm} onChange={handleChangeIam}>
+                <option value="" disabled>
+                  I am
+                </option>
+                <option value="Tenant">Tenant</option>
+                <option value="Agent">Agent</option>
+              </select>
+              <div className="field_icon">
+                <span className="material-symbols-outlined">person</span>
+              </div>
+            </div>
+          </div>
+          <div className="form_field st-2">
+            <div className="field_inner">
+              <input
+                type="text"
+                value={name}
+                onChange={handleChangeName}
+                placeholder="Name"
+              />
+              <div className="field_icon">
+                <span className="material-symbols-outlined">person</span>
+              </div>
+            </div>
+          </div>
+          <div className="form_field st-2">
+            <div className="field_inner">
+              <input
+                type="email"
+                value={email}
+                onChange={handleChangeEmail}
+                placeholder="Email"
+              />
+              <div className="field_icon">
+                <span className="material-symbols-outlined">email</span>{" "}
+                {/* Updated icon to 'email' */}
+              </div>
+            </div>
+          </div>
+          <div className="form_field st-2" style={{
+            border: "none"
+          }}>
+            <div className="field_inner">
+              <PhoneInput
+                country={"in"}
+                value={phone}
+                onChange={handleChangePhone}
+                international
+                keyboardType="phone-pad"
+                countryCodeEditable={true}
+                placeholder="Country code + mobile number"
+                inputProps={{
+                  name: "phone",
+                  required: true,
+                  autoFocus: false,
+                }}
+                inputStyle={{
+                  width: "100%",
+                  paddingLeft: "45px",
+                  fontSize: "16px",
+                  borderRadius: "5px",
+                  border: "1px solid #00A8A8",
+                }}
+                buttonStyle={{
+                  borderRadius: "5px",
+                  textAlign: "left",
+                  border: "1px solid #00A8A8",
+                }}
+              />
+              <div className="field_icon">
+                <span className="material-symbols-outlined">call</span>
+              </div>
+            </div>
+          </div>
+          <div className="form_field st-2" style={{
+            border: "none"
+          }}>
+            <div className="field_inner">
+              <textarea
+                value={description}
+                onChange={handleChangeDescription}
+                placeholder="Description"
+              />
+              <div className="field_icon">
+                <span className="material-symbols-outlined">
+                  description
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="submit_btn mt-3">
+          <button
+            type="submit"
+            className="modal_btn theme_btn no_icon btn_fill"
+            disabled={isUploading}
+          >
+            {isUploading ? "Submitting..." : "Submit"}
+          </button>
+        </div>
+
+      </form>
     </Modal>
   );
 };

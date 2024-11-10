@@ -220,7 +220,7 @@ const PGAdminPropertyOld = () => {
             </Link>
             <Link to="/dashboard" className="more-add-options-icons">
               <h1>Dashboard</h1>
-              <span class="material-symbols-outlined">Dashboard</span>
+              <span className="material-symbols-outlined">Dashboard</span>
             </Link>
           </div>
         </div>

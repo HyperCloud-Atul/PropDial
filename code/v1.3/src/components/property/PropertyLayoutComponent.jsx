@@ -165,147 +165,147 @@ export default function PropertyLayoutComponent(props) {
   };
 
   return (
-  
-  <>
+
+    <>
 
 
-<section className="property_card_single add_aditional_form mobile_full_card">
-<div className="more_detail_card_inner relative">
-  <h2 className="card_title">Property Layout Component</h2>
-  <div className="aai_form">
-    <div
-      className="row"
-      style={{
-        rowGap: "18px",
-      }}
-    >
-      <div className="col-md-12">
-        <div className="form_field">
-          <div className="field_box theme_radio_new">
-            <div className="theme_radio_container">
-              <div className="radio_single">
-                <input
-                  type="radio"
-                  name="aai_type"
-                  id="bedroom"
-                  value={propertyLayout.RoomType}
-                  onClick={(e) => {
-                    setPropertyLayout({
-                      ...propertyLayout,
-                      RoomType: "Bedroom",
-                    });
-                  }}
-                  checked={propertyLayout.RoomType === "Bedroom"}
-                />
-                <label htmlFor="bedroom">Bedroom</label>
+      <section className="property_card_single add_aditional_form mobile_full_card">
+        <div className="more_detail_card_inner relative">
+          <h2 className="card_title">Property Layout Component</h2>
+          <div className="aai_form">
+            <div
+              className="row"
+              style={{
+                rowGap: "18px",
+              }}
+            >
+              <div className="col-md-12">
+                <div className="form_field">
+                  <div className="field_box theme_radio_new">
+                    <div className="theme_radio_container">
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="aai_type"
+                          id="bedroom"
+                          value={propertyLayout.RoomType}
+                          onClick={(e) => {
+                            setPropertyLayout({
+                              ...propertyLayout,
+                              RoomType: "Bedroom",
+                            });
+                          }}
+                          checked={propertyLayout.RoomType === "Bedroom"}
+                        />
+                        <label htmlFor="bedroom">Bedroom</label>
+                      </div>
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="aai_type"
+                          id="bathroom"
+                          value={propertyLayout.RoomType}
+                          onClick={(e) => {
+                            setPropertyLayout({
+                              ...propertyLayout,
+                              RoomType: "Bathroom",
+                            });
+                          }}
+                          checked={propertyLayout.RoomType === "Bathroom"}
+                        />
+                        <label htmlFor="bathroom">Bathroom</label>
+                      </div>
+                      <div
+                        className="radio_single"
+                      // className={
+                      //     propertyLayout.RoomType === "Kitchen"
+                      //         ? "radio_single radiochecked"
+                      //         : "radio_single"
+                      // }
+                      >
+                        <input
+                          type="radio"
+                          name="aai_type"
+                          id="kitchen"
+                          onClick={(e) => {
+                            setPropertyLayout({
+                              ...propertyLayout,
+                              RoomType: "Kitchen",
+                            });
+                          }}
+                          checked={propertyLayout.RoomType === "Kitchen"}
+                        />
+                        <label htmlFor="kitchen">Kitchen</label>
+                      </div>
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="aai_type"
+                          id="living"
+                          onClick={(e) => {
+                            setPropertyLayout({
+                              ...propertyLayout,
+                              RoomType: "Living Room",
+                            });
+                          }}
+                          checked={propertyLayout.RoomType === "Living Room"}
+                        />
+                        <label htmlFor="living">Living Room</label>
+                      </div>
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="aai_type"
+                          id="dining"
+                          onClick={(e) => {
+                            setPropertyLayout({
+                              ...propertyLayout,
+                              RoomType: "Dining Room",
+                            });
+                          }}
+                          checked={propertyLayout.RoomType === "Dining Room"}
+                        />
+                        <label htmlFor="dining">Dining Room</label>
+                      </div>
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="aai_type"
+                          id="balcony"
+                          onClick={(e) => {
+                            setPropertyLayout({
+                              ...propertyLayout,
+                              RoomType: "Balcony",
+                            });
+                          }}
+                          checked={propertyLayout.RoomType === "Balcony"}
+                        />
+                        <label htmlFor="balcony">Balcony</label>
+                      </div>
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="aai_type"
+                          id="basement"
+                          onClick={(e) => {
+                            setPropertyLayout({
+                              ...propertyLayout,
+                              RoomType: "Basement",
+                            });
+                          }}
+                          checked={propertyLayout.RoomType === "Basement"}
+                        />
+                        <label htmlFor="basement">Basement</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="radio_single">
-                <input
-                  type="radio"
-                  name="aai_type"
-                  id="bathroom"
-                  value={propertyLayout.RoomType}
-                  onClick={(e) => {
-                    setPropertyLayout({
-                      ...propertyLayout,
-                      RoomType: "Bathroom",
-                    });
-                  }}
-                  checked={propertyLayout.RoomType === "Bathroom"}
-                />
-                <label htmlFor="bathroom">Bathroom</label>
-              </div>
-              <div
-                className="radio_single"
-                // className={
-                //     propertyLayout.RoomType === "Kitchen"
-                //         ? "radio_single radiochecked"
-                //         : "radio_single"
-                // }
-              >
-                <input
-                  type="radio"
-                  name="aai_type"
-                  id="kitchen"
-                  onClick={(e) => {
-                    setPropertyLayout({
-                      ...propertyLayout,
-                      RoomType: "Kitchen",
-                    });
-                  }}
-                  checked={propertyLayout.RoomType === "Kitchen"}
-                />
-                <label htmlFor="kitchen">Kitchen</label>
-              </div>
-              <div className="radio_single">
-                <input
-                  type="radio"
-                  name="aai_type"
-                  id="living"
-                  onClick={(e) => {
-                    setPropertyLayout({
-                      ...propertyLayout,
-                      RoomType: "Living Room",
-                    });
-                  }}
-                  checked={propertyLayout.RoomType === "Living Room"}
-                />
-                <label htmlFor="living">Living Room</label>
-              </div>
-              <div className="radio_single">
-                <input
-                  type="radio"
-                  name="aai_type"
-                  id="dining"
-                  onClick={(e) => {
-                    setPropertyLayout({
-                      ...propertyLayout,
-                      RoomType: "Dining Room",
-                    });
-                  }}
-                  checked={propertyLayout.RoomType === "Dining Room"}
-                />
-                <label htmlFor="dining">Dining Room</label>
-              </div>
-              <div className="radio_single">
-                <input
-                  type="radio"
-                  name="aai_type"
-                  id="balcony"
-                  onClick={(e) => {
-                    setPropertyLayout({
-                      ...propertyLayout,
-                      RoomType: "Balcony",
-                    });
-                  }}
-                  checked={propertyLayout.RoomType === "Balcony"}
-                />
-                <label htmlFor="balcony">Balcony</label>
-              </div>
-              <div className="radio_single">
-                <input
-                  type="radio"
-                  name="aai_type"
-                  id="basement"
-                  onClick={(e) => {
-                    setPropertyLayout({
-                      ...propertyLayout,
-                      RoomType: "Basement",
-                    });
-                  }}
-                  checked={propertyLayout.RoomType === "Basement"}
-                />
-                <label htmlFor="basement">Basement</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* <div className="col-md-1">
+              {/* <div className="col-md-1">
                       <div className="form_field_upload">
                         <label htmlFor="upload">
                           <div className="text-center">
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                               upload
                             </span>
                             <p>Upload image</p>
@@ -314,58 +314,58 @@ export default function PropertyLayoutComponent(props) {
                         <input type="file" id="upload" />
                       </div>
                     </div> */}
-      <div className="col-md-12">
-        <div className="add_info_text">
-          <div className="form_field">
-            <input
-              type="text"
-              placeholder="Room Name"
-              onChange={(e) =>
-                setPropertyLayout({
-                  ...propertyLayout,
-                  RoomName: e.target.value,
-                })
-              }
-              value={propertyLayout && propertyLayout.RoomName}
-            />
-          </div>
-          <div className="form_field">
-            <input
-              type="text"
-              placeholder="Length in feet"
-              onChange={(e) => {
-                const newValue = e.target.value;
-                const regex = /^\d*\.?\d{0,2}$/; // Regular expression to match numbers with up to 2 decimal places
+              <div className="col-md-12">
+                <div className="add_info_text">
+                  <div className="form_field">
+                    <input
+                      type="text"
+                      placeholder="Room Name"
+                      onChange={(e) =>
+                        setPropertyLayout({
+                          ...propertyLayout,
+                          RoomName: e.target.value,
+                        })
+                      }
+                      value={propertyLayout && propertyLayout.RoomName}
+                    />
+                  </div>
+                  <div className="form_field">
+                    <input
+                      type="text"
+                      placeholder="Length in feet"
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        const regex = /^\d*\.?\d{0,2}$/; // Regular expression to match numbers with up to 2 decimal places
 
-                if (regex.test(newValue)) {
-                  setPropertyLayout({
-                    ...propertyLayout,
-                    RoomLength: newValue,
-                  });
-                }
-              }}
-              value={propertyLayout.RoomLength}
-            />
-          </div>
-          <div className="form_field">
-            <input
-              type="text"
-              placeholder="Width in feet"
-              onChange={(e) => {
-                const newValue = e.target.value;
-                const regex = /^\d*\.?\d{0,2}$/; // Regular expression to match numbers with up to 2 decimal places
+                        if (regex.test(newValue)) {
+                          setPropertyLayout({
+                            ...propertyLayout,
+                            RoomLength: newValue,
+                          });
+                        }
+                      }}
+                      value={propertyLayout.RoomLength}
+                    />
+                  </div>
+                  <div className="form_field">
+                    <input
+                      type="text"
+                      placeholder="Width in feet"
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        const regex = /^\d*\.?\d{0,2}$/; // Regular expression to match numbers with up to 2 decimal places
 
-                if (regex.test(newValue)) {
-                  setPropertyLayout({
-                    ...propertyLayout,
-                    RoomWidth: newValue,
-                  });
-                }
-              }}
-              value={propertyLayout.RoomWidth}
-            />
-          </div>
-          {/* <div className="form_field">
+                        if (regex.test(newValue)) {
+                          setPropertyLayout({
+                            ...propertyLayout,
+                            RoomWidth: newValue,
+                          });
+                        }
+                      }}
+                      value={propertyLayout.RoomWidth}
+                    />
+                  </div>
+                  {/* <div className="form_field">
                               <input type="text"
                                   placeholder="Length in feet"
                                   
@@ -379,7 +379,7 @@ export default function PropertyLayoutComponent(props) {
                                   
                               />
                           </div> */}
-          {/* <div className="form_field">
+                  {/* <div className="form_field">
                               <input type="text"
                                   placeholder="Width in feet"
                            
@@ -392,101 +392,101 @@ export default function PropertyLayoutComponent(props) {
                                   value={propertyLayout && propertyLayout.RoomWidth}
                               />
                           </div> */}
-          {/* <div className="form_field">
+                  {/* <div className="form_field">
                               <input type="text" placeholder="Total area"
                                 value={propertyLayout.RoomLength * propertyLayout.RoomWidth}
                               />
                             </div> */}
 
-          {additionalInfos.map((info, index) => (
-            <div className="form_field">
-              <div className="relative" key={index}>
-                <input
-                  type="text"
-                  value={info}
-                  onChange={(e) =>
-                    handleInputChange(index, e.target.value)
-                  }
-                  placeholder="Fixtures etc. fan, light, furniture, etc."
-                />
-                {additionalInfos.length > 1 && (
-                  <span
-                    onClick={() => handleRemove(index)}
-                    className="pointer close_field"
+                  {additionalInfos.map((info, index) => (
+                    <div className="form_field">
+                      <div className="relative" key={index}>
+                        <input
+                          type="text"
+                          value={info}
+                          onChange={(e) =>
+                            handleInputChange(index, e.target.value)
+                          }
+                          placeholder="Fixtures etc. fan, light, furniture, etc."
+                        />
+                        {additionalInfos.length > 1 && (
+                          <span
+                            onClick={() => handleRemove(index)}
+                            className="pointer close_field"
+                          >
+                            X
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <div className="addmore" onClick={handleAddMore}>
+                    add more
+                  </div>
+                </div>
+              </div>
+              {props.propertylayouts && props.propertylayouts.length !== 0 && (
+                <div className="col-12">
+                  <h2 className="card_title">Attached with</h2>
+                  <div className="form_field theme_checkbox">
+                    <div className="theme_checkbox_container">
+                      {/* need to map all roomName of propertylayouts collection here */}
+                      {props.propertylayouts.map((layout, index) => (
+                        <div className="checkbox_single" key={layout.roomName}>
+                          <input
+                            type="checkbox"
+                            id={layout.roomName}
+                            name={layout.roomName}
+                            onChange={(e) =>
+                              handleAttachmentInputChange(
+                                index,
+                                layout.roomName,
+                                e.target.value,
+                                e.target.checked
+                              )
+                            }
+                            checked={attachments.includes(layout.roomName)}
+                          />
+                          <label htmlFor={layout.roomName}>
+                            {layout.roomName}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="row mt-3">
+            <div className="col-md-6">
+              <div className="row">
+                <div className="col-5">
+                  <div
+                    className="theme_btn btn_border text-center no_icon full_width"
+                    onClick={hidePropertyLayoutComponent}
                   >
-                    X
-                  </span>
-                )}
+                    Cancel
+                  </div>
+                </div>
+                <div className="col-7">
+                  <div
+                    className="theme_btn btn_fill text-center no_icon full_width"
+                    onClick={handlePropertyLayout}
+                  >
+                    {props.layoutid === "1234" || props.layoutid === null
+                      ? "Add"
+                      : "Edit"}
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
-          <div className="addmore" onClick={handleAddMore}>
-            add more
           </div>
         </div>
-      </div>
-      {props.propertylayouts && props.propertylayouts.length !== 0 && (
-        <div className="col-12">
-          <h2 className="card_title">Attached with</h2>
-          <div className="form_field theme_checkbox">
-            <div className="theme_checkbox_container">
-              {/* need to map all roomName of propertylayouts collection here */}
-              {props.propertylayouts.map((layout, index) => (
-                <div className="checkbox_single" key={layout.roomName}>
-                  <input
-                    type="checkbox"
-                    id={layout.roomName}
-                    name={layout.roomName}
-                    onChange={(e) =>
-                      handleAttachmentInputChange(
-                        index,
-                        layout.roomName,
-                        e.target.value,
-                        e.target.checked
-                      )
-                    }
-                    checked={attachments.includes(layout.roomName)}
-                  />
-                  <label htmlFor={layout.roomName}>
-                    {layout.roomName}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  </div>
-  <div className="row mt-3">
-    <div className="col-md-6">
-      <div className="row">
-        <div className="col-5">
-          <div
-            className="theme_btn btn_border text-center no_icon full_width"
-            onClick={hidePropertyLayoutComponent}
-          >
-            Cancel
-          </div>
-        </div>
-        <div className="col-7">
-        <div
-        className="theme_btn btn_fill text-center no_icon full_width"
-        onClick={handlePropertyLayout}
-      >
-        {props.layoutid === "1234" || props.layoutid === null
-          ? "Add"
-          : "Edit"}
-      </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</section>
+      </section>
 
- 
-  
-  </>
+
+
+    </>
   );
 }

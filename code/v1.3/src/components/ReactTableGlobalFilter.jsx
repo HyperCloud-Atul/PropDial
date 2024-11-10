@@ -18,7 +18,7 @@ export default function ReactTableGlobalFilter({ filter, setFilter }) {
                 }}
                 placeholder='Search'
             ></input>
-            <div class="field_icon"><span class="material-symbols-outlined">search</span></div>
+            <div className="field_icon"><span className="material-symbols-outlined">search</span></div>
         </div>
 
 

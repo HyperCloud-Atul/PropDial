@@ -40,12 +40,12 @@ const PGExportExcel = () => {
         console.log('_totalCount', json.length)
         json.forEach(element => {
 
-            let _locality = element.locality
-            let _localityList = _locality.split(';')
-            console.log(_localityList, _locality)
+            // let _locality = element.locality
+            // let _localityList = _locality.split(';')
+            // console.log(_localityList, _locality)
             record = {
                 ...element,
-                locality: _locality === '' ? [] : _localityList,
+                // locality: _locality === '' ? [] : _localityList,
                 country: 'India',
                 createdAt: new Date(),
                 createdBy: user && user.uid

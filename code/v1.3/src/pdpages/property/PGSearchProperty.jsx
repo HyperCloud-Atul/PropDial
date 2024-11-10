@@ -52,31 +52,31 @@ const PGSearchProperty = () => {
 
   const [favoritedProperties, setFavoritedProperties] = useState([]);
   const [favoriteCount, setFavoriteCount] = useState(0);
-  
+
   // Load saved favorites on component mount and filter out any removed properties
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    
+
     // Only filter if propdialProperties is not null or undefined
     if (propdialProperties) {
       const updatedFavorites = savedFavorites.filter((favId) =>
         propdialProperties.some((property) => property.id === favId)
       );
-  
+
       setFavoritedProperties(updatedFavorites);
       setFavoriteCount(updatedFavorites.length);
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     }
   }, [propdialProperties]);
-  
-  
+
+
   // Update favorites list and save to localStorage
   const handleUpdateFavorites = (updatedFavorites) => {
     setFavoritedProperties(updatedFavorites);
     setFavoriteCount(updatedFavorites.length);
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
-  
+
   // Filter favorite properties based on IDs
   const filterFavoriteProperties = (properties) => {
     return properties.filter((property) => favoritedProperties.includes(property.id));
@@ -193,7 +193,7 @@ const PGSearchProperty = () => {
         <div className="property_search_parent">
           <input type="search" value={searchQuery} className="property_search" onChange={handleSearchChange} placeholder="Search By Society, Locality, City, State... " />
           <div className="icon">
-            <span class="material-symbols-outlined">
+            <span className="material-symbols-outlined">
               search
             </span>
           </div>
@@ -305,7 +305,7 @@ const PGSearchProperty = () => {
                           propertiesdocuments={filterFavoriteProperties(propdialProperties)}
                           onUpdateFavorites={handleUpdateFavorites} activeOption={activeOption}
                         />
- 
+
                       ) : (
                         <p>No favorite properties yet!</p>
                       )}

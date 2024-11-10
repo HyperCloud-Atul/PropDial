@@ -20,7 +20,7 @@ const userFilter = [
   "Executive",
   "Admin",
   "Agent",
-  "Super Admin",  
+  "Super Admin",
   "Tenant",
   "Prospective Tenant",
   "Buyer",
@@ -63,7 +63,7 @@ const UserList = () => {
       switch (filter) {
         case "Owner":
           roleMatch =
-          document.status === "active" &&
+            document.status === "active" &&
             document.rolePropDial === "owner" ||
             document.rolePropDial === "coowner";
           break;
@@ -79,9 +79,9 @@ const UserList = () => {
         case "Super Admin":
           roleMatch = document.status === "active" && document.rolePropDial === "superAdmin";
           break;
-          case "Agent":
-            roleMatch = document.status === "active" && document.rolePropDial === "agent";
-            break;
+        case "Agent":
+          roleMatch = document.status === "active" && document.rolePropDial === "agent";
+          break;
         case "Inactive":
           roleMatch = document.status === "inactive";
           break;
@@ -176,8 +176,8 @@ const UserList = () => {
                 value={searchInput}
                 onChange={handleSearchInputChange}
               />
-              <div class="field_icon">
-                <span class="material-symbols-outlined">search</span>
+              <div className="field_icon">
+                <span className="material-symbols-outlined">search</span>
               </div>
             </div>
           </div>

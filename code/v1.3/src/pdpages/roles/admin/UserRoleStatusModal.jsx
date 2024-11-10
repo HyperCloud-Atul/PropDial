@@ -12,7 +12,7 @@ const UserRoleStatusModal = ({
   if (!selectedUser) return null;
   return (
     <Modal show={show} onHide={handleClose} className="my_modal margin_top">
-      <span class="material-symbols-outlined modal_close" onClick={handleClose}>
+      <span className="material-symbols-outlined modal_close" onClick={handleClose}>
         close
       </span>
       <Modal.Body>
@@ -143,7 +143,7 @@ const UserRoleStatusModal = ({
                 />
                 <label htmlFor="prospectiveBuyer">prospective Buyer</label>
               </div>
-             
+
             </div>
           </div>
         </div>
@@ -161,9 +161,9 @@ const UserRoleStatusModal = ({
                     type="radio"
                     name="access_type"
                     id="at_city"
-                    // value={category.value}
-                    // onChange={handleDocCatChange}
-                    // checked={selectedDocCat === category.value}
+                  // value={category.value}
+                  // onChange={handleDocCatChange}
+                  // checked={selectedDocCat === category.value}
                   />
                   <label htmlFor="at_city">City</label>
                 </div>
@@ -172,9 +172,9 @@ const UserRoleStatusModal = ({
                     type="radio"
                     name="access_type"
                     id="at_state"
-                    // value={category.value}
-                    // onChange={handleDocCatChange}
-                    // checked={selectedDocCat === category.value}
+                  // value={category.value}
+                  // onChange={handleDocCatChange}
+                  // checked={selectedDocCat === category.value}
                   />
                   <label htmlFor="at_state">state</label>
                 </div>
@@ -184,9 +184,9 @@ const UserRoleStatusModal = ({
                     type="radio"
                     name="access_type"
                     id="at_region"
-                    // value={category.value}
-                    // onChange={handleDocCatChange}
-                    // checked={selectedDocCat === category.value}
+                  // value={category.value}
+                  // onChange={handleDocCatChange}
+                  // checked={selectedDocCat === category.value}
                   />
                   <label htmlFor="at_region">Region</label>
                 </div>
@@ -195,9 +195,9 @@ const UserRoleStatusModal = ({
                     type="radio"
                     name="access_type"
                     id="at_country"
-                    // value={category.value}
-                    // onChange={handleDocCatChange}
-                    // checked={selectedDocCat === category.value}
+                  // value={category.value}
+                  // onChange={handleDocCatChange}
+                  // checked={selectedDocCat === category.value}
                   />
                   <label htmlFor="at_country">Country</label>
                 </div>
@@ -237,9 +237,8 @@ const UserRoleStatusModal = ({
           <span className="m16 m16-14-m">{selectedUser.displayName}</span> is
           currently set to{" "}
           <span
-            className={`m16 m16-14-m text-capitalize ${
-              selectedUser.status === "active" ? "text_green2" : "text_red"
-            }`}
+            className={`m16 m16-14-m text-capitalize ${selectedUser.status === "active" ? "text_green2" : "text_red"
+              }`}
           >
             {selectedUser.status}
           </span>
@@ -263,8 +262,8 @@ const UserRoleStatusModal = ({
                   checked={selectedUser.status === "active"}
                   onChange={() => handleStatusChange("active")}
                 />
-                <label htmlFor="active" 
-                style={selectedUser.status === "active" ? { background: "var(--theme-green2)" } : {}}
+                <label htmlFor="active"
+                  style={selectedUser.status === "active" ? { background: "var(--theme-green2)" } : {}}
                 >Active</label>
               </div>
               <div className="radio_single">
@@ -277,7 +276,7 @@ const UserRoleStatusModal = ({
                   onChange={() => handleStatusChange("inactive")}
                 />
                 <label htmlFor="inactive"
-                 style={selectedUser.status === "inactive" ? { background: "var(--theme-red)" } : {}}
+                  style={selectedUser.status === "inactive" ? { background: "var(--theme-red)" } : {}}
                 >Inactive</label>
               </div>
             </div>

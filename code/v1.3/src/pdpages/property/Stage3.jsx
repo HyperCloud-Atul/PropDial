@@ -2654,7 +2654,7 @@ export default function Stage3(props) {
                               (user.role === "owner" ||
                                 user.role === "admin" || user.role === "superAdmin") && (
                                 <span
-                                  class="material-symbols-outlined click_icon text_near_icon"
+                                  className="material-symbols-outlined click_icon text_near_icon"
                                   onClick={() =>
                                     handleEditPropDesc("propertyDescription")
                                   }
@@ -2727,7 +2727,7 @@ no_icon"
                               user &&
                               user.role == "admin" && (
                                 <span
-                                  class="material-symbols-outlined click_icon text_near_icon"
+                                  className="material-symbols-outlined click_icon text_near_icon"
                                   onClick={() =>
                                     handleEditOwnerInstruction(
                                       "ownerInstructions"

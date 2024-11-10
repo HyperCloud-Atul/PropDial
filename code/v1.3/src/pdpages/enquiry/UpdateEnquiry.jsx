@@ -358,12 +358,12 @@ const UpdateEnquiry = () => {
             }}
           >
             <span
-              class="material-symbols-outlined pointer"
+              className="material-symbols-outlined pointer"
               onClick={backViewEnquiry}
             >
               arrow_back
             </span>
-            <h2 className="m22 mb-1">Update Enquiry              
+            <h2 className="m22 mb-1">Update Enquiry
             </h2>
           </div>
           <div className="right">
@@ -685,7 +685,7 @@ const UpdateEnquiry = () => {
                       className={isReadOnly ? "no-drop-cursor" : ""}
                     />
                     <div className="field_icon">
-                      <span class="material-symbols-outlined">search</span>
+                      <span className="material-symbols-outlined">search</span>
                     </div>
                   </div>
                 </div>
@@ -700,11 +700,11 @@ const UpdateEnquiry = () => {
                       type="text"
                       value={propertyOwner}
                       onChange={handleChangePropertyOwner}
-                    readOnly
+                      readOnly
                       className={isReadOnly ? "no-drop-cursor" : ""}
                     />
                     <div className="field_icon">
-                      <span class="material-symbols-outlined">search</span>
+                      <span className="material-symbols-outlined">search</span>
                     </div>{" "}
                   </div>
                 </div>
@@ -749,7 +749,7 @@ const UpdateEnquiry = () => {
                       className={isReadOnly ? "no-drop-cursor" : ""}
                     />
                     <div className="field_icon">
-                      <span class="material-symbols-outlined">search</span>
+                      <span className="material-symbols-outlined">search</span>
                     </div>{" "}
                   </div>
                 </div>
@@ -775,7 +775,7 @@ const UpdateEnquiry = () => {
                       onChange={handleChangeName}
                     />
                     <div className="field_icon">
-                      <span class="material-symbols-outlined">draw</span>
+                      <span className="material-symbols-outlined">draw</span>
                     </div>{" "}
                   </div>
                 </div>
@@ -819,7 +819,7 @@ const UpdateEnquiry = () => {
                       className={isReadOnly ? "no-drop-cursor" : ""}
                     />
                     <div className="field_icon">
-                      <span class="material-symbols-outlined">draw</span>
+                      <span className="material-symbols-outlined">draw</span>
                     </div>
                   </div>
                 </div>
@@ -845,7 +845,7 @@ const UpdateEnquiry = () => {
                       className={isReadOnly ? "no-drop-cursor" : ""}
                     />
                     <div className="field_icon">
-                      <span class="material-symbols-outlined">draw</span>
+                      <span className="material-symbols-outlined">draw</span>
                     </div>{" "}
                   </div>
                 </div>
@@ -861,7 +861,7 @@ const UpdateEnquiry = () => {
                       onChange={handleChangeRemark}
                     />
                     <div className="field_icon">
-                      <span class="material-symbols-outlined">draw</span>
+                      <span className="material-symbols-outlined">draw</span>
                     </div>{" "}
                   </div>
                 </div>
@@ -1014,7 +1014,7 @@ const UpdateEnquiry = () => {
                       id="updateForOwner"
                     />
                     <div className="field_icon">
-                      <span class="material-symbols-outlined">draw</span>
+                      <span className="material-symbols-outlined">draw</span>
                     </div>{" "}
                   </div>
                   {errors.updateForOwner && (

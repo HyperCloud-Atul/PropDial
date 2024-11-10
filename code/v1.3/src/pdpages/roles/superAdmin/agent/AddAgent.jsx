@@ -5,6 +5,7 @@ import { useFirestore } from "../../../../hooks/useFirestore";
 import { projectFirestore } from "../../../../firebase/config";
 import Select from "react-select";
 import PhoneInput from "react-phone-input-2";
+import SearchBarAutoComplete from "../../../../pages/search/SearchBarAutoComplete";
 
 const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   // add document
@@ -21,10 +22,20 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
     "",
     ["state", "asc"]
   );
+  const { documents: masterCity, error: masterCityError } = useCollection(
+    "m_cities", "", ["city", "asc"]
+  );
+  const { documents: masterLocality, error: masterLocalityError } = useCollection(
+    "m_localities", "", ["locality", "asc"]
+  );
+  const { documents: masterSociety, error: masterSocietyError } =
+    useCollection("m_societies", "", ["society", "asc"]);
+
   const [state, setState] = useState();
   const [city, setCity] = useState();
   const [locality, setLocality] = useState();
   const [society, setSociety] = useState();
+  // const [searchList, setSearchList] = useState(null);
 
   let stateOptions = useRef([]);
   let cityOptions = useRef([]);
@@ -42,20 +53,8 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
 
   useEffect(() => {
     // console.log('in useeffect')
-    // Master data: State Populate
-    // if (masterState) {
-    //   stateOptions.current = masterState.map((stateData) => ({
-    //     label: stateData.state,
-    //     value: stateData.id,
-    //   }));
 
-    //   // console.log("stateOptions: ", stateOptions)
 
-    //   // handleStateChange({
-    //   //   label: stateOptions.current[0].label,
-    //   //   value: stateOptions.current[0].value,
-    //   // });
-    // }
   }, [masterState]);
 
   // Populate Master Data - Start
@@ -99,52 +98,47 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
 
   //City select onchange
   const handleCityChange = async (option) => {
-    setCity(option);
-    // console.log('city.id:', option.value)
+    setCity(option, masterLocality, masterCity);
+    console.log('city.id:', option.value)
     if (option) {
-      const ref = await projectFirestore
-        .collection("m_localities")
-        .where("city", "==", option.value)
-        .orderBy("locality", "asc");
-      ref.onSnapshot(
-        async (snapshot) => {
-          if (snapshot.docs) {
-            localityOptions.current = snapshot.docs.map((localityData) => ({
-              label: localityData.data().locality,
-              value: localityData.id,
-            }));
 
-            // console.log("localityOptions: ", localityOptions);
+      let _localitylist = masterLocality.filter(e => e.city === option.value);
+      let _societylist = masterSociety.filter(e => e.city === option.value);
 
-            if (localityOptions.current.length === 0) {
-              console.log("No Locality");
-              handleLocalityChange(null);
-            } else {
-              handleLocalityChange({
-                label: localityOptions.current[0].label,
-                value: localityOptions.current[0].value,
-              });
-            }
-          } else {
-            handleLocalityChange(null);
-            // setError('No such document exists')
-          }
-        },
-        (err) => {
-          console.log(err.message);
-          // setError('failed to get document')
-        }
-      );
+      localityOptions.current = _localitylist.map((localityData) => ({
+        label: localityData.locality,
+        value: localityData.id,
+      }));
+
+      societyOptions.current = _societylist.map((societyData) => ({
+        label: societyData.society + "; " + (masterLocality && masterLocality.find((e) => e.id === societyData.locality).locality),
+        value: societyData.id,
+      }));
+
+      if (localityOptions.current.length === 0) {
+        console.log("No Locality");
+        // handleLocalityChange(null);
+      } else {
+        // handleLocalityChange({
+        //   label: localityOptions.current[0].label,
+        //   value: localityOptions.current[0].value,
+        // });
+      }
+    } else {
+      // handleLocalityChange(null);
+      // setError('No such document exists')
     }
+  }
 
-  };
 
   //Locality select onchange
   const handleLocalityChange = async (option) => {
-    setLocality(option);
-    // console.log('locality.id:', option.value)
+    // setLocality(option);
+    console.log('locality.id:', option)
+    // console.log('selected city:', city)
 
     if (option) {
+
       const ref = await projectFirestore
         .collection("m_societies")
         .where("locality", "==", option.value)
@@ -157,19 +151,6 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
               value: societyData.id,
             }));
 
-            // console.log("societyOptions.current: ", societyOptions.current);
-
-            if (societyOptions.current.length === 0) {
-              console.log("No Society");
-              handleSocietyChange(null);
-            } else {
-              handleSocietyChange({
-                label: societyOptions.current[0].label,
-                value: societyOptions.current[0].value,
-              });
-            }
-          } else {
-            handleSocietyChange(null);
           }
         },
         (err) => {
@@ -183,7 +164,32 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   //Society select onchange
   const handleSocietyChange = async (option) => {
     setSociety(option);
-    // console.log('society.id:', option.value)
+    // option
+    let _locality = []
+
+    console.log('society.id:', option)
+    option.forEach(element => {
+      // let str = []
+      // str = element.label.split('; ')
+      let _societyObj = masterSociety.find(e => e.id === element.value)
+
+      console.log(_societyObj)
+      let _localityObj = masterLocality.find(e => e.id === _societyObj.locality)
+      console.log('_localityObj', _localityObj)
+
+      if (_locality.find(e => e.value === _localityObj.id)) {
+
+        console.log('already present')
+      } else {
+        _locality.push({
+          label: _localityObj.locality,
+          value: _localityObj.id
+        })
+        console.log('not present')
+      }
+      console.log('_locality', _locality)
+      setLocality(_locality)
+    });
   };
   // Populate Master Data - End
 
@@ -195,6 +201,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   const [agentEmail, setAgentEmail] = useState("");
   const [agentPancard, setAgentPancard] = useState("");
   const [agentGstNumber, setAgentGstNumber] = useState("");
+  const [errors, setErrors] = useState({});
 
   // functions
   const handleChangeAgentName = (e) => setAgentName(e.target.value);
@@ -206,15 +213,15 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   const handleChangeAgentGstNumber = (e) => setAgentGstNumber(e.target.value);
 
   // Add additional state variables for tracking errors
-  const [errors, setErrors] = useState({
-    agentName: "",
-    agentPhone: "",
-    // agentEmail: "",
-    state: "",
-    city: "",
-    locality: "",
-    society: "",
-  });
+  // const [errors, setErrors] = useState({
+  //   agentName: "",
+  //   agentPhone: "",
+  //   // agentEmail: "",
+  //   state: "",
+  //   city: "",
+  //   locality: "",
+  //   society: "",
+  // });
 
   const someError = errors.agentName || errors.agentEmail;
 
@@ -262,7 +269,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
         state: state.label,
         city: city.label,
         locality: locality,
-        // society: society.label,
+        society: society,
         status: "active",
       };
 
@@ -290,9 +297,206 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
       setShowAIForm(!showAIForm);
     }
   };
+
+  // const { documents: masterState, error: masterStateError } = useCollection(
+  //   "m_states", "", ["state", "asc"]
+  // );
+
+  // const handleFieldChange = (setter) => (event) => {
+  //   const { name, value } = event.target;
+  //   setter(value);
+  //   setErrors((prevErrors) => {
+  //     const newErrors = { ...prevErrors };
+  //     if (newErrors[name]) delete newErrors[name];
+  //     return newErrors;
+  //   });
+  // };
+
+  // const [searchInput, setSearchInput] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
+
+
+
+  // const [changedUser, setChangedUser] = useState();
+  // const [ownersProeprtyList, setOwnersProeprtyList] = useState();
+  // const [searchResultValueId, setSearchResultValueId] = useState("");
+  // const [propertyName, setPropertyName] = useState("");
+  // const handleChangePropertyName = handleFieldChange(setPropertyName);
+
+
+  // Search Popup - Start
+  // const [searchPopup, setSearchPopup] = useState(false);
+  // const [searchResultValue, setSearchResultValue] = useState("");
+  // const [filteredData, setFilteredData] = useState(masterSociety);
+  // const [selectedValue, setSelectedValue] = useState(null);
+  // const handleChangeSearchText = handleFieldChange(setSearchResultValue);
+  // Search Popup - End
+
+  // const handleSearchInputChange = (e) => {
+  //   console.log("e.target.value: ", e.target.value)
+  //   setSearchInput(e.target.value);
+  // };
+  // useEffect(() => {
+  //   let strList = []
+  //   masterSociety && masterSociety.forEach(element => {
+  //     let _locality = masterLocality.find(e => e.id === element.locality)
+  //     let _city = masterCity.find(e => e.id === element.city)
+
+  //     strList.push({
+  //       ...element,
+  //       localityName: _locality.locality,
+  //       cityName: _city.city
+  //     })
+  //   });
+  //   setSearchList(strList)
+
+  // }, [masterSociety])
+
+
+  // const openSearchPopup = (docId) => {
+  //   console.log("Open Search Popup");
+  //   setSearchPopup(true);
+  //   // setUserdbFieldName(option);
+  //   setChangedUser(docId);
+  //   setOwnersProeprtyList({ lable: "", value: "" });
+  // };
+
+  // const closeSearchPopup = () => {
+  //   console.log("close popup")
+  //   setSearchPopup(false);
+  // };
+
+
+  // const confirmSearchPopup = async () => {
+  //   console.log("selected value: ", selectedValue);
+
+  //   setSearchPopup(false);
+  // };
+
+  // const handleSearchChange = (event) => {
+  //   const query = event.target.value;
+  //   setSearchQuery(query);
+  //   filterDataByQuery(query);
+  // };
+
+  // const filterDataByQuery = (query) => {
+  //   // console.log('query: ', searchList)
+  //   const filtered =
+  //     searchList &&
+  //     searchList.filter(
+  //       (society) =>
+  //         society.society.toLowerCase().includes(query.toLowerCase())
+  //         || society.localityName.toLowerCase().includes(query)
+  //         || society.cityName.toLowerCase().includes(query)
+  //     );
+  //   // console.log("filtered: ", filtered);
+  //   setFilteredData(filtered);
+
+
+  //   // let strList = []
+  //   //   masterSociety && masterSociety.forEach(element => {
+  //   //     let _locality = masterLocality.find(e => e.id === element.locality)
+
+  //   //     strList.push(element.society + '-' + _locality.locality)
+  //   //   });
+  //   //   setSearchList(strList)
+
+  // };
+
+  // const handleSearchItem = (val) => {
+  //   setSelectedValue(val);
+  // };
+
+
   return (
     <form>
       <div className="vg12"></div>
+
+      {/* Search Popup - Start */}
+      {/* <div
+        className={
+          searchPopup
+            ? "pop-up-change-number-div open"
+            : "pop-up-change-number-div"
+        }
+      >
+        <div className="direct-div">
+          <span
+            onClick={closeSearchPopup}
+            className="material-symbols-outlined modal_close"
+          >
+            close
+          </span>
+          <h5 className="text_orange text-center">Search Society</h5>
+          <div className="vg12"></div>
+          <div>
+            <div className="enq_fields">
+              <div className="form_field st-2">
+                <div className="field_inner">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    placeholder="Search society by society name, location or city ..."
+                  />
+                  <div className="field_icon">
+                    <span className="material-symbols-outlined">search</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+            <ul className="search_results">
+              {filteredData &&
+                filteredData.map((item) => (
+                  <li className="search_result_single" key={item.id}>
+                    <label>
+                      <input
+                        name="searchInput"
+                        type="radio"
+                        checked={selectedValue === item.id}
+                        onChange={() => handleSearchItem(item.id)}
+                      />
+                      <div>
+                        <strong> {item.society} </strong>
+                        <br></br>
+                        {masterLocality && masterLocality.find((e) => e.id === item.locality).locality}
+                        {", "}
+                        {masterCity && masterCity.find((e) => e.id === item.city).city}
+                        {", "}
+                        {masterState && masterState.find((e) => e.id === item.state).state}
+                       
+                      </div>
+                    </label>
+                  </li>
+                ))}
+            </ul>
+          </div>
+          <div className="vg12"></div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2,1fr)",
+              gap: "15px",
+            }}
+          >
+            <button
+              onClick={closeSearchPopup}
+              className="theme_btn full_width btn_border no_icon"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={confirmSearchPopup}
+              className="theme_btn full_width btn_fill no_icon"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div> */}
+      {/* Search Popup - End */}
+
       <div className="row row_gap form_full">
         <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
@@ -427,6 +631,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
             </div>
           </div>
         </div>
+
         <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
             <label htmlFor="">State*</label>
@@ -482,11 +687,39 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
             </div>
           </div>
         </div>
+
+
+        <div className="col-xl-4 col-lg-6">
+          <div className="form_field label_top">
+            <label htmlFor="">Society*</label>
+            <div className="form_field_inner">
+              <Select
+                isMulti
+                className=""
+                onChange={handleSocietyChange}
+                options={societyOptions.current}
+                value={society}
+                styles={{
+                  control: (baseStyles, state) => ({
+                    ...baseStyles,
+                    outline: "none",
+                    background: "#eee",
+                    borderBottom: " 1px solid var(--theme-blue)",
+                  }),
+                }}
+              />
+              {errors.society && (
+                <div className="field_error">{errors.society}</div>
+              )}
+            </div>
+          </div>
+        </div>
         <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
             <label htmlFor="">Locality*</label>
             <div className="form_field_inner">
               <Select
+                isDisabled
                 isMulti
                 className=""
                 onChange={handleLocalityChange}
@@ -507,31 +740,42 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
             </div>
           </div>
         </div>
-        {/* <div className="col-xl-4 col-lg-6">
-          <div className="form_field label_top">
-            <label htmlFor="">Society*</label>
-            <div className="form_field_inner">
-              <Select
-                className=""
-                onChange={handleSocietyChange}
-                options={societyOptions.current}
-                value={society}
-                styles={{
-                  control: (baseStyles, state) => ({
-                    ...baseStyles,
-                    outline: "none",
-                    background: "#eee",
-                    borderBottom: " 1px solid var(--theme-blue)",
-                  }),
+        <div className="col-md-6">
+          {/* Search Input - Start */}
+          {/* <div className="form_field label_top">
+            <label htmlFor="searchinputfield">Search Society</label>
+            <div
+              className="form_field_inner with_icon pointer"
+              onClick={(e) => {
+                openSearchPopup(e);
+              }}
+              style={{
+                cursor: "pointer"
+              }}
+            >
+              <input
+                type="text"
+                placeholder="Search Society..."
+                value={searchResultValue}
+                onChange={handleChangeSearchText}
+                id="searchinputfield"
+                readOnly
+                style={{
+                  cursor: "pointer",
                 }}
               />
-              {errors.society && (
-                <div className="field_error">{errors.society}</div>
-              )}
+              <div className="field_icon">
+                <span className="material-symbols-outlined">search</span>
+              </div>
             </div>
-          </div>
-        </div> */}
+            {errors.society && (
+              <div className="field_error">{errors.society}</div>
+            )}
+          </div> */}
+          {/* Search Input - End */}
+        </div>
       </div>
+
       <div className="vg22"></div>
       {addingError && (
         <>

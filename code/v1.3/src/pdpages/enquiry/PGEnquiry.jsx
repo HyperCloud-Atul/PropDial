@@ -18,11 +18,11 @@ const PGEnquiry = () => {
   const { user } = useAuthContext();
   // render ViewEnquiry by url id start 
   const { id } = useParams();
-  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry-propdial", "" , ["date", "desc"]);
-console.log("enquiryDocs", enquiryDocs);
+  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry-propdial", "", ["date", "desc"]);
+  console.log("enquiryDocs", enquiryDocs);
 
   const enquiryDocsById = id === "all" ? enquiryDocs : (enquiryDocs && enquiryDocs.filter(doc => (doc.propId === id)));
-  
+
   console.log("enquiryDocsById", enquiryDocsById, id);
   // render ViewEnquiry by url id end
 
@@ -54,79 +54,79 @@ console.log("enquiryDocs", enquiryDocs);
 
   return (
     <>
-    {user && user.status === "active" ? (
-   <div className="top_header_pg pg_bg pg_enquiry">
-   <div className="page_spacing">
-     {/* 9 dots html  */}
-     <div onClick={openMoreAddOptions} className="property-list-add-property">
-       <span className="material-symbols-outlined">apps</span>
-     </div>
-     <div
-       className={
-         handleMoreOptionsClick
-           ? "more-add-options-div open"
-           : "more-add-options-div"
-       }
-       onClick={closeMoreAddOptions}
-       id="moreAddOptions"
-     >
-       <div className="more-add-options-inner-div">
-         <div className="more-add-options-icons">
-           <h1>Close</h1>
-           <span className="material-symbols-outlined">close</span>
-         </div>
+      {user && user.status === "active" ? (
+        <div className="top_header_pg pg_bg pg_enquiry">
+          <div className="page_spacing">
+            {/* 9 dots html  */}
+            <div onClick={openMoreAddOptions} className="property-list-add-property">
+              <span className="material-symbols-outlined">apps</span>
+            </div>
+            <div
+              className={
+                handleMoreOptionsClick
+                  ? "more-add-options-div open"
+                  : "more-add-options-div"
+              }
+              onClick={closeMoreAddOptions}
+              id="moreAddOptions"
+            >
+              <div className="more-add-options-inner-div">
+                <div className="more-add-options-icons">
+                  <h1>Close</h1>
+                  <span className="material-symbols-outlined">close</span>
+                </div>
 
-         <Link to="/newproperty" className="more-add-options-icons">
-           <h1>Add property</h1>
-           <span className="material-symbols-outlined">location_city</span>
-         </Link>
+                <Link to="/newproperty" className="more-add-options-icons">
+                  <h1>Add property</h1>
+                  <span className="material-symbols-outlined">location_city</span>
+                </Link>
 
-         <Link to="" className="more-add-options-icons">
-           <h1>Add bills</h1>
-           <span class="material-symbols-outlined">receipt_long</span>
-         </Link>
+                <Link to="" className="more-add-options-icons">
+                  <h1>Add bills</h1>
+                  <span className="material-symbols-outlined">receipt_long</span>
+                </Link>
 
-         <Link to="/addnotification/new" className="more-add-options-icons">
-           <h1>Add notification</h1>
-           <span class="material-symbols-outlined">notifications</span>
-         </Link>
-       </div>
-     </div>
-     {/* 9 dots html  */}
-     <Link className="property-list-add-property with_9dot">
-       <span class="material-symbols-outlined" onClick={handelShowForm}>
-         {showForm ? "close" : "add"}
-       </span>
-     </Link>
-     {!showForm && (
-       <ViewEnquiry enquiryDocs={enquiryDocsById} enquiryDocsError={enquiryDocsError} />
-     )}
-     {showForm && (
-       <>
-         <div className="pg_header d-flex justify-content-between">
-           <div className="left d-flex align-items-center pointer" style={{
-             gap: "5px"
-           }}>
-             <span class="material-symbols-outlined pointer" onClick={handelShowForm} >
-               arrow_back
-             </span>
-             <h2 className="m22 mb-1">Add Enquiry
-             </h2>
-           </div>
+                <Link to="/addnotification/new" className="more-add-options-icons">
+                  <h1>Add notification</h1>
+                  <span className="material-symbols-outlined">notifications</span>
+                </Link>
+              </div>
+            </div>
+            {/* 9 dots html  */}
+            <Link className="property-list-add-property with_9dot">
+              <span className="material-symbols-outlined" onClick={handelShowForm}>
+                {showForm ? "close" : "add"}
+              </span>
+            </Link>
+            {!showForm && (
+              <ViewEnquiry enquiryDocs={enquiryDocsById} enquiryDocsError={enquiryDocsError} />
+            )}
+            {showForm && (
+              <>
+                <div className="pg_header d-flex justify-content-between">
+                  <div className="left d-flex align-items-center pointer" style={{
+                    gap: "5px"
+                  }}>
+                    <span className="material-symbols-outlined pointer" onClick={handelShowForm} >
+                      arrow_back
+                    </span>
+                    <h2 className="m22 mb-1">Add Enquiry
+                    </h2>
+                  </div>
 
-         </div>
-         <AddEnquiry 
-         enquiryAdded={handelShowForm}
-         />
-       </>
-     )}
-   </div>
- </div>
-    ):(
-      <InactiveUserCard/>
-    )}
-  </>
-  
+                </div>
+                <AddEnquiry
+                  enquiryAdded={handelShowForm}
+                />
+              </>
+            )}
+          </div>
+        </div>
+      ) : (
+        <InactiveUserCard />
+      )}
+    </>
+
   );
 };
 

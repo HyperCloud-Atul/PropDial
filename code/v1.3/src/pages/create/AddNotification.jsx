@@ -91,151 +91,151 @@ const AddNotification = () => {
   };
   return (
     <>
-    {user && user.status === "active" ? (
-    <div className="top_header_pg pg_bg">
-    <div className="page_spacing pg_min_height">
-      <div className="pg_header">
-        <h2 className="m22 mb-1">Add Notification</h2>
-        <h4 className="r18 light_black">
-          You can add all types of notification here
-        </h4>
-      </div>
-      <div className="vg22"></div>
-      <div className="add_notification_form regular_card">
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-6">
-              <div className="form_field">
-                <label className="no-floating" htmlFor="">
-                  Notification type
-                </label>
-                <div className="form_field_inner">
-                  <select
-                    name=""
-                    id=""
-                    value={notificationFields && notificationFields.Type}
-                    onChange={(e) =>
-                      setNotificationFields({
-                        ...notificationFields,
-                        Type: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="" defaultValue>
-                      Select notification type
-                    </option>
-                    <option
-                      defaultValue={
-                        notificationFields &&
-                          notificationFields.Type === "App Updates"
-                          ? true
-                          : false
-                      }
-                    >
-                      App Updates
-                    </option>
-                    <option
-                      defaultValue={
-                        notificationFields &&
-                          notificationFields.Type === "Discount"
-                          ? true
-                          : false
-                      }
-                    >
-                      Discount
-                    </option>
-                    <option
-                      defaultValue={
-                        notificationFields &&
-                          notificationFields.Type === "Offer"
-                          ? true
-                          : false
-                      }
-                    >
-                      Offer
-                    </option>
-                  </select>
-                  <div className="field_icon">
-                    <span class="material-symbols-outlined">
-                      notifications
-                    </span>
+      {user && user.status === "active" ? (
+        <div className="top_header_pg pg_bg">
+          <div className="page_spacing pg_min_height">
+            <div className="pg_header">
+              <h2 className="m22 mb-1">Add Notification</h2>
+              <h4 className="r18 light_black">
+                You can add all types of notification here
+              </h4>
+            </div>
+            <div className="vg22"></div>
+            <div className="add_notification_form regular_card">
+              <form onSubmit={handleSubmit}>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form_field">
+                      <label className="no-floating" htmlFor="">
+                        Notification type
+                      </label>
+                      <div className="form_field_inner">
+                        <select
+                          name=""
+                          id=""
+                          value={notificationFields && notificationFields.Type}
+                          onChange={(e) =>
+                            setNotificationFields({
+                              ...notificationFields,
+                              Type: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" defaultValue>
+                            Select notification type
+                          </option>
+                          <option
+                            defaultValue={
+                              notificationFields &&
+                                notificationFields.Type === "App Updates"
+                                ? true
+                                : false
+                            }
+                          >
+                            App Updates
+                          </option>
+                          <option
+                            defaultValue={
+                              notificationFields &&
+                                notificationFields.Type === "Discount"
+                                ? true
+                                : false
+                            }
+                          >
+                            Discount
+                          </option>
+                          <option
+                            defaultValue={
+                              notificationFields &&
+                                notificationFields.Type === "Offer"
+                                ? true
+                                : false
+                            }
+                          >
+                            Offer
+                          </option>
+                        </select>
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">
+                            notifications
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="ff_gap"></div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form_field">
+                      <label htmlFor="">Title</label>
+                      <div className="form_field_inner">
+                        <input
+                          required
+                          type="text"
+                          maxLength={70}
+                          placeholder="Heading for notification"
+                          onChange={(e) =>
+                            setNotificationFields({
+                              ...notificationFields,
+                              ShortDescription: e.target.value,
+                            })
+                          }
+                          value={
+                            notificationFields &&
+                            notificationFields.ShortDescription
+                          }
+                        />
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">description</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="ff_gap"></div>
+                  </div>
+                  <div className="col-md-12">
+                    <div className="form_field">
+                      <label htmlFor="">Description</label>
+                      <div className="form_field_inner">
+                        <textarea
+                          required
+                          type="text"
+                          // maxLength={300}
+                          placeholder="Write something about notification"
+                          onChange={(e) =>
+                            setNotificationFields({
+                              ...notificationFields,
+                              Description: e.target.value,
+                            })
+                          }
+                          value={
+                            notificationFields && notificationFields.Description
+                          }
+                        ></textarea>
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">description</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-8"></div>
+                  <div className="col-md-4 text-center top_margin">
+                    <div className="ff_gap"></div>
+                    <button type="submit" className="theme_btn btn_fill no_icon full_width">
+                      {notificationid === "new"
+                        ? "Add Notification"
+                        : "Update Notification"}
+                    </button>
+                    {formError && <p className="error">{formError}</p>}
                   </div>
                 </div>
-              </div>
-              <div className="ff_gap"></div>
-            </div>
-            <div className="col-md-6">
-              <div className="form_field">
-                <label htmlFor="">Title</label>
-                <div className="form_field_inner">
-                  <input
-                    required
-                    type="text"
-                    maxLength={70}
-                    placeholder="Heading for notification"
-                    onChange={(e) =>
-                      setNotificationFields({
-                        ...notificationFields,
-                        ShortDescription: e.target.value,
-                      })
-                    }
-                    value={
-                      notificationFields &&
-                      notificationFields.ShortDescription
-                    }
-                  />
-                  <div className="field_icon">
-                    <span class="material-symbols-outlined">description</span>
-                  </div>
-                </div>
-              </div>
-              <div className="ff_gap"></div>
-            </div>
-            <div className="col-md-12">
-              <div className="form_field">
-                <label htmlFor="">Description</label>
-                <div className="form_field_inner">
-                  <textarea
-                    required
-                    type="text"
-                    // maxLength={300}
-                    placeholder="Write something about notification"
-                    onChange={(e) =>
-                      setNotificationFields({
-                        ...notificationFields,
-                        Description: e.target.value,
-                      })
-                    }
-                    value={
-                      notificationFields && notificationFields.Description
-                    }
-                  ></textarea>
-                  <div className="field_icon">
-                    <span class="material-symbols-outlined">description</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-8"></div>
-            <div className="col-md-4 text-center top_margin">
-              <div className="ff_gap"></div>
-              <button type="submit" className="theme_btn btn_fill no_icon full_width">
-                {notificationid === "new"
-                  ? "Add Notification"
-                  : "Update Notification"}
-              </button>
-              {formError && <p className="error">{formError}</p>}
+              </form>
             </div>
           </div>
-        </form>
-      </div>
-    </div>
-  </div>
-    ):(
-      <InactiveUserCard/>
-    )}
-  </>
-   
+        </div>
+      ) : (
+        <InactiveUserCard />
+      )}
+    </>
+
   );
 };
 

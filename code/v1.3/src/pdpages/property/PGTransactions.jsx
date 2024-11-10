@@ -154,18 +154,18 @@ const PGTransactions = () => {
 
                         <Link to="" className="more-add-options-icons">
                             <h1>Add bills</h1>
-                            <span class="material-symbols-outlined">receipt_long</span>
+                            <span className="material-symbols-outlined">receipt_long</span>
                         </Link>
 
                         <Link to="/addnotification/new" className="more-add-options-icons">
                             <h1>Add notification</h1>
-                            <span class="material-symbols-outlined">notifications</span>
+                            <span className="material-symbols-outlined">notifications</span>
                         </Link>
                     </div>
                 </div>
                 {/* 9 dots html  */}
                 <Link className="bottom_add_button" onClick={handelShowPaymentForm}>
-                    <span class="material-symbols-outlined">
+                    <span className="material-symbols-outlined">
                         {paymentForm ? "close" : "add"}
                     </span>
                 </Link>
@@ -179,9 +179,9 @@ const PGTransactions = () => {
                                 rowGap: "10px"
                             }}>
                                 <div className="col-md-4">
-                                    <div class="form_field">
+                                    <div className="form_field">
                                         <label for="">Expences amount</label>
-                                        <div class="form_field_inner">
+                                        <div className="form_field_inner">
                                             <input
                                                 required
                                                 type="number"
@@ -195,16 +195,16 @@ const PGTransactions = () => {
                                                 }
                                                 value={transactionDetails && transactionDetails.ExpenseAmount}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">description</span>
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">description</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
-                                    <div class="form_field">
+                                    <div className="form_field">
                                         <label for="">Discount</label>
-                                        <div class="form_field_inner">
+                                        <div className="form_field_inner">
                                             <input
                                                 required
                                                 type="number"
@@ -218,16 +218,16 @@ const PGTransactions = () => {
                                                 }
                                                 value={transactionDetails && transactionDetails.Discount}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">description</span>
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">description</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
-                                    <div class="form_field">
+                                    <div className="form_field">
                                         <label for="">payment amount</label>
-                                        <div class="form_field_inner">
+                                        <div className="form_field_inner">
                                             <input
                                                 required
                                                 type="number"
@@ -241,27 +241,27 @@ const PGTransactions = () => {
                                                 }
                                                 value={transactionDetails && transactionDetails.PaymentAmount}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">description</span>
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">description</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 {/* <div className="col-md-4">
-                                    <div class="form_field">
+                                    <div className="form_field">
                                         <label for="">Created Date</label>
-                                        <div class="form_field_inner">
+                                        <div className="form_field_inner">
                                             <input required="" type="date" />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">description</span>
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">description</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div> */}
                                 <div className="col-md-4">
-                                    <div class="form_field">
+                                    <div className="form_field">
                                         <label for="">Due Date</label>
-                                        <div class="form_field_inner">
+                                        <div className="form_field_inner">
                                             {/* <input required="" type="date" /> */}
 
                                             <input
@@ -275,16 +275,16 @@ const PGTransactions = () => {
                                                 }
                                                 value={transactionDetails && transactionDetails.DueDate}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">description</span>
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">description</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
-                                    <div class="form_field">
+                                    <div className="form_field">
                                         <label for="">Remark</label>
-                                        <div class="form_field_inner">
+                                        <div className="form_field_inner">
                                             <input
                                                 type="text"
                                                 placeholder="Enter Remarks"
@@ -297,17 +297,17 @@ const PGTransactions = () => {
                                                 }
                                                 value={transactionDetails && transactionDetails.Remarks}
                                             />
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">description</span>
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">description</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="col-md-4">
-                                    <div class="form_field">
+                                    <div className="form_field">
                                         <label for="">Status</label>
-                                        <div class="form_field_inner">
+                                        <div className="form_field_inner">
                                             <select
                                                 value={transactionDetails && transactionDetails.PaymentStatus}
                                                 onChange={(e) => {
@@ -347,22 +347,22 @@ const PGTransactions = () => {
                                                 </option>
                                             </select>
 
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">description</span>
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">description</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 {/* <div className="col-md-4">
-                                    <div class="form_field">
+                                    <div className="form_field">
                                         <label for="">Property</label>
-                                        <div class="form_field_inner">
+                                        <div className="form_field_inner">
                                             <select name="" id="">
                                                 <option value="">property one</option>
                                                 <option value="">property two</option>
                                             </select>
-                                            <div class="field_icon">
-                                                <span class="material-symbols-outlined">description</span>
+                                            <div className="field_icon">
+                                                <span className="material-symbols-outlined">description</span>
                                             </div>
                                         </div>
                                     </div>

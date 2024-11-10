@@ -366,12 +366,12 @@ const PropertyInspectionDocuments = () => {
 
                     <section className="my_big_card selected_date">
                         <div>Inspection Due Date:
-                            <h2 class="card_title mb-0">{inspectionDate} {inspectionSortedDates[0]} </h2>
-                            {/* <h2 class="card_title mb-0">{filterDate && format((new Date(
+                            <h2 className="card_title mb-0">{inspectionDate} {inspectionSortedDates[0]} </h2>
+                            {/* <h2 className="card_title mb-0">{filterDate && format((new Date(
                                 filterDate.seconds * 1000
                             )), "dd MMMM, yyyy")}</h2> */}
                             {/* {filteredInspections && filteredInspections.map((doc) => (
-                                <h2 class="card_title mb-0" key={doc.id}>
+                                <h2 className="card_title mb-0" key={doc.id}>
                                     {new Date(doc.inspectionDate).toLocaleDateString('en-GB', {
                                         day: '2-digit',
                                         month: 'short',
@@ -399,7 +399,7 @@ const PropertyInspectionDocuments = () => {
                     </section>
                     {showAddDocumentForm && (
                         <section className="my_big_card">
-                            <h2 class="card_title">Add document</h2>
+                            <h2 className="card_title">Add document</h2>
                             <div className="inner">
                                 <input
                                     type="text"
@@ -415,7 +415,7 @@ const PropertyInspectionDocuments = () => {
                         </section>
                     )}
                     {showNextInspectionDateForm && (<section className="my_big_card">
-                        <h2 class="card_title">Add Next Inspection date</h2>
+                        <h2 className="card_title">Add Next Inspection date</h2>
                         <div className="inner">
                             <input
                                 type="date"
@@ -436,7 +436,7 @@ const PropertyInspectionDocuments = () => {
                 <hr></hr>
                 <div>
                     {/* <section className="my_big_card"> */}
-                    <h2 class="card_title">Inspections Documents</h2>
+                    <h2 className="card_title">Inspections Documents</h2>
                     <div className="inner">
                         <select id="filterDate" value={filterDate} onChange={handleChangeFilterDate}>
                             {inspections && inspections.map(doc => (

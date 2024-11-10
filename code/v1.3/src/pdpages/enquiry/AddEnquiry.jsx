@@ -504,7 +504,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
                   id="date"
                 />
                 <div className="field_icon">
-                  <span class="material-symbols-outlined">calendar_month</span>
+                  <span className="material-symbols-outlined">calendar_month</span>
                 </div>
               </div>
             </div>
@@ -721,7 +721,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
                     id="empname"
                   />
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">search</span>
+                    <span className="material-symbols-outlined">search</span>
                   </div>
                 </div>
                 {errors.employeeName && (
@@ -757,7 +757,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
                     }}
                   />
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">search</span>
+                    <span className="material-symbols-outlined">search</span>
                   </div>
                 </div>
                 {errors.propertyOwner && (
@@ -799,7 +799,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
                       />
 
                       <div className="field_icon">
-                        <span class="material-symbols-outlined">search</span>
+                        <span className="material-symbols-outlined">search</span>
                       </div></>
                   )}
 
@@ -831,7 +831,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
                     id="name"
                   />
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">draw</span>
+                    <span className="material-symbols-outlined">draw</span>
                   </div>
                 </div>
                 {errors.name && (
@@ -876,7 +876,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
                     }}
                   />
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">draw</span>
+                    <span className="material-symbols-outlined">draw</span>
                   </div>
                 </div>
                 {errors.phone && (
@@ -905,7 +905,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
                     id="email"
                   />
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">draw</span>
+                    <span className="material-symbols-outlined">draw</span>
                   </div>
                 </div>
                 {errors.email && (
@@ -925,7 +925,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
                     id="remark"
                   />
                   <div className="field_icon">
-                    <span class="material-symbols-outlined">draw</span>
+                    <span className="material-symbols-outlined">draw</span>
                   </div>
                 </div>
                 {errors.remark && (

@@ -288,7 +288,7 @@ const PGAdminDashboard = () => {
             to="/newproperty"
             className="property-list-add-property with_9dot"
           >
-            <span class="material-symbols-outlined">add</span>
+            <span className="material-symbols-outlined">add</span>
           </Link>
           <div
             onClick={openMoreAddOptions}
@@ -318,7 +318,7 @@ const PGAdminDashboard = () => {
 
               <Link to="/allproperties/all" className="more-add-options-icons">
                 <h1>Properties</h1>
-                <span class="material-symbols-outlined">real_estate_agent</span>
+                <span className="material-symbols-outlined">real_estate_agent</span>
               </Link>
             </div>
           </div>
@@ -604,7 +604,7 @@ const PGAdminDashboard = () => {
                               <h6>Chandigarh</h6>
                               <h5>
                                 {chandigarhProperties &&
-                                chandigarhProperties.length > 0
+                                  chandigarhProperties.length > 0
                                   ? chandigarhProperties.length
                                   : "0"}
                               </h5>
@@ -664,7 +664,7 @@ const PGAdminDashboard = () => {
                               <h6>Gujarat</h6>
                               <h5>
                                 {gujaratProperties &&
-                                gujaratProperties.length > 0
+                                  gujaratProperties.length > 0
                                   ? gujaratProperties.length
                                   : "0"}
                               </h5>
@@ -685,7 +685,7 @@ const PGAdminDashboard = () => {
                               <h6>Haryana</h6>
                               <h5>
                                 {haryanaProperties &&
-                                haryanaProperties.length > 0
+                                  haryanaProperties.length > 0
                                   ? haryanaProperties.length
                                   : "0"}
                               </h5>
@@ -707,7 +707,7 @@ const PGAdminDashboard = () => {
                               <h6>Karnataka</h6>
                               <h5>
                                 {karnatakaProperties &&
-                                karnatakaProperties.length > 0
+                                  karnatakaProperties.length > 0
                                   ? karnatakaProperties.length
                                   : "0"}
                               </h5>
@@ -730,7 +730,7 @@ const PGAdminDashboard = () => {
                               <h6>Maharashtra</h6>
                               <h5>
                                 {maharashtraProperties &&
-                                maharashtraProperties.length > 0
+                                  maharashtraProperties.length > 0
                                   ? maharashtraProperties.length
                                   : "0"}
                               </h5>
@@ -752,7 +752,7 @@ const PGAdminDashboard = () => {
                               <h6>Rajasthan</h6>
                               <h5>
                                 {rajasthanProperties &&
-                                rajasthanProperties.length > 0
+                                  rajasthanProperties.length > 0
                                   ? rajasthanProperties.length
                                   : "0"}
                               </h5>
@@ -773,7 +773,7 @@ const PGAdminDashboard = () => {
                               <h6>Tamilnadu</h6>
                               <h5>
                                 {tamilnaduProperties &&
-                                tamilnaduProperties.length > 0
+                                  tamilnaduProperties.length > 0
                                   ? tamilnaduProperties.length
                                   : "0"}
                               </h5>
@@ -794,7 +794,7 @@ const PGAdminDashboard = () => {
                               <h6>Talangana</h6>
                               <h5>
                                 {telanganaProperties &&
-                                telanganaProperties.length > 0
+                                  telanganaProperties.length > 0
                                   ? telanganaProperties.length
                                   : "0"}
                               </h5>
@@ -815,7 +815,7 @@ const PGAdminDashboard = () => {
                               <h6>Uttar Pradesh</h6>
                               <h5>
                                 {uttarpradeshProperties &&
-                                uttarpradeshProperties.length > 0
+                                  uttarpradeshProperties.length > 0
                                   ? uttarpradeshProperties.length
                                   : "0"}
                               </h5>
@@ -836,7 +836,7 @@ const PGAdminDashboard = () => {
                               <h6>Uttrakhand</h6>
                               <h5>
                                 {uttarakhandProperties &&
-                                uttarakhandProperties.length > 0
+                                  uttarakhandProperties.length > 0
                                   ? uttarakhandProperties.length
                                   : "0"}
                               </h5>
@@ -1071,7 +1071,7 @@ const PGAdminDashboard = () => {
           </div>
         </>
       ) : (
-      <InactiveUserCard/>
+        <InactiveUserCard />
       )}
     </div>
   );

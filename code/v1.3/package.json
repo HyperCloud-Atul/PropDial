@@ -18,6 +18,7 @@
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.10.5",
+    "core-js": "^3.39.0",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "file-saver": "^2.0.5",
@@ -91,18 +92,16 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all",
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version",
+    "last 2 versions",
+    "Safari >= 12"
+  ],
   "devDependencies": {
     "tailwindcss": "^4.0.0-alpha.10"
   }

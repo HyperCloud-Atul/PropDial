@@ -120,74 +120,74 @@ export default function ReactTable({ tableColumns, tableData }) {
                 </table>
             </div>
             {tableData.length > 25 && (
-            <div className='react_pagination'>
-                <div className="left">
-                    <div className="items_on_page">
-                        <span>
-                            Items per page
-                        </span>
-                        <select value={pageSize} onChange={e => setPageSize(Number(e.target.value))}>
-                            {
-                                [5, 10, 25, 50, 100].map(pageSize => (
-                                    <option key={pageSize} value={pageSize}>
-                                        {pageSize}
-                                    </option>
-                                ))
-                            }
-                        </select>
+                <div className='react_pagination'>
+                    <div className="left">
+                        <div className="items_on_page">
+                            <span>
+                                Items per page
+                            </span>
+                            <select value={pageSize} onChange={e => setPageSize(Number(e.target.value))}>
+                                {
+                                    [5, 10, 25, 50, 100].map(pageSize => (
+                                        <option key={pageSize} value={pageSize}>
+                                            {pageSize}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div className="right">
-                    <div className="previous_previous_first">
-                        <span class={`material-symbols-outlined previous_first ${!canPreviousPage ? "disabled" : "pointer"}`} onClick={() => gotoPage(0)}>
-                            skip_previous
-                        </span>
-                        <div className={`previous_click ${!canPreviousPage ? "disabled" : "pointer"}`} onClick={() => previousPage()}>
-                            <div className="arrow">
-                                <span class="material-symbols-outlined">
-                                    arrow_back_ios
-                                </span> <span class="material-symbols-outlined">
-                                    arrow_back_ios
+                    <div className="right">
+                        <div className="previous_previous_first">
+                            <span className={`material-symbols-outlined previous_first ${!canPreviousPage ? "disabled" : "pointer"}`} onClick={() => gotoPage(0)}>
+                                skip_previous
+                            </span>
+                            <div className={`previous_click ${!canPreviousPage ? "disabled" : "pointer"}`} onClick={() => previousPage()}>
+                                <div className="arrow">
+                                    <span className="material-symbols-outlined">
+                                        arrow_back_ios
+                                    </span> <span className="material-symbols-outlined">
+                                        arrow_back_ios
+                                    </span>
+                                </div>
+
+
+                                <span>
+                                    Previous
                                 </span>
                             </div>
+                        </div>
+                        <div className="total_page">
+                            <span className="active_page">
+                                {pageIndex + 1}
+                            </span>
+                            <span className="tp_number">
+                                of {pageOptions.length}
+                            </span>
+                        </div>
+                        <div className="next_next_last">
+                            <div className={`next_click ${!canNextPage ? "disabled" : "pointer"}`} onClick={() => nextPage()}>
+                                <span>
+                                    Next
+                                </span>
+                                <div className="arrow">
+                                    <span className="material-symbols-outlined">
+                                        arrow_forward_ios
+                                    </span><span className="material-symbols-outlined">
+                                        arrow_forward_ios
+                                    </span>
+                                </div>
 
-
-                            <span>
-                                Previous
+                            </div>
+                            <span className={`material-symbols-outlined next_last ${!canNextPage ? "disabled" : "pointer"}`} onClick={() => gotoPage(pageCount - 1)}>
+                                skip_next
                             </span>
                         </div>
                     </div>
-                    <div className="total_page">
-                        <span className="active_page">
-                            {pageIndex + 1}
-                        </span>
-                        <span className="tp_number">
-                            of {pageOptions.length}
-                        </span>
-                    </div>
-                    <div className="next_next_last">
-                        <div className={`next_click ${!canNextPage ? "disabled" : "pointer"}`} onClick={() => nextPage()}>
-                            <span>
-                                Next
-                            </span>
-                            <div className="arrow">
-                                <span class="material-symbols-outlined">
-                                    arrow_forward_ios
-                                </span><span class="material-symbols-outlined">
-                                    arrow_forward_ios
-                                </span>
-                            </div>
-
-                        </div>
-                        <span class={`material-symbols-outlined next_last ${!canNextPage ? "disabled" : "pointer"}`} onClick={() => gotoPage(pageCount - 1)}>
-                            skip_next
-                        </span>
-                    </div>
-                </div>
 
 
 
-            </div >
+                </div >
             )}
         </>
     )

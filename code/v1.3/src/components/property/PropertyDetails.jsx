@@ -1030,22 +1030,22 @@ const PropertyDetails = () => {
 
   //   modal code end
 
-// Fetch all agent documents from the collection
-// const { documents: agentDoc, errors: agentDocError } = useCollection(
-//   "agent-propdial",
-//   "",
-//   ["createdAt", "desc"]
-// );
+  // Fetch all agent documents from the collection
+  // const { documents: agentDoc, errors: agentDocError } = useCollection(
+  //   "agent-propdial",
+  //   "",
+  //   ["createdAt", "desc"]
+  // );
 
-// // Check if documents are available and then apply city and locality filters
-// const filteredAgentDocs = agentDoc
-//   ? agentDoc.filter(doc => 
-//       doc.city === propertyDocument.city && 
-//       doc.locality && doc.locality.includes(propertyDocument.locality) 
-      
-//     )
-//   : [];
-// // Debugging logs to check the filtered results
+  // // Check if documents are available and then apply city and locality filters
+  // const filteredAgentDocs = agentDoc
+  //   ? agentDoc.filter(doc => 
+  //       doc.city === propertyDocument.city && 
+  //       doc.locality && doc.locality.includes(propertyDocument.locality) 
+
+  //     )
+  //   : [];
+  // // Debugging logs to check the filtered results
 
 
   return (
@@ -1192,7 +1192,7 @@ const PropertyDetails = () => {
             to={`/updateproperty/${propertyid}`}
             className="property-list-add-property with_9dot"
           >
-            <span class="material-symbols-outlined">edit_square</span>
+            <span className="material-symbols-outlined">edit_square</span>
           </Link>
         )}
 
@@ -1202,7 +1202,7 @@ const PropertyDetails = () => {
           {!user && (
             <div className="top_search_bar">
               <Link to="/properties" className="back_btn">
-                <span class="material-symbols-outlined">arrow_back</span>
+                <span className="material-symbols-outlined">arrow_back</span>
                 <span>Back</span>
               </Link>
             </div>
@@ -1219,7 +1219,7 @@ const PropertyDetails = () => {
                     //       <div className="col-6 col-md-9">
                     //         <div className="left">
                     //           <div className="qd_single">
-                    //             <span class="material-symbols-outlined">
+                    //             <span className="material-symbols-outlined">
                     //               home
                     //             </span>
                     //             <h6>
@@ -1378,7 +1378,7 @@ const PropertyDetails = () => {
                                               propertyDocument.isReviewUpdatedAt && (
                                                 <div>
                                                   <div className="info_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                       info
                                                     </span>
                                                     <div className="info_icon_inner">
@@ -1462,7 +1462,7 @@ const PropertyDetails = () => {
                                               propertyDocument.isActiveUpdatedAt && (
                                                 <div>
                                                   <div className="info_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                       info
                                                     </span>
                                                     <div className="info_icon_inner">
@@ -1610,7 +1610,7 @@ const PropertyDetails = () => {
                                               propertyDocument.isInactiveUpdatedAt && (
                                                 <div>
                                                   <div className="info_icon">
-                                                    <span class="material-symbols-outlined">
+                                                    <span className="material-symbols-outlined">
                                                       info
                                                     </span>
                                                     <div className="info_icon_inner">
@@ -2116,7 +2116,7 @@ const PropertyDetails = () => {
                           <Link to={`/propertydocumentdetails/${propertyid}`}>
                             <div className="eicp_single">
                               <div className="icon">
-                                <span class="material-symbols-outlined">
+                                <span className="material-symbols-outlined">
                                   description
                                 </span>
                                 <div className="text">
@@ -2136,7 +2136,7 @@ const PropertyDetails = () => {
                           <Link to={`/enquiry/${propertyid}`}>
                             <div className="eicp_single">
                               <div className="icon">
-                                <span class="material-symbols-outlined">
+                                <span className="material-symbols-outlined">
                                   support_agent
                                 </span>
                                 <div className="text">
@@ -2151,7 +2151,7 @@ const PropertyDetails = () => {
                           <Link to={`/property-keys/${propertyid}`}>
                             <div className="eicp_single">
                               <div className="icon">
-                                <span class="material-symbols-outlined">
+                                <span className="material-symbols-outlined">
                                   key
                                 </span>
                                 <div className="text">
@@ -2169,7 +2169,7 @@ const PropertyDetails = () => {
                           <Link to={`/property-utility-bills/${propertyid}`}>
                             <div className="eicp_single">
                               <div className="icon">
-                                <span class="material-symbols-outlined">
+                                <span className="material-symbols-outlined">
                                   receipt_long
                                 </span>
                                 <div className="text">
@@ -2186,7 +2186,7 @@ const PropertyDetails = () => {
                           <Link to={`/property-ads/${propertyid}`}>
                             <div className="eicp_single">
                               <div className="icon">
-                                <span class="material-symbols-outlined">
+                                <span className="material-symbols-outlined">
                                   featured_video
                                 </span>
                                 <div className="text">
@@ -2201,7 +2201,7 @@ const PropertyDetails = () => {
                           {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
                           <div className="eicp_single coming_soon">
                             <div className="icon">
-                              <span class="material-symbols-outlined">
+                              <span className="material-symbols-outlined">
                                 pageview
                               </span>
                               <div className="text">
@@ -2217,7 +2217,7 @@ const PropertyDetails = () => {
                           <Link to={`/transactions/${propertyid}`}>
                           <div className="eicp_single coming_soon">
                             <div className="icon">
-                              <span class="material-symbols-outlined">
+                              <span className="material-symbols-outlined">
                                 payments
                               </span>
                               <div className="text">
@@ -2509,7 +2509,7 @@ const PropertyDetails = () => {
                                     className="plus_icon_inner"
                                     onClick={handleShowPropertyLayoutComponent}
                                   >
-                                    <span class="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">
                                       add
                                     </span>
                                   </Link>
@@ -2689,7 +2689,7 @@ const PropertyDetails = () => {
                                     centered
                                   >
                                     <span
-                                      class="material-symbols-outlined modal_close"
+                                      className="material-symbols-outlined modal_close"
                                       onClick={handleRoomModalClose}
                                     >
                                       close
@@ -2933,7 +2933,7 @@ const PropertyDetails = () => {
                                     className="plus_icon_inner"
                                     onClick={handleAddTenant}
                                   >
-                                    <span class="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">
                                       add
                                     </span>
                                   </Link>
@@ -3085,7 +3085,7 @@ const PropertyDetails = () => {
                                         )
                                       }
                                     >
-                                      <span class="material-symbols-outlined">
+                                      <span className="material-symbols-outlined">
                                         add
                                       </span>
                                     </Link>
@@ -3291,7 +3291,7 @@ const PropertyDetails = () => {
                           centered
                         >
                           <span
-                            class="material-symbols-outlined modal_close"
+                            className="material-symbols-outlined modal_close"
                             onClick={(e) =>
                               handleClosePropUserTags(e, "cancel", "propowner")
                             }
@@ -3488,7 +3488,7 @@ const PropertyDetails = () => {
                                         )
                                       }
                                     >
-                                      <span class="material-symbols-outlined">
+                                      <span className="material-symbols-outlined">
                                         add
                                       </span>
                                     </Link>
@@ -3558,7 +3558,7 @@ const PropertyDetails = () => {
                                                   user.role ===
                                                   "superAdmin") && (
                                                   <span
-                                                    class="material-symbols-outlined click_icon text_near_icon"
+                                                    className="material-symbols-outlined click_icon text_near_icon"
                                                     style={{
                                                       fontSize: "10px",
                                                     }}
@@ -3696,7 +3696,7 @@ const PropertyDetails = () => {
                           centered
                         >
                           <span
-                            class="material-symbols-outlined modal_close"
+                            className="material-symbols-outlined modal_close"
                             onClick={(e) =>
                               handleClosePropUserTags(
                                 e,
@@ -4820,7 +4820,7 @@ const PropertyDetails = () => {
                                   user.role === "admin" ||
                                   user.role === "superAdmin") && (
                                   <span
-                                    class="material-symbols-outlined click_icon text_near_icon"
+                                    className="material-symbols-outlined click_icon text_near_icon"
                                     onClick={() =>
                                       handleEditPropDesc("propertyDescription")
                                     }
@@ -4891,7 +4891,7 @@ const PropertyDetails = () => {
                                     (user.role === "admin" ||
                                       user.role === "superAdmin") && (
                                       <span
-                                        class="material-symbols-outlined click_icon text_near_icon"
+                                        className="material-symbols-outlined click_icon text_near_icon"
                                         onClick={() =>
                                           handleEditOwnerInstruction(
                                             "ownerInstructions"
