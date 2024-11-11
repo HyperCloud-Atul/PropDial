@@ -8,6 +8,8 @@ import { useDocument } from "../../../../hooks/useDocument";
 import Select from "react-select";
 import PhoneInput from "react-phone-input-2";
 import { timestamp } from "../../../../firebase/config";
+import ScrollToTop from "../../../../components/ScrollToTop";
+import InactiveUserCard from "../../../../components/InactiveUserCard";
 
 const UpdateAgent = () => {
   const { id } = useParams();
@@ -456,15 +458,33 @@ const UpdateAgent = () => {
     }
   };
 
-
-
   const backViewAgents = () => {
     navigate("/agents");
   };
   return (
-    <>
-      <br></br><br></br><br></br>
-      <form>
+    <div>
+    <ScrollToTop />
+    {user && user.status === "active" ? (
+      <div className="top_header_pg pg_bg pg_agent">
+        <div className="page_spacing pg_min_height">
+        <div className="pg_header d-flex justify-content-between">
+                  <div
+                    className="left d-flex align-items-center pointer"
+                    style={{
+                      gap: "5px",
+                    }}
+                  >
+                    <span
+                      className="material-symbols-outlined pointer"
+                      onClick={backViewAgents}
+                    >
+                      arrow_back
+                    </span>
+                    <h2 className="m22">Update Agent</h2>
+                  </div>
+                </div>
+                <hr />
+        <form>
         <div className="vg12"></div>
 
         {/* Search Popup - Start */}
@@ -856,10 +876,9 @@ const UpdateAgent = () => {
           <div className="col-md-6 col-12">
             <div className="row">
               <div className="col-4">
-                <div
-                  className="theme_btn btn_border no_icon text-center"
-                // onClick={handleShowAIForm}
-                >
+                <div className="theme_btn btn_border no_icon text-center w-100"
+                onClick={backViewAgents}
+                >                
                   Cancel
                 </div>
               </div>
@@ -883,7 +902,12 @@ const UpdateAgent = () => {
           </div>
         </div>
       </form>
-    </>
+        </div>
+      </div>
+    ) : (
+      <InactiveUserCard />
+    )}
+  </div>  
   );
 };
 

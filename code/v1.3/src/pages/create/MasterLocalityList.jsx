@@ -258,7 +258,7 @@ export default function MasterLocalityList() {
           };
           await addDocument(dataSet);
           setFormError("Successfully added");
-          sethandleAddSectionFlag(!handleAddSectionFlag);
+          // sethandleAddSectionFlag(!handleAddSectionFlag);
         } else {
           setFormError("Already added");
           sethandleAddSectionFlag(!handleAddSectionFlag);
@@ -280,9 +280,9 @@ export default function MasterLocalityList() {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add Locality");
-    setCountry(null)
-    setState(null)
-    setCity(null)
+    // setCountry(null)
+    // setState(null)
+    // setCity(null)
     setLocality("");
     setCurrentDocid(null);
   };

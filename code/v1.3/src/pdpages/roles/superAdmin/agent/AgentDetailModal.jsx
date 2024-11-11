@@ -114,39 +114,46 @@ const AgentDetailModal = ({ show, handleClose, selectedAgent, user }) => {
       <hr />
       <div className="details">
         <h6>Business Information</h6>
-        <ul>
-          {selectedAgent.agentCompnayName && (
-            <li>
-              <div className="left">Company Name</div>
-              <div className="middle">:-</div>
-              <div className="right text-capitalize">
-                {selectedAgent.agentCompnayName}
-              </div>
-            </li>
-          )}
-          {selectedAgent.agentPancard && (
-            <li>
-              <div className="left">PAN Card</div>
-              <div className="middle">:-</div>
-              <div className="right">{selectedAgent.agentPancard}</div>
-            </li>
-          )}
-
-          {selectedAgent.agentGstNumber && (
-            <li>
-              <div className="left">GST Number</div>
-              <div className="middle">:-</div>
-              <div
-                className="right"
-                style={{
-                  wordBreak: "break-all",
-                }}
-              >
-                {selectedAgent.agentGstNumber}
-              </div>
-            </li>
-          )}
-        </ul>
+        {(selectedAgent.agentCompnayName || selectedAgent.agentPancard || selectedAgent.agentGstNumber) ? (
+             <ul>
+             {selectedAgent.agentCompnayName && (
+               <li>
+                 <div className="left">Company Name</div>
+                 <div className="middle">:-</div>
+                 <div className="right text-capitalize">
+                   {selectedAgent.agentCompnayName}
+                 </div>
+               </li>
+             )}
+             {selectedAgent.agentPancard && (
+               <li>
+                 <div className="left">PAN Card</div>
+                 <div className="middle">:-</div>
+                 <div className="right">{selectedAgent.agentPancard}</div>
+               </li>
+             )}
+   
+             {selectedAgent.agentGstNumber && (
+               <li>
+                 <div className="left">GST Number</div>
+                 <div className="middle">:-</div>
+                 <div
+                   className="right"
+                   style={{
+                     wordBreak: "break-all",
+                   }}
+                 >
+                   {selectedAgent.agentGstNumber}
+                 </div>
+               </li>
+             )}
+           </ul>
+        ) : (
+          <ul>
+            <li>Not added yet </li>
+          </ul>
+        )}
+     
       </div>
       {selectedAgent.updatedAt && (
         <>

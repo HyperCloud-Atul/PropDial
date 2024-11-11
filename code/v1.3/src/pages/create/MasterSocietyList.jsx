@@ -290,10 +290,10 @@ export default function MasterSocietyList() {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add Society");
-    setCountry(null);
-    setState(null)
-    setCity(null)
-    setLocality(null)
+    // setCountry(null);
+    // setState(null)
+    // setCity(null)
+    // setLocality(null)
     setSociety("");
     setCurrentDocid(null);
   };
