@@ -668,6 +668,49 @@ export default function PGProfile() {
       <div className="vg22"></div>
       <div className="container">
         <div className="row no-gutters">
+        <div className="col-lg-6 col-md-12 col-sm-12">
+            <div className="property-status-padding-div">
+              <div className="profile-card-div">
+                <div className="address-div">
+                  <div className="icon">
+                    <span className="material-symbols-outlined">featured_seasonal_and_gifts</span>
+                  </div>
+                  <Link to="/how-use" className="address-text">
+                    <h5>Refer and win</h5>
+                    <div className="">
+                      <span className="material-symbols-outlined">
+                        chevron_right
+                      </span>
+                    </div>
+                  </Link>
+                </div>           
+              
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6 col-md-12 col-sm-12">
+            <div className="property-status-padding-div">
+              <div className="profile-card-div">             
+
+              <div className="address-div" style={{ cursor: "pointer" }}>
+                  <div className="icon">
+                    <span className="material-symbols-outlined">sports</span>
+                  </div>
+
+                  <Link to="/properties" className="address-text">
+                    <h5>My Referals</h5>
+                    <div className="">
+                      <span className="material-symbols-outlined">
+                        chevron_right
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+<div className="vg22"></div>
+
           <div className="col-lg-6 col-md-12 col-sm-12">
             <div className="property-status-padding-div">
               <div className="profile-card-div">
