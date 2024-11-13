@@ -625,7 +625,7 @@ const CreateProperty = () => {
           ? propertyDetails.Category
           : "Residential",
         unitNumber: propertyDetails.UnitNumber
-          ? propertyDetails.UnitNumber
+          ? propertyDetails.UnitNumber.trim()
           : "",
         // purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
         purpose: propertyDetails.Flag.toLowerCase() === "pms only" ? "PMS" : (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "pms after rent") ? "Rent" : (propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out") ? "Sale" : "RentSaleBoth",
@@ -664,7 +664,7 @@ const CreateProperty = () => {
         society: society.label,
         // society: camelCase(propertyDetails.Society.toLowerCase().trim()),
         pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
-        propertyName: propertyDetails.UnitNumber + ", " + camelCase(propertyDetails.Society.toLowerCase().trim()),
+        propertyName: propertyDetails.UnitNumber.trim() + ", " + camelCase(propertyDetails.Society.toLowerCase().trim()),
       };
 
       const _newProperty = {
@@ -2923,7 +2923,7 @@ const CreateProperty = () => {
                         onChange={(e) =>
                           setPropertyDetails({
                             ...propertyDetails,
-                            UnitNumber: e.target.value.trim(),
+                            UnitNumber: e.target.value,
                           })
                         }
                         value={propertyDetails && propertyDetails.UnitNumber}

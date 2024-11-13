@@ -798,7 +798,7 @@ const Stage1 = (props) => {
       category: propertyDetails.Category
         ? propertyDetails.Category
         : "Residential",
-      unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber : "",
+      unitNumber: propertyDetails.UnitNumber ? propertyDetails.UnitNumber.trim() : "",
       purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
 
       // demandprice: propertyDetails.DemandPrice
@@ -832,7 +832,7 @@ const Stage1 = (props) => {
       // society: camelCase(propertyDetails.Society.toLowerCase().trim()),
       pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
       propertyName:
-        propertyDetails.UnitNumber +
+        propertyDetails.UnitNumber.trim() +
         ", " +
         camelCase(propertyDetails.Society.toLowerCase().trim()),
     };
@@ -2761,7 +2761,7 @@ const Stage1 = (props) => {
                   onChange={(e) =>
                     setPropertyDetails({
                       ...propertyDetails,
-                      UnitNumber: e.target.value.trim(),
+                      UnitNumber: e.target.value,
                     })
                   }
                   value={propertyDetails && propertyDetails.UnitNumber}
