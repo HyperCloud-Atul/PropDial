@@ -747,7 +747,7 @@ const CreateProperty = () => {
         const statecode = (masterState && masterState.find((e) => e.id === state.value)).stateCode
         // console.log("statecode: ", statecode)
 
-        const formattedId = `PID: ${statecode}-${String(
+        const formattedId = `${statecode}-${String(
           propertiesCount
         ).padStart(5, "0")}`;
         // console.log("formattedId: ", formattedId)

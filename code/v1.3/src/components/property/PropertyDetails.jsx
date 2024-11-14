@@ -1821,7 +1821,7 @@ const PropertyDetails = () => {
                           {propertyDocument.state}
                         </h6>
                         <span className="pid_badge">
-                          {propertyDocument.pid}
+                          PID: {" " + propertyDocument.pid}
                         </span>
                       </div>
                       <div className="divider"></div>

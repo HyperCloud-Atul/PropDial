@@ -317,19 +317,19 @@ const PropertyCard = ({ propertyid }) => {
                   <span>₹</span>
                   {/* <span>{propertydoc.demandPriceRent}</span> */}
                   {propertydoc.flag.toLowerCase() === "pms only" ||
-                  propertydoc.flag.toLowerCase() === "pms after rent" ||
-                  propertydoc.flag.toLowerCase() === "available for rent" ||
-                  propertydoc.flag.toLowerCase() === "rented out"
+                    propertydoc.flag.toLowerCase() === "pms after rent" ||
+                    propertydoc.flag.toLowerCase() === "available for rent" ||
+                    propertydoc.flag.toLowerCase() === "rented out"
                     ? propertydoc.demandPriceRent &&
-                      formatNumberWithCommas(propertydoc.demandPriceRent)
+                    formatNumberWithCommas(propertydoc.demandPriceRent)
                     : propertydoc.flag.toLowerCase() === "rent and sale" ||
                       propertydoc.flag.toLowerCase() === "rented but sale"
-                    ? propertydoc.demandPriceRent &&
+                      ? propertydoc.demandPriceRent &&
                       formatNumberWithCommas(propertydoc.demandPriceRent) +
-                        " / ₹" +
-                        propertydoc.demandPriceSale &&
+                      " / ₹" +
+                      propertydoc.demandPriceSale &&
                       formatNumberWithCommas(propertydoc.demandPriceSale)
-                    : propertydoc.demandPriceSale &&
+                      : propertydoc.demandPriceSale &&
                       formatNumberWithCommas(propertydoc.demandPriceSale)}
 
                   {propertydoc.maintenanceCharges !== "" && (
@@ -372,11 +372,11 @@ const PropertyCard = ({ propertyid }) => {
                               ? "var(--success-color)" // Green for Active
                               : propertydoc.isActiveInactiveReview ===
                                 "Inactive"
-                              ? "var(--theme-red)" // Red for Inactive
-                              : "var(--theme-blue)", // Dark Gold for In-Review (or any of the options above)
+                                ? "var(--theme-red)" // Red for Inactive
+                                : "var(--theme-blue)", // Dark Gold for In-Review (or any of the options above)
                         }}
                       ></span>
-                      {propertydoc.pid}
+                      PID: {" " + propertydoc.pid}
                     </span>
                   </div>
                   {/* <div className="right">
@@ -405,15 +405,15 @@ const PropertyCard = ({ propertyid }) => {
                       {propertydoc.superArea
                         ? "Super Area"
                         : propertydoc.carpetArea
-                        ? "Carpet Area"
-                        : "Area"}
+                          ? "Carpet Area"
+                          : "Area"}
                     </h6>
-                    <h5>                      
+                    <h5>
                       {propertydoc.superArea
                         ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
                         : propertydoc.carpetArea
-                        ? `${propertydoc.carpetArea} ${propertydoc.superAreaUnit}`
-                        : "Yet to added"}
+                          ? `${propertydoc.carpetArea} ${propertydoc.superAreaUnit}`
+                          : "Yet to added"}
                     </h5>
                   </div>
                 </div>
@@ -440,73 +440,72 @@ const PropertyCard = ({ propertyid }) => {
             {expanded
               ? ""
               : propertydoc && (
-                  <div className="middle_single">
-                    <div className="ms_child">
-                      <div className="icon_container">
-                        <img src="/assets/img/new_super_area.png" alt="" />
-                      </div>
-                      <div className="left">
-                        <h6>Floor</h6>
-                        <h5>
-                          {propertydoc.floorNo
-                            ? propertydoc.floorNo === "Ground"
-                              ? "Ground"
-                              : propertydoc.floorNo === "Stilt"
+                <div className="middle_single">
+                  <div className="ms_child">
+                    <div className="icon_container">
+                      <img src="/assets/img/new_super_area.png" alt="" />
+                    </div>
+                    <div className="left">
+                      <h6>Floor</h6>
+                      <h5>
+                        {propertydoc.floorNo
+                          ? propertydoc.floorNo === "Ground"
+                            ? "Ground"
+                            : propertydoc.floorNo === "Stilt"
                               ? "Stilt"
                               : propertydoc.floorNo === "Basement"
-                              ? "Basement "
-                              : `${propertydoc.floorNo}${
-                                  propertydoc.numberOfFloors
-                                    ? " of " + propertydoc.numberOfFloors
-                                    : ""
+                                ? "Basement "
+                                : `${propertydoc.floorNo}${propertydoc.numberOfFloors
+                                  ? " of " + propertydoc.numberOfFloors
+                                  : ""
                                 }`
-                            : ""}
-                        </h5>
-                      </div>
-                    </div>
-                    <div className="ms_child">
-                      <div className="icon_container">
-                        <img src="/assets/img/new_bhk.png" alt="" />
-                      </div>
-                      <div className="left">
-                        <h6>BHK</h6>
-                        <h5>{propertydoc.bhk}</h5>
-                      </div>
-                    </div>
-                    <div className="ms_child">
-                      <div className="icon_container">
-                        <img src="/assets/img/new_furniture.png" alt="" />
-                      </div>
-                      <div className="left">
-                        <h6>furnishing</h6>
-                        <h5>{propertydoc.furnishing}</h5>
-                      </div>
+                          : ""}
+                      </h5>
                     </div>
                   </div>
-                )}
+                  <div className="ms_child">
+                    <div className="icon_container">
+                      <img src="/assets/img/new_bhk.png" alt="" />
+                    </div>
+                    <div className="left">
+                      <h6>BHK</h6>
+                      <h5>{propertydoc.bhk}</h5>
+                    </div>
+                  </div>
+                  <div className="ms_child">
+                    <div className="icon_container">
+                      <img src="/assets/img/new_furniture.png" alt="" />
+                    </div>
+                    <div className="left">
+                      <h6>furnishing</h6>
+                      <h5>{propertydoc.furnishing}</h5>
+                    </div>
+                  </div>
+                </div>
+              )}
             {expanded
               ? ""
               : propertydoc && (
-                  <div className="middle_single addtional_rooms">
-                    <div className="ms_child">
-                      <div className="icon_container">
-                        <img src="/assets/img/new_room.png" alt="" />
-                      </div>
-                      <div className="left">
-                        <h6>{propertydoc.displayName}</h6>
-                        <h5>
-                          {propertydoc.additionalRooms.length > 0
-                            ? propertydoc.additionalRooms.map(
-                                (additionalroom) => (
-                                  <span>{additionalroom}</span>
-                                )
-                              )
-                            : "No Additional Rooms"}
-                        </h5>
-                      </div>
+                <div className="middle_single addtional_rooms">
+                  <div className="ms_child">
+                    <div className="icon_container">
+                      <img src="/assets/img/new_room.png" alt="" />
+                    </div>
+                    <div className="left">
+                      <h6>{propertydoc.displayName}</h6>
+                      <h5>
+                        {propertydoc.additionalRooms.length > 0
+                          ? propertydoc.additionalRooms.map(
+                            (additionalroom) => (
+                              <span>{additionalroom}</span>
+                            )
+                          )
+                          : "No Additional Rooms"}
+                      </h5>
                     </div>
                   </div>
-                )}
+                </div>
+              )}
           </div>
           <div className="card_upcoming">
             <div className="parent">

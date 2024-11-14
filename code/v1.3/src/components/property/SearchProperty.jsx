@@ -76,7 +76,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                     />
                   )}
                 </div>
-                <div className="id_badge on_mobile_767">{property.pid}</div>
+                <div className="id_badge on_mobile_767">PID: {" " + property.pid}</div>
                 <div className="pcs_main_detail">
                   <div className="pmd_top relative">
                     <h4 className="property_name">{property.society}</h4>
@@ -93,7 +93,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                   </div>
                   <div className="pmd_body">
                     <div className="property_information">
-                    <div className="pi_single">
+                      <div className="pi_single">
                         <h6>
                           {property.superArea && "Super "}
                           {property.superArea &&
@@ -119,34 +119,33 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                       <div className="pi_single">
                         <h6>Bathroom</h6>
                         <h5>{property.numberOfBathrooms}</h5>
-                      </div>                     
+                      </div>
                       <div className="pi_single">
                         <h6>
-                        {property.floorNo
-                              ? ["Ground", "Stilt", "Basement"].includes(
-                                  property.floorNo
-                                )
-                                ? "Floor"
-                                : "Floor no"
-                              : ""}
+                          {property.floorNo
+                            ? ["Ground", "Stilt", "Basement"].includes(
+                              property.floorNo
+                            )
+                              ? "Floor"
+                              : "Floor no"
+                            : ""}
                         </h6>
                         <h5>
-                        {property.floorNo
-                              ? property.floorNo ===
-                                "Ground"
-                                ? "Ground"
-                                : property.floorNo ===
-                                  "Stilt"
+                          {property.floorNo
+                            ? property.floorNo ===
+                              "Ground"
+                              ? "Ground"
+                              : property.floorNo ===
+                                "Stilt"
                                 ? "Stilt"
                                 : property.floorNo ===
                                   "Basement"
-                                ? "Basement "
-                                : `${property.floorNo}${
-                                    property.numberOfFloors
-                                      ? " of " + property.numberOfFloors
-                                      : ""
+                                  ? "Basement "
+                                  : `${property.floorNo}${property.numberOfFloors
+                                    ? " of " + property.numberOfFloors
+                                    : ""
                                   }`
-                              : ""}
+                            : ""}
                         </h5>
                       </div>
                       <div className="pi_single">
@@ -157,7 +156,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                         <h6>Furnishing</h6>
                         <h5>{property.furnishing}</h5>
                       </div>
-                    
+
                     </div>
                   </div>
                 </div>
@@ -173,7 +172,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
               </div>
             </div>
             <div className="pcs_other_info">
-              <div className="id_badge on_desktop_hide_767">{property.pid}</div>
+              <div className="id_badge on_desktop_hide_767">PID: + " " + {property.pid}</div>
               <div className="poi_inner">
                 <div>
                   <h6 className="value_per_sqf">
