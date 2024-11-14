@@ -180,9 +180,9 @@ const UpdateEnquiry = () => {
     }
     if (!updateForOwner) {
       errors.updateForOwner = "Update for owner is a required field";
-    } else if (updateForOwner.length < 50) {
+    } else if (updateForOwner.length < 20) {
       errors.updateForOwner =
-        "Update for owner must be at least 50 characters long";
+        "Update for owner must be at least 20 characters long";
     }
 
     setErrors(errors);
@@ -986,7 +986,8 @@ const UpdateEnquiry = () => {
                       <DatePicker
                         selected={visitDate}
                         onChange={handleChangeVisitDate}
-                        minDate={new Date()} // Allow only today and future dates
+                        minDate={new Date(new Date().setDate(new Date().getDate() - 2))} // Allow only past 2 days
+                        maxDate={new Date()} // Limit to today
                         dateFormat="dd/MM/yyyy"
                         placeholderText="Select a date"
                       />

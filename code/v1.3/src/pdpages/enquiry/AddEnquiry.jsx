@@ -174,6 +174,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
         status: "open",
         updatedAt: new Date(),
         updatedBy: user.uid,
+        updateForOwner: "New inquiry received, our executive will follow up and update you"
       };
 
       let UrlId;
