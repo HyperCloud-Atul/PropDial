@@ -142,7 +142,7 @@ const AgentSingle = ({ agentDoc }) => {
     <div className="agent_cards propdial_users all_tenants ">
       {agentDoc &&
         agentDoc.map((doc) => (
-          <div className="pu_single">
+          <div key={doc.id} className="pu_single">
             <div className="tc_single relative item">
               <div className="left">
                 <div className="tcs_img_container">
