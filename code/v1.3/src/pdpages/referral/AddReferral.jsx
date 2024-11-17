@@ -9,8 +9,12 @@ const AddReferral = () => {
   if (!user) navigate("/login");
 
   // add document
-  const { addDocument: addReferralDoc, errors } =
-    useFirestore("referrals-propdial");
+  const {
+    addDocument: addReferralDoc,
+    updateDocument,
+    deleteDocument,
+    errors,
+  } = useFirestore("referrals-propdial");
 
   // all useState
   const [isUploading, setIsUploading] = useState(false);
@@ -20,30 +24,21 @@ const AddReferral = () => {
   const handleEmailChange = (e) => setEmail(e.target.value);
   // add document code
   const handleAddDoc = async () => {
-    // if (
-    //   !selectedBillType ||
-    //   !authorityName ||
-    //   !billId ||
-    //   !selectedPaymentType ||
-    //   !amountDue ||
-    //   !dueDate
-    // ) {
-    //   alert("All fields are required!");
-    //   return;
-    // }
-
     try {
       setIsUploading(true);
       const docRef = await addReferralDoc({
         name,
         email,
-
+        phone: "",
         referTo: "",
         referalCode: "",
         referedBy: user.uid,
         isAccept: false,
       });
-
+      // console.log("Document Reference:", docRef);
+      if (docRef.id) {
+        await updateDocument(docRef.id, { referalCode: docRef.id });
+      }
       setName("");
       setEmail("");
       setIsUploading(false);
@@ -85,7 +80,7 @@ const AddReferral = () => {
                           }
                         }}
                       />
-                       <div className="field_icon icon_left">
+                      <div className="field_icon icon_left">
                         <span class="material-symbols-outlined">person</span>
                       </div>
                     </div>
