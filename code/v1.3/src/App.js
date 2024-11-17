@@ -107,7 +107,9 @@ import ScrollToTop from "./components/ScrollToTop";
 import FCMNotification from "./components/FCMNotification";
 import PGExportExcel from "./pdpages/util/PGImportExcel"
 import PGReferral from "./pdpages/referral/PGReferral";
-import { Login } from "@mui/icons-material";
+// import { Login } from "@mui/icons-material";
+import ReferralLogin from "./pdpages/phonelogin/ReferralLogin";
+
 
 // New component import end
 
@@ -317,6 +319,8 @@ function App() {
                 <Routes>
                   <Route path="/importexcel" element={<PGExportExcel />}></Route>
                   <Route path="/login" element={<PhoneLogin />}></Route>
+                  <Route path="/referrallogin/:referralCode/:referredBy" element={<ReferralLogin />}></Route>
+                  
                   <Route path="/" element={<Home></Home>}></Route>
                   <Route
                     path="/more-menu"
