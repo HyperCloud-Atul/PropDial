@@ -68,11 +68,14 @@ const TenantDetails = () => {
   };
 
   const deleteTenant = async () => {
+    setIsDeleting(true);
     try {
       await deleteDocument(tenantId);
+      setIsDeleting(false);
       navigate(`/propertydetails/${editedFields.propertyId}`);
     } catch (error) {
       console.error("Error deleting tenant:", error);
+      setIsDeleting(false);
     }
   };
 
@@ -105,17 +108,19 @@ const TenantDetails = () => {
   };
 
   const deleteTenantPhoto = async () => {
+    setIsDeleting(true);
     if (imageURL) {
       const storageRef = projectStorage.refFromURL(imageURL);
       try {
         await storageRef.delete();
         await updateDocument(tenantId, { tenantImgUrl: "" });
-        setImageURL(null);
+        setImageURL(null);        
       } catch (error) {
-        console.error("Error deleting image:", error);
+        console.error("Error deleting image:", error);    
       }
     }
     handleCloseModal();
+    setIsDeleting(false);
   };
 
   const handleCancelClick = (fieldName) => {
@@ -342,6 +347,7 @@ const TenantDetails = () => {
   // modal controls start
   const [showModal, setShowModal] = useState(false);
   const [actionType, setActionType] = useState(""); // Store the type of action
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleShowModal = (action) => {
     setActionType(action); // Set the action type (e.g., "deleteTenant")
@@ -1353,6 +1359,7 @@ const TenantDetails = () => {
               show={showModal}
               handleClose={handleCloseModal}
               handleDelete={handleDelete} // This will now handle different actions
+              isDeleting={isDeleting}
             />
 
             {/* <div>

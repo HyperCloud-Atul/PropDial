@@ -140,7 +140,14 @@
   margin-bottom: -6px;
   padding: 3px 20px;
 }
-
+.form_field{
+  .calendar_click{
+    input{
+      z-index: 1;
+      background: transparent;
+    }
+  }
+}
 .form_field.label_top {
   background: #fff;
   border: 1px solid #d7d7d7;

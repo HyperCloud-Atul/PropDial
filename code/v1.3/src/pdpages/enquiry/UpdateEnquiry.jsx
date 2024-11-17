@@ -50,7 +50,6 @@ const UpdateEnquiry = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [dbUserState, setdbUserState] = useState(dbUsers);
 
-
   const { documents: allProperties, error: allPropertiesError } = useCollection(
     "properties-propdial"
   );
@@ -88,13 +87,11 @@ const UpdateEnquiry = () => {
           value: data.id,
         }))
       );
-
     });
 
     // console.log("results: ", results)
 
     // let results = [];
-
   };
 
   useEffect(() => {
@@ -108,23 +105,22 @@ const UpdateEnquiry = () => {
       setEmployeeName(enquiryDocument.employeeName || "");
       setPropertyOwner(enquiryDocument.propertyOwner || "");
       // setPropertyName(enquiryDocument.propertyName || "");
-      setPropertyName({ label: enquiryDocument.propertyName, value: enquiryDocument.propId });
+      setPropertyName({
+        label: enquiryDocument.propertyName,
+        value: enquiryDocument.propId,
+      });
       setPhone(enquiryDocument.phone || "");
       setEmail(enquiryDocument.email || "");
       setDate(new Date(enquiryDocument.date) || new Date());
       setEnquiryStatus(enquiryDocument.enquiryStatus || "open");
       setRemark(enquiryDocument.remark || "");
 
-
       //Load Properties of assigned Owners
-      proeprtyListforUserId(enquiryDocument.propertyOwnerId)
+      proeprtyListforUserId(enquiryDocument.propertyOwnerId);
     }
-
-
   }, [enquiryDocument, dbUsers]);
 
   // console.log("dbUserState", dbUserState);
-
 
   const [errors, setErrors] = useState({});
 
@@ -164,8 +160,8 @@ const UpdateEnquiry = () => {
   };
 
   const handlePropertyName = async (option) => {
-    setPropertyName(option)
-  }
+    setPropertyName(option);
+  };
 
   const validateFields = () => {
     let errors = {};
@@ -196,7 +192,6 @@ const UpdateEnquiry = () => {
     }
     try {
       setIsUploading(true);
-
       const newStatusUpdate = {
         status: enquiryStatus,
         // timestamp: new Date().toISOString(),
@@ -247,8 +242,8 @@ const UpdateEnquiry = () => {
     if (enquiryDocument) {
       const lastStatus = enquiryDocument?.statusUpdates?.length
         ? enquiryDocument.statusUpdates[
-          enquiryDocument.statusUpdates.length - 1
-        ].status
+            enquiryDocument.statusUpdates.length - 1
+          ].status
         : "open";
       setEnquiryStatus(lastStatus);
     }
@@ -287,7 +282,7 @@ const UpdateEnquiry = () => {
         disableFilters: true,
       },
       {
-        Header: "Update for owner",
+        Header: "Remark",
         accessor: "updateForOwner",
         disableFilters: true,
       },
@@ -327,15 +322,14 @@ const UpdateEnquiry = () => {
         accessor: "updatedBy",
         Cell: ({ value }) => (
           <span className="text-capitalize">
-            {dbUserState.find((user) => user.id === value)?.fullName || "Unknown"}
+            {dbUserState.find((user) => user.id === value)?.fullName ||
+              "Unknown"}
           </span>
         ),
         disableFilters: true,
       },
     ];
   }, [dbUserState]);
-
-
 
   if (!enquiryDocument) {
     return <div>Loading...</div>;
@@ -345,11 +339,15 @@ const UpdateEnquiry = () => {
   // field only in readonly mode
   const isReadOnly = user && user.role !== "superAdmin";
 
-
+  // goback code
+  const handleGoBack = () => {
+    navigate(-1); // Navigate back one step
+  };
+  // goback code
 
   return (
     <div className="top_header_pg pg_bg pg_enquiry pg_enquiry_update">
-      <div className="page_spacing">
+      <div className="page_spacing pg_min_height">
         <div className="pg_header d-flex justify-content-between">
           <div
             className="left d-flex align-items-center pointer"
@@ -359,385 +357,408 @@ const UpdateEnquiry = () => {
           >
             <span
               className="material-symbols-outlined pointer"
-              onClick={backViewEnquiry}
+              onClick={handleGoBack}
             >
               arrow_back
             </span>
-            <h2 className="m22 mb-1">Update Enquiry
+            <h2 className="m22 mb-1">
+              {user && user.role === "owner"
+                ? "Enquiry Status"
+                : "Update Enquiry"}
             </h2>
           </div>
-          <div className="right">
-            <div
-              className="d-flex align-items-center"
-              style={{
-                gap: "22px",
-              }}
-            >
-              <Link to="/enquiry/all" className="theme_btn btn_border no_icon text-center">
-                Cancel
-              </Link>
-              <button
-                className="theme_btn btn_fill no_icon text-center"
-                onClick={submitEnquiry}
-                disabled={isUploading}
+          {user && (user.role === "admin" || user.role === "superAdmin") && (
+            <div className="right">
+              <div
+                className="d-flex align-items-center"
+                style={{
+                  gap: "22px",
+                }}
               >
-                {isUploading ? "Updating..." : "Update Enquiry"}
-              </button>
+                <Link
+                  to="/enquiry/all"
+                  className="theme_btn btn_border no_icon text-center"
+                >
+                  Cancel
+                </Link>
+                <button
+                  className="theme_btn btn_fill no_icon text-center"
+                  onClick={submitEnquiry}
+                  disabled={isUploading}
+                >
+                  {isUploading ? "Updating..." : "Update Enquiry"}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-        <hr />
-        <div className="add_enquiry">
-          <div className="vg22"></div>
-          <div className="row row_gap">
-            <div className="col-md-4">
-              <div className="form_field label_top">
-                <label htmlFor="">Click To Select Date</label>
-                <div className="form_field_inner with_icon">
-                  <DatePicker
-                    selected={date}
-                    onChange={handleChangeDate}
-                    maxDate={new Date()}
-                    minDate={
-                      new Date(new Date().setDate(new Date().getDate() - 1))
-                    }
-                    dateFormat="dd/MM/yyyy"
-                    readOnly={isReadOnly}
-                    className={isReadOnly ? "no-drop-cursor" : ""}
-                  />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">
-                      calendar_month
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="form_field st-2 label_top">
-                <label htmlFor="">Enquiry Type</label>
-                <div className="field_box theme_radio_new">
-                  <div className="theme_radio_container">
-                    <div className="radio_single">
-                      <input
-                        type="radio"
-                        name="enquiryType"
-                        id="rent"
-                        onClick={handleChangeEnquiryType}
-                        value="rent"
-                        checked={enquiryType === "rent"}
-                        disabled={isReadOnly}
+        {user && (user.role === "admin" || user.role === "superAdmin") && (
+          <>
+            <hr />
+            <div className="add_enquiry">
+              <div className="vg22"></div>
+              <div className="row row_gap">
+                <div className="col-md-4">
+                  <div className="form_field label_top">
+                    <label htmlFor="">Click To Select Date</label>
+                    <div className="form_field_inner with_icon">
+                      <DatePicker
+                        selected={date}
+                        onChange={handleChangeDate}
+                        maxDate={new Date()}
+                        minDate={
+                          new Date(new Date().setDate(new Date().getDate() - 1))
+                        }
+                        dateFormat="dd/MM/yyyy"
+                        readOnly={isReadOnly}
+                        className={isReadOnly ? "no-drop-cursor" : ""}
                       />
-                      <label
-                        htmlFor="rent"
-                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                          }`}
-                      >
-                        rent
-                      </label>
-                    </div>
-                    <div className="radio_single">
-                      <input
-                        type="radio"
-                        name="enquiryType"
-                        id="sale"
-                        onClick={handleChangeEnquiryType}
-                        value="sale"
-                        checked={enquiryType === "sale"}
-                        disabled={isReadOnly}
-                      />
-                      <label
-                        htmlFor="sale"
-                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                          }`}
-                      >
-                        sale
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="form_field st-2 label_top">
-                <label htmlFor="">Enquiry From</label>
-                <div className="field_box theme_radio_new">
-                  <div className="theme_radio_container">
-                    {enquiryType.toLowerCase() === "rent" && (
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="enquiryFrom"
-                          id="tenant"
-                          onClick={handleChangeEnquiryFrom}
-                          value="prospective tenant"
-                          checked={enquiryFrom === "prospective tenant"}
-                          disabled={isReadOnly}
-                        />
-                        <label
-                          htmlFor="tenant"
-                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                            }`}
-                        >
-                          prospective tenant
-                        </label>
-                      </div>
-                    )}
-                    {enquiryType.toLowerCase() === "sale" && (
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="enquiryFrom"
-                          id="buyer"
-                          onClick={handleChangeEnquiryFrom}
-                          value="prospective buyer"
-                          checked={enquiryFrom === "prospective buyer"}
-                          disabled={isReadOnly}
-                        />
-                        <label
-                          htmlFor="buyer"
-                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                            }`}
-                        >
-                          prospective buyer
-                        </label>
-                      </div>
-                    )}
-                    <div className="radio_single">
-                      <input
-                        type="radio"
-                        name="enquiryFrom"
-                        id="agent"
-                        onClick={handleChangeEnquiryFrom}
-                        value="agent"
-                        checked={enquiryFrom === "agent"}
-                        disabled={isReadOnly}
-                      />
-                      <label
-                        htmlFor="agent"
-                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                          }`}
-                      >
-                        Agent
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="form_field st-2 label_top">
-                <label htmlFor="">Referred By</label>
-                <div className="field_box theme_radio_new">
-                  <div className="theme_radio_container">
-                    <div className="radio_single">
-                      <input
-                        type="radio"
-                        name="referredBy"
-                        id="owner"
-                        onClick={handleChangeReferredBy}
-                        value="owner"
-                        checked={referredBy === "owner"}
-                        disabled={isReadOnly}
-                      />
-                      <label
-                        htmlFor="owner"
-                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                          }`}
-                      >
-                        owner
-                      </label>
-                    </div>
-                    <div className="radio_single">
-                      <input
-                        type="radio"
-                        name="referredBy"
-                        id="propdial"
-                        onClick={handleChangeReferredBy}
-                        value="propdial"
-                        checked={referredBy === "propdial"}
-                        disabled={isReadOnly}
-                      />
-                      <label
-                        htmlFor="propdial"
-                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                          }`}
-                      >
-                        propdial
-                      </label>
-                    </div>
-                    <div className="radio_single">
-                      <input
-                        type="radio"
-                        name="referredBy"
-                        id="employee"
-                        onClick={handleChangeReferredBy}
-                        value="employee"
-                        checked={referredBy === "employee"}
-                        disabled={isReadOnly}
-                      />
-                      <label
-                        htmlFor="employee"
-                        className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                          }`}
-                      >
-                        employee
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {referredBy === "propdial" && (
-              <div className="col-md-8">
-                <div className="form_field st-2 label_top">
-                  <label htmlFor="">Source</label>
-                  <div className="field_box theme_radio_new">
-                    <div className="theme_radio_container">
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="source"
-                          id="99acres"
-                          onClick={handleChangeSource}
-                          value="99acres"
-                          checked={source === "99acres"}
-                          disabled={isReadOnly}
-                        />
-                        <label
-                          htmlFor="99acres"
-                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                            }`}
-                        >
-                          99acres
-                        </label>
-                      </div>
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="source"
-                          id="magicBricks"
-                          onClick={handleChangeSource}
-                          value="magicbricks"
-                          checked={source === "magicbricks"}
-                          disabled={isReadOnly}
-                        />
-                        <label
-                          htmlFor="magicBricks"
-                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                            }`}
-                        >
-                          magicbricks
-                        </label>
-                      </div>
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="source"
-                          id="housing"
-                          onClick={handleChangeSource}
-                          value="housing"
-                          checked={source === "housing"}
-                          disabled={isReadOnly}
-                        />
-                        <label
-                          htmlFor="housing"
-                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                            }`}
-                        >
-                          housing
-                        </label>
-                      </div>
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="source"
-                          id="other"
-                          onClick={handleChangeSource}
-                          value="other"
-                          checked={source === "other"}
-                          disabled={isReadOnly}
-                        />
-                        <label
-                          htmlFor="other"
-                          className={`radio_label ${isReadOnly ? "no-drop-cursor" : ""
-                            }`}
-                        >
-                          other
-                        </label>
+                      <div className="field_icon">
+                        <span className="material-symbols-outlined">
+                          calendar_month
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-            {referredBy === "employee" && (
-              <div className="col-md-8">
-                <div className="form_field label_top">
-                  <label htmlFor="">Employee Name</label>
-                  <div className="form_field_inner with_icon">
-                    <input
-                      type="text"
-                      placeholder="Select employee"
-                      value={employeeName}
-                      onChange={handleChangeEmployeeName}
-                      readOnly={isReadOnly}
-                      className={isReadOnly ? "no-drop-cursor" : ""}
-                    />
-                    <div className="field_icon">
-                      <span className="material-symbols-outlined">search</span>
+                <div className="col-md-4">
+                  <div className="form_field st-2 label_top">
+                    <label htmlFor="">Enquiry Type</label>
+                    <div className="field_box theme_radio_new">
+                      <div className="theme_radio_container">
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="enquiryType"
+                            id="rent"
+                            onClick={handleChangeEnquiryType}
+                            value="rent"
+                            checked={enquiryType === "rent"}
+                            disabled={isReadOnly}
+                          />
+                          <label
+                            htmlFor="rent"
+                            className={`radio_label ${
+                              isReadOnly ? "no-drop-cursor" : ""
+                            }`}
+                          >
+                            rent
+                          </label>
+                        </div>
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="enquiryType"
+                            id="sale"
+                            onClick={handleChangeEnquiryType}
+                            value="sale"
+                            checked={enquiryType === "sale"}
+                            disabled={isReadOnly}
+                          />
+                          <label
+                            htmlFor="sale"
+                            className={`radio_label ${
+                              isReadOnly ? "no-drop-cursor" : ""
+                            }`}
+                          >
+                            sale
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-            <div className="row row_gap">
-              <div className="col-md-6">
-                <div className="form_field st-2 label_top">
-                  <label htmlFor="">Property Owner</label>
-                  <div className="form_field_inner with_icon">
-                    <input
-                      type="text"
-                      value={propertyOwner}
-                      onChange={handleChangePropertyOwner}
-                      readOnly
-                      className={isReadOnly ? "no-drop-cursor" : ""}
-                    />
-                    <div className="field_icon">
-                      <span className="material-symbols-outlined">search</span>
-                    </div>{" "}
+                <div className="col-md-4">
+                  <div className="form_field st-2 label_top">
+                    <label htmlFor="">Enquiry From</label>
+                    <div className="field_box theme_radio_new">
+                      <div className="theme_radio_container">
+                        {enquiryType.toLowerCase() === "rent" && (
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="enquiryFrom"
+                              id="tenant"
+                              onClick={handleChangeEnquiryFrom}
+                              value="prospective tenant"
+                              checked={enquiryFrom === "prospective tenant"}
+                              disabled={isReadOnly}
+                            />
+                            <label
+                              htmlFor="tenant"
+                              className={`radio_label ${
+                                isReadOnly ? "no-drop-cursor" : ""
+                              }`}
+                            >
+                              prospective tenant
+                            </label>
+                          </div>
+                        )}
+                        {enquiryType.toLowerCase() === "sale" && (
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="enquiryFrom"
+                              id="buyer"
+                              onClick={handleChangeEnquiryFrom}
+                              value="prospective buyer"
+                              checked={enquiryFrom === "prospective buyer"}
+                              disabled={isReadOnly}
+                            />
+                            <label
+                              htmlFor="buyer"
+                              className={`radio_label ${
+                                isReadOnly ? "no-drop-cursor" : ""
+                              }`}
+                            >
+                              prospective buyer
+                            </label>
+                          </div>
+                        )}
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="enquiryFrom"
+                            id="agent"
+                            onClick={handleChangeEnquiryFrom}
+                            value="agent"
+                            checked={enquiryFrom === "agent"}
+                            disabled={isReadOnly}
+                          />
+                          <label
+                            htmlFor="agent"
+                            className={`radio_label ${
+                              isReadOnly ? "no-drop-cursor" : ""
+                            }`}
+                          >
+                            Agent
+                          </label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form_field label_top">
-                  <label htmlFor="propname">Property Name*</label>
-                  <div className="form_field_inner with_icon">
-
-                    <Select
-                      isDisabled
-                      className=""
-                      onChange={handlePropertyName}
-                      options={ownersProeprtyList}
-                      value={propertyName}
-                      styles={{
-                        control: (baseStyles, state) => ({
-                          ...baseStyles,
-                          outline: "none",
-                          background: "#eee",
-                          borderBottom: " 1px solid var(--theme-blue)",
-                        }),
-                      }}
-                    />
-
-
+                <div className="col-md-4">
+                  <div className="form_field st-2 label_top">
+                    <label htmlFor="">Referred By</label>
+                    <div className="field_box theme_radio_new">
+                      <div className="theme_radio_container">
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="referredBy"
+                            id="owner"
+                            onClick={handleChangeReferredBy}
+                            value="owner"
+                            checked={referredBy === "owner"}
+                            disabled={isReadOnly}
+                          />
+                          <label
+                            htmlFor="owner"
+                            className={`radio_label ${
+                              isReadOnly ? "no-drop-cursor" : ""
+                            }`}
+                          >
+                            owner
+                          </label>
+                        </div>
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="referredBy"
+                            id="propdial"
+                            onClick={handleChangeReferredBy}
+                            value="propdial"
+                            checked={referredBy === "propdial"}
+                            disabled={isReadOnly}
+                          />
+                          <label
+                            htmlFor="propdial"
+                            className={`radio_label ${
+                              isReadOnly ? "no-drop-cursor" : ""
+                            }`}
+                          >
+                            propdial
+                          </label>
+                        </div>
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="referredBy"
+                            id="employee"
+                            onClick={handleChangeReferredBy}
+                            value="employee"
+                            checked={referredBy === "employee"}
+                            disabled={isReadOnly}
+                          />
+                          <label
+                            htmlFor="employee"
+                            className={`radio_label ${
+                              isReadOnly ? "no-drop-cursor" : ""
+                            }`}
+                          >
+                            employee
+                          </label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  {errors.propertyName && (
-                    <div className="field_error">{errors.propertyName}</div>
-                  )}
                 </div>
-              </div>
-              {/* <div className="col-md-6">
+                {referredBy === "propdial" && (
+                  <div className="col-md-8">
+                    <div className="form_field st-2 label_top">
+                      <label htmlFor="">Source</label>
+                      <div className="field_box theme_radio_new">
+                        <div className="theme_radio_container">
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="source"
+                              id="99acres"
+                              onClick={handleChangeSource}
+                              value="99acres"
+                              checked={source === "99acres"}
+                              disabled={isReadOnly}
+                            />
+                            <label
+                              htmlFor="99acres"
+                              className={`radio_label ${
+                                isReadOnly ? "no-drop-cursor" : ""
+                              }`}
+                            >
+                              99acres
+                            </label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="source"
+                              id="magicBricks"
+                              onClick={handleChangeSource}
+                              value="magicbricks"
+                              checked={source === "magicbricks"}
+                              disabled={isReadOnly}
+                            />
+                            <label
+                              htmlFor="magicBricks"
+                              className={`radio_label ${
+                                isReadOnly ? "no-drop-cursor" : ""
+                              }`}
+                            >
+                              magicbricks
+                            </label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="source"
+                              id="housing"
+                              onClick={handleChangeSource}
+                              value="housing"
+                              checked={source === "housing"}
+                              disabled={isReadOnly}
+                            />
+                            <label
+                              htmlFor="housing"
+                              className={`radio_label ${
+                                isReadOnly ? "no-drop-cursor" : ""
+                              }`}
+                            >
+                              housing
+                            </label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="source"
+                              id="other"
+                              onClick={handleChangeSource}
+                              value="other"
+                              checked={source === "other"}
+                              disabled={isReadOnly}
+                            />
+                            <label
+                              htmlFor="other"
+                              className={`radio_label ${
+                                isReadOnly ? "no-drop-cursor" : ""
+                              }`}
+                            >
+                              other
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {referredBy === "employee" && (
+                  <div className="col-md-8">
+                    <div className="form_field label_top">
+                      <label htmlFor="">Employee Name</label>
+                      <div className="form_field_inner with_icon">
+                        <input
+                          type="text"
+                          placeholder="Select employee"
+                          value={employeeName}
+                          onChange={handleChangeEmployeeName}
+                          readOnly={isReadOnly}
+                          className={isReadOnly ? "no-drop-cursor" : ""}
+                        />
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">
+                            search
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="row row_gap">
+                  <div className="col-md-6">
+                    <div className="form_field st-2 label_top">
+                      <label htmlFor="">Property Owner</label>
+                      <div className="form_field_inner with_icon">
+                        <input
+                          type="text"
+                          value={propertyOwner}
+                          onChange={handleChangePropertyOwner}
+                          readOnly
+                          className={isReadOnly ? "no-drop-cursor" : ""}
+                        />
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">
+                            search
+                          </span>
+                        </div>{" "}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form_field label_top">
+                      <label htmlFor="propname">Property Name*</label>
+                      <div className="form_field_inner with_icon">
+                        <Select
+                          isDisabled
+                          className=""
+                          onChange={handlePropertyName}
+                          options={ownersProeprtyList}
+                          value={propertyName}
+                          styles={{
+                            control: (baseStyles, state) => ({
+                              ...baseStyles,
+                              outline: "none",
+                              background: "#eee",
+                              borderBottom: " 1px solid var(--theme-blue)",
+                            }),
+                          }}
+                        />
+                      </div>
+                      {errors.propertyName && (
+                        <div className="field_error">{errors.propertyName}</div>
+                      )}
+                    </div>
+                  </div>
+                  {/* <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Property Name</label>
                   <div className="form_field_inner with_icon">
@@ -754,317 +775,326 @@ const UpdateEnquiry = () => {
                   </div>
                 </div>
               </div> */}
-              <div className="col-md-4">
-                <div className="form_field st-2 label_top">
-                  <label htmlFor="">
-                    {enquiryFrom === "agent"
-                      ? "agent"
-                      : enquiryFrom === "prospective tenant"
-                        ? "Prospective Tenant"
-                        : enquiryFrom === "prospective buyer"
+                  <div className="col-md-4">
+                    <div className="form_field st-2 label_top">
+                      <label htmlFor="">
+                        {enquiryFrom === "agent"
+                          ? "agent"
+                          : enquiryFrom === "prospective tenant"
+                          ? "Prospective Tenant"
+                          : enquiryFrom === "prospective buyer"
                           ? "Prospective Buyer"
                           : ""}{" "}
-                    Name
-                  </label>
-                  <div className="form_field_inner with_icon">
-                    <input
-                      type="text"
-                      readOnly={isReadOnly}
-                      className={isReadOnly ? "no-drop-cursor" : ""}
-                      value={name}
-                      onChange={handleChangeName}
-                    />
-                    <div className="field_icon">
-                      <span className="material-symbols-outlined">draw</span>
-                    </div>{" "}
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form_field label_top">
-                  <label htmlFor="">
-                    {enquiryFrom === "agent"
-                      ? "agent"
-                      : enquiryFrom === "prospective tenant"
-                        ? "Prospective Tenant"
-                        : enquiryFrom === "prospective buyer"
-                          ? "Prospective Buyer"
-                          : ""}{" "}
-                    Contact
-                  </label>
-                  <div className="form_field_inner with_icon">
-                    <PhoneInput
-                      country={"in"}
-                      onlyCountries={["in", "us", "ae"]}
-                      value={phone}
-                      onChange={handleChangePhone}
-                      international
-                      keyboardType="phone-pad"
-                      countryCodeEditable={true}
-                      placeholder="Country code + mobile number"
-                      inputProps={{
-                        name: "phone",
-                        required: true,
-                        autoFocus: false,
-                      }}
-                      inputStyle={{
-                        width: "100%",
-                        paddingLeft: "45px",
-                      }}
-                      buttonStyle={{
-                        textAlign: "left",
-                      }}
-                      disableAreaCodes={isReadOnly}
-                      disabled={isReadOnly}
-                      className={isReadOnly ? "no-drop-cursor" : ""}
-                    />
-                    <div className="field_icon">
-                      <span className="material-symbols-outlined">draw</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form_field label_top">
-                  <label htmlFor="">
-                    {enquiryFrom === "agent"
-                      ? "agent"
-                      : enquiryFrom === "prospective tenant"
-                        ? "Prospective Tenant"
-                        : enquiryFrom === "prospective buyer"
-                          ? "Prospective Buyer"
-                          : ""}{" "}
-                    Email
-                  </label>
-                  <div className="form_field_inner with_icon">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={handleChangeEmail}
-                      readOnly={isReadOnly}
-                      className={isReadOnly ? "no-drop-cursor" : ""}
-                    />
-                    <div className="field_icon">
-                      <span className="material-symbols-outlined">draw</span>
-                    </div>{" "}
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form_field label_top">
-                  <label htmlFor="">Remarks (For Office Use Only)</label>
-                  <div className="form_field_inner with_icon">
-                    <input
-                      type="text"
-                      className="input_field"
-                      value={remark}
-                      onChange={handleChangeRemark}
-                    />
-                    <div className="field_icon">
-                      <span className="material-symbols-outlined">draw</span>
-                    </div>{" "}
-                  </div>
-                </div>
-              </div>
-              <hr />
-              <div className="col-md-4">
-                <div className="form_field st-2 label_top">
-                  <label htmlFor="">Enquiry Status</label>
-                  <div className="field_box theme_radio_new">
-                    <div className="theme_radio_container">
-                      {statusOptions.includes("open") && (
-                        <div className="radio_single">
-                          <input
-                            type="radio"
-                            name="enquiryStatus"
-                            id="open"
-                            onClick={handleChangeEnquiryStatus}
-                            value="open"
-                            checked={enquiryStatus === "open"}
-                          />
-                          <label htmlFor="open" className="radio_label">
-                            Open
-                          </label>
-                        </div>
-                      )}
-                      {statusOptions.includes("working") && (
-                        <div className="radio_single">
-                          <input
-                            type="radio"
-                            name="enquiryStatus"
-                            id="working"
-                            onClick={handleChangeEnquiryStatus}
-                            value="working"
-                            checked={enquiryStatus === "working"}
-                          />
-                          <label htmlFor="working" className="radio_label">
-                            Working
-                          </label>
-                        </div>
-                      )}
-                      {statusOptions.includes("successful") && (
-                        <div className="radio_single">
-                          <input
-                            type="radio"
-                            name="enquiryStatus"
-                            id="successful"
-                            onClick={handleChangeEnquiryStatus}
-                            value="successful"
-                            checked={enquiryStatus === "successful"}
-                          />
-                          <label htmlFor="successful" className="radio_label">
-                            Successful
-                          </label>
-                        </div>
-                      )}
-                      {statusOptions.includes("dead") && (
-                        <div className="radio_single">
-                          <input
-                            type="radio"
-                            name="enquiryStatus"
-                            id="dead"
-                            onClick={handleChangeEnquiryStatus}
-                            value="dead"
-                            checked={enquiryStatus === "dead"}
-                          />
-                          <label htmlFor="dead" className="radio_label">
-                            Dead
-                          </label>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {errors.esForWorking && (
-                    <div className="field_error">{errors.esForWorking}</div>
-                  )}
-                  {errors.esForSD && (
-                    <div className="field_error">{errors.esForSD}</div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form_field st-2 label_top">
-                  <label htmlFor="">Update Type</label>
-                  <div className="field_box theme_radio_new">
-                    <div className="theme_radio_container">
-                      <div className="radio_single">
+                        Name
+                      </label>
+                      <div className="form_field_inner with_icon">
                         <input
-                          type="radio"
-                          name="updateType"
-                          id="general"
-                          onClick={handleChangeUpdateType}
-                          value="general"
+                          type="text"
+                          readOnly={isReadOnly}
+                          className={isReadOnly ? "no-drop-cursor" : ""}
+                          value={name}
+                          onChange={handleChangeName}
                         />
-                        <label htmlFor="general" className="radio_label">
-                          general
-                        </label>
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">
+                            draw
+                          </span>
+                        </div>{" "}
                       </div>
-                      <div className="radio_single">
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form_field label_top">
+                      <label htmlFor="">
+                        {enquiryFrom === "agent"
+                          ? "agent"
+                          : enquiryFrom === "prospective tenant"
+                          ? "Prospective Tenant"
+                          : enquiryFrom === "prospective buyer"
+                          ? "Prospective Buyer"
+                          : ""}{" "}
+                        Contact
+                      </label>
+                      <div className="form_field_inner with_icon">
+                        <PhoneInput
+                          country={"in"}
+                          onlyCountries={["in", "us", "ae"]}
+                          value={phone}
+                          onChange={handleChangePhone}
+                          international
+                          keyboardType="phone-pad"
+                          countryCodeEditable={true}
+                          placeholder="Country code + mobile number"
+                          inputProps={{
+                            name: "phone",
+                            required: true,
+                            autoFocus: false,
+                          }}
+                          inputStyle={{
+                            width: "100%",
+                            paddingLeft: "45px",
+                          }}
+                          buttonStyle={{
+                            textAlign: "left",
+                          }}
+                          disableAreaCodes={isReadOnly}
+                          disabled={isReadOnly}
+                          className={isReadOnly ? "no-drop-cursor" : ""}
+                        />
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">
+                            draw
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form_field label_top">
+                      <label htmlFor="">
+                        {enquiryFrom === "agent"
+                          ? "agent"
+                          : enquiryFrom === "prospective tenant"
+                          ? "Prospective Tenant"
+                          : enquiryFrom === "prospective buyer"
+                          ? "Prospective Buyer"
+                          : ""}{" "}
+                        Email
+                      </label>
+                      <div className="form_field_inner with_icon">
                         <input
-                          type="radio"
-                          name="updateType"
-                          id="visit"
-                          onClick={handleChangeUpdateType}
-                          value="visit"
+                          type="email"
+                          value={email}
+                          onChange={handleChangeEmail}
+                          readOnly={isReadOnly}
+                          className={isReadOnly ? "no-drop-cursor" : ""}
                         />
-                        <label htmlFor="visit" className="radio_label">
-                          visit
-                        </label>
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">
+                            draw
+                          </span>
+                        </div>{" "}
                       </div>
                     </div>
                   </div>
-                  {errors.updateType && (
-                    <div className="field_error">{errors.updateType}</div>
+                  <div className="col-md-4">
+                    <div className="form_field label_top">
+                      <label htmlFor="">Remarks (For Office Use Only)</label>
+                      <div className="form_field_inner with_icon">
+                        <input
+                          type="text"
+                          className="input_field"
+                          value={remark}
+                          onChange={handleChangeRemark}
+                        />
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">
+                            draw
+                          </span>
+                        </div>{" "}
+                      </div>
+                    </div>
+                  </div>
+                  <hr />
+                  <div className="col-md-4">
+                    <div className="form_field st-2 label_top">
+                      <label htmlFor="">Enquiry Status</label>
+                      <div className="field_box theme_radio_new">
+                        <div className="theme_radio_container">
+                          {statusOptions.includes("open") && (
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="enquiryStatus"
+                                id="open"
+                                onClick={handleChangeEnquiryStatus}
+                                value="open"
+                                checked={enquiryStatus === "open"}
+                              />
+                              <label htmlFor="open" className="radio_label">
+                                Open
+                              </label>
+                            </div>
+                          )}
+                          {statusOptions.includes("working") && (
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="enquiryStatus"
+                                id="working"
+                                onClick={handleChangeEnquiryStatus}
+                                value="working"
+                                checked={enquiryStatus === "working"}
+                              />
+                              <label htmlFor="working" className="radio_label">
+                                Working
+                              </label>
+                            </div>
+                          )}
+                          {statusOptions.includes("successful") && (
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="enquiryStatus"
+                                id="successful"
+                                onClick={handleChangeEnquiryStatus}
+                                value="successful"
+                                checked={enquiryStatus === "successful"}
+                              />
+                              <label
+                                htmlFor="successful"
+                                className="radio_label"
+                              >
+                                Successful
+                              </label>
+                            </div>
+                          )}
+                          {statusOptions.includes("dead") && (
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="enquiryStatus"
+                                id="dead"
+                                onClick={handleChangeEnquiryStatus}
+                                value="dead"
+                                checked={enquiryStatus === "dead"}
+                              />
+                              <label htmlFor="dead" className="radio_label">
+                                Dead
+                              </label>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      {errors.esForWorking && (
+                        <div className="field_error">{errors.esForWorking}</div>
+                      )}
+                      {errors.esForSD && (
+                        <div className="field_error">{errors.esForSD}</div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form_field st-2 label_top">
+                      <label htmlFor="">Update Type</label>
+                      <div className="field_box theme_radio_new">
+                        <div className="theme_radio_container">
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="updateType"
+                              id="general"
+                              onClick={handleChangeUpdateType}
+                              value="general"
+                            />
+                            <label htmlFor="general" className="radio_label">
+                              general
+                            </label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="updateType"
+                              id="visit"
+                              onClick={handleChangeUpdateType}
+                              value="visit"
+                            />
+                            <label htmlFor="visit" className="radio_label">
+                              visit
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      {errors.updateType && (
+                        <div className="field_error">{errors.updateType}</div>
+                      )}
+                    </div>
+                  </div>
+                  {updateType === "visit" && (
+                    <div className="col-md-4">
+                      <div className="form_field label_top">
+                        <label htmlFor="">Visit Date</label>
+                        <div className="form_field_inner with_icon calendar_click">
+                          <DatePicker
+                            selected={visitDate}
+                            onChange={handleChangeVisitDate}
+                            minDate={
+                              new Date(
+                                new Date().setDate(new Date().getDate() - 2)
+                              )
+                            } // Allow only past 2 days
+                            maxDate={new Date()} // Limit to today
+                            dateFormat="dd/MM/yyyy"
+                            placeholderText="Select a date"
+                          />
+                          <div className="field_icon">
+                            <span className="material-symbols-outlined">
+                              calendar_month
+                            </span>
+                          </div>
+                        </div>
+                        {errors.visitDate && (
+                          <div className="field_error">{errors.visitDate}</div>
+                        )}
+                      </div>
+                    </div>
                   )}
-                </div>
-              </div>
-              {updateType === "visit" && (
-                <div className="col-md-4">
-                  <div className="form_field label_top">
-                    <label htmlFor="">Visit Date</label>
-                    <div className="form_field_inner with_icon">
-                      <DatePicker
-                        selected={visitDate}
-                        onChange={handleChangeVisitDate}
-                        minDate={new Date(new Date().setDate(new Date().getDate() - 2))} // Allow only past 2 days
-                        maxDate={new Date()} // Limit to today
-                        dateFormat="dd/MM/yyyy"
-                        placeholderText="Select a date"
-                      />
-                      <div className="field_icon">
-                        <span className="material-symbols-outlined">
-                          calendar_month
-                        </span>
-                      </div>
-                    </div>
-                    {errors.visitDate && (
-                      <div className="field_error">{errors.visitDate}</div>
-                    )}
-                  </div>
-                </div>
-              )}
 
-              <div className="col-md-12">
-                <div className="form_field label_top">
-                  <label htmlFor="updateForOwner">Add Update for Owner</label>
-                  <div className="form_field_inner with_icon">
-                    <textarea
-                      placeholder="Update for owner"
-                      value={updateForOwner}
-                      onChange={handleChangeUpdateForOwner}
-                      id="updateForOwner"
-                    />
-                    <div className="field_icon">
-                      <span className="material-symbols-outlined">draw</span>
-                    </div>{" "}
+                  <div className="col-md-12">
+                    <div className="form_field label_top">
+                      <label htmlFor="updateForOwner">
+                        Add Update for Owner
+                      </label>
+                      <div className="form_field_inner with_icon">
+                        <textarea
+                          placeholder="Update for owner"
+                          value={updateForOwner}
+                          onChange={handleChangeUpdateForOwner}
+                          id="updateForOwner"
+                        />
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">
+                            draw
+                          </span>
+                        </div>{" "}
+                      </div>
+                      {errors.updateForOwner && (
+                        <div className="field_error">
+                          {errors.updateForOwner}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  {errors.updateForOwner && (
-                    <div className="field_error">{errors.updateForOwner}</div>
-                  )}
+                  <div
+                    className="col-12 d-flex justify-content-end"
+                    style={{
+                      gap: "22px",
+                    }}
+                  >
+                    <Link
+                      to="/enquiry/all"
+                      className="theme_btn btn_border no_icon text-center"
+                    >
+                      Cancel
+                    </Link>
+                    <button
+                      className="theme_btn btn_fill no_icon text-center"
+                      onClick={submitEnquiry}
+                      disabled={isUploading}
+                    >
+                      {isUploading ? "Updating..." : "Update Enquiry"}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div
-                className="col-12 d-flex justify-content-end"
-                style={{
-                  gap: "22px",
-                }}
-              >
-                <Link to="/enquiry/all" className="theme_btn btn_border no_icon text-center">
-                  Cancel
-                </Link>
-                <button
-                  className="theme_btn btn_fill no_icon text-center"
-                  onClick={submitEnquiry}
-                  disabled={isUploading}
-                >
-                  {isUploading ? "Updating..." : "Update Enquiry"}
-                </button>
               </div>
             </div>
-          </div>
-        </div>
-        {/* {enquiryDocument && enquiryDocument.statusUpdates && enquiryDocument.statusUpdates.map((update, index) => (
-                    <div className="step_single" key={index}>
-                        <div className="number">
-                            <span className="material-symbols-outlined">
-                                open_in_new
-                            </span>
-                        </div>
-                        <h6 className='text-capitalize'>
-                            {update.status}
-                        </h6>
-                        {update.updatedAt && (
-                            <h5>
-                                {format(new Date(update.updatedAt.seconds * 1000), 'dd-MMM-yy hh:mm a')}
-                            </h5>
-                        )}
-                    </div>
-                ))} */}
-        <div className="vg22"></div>
+            <div className="vg22"></div>
+          </>
+        )}
         <hr />
         <ReactTable
-          tableColumns={columns}
-          tableData={enquiryDocument.statusUpdates || []}
+          tableColumns={columns}         
+          tableData={(enquiryDocument?.statusUpdates || []).slice().reverse()}
         />
       </div>
     </div>

@@ -174,7 +174,8 @@ const AddEnquiry = ({ enquiryAdded }) => {
         status: "open",
         updatedAt: new Date(),
         updatedBy: user.uid,
-        updateForOwner: "New inquiry received, our executive will follow up and update you"
+        updateForOwner: "New inquiry received, our executive will follow up and update you",
+        updateType: "general"
       };
 
       let UrlId;
@@ -186,7 +187,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
         UrlId = propertyName !== '' ? propertyName.value : ""
 
         _propertyName = propertyName.label
-        propertyPID = _propertyName.slice(_propertyName.indexOf(':') + 1, _propertyName.indexOf(')')).trim()
+        propertyPID = _propertyName.slice(_propertyName.indexOf('(') + 1, _propertyName.indexOf(')')).trim()
       }
       else {
         console.log("propertyDoc: ", propertyDoc)
@@ -493,7 +494,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
           <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="date">Click To Select Date*</label>
-              <div className="form_field_inner with_icon">
+              <div className="form_field_inner with_icon calendar_click">
                 <DatePicker
                   selected={date}
                   onChange={handleChangeDate}
@@ -830,6 +831,12 @@ const AddEnquiry = ({ enquiryAdded }) => {
                     value={name}
                     onChange={handleChangeName}
                     id="name"
+                    onKeyPress={(e) => {
+                      const regex = /^[a-zA-Z\s]*$/; // Only letters and spaces allowed
+                      if (!regex.test(e.key)) {
+                        e.preventDefault(); // Prevent invalid input
+                      }
+                    }}
                   />
                   <div className="field_icon">
                     <span className="material-symbols-outlined">draw</span>

@@ -514,6 +514,12 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
                     }));
                   }
                 }}
+                onKeyPress={(e) => {
+                  const regex = /^[a-zA-Z\s]*$/; // Only letters and spaces allowed
+                  if (!regex.test(e.key)) {
+                    e.preventDefault(); // Prevent invalid input
+                  }
+                }}
                 placeholder="Enter agent name"
               />
               {errors.agentName && (
@@ -528,16 +534,8 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
             <div className="form_field_inner">
               <PhoneInput
                 country={"in"}
-                value={agentPhone}
-                // onChange={(e) => {
-                //   handleChangeAgentPhone(e);
-                //   if (e.target.value) {
-                //     setErrors((prevErrors) => ({
-                //       ...prevErrors,
-                //       agentPhone: "",
-                //     }));
-                //   }
-                // }}
+                onlyCountries={["in"]} // Allow only India
+                value={agentPhone}              
                 onChange={handleChangeAgentPhone}
                 international
                 keyboardType="phone-pad"

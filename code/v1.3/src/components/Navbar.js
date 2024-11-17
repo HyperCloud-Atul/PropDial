@@ -331,7 +331,7 @@ export default function Navbar() {
 
               <Link to="/notification" className="notification_icon relative">
                 <img
-                  src="./assets/img/home/notification.png"
+                  src="/assets/img/home/notification.png"
                   alt=""
                   className="pointer"                 
                 />

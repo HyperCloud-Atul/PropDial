@@ -172,7 +172,7 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
               </div>
             </div>
             <div className="pcs_other_info">
-              <div className="id_badge on_desktop_hide_767">PID: + " " + {property.pid}</div>
+              <div className="id_badge on_desktop_hide_767">PID:{" "}{property.pid}</div>
               <div className="poi_inner">
                 <div>
                   <h6 className="value_per_sqf">

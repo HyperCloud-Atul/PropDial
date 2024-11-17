@@ -3,6 +3,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import { useLogout } from '../../hooks/useLogout';
 import { Link } from 'react-router-dom';
 import { useCollection } from '../../hooks/useCollection';
+import { useFirestore } from '../../hooks/useFirestore';
 import { useParams } from 'react-router-dom';
 import InactiveUserCard from '../../components/InactiveUserCard';
 
@@ -24,6 +25,9 @@ const PGEnquiry = () => {
   const enquiryDocsById = id === "all" ? enquiryDocs : (enquiryDocs && enquiryDocs.filter(doc => (doc.propId === id)));
 
   console.log("enquiryDocsById", enquiryDocsById, id);
+
+  const { deleteDocument } =
+  useFirestore("enquiry-propdial");
   // render ViewEnquiry by url id end
 
   // useEffect(() => {
@@ -99,7 +103,8 @@ const PGEnquiry = () => {
               </span>
             </Link>
             {!showForm && (
-              <ViewEnquiry enquiryDocs={enquiryDocsById} enquiryDocsError={enquiryDocsError} />
+              <ViewEnquiry enquiryDocs={enquiryDocsById} enquiryDocsError={enquiryDocsError}
+              deleteDocument={deleteDocument} />
             )}
             {showForm && (
               <>

@@ -1,0 +1,35 @@
+.pg_referral{
+.add_referral{
+    .pg_divide{
+        min-height: 75vh;
+    }
+    .img_part{
+        img{
+            width: 65%;
+        }
+    }
+    .refer_form{
+        box-shadow: 0rem 0.3125rem 0.3125rem 0rem rgba(82, 63, 105, 0.05);
+        background: var(--white-color);
+        border-radius: 22px;
+        padding: 22px;
+        max-width: 85%;
+        .gift_img{
+            width: 48px;
+            position: absolute;
+            top: -40px;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+        h3{
+            font-size: 20px;
+            color: var(--light-black);
+            text-align: center;
+            margin-bottom: 22px;
+        }
+        
+    }
+
+}
+}

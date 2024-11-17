@@ -399,13 +399,23 @@
   padding-left: 0px;
   border: none;
 }
+.aai_form .form_field .field_icon.icon_left{
 
+  right: 8px;
+  left: inherit;
+}
+.aai_form .form_field .field_icon.icon_left span{
+  color: var(--theme-grey);
+}
 .aai_form .form_field input, .aai_form .form_field textarea  {
   border-radius: 8px;
   font-size: 16px;
   padding: 6px;
   width: fit-content;
   color: var(--light-black);
+}
+.aai_form .form_field.with_icon input{
+  padding-right: 36px;
 }
 .aai_form .form_field.price_input input{
   padding-left: 22px !important;
@@ -765,6 +775,18 @@ label.upload_img.by_text {
   position: absolute;
   top: 5px;
   right: 18px;
+  font-size: 16px;
+  background: white;
+  border-radius: 50%;
+  padding: 3px;
+  cursor: pointer;
+  z-index: 2;
+}
+.delete_icon_top{
+  color: var(--theme-red);
+  position: absolute;
+  top: -10px;
+  right: -3px;
   font-size: 16px;
   background: white;
   border-radius: 50%;

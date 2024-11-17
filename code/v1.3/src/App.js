@@ -106,6 +106,8 @@ import UpdateEnquiry from "./pdpages/enquiry/UpdateEnquiry";
 import ScrollToTop from "./components/ScrollToTop";
 import FCMNotification from "./components/FCMNotification";
 import PGExportExcel from "./pdpages/util/PGImportExcel"
+import PGReferral from "./pdpages/referral/PGReferral";
+import { Login } from "@mui/icons-material";
 
 // New component import end
 
@@ -326,6 +328,15 @@ function App() {
                     element={user ? <PGProfile /> : <PhoneLogin />}
                   ></Route> */}
                   <Route path="/profile" element={<PGProfile />}></Route>
+                  <Route path="/referral" element={
+                    user ? (
+                      <PGReferral />
+                    )
+                    : 
+                    (
+                      <Navigate to="/login" />
+                    )
+                  }></Route>
                   <Route
                     path="/notification"
                     element={<PGNotification />}
@@ -354,9 +365,9 @@ function App() {
                     }
                   ></Route>
                   <Route
-                    path="/edit-enquiry/:id"
+                    path={user && (user.role === "owner" ? "/enquiry-status/:id" : "/edit-enquiry/:id")}
                     element={
-                      user && user
+                      user && (user.role === "admin" || user.role === "superAdmin" || user.role === "owner")
                         ? (
                           <UpdateEnquiry />
                         ) : (
@@ -368,7 +379,7 @@ function App() {
                   <Route
                     path="/edit-agent/:id"
                     element={
-                      user && user
+                      user && (user.role === "admin" || user.role === "superAdmin")
                         ? (
                           <UpdateAgent />
                         ) : (
@@ -379,14 +390,17 @@ function App() {
 
 
                   <Route path="/properties" element={<PGProperties />}></Route>
+                  
                   <Route
                     path="/propertydetails/:propertyid"
                     element={<PropertyDetails></PropertyDetails>}
                   ></Route>
+
                   <Route
                     path="/tenantdetails/:tenantId"
                     element={<TenantDetails />}
                   ></Route>
+
                   <Route
                     path="/propertydocumentdetails/:propertyId"
                     element={

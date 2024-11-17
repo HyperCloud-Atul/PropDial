@@ -3,9 +3,12 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import EnquiryDetailModal from "./EnquiryDetailModal";
+import SureDelete from "../sureDelete/SureDelete";
 
-const EnquirySingle = ({ enquiries }) => {
+const EnquirySingle = ({ enquiries, deleteDocument }) => {
   const { user } = useAuthContext();
+
+  // view enquiry detail modal
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
   const [showEnquriyModal, setShowEnquriyModal] = useState(false);
 
@@ -14,6 +17,43 @@ const EnquirySingle = ({ enquiries }) => {
     setSelectedEnquiry(doc);
     setShowEnquriyModal(true);
   };
+  // view enquiry detail modal
+
+  // delete enquiry modal
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [docToDelete, setDocToDelete] = useState(null);
+
+  const handleDeleteClick = (docId) => {
+    setDocToDelete(docId);
+    setShowConfirmModal(true);
+  };
+
+  // Function to hide the modal
+  const handleConfirmClose = () => {
+    setShowConfirmModal(false);
+    setDocToDelete(null);
+  };
+
+  // Function to delete the document after confirmation
+  const confirmDeleteDocument = async () => {
+    try {
+      setIsDeleting(true);
+      if (docToDelete) {
+        await deleteDocument(docToDelete);
+        setShowConfirmModal(false);
+        setDocToDelete(null);
+        setIsDeleting(false);
+      }
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      setShowConfirmModal(false);
+      setDocToDelete(null);
+      setIsDeleting(false);
+    }
+  };
+
+  // delete enquiry modal
 
   return (
     <>
@@ -78,19 +118,34 @@ const EnquirySingle = ({ enquiries }) => {
                   <img src="/assets/img/whatsapp_simple.png" alt="" />
                 </Link>
               </div>
-            )}
+            )} 
             {(doc.enquiryStatus === "open" ||
-              doc.enquiryStatus === "working"
-            ||
-            doc.enquiryStatus === "dead" ||
-            doc.enquiryStatus === "successful"
-            ) &&
+              doc.enquiryStatus === "working" ||
+              doc.enquiryStatus === "dead" ||
+              doc.enquiryStatus === "successful") &&
               user &&
-              (user.role === "admin" || user.role === "superAdmin") && (
-                <Link to={`/edit-enquiry/${doc.id}`} className="enq_edit">
-                  <span className="material-symbols-outlined">edit_square</span>
+              (user.role === "admin" || user.role === "superAdmin" || user.role === "owner") && (
+                <Link to={user && (user.role === "owner" ? `/enquiry-status/${doc.id}` : `/edit-enquiry/${doc.id}`)} className="enq_edit">
+                  <span className="material-symbols-outlined">
+              {user && user.role === "owner" ? "visibility" : "edit_square"}
+                    
+                  </span>
                 </Link>
               )}
+
+            {user && user.role === "superAdmin" && (
+           
+               <span
+                className="material-symbols-outlined delete_icon_top"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent parent onClick from triggering
+                  handleDeleteClick(doc.id); // Open the delete confirmation modal
+                }}
+              >
+                delete_forever
+              </span>
+         
+            )}
           </div>
         ))}
       <EnquiryDetailModal
@@ -98,6 +153,12 @@ const EnquirySingle = ({ enquiries }) => {
         handleClose={handleEnquriyModalClose}
         selectedEnquiry={selectedEnquiry}
         user={user}
+      />
+      <SureDelete
+        show={showConfirmModal}
+        handleClose={handleConfirmClose}
+        handleDelete={confirmDeleteDocument}
+        isDeleting={isDeleting}
       />
     </>
   );

@@ -2,7 +2,7 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 
-const SureDelete = ({ show, handleClose, handleDelete }) => {
+const SureDelete = ({ show, handleClose, handleDelete, isDeleting }) => {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header className="justify-content-center" style={{
@@ -23,7 +23,7 @@ const SureDelete = ({ show, handleClose, handleDelete }) => {
         gap: "15px"
       }}>
         <div className="cancel_btn" onClick={handleDelete}  >
-          Yes
+    {isDeleting ? "Deleting..." : "Yes"}
         </div>
         <div className="done_btn" onClick={handleClose}>
           No

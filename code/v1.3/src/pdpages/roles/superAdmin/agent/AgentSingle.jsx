@@ -96,6 +96,7 @@ const AgentSingle = ({ agentDoc }) => {
   };
 
   // Delete confirmation modal
+  const [isDeleting, setIsDeleting] = useState(false);
   const handleShowDeleteModal = (imageUrl, docId) => {
     setImageToDelete({ imageUrl, docId });
     setShowModal(true);
@@ -107,6 +108,7 @@ const AgentSingle = ({ agentDoc }) => {
   };
 
   const handleDelete = async () => {
+    setIsDeleting(true);
     if (imageToDelete) {
       const { imageUrl, docId } = imageToDelete;
       const storageRef = projectStorage.refFromURL(imageUrl);
@@ -115,8 +117,10 @@ const AgentSingle = ({ agentDoc }) => {
         await updateDocument(docId, { agentImageUrl: "" });
         setImageToDelete(null);
         setShowModal(false);
+        setIsDeleting(false);
       } catch (error) {
         console.error("Error deleting image:", error);
+        setIsDeleting(false);
       }
     }
   };
@@ -343,6 +347,7 @@ const AgentSingle = ({ agentDoc }) => {
         show={showModal}
         handleClose={handleCloseModal}
         handleDelete={handleDelete}
+        isDeleting={isDeleting}
       />
     </div>
   );

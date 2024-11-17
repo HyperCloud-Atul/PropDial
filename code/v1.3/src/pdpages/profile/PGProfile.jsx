@@ -675,7 +675,7 @@ export default function PGProfile() {
                   <div className="icon">
                     <span className="material-symbols-outlined">featured_seasonal_and_gifts</span>
                   </div>
-                  <Link to="/how-use" className="address-text">
+                  <Link to="/referral" className="address-text">
                     <h5>Refer and win</h5>
                     <div className="">
                       <span className="material-symbols-outlined">
@@ -697,7 +697,7 @@ export default function PGProfile() {
                     <span className="material-symbols-outlined">sports</span>
                   </div>
 
-                  <Link to="/properties" className="address-text">
+                  <Link to="/referral" className="address-text">
                     <h5>My Referals</h5>
                     <div className="">
                       <span className="material-symbols-outlined">

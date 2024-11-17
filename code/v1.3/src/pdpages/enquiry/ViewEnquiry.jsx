@@ -14,7 +14,7 @@ import Filters from "../../components/Filters";
 const enquiryFilter = ["This Month", "Last 3 Months", "Last 6 Months"];
 const enquiryStatusFilter = ["Total", "Open", "Working", "Successful", "Dead"];
 
-const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
+const ViewEnquiry = ({ enquiryDocs, enquiryDocsError, deleteDocument }) => {
   //  const { documents: enquiryDocs, error: enquiryDocsError } = useCollection("enquiry-propdial");
   const [filter, setFilter] = useState(enquiryFilter[0]);
   const [enquiries, setEnquiries] = useState([]);
@@ -551,7 +551,7 @@ const ViewEnquiry = ({ enquiryDocs, enquiryDocsError }) => {
 
       {viewMode === "card_view" && (
         <div className="my_small_card_parent">
-          {enquiries && <EnquirySingle enquiries={enquiries} />}
+          {enquiries && <EnquirySingle enquiries={enquiries} deleteDocument={deleteDocument} />}
         </div>
       )}
       {viewMode === "table_view" && (
