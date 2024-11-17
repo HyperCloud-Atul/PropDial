@@ -99,6 +99,7 @@ const PGAgent = () => {
                   showAIForm={showAIForm}
                   setShowAIForm={setShowAIForm}
                   handleShowAIForm={handleShowAIForm}
+                  agentID={'new'}
                 />
               </>
             )}

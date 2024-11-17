@@ -668,7 +668,7 @@ const Stage2 = (props) => {
       else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
       errorFlag = true;
     }
-    else if ((propertyDetails.SuperArea != "" && propertyDetails.CarpetArea !== "") &&
+    else if ((propertyDetails.SuperArea !== "" && propertyDetails.CarpetArea !== "") &&
       Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
       if (errorMsg === "Please select ") {
         errorMsg = "Carpet Area should be less than Super Area";

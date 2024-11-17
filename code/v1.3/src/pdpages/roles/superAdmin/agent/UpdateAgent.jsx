@@ -10,7 +10,7 @@ import PhoneInput from "react-phone-input-2";
 import { timestamp } from "../../../../firebase/config";
 import ScrollToTop from "../../../../components/ScrollToTop";
 import InactiveUserCard from "../../../../components/InactiveUserCard";
-
+import AddAgent from "./AddAgent";
 const UpdateAgent = () => {
   const { id } = useParams();
   const { user } = useAuthContext();
@@ -21,6 +21,8 @@ const UpdateAgent = () => {
     error: addingError,
   } = useFirestore("agent-propdial");
 
+  const [showAIForm, setShowAIForm] = useState(false);
+  const handleShowAIForm = () => setShowAIForm(!showAIForm);
   const navigate = useNavigate();
   const { documents: masterState, error: masterStateError } = useCollection(
     "m_states",
@@ -463,32 +465,37 @@ const UpdateAgent = () => {
   };
   return (
     <div>
-    <ScrollToTop />
-    {user && user.status === "active" ? (
-      <div className="top_header_pg pg_bg pg_agent">
-        <div className="page_spacing pg_min_height">
-        <div className="pg_header d-flex justify-content-between">
-                  <div
-                    className="left d-flex align-items-center pointer"
-                    style={{
-                      gap: "5px",
-                    }}
-                  >
-                    <span
-                      className="material-symbols-outlined pointer"
-                      onClick={backViewAgents}
-                    >
-                      arrow_back
-                    </span>
-                    <h2 className="m22">Update Agent</h2>
-                  </div>
-                </div>
-                <hr />
-        <form>
-        <div className="vg12"></div>
-
-        {/* Search Popup - Start */}
-        {/* <div
+      <ScrollToTop />
+      {user && user.status === "active" ? (
+        <div className="top_header_pg pg_bg pg_agent">
+          <div className="page_spacing pg_min_height">
+            <div className="pg_header d-flex justify-content-between">
+              <div
+                className="left d-flex align-items-center pointer"
+                style={{
+                  gap: "5px",
+                }}
+              >
+                <span
+                  className="material-symbols-outlined pointer"
+                  onClick={backViewAgents}
+                >
+                  arrow_back
+                </span>
+                <h2 className="m22">Update Agent</h2>
+              </div>
+            </div>
+            <hr />
+            <form>
+              <div className="vg12"></div>
+              <AddAgent
+                showAIForm={showAIForm}
+                setShowAIForm={setShowAIForm}
+                handleShowAIForm={handleShowAIForm}
+                agentID={id}
+              />
+              {/* Search Popup - Start */}
+              {/* <div
         className={
           searchPopup
             ? "pop-up-change-number-div open"
@@ -570,267 +577,251 @@ const UpdateAgent = () => {
           </div>
         </div>
       </div> */}
-        {/* Search Popup - End */}
+              {/* Search Popup - End */}
 
-        <div className="row row_gap form_full">
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">Name*</label>
-              <div className="form_field_inner">
-                <input
-                  type="text"
-                  value={agentName}
-                  onChange={(e) => {
-                    handleChangeAgentName(e);
-                    if (e.target.value) {
-                      setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        agentName: "",
-                      }));
-                    }
-                  }}
-                  placeholder="Enter agent name"
-                />
-                {errors.agentName && (
-                  <div className="field_error">{errors.agentName}</div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">Phone number*</label>
-              <div className="form_field_inner">
-                <PhoneInput
-                  country={"in"}
-                  value={agentPhone}
-                  // onChange={(e) => {
-                  //   handleChangeAgentPhone(e);
-                  //   if (e.target.value) {
-                  //     setErrors((prevErrors) => ({
-                  //       ...prevErrors,
-                  //       agentPhone: "",
-                  //     }));
-                  //   }
-                  // }}
-                  onChange={handleChangeAgentPhone}
-                  international
-                  keyboardType="phone-pad"
-                  countryCodeEditable={true}
-                  placeholder="Country code + mobile number"
-                  inputProps={{
-                    name: "phone",
-                    required: true,
-                    autoFocus: false,
-                  }}
-                  inputStyle={{
-                    width: "100%",
-                    paddingLeft: "45px",
-                    fontSize: "16px",
-                    borderRadius: "12px",
-                    height: "45px",
-                  }}
-                  buttonStyle={{
-                    borderRadius: "12px",
-                    textAlign: "left",
-                    border: "1px solid #00A8A8",
-                  }}
-                />
-                {errors.agentPhone && (
-                  <div className="field_error">{errors.agentPhone}</div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">Email</label>
-              <div className="form_field_inner">
-                <input
-                  type="text"
-                  value={agentEmail}
-                  onChange={(e) => {
-                    handleChangeAgentEmail(e);
-                    if (e.target.value) {
-                      setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        agentEmail: "",
-                      }));
-                    }
-                  }}
-                  placeholder="Enter agent email"
-                />
-                {errors.agentEmail && (
-                  <div className="field_error">{errors.agentEmail}</div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">company name</label>
-              <div className="form_field_inner">
-                <input
-                  type="text"
-                  value={agentCompnayName}
-                  onChange={handleChangeAgentComanayName}
-                  placeholder="Enter company name"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">Pancard Number</label>
-              <div className="form_field_inner">
-                <input
-                  type="text"
-                  value={agentPancard}
-                  onChange={handleChangeAgentPancard}
-                  placeholder="Enter pancard number"
-                  maxLength={10} // Set maximum length
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">GST Number</label>
-              <div className="form_field_inner">
-                <input
-                  type="text"
-                  value={agentGstNumber}
-                  onChange={handleChangeAgentGstNumber}
-                  placeholder="Enter GST number"
-                />
-              </div>
-            </div>
-          </div>
+              <div className="row row_gap form_full">
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">Name*</label>
+                    <div className="form_field_inner">
+                      <input
+                        type="text"
+                        value={agentName}
+                        onChange={(e) => {
+                          handleChangeAgentName(e);
+                          if (e.target.value) {
+                            setErrors((prevErrors) => ({
+                              ...prevErrors,
+                              agentName: "",
+                            }));
+                          }
+                        }}
+                        placeholder="Enter agent name"
+                      />
+                      {errors.agentName && (
+                        <div className="field_error">{errors.agentName}</div>
+                      )}
+                    </div>
+                  </div>
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">Phone number*</label>
+                    <div className="form_field_inner">
+                      <PhoneInput
+                        country={"in"}
+                        value={agentPhone}
 
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">State*</label>
-              <div className="form_field_inner">
-                <Select
-                  className=""
-                  // onChange={(e) => {
-                  //   handleStateChange(e);
-                  //   if (e.target.value) {
-                  //     setErrors((prevErrors) => ({
-                  //       ...prevErrors,
-                  //       state: "",
-                  //     }));
-                  //   }
-                  // }}
-                  onChange={(e) => {
-                    handleStateChange({
-                      label: e.label,
-                      value: e.value,
-                    }, city, locality, society
-                    )
-                  }}
-                  options={stateOptions.current}
-                  value={state}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      outline: "none",
-                      background: "#eee",
-                      borderBottom: " 1px solid var(--theme-blue)",
-                    }),
-                  }}
-                />
-                {errors.state && (
-                  <div className="field_error">{errors.state}</div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">City*</label>
-              <div className="form_field_inner">
-                <Select
-                  className=""
-                  onChange={(e) => {
-                    handleCityChange({
-                      label: e.label,
-                      value: e.value
-                    }, locality, society
+                        onChange={handleChangeAgentPhone}
+                        international
+                        keyboardType="phone-pad"
+                        countryCodeEditable={true}
+                        placeholder="Country code + mobile number"
+                        inputProps={{
+                          name: "phone",
+                          required: true,
+                          autoFocus: false,
+                        }}
+                        inputStyle={{
+                          width: "100%",
+                          paddingLeft: "45px",
+                          fontSize: "16px",
+                          borderRadius: "12px",
+                          height: "45px",
+                        }}
+                        buttonStyle={{
+                          borderRadius: "12px",
+                          textAlign: "left",
+                          border: "1px solid #00A8A8",
+                        }}
+                      />
+                      {errors.agentPhone && (
+                        <div className="field_error">{errors.agentPhone}</div>
+                      )}
+                    </div>
+                  </div>
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">Email</label>
+                    <div className="form_field_inner">
+                      <input
+                        type="text"
+                        value={agentEmail}
+                        onChange={(e) => {
+                          handleChangeAgentEmail(e);
+                          if (e.target.value) {
+                            setErrors((prevErrors) => ({
+                              ...prevErrors,
+                              agentEmail: "",
+                            }));
+                          }
+                        }}
+                        placeholder="Enter agent email"
+                      />
+                      {errors.agentEmail && (
+                        <div className="field_error">{errors.agentEmail}</div>
+                      )}
+                    </div>
+                  </div>
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">company name</label>
+                    <div className="form_field_inner">
+                      <input
+                        type="text"
+                        value={agentCompnayName}
+                        onChange={handleChangeAgentComanayName}
+                        placeholder="Enter company name"
+                      />
+                    </div>
+                  </div>
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">Pancard Number</label>
+                    <div className="form_field_inner">
+                      <input
+                        type="text"
+                        value={agentPancard}
+                        onChange={handleChangeAgentPancard}
+                        placeholder="Enter pancard number"
+                        maxLength={10} // Set maximum length
+                      />
+                    </div>
+                  </div>
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">GST Number</label>
+                    <div className="form_field_inner">
+                      <input
+                        type="text"
+                        value={agentGstNumber}
+                        onChange={handleChangeAgentGstNumber}
+                        placeholder="Enter GST number"
+                      />
+                    </div>
+                  </div>
+                </div> */}
 
-                    )
-                  }}
-                  options={cityOptions.current}
-                  value={city}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      outline: "none",
-                      background: "#eee",
-                      borderBottom: " 1px solid var(--theme-blue)",
-                    }),
-                  }}
-                />
-                {errors.city && <div className="field_error">{errors.city}</div>}
-              </div>
-            </div>
-          </div>
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">State*</label>
+                    <div className="form_field_inner">
+                      <Select
+                        className=""
+
+                        onChange={(e) => {
+                          handleStateChange({
+                            label: e.label,
+                            value: e.value,
+                          }, city, locality, society
+                          )
+                        }}
+                        options={stateOptions.current}
+                        value={state}
+                        styles={{
+                          control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            outline: "none",
+                            background: "#eee",
+                            borderBottom: " 1px solid var(--theme-blue)",
+                          }),
+                        }}
+                      />
+                      {errors.state && (
+                        <div className="field_error">{errors.state}</div>
+                      )}
+                    </div>
+                  </div>
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">City*</label>
+                    <div className="form_field_inner">
+                      <Select
+                        className=""
+                        onChange={(e) => {
+                          handleCityChange({
+                            label: e.label,
+                            value: e.value
+                          }, locality, society
+
+                          )
+                        }}
+                        options={cityOptions.current}
+                        value={city}
+                        styles={{
+                          control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            outline: "none",
+                            background: "#eee",
+                            borderBottom: " 1px solid var(--theme-blue)",
+                          }),
+                        }}
+                      />
+                      {errors.city && <div className="field_error">{errors.city}</div>}
+                    </div>
+                  </div>
+                </div> */}
 
 
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">Society*</label>
-              <div className="form_field_inner">
-                <Select
-                  isMulti
-                  className=""
-                  onChange={handleSocietyChange}
-                  options={societyOptions.current}
-                  value={society}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      outline: "none",
-                      background: "#eee",
-                      borderBottom: " 1px solid var(--theme-blue)",
-                    }),
-                  }}
-                />
-                {errors.society && (
-                  <div className="field_error">{errors.society}</div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-4 col-lg-6">
-            <div className="form_field label_top">
-              <label htmlFor="">Locality*</label>
-              <div className="form_field_inner">
-                <Select
-                  isDisabled
-                  isMulti
-                  className=""
-                  // onChange={handleLocalityChange}
-                  options={localityOptions.current}
-                  value={locality}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      outline: "none",
-                      background: "#eee",
-                      borderBottom: " 1px solid var(--theme-blue)",
-                    }),
-                  }}
-                />
-                {errors.locality && (
-                  <div className="field_error">{errors.locality}</div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6">
-            {/* Search Input - Start */}
-            {/* <div className="form_field label_top">
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">Society*</label>
+                    <div className="form_field_inner">
+                      <Select
+                        isMulti
+                        className=""
+                        onChange={handleSocietyChange}
+                        options={societyOptions.current}
+                        value={society}
+                        styles={{
+                          control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            outline: "none",
+                            background: "#eee",
+                            borderBottom: " 1px solid var(--theme-blue)",
+                          }),
+                        }}
+                      />
+                      {errors.society && (
+                        <div className="field_error">{errors.society}</div>
+                      )}
+                    </div>
+                  </div>
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
+                  <div className="form_field label_top">
+                    <label htmlFor="">Locality*</label>
+                    <div className="form_field_inner">
+                      <Select
+                        isDisabled
+                        isMulti
+                        className=""
+                        // onChange={handleLocalityChange}
+                        options={localityOptions.current}
+                        value={locality}
+                        styles={{
+                          control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            outline: "none",
+                            background: "#eee",
+                            borderBottom: " 1px solid var(--theme-blue)",
+                          }),
+                        }}
+                      />
+                      {errors.locality && (
+                        <div className="field_error">{errors.locality}</div>
+                      )}
+                    </div>
+                  </div>
+                </div> */}
+                <div className="col-md-6">
+                  {/* Search Input - Start */}
+                  {/* <div className="form_field label_top">
             <label htmlFor="searchinputfield">Search Society</label>
             <div
               className="form_field_inner with_icon pointer"
@@ -860,54 +851,54 @@ const UpdateAgent = () => {
               <div className="field_error">{errors.society}</div>
             )}
           </div> */}
-            {/* Search Input - End */}
-          </div>
-        </div>
+                  {/* Search Input - End */}
+                </div>
+              </div>
 
-        <div className="vg22"></div>
-        {addingError && (
-          <>
-            <div className="field_error">{addingError}</div>
-            <div className="vg22"></div>
-          </>
-        )}
-        <div className="row">
-          <div className="col-md-6"></div>
-          <div className="col-md-6 col-12">
-            <div className="row">
-              <div className="col-4">
-                <div className="theme_btn btn_border no_icon text-center w-100"
-                onClick={backViewAgents}
-                >                
-                  Cancel
+              <div className="vg22"></div>
+              {/* {addingError && (
+                <>
+                  <div className="field_error">{addingError}</div>
+                  <div className="vg22"></div>
+                </>
+              )} */}
+              {/* <div className="row">
+                <div className="col-md-6"></div>
+                <div className="col-md-6 col-12">
+                  <div className="row">
+                    <div className="col-4">
+                      <div className="theme_btn btn_border no_icon text-center w-100"
+                        onClick={backViewAgents}
+                      >
+                        Cancel
+                      </div>
+                    </div>
+                    <div className="col-8">
+                      <div
+                        onClick={submitUpdatedAgent}
+                        className="theme_btn btn_fill no_icon text-center"
+                        disabled={isUploading}
+                      >
+                        {isUploading ? "Updating...." : "Update"}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="col-8">
-                <div
-                  onClick={submitUpdatedAgent}
-                  className="theme_btn btn_fill no_icon text-center"
-                  disabled={isUploading}
-                >
-                  {isUploading ? "Updating...." : "Update"}
+                <div className="col-12">
+                  {someError && (
+                    <div className="field_error text-center mt-3">
+                      Please complete all required fields before submitting the form.
+                    </div>
+                  )}
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-12">
-            {someError && (
-              <div className="field_error text-center mt-3">
-                Please complete all required fields before submitting the form.
-              </div>
-            )}
+              </div> */}
+            </form>
           </div>
         </div>
-      </form>
-        </div>
-      </div>
-    ) : (
-      <InactiveUserCard />
-    )}
-  </div>  
+      ) : (
+        <InactiveUserCard />
+      )}
+    </div>
   );
 };
 

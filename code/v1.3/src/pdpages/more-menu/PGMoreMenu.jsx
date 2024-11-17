@@ -169,7 +169,7 @@ const PGMoreMenu = () => {
                       chevron_right
                     </span>
                   </Link>
-                
+
                   <Link className="mm_single coming_soon r0" to="">
                     <span className="material-symbols-outlined mms_icon">
                       receipt_long
@@ -193,7 +193,7 @@ const PGMoreMenu = () => {
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
-                  </Link>                
+                  </Link>
                   <Link className="mm_single coming_soon r0" to="">
                     <span className="material-symbols-outlined mms_icon">
                       confirmation_number
@@ -233,190 +233,190 @@ const PGMoreMenu = () => {
             </div>
           )}
           {user && user.role === "superAdmin" && (
-              <div className="admin_div">
-                <div className="dvg22"></div>
-                <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
-                  <h6 className="title dm20 light_black">Super Admin</h6>
-                  <div className="inner">                   
-                    <Link className="mm_single" to="/addnotification/new">
-                      <span className="material-symbols-outlined mms_icon">
-                        notification_important
-                      </span>
-                      <h5 className="dr16"> add notification</h5>
-                      <h6>
-                        Create and manage your custom alerts and notifications
-                      </h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>            
-                    <Link className="mm_single" to="/userlist">
-                      <span className="material-symbols-outlined mms_icon">
-                        group
-                      </span>
-                      <h5 className="dr16">user list</h5>
-                      <h6>View and manage all registered users</h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link> 
-                    <Link className="mm_single" to="/agents">
-                      <span className="material-symbols-outlined mms_icon">
-                        group
-                      </span>
-                      <h5 className="dr16">agent list</h5>
-                      <h6>View and manage all registered agent</h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link> 
-                                    
-                    
-                    
-                  </div>
-                </section>
-                <div className="dvg22"></div>
-                <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
-                  <h6 className="title dm20 light_black">Master data</h6>
-                  <div className="inner">
-                    <Link className="mm_single" to="/countrylist">
-                      <span className="material-symbols-outlined mms_icon">
-                        flag
-                      </span>
-                      <h5 className="dr16">Country's list</h5>
-                      <h6>
-                        Add and manage countries for your listings and settings
-                      </h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>
-                    <Link className="mm_single" to="/statelist">
-                      <span className="material-symbols-outlined mms_icon">
-                        emoji_transportation
-                      </span>
-                      <h5 className="dr16">State's list</h5>
-                      <h6>
-                        Add and manage states for your listings and settings
-                      </h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>
-                    <Link className="mm_single" to="/citylist">
-                      <span className="material-symbols-outlined mms_icon">
-                        holiday_village
-                      </span>
-                      <h5 className="dr16">City's list</h5>
-                      <h6>
-                        Add and manage cites for your listings and settings
-                      </h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>
-                    <Link className="mm_single" to="/localitylist">
-                      <span className="material-symbols-outlined mms_icon">
-                        location_city
-                      </span>
-                      <h5 className="dr16">Locality's list</h5>
-                      <h6>
-                        Add and manage localites for your listings and settings
-                      </h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>
-                    <Link className="mm_single" to="/societylist">
-                      <span className="material-symbols-outlined mms_icon">
-                        location_home
-                      </span>
-                      <h5 className="dr16">Society's list</h5>
-                      <h6>
-                        Add and manage societies for your listings and settings
-                      </h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>
-                  </div>
-                </section>
-                <div className="dvg22"></div>
-                <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white coming_soon r0">
-                  <h6 className="title dm20 light_black">setting</h6>
-                  <div className="inner">
-                    <Link className="mm_single" to="/adminsettings">
-                      <span className="material-symbols-outlined mms_icon">
-                        flag
-                      </span>
-                      <h5 className="dr16">Country</h5>
-                      <h6>set your current location</h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>
-                    <Link className="mm_single" to="/adminsettings">
-                      <span className="material-symbols-outlined mms_icon">
-                        diamond
-                      </span>
-                      <h5 className="dr16">Logo</h5>
-                      <h6>Upload and update the logo displayed on your site</h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>
-                    <Link className="mm_single" to="">
-                      <span className="material-symbols-outlined mms_icon">
-                        contrast
-                      </span>
-                      <h5 className="dr16">Theme</h5>
-                      <h6>
-                        Choose and apply a new theme for your site's appearance
-                      </h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        <DarkModeToggle
-                          onChange={() =>
-                            toggleDarkMode(
-                              appDisplayMode && appDisplayMode.id,
-                              appDisplayMode && appDisplayMode.displayMode
-                            )
-                          }
-                          checked={
-                            appDisplayMode &&
-                            appDisplayMode.displayMode == "dark"
-                          }
-                          size={50}
-                        />
-                      </span>
-                    </Link>
-                    <Link className="mm_single" to="">
-                      <span className="material-symbols-outlined mms_icon">
-                        g_translate
-                      </span>
-                      <h5 className="dr16">Site Language</h5>
-                      <h6>
-                        Select and set the preferred language for your website
-                      </h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>
-                    <Link className="mm_single" to="">
-                      <span className="material-symbols-outlined mms_icon">
-                        credit_card
-                      </span>
-                      <h5 className="dr16">Payment Gateway</h5>
-                      <h6>
-                        Configure and switch your payment processing provider
-                      </h6>
-                      <span className="material-symbols-outlined mms_ra">
-                        chevron_right
-                      </span>
-                    </Link>
-                  </div>
-                </section>
-              </div>
-            )}
+            <div className="admin_div">
+              <div className="dvg22"></div>
+              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
+                <h6 className="title dm20 light_black">Super Admin</h6>
+                <div className="inner">
+                  <Link className="mm_single" to="/addnotification/new">
+                    <span className="material-symbols-outlined mms_icon">
+                      notification_important
+                    </span>
+                    <h5 className="dr16"> add notification</h5>
+                    <h6>
+                      Create and manage your custom alerts and notifications
+                    </h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="/userlist">
+                    <span className="material-symbols-outlined mms_icon">
+                      group
+                    </span>
+                    <h5 className="dr16">user list</h5>
+                    <h6>View and manage all registered users</h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="/agents">
+                    <span className="material-symbols-outlined mms_icon">
+                      group
+                    </span>
+                    <h5 className="dr16">agent list</h5>
+                    <h6>View and manage all registered agent</h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+
+
+
+                </div>
+              </section>
+              <div className="dvg22"></div>
+              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
+                <h6 className="title dm20 light_black">Master data</h6>
+                <div className="inner">
+                  <Link className="mm_single" to="/countrylist">
+                    <span className="material-symbols-outlined mms_icon">
+                      flag
+                    </span>
+                    <h5 className="dr16">Country's list</h5>
+                    <h6>
+                      Add and manage countries for your listings and settings
+                    </h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="/statelist">
+                    <span className="material-symbols-outlined mms_icon">
+                      emoji_transportation
+                    </span>
+                    <h5 className="dr16">State's list</h5>
+                    <h6>
+                      Add and manage states for your listings and settings
+                    </h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="/citylist">
+                    <span className="material-symbols-outlined mms_icon">
+                      holiday_village
+                    </span>
+                    <h5 className="dr16">City's list</h5>
+                    <h6>
+                      Add and manage cites for your listings and settings
+                    </h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="/localitylist">
+                    <span className="material-symbols-outlined mms_icon">
+                      location_city
+                    </span>
+                    <h5 className="dr16">Locality's list</h5>
+                    <h6>
+                      Add and manage localites for your listings and settings
+                    </h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="/societylist">
+                    <span className="material-symbols-outlined mms_icon">
+                      location_home
+                    </span>
+                    <h5 className="dr16">Society's list</h5>
+                    <h6>
+                      Add and manage societies for your listings and settings
+                    </h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                </div>
+              </section>
+              <div className="dvg22"></div>
+              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white coming_soon r0">
+                <h6 className="title dm20 light_black">setting</h6>
+                <div className="inner">
+                  <Link className="mm_single" to="/adminsettings">
+                    <span className="material-symbols-outlined mms_icon">
+                      flag
+                    </span>
+                    <h5 className="dr16">Country</h5>
+                    <h6>set your current location</h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="/adminsettings">
+                    <span className="material-symbols-outlined mms_icon">
+                      diamond
+                    </span>
+                    <h5 className="dr16">Logo</h5>
+                    <h6>Upload and update the logo displayed on your site</h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="">
+                    <span className="material-symbols-outlined mms_icon">
+                      contrast
+                    </span>
+                    <h5 className="dr16">Theme</h5>
+                    <h6>
+                      Choose and apply a new theme for your site's appearance
+                    </h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      <DarkModeToggle
+                        onChange={() =>
+                          toggleDarkMode(
+                            appDisplayMode && appDisplayMode.id,
+                            appDisplayMode && appDisplayMode.displayMode
+                          )
+                        }
+                        checked={
+                          appDisplayMode &&
+                          appDisplayMode.displayMode === "dark"
+                        }
+                        size={50}
+                      />
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="">
+                    <span className="material-symbols-outlined mms_icon">
+                      g_translate
+                    </span>
+                    <h5 className="dr16">Site Language</h5>
+                    <h6>
+                      Select and set the preferred language for your website
+                    </h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                  <Link className="mm_single" to="">
+                    <span className="material-symbols-outlined mms_icon">
+                      credit_card
+                    </span>
+                    <h5 className="dr16">Payment Gateway</h5>
+                    <h6>
+                      Configure and switch your payment processing provider
+                    </h6>
+                    <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span>
+                  </Link>
+                </div>
+              </section>
+            </div>
+          )}
 
           {/* Owner Cards */}
           {/* {user && user.role === "owner" && (

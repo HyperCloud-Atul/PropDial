@@ -6,8 +6,10 @@ import { projectFirestore } from "../../../../firebase/config";
 import Select from "react-select";
 import PhoneInput from "react-phone-input-2";
 import SearchBarAutoComplete from "../../../../pages/search/SearchBarAutoComplete";
+import { useDocument } from "../../../../hooks/useDocument"
+import { useNavigate } from "react-router-dom";
 
-const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
+const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
   // add document
   const {
     addDocument: addAgentDoc,
@@ -15,6 +17,8 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
     deleteDocument: deleteAgentDoc,
     error: addingError,
   } = useFirestore("agent-propdial");
+  console.log('agentID', agentID)
+  const navigate = useNavigate();
 
   //Master Data Loading Initialisation - Start
   const { documents: masterState, error: masterStateError } = useCollection(
@@ -30,17 +34,31 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   );
   const { documents: masterSociety, error: masterSocietyError } =
     useCollection("m_societies", "", ["society", "asc"]);
-
+  const { document: agentDoc, error: agentDocError } =
+    useDocument("agent-propdial", agentID);
+  console.log(agentDoc, agentDocError)
   const [state, setState] = useState();
   const [city, setCity] = useState();
   const [locality, setLocality] = useState();
   const [society, setSociety] = useState();
+  const [area, setArea] = useState();
+  const [areaFilter, setAreaFilter] = useState([]);
   // const [searchList, setSearchList] = useState(null);
+  // all useStates
+  const [isUploading, setIsUploading] = useState(false);
+  const [agentName, setAgentName] = useState("");
+  const [agentCompnayName, setAgentCompnayName] = useState("");
+  const [agentPhone, setAgentPhone] = useState("");
+  const [agentEmail, setAgentEmail] = useState("");
+  const [agentPancard, setAgentPancard] = useState("");
+  const [agentGstNumber, setAgentGstNumber] = useState("");
+  const [errors, setErrors] = useState({});
 
   let stateOptions = useRef([]);
   let cityOptions = useRef([]);
   let localityOptions = useRef([]);
   let societyOptions = useRef([]);
+  let areaOptions = useRef([]);
 
   if (masterState) {
     stateOptions.current = masterState.map((stateData) => ({
@@ -50,12 +68,49 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   }
 
   //Master Data Loading Initialisation - End
+  useEffect(() => {
+    // console.log('in useeffect')
+    if (agentDoc) {
+      let selectedstate = masterState.find(e => e.state === agentDoc.state)
+      selectedstate &&
+        setState({
+          label: agentDoc.state,
+          value: selectedstate.id
+        });
 
+      let selectedcity = masterCity.find(e => e.city === agentDoc.city)
+      selectedcity &&
+        setCity({
+          label: agentDoc.city,
+          value: selectedcity.id
+        });
+
+      agentDoc.locality ? setLocality(agentDoc.locality) : setLocality([]);
+      agentDoc.society ? setSociety(agentDoc.society) : setSociety([]);
+      agentDoc.area ? setArea(agentDoc.area) : setArea([]);
+      agentDoc.agentName ? setAgentName(agentDoc.agentName) : setAgentName('');
+      agentDoc.agentCompnayName ? setAgentCompnayName(agentDoc.agentCompnayName) : setAgentCompnayName('');
+
+      agentDoc.agentPhone ? setAgentPhone(agentDoc.agentPhone) : setAgentPhone('');
+      agentDoc.agentEmail ? setAgentEmail(agentDoc.agentEmail) : setAgentEmail('');
+      agentDoc.agentPancard ? setAgentPancard(agentDoc.agentPancard) : setAgentPancard('');
+      agentDoc.agentGstNumber ? setAgentGstNumber(agentDoc.agentGstNumber) : setAgentGstNumber('');
+      handleStateChange({
+        label: agentDoc.state,
+        value: selectedstate.id
+      });
+      handleCityChange({
+        label: agentDoc.city,
+        value: selectedcity.id
+      });
+    }
+  }, [agentDoc]);
   useEffect(() => {
     // console.log('in useeffect')
 
 
   }, [masterState]);
+
 
   // Populate Master Data - Start
   //State select onchange
@@ -77,12 +132,40 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
 
             if (cityOptions.current.length === 0) {
               console.log("No City");
+              setLocality([])
+              setSociety([])
+              setArea([])
+
               handleCityChange(null);
+
             } else {
-              handleCityChange({
-                label: cityOptions.current[0].label,
-                value: cityOptions.current[0].value,
-              });
+              console.log(option, agentDoc)
+              if (agentDoc && option.label === agentDoc.state) {
+                let selectedcity = masterCity.find(e => e.city === agentDoc.city)
+
+                setCity({
+                  label: agentDoc.city,
+                  value: selectedcity.id
+                });
+                setLocality(agentDoc.locality)
+                setSociety(agentDoc.society)
+                setArea(agentDoc.area)
+
+                handleCityChange({
+                  label: agentDoc.city,
+                  value: selectedcity.id
+                })
+              } else {
+
+                setLocality([])
+                setSociety([])
+                setArea([])
+
+                handleCityChange({
+                  label: cityOptions.current[0].label,
+                  value: cityOptions.current[0].value,
+                });
+              }
             }
           } else {
             // setError('No such document exists')
@@ -95,30 +178,140 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
       );
     }
   };
+  const handleAreaChange = async (option) => {
+    console.log('areaOptions.current', areaOptions.current)
+    let list1 = areaOptions.current[0] ? areaOptions.current[0].options : [];
+    let list2 = areaOptions.current[1] ? areaOptions.current[1].options : [];
+    let list3 = []
+    let selectedSociety = []
+    let selectedLoclity = []
+    setArea(option)
+    console.log(option, areaOptions.current, list1, list2)
+    option.forEach(element => {
+      console.log(element, element.value)
+      let str = element.value && element.value.split('#')
+      console.log(str, element.value)
+      if (element.value.includes('locality')) {
+        selectedLoclity.push({
+          label: element.label,
+          value: str[0]
+        })
+        let list4 = list2.filter(e => e.value.includes(str[0]))
+        list4.forEach(element1 => {
+          list3.push(element1)
+        });
+      } else {
+        let str = element.value && element.value.split('#')
+        let str1 = element.label && element.label.split(';')
+        selectedSociety.push({
+          label: element.label,
+          value: str[0]
+        })
+        if (!selectedLoclity.find(e => e.label === str1[1] && e.value === str[1])) {
+          selectedLoclity.push({
+            label: str1[1],
+            value: str[1]
+          })
+        }
+
+      }
+
+    })
+    let list4 = []
+    let str = []
+    list3.forEach(element => {
+      str = element.value.split("#")
+      list4.push({
+        label: element.label,
+        value: str[0]
+      })
+    });
+    setLocality(selectedLoclity)
+    setSociety(selectedSociety)
+    console.log(list3)
+    // let _area = []
+    // _area.push({
+    //   'label': <span style={{ color: 'red', fontSize: "1.4rem", width: "100%", textDecoration: "underline" }} ><strong>Localities</strong></span>,
+    //   'options': list1
+    // })
+    // _area.push({
+    //   'label': <span style={{ color: 'red', fontSize: "1.4rem", width: "100%", textDecoration: "underline" }} ><strong>Socities</strong></span>,
+    //   'options': list3
+    // })
+    // setAreaFilter(_area)
+
+  };
+
 
   //City select onchange
   const handleCityChange = async (option) => {
     setCity(option, masterLocality, masterCity);
     console.log('city.id:', option.value)
+    let _area = []
     if (option) {
 
       let _localitylist = masterLocality.filter(e => e.city === option.value);
       let _societylist = masterSociety.filter(e => e.city === option.value);
+      let list1 = [];
+      _localitylist.forEach(element => {
+        list1.push({
+          // ...element,
+          label: element.locality,
+          value: element.id + "#" + "locality",
+          // type: 'locality'
+        })
+      });
+      let list2 = [];
 
+      let _localityList = []
+      _societylist.forEach(element => {
+        let _local = masterLocality.find(e => e.id === element.locality)
+        list2.push({
+          // ...element,
+          label: element.society + ";" + _local.locality,
+          value: element.id + "#" + element.locality + "#" + 'society',
+          // type: 'society'
+        })
+      });
+      console.log('_area', _area)
+      _area.push({
+        'label': <span style={{ color: 'red', fontSize: "1.4rem", width: "100%", textDecoration: "underline" }} ><strong>Localities</strong></span>,
+        'options': list1
+      })
+      _area.push({
+        'label': <span style={{ color: 'red', fontSize: "1.4rem", width: "100%", textDecoration: "underline" }} ><strong>Socities</strong></span>,
+        'options': list2
+      })
+      areaOptions.current = _area
+      console.log(areaOptions.current);
+      setAreaFilter(areaOptions.current);
       localityOptions.current = _localitylist.map((localityData) => ({
         label: localityData.locality,
         value: localityData.id,
       }));
 
       societyOptions.current = _societylist.map((societyData) => ({
-        label: societyData.society + "; " + (masterLocality && masterLocality.find((e) => e.id === societyData.locality).locality),
+        label: societyData.society + ";" + (masterLocality && masterLocality.find((e) => e.id === societyData.locality).locality),
         value: societyData.id,
       }));
 
       if (localityOptions.current.length === 0) {
         console.log("No Locality");
         // handleLocalityChange(null);
+        setLocality([])
+        setSociety([])
+        setArea([])
       } else {
+
+        if (option.label === agentDoc.city) {
+          setLocality(agentDoc.locality)
+          setSociety(agentDoc.society)
+          setArea(agentDoc.area)
+        } else {
+          setLocality([])
+          setSociety([])
+          setArea([])
+        }
         // handleLocalityChange({
         //   label: localityOptions.current[0].label,
         //   value: localityOptions.current[0].value,
@@ -193,15 +386,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
   };
   // Populate Master Data - End
 
-  // all useStates
-  const [isUploading, setIsUploading] = useState(false);
-  const [agentName, setAgentName] = useState("");
-  const [agentCompnayName, setAgentCompnayName] = useState("");
-  const [agentPhone, setAgentPhone] = useState("");
-  const [agentEmail, setAgentEmail] = useState("");
-  const [agentPancard, setAgentPancard] = useState("");
-  const [agentGstNumber, setAgentGstNumber] = useState("");
-  const [errors, setErrors] = useState({});
+
 
   // functions
   const handleChangeAgentName = (e) => setAgentName(e.target.value);
@@ -270,12 +455,18 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
         city: city.label,
         locality: locality,
         society: society,
+        area: area,
         status: "active",
       };
 
       console.log("dataSet: ", dataSet)
+      if (agentID === "new") {
+        const docRef = await addAgentDoc(dataSet);
 
-      const docRef = await addAgentDoc(dataSet);
+      } else {
+        const docRef = await updateAgentDoc(agentID, dataSet);
+
+      }
 
       // Reset fields and errors after successful submission
       setAgentName("");
@@ -291,6 +482,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
       setErrors({});
       setIsUploading(false);
       setShowAIForm(!showAIForm);
+      navigate('/agents')
     } catch (addingError) {
       console.error("Error adding document:", addingError);
       setIsUploading(false);
@@ -533,9 +725,19 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
             <label htmlFor="">Phone number*</label>
             <div className="form_field_inner">
               <PhoneInput
-                country={"in"}
+                // country={"in"}
+                // value={agentPhone}
+                // onChange={(e) => {
+                //   handleChangeAgentPhone(e);
+                //   if (e.target.value) {
+                //     setErrors((prevErrors) => ({
+                //       ...prevErrors,
+                //       agentPhone: "",
+                //     }));
+                //   }
+                // }}
                 onlyCountries={["in"]} // Allow only India
-                value={agentPhone}              
+                value={agentPhone}
                 onChange={handleChangeAgentPhone}
                 international
                 keyboardType="phone-pad"
@@ -686,8 +888,33 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
           </div>
         </div>
 
-
         <div className="col-xl-4 col-lg-6">
+          <div className="form_field label_top">
+            <label htmlFor="">Area*</label>
+            <div className="form_field_inner">
+              <Select
+                isMulti
+                className=""
+                onChange={(option) => handleAreaChange(option)}
+                options={areaFilter}
+                value={area}
+                styles={{
+                  control: (baseStyles, state) => ({
+                    ...baseStyles,
+                    outline: "none",
+                    background: "#eee",
+                    borderBottom: " 1px solid var(--theme-blue)",
+                  }),
+                }}
+              />
+              {errors.society && (
+                <div className="field_error">{errors.society}</div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
             <label htmlFor="">Society*</label>
             <div className="form_field_inner">
@@ -711,8 +938,8 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
               )}
             </div>
           </div>
-        </div>
-        <div className="col-xl-4 col-lg-6">
+        </div> */}
+        {/* <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
             <label htmlFor="">Locality*</label>
             <div className="form_field_inner">
@@ -737,7 +964,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
               )}
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="col-md-6">
           {/* Search Input - Start */}
           {/* <div className="form_field label_top">
@@ -799,7 +1026,8 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
                 className="theme_btn btn_fill no_icon text-center"
                 disabled={isUploading}
               >
-                {isUploading ? "Adding...." : "Add"}
+                {agentID !== 'new' ? "Update" : "Add"}
+                {isUploading ? "ing...." : ""}
               </div>
             </div>
           </div>
@@ -812,6 +1040,18 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm }) => {
           )}
         </div>
       </div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
+      <div className="vg22"></div>
+
+
     </form>
   );
 };
