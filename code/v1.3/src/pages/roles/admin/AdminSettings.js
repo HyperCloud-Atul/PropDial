@@ -63,9 +63,9 @@ export default function AdminSettings() {
     // console.log('PopupReturn in useEffect', popupReturn)
     // console.log('expandParam in useEffect', expandParam)
     if (popupReturn) {
-      if (expandParam == "EMail") saveEmailSettings();
-      if (expandParam == "PaymentGateway") savePaymentGatewaySettings();
-      if (expandParam == "Wallet") saveWalletSettings();
+      if (expandParam === "EMail") saveEmailSettings();
+      if (expandParam === "PaymentGateway") savePaymentGatewaySettings();
+      if (expandParam === "Wallet") saveWalletSettings();
     }
   }, [popupReturn]);
 

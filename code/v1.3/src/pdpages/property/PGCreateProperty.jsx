@@ -602,7 +602,7 @@ const CreateProperty = () => {
         errorFlag = true;
       }
 
-      if (locality.label === "" || locality == undefined || locality === "Select Locality") {
+      if (locality.label === "" || locality === undefined || locality === "Select Locality") {
         if (errorMsg === "Error: Please select ")
           errorMsg = errorMsg + "Locality";
         else errorMsg = errorMsg + ", Locality";

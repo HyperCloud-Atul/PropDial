@@ -36,7 +36,7 @@ const NineDots = ({ nineDotsMenu }) => {
             </Link>
           ))}
         </div>
-      </div>   
+      </div>
     </div>
   );
 };
