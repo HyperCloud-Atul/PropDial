@@ -105,16 +105,15 @@ import PGEnquiry from "./pdpages/enquiry/PGEnquiry";
 import UpdateEnquiry from "./pdpages/enquiry/UpdateEnquiry";
 import ScrollToTop from "./components/ScrollToTop";
 import FCMNotification from "./components/FCMNotification";
-import PGExportExcel from "./pdpages/util/PGImportExcel"
+import PGExportExcel from "./pdpages/util/PGImportExcel";
 import PGReferral from "./pdpages/referral/PGReferral";
 // import { Login } from "@mui/icons-material";
 import ReferralLogin from "./pdpages/phonelogin/ReferralLogin";
-
+import AlreadyLogin from "./pdpages/referral/AlreadyLogin";
 
 // New component import end
 
 function App() {
-
   //---------------------- Copy Collection Code - Start -----------------------------------
   // const { documents: dbCollectionDocument, error: dbCollectionDocumentError } =
   //   useCollection("users");  // name of existing documets collection
@@ -282,7 +281,7 @@ function App() {
               <div>
                 {/* PWA INSTALLATION CODE START */}
                 {dbTextContentDocuments &&
-                  dbTextContentDocuments.status == "active" ? (
+                dbTextContentDocuments.status == "active" ? (
                   <>
                     {" "}
                     {deferredPrompt && (
@@ -317,10 +316,25 @@ function App() {
                 <ScrollToTop />
                 <Navbar />
                 <Routes>
-                  <Route path="/importexcel" element={<PGExportExcel />}></Route>
-                  <Route path="/login" element={<PhoneLogin />}></Route>
-                  <Route path="/referrallogin/:referralCode/:referredBy" element={<ReferralLogin />}></Route>
-                  
+                  <Route
+                    path="/importexcel"
+                    element={<PGExportExcel />}
+                  ></Route>
+                  <Route
+                    path="/login"
+                    element={user ? <Navigate to="/profile" /> : <PhoneLogin />}
+                  ></Route>
+                     <Route
+                    path="/alreadylogin"
+                    element={<AlreadyLogin />}
+                  ></Route>
+                   <Route
+                     path="/referrallogin/:referralCode/:referredBy"
+                    element=
+                    {
+                      // user ? <Navigate to="/alreadylogin" /> :
+                       <ReferralLogin />}
+                  ></Route>                 
                   <Route path="/" element={<Home></Home>}></Route>
                   <Route
                     path="/more-menu"
@@ -332,15 +346,10 @@ function App() {
                     element={user ? <PGProfile /> : <PhoneLogin />}
                   ></Route> */}
                   <Route path="/profile" element={<PGProfile />}></Route>
-                  <Route path="/referral" element={
-                    user ? (
-                      <PGReferral />
-                    )
-                    : 
-                    (
-                      <Navigate to="/login" />
-                    )
-                  }></Route>
+                  <Route
+                    path="/referral"
+                    element={user ? <PGReferral /> : <Navigate to="/login" />}
+                  ></Route>
                   <Route
                     path="/notification"
                     element={<PGNotification />}
@@ -359,9 +368,9 @@ function App() {
                     path="/enquiry/:id"
                     element={
                       user &&
-                        (user.role === "owner" ||
-                          user.role === "admin" ||
-                          user.role === "superAdmin") ? (
+                      (user.role === "owner" ||
+                        user.role === "admin" ||
+                        user.role === "superAdmin") ? (
                         <PGEnquiry />
                       ) : (
                         <Navigate to="/login" />
@@ -369,32 +378,38 @@ function App() {
                     }
                   ></Route>
                   <Route
-                    path={user && (user.role === "owner" ? "/enquiry-status/:id" : "/edit-enquiry/:id")}
+                    path={
+                      user &&
+                      (user.role === "owner"
+                        ? "/enquiry-status/:id"
+                        : "/edit-enquiry/:id")
+                    }
                     element={
-                      user && (user.role === "admin" || user.role === "superAdmin" || user.role === "owner")
-                        ? (
-                          <UpdateEnquiry />
-                        ) : (
-                          <Navigate to="/login" />
-                        )
+                      user &&
+                      (user.role === "admin" ||
+                        user.role === "superAdmin" ||
+                        user.role === "owner") ? (
+                        <UpdateEnquiry />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
                     }
                   ></Route>
 
                   <Route
                     path="/edit-agent/:id"
                     element={
-                      user && (user.role === "admin" || user.role === "superAdmin")
-                        ? (
-                          <UpdateAgent />
-                        ) : (
-                          <Navigate to="/login" />
-                        )
+                      user &&
+                      (user.role === "admin" || user.role === "superAdmin") ? (
+                        <UpdateAgent />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
                     }
                   ></Route>
 
-
                   <Route path="/properties" element={<PGProperties />}></Route>
-                  
+
                   <Route
                     path="/propertydetails/:propertyid"
                     element={<PropertyDetails></PropertyDetails>}
@@ -425,9 +440,7 @@ function App() {
                   ></Route>
                   <Route
                     path="/property-ads/:propertyId"
-                    element={
-                      user ? <PropertyAds /> : <Navigate to="/login" />
-                    }
+                    element={user ? <PropertyAds /> : <Navigate to="/login" />}
                   ></Route>
 
                   <Route
@@ -438,7 +451,7 @@ function App() {
                     path="/allproperties/:filterOption"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PGAdminProperty />
                       ) : (
                         <Navigate to="/login" />
@@ -474,8 +487,8 @@ function App() {
                     path="/ticketdetail"
                     element={
                       user &&
-                        user.status === "active" &&
-                        (user.role === "owner" || user.role !== "admin") ? (
+                      user.status === "active" &&
+                      (user.role === "owner" || user.role !== "admin") ? (
                         <TicketDetail />
                       ) : (
                         <Navigate to="/login" />
@@ -526,7 +539,7 @@ function App() {
                     path="/pgsearch"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PGSearch />
                       ) : (
                         <Navigate to="/login" />
@@ -549,7 +562,7 @@ function App() {
                     path="/admindashboard"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PGAdminDashboard />
                       ) : (
                         <Navigate to="/login" />
@@ -560,7 +573,7 @@ function App() {
                     path="/adminproperties"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PGAdminProperties />
                       ) : (
                         <Navigate to="/login" />
@@ -571,7 +584,7 @@ function App() {
                     path="/newproperty"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PGCreateProperty />
                       ) : (
                         <Navigate to="/login" />
@@ -582,7 +595,7 @@ function App() {
                     path="/updateproperty/:propertyid"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PGUpdateProperty />
                       ) : (
                         <Navigate to="/login" />
@@ -593,7 +606,7 @@ function App() {
                     path="/addbill/:propertyid"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <AddBill />
                       ) : (
                         <Navigate to="/login" />
@@ -604,7 +617,7 @@ function App() {
                     path="/addphoto"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <AddPhoto />
                       ) : (
                         <Navigate to="/login" />
@@ -615,7 +628,7 @@ function App() {
                     path="/adddocument"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <AddDocument />
                       ) : (
                         <Navigate to="/login" />
@@ -626,7 +639,7 @@ function App() {
                     path="/adddocumentnew"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <AddDocumentNew />
                       ) : (
                         <Navigate to="/login" />
@@ -637,7 +650,7 @@ function App() {
                     path="/pgpropertylist"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PGPropertyList />
                       ) : (
                         <Navigate to="/login" />
@@ -648,7 +661,7 @@ function App() {
                     path="/propertystatus"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PropertyStatus />
                       ) : (
                         <Navigate to="/login" />
@@ -659,7 +672,7 @@ function App() {
                     path="/propertyedit/:id"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PGPropertyEdit />
                       ) : (
                         <Navigate to="/login" />
@@ -670,7 +683,7 @@ function App() {
                     path="/propertybills/:propertyid"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <PGPropertyBills />
                       ) : (
                         <Navigate to="/login" />
@@ -717,7 +730,7 @@ function App() {
                     path="/ownerdashboard"
                     element={
                       (user && user.role === "owner") ||
-                        (user && user.role === "coowner") ? (
+                      (user && user.role === "coowner") ? (
                         <PGOwnerDashboard />
                       ) : (
                         <Navigate to="/login" />
@@ -770,7 +783,7 @@ function App() {
                     path="/countrylist"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <MasterCountryList />
                       ) : (
                         <PhoneLogin />
@@ -781,7 +794,7 @@ function App() {
                     path="/statelist"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <MasterStateList />
                       ) : (
                         <PhoneLogin />
@@ -792,7 +805,7 @@ function App() {
                     path="/citylist"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <MasterCityList />
                       ) : (
                         <PhoneLogin />
@@ -803,7 +816,7 @@ function App() {
                     path="/localitylist"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <MasterLocalityList />
                       ) : (
                         <PhoneLogin />
@@ -814,7 +827,7 @@ function App() {
                     path="/societylist"
                     element={
                       user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
+                      (user.role === "admin" || user.role === "superAdmin") ? (
                         <MasterSocietyList />
                       ) : (
                         <PhoneLogin />
@@ -824,8 +837,7 @@ function App() {
                   <Route
                     path="/agents"
                     element={
-                      user &&
-                        (user.role === "superAdmin") ? (
+                      user && user.role === "superAdmin" ? (
                         <PGAgent />
                       ) : (
                         <PhoneLogin />

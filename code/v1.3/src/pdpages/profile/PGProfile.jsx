@@ -341,10 +341,6 @@ export default function PGProfile() {
     }, 1000);
   };
 
-
-  const referralCode = "rBmt34SXDM6Vtm8cJ3jj";
-  const referredById = "1SoZ9LHprrcSyMhGEiPFpRCIPyj1";
-
   // --------------------HTML UI Codebase------------------
   return (
     <div className="profile_pg pg_bg ">
@@ -394,7 +390,6 @@ export default function PGProfile() {
               )}
             </div>
             <div className="vg22"></div>
-
             <h4 className="user_name field_with_edit_icon">
               <input
                 type="text"
@@ -615,13 +610,7 @@ export default function PGProfile() {
                     </Link>
           </div>
         )}
-      </div>
-
-      <button>
-        <Link to={`/referrallogin/${referralCode}/${referredById}`}>
-          Go to Referral Login
-        </Link>
-      </button>
+      </div>  
 
       {user && user.roles && user.roles.length > 1 && (
         <div className="container">

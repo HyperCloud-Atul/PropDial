@@ -25,7 +25,7 @@ const PGReferral = () => {
   // get agent document start
   const { documents: referralDoc, errors: referralDocError } = useCollection(
     "referrals-propdial",
-    "",
+    ["referedBy", "==", user.uid],
     ["createdAt", "desc"]
   );
   // get agent document end
