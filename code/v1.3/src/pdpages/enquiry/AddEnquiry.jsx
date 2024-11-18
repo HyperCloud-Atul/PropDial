@@ -493,7 +493,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
         <div className="row row_gap">
           <div className="col-md-4">
             <div className="form_field label_top">
-              <label htmlFor="date">Click To Select Date*</label>
+              <label htmlFor="date">Date*</label>
               <div className="form_field_inner with_icon calendar_click">
                 <DatePicker
                   selected={date}
@@ -504,6 +504,8 @@ const AddEnquiry = ({ enquiryAdded }) => {
                   }
                   dateFormat="dd/MM/yyyy"
                   id="date"
+                  readOnly
+                  disabled               
                 />
                 <div className="field_icon">
                   <span className="material-symbols-outlined">calendar_month</span>

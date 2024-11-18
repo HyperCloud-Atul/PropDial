@@ -21,6 +21,7 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
       show={show}
       onHide={handleClose}
       className="enquiry_modal margin_top"
+      centered
     >
       <span className="material-symbols-outlined modal_close" onClick={handleClose}>
         close
