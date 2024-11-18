@@ -15,7 +15,7 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
  // console.log("agent doc: ", referralDoc)
 
  // Filter referral
- const filteredAgentList = referralDoc
+ const filteredreferrals = referralDoc
    ? referralDoc.filter((document) => {
      let searchMatch = true;
 
@@ -83,7 +83,7 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
                       </div>
                       <div className="number">
                         {/* {myproperties && myproperties.length} */}
-                        2K
+                        00
                         </div>
                     </div>
                   </div>
@@ -102,14 +102,14 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
                     <div className="ps_single active">
                       <h5>
                         {/* {activeProperties && activePropertieslengthWithoutNulls} */}
-                        10
+                        00
                         </h5>
                       <h6>Successful Conversions</h6>
                     </div>
                     <div className="ps_single inactive">
                       <h5>
                         {/* {inactiveProperties && inactivePropertieslengthWithoutNulls} */}
-                        5
+                        00
                         </h5>
                       <h6>Pending Referrals</h6>
                     </div>
@@ -163,7 +163,16 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
      {/* view agent pg header and filters end  */}
 
      {/* agent card and table  */}
-     {viewMode === "card_view" && filteredAgentList && <ReferralSingle referralDoc={filteredAgentList} />}
+
+     {viewMode === "card_view" && (
+        <div className="pg_enquiry">
+          <div className="my_small_card_parent">
+            {filteredreferrals && (
+              <ReferralSingle referralDoc={filteredreferrals} user={user} />
+            )}
+          </div>
+        </div>
+      )}
 
      {viewMode === "table_view" && (
        <h5 className="text-center text_green">

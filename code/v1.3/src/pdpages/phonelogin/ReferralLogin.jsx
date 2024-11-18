@@ -359,6 +359,7 @@ const ReferralLogin = () => {
             createdAt: timestamp.fromDate(new Date()),
             lastLoginTimestamp: timestamp.fromDate(new Date()),
           });
+          
   
         console.log("User Created Successfully")
   
