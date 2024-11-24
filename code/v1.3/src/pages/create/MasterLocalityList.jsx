@@ -18,7 +18,8 @@ export default function MasterLocalityList() {
   }, [location]);
   const { camelCase } = useCommon();
   // Scroll to the top of the page whenever the location changes end
-  const { addDocument, response } = useFirestore("m_localities");
+  // const { addDocument, response } = useFirestore("m_localities");
+  const { addDocumentWithCustomDocId, response: responseAddDocument } = useFirestore("m_localities");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_localities");
 
@@ -67,6 +68,7 @@ export default function MasterLocalityList() {
       }));
 
       // console.log("countryOptions: ", countryOptions)
+      handleCountryChange({ label: "INDIA", value: "_india" })
     }
 
   }, [masterCountry]);
@@ -250,13 +252,16 @@ export default function MasterLocalityList() {
 
         if (results.length === 0) {
           const dataSet = {
+            docId: city.value + "_" + localityname.split(" ").join("_").toLowerCase(),
             country: country.value,
             state: state.value,
             city: city.value,
             locality: localityname,
             status: "active",
           };
-          await addDocument(dataSet);
+          // await addDocument(dataSet);
+          const _customDocId = dataSet.docId
+          await addDocumentWithCustomDocId(dataSet, _customDocId);
           setFormError("Successfully added");
           // sethandleAddSectionFlag(!handleAddSectionFlag);
         } else {
@@ -280,7 +285,7 @@ export default function MasterLocalityList() {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add Locality");
-    // setCountry(null)
+    setCountry({ label: "INDIA", value: "_india" })
     // setState(null)
     // setCity(null)
     setLocality("");
