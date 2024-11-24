@@ -17,7 +17,8 @@ export default function MasterSocietyList() {
   }, [location]);
   const { camelCase } = useCommon();
   // Scroll to the top of the page whenever the location changes end
-  const { addDocument, response } = useFirestore("m_societies");
+  // const { addDocument, response } = useFirestore("m_societies");
+  const { addDocumentWithCustomDocId, response: responseAddDocument } = useFirestore("m_societies");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_societies");
 
@@ -67,6 +68,7 @@ export default function MasterSocietyList() {
       }));
 
       // console.log("countryOptions: ", countryOptions)
+      handleCountryChange({ label: "INDIA", value: "_india" })
     }
   }, [masterCountry]);
 
@@ -259,6 +261,7 @@ export default function MasterSocietyList() {
 
         if (results.length === 0) {
           const dataSet = {
+            docId: locality.value + "_" + societyname.split(" ").join("_").toLowerCase(),
             country: country.value,
             state: state.value,
             city: city.value,
@@ -266,7 +269,9 @@ export default function MasterSocietyList() {
             society: societyname,
             status: "active",
           };
-          await addDocument(dataSet);
+          // await addDocument(dataSet);
+          const _customDocId = dataSet.docId
+          await addDocumentWithCustomDocId(dataSet, _customDocId);
           setFormError("Successfully added");
           sethandleAddSectionFlag(!handleAddSectionFlag);
         } else {
