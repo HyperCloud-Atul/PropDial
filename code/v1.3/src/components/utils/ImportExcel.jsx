@@ -76,7 +76,12 @@ class ImportExcel extends React.Component {
 
     render() {
         return (
-            <div>
+            <div style={{
+                margin: '8px 0 8px 0',
+                padding: '15px',
+                border: '2px solid #ddd',
+                borderRadius: '8px'
+            }} >
                 <input
                     type="file"
                     id="file"
@@ -85,15 +90,19 @@ class ImportExcel extends React.Component {
                     onChange={this.filePathset.bind(this)}
                 />
 
+                <br></br>
+
 
                 <div
                     style={{
                         background: '#348DCB',
-                        padding: '5px 30px',
+                        padding: '5px 0 8px 15px',
+                        margin: '10px 0 0 0',
                         color: '#fff',
                         borderRadius: '20px',
                         cursor: 'pointer',
                         width: '300px'
+
                     }} onClick={() => {
                         this.readFile();
                     }}>Import into Database Collection</div>

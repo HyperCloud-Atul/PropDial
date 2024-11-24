@@ -318,7 +318,7 @@ function App() {
                 <Navbar />
                 <Routes>
                   <Route
-                    path="/importexcel"
+                    path="/importexcel/:collectionName"
                     element={<PGExportExcel />}
                   ></Route>
                   <Route

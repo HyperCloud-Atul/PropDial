@@ -21,7 +21,9 @@ export default function MasterStateList() {
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
   const { camelCase } = useCommon();
-  const { addDocument, response } = useFirestore("m_states");
+  // const { addDocument, response } = useFirestore("m_states");
+  const { addDocumentWithCustomDocId, response } = useFirestore("m_states");
+
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_states");
 
@@ -111,6 +113,7 @@ export default function MasterStateList() {
 
         if (results.length === 0) {
           const dataSet = {
+            docId: "_" + _state.split(" ").join("_").toLowerCase(),
             country: country.value,
             state: _state,
             stateCode: _stateCode,
@@ -123,7 +126,10 @@ export default function MasterStateList() {
           // sethandleAddSectionFlag(!handleAddSectionFlag);
           // console.log("Successfully added")
           // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
-          await addDocument(dataSet);
+          // await addDocument(dataSet);
+          const _customDocId = dataSet.docId
+          await addDocumentWithCustomDocId(dataSet, _customDocId);
+
         } else if (results.length > 0 && _addCityFlag === false) {
           setFormError("Duplicate State");
           // sethandleAddSectionFlag(!handleAddSectionFlag);
@@ -201,7 +207,7 @@ export default function MasterStateList() {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add State");
-    setCountry(null)
+    setCountry({ label: "INDIA", value: "_india" })
     setState("");
     setStateCode("")
     setGSTStateCode("")

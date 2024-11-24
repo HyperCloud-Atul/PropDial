@@ -55,6 +55,44 @@ export const useFirestore = (collection) => {
     dispatch(action);
     // }
   };
+
+
+  const addDocumentWithCustomDocId = async (doc, _customDocId) => {
+    dispatch({ type: "IS_PENDING" });
+
+    try {
+      // const createdBy = {
+      //   id: user.uid,
+      //   displayName: user.displayName + '(' + user.role + ')',
+      //   fullName: user.fullName,
+      //   phoneNumber: user.phoneNumber,
+      //   emailID: user.email,
+      //   photoURL: user.photoURL
+      // }    
+      // console.log("doc data: ", doc)
+      console.log("doc id: ", _customDocId)
+      const createdBy = user ? user.uid : "guest";
+      const createdAt = timestamp.fromDate(new Date());
+      // const addedDocument = await ref.add({ ...doc, createdAt, createdBy });
+      await ref.doc(_customDocId).set({ ...doc, createdAt, createdBy });
+      // console.log("addedDocument: ", addedDocument)
+      // console.log("addedDocument id: ", addedDocument.id)
+
+      // dispatchIfNotCancelled({
+      //   type: "ADDED_DOCUMENT",
+      //   payload: {
+      //     ...addedDocument,
+      //     id: addedDocument.id,
+      //   },
+      // });
+      // return addedDocument; // addedDocument returned
+    } catch (err) {
+      console.log("Firestore set document err:", err);
+      // dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
+    }
+  };
+
+
   // console.log("user", user);
   // add a document
   const addDocument = async (doc) => {
@@ -69,7 +107,7 @@ export const useFirestore = (collection) => {
       //   emailID: user.email,
       //   photoURL: user.photoURL
       // }    
-      // console.log("doc data: ", doc)
+      console.log("doc data: ", doc)
       const createdBy = user ? user.uid : "guest";
       const createdAt = timestamp.fromDate(new Date());
       const addedDocument = await ref.add({ ...doc, createdAt, createdBy });
@@ -124,5 +162,5 @@ export const useFirestore = (collection) => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { addDocument, deleteDocument, updateDocument, response };
+  return { addDocumentWithCustomDocId, addDocument, deleteDocument, updateDocument, response };
 };

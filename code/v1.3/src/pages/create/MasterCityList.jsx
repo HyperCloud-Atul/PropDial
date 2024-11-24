@@ -19,8 +19,9 @@ export default function MasterCityList() {
   }, [location]);
   const { camelCase } = useCommon();
   // Scroll to the top of the page whenever the location changes end
-  const { addDocument, response: responseAddDocument } =
-    useFirestore("m_cities");
+  // const { addDocument, response: responseAddDocument } = useFirestore("m_cities");
+  const { addDocumentWithCustomDocId, response: responseAddDocument } = useFirestore("m_cities");
+
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_cities");
 
@@ -69,6 +70,9 @@ export default function MasterCityList() {
         value: countryData.id,
       }));
     }
+
+    handleCountryChange({ label: "INDIA", value: "_india" })
+
   }, [masterCountry]);
 
   // Populate Master Data - Start
@@ -255,6 +259,7 @@ export default function MasterCityList() {
         // console.log("results.length: ", results.length)
         if (results.length === 0) {
           const dataSet = {
+            docId: state.value + "_" + cityname.split(" ").join("_").toLowerCase(),
             country: country.value,
             state: state.value,
             city: cityname,
@@ -267,7 +272,9 @@ export default function MasterCityList() {
           // sethandleAddSectionFlag(!handleAddSectionFlag);
           // console.log("Successfully added")
           // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
-          await addDocument(dataSet);
+          // await addDocument(dataSet);
+          const _customDocId = dataSet.docId
+          await addDocumentWithCustomDocId(dataSet, _customDocId);
         } else if (results.length > 0 && _addCityFlag === false) {
           // console.log("Duplicate City")
           setFormError("Duplicate City");
@@ -291,7 +298,7 @@ export default function MasterCityList() {
     setFormError("");
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add");
-    setCountry(null)
+    setCountry({ label: "INDIA", value: "_india" })
     setState(null)
     setCity("");
   };
