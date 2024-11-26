@@ -232,10 +232,10 @@ const PGMoreMenu = () => {
               </section>
             </div>
           )}
-          {user && user.role === "superAdmin" && (
+          {user && (user.role === "admin" || user.role === "superAdmin") && (
             <div className="admin_div">
               <div className="dvg22"></div>
-              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
+              {user.role === "superAdmin" && (<section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
                 <h6 className="title dm20 light_black">Super Admin</h6>
                 <div className="inner">
                   <Link className="mm_single" to="/addnotification/new">
@@ -270,16 +270,14 @@ const PGMoreMenu = () => {
                       chevron_right
                     </span>
                   </Link>
-
-
-
                 </div>
-              </section>
+              </section>)}
+
               <div className="dvg22"></div>
-              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
+              {(<section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
                 <h6 className="title dm20 light_black">Master data</h6>
                 <div className="inner">
-                  <Link className="mm_single" to="/countrylist">
+                  {user.role === "superAdmin" && <Link className="mm_single" to="/countrylist">
                     <span className="material-symbols-outlined mms_icon">
                       flag
                     </span>
@@ -290,8 +288,8 @@ const PGMoreMenu = () => {
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
-                  </Link>
-                  <Link className="mm_single" to="/statelist">
+                  </Link>}
+                  {user.role === "superAdmin" && <Link className="mm_single" to="/statelist">
                     <span className="material-symbols-outlined mms_icon">
                       emoji_transportation
                     </span>
@@ -302,8 +300,8 @@ const PGMoreMenu = () => {
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
-                  </Link>
-                  <Link className="mm_single" to="/citylist">
+                  </Link>}
+                  {user.role === "superAdmin" && <Link className="mm_single" to="/citylist">
                     <span className="material-symbols-outlined mms_icon">
                       holiday_village
                     </span>
@@ -314,7 +312,7 @@ const PGMoreMenu = () => {
                     <span className="material-symbols-outlined mms_ra">
                       chevron_right
                     </span>
-                  </Link>
+                  </Link>}
                   <Link className="mm_single" to="/localitylist">
                     <span className="material-symbols-outlined mms_icon">
                       location_city
@@ -340,9 +338,10 @@ const PGMoreMenu = () => {
                     </span>
                   </Link>
                 </div>
-              </section>
+              </section>)}
+
               <div className="dvg22"></div>
-              <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white coming_soon r0">
+              {user.role === "superAdmin" && <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white coming_soon r0">
                 <h6 className="title dm20 light_black">setting</h6>
                 <div className="inner">
                   <Link className="mm_single" to="/adminsettings">
@@ -414,7 +413,7 @@ const PGMoreMenu = () => {
                     </span>
                   </Link>
                 </div>
-              </section>
+              </section>}
             </div>
           )}
 

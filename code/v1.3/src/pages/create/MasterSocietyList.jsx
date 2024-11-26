@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
@@ -15,6 +16,7 @@ export default function MasterSocietyList() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+  const { user } = useAuthContext();
   const { camelCase } = useCommon();
   // Scroll to the top of the page whenever the location changes end
   // const { addDocument, response } = useFirestore("m_societies");
@@ -372,6 +374,11 @@ export default function MasterSocietyList() {
     : null;
 
   // nine dots menu start
+  const nineDotsAdminMenu = [
+    // { title: "Country's List", link: "/countrylist", icon: "public" },
+
+    { title: "Society's List", link: "/societylist", icon: "home" },
+  ];
   const nineDotsMenu = [
     // { title: "Country's List", link: "/countrylist", icon: "public" },
     { title: "State's List", link: "/statelist", icon: "map" },
@@ -398,7 +405,7 @@ export default function MasterSocietyList() {
           className={`page_spacing ${masterSociety && masterSociety.length === 0 && "pg_min_height"
             }`}
         >
-          <NineDots nineDotsMenu={nineDotsMenu} />
+          <NineDots nineDotsMenu={user && user.role === 'superAdmin' ? nineDotsMenu : nineDotsAdminMenu} />
 
           {masterSociety && masterSociety.length === 0 && (
             <div className={`pg_msg ${handleAddSectionFlag && "d-none"}`}>
