@@ -60,8 +60,9 @@ export default function MasterCityList() {
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [filter, setFilter] = useState("INDIA");
+  const [stateFilter, setStateFilter] = useState("INDIA");
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
-
+  const [filteredData, setFilteredData] = useState([]);
   useEffect(() => {
     // console.log('in useeffect')
     if (masterCountry) {
@@ -120,7 +121,7 @@ export default function MasterCityList() {
   //Stae select onchange
   const handleStateChange = async (option) => {
     setState(option);
-    // console.log('state.id:', option.value)    
+    console.log('state.id:', option.value)
     const ref = await projectFirestore
       .collection("m_cities")
       .where("state", "==", option.value)
@@ -132,6 +133,47 @@ export default function MasterCityList() {
             label: cityData.data().city,
             value: cityData.id,
           }));
+
+          // if (cityOptions.current.length === 0) {
+          //   // console.log("No City")
+          //   handleCityChange(null)
+          // }
+          // else {
+          //   handleCityChange({
+          //     label: cityOptions.current[0].label,
+          //     value: cityOptions.current[0].value,
+          //   });
+          // }
+
+        } else {
+          // handleCityChange(null)
+          // setError('No such document exists')
+        }
+      },
+      (err) => {
+        console.log(err.message);
+        // setError('failed to get document')
+      }
+    );
+  };
+
+  //Filter State select onchange
+  const handleFilterStateChange = async (option) => {
+    setState(option);
+    console.log('handleFilterStateChange state.id:', option.value)
+    const ref = await projectFirestore
+      .collection("m_cities")
+      .where("state", "==", option.value)
+      .orderBy("city", "asc");
+    ref.onSnapshot(
+      async (snapshot) => {
+        if (snapshot.docs) {
+          cityOptions.current = snapshot.docs.map((cityData) => ({
+            label: cityData.data().city,
+            value: cityData.id,
+          }));
+
+          console.log("cityOptions: ", cityOptions.current)
 
           // if (cityOptions.current.length === 0) {
           //   // console.log("No City")
@@ -290,6 +332,19 @@ export default function MasterCityList() {
 
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
+    // console.log(newFilter)
+    let _counryCode = "_" + newFilter.toLowerCase();
+    console.log(newFilter, _counryCode)
+    let _filterList = []
+    // if (data) {
+    _filterList = masterCity.filter(e => e.country === _counryCode)
+    // console.log('_filterList', _filterList)
+    setFilteredData(_filterList)
+    // };
+  }
+
+  const changeStateFilter = (newFilter) => {
+    setStateFilter(newFilter);
   };
 
 
@@ -334,66 +389,108 @@ export default function MasterCityList() {
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
+    let _searchkey = e.target.value.toLowerCase()
+    let _filterList = []
+    _filterList = masterCity.filter(e => e.docId.includes(_searchkey) || e.country.includes(_searchkey))
+    console.log('_filterList', _filterList)
+    setFilteredData(_filterList)
 
   };
 
   const [searchInput, setSearchInput] = useState("");
 
-  let filteredData = masterCity
-    ? masterCity.filter((document) => {
-      let isFiltered = false;
+  // let filteredData = [];
+  const filteredDataNew = (data) => {
+    console.log(data)
+    let _filterList = [];
+    if (data) {
+      _filterList = masterCity.filter(e => e.state === data.value)
+    }
+    console.log('_filterList', _filterList)
+    setFilteredData(_filterList)
+    // filterData
+    console.log('filteredData', filteredData)
 
-      // Role and country-based filtering
-      switch (filter) {
-        case "INDIA":
-          const indiaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "INDIA").id
-          if (document.country === indiaid) {
-            isFiltered = true;
-          }
-          break;
-        case "USA":
-          const usaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "USA").id
-          if (document.country === usaid) {
-            isFiltered = true;
-          }
-          break;
-        case "OTHERS":
-          const indiaid1 = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "INDIA").id
-          const usaid1 = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "USA").id
-          if (document.country !== indiaid1 && document.country !== usaid1) {
-            isFiltered = true;
-          }
-          break;
-        case "INACTIVE":
-          if (document.status.toLowerCase() === "inactive") {
-            isFiltered = true;
-          }
-          break;
-        default:
-          isFiltered = true;
-      }
+  }
 
-      // console.log("document: ", document)
-      let _searchkey;
-      let _state = masterState.find(e => e.id === document.state).state;
-      _searchkey = {
-        city: document.city,
-        state: _state
-      }
-      // console.log("_searchkey: ", _searchkey)
+  const searchCountry = (data) => {
+    // console.log(data)
+    let _filterList = [];
 
-      // Search input filtering
-      const searchMatch = searchInput
-        ? Object.values(_searchkey).some(
-          (field) =>
-            typeof field === "string" &&
-            field.toUpperCase().includes(searchInput.toUpperCase())
-        )
-        : true;
+    setFilteredData(_filterList)
+    // filterData
+    console.log('filteredData', filteredData)
 
-      return isFiltered && searchMatch;
-    })
-    : null;
+  }
+
+  // let filteredData = masterCity
+  //   ? masterCity.filter((document) => {
+  //     let isFiltered = false;
+
+  //     console.log("document: ", document)
+  //     // console.log("filter value: ", filter)
+  //     console.log("State Filter: ", stateFilter)
+
+  //     if (stateFilter.value === document.state) {
+  //       isFiltered = true;
+  //     }
+
+  //     // Role and country-based filtering
+  //     switch (filter) {
+  //       case "INDIA":
+  //         const indiaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "INDIA").id
+  //         if (document.country === indiaid) {
+  //           isFiltered = true;
+  //         }
+  //         break;
+  //       case "USA":
+  //         const usaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "USA").id
+  //         if (document.country === usaid) {
+  //           isFiltered = true;
+  //         }
+  //         break;
+  //       case "OTHERS":
+  //         const indiaid1 = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "INDIA").id
+  //         const usaid1 = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "USA").id
+  //         if (document.country !== indiaid1 && document.country !== usaid1) {
+  //           isFiltered = true;
+  //         }
+  //         break;
+  //       case "INACTIVE":
+  //         if (document.status.toLowerCase() === "inactive") {
+  //           isFiltered = true;
+  //         }
+  //         break;
+  //       default:
+  //         isFiltered = true;
+  //     }
+
+
+  //     // console.log("searchInput: ", searchInput)
+
+  //     let searchMatch = "";
+  //     // if (searchInput) {
+  //     let _searchkey;
+  //     let _state = masterState.find(e => e.id === document.state).state;
+  //     _searchkey = {
+  //       city: document.city,
+  //       state: _state
+  //     }
+  //     // console.log("_searchkey: ", _searchkey)
+
+  //     // Search input filtering
+  //     searchMatch = searchInput
+  //       ? Object.values(_searchkey).some(
+  //         (field) =>
+  //           typeof field === "string" &&
+  //           field.toUpperCase().includes(searchInput.toUpperCase())
+  //       )
+  //       : true;
+  //     // }
+
+  //     return isFiltered && searchMatch;
+  //   })
+  //   : null;
 
 
   // nine dots menu start  
@@ -416,7 +513,7 @@ export default function MasterCityList() {
     setviewMode(newViewMode);
   };
   // View mode end
-
+  console.log(filteredData)
   return (
     <div className="top_header_pg pg_bg pg_adminproperty">
       <div
@@ -459,7 +556,7 @@ export default function MasterCityList() {
             </div>
             <div className="vg12"></div>
             <div className="filters">
-              <div className="left">
+              <div className="left" style={{ display: "flex", alignItems: "center" }}>
                 <div className="rt_global_search search_field">
                   <input
                     placeholder="Search"
@@ -469,6 +566,30 @@ export default function MasterCityList() {
                   <div className="field_icon">
                     <span className="material-symbols-outlined">search</span>
                   </div>
+                </div>
+                <div style={{ padding: "0 10px" }}>
+                  <Select
+                    className=""
+                    // onChange={(option) => handleFilterStateChange(option)}
+                    // onChange={(option) => setState(option)}
+                    onChange={(e) => {
+                      setState(e)
+                      filteredDataNew(e)
+
+                    }}
+                    // changeFilter={changeFilter}
+                    options={stateOptions.current}
+                    value={state}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: "#eee",
+                        borderBottom: " 1px solid var(--theme-blue)",
+                        width: '300px',
+                      }),
+                    }}
+                  />
                 </div>
               </div>
               <div className="right">
