@@ -60,6 +60,7 @@ export default function MasterLocalityList() {
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     // console.log('in useeffect')
@@ -71,6 +72,7 @@ export default function MasterLocalityList() {
 
       // console.log("countryOptions: ", countryOptions)
       handleCountryChange({ label: "INDIA", value: "_india" })
+      filteredDataNew({ label: "Andaman & Nicobar Islands", value: "_andaman_&_nicobar_islands" })
     }
 
   }, [masterCountry]);
@@ -158,7 +160,7 @@ export default function MasterLocalityList() {
   //City select onchange
   const handleCityChange = async (option) => {
     setCity(option);
-    // console.log('city.id:', option)
+    // console.log('handleCityChange city.id:', option)
 
     if (option) {
       const ref = await projectFirestore
@@ -173,7 +175,8 @@ export default function MasterLocalityList() {
               value: localityData.id,
             }));
 
-            // console.log("localityOptions: ", localityOptions)           
+            // console.log("localityOptions: ", localityOptions)   
+            filteredDataNew(option)
 
           } else {
             // setError('No such document exists')
@@ -231,6 +234,10 @@ export default function MasterLocalityList() {
     setFormError(null);
 
     let localityname = camelCase(locality.trim());
+    // console.log("localityname: ", localityname)
+
+    let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase()
+    // console.log("value: ", isDuplicateLocality)
 
     if (currentDocid) {
       // console.log("country.value: ", country.value)
@@ -246,11 +253,13 @@ export default function MasterLocalityList() {
     } else {
       let ref = projectFirestore
         .collection("m_localities")
-        .where("locality", "==", localityname);
+        .where("docId", "==", isDuplicateLocality);
+
       const unsubscribe = ref.onSnapshot(async (snapshot) => {
         snapshot.docs.forEach((doc) => {
           results.push({ ...doc.data(), id: doc.id });
         });
+
 
         if (results.length === 0) {
           const dataSet = {
@@ -261,6 +270,7 @@ export default function MasterLocalityList() {
             locality: localityname,
             status: "active",
           };
+          // console.log("dataSet: ", dataSet)
           // await addDocument(dataSet);
           const _customDocId = dataSet.docId
           await addDocumentWithCustomDocId(dataSet, _customDocId);
@@ -332,44 +342,58 @@ export default function MasterLocalityList() {
 
   const [searchInput, setSearchInput] = useState("");
 
+  const filteredDataNew = (data) => {
+    console.log(data)
+    let _filterList = [];
+    if (data) {
+      // _filterList = masterCity.filter(e => e.state === data.value)
+      _filterList = masterLocality && masterLocality.filter(e => e.city === data.value)
+    }
+    // console.log('_filterList', _filterList)
+    setFilteredData(_filterList)
+    // filterData
+    // console.log('filteredData', filteredData)
+
+  }
+
   const handleSearchInputChange = (e) => {
     // console.log("e.target.value: ", e.target.value)
     setSearchInput(e.target.value);
   };
 
-  const filteredData = masterLocality
-    ? masterLocality.filter((document) => {
-      // Search input filtering
+  // const filteredData = masterLocality
+  //   ? masterLocality.filter((document) => {
+  //     // Search input filtering
 
-      // console.log("document: ", document)
-      let _searchkey;
-      let _city = masterCity.find(e => e.id === document.city).city;
-      _searchkey = {
-        locality: document.locality,
-        city: _city
-      }
-      // console.log("_searchkey: ", _searchkey)
+  //     // console.log("document: ", document)
+  //     let _searchkey;
+  //     let _city = masterCity.find(e => e.id === document.city).city;
+  //     _searchkey = {
+  //       locality: document.locality,
+  //       city: _city
+  //     }
+  //     // console.log("_searchkey: ", _searchkey)
 
-      // Search input filtering
-      const searchMatch = searchInput
-        ? Object.values(_searchkey).some(
-          (field) =>
-            typeof field === "string" &&
-            field.toUpperCase().includes(searchInput.toUpperCase())
-        )
-        : true;
+  //     // Search input filtering
+  //     const searchMatch = searchInput
+  //       ? Object.values(_searchkey).some(
+  //         (field) =>
+  //           typeof field === "string" &&
+  //           field.toUpperCase().includes(searchInput.toUpperCase())
+  //       )
+  //       : true;
 
-      // const searchMatch = searchInput
-      //   ? Object.values(document).some(
-      //     (field) =>
-      //       typeof field === "string" &&
-      //       field.toUpperCase().includes(searchInput.toUpperCase())
-      //   )
-      //   : true;
+  //     // const searchMatch = searchInput
+  //     //   ? Object.values(document).some(
+  //     //     (field) =>
+  //     //       typeof field === "string" &&
+  //     //       field.toUpperCase().includes(searchInput.toUpperCase())
+  //     //   )
+  //     //   : true;
 
-      return searchMatch;
-    })
-    : null;
+  //     return searchMatch;
+  //   })
+  //   : null;
 
   // nine dots menu start
   const nineDotsAdminMenu = [
@@ -439,7 +463,7 @@ export default function MasterLocalityList() {
             </div>
             <div className="vg12"></div>
             <div className="filters">
-              <div className="left">
+              <div className="left" style={{ display: "flex", alignItems: "center" }}>
                 <div className="rt_global_search search_field">
                   <input
                     placeholder="Search"
@@ -449,6 +473,54 @@ export default function MasterLocalityList() {
                   <div className="field_icon">
                     <span className="material-symbols-outlined">search</span>
                   </div>
+                </div>
+                <div style={{ padding: "0 10px" }}>
+                  <Select
+                    className=""
+                    // onChange={(option) => handleFilterStateChange(option)}
+                    // onChange={(option) => setState(option)}
+                    onChange={(e) => {
+                      setState(e)
+                      handleStateChange(e)
+
+                    }}
+                    // changeFilter={changeFilter}
+                    options={stateOptions.current}
+                    value={state}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: "#eee",
+                        borderBottom: " 1px solid var(--theme-blue)",
+                        width: '300px',
+                      }),
+                    }}
+                  />
+                </div>
+                <div style={{ padding: "0 10px" }}>
+                  <Select
+                    className=""
+                    // onChange={(option) => handleFilterStateChange(option)}
+                    // onChange={(option) => setState(option)}
+                    onChange={(e) => {
+                      setCity(e)
+                      filteredDataNew(e)
+
+                    }}
+                    // changeFilter={changeFilter}
+                    options={cityOptions.current}
+                    value={city}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: "#eee",
+                        borderBottom: " 1px solid var(--theme-blue)",
+                        width: '300px',
+                      }),
+                    }}
+                  />
                 </div>
               </div>
               <div className="right">
@@ -616,114 +688,114 @@ export default function MasterLocalityList() {
           </form>
           <hr />
         </div>
-        {filteredData && filteredData.length !== 0 && (
+        {filteredData && filteredData.length > 0 ? (
           <>
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>
+
                   {filteredData &&
-                    filteredData.map((data) => (
-                      <div className="property-status-padding-div">
+                    (filteredData.map((data) => <div className="property-status-padding-div">
+                      <div
+                        className="profile-card-div"
+                        style={{ position: "relative" }}
+                      >
                         <div
-                          className="profile-card-div"
-                          style={{ position: "relative" }}
+                          className="address-div"
+                          style={{ paddingBottom: "5px" }}
                         >
                           <div
-                            className="address-div"
-                            style={{ paddingBottom: "5px" }}
+                            className="icon"
+                            style={{ position: "relative", top: "-1px" }}
                           >
-                            <div
-                              className="icon"
-                              style={{ position: "relative", top: "-1px" }}
+                            <span
+                              className="material-symbols-outlined"
+                              style={{ color: "var(--darkgrey-color)" }}
                             >
-                              <span
-                                className="material-symbols-outlined"
-                                style={{ color: "var(--darkgrey-color)" }}
+                              flag
+                            </span>
+                          </div>
+                          <div className="address-text">
+                            <div
+                              onClick={() =>
+                                handleEditCard(
+                                  data.id,
+                                  data.country,
+                                  data.state,
+                                  data.city,
+                                  data.locality
+                                )
+                              }
+                              style={{
+                                width: "80%",
+                                height: "170%",
+                                textAlign: "left",
+                                display: "flex",
+                                justifyContent: "center",
+                                flexDirection: "column",
+                                transform: "translateY(-7px)",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <h5
+                                style={{
+                                  margin: "0",
+                                  transform: "translateY(5px)",
+                                }}
                               >
-                                flag
-                              </span>
+                                {data.locality}
+                              </h5>
+                              <small
+                                style={{
+                                  margin: "0",
+                                  transform: "translateY(5px)",
+                                }}
+                              >
+                                {(masterCity && masterCity.find((e) => e.id === data.city))?.city}, {" "}
+                                {/* {data.state} */}
+                                {(masterState && masterState.find((e) => e.id === data.state))?.state}, {" "}
+                                {(masterCountry && masterCountry.find((e) => e.id === data.country))?.country}
+                                {/* {data.country} */}
+                              </small>
                             </div>
-                            <div className="address-text">
-                              <div
-                                onClick={() =>
-                                  handleEditCard(
-                                    data.id,
-                                    data.country,
-                                    data.state,
-                                    data.city,
-                                    data.locality
-                                  )
-                                }
+                            <div
+                              className=""
+                              onClick={() =>
+                                handleChangeStatus(data.id, data.status)
+                              }
+                              style={{
+                                width: "20%",
+                                height: "calc(100% - -20px)",
+                                position: "relative",
+                                top: "-8px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <small
                                 style={{
-                                  width: "80%",
-                                  height: "170%",
-                                  textAlign: "left",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  flexDirection: "column",
-                                  transform: "translateY(-7px)",
-                                  cursor: "pointer",
+                                  margin: "0",
+                                  background:
+                                    data.status === "active"
+                                      ? "green"
+                                      : "red",
+                                  color: "#fff",
+                                  padding: "3px 10px 3px 10px",
+                                  borderRadius: "4px",
                                 }}
                               >
-                                <h5
-                                  style={{
-                                    margin: "0",
-                                    transform: "translateY(5px)",
-                                  }}
-                                >
-                                  {data.locality}
-                                </h5>
-                                <small
-                                  style={{
-                                    margin: "0",
-                                    transform: "translateY(5px)",
-                                  }}
-                                >
-                                  {(masterCity && masterCity.find((e) => e.id === data.city))?.city}, {" "}
-                                  {/* {data.state} */}
-                                  {(masterState && masterState.find((e) => e.id === data.state))?.state}, {" "}
-                                  {(masterCountry && masterCountry.find((e) => e.id === data.country))?.country}
-                                  {/* {data.country} */}
-                                </small>
-                              </div>
-                              <div
-                                className=""
-                                onClick={() =>
-                                  handleChangeStatus(data.id, data.status)
-                                }
-                                style={{
-                                  width: "20%",
-                                  height: "calc(100% - -20px)",
-                                  position: "relative",
-                                  top: "-8px",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "flex-end",
-                                  cursor: "pointer",
-                                }}
-                              >
-                                <small
-                                  style={{
-                                    margin: "0",
-                                    background:
-                                      data.status === "active"
-                                        ? "green"
-                                        : "red",
-                                    color: "#fff",
-                                    padding: "3px 10px 3px 10px",
-                                    borderRadius: "4px",
-                                  }}
-                                >
-                                  {data.status}
-                                </small>
-                                {/* <span className="material-symbols-outlined">
+                                {data.status}
+                              </small>
+                              {/* <span className="material-symbols-outlined">
                                             chevron_right
                                         </span> */}
-                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
+                    </div>
                     ))}
                 </>
               )}
@@ -731,9 +803,11 @@ export default function MasterLocalityList() {
             {viewMode === "table_view" && (
               <h5 className="text-center text_green">Coming Soon....</h5>
             )}
+
           </>
-        )}
+        ) : "No Locality Available"}
       </div>
+      <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
     </div>
   );
 }

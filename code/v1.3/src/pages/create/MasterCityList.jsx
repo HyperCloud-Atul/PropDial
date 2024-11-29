@@ -284,6 +284,12 @@ export default function MasterCityList() {
 
     let cityname = camelCase(city.trim());
     // console.log('cityname:', cityname)
+
+
+    let isDuplicateCity = state.value + "_" + cityname.split(" ").join("_").toLowerCase()
+    // console.log("value: ", isDuplicateLocality)
+
+
     // console.log("Updated currentDocid: ", currentDocid)
     if (currentDocid != null) {
       // console.log("Updated currentDocid: ", currentDocid)
@@ -298,7 +304,7 @@ export default function MasterCityList() {
     } else if (currentDocid == null) {
       let ref = projectFirestore
         .collection("m_cities")
-        .where("city", "==", cityname);
+        .where("docId", "==", isDuplicateCity);
       const unsubscribe = ref.onSnapshot(async (snapshot) => {
         snapshot.docs.forEach((doc) => {
           results.push({ ...doc.data(), id: doc.id });
