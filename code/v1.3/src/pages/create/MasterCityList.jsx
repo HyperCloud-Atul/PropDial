@@ -73,6 +73,8 @@ export default function MasterCityList() {
     }
 
     handleCountryChange({ label: "INDIA", value: "_india" })
+    filteredDataNew({ label: "Andaman & Nicobar Islands", value: "_andaman_&_nicobar_islands" })
+
 
   }, [masterCountry]);
 
@@ -81,7 +83,7 @@ export default function MasterCityList() {
   const handleCountryChange = async (option) => {
     setCountry(option);
     // let countryname = option.label;
-    // console.log('countryname:', countryname)
+    // console.log('handleCountryChange option:', option)
     // const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
     // console.log('countryid:', countryid)
     const ref = await projectFirestore
@@ -121,7 +123,7 @@ export default function MasterCityList() {
   //Stae select onchange
   const handleStateChange = async (option) => {
     setState(option);
-    console.log('state.id:', option.value)
+    // console.log('state.id:', option.value)
     const ref = await projectFirestore
       .collection("m_cities")
       .where("state", "==", option.value)
@@ -133,6 +135,10 @@ export default function MasterCityList() {
             label: cityData.data().city,
             value: cityData.id,
           }));
+
+          // console.log("cityOptions.current: ", cityOptions.current)
+
+          // setFilteredData(cityOptions.current)
 
           // if (cityOptions.current.length === 0) {
           //   // console.log("No City")
@@ -158,45 +164,45 @@ export default function MasterCityList() {
   };
 
   //Filter State select onchange
-  const handleFilterStateChange = async (option) => {
-    setState(option);
-    console.log('handleFilterStateChange state.id:', option.value)
-    const ref = await projectFirestore
-      .collection("m_cities")
-      .where("state", "==", option.value)
-      .orderBy("city", "asc");
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          cityOptions.current = snapshot.docs.map((cityData) => ({
-            label: cityData.data().city,
-            value: cityData.id,
-          }));
+  // const handleFilterStateChange = async (option) => {
+  //   setState(option);
+  //   console.log('handleFilterStateChange state.id:', option.value)
+  //   const ref = await projectFirestore
+  //     .collection("m_cities")
+  //     .where("state", "==", option.value)
+  //     .orderBy("city", "asc");
+  //   ref.onSnapshot(
+  //     async (snapshot) => {
+  //       if (snapshot.docs) {
+  //         cityOptions.current = snapshot.docs.map((cityData) => ({
+  //           label: cityData.data().city,
+  //           value: cityData.id,
+  //         }));
 
-          console.log("cityOptions: ", cityOptions.current)
+  //         console.log("cityOptions: ", cityOptions.current)
 
-          // if (cityOptions.current.length === 0) {
-          //   // console.log("No City")
-          //   handleCityChange(null)
-          // }
-          // else {
-          //   handleCityChange({
-          //     label: cityOptions.current[0].label,
-          //     value: cityOptions.current[0].value,
-          //   });
-          // }
+  //         // if (cityOptions.current.length === 0) {
+  //         //   // console.log("No City")
+  //         //   handleCityChange(null)
+  //         // }
+  //         // else {
+  //         //   handleCityChange({
+  //         //     label: cityOptions.current[0].label,
+  //         //     value: cityOptions.current[0].value,
+  //         //   });
+  //         // }
 
-        } else {
-          // handleCityChange(null)
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
-      }
-    );
-  };
+  //       } else {
+  //         // handleCityChange(null)
+  //         // setError('No such document exists')
+  //       }
+  //     },
+  //     (err) => {
+  //       console.log(err.message);
+  //       // setError('failed to get document')
+  //     }
+  //   );
+  // };
 
   //City select onchange
   // const handleCityChange = async (option) => {
@@ -343,9 +349,9 @@ export default function MasterCityList() {
     // };
   }
 
-  const changeStateFilter = (newFilter) => {
-    setStateFilter(newFilter);
-  };
+  // const changeStateFilter = (newFilter) => {
+  //   setStateFilter(newFilter);
+  // };
 
 
   const handleAddSection = () => {
@@ -401,27 +407,27 @@ export default function MasterCityList() {
 
   // let filteredData = [];
   const filteredDataNew = (data) => {
-    console.log(data)
+    // console.log("filteredDataNew data: ", data)
     let _filterList = [];
     if (data) {
-      _filterList = masterCity.filter(e => e.state === data.value)
+      _filterList = masterCity && masterCity.filter(e => e.state === data.value)
     }
-    console.log('_filterList', _filterList)
+    // console.log('_filterList', _filterList)
     setFilteredData(_filterList)
     // filterData
-    console.log('filteredData', filteredData)
+    // console.log('filteredData', filteredData)
 
   }
 
-  const searchCountry = (data) => {
-    // console.log(data)
-    let _filterList = [];
+  // const searchCountry = (data) => {
+  //   // console.log(data)
+  //   let _filterList = [];
 
-    setFilteredData(_filterList)
-    // filterData
-    console.log('filteredData', filteredData)
+  //   setFilteredData(_filterList)
+  //   // filterData
+  //   console.log('filteredData', filteredData)
 
-  }
+  // }
 
   // let filteredData = masterCity
   //   ? masterCity.filter((document) => {
@@ -513,7 +519,7 @@ export default function MasterCityList() {
     setviewMode(newViewMode);
   };
   // View mode end
-  console.log(filteredData)
+  // console.log(filteredData)
   return (
     <div className="top_header_pg pg_bg pg_adminproperty">
       <div
@@ -572,6 +578,7 @@ export default function MasterCityList() {
                     className=""
                     // onChange={(option) => handleFilterStateChange(option)}
                     // onChange={(option) => setState(option)}
+                    // defaultValue={label:'DELHI', value:'_delhi' }
                     onChange={(e) => {
                       setState(e)
                       filteredDataNew(e)
@@ -591,6 +598,7 @@ export default function MasterCityList() {
                     }}
                   />
                 </div>
+
               </div>
               <div className="right">
                 <div className="new_inline">
