@@ -5,6 +5,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import NineDots from "../../components/NineDots";
+import MasterCountryTable from "./MasterCountryTable";
 
 export default function MasterCountryList() {
   // Scroll to the top of the page whenever the location changes start
@@ -379,7 +380,8 @@ export default function MasterCountryList() {
               )}
             </div>
             {viewMode === "table_view" && (
-              <h5 className="text-center text_green">Coming Soon....</h5>
+              // <h5 className="text-center text_green">Coming Soon....</h5>
+              <>{masterCountry && <MasterCountryTable filterData={masterCountry} />}</>
             )}
           </>
         )}

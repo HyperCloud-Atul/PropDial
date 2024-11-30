@@ -8,6 +8,7 @@ import Filters from "../../components/Filters";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import MasterLocalityTable from "./MasterLocalityTable";
 // component
 import NineDots from "../../components/NineDots";
 
@@ -801,13 +802,13 @@ export default function MasterLocalityList() {
               )}
             </div>
             {viewMode === "table_view" && (
-              <h5 className="text-center text_green">Coming Soon....</h5>
+                <>{filteredData && <MasterLocalityTable filterData={filteredData} />}</>
             )}
 
           </>
         ) : "No Locality Available"}
       </div>
-      <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+    
     </div>
   );
 }

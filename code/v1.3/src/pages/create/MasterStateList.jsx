@@ -7,6 +7,7 @@ import Select from "react-select";
 import Filters from "../../components/Filters";
 import { useCommon } from "../../hooks/useCommon";
 import { Link } from "react-router-dom";
+import MasterStateTable from "./MasterStateTable";
 
 // component
 import NineDots from "../../components/NineDots";
@@ -581,7 +582,8 @@ export default function MasterStateList() {
                 )}
               </div>
               {viewMode === "table_view" && (
-                <h5 className="text-center text_green">Coming Soon....</h5>
+                // <h5 className="text-center text_green">Coming Soon....</h5>
+                <>{filteredData && <MasterStateTable filterData={filteredData} />}</>
               )}
             </>
           )}

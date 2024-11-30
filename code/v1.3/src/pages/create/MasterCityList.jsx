@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "./Create.css";
 import NineDots from "../../components/NineDots";
+import MasterCityTable from "./MasterCityTable";
 
 const dataFilter = ["INDIA", "USA", "OTHERS", "INACTIVE"];
 export default function MasterCityList() {
@@ -872,9 +873,7 @@ export default function MasterCityList() {
               )}
             </div>
             {viewMode === "table_view" && (
-              <h5 className="text-center text_green">
-                Coming Soon....
-              </h5>
+               <>{filteredData && <MasterCityTable filterData={filteredData} />}</>
             )}
           </>
         )}

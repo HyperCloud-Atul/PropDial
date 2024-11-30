@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 // component
 import NineDots from "../../components/NineDots";
+import MasterSocietyTable from "./MasterSocietyTable";
 
 export default function MasterSocietyList() {
   // Scroll to the top of the page whenever the location changes start
@@ -843,9 +844,7 @@ export default function MasterSocietyList() {
                 )}
               </div>
               {viewMode === "table_view" && (
-                <h5 className="text-center text_green">
-                  Coming Soon....
-                </h5>
+            <>{filteredData && <MasterSocietyTable filterData={filteredData} />}</>
               )}
             </>
           )}
