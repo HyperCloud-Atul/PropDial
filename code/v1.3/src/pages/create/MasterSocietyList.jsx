@@ -19,8 +19,8 @@ export default function MasterSocietyList() {
   const { user } = useAuthContext();
   const { camelCase } = useCommon();
   // Scroll to the top of the page whenever the location changes end
-  // const { addDocument, response } = useFirestore("m_societies");
-  const { addDocumentWithCustomDocId, response: responseAddDocument } = useFirestore("m_societies");
+  const { addDocument, response } = useFirestore("m_societies");
+  // const { addDocumentWithCustomDocId, response: responseAddDocument } = useFirestore("m_societies");
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_societies");
 
@@ -59,6 +59,7 @@ export default function MasterSocietyList() {
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
 
 
   useEffect(() => {
@@ -263,7 +264,7 @@ export default function MasterSocietyList() {
 
         if (results.length === 0) {
           const dataSet = {
-            docId: locality.value + "_" + societyname.split(" ").join("_").toLowerCase(),
+            // docId: locality.value + "_" + societyname.split(" ").join("_").toLowerCase(),
             country: country.value,
             state: state.value,
             city: city.value,
@@ -271,9 +272,9 @@ export default function MasterSocietyList() {
             society: societyname,
             status: "active",
           };
-          // await addDocument(dataSet);
-          const _customDocId = dataSet.docId
-          await addDocumentWithCustomDocId(dataSet, _customDocId);
+          await addDocument(dataSet);
+          // const _customDocId = dataSet.docId
+          // await addDocumentWithCustomDocId(dataSet, _customDocId);
           setFormError("Successfully added");
           sethandleAddSectionFlag(!handleAddSectionFlag);
         } else {
@@ -345,33 +346,47 @@ export default function MasterSocietyList() {
 
   const [searchInput, setSearchInput] = useState("");
 
+  const filteredDataNew = (data) => {
+    console.log(data)
+    let _filterList = [];
+    if (data) {
+      // _filterList = masterCity.filter(e => e.state === data.value)
+      _filterList = masterSociety && masterSociety.filter(e => e.locality === data.value)
+    }
+    // console.log('_filterList', _filterList)
+    setFilteredData(_filterList)
+    // filterData
+    // console.log('filteredData', filteredData)
+
+  }
+
   const handleSearchInputChange = (e) => {
     // console.log("e.target.value: ", e.target.value)
     setSearchInput(e.target.value);
   };
 
-  const filteredData = masterSociety
-    ? masterSociety.filter((document) => {
-      let _searchkey;
-      let _locality = masterLocality.find(e => e.id === document.locality).locality;
-      _searchkey = {
-        society: document.society,
-        locality: _locality
-      }
-      // console.log("_searchkey: ", _searchkey)
+  // const filteredData = masterSociety
+  //   ? masterSociety.filter((document) => {
+  //     let _searchkey;
+  //     let _locality = masterLocality.find(e => e.id === document.locality).locality;
+  //     _searchkey = {
+  //       society: document.society,
+  //       locality: _locality
+  //     }
+  //     // console.log("_searchkey: ", _searchkey)
 
-      // Search input filtering
-      const searchMatch = searchInput
-        ? Object.values(_searchkey).some(
-          (field) =>
-            typeof field === "string" &&
-            field.toUpperCase().includes(searchInput.toUpperCase())
-        )
-        : true;
+  //     // Search input filtering
+  //     const searchMatch = searchInput
+  //       ? Object.values(_searchkey).some(
+  //         (field) =>
+  //           typeof field === "string" &&
+  //           field.toUpperCase().includes(searchInput.toUpperCase())
+  //       )
+  //       : true;
 
-      return searchMatch;
-    })
-    : null;
+  //     return searchMatch;
+  //   })
+  //   : null;
 
   // nine dots menu start
   const nineDotsAdminMenu = [
@@ -442,7 +457,7 @@ export default function MasterSocietyList() {
               </div>
               <div className="vg12"></div>
               <div className="filters">
-                <div className="left">
+                <div className="left" style={{ display: "flex", alignItems: "center" }}>
                   <div className="rt_global_search search_field">
                     <input
                       placeholder="Search"
@@ -452,6 +467,78 @@ export default function MasterSocietyList() {
                     <div className="field_icon">
                       <span className="material-symbols-outlined">search</span>
                     </div>
+                  </div>
+                  <div style={{ padding: "0 10px" }}>
+                    <Select
+                      className=""
+                      // onChange={(option) => handleFilterStateChange(option)}
+                      // onChange={(option) => setState(option)}
+                      onChange={(e) => {
+                        setState(e)
+                        handleStateChange(e)
+
+                      }}
+                      // changeFilter={changeFilter}
+                      options={stateOptions.current}
+                      value={state}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                          width: '300px',
+                        }),
+                      }}
+                    />
+                  </div>
+                  <div style={{ padding: "0 10px" }}>
+                    <Select
+                      className=""
+                      // onChange={(option) => handleFilterStateChange(option)}
+                      // onChange={(option) => setState(option)}
+                      onChange={(e) => {
+                        setCity(e)
+                        handleCityChange(e)
+
+                      }}
+                      // changeFilter={changeFilter}
+                      options={cityOptions.current}
+                      value={city}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                          width: '300px',
+                        }),
+                      }}
+                    />
+                  </div>
+                  <div style={{ padding: "0 10px" }}>
+                    <Select
+                      className=""
+                      // onChange={(option) => handleFilterStateChange(option)}
+                      // onChange={(option) => setState(option)}
+                      onChange={(e) => {
+                        setLocality(e)
+                        filteredDataNew(e)
+
+                      }}
+                      // changeFilter={changeFilter}
+                      options={localityOptions.current}
+                      value={locality}
+                      styles={{
+                        control: (baseStyles, state) => ({
+                          ...baseStyles,
+                          outline: "none",
+                          background: "#eee",
+                          borderBottom: " 1px solid var(--theme-blue)",
+                          width: '300px',
+                        }),
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="right">
