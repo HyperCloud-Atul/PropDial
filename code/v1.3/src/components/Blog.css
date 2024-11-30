@@ -158,7 +158,12 @@ img.verified_img {
 .prop_doc_tab .blog_sect .card-container {
   margin-top: 20px;
 }
-
+.prop_doc_tab .blog_sect .card-body:after{
+  content: none;
+}
+.prop_doc_tab .blog_sect .card-body:before{
+  content: none;
+}
 @media only screen and (max-width: 991px) {
   .verified_batch span {
     font-size: 35px;
