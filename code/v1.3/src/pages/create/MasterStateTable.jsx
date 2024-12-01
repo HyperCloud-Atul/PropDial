@@ -19,6 +19,14 @@ const MasterStateTable = ({ filterData }) => {
         accessor: "state",
       },   
       {
+        Header: "State Code",
+        accessor: "stateCode",
+      },
+      {
+        Header: "GST Code",
+        accessor: "gstStateCode",
+      },
+      {
         Header: "Added At",
         accessor: "createdAt",
         Cell: ({ value }) => (
