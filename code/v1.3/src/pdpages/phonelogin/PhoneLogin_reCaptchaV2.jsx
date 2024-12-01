@@ -351,6 +351,16 @@ const PhoneLogin_reCaptchaV2 = () => {
           status: "active",
           createdAt: timestamp.fromDate(new Date()),
           lastLoginTimestamp: timestamp.fromDate(new Date()),
+          //Employee Details
+          dateofJoinee: "",
+          dateofLeaving: "",
+          employeeId: "",
+          reportingManagerId: "",
+          department: "",
+          designation: "",
+          uan: "",
+          pan: "",
+          aadhaar: ""
         });
 
       console.log("User Created Successfully")

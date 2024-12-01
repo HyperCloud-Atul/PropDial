@@ -1,14 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import Gallery from "react-image-gallery";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDocument } from "../../hooks/useDocument";
+import { useCommon } from "../../hooks/useCommon";
+import { format } from "date-fns";
 import './PGUserProfileDetails.css'
 
 export default function PGUserProfileDetails() {
     const images = [];
-    const { user } = useAuthContext();
+    const { userProfileId } = useParams();
+    const { camelCase } = useCommon();
+    // const { user } = useAuthContext();
     const [isUploading, setIsUploading] = useState(false);
     const [isConfirmVisible, setIsConfirmVisible] = useState(false);
     const [selectedImage, setSelectedImage] = useState("/assets/img/team1.jpg");
+
+    console.log("userProfileId: ", userProfileId)
+
+    const { document: userProfileDoc, error: userProfileDocError } = useDocument("users-propdial", userProfileId)
 
     return (
         <>
@@ -137,66 +147,78 @@ export default function PGUserProfileDetails() {
                         <div className="col-lg-5 col-md-5 col-sm-12">
                             <div className="profile-card-image">
                                 <img
-                                    src={selectedImage}
+                                    src={userProfileDoc && userProfileDoc.photoURL}
                                     alt="Selected img"
                                 />
                             </div>
                         </div>
                         <div className="col-lg-7 col-md-7 col-sm-12">
                             <div className="profile-card-content">
-                                <h1>Atul Tripathi</h1>
-                                <h2>+91 874-900-1111</h2>
-                                <h2>atul@hyperclouddigital.com</h2>
-                                <h4>A-504, High Mont Society, Hinjewdi Phase - II, Pune, Maharashtra</h4>
-                                <h5>Active</h5>
+                                <h1>{userProfileDoc && userProfileDoc.fullName}</h1>
+                                <h2>{userProfileDoc && userProfileDoc.phoneNumber.replace(
+                                    /(\d{2})(\d{5})(\d{5})/,
+                                    "+$1 $2-$3"
+                                )}</h2>
+                                <h2>{userProfileDoc && userProfileDoc.email}</h2>
+                                <h4>{userProfileDoc && userProfileDoc.address}  </h4>
+                                <h5> {userProfileDoc && camelCase(userProfileDoc.status)}</h5>
                                 <div>
-                                    <h3>Executive</h3>
+                                    <h3>{userProfileDoc && camelCase(userProfileDoc.rolePropDial)}</h3>
                                     <span className="material-symbols-outlined">
                                         edit
                                     </span>
                                 </div>
-                            </div>
-                            {/* <hr />
-                            <div className="employee-details">
-                                <h1>Employee Details</h1>
-                                <div className="employee-details-outter-div">
-                                    <div className="employee-details-inner-div">
-                                        <h5>1 Mar'24</h5>
-                                        <small>Date of Joinee</small>
-                                    </div>
-                                    <div className="employee-details-inner-div">
-                                        <h5>NA</h5>
-                                        <small>Date of Leaving</small>
-                                    </div>
-                                    <div className="employee-details-inner-div">
-                                        <h5>4 hours ago</h5>
-                                        <small>Last Logged-in</small>
-                                    </div>
+                                <div>
+                                    <h3>Is Employee? {userProfileDoc && userProfileDoc.whoAmI === 'employee' ? 'Yes' : 'No'}</h3>
+                                    <span className="material-symbols-outlined">
+                                        edit
+                                    </span>
                                 </div>
+
+                                <div className="">
+                                    <h2>  {userProfileDoc && userProfileDoc.dateofJoinee ? format(
+                                        userProfileDoc.lastLoginTimestamp.toDate(),
+                                        "dd-MMM-yyyy hh:mm a"
+                                    ) : ""}
+                                    </h2>
+
+
+                                </div>
+                                <div>
+                                    <small>Last Logged-in</small>
+                                </div>
+
                             </div>
-                            <div className="employee-details">
-                                <h1>Access Management</h1>
-                            </div> */}
                         </div>
                     </div>
                 </div>
                 <br />
-                <div className="profile-card">
+                {userProfileDoc && userProfileDoc.whoAmI === 'employee' && <div className="profile-card">
                     <h1 className="profile-card-heading">Employee Details</h1>
                     <div className="employee-details">
                         <div className="employee-details-outter-div">
                             <div className="employee-details-inner-div">
-                                <h5>1 Mar'24</h5>
+                                <h5>{userProfileDoc && userProfileDoc.dateofJoinee ? format(
+                                    userProfileDoc.dateofJoinee.toDate(),
+                                    "dd-MMM-yyyy"
+                                ) : ""}</h5>
                                 <small>Date of Joinee</small>
                             </div>
                             <div className="employee-details-inner-div">
-                                <h5>NA</h5>
+                                <h5>{userProfileDoc && userProfileDoc.dateofLeaving ? format(
+                                    userProfileDoc.dateofLeaving.toDate(),
+                                    "dd-MMM-yyyy"
+                                ) : "NA"}</h5>
+
                                 <small>Date of Leaving</small>
                             </div>
-                            <div className="employee-details-inner-div">
-                                <h5>4 hours ago</h5>
+                            {/* <div className="employee-details-inner-div">
+                                <h5>{userProfileDoc && userProfileDoc.dateofJoinee ? format(
+                                    userProfileDoc.lastLoginTimestamp.toDate(),
+                                    "dd-MMM-yyyy hh:mm a"
+                                ) : ""}</h5>
                                 <small>Last Logged-in</small>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <hr />
@@ -205,35 +227,15 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static">
                                 <div>
                                     <small><strong>Employee id</strong></small>
-                                    <h5>1234567</h5>
+                                    <h5>{userProfileDoc && userProfileDoc.employeeId} </h5>
                                 </div>
                                 <span className="material-symbols-outlined">
                                     edit
                                 </span>
                             </div>
                         </div>
-                        <div className="col-lg-6 col-md-6 col-sm-12" style={{ padding: '0' }}>
-                            <div className="employee-details-static" style={{ borderRight: 'none' }}>
-                                <div>
-                                    <small><strong>Name</strong></small>
-                                    <h5>Sanskar Solanki</h5>
-                                </div>
-                                <span className="material-symbols-outlined">
-                                    edit
-                                </span>
-                            </div>
-                        </div>
-                        <div className="col-lg-6 col-md-6 col-sm-12" style={{ padding: '0' }}>
-                            <div className="employee-details-static">
-                                <div>
-                                    <small><strong>User Type</strong></small>
-                                    <h5>Employee</h5>
-                                </div>
-                                <span className="material-symbols-outlined">
-                                    edit
-                                </span>
-                            </div>
-                        </div>
+
+
                         <div className="col-lg-6 col-md-6 col-sm-12" style={{ padding: '0' }}>
                             <div className="employee-details-static" style={{ borderRight: 'none' }}>
                                 <div>
@@ -249,7 +251,7 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static">
                                 <div>
                                     <small><strong>Department</strong></small>
-                                    <h5>IT</h5>
+                                    <h5>{userProfileDoc && userProfileDoc.department}</h5>
                                 </div>
                                 <span className="material-symbols-outlined">
                                     edit
@@ -260,7 +262,7 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static" style={{ borderRight: 'none' }}>
                                 <div>
                                     <small><strong>Designation</strong></small>
-                                    <h5>Software Developer</h5>
+                                    <h5>{userProfileDoc && userProfileDoc.designation}</h5>
                                 </div>
                                 <span className="material-symbols-outlined">
                                     edit
@@ -271,7 +273,7 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static">
                                 <div>
                                     <small><strong>UAN Number</strong></small>
-                                    <h5>UAN Number</h5>
+                                    <h5>{userProfileDoc && userProfileDoc.uan}</h5>
                                 </div>
                                 <span className="material-symbols-outlined">
                                     edit
@@ -282,7 +284,7 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static" style={{ borderRight: 'none' }}>
                                 <div>
                                     <small><strong>PAN Number</strong></small>
-                                    <h5>PAN Number</h5>
+                                    <h5>{userProfileDoc && userProfileDoc.pan}</h5>
                                 </div>
                                 <span className="material-symbols-outlined">
                                     edit
@@ -293,7 +295,7 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static" style={{ borderBottom: 'none', paddingBottom: '2px' }}>
                                 <div>
                                     <small><strong>Aadhar Number</strong></small>
-                                    <h5>Aadhar Number</h5>
+                                    <h5>{userProfileDoc && userProfileDoc.aadhaar}</h5>
                                 </div>
                                 <span className="material-symbols-outlined">
                                     edit
@@ -301,7 +303,7 @@ export default function PGUserProfileDetails() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
                 <br />
                 <div className="profile-card">
                     <h1 className="profile-card-heading">Access Management</h1>
@@ -353,7 +355,9 @@ export default function PGUserProfileDetails() {
                     </div>
                 </div>
                 <br />
-                <div className="profile-card">
+                {/* Reference 1 */}
+
+                {userProfileDoc && userProfileDoc.reference1 && <div className="profile-card">
                     <h1 className="profile-card-heading">Reference 1</h1>
                     <div style={{ padding: '8px' }} />
                     <div className="row no-gutters" style={{ padding: '0 10px' }}>
@@ -361,7 +365,9 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static">
                                 <div style={{ width: '100%' }}>
                                     <small><strong>Name</strong></small><br />
-                                    <input placeholder="Enter Name" type="text" />
+                                    <input placeholder="Enter Name" type="text" value={userProfileDoc.reference1.name}>
+
+                                    </input>
                                 </div>
                             </div>
                         </div>
@@ -369,7 +375,7 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static">
                                 <div style={{ width: '100%' }}>
                                     <small><strong>Email</strong></small><br />
-                                    <input placeholder="Enter Email" type="email" />
+                                    <input placeholder="Enter Email" type="email" value={userProfileDoc.reference1.email} />
                                 </div>
                             </div>
                         </div>
@@ -377,7 +383,7 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static" style={{ borderRight: 'none' }}>
                                 <div style={{ width: '100%' }}>
                                     <small><strong>Mobile Number</strong></small><br />
-                                    <input placeholder="Enter Mobile Number" type="number" />
+                                    <input placeholder="Enter Mobile Number" type="number" value={userProfileDoc.reference1.mobile} />
                                 </div>
                             </div>
                         </div>
@@ -385,14 +391,15 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static" style={{ borderRight: 'none', borderBottom: 'none', paddingBottom: '2px' }}>
                                 <div style={{ width: '100%' }}>
                                     <small><strong>Local Address</strong></small><br />
-                                    <textarea name="" placeholder="Enter Address" id=""></textarea>
+                                    <textarea name="" placeholder="Enter Address" id="" value={userProfileDoc.reference1.address}></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
                 <br />
-                <div className="profile-card">
+                {/* Reference 2 */}
+                {userProfileDoc && userProfileDoc.reference2 && <div className="profile-card">
                     <h1 className="profile-card-heading">Reference 2</h1>
                     <div style={{ padding: '8px' }} />
                     <div className="row no-gutters" style={{ padding: '0 10px' }}>
@@ -400,7 +407,9 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static">
                                 <div style={{ width: '100%' }}>
                                     <small><strong>Name</strong></small><br />
-                                    <input placeholder="Enter Name" type="text" />
+                                    <input placeholder="Enter Name" type="text" value={userProfileDoc.reference2.name}>
+
+                                    </input>
                                 </div>
                             </div>
                         </div>
@@ -408,7 +417,7 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static">
                                 <div style={{ width: '100%' }}>
                                     <small><strong>Email</strong></small><br />
-                                    <input placeholder="Enter Email" type="email" />
+                                    <input placeholder="Enter Email" type="email" value={userProfileDoc.reference2.email} />
                                 </div>
                             </div>
                         </div>
@@ -416,7 +425,7 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static" style={{ borderRight: 'none' }}>
                                 <div style={{ width: '100%' }}>
                                     <small><strong>Mobile Number</strong></small><br />
-                                    <input placeholder="Enter Mobile Number" type="number" />
+                                    <input placeholder="Enter Mobile Number" type="number" value={userProfileDoc.reference2.mobile} />
                                 </div>
                             </div>
                         </div>
@@ -424,12 +433,13 @@ export default function PGUserProfileDetails() {
                             <div className="employee-details-static" style={{ borderRight: 'none', borderBottom: 'none', paddingBottom: '2px' }}>
                                 <div style={{ width: '100%' }}>
                                     <small><strong>Local Address</strong></small><br />
-                                    <textarea name="" placeholder="Enter Address" id=""></textarea>
+                                    <textarea name="" placeholder="Enter Address" id="" value={userProfileDoc.reference2.address}></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
+
                 <br />
 
             </div>

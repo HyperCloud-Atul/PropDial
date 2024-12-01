@@ -1519,22 +1519,12 @@ const CreateProperty = () => {
                         <option
                           defaultValue={
                             propertyDetails &&
-                              propertyDetails.PropertyType === "High Rise Apt"
+                              propertyDetails.PropertyType === "Multi Storey Apt"
                               ? true
                               : false
                           }
                         >
-                          High Rise Apt (10+ floor)
-                        </option>
-                        <option
-                          defaultValue={
-                            propertyDetails &&
-                              propertyDetails.PropertyType === "Low Rise Apt"
-                              ? true
-                              : false
-                          }
-                        >
-                          Low Rise Apt (5-10 floor)
+                          Multi Storey Apt
                         </option>
                         <option
                           defaultValue={
@@ -1544,7 +1534,7 @@ const CreateProperty = () => {
                               : false
                           }
                         >
-                          Builder Floor (Upto 4 floor)
+                          Builder Floor
                         </option>
                         <option
                           defaultValue={

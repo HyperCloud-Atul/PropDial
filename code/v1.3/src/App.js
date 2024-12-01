@@ -860,7 +860,7 @@ function App() {
                     element={<PGNotification />}
                   ></Route>
                   <Route
-                    path="/profiledetails"
+                    path="/profiledetails/:userProfileId"
                     element={<PGUserProfileDetails />}
                   ></Route>
                 </Routes>

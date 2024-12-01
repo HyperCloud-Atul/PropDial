@@ -50,6 +50,16 @@ export const AuthContextProvider = ({ children }) => {
             let status = snapshot.data().status;
             let createdAt = snapshot.data().createdAt;
             let lastLoginTimestamp = snapshot.data().lastLoginTimestamp;
+            //Employee Details
+            let dateofJoinee = snapshot.data().dateofJoinee;
+            let dateofLeaving = snapshot.data().dateofLeaving;
+            let employeeId = snapshot.data().employeeId;
+            let reportingManagerId = snapshot.data().reportingManagerId;
+            let department = snapshot.data().department;
+            let designation = snapshot.data().designation;
+            let uan = snapshot.data().uan;
+            let pan = snapshot.data().pan;
+            let aadhaar = snapshot.data().aadhaar;
 
             let userData = {
               ...user,
@@ -73,6 +83,16 @@ export const AuthContextProvider = ({ children }) => {
               status,
               createdAt,
               lastLoginTimestamp,
+              //Employee Details
+              dateofJoinee,
+              dateofLeaving,
+              employeeId,
+              reportingManagerId,
+              department,
+              designation,
+              uan,
+              pan,
+              aadhaar
             };
 
             dispatch({ type: "AUTH_IS_READY", payload: userData });

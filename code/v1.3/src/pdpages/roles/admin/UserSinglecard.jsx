@@ -13,6 +13,7 @@ const UserSinglecard = ({ users }) => {
 
   const handleClose = () => setShow(false);
   const handleShow = (userObj) => {
+    console.log("userObj: ", userObj)
     setSelectedUser(userObj);
     setShow(true);
   };

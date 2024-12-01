@@ -844,10 +844,11 @@ export default function MasterSocietyList() {
                 )}
               </div>
               {viewMode === "table_view" && (
-            <>{filteredData && <MasterSocietyTable filterData={filteredData} />}</>
+                <>{filteredData && <MasterSocietyTable filterData={filteredData} />}</>
               )}
             </>
           )}
+          <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
         </div>
       </div>
     </>

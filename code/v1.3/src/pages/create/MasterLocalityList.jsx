@@ -802,13 +802,15 @@ export default function MasterLocalityList() {
               )}
             </div>
             {viewMode === "table_view" && (
-                <>{filteredData && <MasterLocalityTable filterData={filteredData} />}</>
+              <>{filteredData && <MasterLocalityTable filterData={filteredData} />}</>
             )}
 
           </>
         ) : "No Locality Available"}
+
+        <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
       </div>
-    
+
     </div>
   );
 }

@@ -858,23 +858,14 @@ const Stage2 = (props) => {
                   <option
                     defaultValue={
                       propertyDetails &&
-                        propertyDetails.PropertyType === "High Rise Apt"
+                        propertyDetails.PropertyType === "Multi Storey Apt"
                         ? true
                         : false
                     }
                   >
-                    High Rise Apt (10+ floor)
+                    Multi Storey Apt
                   </option>
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Low Rise Apt"
-                        ? true
-                        : false
-                    }
-                  >
-                    Low Rise Apt (5-10 floor)
-                  </option>
+
                   <option
                     defaultValue={
                       propertyDetails &&
@@ -883,7 +874,7 @@ const Stage2 = (props) => {
                         : false
                     }
                   >
-                    Builder Floor (Upto 4 floor)
+                    Builder Floor
                   </option>
                   <option
                     defaultValue={
