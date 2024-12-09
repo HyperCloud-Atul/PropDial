@@ -730,8 +730,11 @@ export default function MasterSocietyList() {
             </form>
             <hr />
           </div>
+          {filteredData && filteredData.length > 0 ? <div><strong> Filtered Society: {filteredData.length}</strong></div> : "No Society available, please add new"}
+          <br></br>
           {filteredData && filteredData.length !== 0 && (
             <>
+
               <div className="master_data_card">
                 {viewMode === "card_view" && (
                   <>

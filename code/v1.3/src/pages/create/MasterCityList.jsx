@@ -762,6 +762,8 @@ export default function MasterCityList() {
                 <div className="vg22"></div>
               </>
             )} */}
+            {filteredData && filteredData.length > 0 ? <div><strong> Filtered City: {filteredData.length}</strong></div> : ""}
+            <br></br>
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>
@@ -873,7 +875,7 @@ export default function MasterCityList() {
               )}
             </div>
             {viewMode === "table_view" && (
-               <>{filteredData && <MasterCityTable filterData={filteredData} />}</>
+              <>{filteredData && <MasterCityTable filterData={filteredData} />}</>
             )}
           </>
         )}

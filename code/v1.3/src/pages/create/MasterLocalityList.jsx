@@ -448,7 +448,7 @@ export default function MasterLocalityList() {
             <div className="pg_header d-flex justify-content-between">
               <div className="left">
                 <h2 className="m22">
-                  Total Locality:{" "}
+                  Total Localities:{" "}
                   {masterLocality && (
                     <span className="text_orange">{masterLocality.length}</span>
                   )}
@@ -691,9 +691,13 @@ export default function MasterLocalityList() {
         </div>
         {filteredData && filteredData.length > 0 ? (
           <>
+            <div><strong> Filtered Locality: {filteredData.length}</strong></div>
+            <br></br>
+
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>
+
 
                   {filteredData &&
                     (filteredData.map((data) => <div className="property-status-padding-div">
