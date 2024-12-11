@@ -152,7 +152,7 @@ a.theme_btn.btn_white {
 
 .theme_btn.btn_border {
   background: none;
-  color: var(--black-color);
+  color: var(--theme-green);
   border: 1px solid var(--theme-green);
 }
 

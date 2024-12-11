@@ -205,7 +205,13 @@
     padding: 0 10px 0 10px;
     position: relative;
   }
-
+textarea{
+  border: none;
+  padding: 10px 0px 0px 10px;
+  &:focus{
+    outline: none;
+  }
+}
   select {
     border: none;
     border-bottom: 1px solid #ddd;
