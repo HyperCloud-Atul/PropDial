@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { useFirestore } from "../../../../hooks/useFirestore";
 import { projectStorage } from "../../../../firebase/config";
 import { BeatLoader } from "react-spinners";
+import { useCommon } from "../../../../hooks/useCommon";
 
 // import component
 import ImageModal from "../../../imageModal/ImageModal";
@@ -15,6 +16,10 @@ import SureDelete from "../../../sureDelete/SureDelete";
 const AgentSingle = ({ agentDoc }) => {
   const { user } = useAuthContext();
   const fileInputRef = useRef(null);
+
+  const { camelCase } = useCommon();
+
+
   const { addDocument, updateDocument, deleteDocument, error } =
     useFirestore("agent-propdial");
 
@@ -261,7 +266,7 @@ const AgentSingle = ({ agentDoc }) => {
 
                 <div className="tenant_detail">
                   <h6 className="t_name pointer">
-                    {doc.agentName}
+                    {camelCase(doc.agentName)}
                     {user && user.role === "superAdmin" && (
                       <Link
                         to={`/edit-agent/${doc.id}`}

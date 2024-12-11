@@ -5,6 +5,7 @@ import { useCollection } from "../../../../hooks/useCollection";
 import { useFirestore } from "../../../../hooks/useFirestore";
 import { projectFirestore } from "../../../../firebase/config";
 import { useDocument } from "../../../../hooks/useDocument";
+import { useCommon } from "../../../../hooks/useCommon";
 import Select from "react-select";
 import PhoneInput from "react-phone-input-2";
 import { timestamp } from "../../../../firebase/config";
@@ -14,6 +15,7 @@ import AddAgent from "./AddAgent";
 const UpdateAgent = () => {
   const { id } = useParams();
   const { user } = useAuthContext();
+  const { camelCase } = useCommon();
   const {
     // addDocument: addAgentDoc,
     updateDocument: updateAgentDoc,
@@ -62,7 +64,7 @@ const UpdateAgent = () => {
     if (agentDoc) {
       // console.log("agentDoc: ", agentDoc)
 
-      setAgentName(agentDoc.agentName || "");
+      setAgentName(camelCase(agentDoc.agentName) || "");
       setAgentCompnayName(agentDoc.agentCompnayName || "");
       setAgentPhone(agentDoc.agentPhone || "");
       setAgentEmail(agentDoc.agentEmail || "");
@@ -428,7 +430,7 @@ const UpdateAgent = () => {
 
       // Log data before update
       const updatedAgentDoc = {
-        agentName,
+        agentName: camelCase(agentName),
         agentCompnayName,
         agentPhone,
         agentEmail,
