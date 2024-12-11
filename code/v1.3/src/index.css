@@ -141,7 +141,9 @@ a.theme_btn.btn_white {
   border: 1px solid var(--theme-green);
   color: var(--white-color);
 }
-
+.theme_btn.min_width{
+  min-width: 100px;
+}
 .theme_btn.btn_red {
   border: none;
   background: var(--theme-red);
@@ -198,7 +200,9 @@ a.theme_btn.btn_white {
 .relative {
   position: relative;
 }
-
+.break_all{
+  word-break: break-all;
+}
 .error {
   /* color: var(--red-color); */
   color: #fff;

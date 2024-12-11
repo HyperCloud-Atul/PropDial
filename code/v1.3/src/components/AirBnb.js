@@ -80,7 +80,7 @@ const AirBnb = () => {
   };
   return (
     <section
-      className="blog_sect sect_padding"
+      className="blog_sect sect_padding air_bnb"
       // ari_bnb
       style={{
         backgroundImage: "url('./assets/img/home/aribnb_bg.png')",

@@ -333,10 +333,14 @@
       min-width: 100px;
       text-align: center;
       text-transform: capitalize;
+      background-color: var(--white-color);
+      background: var(--white-color);
+
     }
 
     input[type="radio"]:checked + label {
       background-color: var(--theme-blue);
+      background: var(--theme-blue);
       color: var(--white-color);
     }
 

@@ -16,6 +16,7 @@ import "./App.css";
 import PhoneLogin from "./pdpages/phonelogin/PhoneLogin_reCaptchaV2";
 import PGProfile from "./pdpages/profile/PGProfile";
 import PGUserProfileDetails from "./pdpages/profile/PGUserProfileDetails"
+import PGUserProfileDetails2 from "./pdpages/profile/PGUserProfileDetails2"
 import PGNotification from "./pdpages/notification/PGNotification";
 import PGAboutUs from "./pdpages/about_us/PGAboutUs";
 import PGPriacyPolicy from "./pdpages/privacypolicy/PGPrivacyPolicy";
@@ -862,6 +863,10 @@ function App() {
                   <Route
                     path="/profiledetails/:userProfileId"
                     element={<PGUserProfileDetails />}
+                  ></Route>
+                    <Route
+                    path="/profiledetails2/:userProfileId"
+                    element={<PGUserProfileDetails2 />}
                   ></Route>
                 </Routes>
                 {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}
