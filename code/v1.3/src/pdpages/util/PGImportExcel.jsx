@@ -19,8 +19,8 @@ const PGExportExcel = () => {
     // const collectionName = "m_states";
     // const collectionName = "m_localities";    
 
-    // const { addDocument, updateDocument, error } = useFirestore(collectionName);
-    const { addDocumentWithCustomDocId, updateDocument, error } = useFirestore(collectionName);
+    const { addDocument, updateDocument, error } = useFirestore(collectionName);
+    // const { addDocumentWithCustomDocId, updateDocument, error } = useFirestore(collectionName);
     const { isPending, error: download, documents } = useCollection(collectionName);
 
     // const { collectionName, setCollectionName } = useState();
@@ -66,9 +66,9 @@ const PGExportExcel = () => {
             setCount(count + 1);
             console.log(count)
 
-            // addDocument(record)
-            const _customDocId = record.docId.split(" ").join("_").toLowerCase()
-            await addDocumentWithCustomDocId(record, _customDocId);
+            addDocument(record)
+            // const _customDocId = record.docId.split(" ").join("_").toLowerCase()
+            // await addDocumentWithCustomDocId(record, _customDocId);
 
         });
         console.log('upload completed !!')

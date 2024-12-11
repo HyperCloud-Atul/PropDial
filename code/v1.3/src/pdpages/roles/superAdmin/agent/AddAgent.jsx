@@ -8,8 +8,12 @@ import PhoneInput from "react-phone-input-2";
 import SearchBarAutoComplete from "../../../../pages/search/SearchBarAutoComplete";
 import { useDocument } from "../../../../hooks/useDocument"
 import { useNavigate } from "react-router-dom";
+import { useCommon } from "../../../../hooks/useCommon";
 
 const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
+
+  const { camelCase } = useCommon();
+
   // add document
   const {
     addDocument: addAgentDoc,
@@ -88,7 +92,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
       agentDoc.locality ? setLocality(agentDoc.locality) : setLocality([]);
       agentDoc.society ? setSociety(agentDoc.society) : setSociety([]);
       agentDoc.area ? setArea(agentDoc.area) : setArea([]);
-      agentDoc.agentName ? setAgentName(agentDoc.agentName) : setAgentName('');
+      agentDoc.agentName ? setAgentName(camelCase(agentDoc.agentName)) : setAgentName('');
       agentDoc.agentCompnayName ? setAgentCompnayName(agentDoc.agentCompnayName) : setAgentCompnayName('');
 
       agentDoc.agentPhone ? setAgentPhone(agentDoc.agentPhone) : setAgentPhone('');
@@ -444,7 +448,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
       setIsUploading(true);
 
       const dataSet = {
-        agentName,
+        agentName: camelCase(agentName),
         agentCompnayName,
         agentPhone,
         agentEmail,
