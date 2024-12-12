@@ -115,16 +115,17 @@ const UserSinglecard = ({ users }) => {
                     className="pointer"
                   />
                 </div>
-                <div className="tenant_detail">
-                  <h6
-                    className="t_name pointer"
-                    onClick={() => handleShow(userObj)}
-                  >
-                    {userObj.fullName}
-                    <span className="material-symbols-outlined click_icon text_near_icon">
+                <div className="tenant_detail">              
+               
+                  <Link to={`/profiledetails/${userObj.id}`}
+                   className="t_name pointer"
+                   // onClick={() => handleShow(userObj)} click to open popup don't delete it
+                   >
+                  {userObj.fullName}
+                  <span className="material-symbols-outlined click_icon text_near_icon">
                       edit
                     </span>
-                  </h6>
+                  </Link>
                   {userObj.phoneNumber && (
                     <h6 className="t_number">
                       {userObj.phoneNumber.replace(
