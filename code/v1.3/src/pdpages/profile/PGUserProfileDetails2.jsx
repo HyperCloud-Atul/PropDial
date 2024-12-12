@@ -8,6 +8,8 @@ import { useDocument } from "../../hooks/useDocument";
 import { useCommon } from "../../hooks/useCommon";
 import { useFirestore } from "../../hooks/useFirestore";
 import { format } from "date-fns";
+import { BeatLoader } from "react-spinners";
+import { projectStorage } from "../../firebase/config";
 import PhoneInput from "react-phone-input-2";
 
 // import scss
@@ -755,6 +757,173 @@ export default function PGUserProfileDetails2() {
   };
   // full code for ref2 end
 
+  // old running code for upload document start
+  // const fileInputRefs = useRef({});
+
+  // const [isDocUploading, setIsDocUploading] = useState({});
+  // const [files, setFiles] = useState({});
+  // const [uploadDocInProgress, setUploadDocInProgress] = useState({});
+
+  // const documentTypes = ["Aadhaar Card", "PAN Card", "Driving Licence"];
+
+  // const handleDocFileChange = (event, docType) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setFiles((prev) => ({ ...prev, [docType]: file }));
+  //   }
+  // };
+
+  // const getFileType = (file) => {
+  //   const fileExtension = file.name.split(".").pop().toLowerCase();
+  //   return fileExtension === "pdf" ? "pdf" : "image";
+  // };
+
+  // useEffect(() => {
+  //   documentTypes.forEach((docType) => {
+  //     if (files[docType]) {
+  //       uploadDocument(docType);
+  //     }
+  //   });
+  // }, [files]);
+
+  // const uploadDocument = async (docType) => {
+  //   try {
+  //     setIsDocUploading((prev) => ({ ...prev, [docType]: true }));
+  //     const file = files[docType];
+  //     const fileType = getFileType(file);
+
+  //     const storageRef = projectStorage.ref(
+  //       `user-docs/${userProfileId}/${docType}/${file.name}`
+  //     );
+  //     const uploadTask = storageRef.put(file);
+
+  //     uploadTask.on(
+  //       "state_changed",
+  //       (snapshot) => {
+  //         const progress =
+  //           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //         setUploadDocInProgress((prev) => ({ ...prev, [docType]: progress }));
+  //       },
+  //       (error) => {
+  //         console.error(`Error uploading ${docType}:`, error);
+  //         setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+  //       },
+  //       async () => {
+  //         const fileURL = await storageRef.getDownloadURL();
+  //         await updateDocument(userProfileId, {
+  //           [`${docType.replace(/ /g, "").toLowerCase()}Url`]: fileURL,
+  //           [`${docType.replace(/ /g, "").toLowerCase()}Type`]: fileType,
+  //         });
+  //         setFiles((prev) => {
+  //           const updatedFiles = { ...prev };
+  //           delete updatedFiles[docType];
+  //           return updatedFiles;
+  //         });
+  //         setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.error(`Error uploading ${docType}:`, error);
+  //     setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+  //   }
+  // };
+  // old running code for upload document end
+
+  // New code for upload document start
+  const documentTypes = [
+    "Aadhaar Card",
+    "PAN Card",
+    "Driving Licence",
+    "Voter ID",
+  ];
+  const fileInputRefs = useRef({});
+  const [isDocUploading, setIsDocUploading] = useState({});
+  const [files, setFiles] = useState({});
+  const [uploadDocInProgress, setUploadDocInProgress] = useState({});
+
+  const handleDocFileChange = (event, docType) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFiles((prev) => ({ ...prev, [docType]: file }));
+    }
+  };
+
+  const getFileType = (file) => {
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    return fileExtension === "pdf" ? "pdf" : "image";
+  };
+
+  useEffect(() => {
+    Object.keys(files).forEach((docType) => {
+      if (files[docType]) uploadDocument(docType);
+    });
+  }, [files]);
+
+  const uploadDocument = async (docType) => {
+    try {
+      setIsDocUploading((prev) => ({ ...prev, [docType]: true }));
+      const file = files[docType];
+      const fileType = getFileType(file);
+
+      const storageRef = projectStorage.ref(
+        `user-docs/${userProfileId}/${docType}/${file.name}`
+      );
+      const uploadTask = storageRef.put(file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadDocInProgress((prev) => ({ ...prev, [docType]: progress }));
+        },
+        (error) => {
+          console.error(`Error uploading ${docType}:`, error);
+          setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+        },
+        async () => {
+          const fileURL = await storageRef.getDownloadURL();
+          await updateDocument(userProfileId, {
+            [`${docType.replace(/ /g, "").toLowerCase()}Url`]: fileURL,
+            [`${docType.replace(/ /g, "").toLowerCase()}Type`]: fileType,
+          });
+          setFiles((prev) => {
+            const updatedFiles = { ...prev };
+            delete updatedFiles[docType];
+            return updatedFiles;
+          });
+          setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+        }
+      );
+    } catch (error) {
+      console.error(`Error uploading ${docType}:`, error);
+      setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+    }
+  };
+
+  const renderFilePreview = (docType) => {
+    const urlKey = `${docType.replace(/ /g, "").toLowerCase()}Url`;
+    const typeKey = `${docType.replace(/ /g, "").toLowerCase()}Type`;
+
+    if (userProfileDoc && userProfileDoc[urlKey]) {
+      return userProfileDoc[typeKey] === "image" ? (
+        <img src={userProfileDoc[urlKey]} alt={`${docType} preview`} />
+      ) : (
+        <iframe
+          // title={`${docType} Viewer`}
+          title="PDF Viewer"
+          src={userProfileDoc[urlKey]}
+          className="document-preview"
+          style={{
+            width: "100%",
+            aspectRatio: "3/2",
+          }}
+        ></iframe>
+      );
+    }
+    return <img src="https://via.placeholder.com/150" alt="Placeholder" />;
+  };
+
   return (
     <div className="top_header_pg pg_bg user_detail_pg relative">
       <div className="basic_info">
@@ -1455,17 +1624,19 @@ export default function PGUserProfileDetails2() {
             </div>
           </div>
         )}
-          {userProfileDoc && userProfileDoc.isEmployee && (
+        {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">
               <h2 className="card_title">
-              Bank Detail
+                Bank Detail
                 <span
                   className={`material-symbols-outlined action_icon ${
                     isBankDetailEditing ? "text_red" : "text_green"
                   }`}
                   onClick={
-                    isBankDetailEditing ? handleBankDetailCancelClick : handleBankDetailEditClick
+                    isBankDetailEditing
+                      ? handleBankDetailCancelClick
+                      : handleBankDetailEditClick
                   }
                 >
                   {isBankDetailEditing ? "close" : "border_color"}
@@ -1480,7 +1651,8 @@ export default function PGUserProfileDetails2() {
                     <div className="pis_content">
                       <h6>A/C Holder Name</h6>
                       <h5>
-                        {userProfileDoc.bankDetail && userProfileDoc.bankDetail.acHolderName
+                        {userProfileDoc.bankDetail &&
+                        userProfileDoc.bankDetail.acHolderName
                           ? userProfileDoc.bankDetail.acHolderName
                           : "Not provided yet"}
                       </h5>
@@ -1493,8 +1665,10 @@ export default function PGUserProfileDetails2() {
                     <div className="pis_content">
                       <h6>A/C Number</h6>
                       <h5>
-                        {userProfileDoc.bankDetail && userProfileDoc.bankDetail.acNumber ? userProfileDoc.bankDetail.acNumber : "Not provided yet"}                            
-                          
+                        {userProfileDoc.bankDetail &&
+                        userProfileDoc.bankDetail.acNumber
+                          ? userProfileDoc.bankDetail.acNumber
+                          : "Not provided yet"}
                       </h5>
                     </div>
                   </div>
@@ -1505,7 +1679,8 @@ export default function PGUserProfileDetails2() {
                     <div className="pis_content">
                       <h6>Bank Name</h6>
                       <h5>
-                        {userProfileDoc.bankDetail && userProfileDoc.bankDetail.bankName
+                        {userProfileDoc.bankDetail &&
+                        userProfileDoc.bankDetail.bankName
                           ? userProfileDoc.bankDetail.bankName
                           : "Not provided yet"}
                       </h5>
@@ -1518,7 +1693,8 @@ export default function PGUserProfileDetails2() {
                     <div className="pis_content">
                       <h6>Branch Name</h6>
                       <h5>
-                        {userProfileDoc.bankDetail && userProfileDoc.bankDetail.branchName
+                        {userProfileDoc.bankDetail &&
+                        userProfileDoc.bankDetail.branchName
                           ? userProfileDoc.bankDetail.branchName
                           : "Not provided yet"}
                       </h5>
@@ -1531,7 +1707,8 @@ export default function PGUserProfileDetails2() {
                     <div className="pis_content">
                       <h6>IFSC Code</h6>
                       <h5>
-                        {userProfileDoc.bankDetail && userProfileDoc.bankDetail.ifscCode
+                        {userProfileDoc.bankDetail &&
+                        userProfileDoc.bankDetail.ifscCode
                           ? userProfileDoc.bankDetail.ifscCode
                           : "Not provided yet"}
                       </h5>
@@ -1563,7 +1740,7 @@ export default function PGUserProfileDetails2() {
                           />
                         </div>
                       </div>
-                    </div>                 
+                    </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
                         <label>A/C Number*</label>
@@ -2038,7 +2215,181 @@ export default function PGUserProfileDetails2() {
             </div>
           </div>
         )}
-      
+        {/* <div className="upload-user-documents">
+          <h2>Upload Documents</h2>
+          <div className="document-upload-container">
+            {documentTypes.map((docType) => (
+              <div key={docType} className="document-upload">
+                {docType === "Aadhaar Card" && (
+                  <div>
+                    {userProfileDoc && userProfileDoc.aadhaarcardUrl ? (
+                      userProfileDoc.aadhaarcardType === "image" ? (
+                        <img src={userProfileDoc.aadhaarcardUrl} alt="" />
+                      ) : (
+                        <iframe
+                          title="PDF Viewer"
+                          src={userProfileDoc.aadhaarcardUrl}
+                          style={{
+                            width: "100%",
+                            aspectRatio: "3/2",
+                          }}
+                          className="pointer"
+                        ></iframe>
+                      )
+                    ) : (
+                      <img src="https://via.placeholder.com/150" alt="" />
+                    )}
+                  </div>
+                )}
+                {docType === "PAN Card" && (
+                  <div>
+                    {userProfileDoc && userProfileDoc.pancardUrl ? (
+                      userProfileDoc.pancardType === "image" ? (
+                        <img src={userProfileDoc.pancardUrl} alt="" />
+                      ) : (
+                        <iframe
+                          title="PDF Viewer"
+                          src={userProfileDoc.pancardUrl}
+                          style={{
+                            width: "100%",
+                            aspectRatio: "3/2",
+                          }}
+                          className="pointer"
+                        ></iframe>
+                      )
+                    ) : (
+                      <img src="https://via.placeholder.com/150" alt="" />
+                    )}
+                  </div>
+                )}
+                   {docType === "Driving Licence" && (
+                  <div>
+                    {userProfileDoc && userProfileDoc.drivinglicenceUrl ? (
+                      userProfileDoc.drivinglicenceType === "image" ? (
+                        <img src={userProfileDoc.drivinglicenceUrl} alt="" />
+                      ) : (
+                        <iframe
+                          title="PDF Viewer"
+                          src={userProfileDoc.drivinglicenceUrl}
+                          style={{
+                            width: "100%",
+                            aspectRatio: "3/2",
+                          }}
+                          className="pointer"
+                        ></iframe>
+                      )
+                    ) : (
+                      <img src="https://via.placeholder.com/150" alt="" />
+                    )}
+                  </div>
+                )}
+
+                <label
+                  htmlFor={`upload_${docType}`}
+                  className="upload-label pointer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "5px",
+                    background: "var(--theme-green)",
+                    padding: "10px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Upload {docType}
+                  <input
+                    type="file"
+                    id={`upload_${docType}`}
+                    onChange={(e) => handleDocFileChange(e, docType)}
+                    ref={(el) => (fileInputRefs.current[docType] = el)}
+                    style={{ display: "none" }}
+                  />
+                </label>
+                {isDocUploading[docType] ? (
+                  <div className="loader-container">
+                    <BeatLoader color={"#FF5733"} loading={true} />
+                    <p>Uploading {Math.round(uploadDocInProgress[docType])}%</p>
+                  </div>
+                ) : (
+                  <p>No file selected</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div> */}
+
+        {userProfileDoc && userProfileDoc.isEmployee && (
+          <div className="property_card_single mobile_full_card overflow_unset">
+            <div className="more_detail_card_inner">
+              <h2 className="card_title">
+                Employee Document
+                {/* <span
+                  className={`material-symbols-outlined action_icon ${
+                    isRef2Editing ? "text_red" : "text_green"
+                  }`}
+                  onClick={
+                    isRef2Editing ? handleRef2CancelClick : handleRef2EditClick
+                  }
+                >
+                  {isRef2Editing ? "close" : "border_color"}
+                </span> */}
+              </h2>
+              <div className="employee_docs">
+                {documentTypes.map((docType) => (
+                  <div key={docType} className="ed_single">
+                    <div className="image_container relative">
+                      {isDocUploading[docType] && (
+                        <div className="loader">
+                          <BeatLoader color={"#FF5733"} loading={true} />
+                        </div>
+                      )}
+                      {renderFilePreview(docType)}
+                    </div>
+                    <div className=" ">
+                      {isDocUploading[docType] ? (
+                        <div className="uploader relative">
+                          <span>
+                            {Math.round(uploadDocInProgress[docType])}%
+                          </span>
+                          <div
+                            className="u_bar"
+                            style={{
+                              width: `${Math.round(
+                                uploadDocInProgress[docType]
+                              )}%`,
+                            }}
+                          ></div>
+                        </div>
+                      ) : (
+                        <div className="doc_name_upload">
+                          <h6 className="doc_name">{docType}</h6>
+                          <label
+                            htmlFor={`upload_${docType}`}
+                            className="upload_label"
+                          >
+                            <span class="material-symbols-outlined">
+                              upload
+                            </span>
+                            <input
+                              type="file"
+                              id={`upload_${docType}`}
+                              onChange={(e) => handleDocFileChange(e, docType)}
+                              ref={(el) =>
+                                (fileInputRefs.current[docType] = el)
+                              }
+                              style={{ display: "none" }}
+                            />
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
