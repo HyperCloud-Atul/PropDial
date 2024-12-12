@@ -1624,6 +1624,77 @@ export default function PGUserProfileDetails2() {
             </div>
           </div>
         )}
+          {userProfileDoc && userProfileDoc.isEmployee && (
+          <div className="property_card_single mobile_full_card overflow_unset">
+            <div className="more_detail_card_inner">
+              <h2 className="card_title">
+                Employee Document
+                {/* <span
+                  className={`material-symbols-outlined action_icon ${
+                    isRef2Editing ? "text_red" : "text_green"
+                  }`}
+                  onClick={
+                    isRef2Editing ? handleRef2CancelClick : handleRef2EditClick
+                  }
+                >
+                  {isRef2Editing ? "close" : "border_color"}
+                </span> */}
+              </h2>
+              <div className="employee_docs">
+                {documentTypes.map((docType) => (
+                  <div key={docType} className="ed_single">
+                    <div className="image_container relative">
+                      {isDocUploading[docType] && (
+                        <div className="loader">
+                          <BeatLoader color={"#FF5733"} loading={true} />
+                        </div>
+                      )}
+                      {renderFilePreview(docType)}
+                    </div>
+                    <div className=" ">
+                      {isDocUploading[docType] ? (
+                        <div className="uploader relative">
+                          <span>
+                            {Math.round(uploadDocInProgress[docType])}%
+                          </span>
+                          <div
+                            className="u_bar"
+                            style={{
+                              width: `${Math.round(
+                                uploadDocInProgress[docType]
+                              )}%`,
+                            }}
+                          ></div>
+                        </div>
+                      ) : (
+                        <div className="doc_name_upload">
+                          <h6 className="doc_name">{docType}</h6>
+                          <label
+                            htmlFor={`upload_${docType}`}
+                            className="upload_label"
+                          >
+                            <span class="material-symbols-outlined">
+                              upload
+                            </span>
+                            <input
+                              type="file"
+                              id={`upload_${docType}`}
+                              onChange={(e) => handleDocFileChange(e, docType)}
+                              ref={(el) =>
+                                (fileInputRefs.current[docType] = el)
+                              }
+                              style={{ display: "none" }}
+                            />
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
         {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">
@@ -2319,77 +2390,7 @@ export default function PGUserProfileDetails2() {
           </div>
         </div> */}
 
-        {userProfileDoc && userProfileDoc.isEmployee && (
-          <div className="property_card_single mobile_full_card overflow_unset">
-            <div className="more_detail_card_inner">
-              <h2 className="card_title">
-                Employee Document
-                {/* <span
-                  className={`material-symbols-outlined action_icon ${
-                    isRef2Editing ? "text_red" : "text_green"
-                  }`}
-                  onClick={
-                    isRef2Editing ? handleRef2CancelClick : handleRef2EditClick
-                  }
-                >
-                  {isRef2Editing ? "close" : "border_color"}
-                </span> */}
-              </h2>
-              <div className="employee_docs">
-                {documentTypes.map((docType) => (
-                  <div key={docType} className="ed_single">
-                    <div className="image_container relative">
-                      {isDocUploading[docType] && (
-                        <div className="loader">
-                          <BeatLoader color={"#FF5733"} loading={true} />
-                        </div>
-                      )}
-                      {renderFilePreview(docType)}
-                    </div>
-                    <div className=" ">
-                      {isDocUploading[docType] ? (
-                        <div className="uploader relative">
-                          <span>
-                            {Math.round(uploadDocInProgress[docType])}%
-                          </span>
-                          <div
-                            className="u_bar"
-                            style={{
-                              width: `${Math.round(
-                                uploadDocInProgress[docType]
-                              )}%`,
-                            }}
-                          ></div>
-                        </div>
-                      ) : (
-                        <div className="doc_name_upload">
-                          <h6 className="doc_name">{docType}</h6>
-                          <label
-                            htmlFor={`upload_${docType}`}
-                            className="upload_label"
-                          >
-                            <span class="material-symbols-outlined">
-                              upload
-                            </span>
-                            <input
-                              type="file"
-                              id={`upload_${docType}`}
-                              onChange={(e) => handleDocFileChange(e, docType)}
-                              ref={(el) =>
-                                (fileInputRefs.current[docType] = el)
-                              }
-                              style={{ display: "none" }}
-                            />
-                          </label>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+      
       </div>
     </div>
   );
