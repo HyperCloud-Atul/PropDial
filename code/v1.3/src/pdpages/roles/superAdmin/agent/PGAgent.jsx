@@ -14,17 +14,36 @@ import ViewAgent from "./ViewAgent";
 const PGAgent = () => {
   const { user } = useAuthContext();
   const [showAIForm, setShowAIForm] = useState(false);
+  const [allList, setAllList] = useState([]);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
 
   // get agent document start
-  const { documents: agentDoc, errors: agentDocError } =
-    useCollection("agent-propdial", "", ["createdAt", "desc"]);
+  // const { documents: agentDoc, errors: agentDocError } =
+  //   useCollection("agent-propdial", "", ["createdAt", "desc"]);
+  const { documents: agentDoc, errors: agentDocError } = useCollection("agent-propdial", ["state", "==", "Haryana"], ["createdAt", "desc"]);
+
   // get agent document end
+  useEffect(() => {
+
+    let _list = [];
+    agentDoc && agentDoc.forEach(element => {
+      _list.push({
+        ...element,
+        searchKey: element.agentName.toLowerCase() + element.city.toLowerCase() + element.id.toLowerCase()
+      })
+
+    });
+    setAllList(_list)
+
+  }, [agentDoc])
+
 
   // nine dots menu start
   const nineDotsMenu = [
     { title: "User List", link: "/userlist", icon: "group" },
   ];
+
+
   // nine dots menu end
   return (
     <div>
@@ -45,7 +64,7 @@ const PGAgent = () => {
             {/* nine dot menu and plus icons start  */}
 
             {/* if no agent doc available start */}
-            {agentDoc && agentDoc.length === 0 && (
+            {allList && allList.length === 0 && (
               <div className={`pg_msg ${showAIForm && "d-none"}`}>
                 <div>
                   No Agent Yet!
@@ -62,11 +81,11 @@ const PGAgent = () => {
             {/* if no agent doc available end  */}
 
             {/* view agent start  */}
-            {agentDoc && agentDoc.length !== 0 && (
+            {allList && allList.length !== 0 && (
               <>
                 {!showAIForm && (
                   <ViewAgent
-                    agentDoc={agentDoc}
+                    agentDoc={allList}
                     handleShowAIForm={handleShowAIForm}
                   />
                 )}
