@@ -20,7 +20,7 @@ const PGAgent = () => {
   // get agent document start
   // const { documents: agentDoc, errors: agentDocError } =
   //   useCollection("agent-propdial", "", ["createdAt", "desc"]);
-  const { documents: agentDoc, errors: agentDocError } = useCollection("agent-propdial", ["state", "==", "Haryana"], ["createdAt", "desc"]);
+  const { documents: agentDoc, errors: agentDocError } = useCollection("agent-propdial", ["state", "==", "Delhi"], ["createdAt", "desc"]);
 
   // get agent document end
   useEffect(() => {

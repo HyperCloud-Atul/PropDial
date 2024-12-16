@@ -10,8 +10,8 @@ import AgentSingle from "./AgentSingle";
 const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
 
   const [state, setState] = useState({
-    label: 'Haryana',
-    value: '_haryana'
+    label: 'Delhi',
+    value: '_delhi'
   });
   let cityOptions = useRef([]);
   let stateOptions = useRef([]);
@@ -70,6 +70,8 @@ const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
             city: agentData.data().city,
             id: agentData.id,
             state: agentData.data().state,
+            createdAt: agentData.data().createdAt,
+            createdBy: agentData.data().createdBy,
             searchKey: agentData.data().agentName.toLowerCase() + agentData.data().city.toLowerCase() + agentData.id.toLowerCase()
           }));
         }

@@ -21,7 +21,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
     deleteDocument: deleteAgentDoc,
     error: addingError,
   } = useFirestore("agent-propdial");
-  console.log('agentID', agentID)
+  // console.log('agentID', agentID)
   const navigate = useNavigate();
 
   //Master Data Loading Initialisation - Start
@@ -40,7 +40,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
     useCollection("m_societies", "", ["society", "asc"]);
   const { document: agentDoc, error: agentDocError } =
     useDocument("agent-propdial", agentID);
-  console.log(agentDoc, agentDocError)
+  // console.log(agentDoc, agentDocError)
   const [state, setState] = useState();
   const [city, setCity] = useState();
   const [locality, setLocality] = useState();
@@ -396,7 +396,10 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
   const handleChangeAgentName = (e) => setAgentName(e.target.value);
   const handleChangeAgentComanayName = (e) =>
     setAgentCompnayName(e.target.value);
-  const handleChangeAgentPhone = (value) => setAgentPhone(value);
+  const handleChangeAgentPhone = (value) => {
+    console.log("handleChangeAgentPhone")
+    setAgentPhone(value);
+  }
   const handleChangeAgentEmail = (e) => setAgentEmail(e.target.value);
   const handleChangeAgentPancard = (e) => setAgentPancard(e.target.value);
   const handleChangeAgentGstNumber = (e) => setAgentGstNumber(e.target.value);
@@ -424,276 +427,165 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
   const submitAgentDocument = async (e) => {
     e.preventDefault();
 
-    const newErrors = {
-      agentName: !agentName ? "Name is required" : "",
-      agentPhone: !agentPhone ? "Phone number is required" : "",
-      // agentEmail: !agentEmail
-      //   ? "Email is required"
-      //   : !isValidEmail(agentEmail)
-      //     ? "Invalid email format"
-      //     : "",
-      state: !state ? "State is required" : "",
-      city: !city ? "City is required" : "",
-      locality: !locality ? "Locality is required" : "",
-      // society: !society ? "Society is required" : "",
-    };
 
-    setErrors(newErrors);
+    const ref = await projectFirestore
+      .collection("agent-propdial")
+      .where("agentPhone", "==", agentPhone)
 
-    // Check if there are any errors
-    const hasErrors = Object.values(newErrors).some((error) => error !== "");
-    if (hasErrors) return;
+    console.log("ref: ", ref)
+    let isPhoneExists = false
+    let newErrors;
+    ref.onSnapshot(
+      async (snapshot) => {
+        console.log("snapshot.docs", snapshot.docs)
+        if (snapshot.docs.length > 0) {
+          isPhoneExists = true
+        }
+        else {
+          isPhoneExists = false
+        }
+        // snapshot.docs.length > 0 ? isPhoneExists = true : isPhoneExists = false
+        // newErrors = {
+        //   agentPhone: isPhoneExists ? "Duplicate mobile no" : ""
+        // }
 
-    try {
-      setIsUploading(true);
+        console.log("isPhoneExists: ", isPhoneExists)
 
-      const dataSet = {
-        agentName: camelCase(agentName),
-        agentCompnayName,
-        agentPhone,
-        agentEmail,
-        agentPancard: agentPancard.toUpperCase(),
-        agentGstNumber: agentGstNumber.toUpperCase(),
-        country: "India",
-        state: state.label,
-        city: city.label,
-        locality: locality,
-        society: society,
-        area: area,
-        status: "active",
-      };
+        newErrors = {
+          // ...newErrors,
+          agentName: !agentName ? "Name is required" : "",
+          agentPhone: agentPhone.length < 10 ? "Please enter correct mobile number" : isPhoneExists ? "Duplicate mobile no" : "",
+          // agentPhone: isPhoneExists ? "Duplicate phone number" : "",
+          // agentEmail: !agentEmail
+          //   ? "Email is required"
+          //   : !isValidEmail(agentEmail)
+          //     ? "Invalid email format"
+          //     : "",
+          state: !state ? "State is required" : "",
+          city: !city ? "City is required" : "",
+          locality: !locality ? "Locality is required" : "",
+          // society: !society ? "Society is required" : "",
+        };
 
-      console.log("dataSet: ", dataSet)
-      if (agentID === "new") {
-        const docRef = await addAgentDoc(dataSet);
+        setErrors(newErrors);
 
-      } else {
-        const docRef = await updateAgentDoc(agentID, dataSet);
+        // Check if there are any errors
+        const hasErrors = Object.values(newErrors).some((error) => error !== "");
+        if (hasErrors) return;
 
-      }
 
-      // Reset fields and errors after successful submission
-      setAgentName("");
-      setAgentCompnayName("");
-      setAgentPhone("");
-      setAgentEmail("");
-      setAgentPancard("");
-      setAgentGstNumber("");
-      setState("");
-      setLocality("");
-      setCity("");
-      // setSociety("");
-      setErrors({});
-      setIsUploading(false);
-      setShowAIForm(!showAIForm);
-      navigate('/agents')
-    } catch (addingError) {
-      console.error("Error adding document:", addingError);
-      setIsUploading(false);
-      setShowAIForm(!showAIForm);
-    }
+
+        try {
+          setIsUploading(true);
+
+          const dataSet = {
+            agentName: camelCase(agentName),
+            agentCompnayName,
+            agentPhone,
+            agentEmail,
+            agentPancard: agentPancard.toUpperCase(),
+            agentGstNumber: agentGstNumber.toUpperCase(),
+            country: "India",
+            state: state.label,
+            city: city.label,
+            locality: locality,
+            society: society,
+            area: area,
+            status: "active",
+          };
+
+
+
+          console.log("dataSet: ", dataSet)
+          if (agentID === "new") {
+            const docRef = await addAgentDoc(dataSet);
+
+          } else {
+            const docRef = await updateAgentDoc(agentID, dataSet);
+
+          }
+
+          // Reset fields and errors after successful submission
+          setAgentName("");
+          setAgentCompnayName("");
+          setAgentPhone("");
+          setAgentEmail("");
+          setAgentPancard("");
+          setAgentGstNumber("");
+          setState("");
+          setLocality("");
+          setCity("");
+          // setSociety("");
+          setErrors({});
+          setIsUploading(false);
+          setShowAIForm(!showAIForm);
+          navigate('/agents')
+        } catch (addingError) {
+          console.error("Error adding document:", addingError);
+          setIsUploading(false);
+          setShowAIForm(!showAIForm);
+        }
+
+      })
   };
-
-  // const { documents: masterState, error: masterStateError } = useCollection(
-  //   "m_states", "", ["state", "asc"]
-  // );
-
-  // const handleFieldChange = (setter) => (event) => {
-  //   const { name, value } = event.target;
-  //   setter(value);
-  //   setErrors((prevErrors) => {
-  //     const newErrors = { ...prevErrors };
-  //     if (newErrors[name]) delete newErrors[name];
-  //     return newErrors;
-  //   });
-  // };
-
-  // const [searchInput, setSearchInput] = useState("");
-  // const [searchQuery, setSearchQuery] = useState("");
-
-
-
-  // const [changedUser, setChangedUser] = useState();
-  // const [ownersProeprtyList, setOwnersProeprtyList] = useState();
-  // const [searchResultValueId, setSearchResultValueId] = useState("");
-  // const [propertyName, setPropertyName] = useState("");
-  // const handleChangePropertyName = handleFieldChange(setPropertyName);
-
-
-  // Search Popup - Start
-  // const [searchPopup, setSearchPopup] = useState(false);
-  // const [searchResultValue, setSearchResultValue] = useState("");
-  // const [filteredData, setFilteredData] = useState(masterSociety);
-  // const [selectedValue, setSelectedValue] = useState(null);
-  // const handleChangeSearchText = handleFieldChange(setSearchResultValue);
-  // Search Popup - End
-
-  // const handleSearchInputChange = (e) => {
-  //   console.log("e.target.value: ", e.target.value)
-  //   setSearchInput(e.target.value);
-  // };
-  // useEffect(() => {
-  //   let strList = []
-  //   masterSociety && masterSociety.forEach(element => {
-  //     let _locality = masterLocality.find(e => e.id === element.locality)
-  //     let _city = masterCity.find(e => e.id === element.city)
-
-  //     strList.push({
-  //       ...element,
-  //       localityName: _locality.locality,
-  //       cityName: _city.city
-  //     })
-  //   });
-  //   setSearchList(strList)
-
-  // }, [masterSociety])
-
-
-  // const openSearchPopup = (docId) => {
-  //   console.log("Open Search Popup");
-  //   setSearchPopup(true);
-  //   // setUserdbFieldName(option);
-  //   setChangedUser(docId);
-  //   setOwnersProeprtyList({ lable: "", value: "" });
-  // };
-
-  // const closeSearchPopup = () => {
-  //   console.log("close popup")
-  //   setSearchPopup(false);
-  // };
-
-
-  // const confirmSearchPopup = async () => {
-  //   console.log("selected value: ", selectedValue);
-
-  //   setSearchPopup(false);
-  // };
-
-  // const handleSearchChange = (event) => {
-  //   const query = event.target.value;
-  //   setSearchQuery(query);
-  //   filterDataByQuery(query);
-  // };
-
-  // const filterDataByQuery = (query) => {
-  //   // console.log('query: ', searchList)
-  //   const filtered =
-  //     searchList &&
-  //     searchList.filter(
-  //       (society) =>
-  //         society.society.toLowerCase().includes(query.toLowerCase())
-  //         || society.localityName.toLowerCase().includes(query)
-  //         || society.cityName.toLowerCase().includes(query)
-  //     );
-  //   // console.log("filtered: ", filtered);
-  //   setFilteredData(filtered);
-
-
-  //   // let strList = []
-  //   //   masterSociety && masterSociety.forEach(element => {
-  //   //     let _locality = masterLocality.find(e => e.id === element.locality)
-
-  //   //     strList.push(element.society + '-' + _locality.locality)
-  //   //   });
-  //   //   setSearchList(strList)
-
-  // };
-
-  // const handleSearchItem = (val) => {
-  //   setSelectedValue(val);
-  // };
 
 
   return (
     <form>
       <div className="vg12"></div>
 
-      {/* Search Popup - Start */}
-      {/* <div
-        className={
-          searchPopup
-            ? "pop-up-change-number-div open"
-            : "pop-up-change-number-div"
-        }
-      >
-        <div className="direct-div">
-          <span
-            onClick={closeSearchPopup}
-            className="material-symbols-outlined modal_close"
-          >
-            close
-          </span>
-          <h5 className="text_orange text-center">Search Society</h5>
-          <div className="vg12"></div>
-          <div>
-            <div className="enq_fields">
-              <div className="form_field st-2">
-                <div className="field_inner">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    placeholder="Search society by society name, location or city ..."
-                  />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">search</span>
-                  </div>
-                </div>
-              </div>
+      <div className="row row_gap form_full">
+        <div className="col-xl-4 col-lg-6">
+          <div className="form_field label_top">
+            <label htmlFor="">Phone number*</label>
+            <div className="form_field_inner">
+              <PhoneInput
+                // country={"in"}
+                // value={agentPhone}
+                // onChange={(e) => {
+                //   handleChangeAgentPhone(e);
+                //   if (e.target.value) {
+                //     setErrors((prevErrors) => ({
+                //       ...prevErrors,
+                //       agentPhone: "",
+                //     }));
+                //   }
+                // }}
+                // onlyCountries={["in"]} // Allow only India
+                country={"in"} // Default country is India
+                onlyCountries={["in"]} // Restrict to only India
+                // disableCountryCode={true} // Disable editing of the country code
+                // disableDropdown={true} // Disable the dropdown menu
+                countryCodeEditable={false}
+                value={agentPhone}
+                onChange={handleChangeAgentPhone}
+                // international
+                keyboardType="phone-pad"
+                placeholder="mobile number"
+                inputProps={{
+                  name: "phone",
+                  required: true,
+                  autoFocus: false,
+                }}
+                inputStyle={{
+                  width: "100%",
+                  paddingLeft: "45px",
+                  fontSize: "16px",
+                  borderRadius: "12px",
+                  height: "45px",
+                }}
+                buttonStyle={{
+                  borderRadius: "12px",
+                  textAlign: "left",
+                  border: "1px solid #00A8A8",
+                }}
+              />
+              {errors.agentPhone && (
+                <div className="field_error">{errors.agentPhone}</div>
+              )}
             </div>
-           
-            <ul className="search_results">
-              {filteredData &&
-                filteredData.map((item) => (
-                  <li className="search_result_single" key={item.id}>
-                    <label>
-                      <input
-                        name="searchInput"
-                        type="radio"
-                        checked={selectedValue === item.id}
-                        onChange={() => handleSearchItem(item.id)}
-                      />
-                      <div>
-                        <strong> {item.society} </strong>
-                        <br></br>
-                        {masterLocality && masterLocality.find((e) => e.id === item.locality).locality}
-                        {", "}
-                        {masterCity && masterCity.find((e) => e.id === item.city).city}
-                        {", "}
-                        {masterState && masterState.find((e) => e.id === item.state).state}
-                       
-                      </div>
-                    </label>
-                  </li>
-                ))}
-            </ul>
-          </div>
-          <div className="vg12"></div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2,1fr)",
-              gap: "15px",
-            }}
-          >
-            <button
-              onClick={closeSearchPopup}
-              className="theme_btn full_width btn_border no_icon"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={confirmSearchPopup}
-              className="theme_btn full_width btn_fill no_icon"
-            >
-              Confirm
-            </button>
           </div>
         </div>
-      </div> */}
-      {/* Search Popup - End */}
-
-      <div className="row row_gap form_full">
         <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
             <label htmlFor="">Name*</label>
@@ -724,53 +616,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
             </div>
           </div>
         </div>
-        <div className="col-xl-4 col-lg-6">
-          <div className="form_field label_top">
-            <label htmlFor="">Phone number*</label>
-            <div className="form_field_inner">
-              <PhoneInput
-                // country={"in"}
-                // value={agentPhone}
-                // onChange={(e) => {
-                //   handleChangeAgentPhone(e);
-                //   if (e.target.value) {
-                //     setErrors((prevErrors) => ({
-                //       ...prevErrors,
-                //       agentPhone: "",
-                //     }));
-                //   }
-                // }}
-                onlyCountries={["in"]} // Allow only India
-                value={agentPhone}
-                onChange={handleChangeAgentPhone}
-                international
-                keyboardType="phone-pad"
-                countryCodeEditable={true}
-                placeholder="Country code + mobile number"
-                inputProps={{
-                  name: "phone",
-                  required: true,
-                  autoFocus: false,
-                }}
-                inputStyle={{
-                  width: "100%",
-                  paddingLeft: "45px",
-                  fontSize: "16px",
-                  borderRadius: "12px",
-                  height: "45px",
-                }}
-                buttonStyle={{
-                  borderRadius: "12px",
-                  textAlign: "left",
-                  border: "1px solid #00A8A8",
-                }}
-              />
-              {errors.agentPhone && (
-                <div className="field_error">{errors.agentPhone}</div>
-              )}
-            </div>
-          </div>
-        </div>
+
         <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
             <label htmlFor="">Email</label>

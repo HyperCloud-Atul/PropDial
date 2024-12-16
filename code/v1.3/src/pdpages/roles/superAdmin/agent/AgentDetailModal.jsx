@@ -193,7 +193,7 @@ const AgentDetailModal = ({ show, handleClose, selectedAgent, user }) => {
                   </span>
                 </div>
                 <h6 className="text-capitalize">
-                  {format(selectedAgent.updatedAt.toDate(), "dd-MMM-yy, hh:mm a")}
+                  {selectedAgent.updatedAt && format(selectedAgent.updatedAt.toDate(), "dd-MMM-yyyy, hh:mm a")}
                 </h6>
                 <h5>Updated At</h5>
               </div>
@@ -237,7 +237,7 @@ const AgentDetailModal = ({ show, handleClose, selectedAgent, user }) => {
               <span className="material-symbols-outlined"> calendar_month</span>
             </div>
             <h6 className="text-capitalize">
-              {format(selectedAgent.createdAt.toDate(), "dd-MMM-yy, hh:mm a")}
+              {selectedAgent.createdAt && format(selectedAgent.createdAt.toDate(), "dd-MMM-yyyy, hh:mm a")}
             </h6>
             <h5>Created At</h5>
           </div>

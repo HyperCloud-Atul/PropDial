@@ -19,7 +19,6 @@ const AgentSingle = ({ agentDoc }) => {
 
   const { camelCase } = useCommon();
 
-
   const { addDocument, updateDocument, deleteDocument, error } =
     useFirestore("agent-propdial");
 
@@ -142,7 +141,7 @@ const AgentSingle = ({ agentDoc }) => {
     setSelectedAgent(doc);
     setShowAgentModal(true);
   };
-  console.log('agentDoc', agentDoc)
+  // console.log('agentDoc', agentDoc)
   return (
     <div className="agent_cards propdial_users all_tenants ">
       {agentDoc &&
@@ -324,7 +323,7 @@ const AgentSingle = ({ agentDoc }) => {
             <div className="dates">
               <div className="date_single">
                 <strong>Created At</strong>:{" "}
-                <span>{doc && doc.createdAt && format(doc.createdAt.toDate(), "dd-MMM-yy")}</span>
+                <span>{doc && doc.createdAt && format(doc.createdAt.toDate(), "dd-MMM-yyyy")}</span>
               </div>
               <div
                 className="date_single click_text pointer"
