@@ -27,7 +27,7 @@ const MasterStateTable = ({ filterData }) => {
         accessor: "gstStateCode",
       },
       {
-        Header: "Added At",
+        Header: "Date",
         accessor: "createdAt",
         Cell: ({ value }) => (
           <div className="mobile_min_width">

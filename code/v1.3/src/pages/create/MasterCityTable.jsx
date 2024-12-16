@@ -19,7 +19,7 @@ const MasterCityTable = ({ filterData }) => {
         accessor: "city",
       },   
       {
-        Header: "Added At",
+        Header: "Date",
         accessor: "createdAt",
         Cell: ({ value }) => (
           <div className="mobile_min_width">
