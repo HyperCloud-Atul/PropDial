@@ -353,6 +353,8 @@ const AgentSingle = ({ agentDoc }) => {
         handleDelete={handleDelete}
         isDeleting={isDeleting}
       />
+
+
     </div>
   );
 };
