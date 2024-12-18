@@ -13,6 +13,7 @@ import { useCommon } from "../../../../hooks/useCommon";
 const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
 
   const { camelCase } = useCommon();
+  const isReadOnly = agentID !== 'new' ? true : false; // Set read-only based on param existence
 
   // add document
   const {
@@ -74,15 +75,22 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
   //Master Data Loading Initialisation - End
   useEffect(() => {
     // console.log('in useeffect')
-    if (agentDoc) {
-      let selectedstate = masterState.find(e => e.state === agentDoc.state)
+    if (agentDoc && masterState) {
+      console.log("agentDoc.state: ", agentDoc.state)
+      console.log("masterState: ", masterState)
+      let selectedstate = masterState && masterState.find(e => e.state === agentDoc.state)
+
+      console.log("selectedstate: ", selectedstate)
+
       selectedstate &&
         setState({
           label: agentDoc.state,
           value: selectedstate.id
         });
 
-      let selectedcity = masterCity.find(e => e.city === agentDoc.city)
+
+
+      let selectedcity = masterCity && masterCity.find(e => e.city === agentDoc.city)
       selectedcity &&
         setCity({
           label: agentDoc.city,
@@ -99,6 +107,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
       agentDoc.agentEmail ? setAgentEmail(agentDoc.agentEmail) : setAgentEmail('');
       agentDoc.agentPancard ? setAgentPancard(agentDoc.agentPancard) : setAgentPancard('');
       agentDoc.agentGstNumber ? setAgentGstNumber(agentDoc.agentGstNumber) : setAgentGstNumber('');
+
       handleStateChange({
         label: agentDoc.state,
         value: selectedstate.id
@@ -108,13 +117,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
         value: selectedcity.id
       });
     }
-  }, [agentDoc]);
-  useEffect(() => {
-    // console.log('in useeffect')
-
-
-  }, [masterState]);
-
+  }, [agentDoc, masterState]);
 
   // Populate Master Data - Start
   //State select onchange
@@ -427,106 +430,124 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
   const submitAgentDocument = async (e) => {
     e.preventDefault();
 
-
-    const ref = await projectFirestore
-      .collection("agent-propdial")
-      .where("agentPhone", "==", agentPhone)
-
-    console.log("ref: ", ref)
     let isPhoneExists = false
     let newErrors;
-    ref.onSnapshot(
-      async (snapshot) => {
-        console.log("snapshot.docs", snapshot.docs)
-        if (snapshot.docs.length > 0) {
-          isPhoneExists = true
-        }
-        else {
-          isPhoneExists = false
-        }
-        // snapshot.docs.length > 0 ? isPhoneExists = true : isPhoneExists = false
-        // newErrors = {
-        //   agentPhone: isPhoneExists ? "Duplicate mobile no" : ""
-        // }
 
-        console.log("isPhoneExists: ", isPhoneExists)
+    //Add new document for agent
+    if (agentID === 'new') {
 
-        newErrors = {
-          // ...newErrors,
-          agentName: !agentName ? "Name is required" : "",
-          agentPhone: agentPhone.length < 10 ? "Please enter correct mobile number" : isPhoneExists ? "Duplicate mobile no" : "",
-          // agentPhone: isPhoneExists ? "Duplicate phone number" : "",
-          // agentEmail: !agentEmail
-          //   ? "Email is required"
-          //   : !isValidEmail(agentEmail)
-          //     ? "Invalid email format"
-          //     : "",
-          state: !state ? "State is required" : "",
-          city: !city ? "City is required" : "",
-          locality: !locality ? "Locality is required" : "",
-          // society: !society ? "Society is required" : "",
-        };
+      const ref = await projectFirestore
+        .collection("agent-propdial")
+        .where("agentPhone", "==", agentPhone)
 
-        setErrors(newErrors);
+      console.log("ref: ", ref)
 
-        // Check if there are any errors
-        const hasErrors = Object.values(newErrors).some((error) => error !== "");
-        if (hasErrors) return;
-
-
-
-        try {
-          setIsUploading(true);
-
-          const dataSet = {
-            agentName: camelCase(agentName),
-            agentCompnayName,
-            agentPhone,
-            agentEmail,
-            agentPancard: agentPancard.toUpperCase(),
-            agentGstNumber: agentGstNumber.toUpperCase(),
-            country: "India",
-            state: state.label,
-            city: city.label,
-            locality: locality,
-            society: society,
-            area: area,
-            status: "active",
-          };
-
-
-
-          console.log("dataSet: ", dataSet)
-          if (agentID === "new") {
-            const docRef = await addAgentDoc(dataSet);
-
-          } else {
-            const docRef = await updateAgentDoc(agentID, dataSet);
-
+      ref.onSnapshot(
+        async (snapshot) => {
+          console.log("snapshot.docs", snapshot.docs)
+          if (snapshot.docs.length > 0) {
+            isPhoneExists = true
+          }
+          else {
+            isPhoneExists = false
           }
 
-          // Reset fields and errors after successful submission
-          setAgentName("");
-          setAgentCompnayName("");
-          setAgentPhone("");
-          setAgentEmail("");
-          setAgentPancard("");
-          setAgentGstNumber("");
-          setState("");
-          setLocality("");
-          setCity("");
-          // setSociety("");
-          setErrors({});
-          setIsUploading(false);
-          setShowAIForm(!showAIForm);
-          navigate('/agents')
-        } catch (addingError) {
-          console.error("Error adding document:", addingError);
-          setIsUploading(false);
-          setShowAIForm(!showAIForm);
-        }
+          console.log("isPhoneExists: ", isPhoneExists)
 
-      })
+          newErrors = {
+            // ...newErrors,
+            agentName: !agentName ? "Name is required" : "",
+            agentPhone: agentPhone.length < 10 ? "Please enter correct mobile number" : isPhoneExists ? "Duplicate mobile no" : "",
+            // agentPhone: isPhoneExists ? "Duplicate phone number" : "",
+            // agentEmail: !agentEmail
+            //   ? "Email is required"
+            //   : !isValidEmail(agentEmail)
+            //     ? "Invalid email format"
+            //     : "",
+            state: !state ? "State is required" : "",
+            city: !city ? "City is required" : "",
+            locality: !locality ? "Locality is required" : "",
+            // society: !society ? "Society is required" : "",
+          };
+
+          setErrors(newErrors);
+
+          // Check if there are any errors
+          const hasErrors = Object.values(newErrors).some((error) => error !== "");
+          if (hasErrors) return;
+
+          try {
+            setIsUploading(true);
+
+            const dataSet = {
+              agentName: camelCase(agentName),
+              agentCompnayName,
+              agentPhone,
+              agentEmail,
+              agentPancard: agentPancard.toUpperCase(),
+              agentGstNumber: agentGstNumber.toUpperCase(),
+              country: "India",
+              state: state.label,
+              city: city.label,
+              locality: locality,
+              society: society,
+              area: area,
+              status: "active",
+            };
+
+            console.log("dataSet: ", dataSet)
+
+            const docRef = await addAgentDoc(dataSet);
+
+
+          } catch (addingError) {
+            console.error("Error adding document:", addingError);
+            setIsUploading(false);
+            setShowAIForm(!showAIForm);
+          }
+
+        })
+    }
+    else { //Update Document
+
+      const dataSet = {
+        agentName: camelCase(agentName),
+        agentCompnayName,
+        agentPhone,
+        agentEmail,
+        agentPancard: agentPancard.toUpperCase(),
+        agentGstNumber: agentGstNumber.toUpperCase(),
+        country: "India",
+        state: state.label,
+        city: city.label,
+        locality: locality,
+        society: society,
+        area: area,
+        status: "active",
+      };
+
+      const docRef = await updateAgentDoc(agentID, dataSet);
+    }
+
+    // Reset fields and errors after successful submission
+    setAgentName("");
+    setAgentCompnayName("");
+    setAgentPhone("");
+    setAgentEmail("");
+    setAgentPancard("");
+    setAgentGstNumber("");
+    setState("");
+    setLocality("");
+    setCity("");
+    // setSociety("");
+    setErrors({});
+    setIsUploading(false);
+    setShowAIForm(!showAIForm);
+    navigate('/agents')
+  };
+
+  const backViewAgents = () => {
+    navigate("/agents");
   };
 
 
@@ -540,23 +561,12 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
             <label htmlFor="">Phone number*</label>
             <div className="form_field_inner">
               <PhoneInput
-                // country={"in"}
-                // value={agentPhone}
-                // onChange={(e) => {
-                //   handleChangeAgentPhone(e);
-                //   if (e.target.value) {
-                //     setErrors((prevErrors) => ({
-                //       ...prevErrors,
-                //       agentPhone: "",
-                //     }));
-                //   }
-                // }}
-                // onlyCountries={["in"]} // Allow only India
                 country={"in"} // Default country is India
                 onlyCountries={["in"]} // Restrict to only India
                 // disableCountryCode={true} // Disable editing of the country code
                 // disableDropdown={true} // Disable the dropdown menu
                 countryCodeEditable={false}
+                disabled={isReadOnly}
                 value={agentPhone}
                 onChange={handleChangeAgentPhone}
                 // international
@@ -865,7 +875,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
             <div className="col-4">
               <div
                 className="theme_btn btn_border no_icon text-center"
-                onClick={handleShowAIForm}
+                onClick={backViewAgents}
               >
                 Cancel
               </div>

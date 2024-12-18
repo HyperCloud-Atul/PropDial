@@ -37,6 +37,7 @@ import HowUse from "./pdpages/howUse/HowUse";
 // superadmin
 import PGAgent from "./pdpages/roles/superAdmin/agent/PGAgent";
 import UpdateAgent from "./pdpages/roles/superAdmin/agent/UpdateAgent";
+
 // admin
 import PGAdminDashboard from "./pages/roles/admin/PGAdminDashboard";
 import PGAdminProperties from "./pages/roles/admin/PGAdminProperties";
@@ -403,6 +404,7 @@ function App() {
                       user &&
                         (user.role === "admin" || user.role === "superAdmin") ? (
                         <UpdateAgent />
+
                       ) : (
                         <Navigate to="/login" />
                       )
