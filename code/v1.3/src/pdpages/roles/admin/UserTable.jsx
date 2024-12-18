@@ -79,7 +79,7 @@ const UserTable = ({ users }) => {
         Cell: ({ row }) => (
           <div onClick={() => handleEdit(row.original)} className='pointer mobile_min_width'>
             <span className='text-capitalize'>{row.original.fullName}</span>
-            <span className="material-symbols-outlined click_icon text_near_icon">edit</span>
+            {/* <span className="material-symbols-outlined click_icon text_near_icon">edit</span> */}
           </div>
         ),
       },

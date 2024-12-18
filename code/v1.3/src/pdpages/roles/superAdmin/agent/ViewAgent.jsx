@@ -124,10 +124,8 @@ const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
               <span className="material-symbols-outlined">search</span>
             </div>
           </div>
-        </div>
-
-        <Select
-          className=""
+          <Select
+          className="state_filter"
           // onChange={(option) => setState(option)}
           onChange={(e) => {
             setState(e)
@@ -145,6 +143,9 @@ const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
             }),
           }}
         />
+        </div>
+
+      
 
         <div className="right">
           <div className="button_filter diff_views">

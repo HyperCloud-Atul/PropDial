@@ -11,6 +11,9 @@ import NineDots from "../../../../components/NineDots";
 import AddAgent from "./AddAgent";
 import ViewAgent from "./ViewAgent";
 
+// import scss 
+import './PGAgent.scss'
+
 const PGAgent = () => {
   const { user } = useAuthContext();
   const [showAIForm, setShowAIForm] = useState(false);

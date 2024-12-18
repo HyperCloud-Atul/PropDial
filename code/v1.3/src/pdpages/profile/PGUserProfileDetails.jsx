@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { BeatLoader } from "react-spinners";
 import { projectStorage } from "../../firebase/config";
 import PhoneInput from "react-phone-input-2";
+import { useCollection } from "../../hooks/useCollection";
 
 // import scss
 import "./PGUserProfileDetails.scss";
@@ -18,6 +19,7 @@ import "./PGUserProfileDetails.scss";
 export default function PGUserProfileDetails2() {
   const { userProfileId } = useParams();
   const { camelCase } = useCommon();
+  const { user } = useAuthContext();
 
   // get and update code start
   const { document: userProfileDoc, error: userProfileDocError } = useDocument(
@@ -28,6 +30,16 @@ export default function PGUserProfileDetails2() {
     useFirestore("users-propdial");
   // get and update code end
 
+  // get user
+  const { documents: dbUsers, error: dbuserserror } =
+    useCollection("users-propdial");
+  const [dbUserState, setdbUserState] = useState(dbUsers);
+  useEffect(() => {
+    setdbUserState(dbUsers);
+  });
+  const lastActiveAt =
+    userProfileDoc?.activeByAt?.[userProfileDoc.activeByAt.length - 1]
+      ?.activeAt;
   // code for active inactive start
   // Make sure that userProfileDoc is not null before using it
   const [status, setStatus] = useState(userProfileDoc?.status || "active");
@@ -52,9 +64,9 @@ export default function PGUserProfileDetails2() {
 
       const updateData = {
         status: popupData.status,
-        activeBy: popupData.status === "active" ? "Admin" : null, // replace with your logic
+        activeBy: popupData.status === "active" ? user.uid : null, // replace with your logic
         activeAt: popupData.status === "active" ? currentDate : null, // replace with your logic
-        inactiveBy: popupData.status === "inactive" ? "Admin" : null,
+        inactiveBy: popupData.status === "inactive" ? user.uid : null,
         inactiveAt: popupData.status === "inactive" ? currentDate : null,
       };
 
@@ -63,7 +75,7 @@ export default function PGUserProfileDetails2() {
         // Append inactive status details to the map
         updateData.inactiveByAt = userProfileDoc.inactiveByAt || [];
         updateData.inactiveByAt.push({
-          inactiveBy: "Admin", // Replace with actual user who is marking inactive
+          inactiveBy: user.uid, // Replace with actual user who is marking inactive
           inactiveAt: currentDate, // Store the current timestamp
         });
       }
@@ -72,7 +84,7 @@ export default function PGUserProfileDetails2() {
         // Append active status details to the map
         updateData.activeByAt = userProfileDoc.activeByAt || [];
         updateData.activeByAt.push({
-          activeBy: "Admin", // Replace with actual user who is marking active
+          activeBy: user.uid, // Replace with actual user who is marking active
           activeAt: currentDate, // Store the current timestamp
         });
       }
@@ -1053,7 +1065,37 @@ export default function PGUserProfileDetails2() {
                           }
                           onChange={() => handleStatusChange("active")}
                         />
-                        <label htmlFor="active">Active</label>
+                        <label htmlFor="active">
+                          <div className="label_inner">
+                            Active
+                            <div className="info_icon">
+                              <span className="material-symbols-outlined">
+                                info
+                              </span>
+                              <div className="info_icon_inner">
+                                <b className="text_green2">Active</b> by{" "}
+                                <b>
+                                  {userProfileDoc &&
+                                    dbUserState &&
+                                    dbUserState.find(
+                                      (user) =>
+                                        user.id === userProfileDoc.activeBy
+                                    )?.fullName}
+                                </b>{" "}
+                                on{" "}
+                                <b>
+                                  {lastActiveAt &&
+                                  !isNaN(new Date(lastActiveAt))
+                                    ? format(
+                                        new Date(lastActiveAt),
+                                        "dd-MMM-yy"
+                                      )
+                                    : "Invalid Date"}
+                                </b>
+                              </div>
+                            </div>
+                          </div>
+                        </label>
                       </div>
                       <div className="radio_single">
                         <input
@@ -1096,8 +1138,8 @@ export default function PGUserProfileDetails2() {
                       color: "#FA6262",
                       fontSize: "20px",
                       border: "none",
-                    }}                  >
-                   
+                    }}
+                  >
                     {popupData.status === "inactive" && (
                       <div>
                         <div className="form_field">
@@ -1158,8 +1200,8 @@ export default function PGUserProfileDetails2() {
                         </div>
                       </div>
                     )}
-                     Are you sure you want to mark this user as{" "}
-                     {popupData.status}?
+                    Are you sure you want to mark this user as{" "}
+                    {popupData.status}?
                   </Modal.Body>
                   <Modal.Footer
                     className="d-flex justify-content-between"
