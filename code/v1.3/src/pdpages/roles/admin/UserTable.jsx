@@ -105,14 +105,14 @@ const UserTable = ({ users }) => {
           <div className="contact_btn mobile_min_width">
             <Link
               className="whatsapp-icon"
-              to={`https://wa.me/${row.original.phoneNumber}`}
+              to={`https://wa.me/+${row.original.phoneNumber}`}
               target="_blank"
             >
               <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
             </Link>
             <Link
               className="call-icon"
-              to={`tel:${row.original.phoneNumber}`}
+              to={`tel:+${row.original.phoneNumber}`}
               target="_blank"
             >
               <img src="/assets/img/simple_call.png" alt="Call" />

@@ -95,14 +95,14 @@ const EnquiryTable = ({ enquiries }) => {
             <div className="contact_btn">
               <Link
                 className="whatsapp-icon"
-                to={`https://wa.me/${row.original.phone}`}
+                to={`https://wa.me/+${row.original.phone}`}
                 target="_blank"
               >
                 <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
               </Link>
               <Link
                 className="call-icon"
-                to={`tel:${row.original.phone}`}
+                to={`tel:+${row.original.phone}`}
                 target="_blank"
               >
                 <img src="/assets/img/simple_call.png" alt="Call" />

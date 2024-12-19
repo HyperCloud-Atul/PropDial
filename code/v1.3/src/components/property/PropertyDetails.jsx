@@ -3018,7 +3018,7 @@ const PropertyDetails = () => {
                                         <div className="wha_call_icon">
                                           <Link
                                             className="call_icon wc_single"
-                                            to={`tel:${tenant.mobile}`}
+                                            to={`tel:+${tenant.mobile}`}
                                             target="_blank"
                                           >
                                             <img
@@ -3028,7 +3028,7 @@ const PropertyDetails = () => {
                                           </Link>
                                           <Link
                                             className="wha_icon wc_single"
-                                            to={`https://wa.me/${tenant.mobile}`}
+                                            to={`https://wa.me/+${tenant.mobile}`}
                                             target="_blank"
                                           >
                                             <img
@@ -3241,7 +3241,7 @@ const PropertyDetails = () => {
                                                 className="call_icon wc_single"
                                                 to={
                                                   propUser
-                                                    ? `tel:${propUser.phoneNumber.replace(
+                                                    ? `tel:+${propUser.phoneNumber.replace(
                                                       /\D/g,
                                                       ""
                                                     )}`
@@ -3257,7 +3257,7 @@ const PropertyDetails = () => {
                                                 className="wha_icon wc_single"
                                                 to={
                                                   propUser
-                                                    ? `https://wa.me/${propUser.phoneNumber.replace(
+                                                    ? `https://wa.me/+${propUser.phoneNumber.replace(
                                                       /\D/g,
                                                       ""
                                                     )}`
@@ -3646,7 +3646,7 @@ const PropertyDetails = () => {
                                                 className="call_icon wc_single"
                                                 to={
                                                   propUser
-                                                    ? `tel:${propUser.phoneNumber.replace(
+                                                    ? `tel:+${propUser.phoneNumber.replace(
                                                       /\D/g,
                                                       ""
                                                     )}`
@@ -3662,7 +3662,7 @@ const PropertyDetails = () => {
                                                 className="wha_icon wc_single"
                                                 to={
                                                   propUser
-                                                    ? `https://wa.me/${propUser.phoneNumber.replace(
+                                                    ? `https://wa.me/+${propUser.phoneNumber.replace(
                                                       /\D/g,
                                                       ""
                                                     )}`

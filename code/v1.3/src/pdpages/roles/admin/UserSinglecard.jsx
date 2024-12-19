@@ -145,14 +145,14 @@ const UserSinglecard = ({ users }) => {
               <div className="wha_call_icon">
                 <Link
                   className="call_icon wc_single"
-                  to={`tel:${userObj.phoneNumber}`}
+                  to={`tel:+${userObj.phoneNumber}`}
                   target="_blank"
                 >
                   <img src="/assets/img/simple_call.png" alt="" />
                 </Link>
                 <Link
                   className="wha_icon wc_single"
-                  to={`https://wa.me/${userObj.phoneNumber}`}
+                  to={`https://wa.me/+${userObj.phoneNumber}`}
                   target="_blank"
                 >
                   <img src="/assets/img/whatsapp_simple.png" alt="" />

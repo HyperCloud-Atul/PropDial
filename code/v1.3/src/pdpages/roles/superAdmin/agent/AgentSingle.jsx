@@ -306,14 +306,14 @@ const AgentSingle = ({ agentDoc }) => {
               <div className="wha_call_icon">
                 <Link
                   className="call_icon wc_single"
-                  to={`tel:${doc.agentPhone}`}
+                  to={`tel:+${doc.agentPhone}`}
                   target="_blank"
                 >
                   <img src="/assets/img/simple_call.png" alt="" />
                 </Link>
                 <Link
                   className="wha_icon wc_single"
-                  to={`https://wa.me/${doc.agentPhone}`}
+                  to={`https://wa.me/+${doc.agentPhone}`}
                   target="_blank"
                 >
                   <img src="/assets/img/whatsapp_simple.png" alt="" />

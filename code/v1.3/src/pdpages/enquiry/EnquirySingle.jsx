@@ -105,14 +105,14 @@ const EnquirySingle = ({ enquiries, deleteDocument }) => {
               <div className="wha_call_icon">
                 <Link
                   className="call_icon wc_single"
-                  to={`tel:${doc.phone && doc.phone}`}
+                  to={`tel:+${doc.phone && doc.phone}`}
                   target="_blank"
                 >
                   <img src="/assets/img/simple_call.png" alt="" />
                 </Link>
                 <Link
                   className="wha_icon wc_single"
-                  to={`https://wa.me/${doc.phone && doc.phone}`}
+                  to={`https://wa.me/+${doc.phone && doc.phone}`}
                   target="_blank"
                 >
                   <img src="/assets/img/whatsapp_simple.png" alt="" />

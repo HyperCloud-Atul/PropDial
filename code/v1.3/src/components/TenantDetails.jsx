@@ -764,14 +764,14 @@ const TenantDetails = () => {
                     <div className="wha_call_icon">
                       <Link
                         className="call_icon wc_single"
-                        to={`tel:${tenantInfo && tenantInfo.mobile}`}
+                        to={`tel:+${tenantInfo && tenantInfo.mobile}`}
                         target="_blank"
                       >
                         <img src="/assets/img/simple_call.png" alt="" />
                       </Link>
                       <Link
                         className="wha_icon wc_single"
-                        to={`https://wa.me/${tenantInfo && tenantInfo.mobile}`}
+                        to={`https://wa.me/+${tenantInfo && tenantInfo.mobile}`}
                         target="_blank"
                       >
                         <img src="/assets/img/whatsapp_simple.png" alt="" />
