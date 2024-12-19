@@ -414,6 +414,18 @@ function App() {
                   <Route path="/properties" element={<PGProperties />}></Route>
 
                   <Route
+                    path="/allproperties/:filterOption"
+                    element={
+                      user &&
+                        (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") ? (
+                        <PGAdminProperty />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
+                    }
+                  ></Route>
+
+                  <Route
                     path="/propertydetails/:propertyid"
                     element={<PropertyDetails></PropertyDetails>}
                   ></Route>
@@ -450,17 +462,7 @@ function App() {
                     path="/propertyinspectiondocument/:propertyId"
                     element={<PropertyInspectionDocuments />}
                   ></Route>
-                  <Route
-                    path="/allproperties/:filterOption"
-                    element={
-                      user &&
-                        (user.role === "admin" || user.role === "superAdmin") ? (
-                        <PGAdminProperty />
-                      ) : (
-                        <Navigate to="/login" />
-                      )
-                    }
-                  ></Route>
+
 
                   {/* <Route
                     path="/addproperty"

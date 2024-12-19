@@ -43,7 +43,7 @@ export default function Navbar() {
       return; // Exit the function to prevent further checks
     } else {
       // console.log('showThirdPage')
-      if (user.role === "admin" || user.role === "superAdmin")
+      if (user.role === "admin" || user.role === "superAdmin" || user.role === "executive")
         navigate("/allproperties/all");
       else navigate("/contact-us");
     }
@@ -73,7 +73,7 @@ export default function Navbar() {
     thirdMenu = "About Us";
   }
 
-  if (user && (user.role === "admin" || user.role === "superAdmin")) {
+  if (user && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive")) {
     secondMenuIcon = "dashboard";
     secondMenu = "Dashboard";
     thirdMenuIcon = "real_estate_agent";
@@ -91,12 +91,12 @@ export default function Navbar() {
     thirdMenuIcon = "real_estate_agent";
     thirdMenu = "Contact";
   }
-  if (user && user.role === "manager") {
-    secondMenuIcon = "dashboard";
-    secondMenu = "Dashboard";
-    thirdMenuIcon = "real_estate_agent";
-    thirdMenu = "Contact";
-  }
+  // if (user && user.role === "executive") {
+  //   secondMenuIcon = "dashboard";
+  //   secondMenu = "Dashboard";
+  //   thirdMenuIcon = "real_estate_agent";
+  //   thirdMenu = "Contact";
+  // }
 
   // Add class on scroll start
   const [isScrolled, setIsScrolled] = useState(false);
@@ -132,9 +132,8 @@ export default function Navbar() {
   const shouldMoreDesktopActive = moreDesktopActivePaths.includes(
     location.pathname
   );
-  const moreDesktopActiveClass = `menu_single pointer ${
-    shouldMoreDesktopActive ? "active" : ""
-  }`;
+  const moreDesktopActiveClass = `menu_single pointer ${shouldMoreDesktopActive ? "active" : ""
+    }`;
   // array of more class active on desktop
 
   // display navbar on top Array
@@ -148,9 +147,8 @@ export default function Navbar() {
   const shouldSocialMediaHide = socialMediaHidePaths.includes(
     location.pathname
   );
-  const socialMediaClass = `menu_social_media ${
-    shouldSocialMediaHide ? "" : "d_none"
-  }`;
+  const socialMediaClass = `menu_social_media ${shouldSocialMediaHide ? "" : "d_none"
+    }`;
   // array for header social media hide after login
 
   // hide navbar array
@@ -246,9 +244,8 @@ export default function Navbar() {
             <li className="main_menus">
               <div
                 onClick={showHome}
-                className={`menu_single pointer ${
-                  location.pathname === "/" ? "active" : ""
-                }`}
+                className={`menu_single pointer ${location.pathname === "/" ? "active" : ""
+                  }`}
               >
                 <span className="material-symbols-outlined">
                   {firstMenuIcon}
@@ -258,9 +255,8 @@ export default function Navbar() {
 
               <div
                 onClick={showSecondPage}
-                className={`menu_single pointer ${
-                  location.pathname === "/dashboard" ? "active" : ""
-                }`}
+                className={`menu_single pointer ${location.pathname === "/dashboard" ? "active" : ""
+                  }`}
               >
                 <span className="material-symbols-outlined">
                   {secondMenuIcon}
@@ -270,12 +266,11 @@ export default function Navbar() {
 
               <div
                 onClick={showThirdPage}
-                className={`menu_single pointer ${
-                  location.pathname === "/contact-us" ||
+                className={`menu_single pointer ${location.pathname === "/contact-us" ||
                   location.pathname === "/allproperties"
-                    ? "active"
-                    : ""
-                }`}
+                  ? "active"
+                  : ""
+                  }`}
               >
                 <span className="material-symbols-outlined">
                   {thirdMenuIcon}
@@ -292,9 +287,8 @@ export default function Navbar() {
               {user ? (
                 <Link
                   to="/profile"
-                  className={`menu_single profile pointer ${
-                    location.pathname === "/profile" ? "active" : ""
-                  }`}
+                  className={`menu_single profile pointer ${location.pathname === "/profile" ? "active" : ""
+                    }`}
                 >
                   <span>Hi, {user.displayName}</span>
                   <div className="user_img">
@@ -311,9 +305,8 @@ export default function Navbar() {
               ) : (
                 <Link to="/login">
                   <div
-                    className={`menu_single login pointer ${
-                      location.pathname === "/login" ? "active" : ""
-                    }`}
+                    className={`menu_single login pointer ${location.pathname === "/login" ? "active" : ""
+                      }`}
                   >
                     <span className="material-symbols-outlined ba_animation">
                       login
@@ -333,12 +326,12 @@ export default function Navbar() {
                 <img
                   src="/assets/img/home/notification.png"
                   alt=""
-                  className="pointer"                 
+                  className="pointer"
                 />
                 {unreadNotifications && unreadNotifications.length > 0 && (
                   <span className="notification-badge">
                     {unreadNotifications.length}
-                    
+
                   </span>
                 )}
               </Link>

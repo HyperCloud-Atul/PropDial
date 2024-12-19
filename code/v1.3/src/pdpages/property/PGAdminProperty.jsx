@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
+import { projectFirestore } from "../../firebase/config";
 import PropertyCard from "../../components/property/PropertyCard";
 import PropertyTable from "../../components/property/PropertyTable";
 import Switch from "react-switch";
@@ -13,6 +14,7 @@ const statusFilter = ["In-Review", "Active", "Inactive"]; // Define the isActive
 const PGAdminProperty = () => {
   const { user } = useAuthContext();
   const { filterOption } = useParams();
+  // console.log("filterOption :", filterOption)
 
   // const { documents: allproperties, error: propertieserror } =
   //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
@@ -30,6 +32,24 @@ const PGAdminProperty = () => {
   const [propertyListWithUsers, setPropertyListWithUsers] = useState();
   const [properties, setProperties] = useState();
 
+  // Existing property filter state
+  const [filter, setFilter] = useState(propertyFilter[0]);
+  const changeFilter = (newFilter) => {
+    setFilter(newFilter);
+  };
+
+  // // New isActiveInactiveReview filter state
+  const [status, setStatus] = useState("In-Review"); // Default to 'In-Review'
+  const changeStatusFilter = (newStatus) => {
+    setStatus(newStatus);
+  };
+
+  // // Search input state
+  const [searchInput, setSearchInput] = useState("");
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
   useEffect(() => {
     let _properties = null;
     if (filterOption === 'all') {
@@ -45,7 +65,9 @@ const PGAdminProperty = () => {
 
     let _propertyListWithUsers = [];
     _properties && _properties.forEach(prop => {
+
       let assigneduserList = assignedPopertyUserList && assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id);
+
       let userDetails = '';
 
       if (assigneduserList && assigneduserList.length > 0) {
@@ -66,31 +88,20 @@ const PGAdminProperty = () => {
     setPropertyListWithUsers(_propertyListWithUsers);
   }, [assignedPopertyUserList, allproperties, userList]);
 
-  // Existing property filter state
-  const [filter, setFilter] = useState(propertyFilter[0]);
-  const changeFilter = (newFilter) => {
-    setFilter(newFilter);
-  };
 
-  // New isActiveInactiveReview filter state
-  const [status, setStatus] = useState("In-Review"); // Default to 'In-Review'
-  const changeStatusFilter = (newStatus) => {
-    setStatus(newStatus);
-  };
 
-  // Rent/Sale switch state
+  // // Rent/Sale switch state
   const [rentSaleFilter, setRentSaleFilter] = useState("Rent");
   const handleRentSaleChange = (checked) => {
     setRentSaleFilter(checked ? "Sale" : "Rent");
   };
 
-  // Search input state
-  const [searchInput, setSearchInput] = useState("");
-  const handleSearchInputChange = (e) => {
-    setSearchInput(e.target.value);
-  };
+
 
   let caseFilter = user.accessType;
+
+  // console.log("propertyListWithUsers: ", propertyListWithUsers)
+
   const accessedPropertyList = propertyListWithUsers
     ? propertyListWithUsers.filter((document) => {
       switch (caseFilter) {
@@ -111,7 +122,7 @@ const PGAdminProperty = () => {
     }) : null;
 
   // Filter properties based on search input, isActiveInactiveReview, and other filters
-  const filterProperties = accessedPropertyList
+  const filteredProperties = accessedPropertyList
     ? accessedPropertyList.filter((document) => {
       let categoryMatch = true;
       let purposeMatch = true;
@@ -148,6 +159,10 @@ const PGAdminProperty = () => {
       return categoryMatch && searchMatch && statusMatch;
     })
     : null;
+
+
+
+  //--------------------------- --------------------------  -------------
 
   // View mode state
   const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
@@ -205,8 +220,8 @@ const PGAdminProperty = () => {
               <div className="left">
                 <h2 className="m22">
                   Filtered properties:{" "}
-                  {properties && (
-                    <span className="text_orange">{filterProperties.length}</span>
+                  {filteredProperties && (
+                    <span className="text_orange">{filteredProperties.length}</span>
                   )}
                 </h2>
               </div>
@@ -237,21 +252,21 @@ const PGAdminProperty = () => {
               <div className="right">
                 <div className="new_inline">
 
-                  {properties && (
+                  {filteredProperties && (
                     <Filters
                       changeFilter={changeStatusFilter}
                       filterList={statusFilter}
-                      filterLength={filterProperties.length}
+                      filterLength={filteredProperties.length}
                     />
                   )}
                 </div>
                 <div className="new_inline">
 
-                  {properties && (
+                  {filteredProperties && (
                     <Filters
                       changeFilter={changeFilter}
                       filterList={propertyFilter}
-                      filterLength={filterProperties.length}
+                      filterLength={filteredProperties.length}
                     />
                   )}
                 </div>
@@ -312,15 +327,15 @@ const PGAdminProperty = () => {
             <div className="property_cards_parent">
               {viewMode === "card_view" && (
                 <>
-                  {properties &&
-                    filterProperties.map((property) => (
+                  {filteredProperties &&
+                    filteredProperties.map((property) => (
                       <PropertyCard key={property.id} propertyid={property.id} />
                     ))}
                 </>
               )}
             </div>
             {viewMode === "table_view" && (
-              <>{properties && <PropertyTable properties={filterProperties} />}</>
+              <>{filteredProperties && <PropertyTable properties={filteredProperties} />}</>
             )}
           </div>
         </div>

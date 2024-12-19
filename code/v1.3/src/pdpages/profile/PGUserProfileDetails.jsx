@@ -12,6 +12,7 @@ import { BeatLoader } from "react-spinners";
 import { projectStorage } from "../../firebase/config";
 import PhoneInput from "react-phone-input-2";
 import { useCollection } from "../../hooks/useCollection";
+import { projectFirestore } from "../../firebase/config";
 
 // import scss
 import "./PGUserProfileDetails.scss";
@@ -34,9 +35,127 @@ export default function PGUserProfileDetails2() {
   const { documents: dbUsers, error: dbuserserror } =
     useCollection("users-propdial");
   const [dbUserState, setdbUserState] = useState(dbUsers);
+
+  //Master Data Loading Initialisation - Start
+  const { documents: masterCountry, error: masterCountryerror } =
+    useCollection("m_countries", "", ["country", "asc"]);
+
+  const [country, setCountry] = useState();
+  const [state, setState] = useState();
+  const [city, setCity] = useState();
+  const [locality, setLocality] = useState();
+  const [society, setSociety] = useState();
+
+  let countryOptions = useRef([]);
+  let stateOptions = useRef([]);
+  let cityOptions = useRef([]);
+  let localityOptions = useRef([]);
+  let societyOptions = useRef([]);
+
+
+  useEffect(() => {
+    // console.log('in useeffect')
+    if (masterCountry) {
+      countryOptions.current = masterCountry.map((countryData) => ({
+        label: countryData.country,
+        value: countryData.id,
+      }));
+    }
+
+    // handleCountryChange({ label: "INDIA", value: "_india" })
+    // filteredDataNew({ label: "Andaman & Nicobar Islands", value: "_andaman_&_nicobar_islands" })
+
+
+  }, [masterCountry]);
+
+  // Populate Master Data - Start
+  //Country select onchange
+  const handleCountryChange = async (option) => {
+    setCountry(option);
+    // let countryname = option.label;
+    // console.log('handleCountryChange option:', option)
+    // const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
+    // console.log('countryid:', countryid)
+    const ref = await projectFirestore
+      .collection("m_states")
+      .where("country", "==", option.value)
+      .orderBy("state", "asc");
+    ref.onSnapshot(
+      async (snapshot) => {
+        if (snapshot.docs) {
+          stateOptions.current = snapshot.docs.map((stateData) => ({
+            label: stateData.data().state,
+            value: stateData.id,
+          }));
+
+          if (stateOptions.current.length === 0) {
+            console.log("No State")
+            handleStateChange(null)
+          }
+          else {
+            handleStateChange({
+              label: stateOptions.current[0].label,
+              value: stateOptions.current[0].value,
+            });
+            // handleStateChange()
+          }
+
+        } else {
+          // setError('No such document exists')
+        }
+      },
+      (err) => {
+        console.log(err.message);
+        // setError('failed to get document')
+      }
+    );
+  };
+
+  //Stae select onchange
+  const handleStateChange = async (option) => {
+    setState(option);
+    // console.log('state.id:', option.value)    
+
+  };
+
+  // Populate Master Data - Ends
+
+  // Save Access Mgmt details
+  const handleSaveAccessMgmt = async () => {
+
+    console.log("selected country", country)
+    console.log("selected state", state)
+
+    const updatedData = {
+      accessType: 'state',
+      accessValue: state
+    };
+
+    console.log("updatedData: ", updatedData)
+
+    try {
+      // const updatedData = {
+      //   ...userProfileDoc,
+      //   bankDetail: bankDetailFormData,
+      // };
+
+      await updateDocument(userProfileId, updatedData);
+
+    } catch (error) {
+      console.error("Error updating details:", error);
+
+    } finally {
+
+    }
+  };
+
+
+
   useEffect(() => {
     setdbUserState(dbUsers);
   });
+
+
   const lastActiveAt =
     userProfileDoc?.activeByAt?.[userProfileDoc.activeByAt.length - 1]
       ?.activeAt;
@@ -158,7 +277,7 @@ export default function PGUserProfileDetails2() {
     // Check if there are changes
     if (
       JSON.stringify(selectedRoles) ===
-        JSON.stringify(userProfileDoc.rolesPropDial || []) &&
+      JSON.stringify(userProfileDoc.rolesPropDial || []) &&
       primaryRole === (userProfileDoc.rolePropDial || "")
     ) {
       setSaveRoleMessage(
@@ -242,17 +361,17 @@ export default function PGUserProfileDetails2() {
       setDepartment(
         userProfileDoc.department
           ? userProfileDoc.department.map((dept) => ({
-              value: dept,
-              label: dept,
-            }))
+            value: dept,
+            label: dept,
+          }))
           : []
       );
       setDesignation(
         userProfileDoc.designation
           ? {
-              value: userProfileDoc.designation,
-              label: userProfileDoc.designation,
-            }
+            value: userProfileDoc.designation,
+            label: userProfileDoc.designation,
+          }
           : ""
       );
       setUanNumber(userProfileDoc.uanNumber || "");
@@ -272,17 +391,17 @@ export default function PGUserProfileDetails2() {
       setDepartment(
         userProfileDoc.department
           ? userProfileDoc.department.map((dept) => ({
-              value: dept,
-              label: dept,
-            }))
+            value: dept,
+            label: dept,
+          }))
           : []
       );
       setDesignation(
         userProfileDoc.designation
           ? {
-              value: userProfileDoc.designation,
-              label: userProfileDoc.designation,
-            }
+            value: userProfileDoc.designation,
+            label: userProfileDoc.designation,
+          }
           : ""
       );
       setUanNumber(userProfileDoc.uanNumber || "");
@@ -1034,9 +1153,9 @@ export default function PGUserProfileDetails2() {
                   <h5>
                     {userProfileDoc && userProfileDoc.createdAt
                       ? format(
-                          userProfileDoc.lastLoginTimestamp.toDate(),
-                          "dd-MMM-yyyy hh:mm a"
-                        )
+                        userProfileDoc.lastLoginTimestamp.toDate(),
+                        "dd-MMM-yyyy hh:mm a"
+                      )
                       : ""}
                   </h5>
                 </div>
@@ -1085,11 +1204,11 @@ export default function PGUserProfileDetails2() {
                                 on{" "}
                                 <b>
                                   {lastActiveAt &&
-                                  !isNaN(new Date(lastActiveAt))
+                                    !isNaN(new Date(lastActiveAt))
                                     ? format(
-                                        new Date(lastActiveAt),
-                                        "dd-MMM-yy"
-                                      )
+                                      new Date(lastActiveAt),
+                                      "dd-MMM-yy"
+                                    )
                                     : "Invalid Date"}
                                 </b>
                               </div>
@@ -1328,11 +1447,10 @@ export default function PGUserProfileDetails2() {
               <div className="blue_single is_employee">
                 <h5>Mode - </h5>
                 <h6
-                  className={` ${
-                    userProfileDoc && userProfileDoc.online
-                      ? "text_green2"
-                      : "text_red"
-                  }`}
+                  className={` ${userProfileDoc && userProfileDoc.online
+                    ? "text_green2"
+                    : "text_red"
+                    }`}
                 >
                   {userProfileDoc && userProfileDoc.online
                     ? "Online"
@@ -1347,9 +1465,8 @@ export default function PGUserProfileDetails2() {
             <h2 className="card_title">
               Roles
               <span
-                className={`material-symbols-outlined action_icon ${
-                  isRoleEditing ? "text_red" : "text_green"
-                }`}
+                className={`material-symbols-outlined action_icon ${isRoleEditing ? "text_red" : "text_green"
+                  }`}
                 onClick={handleRoleEditClick}
               >
                 {isRoleEditing ? "close" : "border_color"}
@@ -1403,18 +1520,16 @@ export default function PGUserProfileDetails2() {
                 <button
                   onClick={handleRoleEditClick}
                   disabled={isRoleSaving}
-                  className={`theme_btn btn_border no_icon min_width ${
-                    isRoleSaving ? "disabled" : ""
-                  }`}
+                  className={`theme_btn btn_border no_icon min_width ${isRoleSaving ? "disabled" : ""
+                    }`}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveRole}
                   disabled={isRoleSaving}
-                  className={`theme_btn btn_fill no_icon min_width ${
-                    isRoleSaving ? "disabled" : ""
-                  }`}
+                  className={`theme_btn btn_fill no_icon min_width ${isRoleSaving ? "disabled" : ""
+                    }`}
                 >
                   {isRoleSaving ? "Saving..." : "Save"}
                 </button>
@@ -1425,6 +1540,16 @@ export default function PGUserProfileDetails2() {
         <div className="property_card_single mobile_full_card overflow_unset">
           <div className="more_detail_card_inner">
             <h2 className="card_title">Access Management</h2>
+            <div>
+              <button
+                onClick={handleSaveAccessMgmt}
+                // disabled={isRoleSaving}
+                className={`theme_btn btn_fill no_icon min_width ${isRoleSaving ? "disabled" : ""
+                  }`}
+              >
+                {"Save"}
+              </button>
+            </div>
             <div className="form_field">
               <div className="field_box theme_radio_new">
                 <div
@@ -1459,6 +1584,9 @@ export default function PGUserProfileDetails2() {
                       // value={designation}
                       // onChange={setDesignation}
                       // options={designationOptions}
+                      onChange={handleCountryChange}
+                      options={countryOptions.current}
+                      value={country}
                       placeholder="Select Country"
                     />
                   </div>
@@ -1469,9 +1597,10 @@ export default function PGUserProfileDetails2() {
                   <label>State</label>
                   <div className="form_field_inner">
                     <Select
-                      // value={designation}
-                      // onChange={setDesignation}
-                      // options={designationOptions}
+                      isMulti
+                      onChange={handleStateChange}
+                      options={stateOptions.current}
+                      value={state}
                       placeholder="Select state"
                     />
                   </div>
@@ -1499,9 +1628,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Employee Detail
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isEdEditing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isEdEditing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isEdEditing ? handleEdCancelClick : handleEdEditClick
                   }
@@ -1523,9 +1651,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc && userProfileDoc.dateOfJoining
                           ? format(
-                              new Date(userProfileDoc.dateOfJoining), // Ensure it's converted to a Date object
-                              "dd-MMM-yyyy"
-                            )
+                            new Date(userProfileDoc.dateOfJoining), // Ensure it's converted to a Date object
+                            "dd-MMM-yyyy"
+                          )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -1543,9 +1671,9 @@ export default function PGUserProfileDetails2() {
                         <h5>
                           {userProfileDoc && userProfileDoc.dateOfLeaving
                             ? format(
-                                new Date(userProfileDoc.dateOfLeaving), // Ensure it's converted to a Date object
-                                "dd-MMM-yyyy"
-                              )
+                              new Date(userProfileDoc.dateOfLeaving), // Ensure it's converted to a Date object
+                              "dd-MMM-yyyy"
+                            )
                             : "Not provided yet"}
                         </h5>
                       </div>
@@ -1773,18 +1901,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleEdCancelClick}
                       disabled={isEdUpdating}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isEdUpdating ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isEdUpdating ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleUpdateEmployeeDetails}
                       disabled={isEdUpdating}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isEdUpdating ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isEdUpdating ? "disabled" : ""
+                        }`}
                     >
                       {isEdUpdating ? "Saving..." : "Save"}
                     </button>
@@ -1871,9 +1997,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Bank Detail
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isBankDetailEditing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isBankDetailEditing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isBankDetailEditing
                       ? handleBankDetailCancelClick
@@ -1893,7 +2018,7 @@ export default function PGUserProfileDetails2() {
                       <h6>A/C Holder Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.acHolderName
+                          userProfileDoc.bankDetail.acHolderName
                           ? userProfileDoc.bankDetail.acHolderName
                           : "Not provided yet"}
                       </h5>
@@ -1907,7 +2032,7 @@ export default function PGUserProfileDetails2() {
                       <h6>A/C Number</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.acNumber
+                          userProfileDoc.bankDetail.acNumber
                           ? userProfileDoc.bankDetail.acNumber
                           : "Not provided yet"}
                       </h5>
@@ -1921,7 +2046,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Bank Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.bankName
+                          userProfileDoc.bankDetail.bankName
                           ? userProfileDoc.bankDetail.bankName
                           : "Not provided yet"}
                       </h5>
@@ -1935,7 +2060,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Branch Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.branchName
+                          userProfileDoc.bankDetail.branchName
                           ? userProfileDoc.bankDetail.branchName
                           : "Not provided yet"}
                       </h5>
@@ -1949,7 +2074,7 @@ export default function PGUserProfileDetails2() {
                       <h6>IFSC Code</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.ifscCode
+                          userProfileDoc.bankDetail.ifscCode
                           ? userProfileDoc.bankDetail.ifscCode
                           : "Not provided yet"}
                       </h5>
@@ -2053,18 +2178,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleBankDetailCancelClick}
                       disabled={isBankDetailSaving}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isBankDetailSaving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isBankDetailSaving ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleBankDetailSubmit}
                       disabled={isBankDetailSaving}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isBankDetailSaving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isBankDetailSaving ? "disabled" : ""
+                        }`}
                     >
                       {isBankDetailSaving ? "Saving..." : "Save"}
                     </button>
@@ -2080,9 +2203,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Reference 1
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isRef1Editing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isRef1Editing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isRef1Editing ? handleRef1CancelClick : handleRef1EditClick
                   }
@@ -2114,9 +2236,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc.ref1 && userProfileDoc.ref1.phone
                           ? userProfileDoc.ref1.phone.replace(
-                              /(\d{2})(\d{5})(\d{5})/,
-                              "+$1 $2-$3"
-                            )
+                            /(\d{2})(\d{5})(\d{5})/,
+                            "+$1 $2-$3"
+                          )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -2244,18 +2366,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleRef1CancelClick}
                       disabled={isRef1Saving}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isRef1Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isRef1Saving ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleRef1Submit}
                       disabled={isRef1Saving}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isRef1Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isRef1Saving ? "disabled" : ""
+                        }`}
                     >
                       {isRef1Saving ? "Saving..." : "Save"}
                     </button>
@@ -2271,9 +2391,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Reference 2
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isRef2Editing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isRef2Editing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isRef2Editing ? handleRef2CancelClick : handleRef2EditClick
                   }
@@ -2305,9 +2424,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc.ref2 && userProfileDoc.ref2.phone
                           ? userProfileDoc.ref2.phone.replace(
-                              /(\d{2})(\d{5})(\d{5})/,
-                              "+$1 $2-$3"
-                            )
+                            /(\d{2})(\d{5})(\d{5})/,
+                            "+$1 $2-$3"
+                          )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -2435,18 +2554,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleRef2CancelClick}
                       disabled={isRef2Saving}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isRef2Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isRef2Saving ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleRef2Submit}
                       disabled={isRef2Saving}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isRef2Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isRef2Saving ? "disabled" : ""
+                        }`}
                     >
                       {isRef2Saving ? "Saving..." : "Save"}
                     </button>

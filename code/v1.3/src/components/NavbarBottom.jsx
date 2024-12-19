@@ -41,7 +41,7 @@ export default function NavbarBottom() {
       // User is not logged in, navigate to "/about-us"
       navigate("/about-us");
       return; // Exit the function to prevent further checks
-    } else if (user.role === "admin" || user.role === "superAdmin") {
+    } else if (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") {
       // User is logged in and role is admin, navigate to "/properties"
       navigate("/allproperties/all");
     } else {
@@ -76,7 +76,7 @@ export default function NavbarBottom() {
     thirdMenu = "About Us";
   }
 
-  if (user && (user.role === "admin" || user.role === "superAdmin")) {
+  if (user && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive")) {
     secondMenuIcon = "dashboard";
     secondMenu = "Dashboard";
     thirdMenuIcon = "real_estate_agent";
