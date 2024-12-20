@@ -1441,7 +1441,7 @@ const CreateProperty = () => {
                                 onClick={(e) => {
                                   setPropertyDetails({
                                     ...propertyDetails,
-                                    Purpose: "Rent",
+                                    Purpose: propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Plot' ? "Rent" : 'Lease',
                                   });
                                 }}
                               />
@@ -1454,7 +1454,7 @@ const CreateProperty = () => {
                                     done
                                   </span>
                                 </div>
-                                Rent
+                                {propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Plot' ? "Rent" : 'Lease'}
                               </label>
                             </div>
                           </div>
@@ -1672,12 +1672,73 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                                propertyDetails.PropertyType === "Shop"
+                                propertyDetails.PropertyType === "Land"
                                 ? true
                                 : false
                             }
                           >
-                            Shop
+                            Land
+                          </option>
+
+                          <option
+                            defaultValue={
+                              propertyDetails &&
+                                propertyDetails.PropertyType === "Retail"
+                                ? true
+                                : false
+                            }
+                          >
+                            Retail
+                          </option>
+                          <option
+                            defaultValue={
+                              propertyDetails &&
+                                propertyDetails.PropertyType === "Office"
+                                ? true
+                                : false
+                            }
+                          >
+                            Office
+                          </option>
+                          <option
+                            defaultValue={
+                              propertyDetails &&
+                                propertyDetails.PropertyType === "Storage"
+                                ? true
+                                : false
+                            }
+                          >
+                            Storage
+                          </option>
+                          <option
+                            defaultValue={
+                              propertyDetails &&
+                                propertyDetails.PropertyType === "Industry"
+                                ? true
+                                : false
+                            }
+                          >
+                            Industry
+                          </option>
+                          <option
+                            defaultValue={
+                              propertyDetails &&
+                                propertyDetails.PropertyType === "Hospitality"
+                                ? true
+                                : false
+                            }
+                          >
+                            Hospitality
+                          </option>
+                          <option
+                            defaultValue={
+                              propertyDetails &&
+                                propertyDetails.PropertyType === "Other"
+                                ? true
+                                : false
+                            }
+                          >
+                            Other
                           </option>
                         </select>
                       )
