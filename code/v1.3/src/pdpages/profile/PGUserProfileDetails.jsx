@@ -42,7 +42,10 @@ export default function PGUserProfileDetails2() {
     "",
     ["country", "asc"]
   );
-
+  const [selectedAmLevel, setSelectedAmLevel] = useState("country");
+  const handleAmRadioChange = (e) => {
+    setSelectedAmLevel(e.target.value);
+  };
   const [country, setCountry] = useState();
   const [state, setState] = useState();
   const [city, setCity] = useState();
@@ -1841,44 +1844,40 @@ export default function PGUserProfileDetails2() {
         </div>
         <div className="property_card_single mobile_full_card overflow_unset">
           <div className="more_detail_card_inner">
-            <h2 className="card_title">Access Management</h2>
-            <div>
-              <button
-                onClick={handleSaveAccessMgmt}
-                // disabled={isRoleSaving}
-                className={`theme_btn btn_fill no_icon min_width ${
-                  isRoleSaving ? "disabled" : ""
-                }`}
-              >
-                {"Save"}
-              </button>
-            </div>
+            <h2 className="card_title">Access Management</h2>        
             <div className="form_field">
-              <div className="field_box theme_radio_new">
-                <div
-                  className="theme_radio_container"
-                  style={{
-                    padding: "0px",
-                    border: "none",
-                  }}
-                >
-                  {[
-                    { id: "country", label: "Country" },
-                    { id: "region", label: "Region" },
-                    { id: "state", label: "State" },
-                    { id: "city", label: "City" },
-                  ].map(({ id, label }) => (
-                    <div className="radio_single" key={id}>
-                      <input type="radio" name="user_role" value={id} id={id} />
-                      <label htmlFor={id}>{label}</label>
-                    </div>
-                  ))}
+          <div className="field_box theme_radio_new">
+            <div
+              className="theme_radio_container"
+              style={{
+                padding: "0px",
+                border: "none",
+              }}
+            >
+              {[
+                { id: "country", label: "Country" },
+                { id: "region", label: "Region" },
+                { id: "state", label: "State" },
+                { id: "city", label: "City" },
+              ].map(({ id, label }) => (
+                <div className="radio_single" key={id}>
+                  <input
+                    type="radio"
+                    name="user_role"
+                    value={id}
+                    id={id}
+                    onChange={handleAmRadioChange}
+                    defaultChecked={id === "country"} // Default check for Country
+                  />
+                  <label htmlFor={id}>{label}</label>
                 </div>
-              </div>
+              ))}
             </div>
+          </div>
+        </div>
             <div className="vg22"></div>
             <div className="vg12"></div>
-            <div className="row">
+            <div className="row row_gap">
               <div className="col-lg-4 col-md-6 col-sm-12">
                 <div className="form_field label_top">
                   <label>Country</label>
@@ -1895,6 +1894,26 @@ export default function PGUserProfileDetails2() {
                   </div>
                 </div>
               </div>
+              {(selectedAmLevel === "region" ||
+            selectedAmLevel === "state" ||
+            selectedAmLevel === "city") && (
+              <div className="col-lg-4 col-md-6 col-sm-12">
+                <div className="form_field label_top">
+                  <label>Region</label>
+                  <div className="form_field_inner">
+                    <Select
+                      // value={designation}
+                      // onChange={setDesignation}
+                      // options={designationOptions}
+                      // onChange={handleCountryChange}
+                      // options={countryOptions.current}
+                      // value={country}
+                      placeholder="Select Region"
+                    />
+                  </div>
+                </div>
+              </div>)}
+              {(selectedAmLevel === "state" || selectedAmLevel === "city") && (
               <div className="col-lg-4 col-md-6 col-sm-12">
                 <div className="form_field label_top">
                   <label>State</label>
@@ -1908,8 +1927,9 @@ export default function PGUserProfileDetails2() {
                     />
                   </div>
                 </div>
-              </div>
-              <div className="col-lg-4 col-md-6 col-sm-12">
+              </div>)}
+              {selectedAmLevel === "city" && (
+              <div className="col-lg-12 col-md-12 col-sm-12">
                 <div className="form_field label_top">
                   <label>City</label>
                   <div className="form_field_inner">
@@ -1921,8 +1941,31 @@ export default function PGUserProfileDetails2() {
                     />
                   </div>
                 </div>
-              </div>
+              </div>)}
             </div>
+            <div className="vg12"></div>
+            <div className="btn_msg_area">
+                 
+
+                    <button
+                      // onClick={handleEdCancelClick}
+                      // disabled={isEdUpdating}
+                      className={`theme_btn btn_border no_icon min_width ${
+                        isEdUpdating ? "disabled" : ""
+                      }`}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                       onClick={handleSaveAccessMgmt}
+                      // disabled={isEdUpdating}
+                      className={`theme_btn btn_fill no_icon min_width ${
+                        isEdUpdating ? "disabled" : ""
+                      }`}
+                    >
+                     Save
+                    </button>
+                  </div>
           </div>
         </div>
         {userProfileDoc && userProfileDoc.isEmployee && (
