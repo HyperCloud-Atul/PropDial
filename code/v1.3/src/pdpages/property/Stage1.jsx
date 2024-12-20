@@ -2785,7 +2785,7 @@ const Stage1 = (props) => {
           </div> */}
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
-              <label htmlFor="">Unit Number</label>
+              {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') ? <label htmlFor="">Unit Number</label> : <label htmlFor="">Plot Number</label>}
               <div className="form_field_inner">
                 <input
                   type="text"
