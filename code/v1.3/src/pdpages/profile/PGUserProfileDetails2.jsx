@@ -955,7 +955,7 @@ export default function PGUserProfileDetails2() {
             <img src="/assets/img/gmailbig.png" alt="" />
           </Link>
           <Link
-            to={`https://wa.me/${userProfileDoc && userProfileDoc.phoneNumber}`}
+            to={`https://wa.me/+${userProfileDoc && userProfileDoc.phoneNumber}`}
             className="icon right"
           >
             <img src="/assets/img/whatsappbig.png" alt="" />

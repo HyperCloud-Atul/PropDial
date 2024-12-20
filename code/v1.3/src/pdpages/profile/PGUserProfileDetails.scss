@@ -206,7 +206,17 @@
         .p_info_single {
           width: 32%;
           &.address {
-            width: 100%;
+            width: 65%;
+          }
+          &.actions{
+            width: 32%;
+            gap: 22px;
+            .icon{
+              img{
+                opacity: 1;
+                height: 32px !important;
+              }
+            }
           }
         }
       }
@@ -222,6 +232,15 @@
         .image_container {
           width: 100%;
           aspect-ratio: 3/2;
+          .image_container_inner{
+            width: 100%;
+            height: 100%;
+            .delete_icon_top {            
+              top: 5px;
+              right: 5px;
+              font-size: 20px;             
+          }
+          }
           .loader {
             position: absolute;
             width: 100%;

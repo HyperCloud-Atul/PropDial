@@ -37,8 +37,11 @@ export default function PGUserProfileDetails2() {
   const [dbUserState, setdbUserState] = useState(dbUsers);
 
   //Master Data Loading Initialisation - Start
-  const { documents: masterCountry, error: masterCountryerror } =
-    useCollection("m_countries", "", ["country", "asc"]);
+  const { documents: masterCountry, error: masterCountryerror } = useCollection(
+    "m_countries",
+    "",
+    ["country", "asc"]
+  );
 
   const [country, setCountry] = useState();
   const [state, setState] = useState();
@@ -52,7 +55,6 @@ export default function PGUserProfileDetails2() {
   let localityOptions = useRef([]);
   let societyOptions = useRef([]);
 
-
   useEffect(() => {
     // console.log('in useeffect')
     if (masterCountry) {
@@ -64,8 +66,6 @@ export default function PGUserProfileDetails2() {
 
     // handleCountryChange({ label: "INDIA", value: "_india" })
     // filteredDataNew({ label: "Andaman & Nicobar Islands", value: "_andaman_&_nicobar_islands" })
-
-
   }, [masterCountry]);
 
   // Populate Master Data - Start
@@ -89,17 +89,15 @@ export default function PGUserProfileDetails2() {
           }));
 
           if (stateOptions.current.length === 0) {
-            console.log("No State")
-            handleStateChange(null)
-          }
-          else {
+            console.log("No State");
+            handleStateChange(null);
+          } else {
             handleStateChange({
               label: stateOptions.current[0].label,
               value: stateOptions.current[0].value,
             });
             // handleStateChange()
           }
-
         } else {
           // setError('No such document exists')
         }
@@ -114,24 +112,22 @@ export default function PGUserProfileDetails2() {
   //Stae select onchange
   const handleStateChange = async (option) => {
     setState(option);
-    // console.log('state.id:', option.value)    
-
+    // console.log('state.id:', option.value)
   };
 
   // Populate Master Data - Ends
 
   // Save Access Mgmt details
   const handleSaveAccessMgmt = async () => {
-
-    console.log("selected country", country)
-    console.log("selected state", state)
+    console.log("selected country", country);
+    console.log("selected state", state);
 
     const updatedData = {
-      accessType: 'state',
-      accessValue: state
+      accessType: "state",
+      accessValue: state,
     };
 
-    console.log("updatedData: ", updatedData)
+    console.log("updatedData: ", updatedData);
 
     try {
       // const updatedData = {
@@ -140,25 +136,16 @@ export default function PGUserProfileDetails2() {
       // };
 
       await updateDocument(userProfileId, updatedData);
-
     } catch (error) {
       console.error("Error updating details:", error);
-
     } finally {
-
     }
   };
 
-
-
   useEffect(() => {
     setdbUserState(dbUsers);
-  });
+  }, [dbUsers]);
 
-
-  const lastActiveAt =
-    userProfileDoc?.activeByAt?.[userProfileDoc.activeByAt.length - 1]
-      ?.activeAt;
   // code for active inactive start
   // Make sure that userProfileDoc is not null before using it
   const [status, setStatus] = useState(userProfileDoc?.status || "active");
@@ -175,8 +162,22 @@ export default function PGUserProfileDetails2() {
     setPopupData({ status: newStatus });
   };
 
+  // Add a state to track the error message
+  const [errorForNoSelectReasonMessage, setErrorForNoSelectReasonMessage] =
+    useState("");
+
   // Function to handle the submission of the status change
   const handlePopupSubmit = async () => {
+    // Check if a reason is selected when the status is inactive
+    if (popupData.status === "inactive" && !reason) {
+      setErrorForNoSelectReasonMessage(
+        "Please select a reason before updating the status."
+      );
+      return; // Don't proceed if no reason is selected
+    } else {
+      setErrorForNoSelectReasonMessage(""); // Clear error message when a reason is selected
+    }
+
     setLoading(true);
     try {
       const currentDate = new Date();
@@ -187,6 +188,8 @@ export default function PGUserProfileDetails2() {
         activeAt: popupData.status === "active" ? currentDate : null, // replace with your logic
         inactiveBy: popupData.status === "inactive" ? user.uid : null,
         inactiveAt: popupData.status === "inactive" ? currentDate : null,
+        inactiveReason: popupData.status === "inactive" ? reason : null, // Add reason here
+        inactiveRemark: popupData.status === "inactive" ? remark : null, // Add remark here
       };
 
       // Add to the 'inactiveByAt' array to track status changes
@@ -196,6 +199,8 @@ export default function PGUserProfileDetails2() {
         updateData.inactiveByAt.push({
           inactiveBy: user.uid, // Replace with actual user who is marking inactive
           inactiveAt: currentDate, // Store the current timestamp
+          inactiveReason: reason, // Add the selected reason here
+          inactiveRemark: remark, // Add the remark here
         });
       }
 
@@ -277,7 +282,7 @@ export default function PGUserProfileDetails2() {
     // Check if there are changes
     if (
       JSON.stringify(selectedRoles) ===
-      JSON.stringify(userProfileDoc.rolesPropDial || []) &&
+        JSON.stringify(userProfileDoc.rolesPropDial || []) &&
       primaryRole === (userProfileDoc.rolePropDial || "")
     ) {
       setSaveRoleMessage(
@@ -361,17 +366,17 @@ export default function PGUserProfileDetails2() {
       setDepartment(
         userProfileDoc.department
           ? userProfileDoc.department.map((dept) => ({
-            value: dept,
-            label: dept,
-          }))
+              value: dept,
+              label: dept,
+            }))
           : []
       );
       setDesignation(
         userProfileDoc.designation
           ? {
-            value: userProfileDoc.designation,
-            label: userProfileDoc.designation,
-          }
+              value: userProfileDoc.designation,
+              label: userProfileDoc.designation,
+            }
           : ""
       );
       setUanNumber(userProfileDoc.uanNumber || "");
@@ -391,17 +396,17 @@ export default function PGUserProfileDetails2() {
       setDepartment(
         userProfileDoc.department
           ? userProfileDoc.department.map((dept) => ({
-            value: dept,
-            label: dept,
-          }))
+              value: dept,
+              label: dept,
+            }))
           : []
       );
       setDesignation(
         userProfileDoc.designation
           ? {
-            value: userProfileDoc.designation,
-            label: userProfileDoc.designation,
-          }
+              value: userProfileDoc.designation,
+              label: userProfileDoc.designation,
+            }
           : ""
       );
       setUanNumber(userProfileDoc.uanNumber || "");
@@ -450,6 +455,45 @@ export default function PGUserProfileDetails2() {
 
       return;
     }
+
+    // Validation for UAN number (exactly 12 digits)
+    if (!/^\d{12}$/.test(uanNumber)) {
+      setEmployeeDetailUpdateMessage("UAN number must be exactly 12 digits.");
+      setEdMessageType("error_msg");
+      setTimeout(() => {
+        setEmployeeDetailUpdateMessage("");
+        setEdMessageType("");
+      }, 5000);
+      return;
+    }
+
+    // Validation for PAN card (minimum 10 characters)
+    if (panNumber.length < 10) {
+      setEmployeeDetailUpdateMessage(
+        "PAN card must have at least 10 characters."
+      );
+      setEdMessageType("error_msg");
+      setTimeout(() => {
+        setEmployeeDetailUpdateMessage("");
+        setEdMessageType("");
+      }, 5000);
+      return;
+    }
+
+    // Validation for Aadhaar number (exactly 12 digits)
+    if (!/^\d{12}$/.test(aadhaarNumber)) {
+      setEmployeeDetailUpdateMessage(
+        "Aadhaar number must be exactly 12 digits."
+      );
+      setEdMessageType("error_msg");
+      setTimeout(() => {
+        setEmployeeDetailUpdateMessage("");
+        setEdMessageType("");
+      }, 5000);
+      return;
+    }
+
+    // Validation for date of joining and leaving
     if (
       !dateOfJoining ||
       (dateOfLeaving && new Date(dateOfLeaving) <= new Date(dateOfJoining))
@@ -501,6 +545,7 @@ export default function PGUserProfileDetails2() {
       }, 5000); // Clear message after 5 seconds
     }
   };
+
   // full code for employee detail end
 
   // code for isemployee start
@@ -526,7 +571,7 @@ export default function PGUserProfileDetails2() {
   };
   // code for isemployee end
 
-  // full code for ref1
+  // full code for ref1 start
   const [ref1FormData, setRef1FormData] = useState({
     name: "",
     phone: "",
@@ -889,6 +934,7 @@ export default function PGUserProfileDetails2() {
   // full code for ref2 end
 
   // old running code for upload document start
+  // (Don't delete)
   // const fileInputRefs = useRef({});
 
   // const [isDocUploading, setIsDocUploading] = useState({});
@@ -990,12 +1036,72 @@ export default function PGUserProfileDetails2() {
     });
   }, [files]);
 
+  // upload document code without delete previous doc from storage automatically
+  //  (Don't delete )
+  // const uploadDocument = async (docType) => {
+  //   try {
+  //     setIsDocUploading((prev) => ({ ...prev, [docType]: true }));
+  //     const file = files[docType];
+  //     const fileType = getFileType(file);
+
+  //     const storageRef = projectStorage.ref(
+  //       `user-docs/${userProfileId}/${docType}/${file.name}`
+  //     );
+  //     const uploadTask = storageRef.put(file);
+
+  //     uploadTask.on(
+  //       "state_changed",
+  //       (snapshot) => {
+  //         const progress =
+  //           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //         setUploadDocInProgress((prev) => ({ ...prev, [docType]: progress }));
+  //       },
+  //       (error) => {
+  //         console.error(`Error uploading ${docType}:`, error);
+  //         setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+  //       },
+  //       async () => {
+  //         const fileURL = await storageRef.getDownloadURL();
+  //         await updateDocument(userProfileId, {
+  //           [`${docType.replace(/ /g, "").toLowerCase()}Url`]: fileURL,
+  //           [`${docType.replace(/ /g, "").toLowerCase()}Type`]: fileType,
+  //         });
+  //         setFiles((prev) => {
+  //           const updatedFiles = { ...prev };
+  //           delete updatedFiles[docType];
+  //           return updatedFiles;
+  //         });
+  //         setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.error(`Error uploading ${docType}:`, error);
+  //     setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+  //   }
+  // };
+
+  // upload document code with delete previous doc from storage automatically
   const uploadDocument = async (docType) => {
     try {
       setIsDocUploading((prev) => ({ ...prev, [docType]: true }));
       const file = files[docType];
       const fileType = getFileType(file);
 
+      // Check if there's an existing document and delete it
+      const urlKey = `${docType.replace(/ /g, "").toLowerCase()}Url`;
+      if (userProfileDoc && userProfileDoc[urlKey]) {
+        const oldFileURL = userProfileDoc[urlKey];
+        const oldFileRef = projectStorage.refFromURL(oldFileURL);
+
+        try {
+          await oldFileRef.delete();
+          console.log(`Previous file for ${docType} deleted successfully.`);
+        } catch (error) {
+          console.error(`Error deleting previous file for ${docType}:`, error);
+        }
+      }
+
+      // Upload the new document
       const storageRef = projectStorage.ref(
         `user-docs/${userProfileId}/${docType}/${file.name}`
       );
@@ -1032,29 +1138,111 @@ export default function PGUserProfileDetails2() {
     }
   };
 
+  // code for delete uploaded document from database and storage both
+  const handleDeleteDocument = async (docType) => {
+    try {
+      const urlKey = `${docType.replace(/ /g, "").toLowerCase()}Url`;
+      if (userProfileDoc && userProfileDoc[urlKey]) {
+        const oldFileURL = userProfileDoc[urlKey];
+        const oldFileRef = projectStorage.refFromURL(oldFileURL);
+
+        // Delete the file from storage
+        await oldFileRef.delete();
+        console.log(`File for ${docType} deleted successfully.`);
+
+        // Remove the URL and file type from the database
+        await updateDocument(userProfileId, {
+          [urlKey]: null,
+          [`${docType.replace(/ /g, "").toLowerCase()}Type`]: null,
+        });
+
+        console.log(`Database entry for ${docType} removed successfully.`);
+      }
+    } catch (error) {
+      console.error(`Error deleting file for ${docType}:`, error);
+    }
+  };
+
+  // code for delete upload document with confirmation popup
+  const [showConfirmModalForDeleteDoc, setShowConfirmModalForDeleteDoc] =
+    useState(false);
+  const [modalDocType, setModalDocType] = useState("");
+  const [isUploadedDocDeleting, setIsUploadedDocDeleting] = useState(false);
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setIsUploadedDocDeleting(true);
+      await handleDeleteDocument(modalDocType); // Call the delete function
+      setIsUploadedDocDeleting(false);
+      setShowConfirmModalForDeleteDoc(false); // Close modal after successful deletion
+    } catch (error) {
+      console.error(`Error deleting ${modalDocType}:`, error);
+      setIsUploadedDocDeleting(false);
+    }
+  };
+
+  const handleDeleteClick = (docType) => {
+    setModalDocType(docType);
+    setShowConfirmModalForDeleteDoc(true);
+  };
+
+  //  (Don't delete )
+  // const renderFilePreview = (docType) => {
+  //   const urlKey = `${docType.replace(/ /g, "").toLowerCase()}Url`;
+  //   const typeKey = `${docType.replace(/ /g, "").toLowerCase()}Type`;
+
+  //   if (userProfileDoc && userProfileDoc[urlKey]) {
+  //     return userProfileDoc[typeKey] === "image" ? (
+  //       <img src={userProfileDoc[urlKey]} alt={`${docType} preview`} />
+  //     ) : (
+  //       <iframe
+  //         // title={`${docType} Viewer`}
+  //         title="PDF Viewer"
+  //         src={userProfileDoc[urlKey]}
+  //         className="document-preview"
+  //         style={{
+  //           width: "100%",
+  //           aspectRatio: "3/2",
+  //         }}
+  //       ></iframe>
+
+  //     );
+  //   }
+  //   return <img src="https://via.placeholder.com/150" alt="Placeholder" />;
+  // };
+
+  // code for redering file with delete button
   const renderFilePreview = (docType) => {
     const urlKey = `${docType.replace(/ /g, "").toLowerCase()}Url`;
     const typeKey = `${docType.replace(/ /g, "").toLowerCase()}Type`;
 
     if (userProfileDoc && userProfileDoc[urlKey]) {
-      return userProfileDoc[typeKey] === "image" ? (
-        <img src={userProfileDoc[urlKey]} alt={`${docType} preview`} />
-      ) : (
-        <iframe
-          // title={`${docType} Viewer`}
-          title="PDF Viewer"
-          src={userProfileDoc[urlKey]}
-          className="document-preview"
-          style={{
-            width: "100%",
-            aspectRatio: "3/2",
-          }}
-        ></iframe>
+      return (
+        <div className="image_container_inner">
+          {userProfileDoc[typeKey] === "image" ? (
+            <img src={userProfileDoc[urlKey]} alt={`${docType} preview`} />
+          ) : (
+            <iframe
+              title="PDF Viewer"
+              src={userProfileDoc[urlKey]}
+              className="document-preview"
+              style={{
+                width: "100%",
+                aspectRatio: "3/2",
+              }}
+            ></iframe>
+          )}
+          <span
+            class="material-symbols-outlined delete_icon_top"
+            onClick={() => handleDeleteClick(docType)}
+          >
+            delete_forever
+          </span>
+        </div>
       );
     }
     return <img src="https://via.placeholder.com/150" alt="Placeholder" />;
   };
-
   return (
     <div className="top_header_pg pg_bg user_detail_pg relative">
       <div className="basic_info">
@@ -1086,7 +1274,9 @@ export default function PGUserProfileDetails2() {
             <img src="/assets/img/gmailbig.png" alt="" />
           </Link>
           <Link
-            to={`https://wa.me/${userProfileDoc && userProfileDoc.phoneNumber}`}
+            to={`https://wa.me/+${
+              userProfileDoc && userProfileDoc.phoneNumber
+            }`}
             className="icon right"
           >
             <img src="/assets/img/whatsappbig.png" alt="" />
@@ -1153,9 +1343,9 @@ export default function PGUserProfileDetails2() {
                   <h5>
                     {userProfileDoc && userProfileDoc.createdAt
                       ? format(
-                        userProfileDoc.lastLoginTimestamp.toDate(),
-                        "dd-MMM-yyyy hh:mm a"
-                      )
+                          userProfileDoc.lastLoginTimestamp.toDate(),
+                          "dd-MMM-yyyy hh:mm a"
+                        )
                       : ""}
                   </h5>
                 </div>
@@ -1186,33 +1376,38 @@ export default function PGUserProfileDetails2() {
                         />
                         <label htmlFor="active">
                           <div className="label_inner">
-                            Active
-                            <div className="info_icon">
-                              <span className="material-symbols-outlined">
-                                info
-                              </span>
-                              <div className="info_icon_inner">
-                                <b className="text_green2">Active</b> by{" "}
-                                <b>
-                                  {userProfileDoc &&
-                                    dbUserState &&
-                                    dbUserState.find(
-                                      (user) =>
-                                        user.id === userProfileDoc.activeBy
-                                    )?.fullName}
-                                </b>{" "}
-                                on{" "}
-                                <b>
-                                  {lastActiveAt &&
-                                    !isNaN(new Date(lastActiveAt))
-                                    ? format(
-                                      new Date(lastActiveAt),
-                                      "dd-MMM-yy"
-                                    )
-                                    : "Invalid Date"}
-                                </b>
-                              </div>
-                            </div>
+                            {userProfileDoc && userProfileDoc.activeAt
+                              ? "Active"
+                              : "Make Active"}
+
+                            {userProfileDoc &&
+                              userProfileDoc.activeBy &&
+                              userProfileDoc.activeAt && (
+                                <div className="info_icon">
+                                  <span className="material-symbols-outlined">
+                                    info
+                                  </span>
+                                  <div className="info_icon_inner">
+                                    <b className="text_green2">Active</b> by{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        dbUserState &&
+                                        dbUserState.find(
+                                          (user) =>
+                                            user.id === userProfileDoc.activeBy
+                                        )?.fullName}
+                                    </b>{" "}
+                                    on{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        format(
+                                          userProfileDoc.activeAt.toDate(),
+                                          "dd-MMM-yyyy hh:mm a"
+                                        )}
+                                    </b>
+                                  </div>
+                                </div>
+                              )}
                           </div>
                         </label>
                       </div>
@@ -1228,7 +1423,57 @@ export default function PGUserProfileDetails2() {
                           }
                           onChange={() => handleStatusChange("inactive")}
                         />
-                        <label htmlFor="inactive">Inactive</label>
+                        <label htmlFor="inactive">
+                          <div className="label_inner">
+                            {userProfileDoc && userProfileDoc.inactiveAt
+                              ? "Inactive"
+                              : "Make Inactive"}
+                            {userProfileDoc &&
+                              userProfileDoc.inactiveAt &&
+                              userProfileDoc.inactiveBy && (
+                                <div className="info_icon">
+                                  <span className="material-symbols-outlined">
+                                    info
+                                  </span>
+                                  <div className="info_icon_inner">
+                                    <b className="text_red">Inactive</b> by{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        dbUserState &&
+                                        dbUserState.find(
+                                          (user) =>
+                                            user.id ===
+                                            userProfileDoc.inactiveBy
+                                        )?.fullName}
+                                    </b>{" "}
+                                    on{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        format(
+                                          userProfileDoc.inactiveAt.toDate(),
+                                          "dd-MMM-yyyy hh:mm a"
+                                        )}
+                                    </b>
+                                    , Reason{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        userProfileDoc.inactiveReason &&
+                                        userProfileDoc.inactiveReason}
+                                    </b>
+                                    ,
+                                    {userProfileDoc &&
+                                      userProfileDoc.inactiveRemark && (
+                                        <>
+                                          {" "}
+                                          Remark{" "}
+                                          <b>{userProfileDoc.inactiveRemark}</b>
+                                        </>
+                                      )}
+                                  </div>
+                                </div>
+                              )}
+                          </div>
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -1274,25 +1519,63 @@ export default function PGUserProfileDetails2() {
                                 <input
                                   type="radio"
                                   name="reason"
-                                  value="resigned"
-                                  checked={reason === "resigned"}
-                                  onChange={() => setReason("resigned")}
-                                  id="resigned"
+                                  value="Security Concerns"
+                                  checked={reason === "Security Concerns"}
+                                  onChange={() =>
+                                    setReason("Security Concerns")
+                                  }
+                                  id="SecurityConcerns"
                                 />
-                                <label htmlFor="resigned">Resigned</label>
+
+                                <label htmlFor="SecurityConcerns">
+                                  Security Concerns
+                                </label>
                               </div>
                               <div className="radio_single">
                                 <input
                                   type="radio"
                                   name="reason"
-                                  value="leave"
-                                  checked={reason === "leave"}
-                                  onChange={() => setReason("leave")}
-                                  id="leave"
+                                  value="PolicyViolations"
+                                  checked={reason === "Policy Violations"}
+                                  onChange={() =>
+                                    setReason("Policy Violations")
+                                  }
+                                  id="PolicyViolations"
                                 />
 
-                                <label htmlFor="leave">Leave</label>
+                                <label htmlFor="PolicyViolations">
+                                  Policy Violations
+                                </label>
                               </div>
+
+                              {userProfileDoc && userProfileDoc.isEmployee && (
+                                <div className="radio_single">
+                                  <input
+                                    type="radio"
+                                    name="reason"
+                                    value="resigned"
+                                    checked={reason === "resigned"}
+                                    onChange={() => setReason("resigned")}
+                                    id="resigned"
+                                  />
+                                  <label htmlFor="resigned">Resigned</label>
+                                </div>
+                              )}
+                              {userProfileDoc && userProfileDoc.isEmployee && (
+                                <div className="radio_single">
+                                  <input
+                                    type="radio"
+                                    name="reason"
+                                    value="leave"
+                                    checked={reason === "leave"}
+                                    onChange={() => setReason("leave")}
+                                    id="leave"
+                                  />
+
+                                  <label htmlFor="leave">Leave</label>
+                                </div>
+                              )}
+
                               <div className="radio_single">
                                 <input
                                   type="radio"
@@ -1329,6 +1612,21 @@ export default function PGUserProfileDetails2() {
                       gap: "15px",
                     }}
                   >
+                    {errorForNoSelectReasonMessage && (
+                      <div
+                        style={{
+                          fontSize: "15px",
+                          padding: "4px 15px",
+                          borderRadius: "8px",
+                          background: "#ffe9e9",
+                          color: "red",
+                          width: "fit-content",
+                          margin: "auto",
+                        }}
+                      >
+                        {errorForNoSelectReasonMessage}
+                      </div>
+                    )}
                     <div
                       className="cancel_btn"
                       onClick={handlePopupSubmit}
@@ -1447,10 +1745,11 @@ export default function PGUserProfileDetails2() {
               <div className="blue_single is_employee">
                 <h5>Mode - </h5>
                 <h6
-                  className={` ${userProfileDoc && userProfileDoc.online
-                    ? "text_green2"
-                    : "text_red"
-                    }`}
+                  className={` ${
+                    userProfileDoc && userProfileDoc.online
+                      ? "text_green2"
+                      : "text_red"
+                  }`}
                 >
                   {userProfileDoc && userProfileDoc.online
                     ? "Online"
@@ -1465,8 +1764,9 @@ export default function PGUserProfileDetails2() {
             <h2 className="card_title">
               Roles
               <span
-                className={`material-symbols-outlined action_icon ${isRoleEditing ? "text_red" : "text_green"
-                  }`}
+                className={`material-symbols-outlined action_icon ${
+                  isRoleEditing ? "text_red" : "text_green"
+                }`}
                 onClick={handleRoleEditClick}
               >
                 {isRoleEditing ? "close" : "border_color"}
@@ -1520,16 +1820,18 @@ export default function PGUserProfileDetails2() {
                 <button
                   onClick={handleRoleEditClick}
                   disabled={isRoleSaving}
-                  className={`theme_btn btn_border no_icon min_width ${isRoleSaving ? "disabled" : ""
-                    }`}
+                  className={`theme_btn btn_border no_icon min_width ${
+                    isRoleSaving ? "disabled" : ""
+                  }`}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveRole}
                   disabled={isRoleSaving}
-                  className={`theme_btn btn_fill no_icon min_width ${isRoleSaving ? "disabled" : ""
-                    }`}
+                  className={`theme_btn btn_fill no_icon min_width ${
+                    isRoleSaving ? "disabled" : ""
+                  }`}
                 >
                   {isRoleSaving ? "Saving..." : "Save"}
                 </button>
@@ -1544,8 +1846,9 @@ export default function PGUserProfileDetails2() {
               <button
                 onClick={handleSaveAccessMgmt}
                 // disabled={isRoleSaving}
-                className={`theme_btn btn_fill no_icon min_width ${isRoleSaving ? "disabled" : ""
-                  }`}
+                className={`theme_btn btn_fill no_icon min_width ${
+                  isRoleSaving ? "disabled" : ""
+                }`}
               >
                 {"Save"}
               </button>
@@ -1628,8 +1931,9 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Employee Detail
                 <span
-                  className={`material-symbols-outlined action_icon ${isEdEditing ? "text_red" : "text_green"
-                    }`}
+                  className={`material-symbols-outlined action_icon ${
+                    isEdEditing ? "text_red" : "text_green"
+                  }`}
                   onClick={
                     isEdEditing ? handleEdCancelClick : handleEdEditClick
                   }
@@ -1651,9 +1955,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc && userProfileDoc.dateOfJoining
                           ? format(
-                            new Date(userProfileDoc.dateOfJoining), // Ensure it's converted to a Date object
-                            "dd-MMM-yyyy"
-                          )
+                              new Date(userProfileDoc.dateOfJoining), // Ensure it's converted to a Date object
+                              "dd-MMM-yyyy"
+                            )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -1671,9 +1975,9 @@ export default function PGUserProfileDetails2() {
                         <h5>
                           {userProfileDoc && userProfileDoc.dateOfLeaving
                             ? format(
-                              new Date(userProfileDoc.dateOfLeaving), // Ensure it's converted to a Date object
-                              "dd-MMM-yyyy"
-                            )
+                                new Date(userProfileDoc.dateOfLeaving), // Ensure it's converted to a Date object
+                                "dd-MMM-yyyy"
+                              )
                             : "Not provided yet"}
                         </h5>
                       </div>
@@ -1842,8 +2146,15 @@ export default function PGUserProfileDetails2() {
                           <input
                             type="number"
                             value={uanNumber}
-                            onChange={(e) => setUanNumber(e.target.value)}
+                            // onChange={(e) => setUanNumber(e.target.value)}
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              if (newValue.length <= 12) {
+                                setUanNumber(newValue);
+                              }
+                            }}
                             placeholder="Enter UAN Number"
+                            maxLength="12"
                           />
                         </div>
                       </div>
@@ -1855,8 +2166,17 @@ export default function PGUserProfileDetails2() {
                           <input
                             type="text"
                             value={panNumber}
-                            onChange={(e) => setPanNumber(e.target.value)}
+                            onChange={(e) => {
+                              const newValue = e.target.value.replace(
+                                /\s+/g,
+                                ""
+                              ); // Remove spaces
+                              if (newValue.length <= 10) {
+                                setPanNumber(newValue);
+                              }
+                            }}
                             placeholder="Enter PAN Number"
+                            maxLength="10"
                           />
                         </div>
                       </div>
@@ -1868,8 +2188,15 @@ export default function PGUserProfileDetails2() {
                           <input
                             type="number"
                             value={aadhaarNumber}
-                            onChange={(e) => setAadhaarNumber(e.target.value)}
+                            // onChange={(e) => setAadhaarNumber(e.target.value)}
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              if (newValue.length <= 12) {
+                                setAadhaarNumber(newValue);
+                              }
+                            }}
                             placeholder="Enter Aadhaar Number"
+                            maxLength="12"
                           />
                         </div>
                       </div>
@@ -1901,16 +2228,18 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleEdCancelClick}
                       disabled={isEdUpdating}
-                      className={`theme_btn btn_border no_icon min_width ${isEdUpdating ? "disabled" : ""
-                        }`}
+                      className={`theme_btn btn_border no_icon min_width ${
+                        isEdUpdating ? "disabled" : ""
+                      }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleUpdateEmployeeDetails}
                       disabled={isEdUpdating}
-                      className={`theme_btn btn_fill no_icon min_width ${isEdUpdating ? "disabled" : ""
-                        }`}
+                      className={`theme_btn btn_fill no_icon min_width ${
+                        isEdUpdating ? "disabled" : ""
+                      }`}
                     >
                       {isEdUpdating ? "Saving..." : "Save"}
                     </button>
@@ -1987,6 +2316,52 @@ export default function PGUserProfileDetails2() {
                     </div>
                   </div>
                 ))}
+                <Modal
+                  show={showConfirmModalForDeleteDoc}
+                  onHide={() => setShowConfirmModalForDeleteDoc(false)}
+                  centered
+                >
+                  <Modal.Header
+                    className="justify-content-center"
+                    style={{
+                      paddingBottom: "0px",
+                      border: "none",
+                    }}
+                  >
+                    <h5>Confirm Deletion</h5>
+                  </Modal.Header>
+                  <Modal.Body
+                    className="text-center"
+                    style={{
+                      color: "#FA6262",
+                      fontSize: "20px",
+                      border: "none",
+                    }}
+                  >
+                    Are you sure you want to delete the uploaded {modalDocType}?
+                  </Modal.Body>
+                  <Modal.Footer
+                    className="d-flex justify-content-between"
+                    style={{
+                      border: "none",
+                      gap: "15px",
+                    }}
+                  >
+                    <div
+                      className="cancel_btn"
+                      onClick={handleDeleteConfirm}
+                      disabled={isUploadedDocDeleting}
+                    >
+                      {isUploadedDocDeleting ? "Deleting..." : "Yes"}
+                    </div>
+                    <div
+                      className="done_btn"
+                      onClick={() => setShowConfirmModalForDeleteDoc(false)}
+                    >
+                      No
+                    </div>
+                  </Modal.Footer>
+                </Modal>{" "}
               </div>
             </div>
           </div>
@@ -1997,8 +2372,9 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Bank Detail
                 <span
-                  className={`material-symbols-outlined action_icon ${isBankDetailEditing ? "text_red" : "text_green"
-                    }`}
+                  className={`material-symbols-outlined action_icon ${
+                    isBankDetailEditing ? "text_red" : "text_green"
+                  }`}
                   onClick={
                     isBankDetailEditing
                       ? handleBankDetailCancelClick
@@ -2018,7 +2394,7 @@ export default function PGUserProfileDetails2() {
                       <h6>A/C Holder Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                          userProfileDoc.bankDetail.acHolderName
+                        userProfileDoc.bankDetail.acHolderName
                           ? userProfileDoc.bankDetail.acHolderName
                           : "Not provided yet"}
                       </h5>
@@ -2032,7 +2408,7 @@ export default function PGUserProfileDetails2() {
                       <h6>A/C Number</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                          userProfileDoc.bankDetail.acNumber
+                        userProfileDoc.bankDetail.acNumber
                           ? userProfileDoc.bankDetail.acNumber
                           : "Not provided yet"}
                       </h5>
@@ -2046,7 +2422,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Bank Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                          userProfileDoc.bankDetail.bankName
+                        userProfileDoc.bankDetail.bankName
                           ? userProfileDoc.bankDetail.bankName
                           : "Not provided yet"}
                       </h5>
@@ -2060,7 +2436,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Branch Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                          userProfileDoc.bankDetail.branchName
+                        userProfileDoc.bankDetail.branchName
                           ? userProfileDoc.bankDetail.branchName
                           : "Not provided yet"}
                       </h5>
@@ -2074,7 +2450,7 @@ export default function PGUserProfileDetails2() {
                       <h6>IFSC Code</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                          userProfileDoc.bankDetail.ifscCode
+                        userProfileDoc.bankDetail.ifscCode
                           ? userProfileDoc.bankDetail.ifscCode
                           : "Not provided yet"}
                       </h5>
@@ -2178,16 +2554,18 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleBankDetailCancelClick}
                       disabled={isBankDetailSaving}
-                      className={`theme_btn btn_border no_icon min_width ${isBankDetailSaving ? "disabled" : ""
-                        }`}
+                      className={`theme_btn btn_border no_icon min_width ${
+                        isBankDetailSaving ? "disabled" : ""
+                      }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleBankDetailSubmit}
                       disabled={isBankDetailSaving}
-                      className={`theme_btn btn_fill no_icon min_width ${isBankDetailSaving ? "disabled" : ""
-                        }`}
+                      className={`theme_btn btn_fill no_icon min_width ${
+                        isBankDetailSaving ? "disabled" : ""
+                      }`}
                     >
                       {isBankDetailSaving ? "Saving..." : "Save"}
                     </button>
@@ -2203,8 +2581,9 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Reference 1
                 <span
-                  className={`material-symbols-outlined action_icon ${isRef1Editing ? "text_red" : "text_green"
-                    }`}
+                  className={`material-symbols-outlined action_icon ${
+                    isRef1Editing ? "text_red" : "text_green"
+                  }`}
                   onClick={
                     isRef1Editing ? handleRef1CancelClick : handleRef1EditClick
                   }
@@ -2236,9 +2615,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc.ref1 && userProfileDoc.ref1.phone
                           ? userProfileDoc.ref1.phone.replace(
-                            /(\d{2})(\d{5})(\d{5})/,
-                            "+$1 $2-$3"
-                          )
+                              /(\d{2})(\d{5})(\d{5})/,
+                              "+$1 $2-$3"
+                            )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -2268,6 +2647,39 @@ export default function PGUserProfileDetails2() {
                           : "Not provided yet"}
                       </h5>
                     </div>
+                  </div>
+                  <div className="p_info_single actions">
+                  {userProfileDoc.ref1 && userProfileDoc.ref1.phone && (
+                   <Link
+                   to={`https://wa.me/+${
+                     userProfileDoc.ref1 && userProfileDoc.ref1.phone
+                   }`}
+                   className="icon"
+                 >
+                   <img src="/assets/img/whatsappbig.png" alt="" />
+                 </Link>
+                )}
+                    {userProfileDoc.ref1 && userProfileDoc.ref1.phone && (
+                   <Link
+                   to={`tel:+${
+                     userProfileDoc.ref1 && userProfileDoc.ref1.phone
+                   }`}
+                   className="icon"
+                 >
+                   <img src="/assets/img/call-icon.png" alt="" />
+                 </Link>
+                )}
+                        {userProfileDoc.ref1 && userProfileDoc.ref1.email && (
+                  <Link
+                  to={`mailto:${userProfileDoc.ref1 && userProfileDoc.ref1.email}`}
+                  className="icon"
+                >
+                  <img src="/assets/img/gmailbig.png" alt="" />
+                </Link>
+                )}
+                   
+                  
+                    
                   </div>
                 </div>
               )}
@@ -2366,16 +2778,18 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleRef1CancelClick}
                       disabled={isRef1Saving}
-                      className={`theme_btn btn_border no_icon min_width ${isRef1Saving ? "disabled" : ""
-                        }`}
+                      className={`theme_btn btn_border no_icon min_width ${
+                        isRef1Saving ? "disabled" : ""
+                      }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleRef1Submit}
                       disabled={isRef1Saving}
-                      className={`theme_btn btn_fill no_icon min_width ${isRef1Saving ? "disabled" : ""
-                        }`}
+                      className={`theme_btn btn_fill no_icon min_width ${
+                        isRef1Saving ? "disabled" : ""
+                      }`}
                     >
                       {isRef1Saving ? "Saving..." : "Save"}
                     </button>
@@ -2391,8 +2805,9 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Reference 2
                 <span
-                  className={`material-symbols-outlined action_icon ${isRef2Editing ? "text_red" : "text_green"
-                    }`}
+                  className={`material-symbols-outlined action_icon ${
+                    isRef2Editing ? "text_red" : "text_green"
+                  }`}
                   onClick={
                     isRef2Editing ? handleRef2CancelClick : handleRef2EditClick
                   }
@@ -2424,9 +2839,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc.ref2 && userProfileDoc.ref2.phone
                           ? userProfileDoc.ref2.phone.replace(
-                            /(\d{2})(\d{5})(\d{5})/,
-                            "+$1 $2-$3"
-                          )
+                              /(\d{2})(\d{5})(\d{5})/,
+                              "+$1 $2-$3"
+                            )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -2456,6 +2871,39 @@ export default function PGUserProfileDetails2() {
                           : "Not provided yet"}
                       </h5>
                     </div>
+                  </div>
+                  <div className="p_info_single actions">
+                  {userProfileDoc.ref2 && userProfileDoc.ref2.phone && (
+                   <Link
+                   to={`https://wa.me/+${
+                     userProfileDoc.ref2 && userProfileDoc.ref2.phone
+                   }`}
+                   className="icon"
+                 >
+                   <img src="/assets/img/whatsappbig.png" alt="" />
+                 </Link>
+                )}
+                    {userProfileDoc.ref2 && userProfileDoc.ref2.phone && (
+                   <Link
+                   to={`tel:+${
+                     userProfileDoc.ref2 && userProfileDoc.ref2.phone
+                   }`}
+                   className="icon"
+                 >
+                   <img src="/assets/img/call-icon.png" alt="" />
+                 </Link>
+                )}
+                        {userProfileDoc.ref2 && userProfileDoc.ref2.email && (
+                  <Link
+                  to={`mailto:${userProfileDoc.ref2 && userProfileDoc.ref2.email}`}
+                  className="icon"
+                >
+                  <img src="/assets/img/gmailbig.png" alt="" />
+                </Link>
+                )}
+                   
+                  
+                    
                   </div>
                 </div>
               )}
@@ -2554,16 +3002,18 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleRef2CancelClick}
                       disabled={isRef2Saving}
-                      className={`theme_btn btn_border no_icon min_width ${isRef2Saving ? "disabled" : ""
-                        }`}
+                      className={`theme_btn btn_border no_icon min_width ${
+                        isRef2Saving ? "disabled" : ""
+                      }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleRef2Submit}
                       disabled={isRef2Saving}
-                      className={`theme_btn btn_fill no_icon min_width ${isRef2Saving ? "disabled" : ""
-                        }`}
+                      className={`theme_btn btn_fill no_icon min_width ${
+                        isRef2Saving ? "disabled" : ""
+                      }`}
                     >
                       {isRef2Saving ? "Saving..." : "Save"}
                     </button>
