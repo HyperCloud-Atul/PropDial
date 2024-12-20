@@ -10,6 +10,29 @@ import InactiveUserCard from "../../../../components/InactiveUserCard";
 import NineDots from "../../../../components/NineDots";
 import AddAgent from "./AddAgent";
 import ViewAgent from "./ViewAgent";
+import {
+  BarLoader,
+  BeatLoader,
+  BounceLoader,
+  CircleLoader,
+  ClimbingBoxLoader,
+  ClipLoader,
+  ClockLoader,
+  DotLoader,
+  FadeLoader,
+  GridLoader,
+  HashLoader,
+  MoonLoader,
+  PacmanLoader,
+  PropagateLoader,
+  PuffLoader,
+  PulseLoader,
+  RingLoader,
+  RiseLoader,
+  RotateLoader,
+  ScaleLoader,
+  SyncLoader
+} from "react-spinners";
 
 // import scss 
 import './PGAgent.scss'
@@ -70,14 +93,15 @@ const PGAgent = () => {
             {allList && allList.length === 0 && (
               <div className={`pg_msg ${showAIForm && "d-none"}`}>
                 <div>
-                  No Agent Yet!
-                  <div
+                  {/* No Agent Yet! */}
+                  <BeatLoader color={"var(--theme-green)"} />
+                  {/* <div
                     onClick={handleShowAIForm}
                     className={`theme_btn no_icon header_btn mt-3 ${showAIForm ? "btn_border" : "btn_fill"
                       }`}
                   >
                     {showAIForm ? "Cancel" : "Add New"}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             )}

@@ -101,6 +101,12 @@ const EnquiryAddModal = ({ show, handleClose, selectedProperty, activeOption }) 
                 value={name}
                 onChange={handleChangeName}
                 placeholder="Name"
+                onKeyPress={(e) => {
+                  const regex = /^[a-zA-Z\s]*$/; // Only letters and spaces allowed
+                  if (!regex.test(e.key)) {
+                    e.preventDefault(); // Prevent invalid input
+                  }
+                }}
               />
               <div className="field_icon">
                 <span className="material-symbols-outlined">person</span>

@@ -348,7 +348,9 @@ const UpdateEnquiry = () => {
   return (
     <div className="top_header_pg pg_bg pg_enquiry pg_enquiry_update">
       <div className="page_spacing pg_min_height">
-        <div className="pg_header d-flex justify-content-between">
+        <div className="pg_header d-flex justify-content-between flex-wrap" style={{
+          rowGap: "15px"
+        }}>
           <div
             className="left d-flex align-items-center pointer"
             style={{
