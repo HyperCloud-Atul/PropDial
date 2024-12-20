@@ -1595,6 +1595,37 @@ const Stage1 = (props) => {
                         </label>
                       </div>
                     </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Category === "Plot"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="category_plot"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              Category: "Plot",
+                            });
+                          }}
+                        />
+                        <label htmlFor="category_plot">
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Plot
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1871,7 +1902,7 @@ const Stage1 = (props) => {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              Purpose: "Rent",
+                              Purpose: propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Plot' ? "Rent" : 'Lease',
                             });
                           }}
                         />
@@ -1887,7 +1918,9 @@ const Stage1 = (props) => {
                               done
                             </span>
                           </div>
-                          <h6>Rent</h6>
+                          <h6>
+                            {propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Plot' ? "Rent" : 'Lease'}
+                          </h6>
                         </label>
                       </div>
                     </div>
@@ -2752,7 +2785,7 @@ const Stage1 = (props) => {
           </div> */}
           <div className="col-xl-4 col-lg-6">
             <div className="form_field label_top">
-              <label htmlFor="">Unit Number</label>
+              {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') ? <label htmlFor="">Unit Number</label> : <label htmlFor="">Plot Number</label>}
               <div className="form_field_inner">
                 <input
                   type="text"
