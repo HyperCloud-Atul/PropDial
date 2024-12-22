@@ -921,7 +921,7 @@ export default function PGUserProfileDetails2() {
         ></iframe>
       );
     }
-    return <img src="https://via.placeholder.com/150" alt="Placeholder" />;
+    return <img src="/assets/img/image_small_placeholder.png" alt="Placeholder" />;
   };
 
   return (
@@ -2308,7 +2308,7 @@ export default function PGUserProfileDetails2() {
                         ></iframe>
                       )
                     ) : (
-                      <img src="https://via.placeholder.com/150" alt="" />
+                      <img src="/assets/img/image_small_placeholder.png" alt="" />
                     )}
                   </div>
                 )}
@@ -2329,7 +2329,7 @@ export default function PGUserProfileDetails2() {
                         ></iframe>
                       )
                     ) : (
-                      <img src="https://via.placeholder.com/150" alt="" />
+                      <img src="/assets/img/image_small_placeholder.png" alt="" />
                     )}
                   </div>
                 )}
@@ -2350,7 +2350,7 @@ export default function PGUserProfileDetails2() {
                         ></iframe>
                       )
                     ) : (
-                      <img src="https://via.placeholder.com/150" alt="" />
+                      <img src="/assets/img/image_small_placeholder.png" alt="" />
                     )}
                   </div>
                 )}

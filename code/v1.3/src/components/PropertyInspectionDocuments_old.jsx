@@ -297,7 +297,7 @@ const PropertyInspectionDocuments_old = () => {
                       ></iframe>
                     ) : (
                       <img
-                        src={doc.documentUrl || "https://via.placeholder.com/150"}
+                        src={doc.documentUrl || "/assets/img/image_small_placeholder.png"}
                         alt="Document"
                       />
                     )}

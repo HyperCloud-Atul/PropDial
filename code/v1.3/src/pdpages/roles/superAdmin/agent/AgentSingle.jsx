@@ -224,7 +224,7 @@ const AgentSingle = ({ agentDoc }) => {
                   ) : (
                     <img
                       src={
-                        doc.agentImageUrl || "https://via.placeholder.com/150"
+                        doc.agentImageUrl || "/assets/img/image_small_placeholder.png"
                       }
                       className="pointer"
                       onClick={() =>

@@ -717,7 +717,7 @@ const PropertyDocuments = () => {
                                   <img
                                     src={
                                       doc.documentUrl ||
-                                      "https://via.placeholder.com/150"
+                                      "/assets/img/image_small_placeholder.png"
                                     }
                                     alt="Document"
                                   />
@@ -869,7 +869,7 @@ const PropertyDocuments = () => {
                                  <img
                                    src={
                                      doc.documentUrl ||
-                                     "https://via.placeholder.com/150"
+                                     "/assets/img/image_small_placeholder.png"
                                    }
                                    alt="Document"
                                  />
@@ -983,7 +983,7 @@ const PropertyDocuments = () => {
                              <img
                                src={
                                  doc.documentUrl ||
-                                 "https://via.placeholder.com/150"
+                                 "/assets/img/image_small_placeholder.png"
                                }
                                alt="Document"
                              />
@@ -1090,7 +1090,7 @@ const PropertyDocuments = () => {
                             <img
                               src={
                                 doc.documentUrl ||
-                                "https://via.placeholder.com/150"
+                                "/assets/img/image_small_placeholder.png"
                               }
                               alt="Document"
                             />
@@ -1199,7 +1199,7 @@ const PropertyDocuments = () => {
                           <img
                             src={
                               doc.documentUrl ||
-                              "https://via.placeholder.com/150"
+                              "/assets/img/image_small_placeholder.png"
                             }
                             alt="Document"
                           />

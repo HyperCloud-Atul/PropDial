@@ -346,7 +346,7 @@ export default function PGUserProfileDetails2() {
 
   // full code for employee detail start
   const [employeeId, setEmployeeId] = useState("");
-  const [department, setDepartment] = useState([]);
+  const [department, setDepartment] = useState("");
   const [designation, setDesignation] = useState("");
   const [uanNumber, setUanNumber] = useState("");
   const [panNumber, setPanNumber] = useState("");
@@ -365,24 +365,10 @@ export default function PGUserProfileDetails2() {
   const handleEdCancelClick = () => {
     setIsEdEditing(!isEdEditing);
     if (userProfileDoc) {
-      setEmployeeId(userProfileDoc.employeeId || "");
-      setDepartment(
-        userProfileDoc.department
-          ? userProfileDoc.department.map((dept) => ({
-              value: dept,
-              label: dept,
-            }))
-          : []
-      );
-      setDesignation(
-        userProfileDoc.designation
-          ? {
-              value: userProfileDoc.designation,
-              label: userProfileDoc.designation,
-            }
-          : ""
-      );
-      setUanNumber(userProfileDoc.uanNumber || "");
+      setEmployeeId(userProfileDoc.employeeId || "");   
+      setDepartment(userProfileDoc.department || "");
+      setDesignation(userProfileDoc.designation || "");
+            setUanNumber(userProfileDoc.uanNumber || "");
       setPanNumber(userProfileDoc.panNumber || "");
       setAadhaarNumber(userProfileDoc.aadhaarNumber || "");
       setDateOfJoining(userProfileDoc.dateOfJoining || "");
@@ -396,32 +382,28 @@ export default function PGUserProfileDetails2() {
   useEffect(() => {
     if (userProfileDoc) {
       setEmployeeId(userProfileDoc.employeeId || "");
-      setDepartment(
-        userProfileDoc.department
-          ? userProfileDoc.department.map((dept) => ({
-              value: dept,
-              label: dept,
-            }))
-          : []
-      );
-      setDesignation(
-        userProfileDoc.designation
-          ? {
-              value: userProfileDoc.designation,
-              label: userProfileDoc.designation,
-            }
-          : ""
-      );
+      setDepartment(userProfileDoc.department || "");
+      setDesignation(userProfileDoc.designation || "");     
       setUanNumber(userProfileDoc.uanNumber || "");
       setPanNumber(userProfileDoc.panNumber || "");
       setAadhaarNumber(userProfileDoc.aadhaarNumber || "");
       setDateOfJoining(userProfileDoc.dateOfJoining || "");
-      setDateOfLeaving(
-        userProfileDoc.dateOfJoining ? userProfileDoc.dateOfLeaving || "" : ""
-      );
+      setDateOfLeaving(userProfileDoc.dateOfLeaving || "");
       setManagerName(userProfileDoc.managerName || "");
+    } else {
+      // Set default values for new entries
+      setEmployeeId("");
+      setDepartment("");
+      setDesignation("");
+      setUanNumber("");
+      setPanNumber("");
+      setAadhaarNumber("");
+      setDateOfJoining("");
+      setDateOfLeaving("");
+      setManagerName("");
     }
   }, [userProfileDoc]);
+  
 
   // Department and Designation Dropdowns
   const departmentOptions = [
@@ -443,9 +425,10 @@ export default function PGUserProfileDetails2() {
     // Validation for required fields
     if (
       !employeeId ||
-      !uanNumber ||
+      !dateOfJoining ||
       !panNumber ||
       !aadhaarNumber ||
+      !department ||
       !designation ||
       department.length === 0
     ) {
@@ -460,7 +443,7 @@ export default function PGUserProfileDetails2() {
     }
 
     // Validation for UAN number (exactly 12 digits)
-    if (!/^\d{12}$/.test(uanNumber)) {
+    if (uanNumber && !/^\d{12}$/.test(uanNumber)) {
       setEmployeeDetailUpdateMessage("UAN number must be exactly 12 digits.");
       setEdMessageType("error_msg");
       setTimeout(() => {
@@ -469,6 +452,7 @@ export default function PGUserProfileDetails2() {
       }, 5000);
       return;
     }
+    
 
     // Validation for PAN card (minimum 10 characters)
     if (panNumber.length < 10) {
@@ -483,8 +467,11 @@ export default function PGUserProfileDetails2() {
       return;
     }
 
+    // Remove spaces from the formatted Aadhaar number for validation
+    const rawAadhaarNumber = aadhaarNumber.replace(/\s/g, "");
+
     // Validation for Aadhaar number (exactly 12 digits)
-    if (!/^\d{12}$/.test(aadhaarNumber)) {
+    if (!/^\d{12}$/.test(rawAadhaarNumber)) {
       setEmployeeDetailUpdateMessage(
         "Aadhaar number must be exactly 12 digits."
       );
@@ -514,8 +501,8 @@ export default function PGUserProfileDetails2() {
 
     const dataSet = {
       employeeId,
-      department: department.map((dept) => dept.value),
-      designation: designation.value,
+      department,
+      designation,
       uanNumber,
       panNumber,
       aadhaarNumber,
@@ -635,8 +622,7 @@ export default function PGUserProfileDetails2() {
   const validateRef1Form = () => {
     if (
       !ref1FormData.name ||
-      !ref1FormData.phone ||
-      !ref1FormData.email ||
+      !ref1FormData.phone ||     
       !ref1FormData.address
     ) {
       setSaveRef1Message("Please fill all required fields.");
@@ -650,7 +636,7 @@ export default function PGUserProfileDetails2() {
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(ref1FormData.email)) {
+    if (ref1FormData.email && !emailRegex.test(ref1FormData.email)) {
       setSaveRef1Message("Please enter a valid email address.");
       setRef1MessageType("error_msg");
       setTimeout(() => {
@@ -761,8 +747,7 @@ export default function PGUserProfileDetails2() {
   const validateRef2Form = () => {
     if (
       !ref2FormData.name ||
-      !ref2FormData.phone ||
-      !ref2FormData.email ||
+      !ref2FormData.phone ||      
       !ref2FormData.address
     ) {
       setSaveRef2Message("Please fill all required fields.");
@@ -776,7 +761,7 @@ export default function PGUserProfileDetails2() {
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(ref2FormData.email)) {
+    if (ref2FormData.email && !emailRegex.test(ref2FormData.email)) {
       setSaveRef2Message("Please enter a valid email address.");
       setRef2MessageType("error_msg");
       setTimeout(() => {
@@ -884,8 +869,7 @@ export default function PGUserProfileDetails2() {
     if (
       !bankDetailFormData.acHolderName ||
       !bankDetailFormData.acNumber ||
-      !bankDetailFormData.bankName ||
-      !bankDetailFormData.branchName ||
+      !bankDetailFormData.bankName ||     
       !bankDetailFormData.ifscCode
     ) {
       setSaveBankDetailMessage("Please fill all required fields.");
@@ -1211,7 +1195,7 @@ export default function PGUserProfileDetails2() {
 
   //     );
   //   }
-  //   return <img src="https://via.placeholder.com/150" alt="Placeholder" />;
+  //   return <img src="/assets/img/image_small_placeholder.png" alt="Placeholder" />;
   // };
 
   // code for redering file with delete button
@@ -1244,7 +1228,9 @@ export default function PGUserProfileDetails2() {
         </div>
       );
     }
-    return <img src="https://via.placeholder.com/150" alt="Placeholder" />;
+    return (
+      <img src="/assets/img/image_small_placeholder.png" alt="Placeholder" />
+    );
   };
   return (
     <div className="top_header_pg pg_bg user_detail_pg relative">
@@ -1688,6 +1674,7 @@ export default function PGUserProfileDetails2() {
                     </div>
                   </div>
                 </div>
+
                 <Modal
                   show={showConfirmationPopup}
                   onHide={() => setShowConfirmationPopup(false)}
@@ -1785,30 +1772,106 @@ export default function PGUserProfileDetails2() {
                   }}
                 >
                   {[
-                    { id: "owner", label: "Owner" },
-                    { id: "frontdesk", label: "Frontdesk" },
-                    { id: "executive", label: "Executive" },
-                    { id: "admin", label: "Admin" },
-                    { id: "agent", label: "Agent" },
-                    { id: "superAdmin", label: "Super Admin" },
-                    { id: "tenant", label: "Tenant" },
-                    { id: "prospectiveTenant", label: "Prospective Tenant" },
-                    { id: "buyer", label: "Buyer" },
-                    { id: "prospectiveBuyer", label: "Prospective Buyer" },
-                  ].map(({ id, label }) => (
-                    <div className="radio_single" key={id}>
-                      <input
-                        type="checkbox"
-                        name="user_role"
-                        value={id}
-                        id={id}
-                        disabled={!isRoleEditing}
-                        checked={selectedRoles.includes(id)}
-                        onChange={() => handleRoleChange(id)}
-                      />
-                      <label htmlFor={id}>{label}</label>
-                    </div>
-                  ))}
+                    {
+                      id: "owner",
+                      label: "Owner",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "frontdesk",
+                      label: "Frontdesk",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "executive",
+                      label: "Executive",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "admin",
+                      label: "Admin",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "hr",
+                      label: "HR",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "admin RO",
+                      label: "Admin RO",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "accountant",
+                      label: "accountant",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+
+                    {
+                      id: "agent",
+                      label: "Agent",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "superAdmin",
+                      label: "Super Admin",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "tenant",
+                      label: "Tenant",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "prospectiveTenant",
+                      label: "Prospective Tenant",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "buyer",
+                      label: "Buyer",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "prospectiveBuyer",
+                      label: "Prospective Buyer",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                  ]
+                    .filter(
+                      (role) =>
+                        userProfileDoc?.isEmployee
+                          ? role.isEmployee || role.showInBoth // Show employee roles or those meant for both
+                          : !role.isEmployee || role.showInBoth // Show non-employee roles or those meant for both
+                    )
+                    .map(({ id, label }) => (
+                      <div className="radio_single" key={id}>
+                        <input
+                          type="checkbox"
+                          name="user_role"
+                          value={id}
+                          id={id}
+                          disabled={!isRoleEditing}
+                          checked={selectedRoles.includes(id)}
+                          onChange={() => handleRoleChange(id)}
+                        />
+                        <label htmlFor={id}>{label}</label>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
@@ -1844,37 +1907,37 @@ export default function PGUserProfileDetails2() {
         </div>
         <div className="property_card_single mobile_full_card overflow_unset">
           <div className="more_detail_card_inner">
-            <h2 className="card_title">Access Management</h2>        
+            <h2 className="card_title">Access Management</h2>
             <div className="form_field">
-          <div className="field_box theme_radio_new">
-            <div
-              className="theme_radio_container"
-              style={{
-                padding: "0px",
-                border: "none",
-              }}
-            >
-              {[
-                { id: "country", label: "Country" },
-                { id: "region", label: "Region" },
-                { id: "state", label: "State" },
-                { id: "city", label: "City" },
-              ].map(({ id, label }) => (
-                <div className="radio_single" key={id}>
-                  <input
-                    type="radio"
-                    name="user_role"
-                    value={id}
-                    id={id}
-                    onChange={handleAmRadioChange}
-                    defaultChecked={id === "country"} // Default check for Country
-                  />
-                  <label htmlFor={id}>{label}</label>
+              <div className="field_box theme_radio_new">
+                <div
+                  className="theme_radio_container"
+                  style={{
+                    padding: "0px",
+                    border: "none",
+                  }}
+                >
+                  {[
+                    { id: "country", label: "Country" },
+                    { id: "region", label: "Region" },
+                    { id: "state", label: "State" },
+                    { id: "city", label: "City" },
+                  ].map(({ id, label }) => (
+                    <div className="radio_single" key={id}>
+                      <input
+                        type="radio"
+                        name="user_role"
+                        value={id}
+                        id={id}
+                        onChange={handleAmRadioChange}
+                        defaultChecked={id === "country"} // Default check for Country
+                      />
+                      <label htmlFor={id}>{label}</label>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
-        </div>
             <div className="vg22"></div>
             <div className="vg12"></div>
             <div className="row row_gap">
@@ -1895,77 +1958,78 @@ export default function PGUserProfileDetails2() {
                 </div>
               </div>
               {(selectedAmLevel === "region" ||
-            selectedAmLevel === "state" ||
-            selectedAmLevel === "city") && (
-              <div className="col-lg-4 col-md-6 col-sm-12">
-                <div className="form_field label_top">
-                  <label>Region</label>
-                  <div className="form_field_inner">
-                    <Select
-                      // value={designation}
-                      // onChange={setDesignation}
-                      // options={designationOptions}
-                      // onChange={handleCountryChange}
-                      // options={countryOptions.current}
-                      // value={country}
-                      placeholder="Select Region"
-                    />
+                selectedAmLevel === "state" ||
+                selectedAmLevel === "city") && (
+                <div className="col-lg-4 col-md-6 col-sm-12">
+                  <div className="form_field label_top">
+                    <label>Region</label>
+                    <div className="form_field_inner">
+                      <Select
+                        // value={designation}
+                        // onChange={setDesignation}
+                        // options={designationOptions}
+                        // onChange={handleCountryChange}
+                        // options={countryOptions.current}
+                        // value={country}
+                        placeholder="Select Region"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>)}
+              )}
               {(selectedAmLevel === "state" || selectedAmLevel === "city") && (
-              <div className="col-lg-4 col-md-6 col-sm-12">
-                <div className="form_field label_top">
-                  <label>State</label>
-                  <div className="form_field_inner">
-                    <Select
-                      isMulti
-                      onChange={handleStateChange}
-                      options={stateOptions.current}
-                      value={state}
-                      placeholder="Select state"
-                    />
+                <div className="col-lg-4 col-md-6 col-sm-12">
+                  <div className="form_field label_top">
+                    <label>State</label>
+                    <div className="form_field_inner">
+                      <Select
+                        isMulti
+                        onChange={handleStateChange}
+                        options={stateOptions.current}
+                        value={state}
+                        placeholder="Select state"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>)}
+              )}
               {selectedAmLevel === "city" && (
-              <div className="col-lg-12 col-md-12 col-sm-12">
-                <div className="form_field label_top">
-                  <label>City</label>
-                  <div className="form_field_inner">
-                    <Select
-                      // value={designation}
-                      // onChange={setDesignation}
-                      // options={designationOptions}
-                      placeholder="Select city"
-                    />
+                <div className="col-lg-12 col-md-12 col-sm-12">
+                  <div className="form_field label_top">
+                    <label>City</label>
+                    <div className="form_field_inner">
+                      <Select
+                        // value={designation}
+                        // onChange={setDesignation}
+                        // options={designationOptions}
+                        placeholder="Select city"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>)}
+              )}
             </div>
             <div className="vg12"></div>
             <div className="btn_msg_area">
-                 
-
-                    <button
-                      // onClick={handleEdCancelClick}
-                      // disabled={isEdUpdating}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isEdUpdating ? "disabled" : ""
-                      }`}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                       onClick={handleSaveAccessMgmt}
-                      // disabled={isEdUpdating}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isEdUpdating ? "disabled" : ""
-                      }`}
-                    >
-                     Save
-                    </button>
-                  </div>
+              <button
+                // onClick={handleEdCancelClick}
+                // disabled={isEdUpdating}
+                className={`theme_btn btn_border no_icon min_width ${
+                  isEdUpdating ? "disabled" : ""
+                }`}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveAccessMgmt}
+                // disabled={isEdUpdating}
+                className={`theme_btn btn_fill no_icon min_width ${
+                  isEdUpdating ? "disabled" : ""
+                }`}
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
         {userProfileDoc && userProfileDoc.isEmployee && (
@@ -2047,7 +2111,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Department</h6>
                       <h5>
                         {userProfileDoc && userProfileDoc.department
-                          ? userProfileDoc.department
+                          ? userProfileDoc.department.value
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -2060,7 +2124,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Designation</h6>
                       <h5>
                         {userProfileDoc && userProfileDoc.designation
-                          ? userProfileDoc.designation
+                          ? userProfileDoc.designation.value
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -2112,7 +2176,7 @@ export default function PGUserProfileDetails2() {
                   <div className="row row_gap form_full">
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Date of Joining</label>
+                        <label>Date of Joining*</label>
                         <div className="form_field_inner">
                           <input
                             type="date"
@@ -2130,7 +2194,14 @@ export default function PGUserProfileDetails2() {
                           <input
                             type="number"
                             value={employeeId}
-                            onChange={(e) => setEmployeeId(e.target.value)}
+                            // onChange={(e) => setEmployeeId(e.target.value)}
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              if (newValue.length <= 4) {
+                                setEmployeeId(newValue);
+                              }
+                            }}
+                            maxLength="4"
                             placeholder="Enter Employee ID"
                           />
                         </div>
@@ -2138,21 +2209,21 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Department</label>
+                        <label>Department*</label>
                         <div className="form_field_inner">
                           <Select
                             // isMulti
                             value={department}
                             onChange={setDepartment}
                             options={departmentOptions}
-                            placeholder="Select Department(s)"
+                            placeholder="Select Department"
                           />
                         </div>
                       </div>
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Designation</label>
+                        <label>Designation*</label>
                         <div className="form_field_inner">
                           <Select
                             value={designation}
@@ -2165,7 +2236,7 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Manager Name</label>
+                        <label>Manager Name*</label>
                         <div className="form_field_inner">
                           <input
                             type="text"
@@ -2187,7 +2258,7 @@ export default function PGUserProfileDetails2() {
                         <label>UAN Number</label>
                         <div className="form_field_inner">
                           <input
-                            type="number"
+                            type="text"
                             value={uanNumber}
                             // onChange={(e) => setUanNumber(e.target.value)}
                             onChange={(e) => {
@@ -2198,13 +2269,16 @@ export default function PGUserProfileDetails2() {
                             }}
                             placeholder="Enter UAN Number"
                             maxLength="12"
+                            style={{
+                              textTransform: "uppercase",
+                            }}
                           />
                         </div>
                       </div>
                     </div>{" "}
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>PAN Number</label>
+                        <label>PAN Number*</label>
                         <div className="form_field_inner">
                           <input
                             type="text"
@@ -2218,6 +2292,9 @@ export default function PGUserProfileDetails2() {
                                 setPanNumber(newValue);
                               }
                             }}
+                            style={{
+                              textTransform: "uppercase",
+                            }}
                             placeholder="Enter PAN Number"
                             maxLength="10"
                           />
@@ -2226,20 +2303,23 @@ export default function PGUserProfileDetails2() {
                     </div>{" "}
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Aadhaar Number</label>
+                        <label>Aadhaar Number*</label>
                         <div className="form_field_inner">
                           <input
-                            type="number"
+                            type="text"
                             value={aadhaarNumber}
-                            // onChange={(e) => setAadhaarNumber(e.target.value)}
                             onChange={(e) => {
-                              const newValue = e.target.value;
-                              if (newValue.length <= 12) {
-                                setAadhaarNumber(newValue);
+                              const input = e.target.value.replace(/\s/g, ""); // Remove any existing spaces
+                              if (/^\d*$/.test(input) && input.length <= 12) {
+                                // Allow only digits and max 12 characters
+                                const formatted =
+                                  input
+                                    .match(/.{1,4}/g) // Group digits in chunks of 4
+                                    ?.join(" ") || ""; // Join chunks with a space
+                                setAadhaarNumber(formatted);
                               }
                             }}
                             placeholder="Enter Aadhaar Number"
-                            maxLength="12"
                           />
                         </div>
                       </div>
@@ -2558,7 +2638,7 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Branch Name*</label>
+                        <label>Branch Name</label>
                         <div className="form_field_inner">
                           <input
                             type="text"
@@ -2692,37 +2772,36 @@ export default function PGUserProfileDetails2() {
                     </div>
                   </div>
                   <div className="p_info_single actions">
-                  {userProfileDoc.ref1 && userProfileDoc.ref1.phone && (
-                   <Link
-                   to={`https://wa.me/+${
-                     userProfileDoc.ref1 && userProfileDoc.ref1.phone
-                   }`}
-                   className="icon"
-                 >
-                   <img src="/assets/img/whatsappbig.png" alt="" />
-                 </Link>
-                )}
                     {userProfileDoc.ref1 && userProfileDoc.ref1.phone && (
-                   <Link
-                   to={`tel:+${
-                     userProfileDoc.ref1 && userProfileDoc.ref1.phone
-                   }`}
-                   className="icon"
-                 >
-                   <img src="/assets/img/call-icon.png" alt="" />
-                 </Link>
-                )}
-                        {userProfileDoc.ref1 && userProfileDoc.ref1.email && (
-                  <Link
-                  to={`mailto:${userProfileDoc.ref1 && userProfileDoc.ref1.email}`}
-                  className="icon"
-                >
-                  <img src="/assets/img/gmailbig.png" alt="" />
-                </Link>
-                )}
-                   
-                  
-                    
+                      <Link
+                        to={`https://wa.me/+${
+                          userProfileDoc.ref1 && userProfileDoc.ref1.phone
+                        }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/whatsappbig.png" alt="" />
+                      </Link>
+                    )}
+                    {userProfileDoc.ref1 && userProfileDoc.ref1.phone && (
+                      <Link
+                        to={`tel:+${
+                          userProfileDoc.ref1 && userProfileDoc.ref1.phone
+                        }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/call-icon.png" alt="" />
+                      </Link>
+                    )}
+                    {userProfileDoc.ref1 && userProfileDoc.ref1.email && (
+                      <Link
+                        to={`mailto:${
+                          userProfileDoc.ref1 && userProfileDoc.ref1.email
+                        }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/gmailbig.png" alt="" />
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}
@@ -2783,7 +2862,7 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Email*</label>
+                        <label>Email</label>
                         <div className="form_field_inner">
                           <input
                             type="email"
@@ -2916,37 +2995,36 @@ export default function PGUserProfileDetails2() {
                     </div>
                   </div>
                   <div className="p_info_single actions">
-                  {userProfileDoc.ref2 && userProfileDoc.ref2.phone && (
-                   <Link
-                   to={`https://wa.me/+${
-                     userProfileDoc.ref2 && userProfileDoc.ref2.phone
-                   }`}
-                   className="icon"
-                 >
-                   <img src="/assets/img/whatsappbig.png" alt="" />
-                 </Link>
-                )}
                     {userProfileDoc.ref2 && userProfileDoc.ref2.phone && (
-                   <Link
-                   to={`tel:+${
-                     userProfileDoc.ref2 && userProfileDoc.ref2.phone
-                   }`}
-                   className="icon"
-                 >
-                   <img src="/assets/img/call-icon.png" alt="" />
-                 </Link>
-                )}
-                        {userProfileDoc.ref2 && userProfileDoc.ref2.email && (
-                  <Link
-                  to={`mailto:${userProfileDoc.ref2 && userProfileDoc.ref2.email}`}
-                  className="icon"
-                >
-                  <img src="/assets/img/gmailbig.png" alt="" />
-                </Link>
-                )}
-                   
-                  
-                    
+                      <Link
+                        to={`https://wa.me/+${
+                          userProfileDoc.ref2 && userProfileDoc.ref2.phone
+                        }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/whatsappbig.png" alt="" />
+                      </Link>
+                    )}
+                    {userProfileDoc.ref2 && userProfileDoc.ref2.phone && (
+                      <Link
+                        to={`tel:+${
+                          userProfileDoc.ref2 && userProfileDoc.ref2.phone
+                        }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/call-icon.png" alt="" />
+                      </Link>
+                    )}
+                    {userProfileDoc.ref2 && userProfileDoc.ref2.email && (
+                      <Link
+                        to={`mailto:${
+                          userProfileDoc.ref2 && userProfileDoc.ref2.email
+                        }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/gmailbig.png" alt="" />
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}
@@ -3007,7 +3085,7 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Email*</label>
+                        <label>Email</label>
                         <div className="form_field_inner">
                           <input
                             type="email"
@@ -3088,7 +3166,7 @@ export default function PGUserProfileDetails2() {
                         ></iframe>
                       )
                     ) : (
-                      <img src="https://via.placeholder.com/150" alt="" />
+                      <img src="/assets/img/image_small_placeholder.png" alt="" />
                     )}
                   </div>
                 )}
@@ -3109,7 +3187,7 @@ export default function PGUserProfileDetails2() {
                         ></iframe>
                       )
                     ) : (
-                      <img src="https://via.placeholder.com/150" alt="" />
+                      <img src="/assets/img/image_small_placeholder.png" alt="" />
                     )}
                   </div>
                 )}
@@ -3130,7 +3208,7 @@ export default function PGUserProfileDetails2() {
                         ></iframe>
                       )
                     ) : (
-                      <img src="https://via.placeholder.com/150" alt="" />
+                      <img src="/assets/img/image_small_placeholder.png" alt="" />
                     )}
                   </div>
                 )}
