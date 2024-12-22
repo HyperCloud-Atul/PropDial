@@ -112,6 +112,18 @@
     }
   }
 }
+.copy_value{
+  position: relative;
+  cursor: pointer;
+  .copied{
+    position: absolute;
+   top: 100%;
+   right: 0;
+   font-size: 13px;
+    color: var(--theme-green);
+    font-weight: 500;
+  }
+}
 .delete_modal {
   .alert_text {
     font-size: 20px;
@@ -1779,11 +1791,11 @@ textarea{
 }
 
 .table_filter_hide .filters .left {
-  display: none;
+  display: none !important;
 }
 
 .table_filter_hide .filters .right {
-  display: none;
+  display: none !important;
 }
 
 .table_filter_hide .vg22 {

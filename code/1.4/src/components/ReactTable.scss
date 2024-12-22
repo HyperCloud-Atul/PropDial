@@ -45,6 +45,18 @@
       margin: auto;
       position: absolute;
     }
+    .contact_btn.with_three:after{
+      content: none;
+    }
+    .contact_btn.with_three{
+      a{
+        border-right: 1px solid #ddd;
+        min-height: 30px;
+        &:last-child{
+          border-right: none;
+        }
+      }
+    }
   }
   
   tr:hover {

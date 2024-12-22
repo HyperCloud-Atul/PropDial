@@ -98,7 +98,7 @@ const UserTable = ({ users }) => {
         Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
-        Header: 'Contact',
+        Header: 'Contact Options',
         accessor: 'actions',
 
         Cell: ({ row }) => (
