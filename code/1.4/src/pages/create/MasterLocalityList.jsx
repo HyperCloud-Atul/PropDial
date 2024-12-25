@@ -58,6 +58,8 @@ export default function MasterLocalityList() {
   //Master Data Loading Initialisation - End
 
   const [formError, setFormError] = useState(null);
+  const [formErrorType, setFormErrorType] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
@@ -230,60 +232,138 @@ export default function MasterLocalityList() {
   // Populate Master Data - End
 
   let results = [];
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setFormError(null);
+
+  //   let localityname = camelCase(locality.trim());
+  //   // console.log("localityname: ", localityname)
+
+  //   let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase()
+  //   // console.log("value: ", isDuplicateLocality)
+
+  //   if (currentDocid) {
+  //     // console.log("country.value: ", country.value)
+  //     // console.log("state.value: ", state.value)
+  //     // console.log("city.value: ", city.value)
+  //     await updateDocument(currentDocid, {
+  //       country: country.value,
+  //       state: state.value,
+  //       city: city.value,
+  //       locality: localityname,
+  //     });
+  //     setFormError("Successfully updated");
+  //   } else {
+  //     let ref = projectFirestore
+  //       .collection("m_localities")
+  //       .where("docId", "==", isDuplicateLocality);
+
+  //     const unsubscribe = ref.onSnapshot(async (snapshot) => {
+  //       snapshot.docs.forEach((doc) => {
+  //         results.push({ ...doc.data(), id: doc.id });
+  //       });
+
+
+  //       if (results.length === 0) {
+  //         const dataSet = {
+  //           docId: city.value + "_" + localityname.split(" ").join("_").toLowerCase(),
+  //           country: country.value,
+  //           state: state.value,
+  //           city: city.value,
+  //           locality: localityname,
+  //           status: "active",
+  //         };
+  //         // console.log("dataSet: ", dataSet)
+  //         // await addDocument(dataSet);
+  //         const _customDocId = dataSet.docId
+  //         await addDocumentWithCustomDocId(dataSet, _customDocId);
+  //         setFormError("Successfully added");
+  //         // sethandleAddSectionFlag(!handleAddSectionFlag);
+  //       } else {
+  //         setFormError("Already added");
+  //         sethandleAddSectionFlag(!handleAddSectionFlag);
+  //       }
+  //     });
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
-
+    setFormErrorType(null);
+    setIsAdding(true);
+  
     let localityname = camelCase(locality.trim());
-    // console.log("localityname: ", localityname)
-
-    let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase()
-    // console.log("value: ", isDuplicateLocality)
-
+    let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase();
+  
     if (currentDocid) {
-      // console.log("country.value: ", country.value)
-      // console.log("state.value: ", state.value)
-      // console.log("city.value: ", city.value)
+      // Update existing document
       await updateDocument(currentDocid, {
         country: country.value,
         state: state.value,
         city: city.value,
         locality: localityname,
       });
+  
+      setFormErrorType("success_msg");
       setFormError("Successfully updated");
+      setIsAdding(false);
+  
+      // Reset error message and locality after 5 seconds
+      setTimeout(() => {
+        setFormError(null);
+        setFormErrorType(null);       
+      }, 5000);
     } else {
-      let ref = projectFirestore
+      // Query Firestore for duplicate document
+      const ref = projectFirestore
         .collection("m_localities")
         .where("docId", "==", isDuplicateLocality);
-
-      const unsubscribe = ref.onSnapshot(async (snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          results.push({ ...doc.data(), id: doc.id });
-        });
-
-
-        if (results.length === 0) {
-          const dataSet = {
-            docId: city.value + "_" + localityname.split(" ").join("_").toLowerCase(),
-            country: country.value,
-            state: state.value,
-            city: city.value,
-            locality: localityname,
-            status: "active",
-          };
-          // console.log("dataSet: ", dataSet)
-          // await addDocument(dataSet);
-          const _customDocId = dataSet.docId
-          await addDocumentWithCustomDocId(dataSet, _customDocId);
-          setFormError("Successfully added");
-          // sethandleAddSectionFlag(!handleAddSectionFlag);
-        } else {
-          setFormError("Already added");
-          sethandleAddSectionFlag(!handleAddSectionFlag);
-        }
-      });
+  
+      // Use `get()` for a one-time read instead of `onSnapshot` to avoid repeated triggers
+      const snapshot = await ref.get();
+      const results = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  
+      if (results.length === 0) {
+        // No duplicates, proceed to add
+        const dataSet = {
+          docId: city.value + "_" + localityname.split(" ").join("_").toLowerCase(),
+          country: country.value,
+          state: state.value,
+          city: city.value,
+          locality: localityname,
+          status: "active",
+        };
+  
+        const _customDocId = dataSet.docId;
+        await addDocumentWithCustomDocId(dataSet, _customDocId);
+  
+        setFormErrorType("success_msg");
+        setFormError("Successfully added");
+        setIsAdding(false);
+  
+        // Reset error message and locality after 5 seconds
+        setTimeout(() => {
+          setFormError(null);
+          setFormErrorType(null);
+          setLocality("");
+        }, 5000);
+      } else {
+        // Duplicate found
+        setFormErrorType("error_msg");
+        setFormError("Already added");
+        setIsAdding(false);
+  
+        // Reset error message after 5 seconds
+        setTimeout(() => {
+          setFormError(null);
+          setFormErrorType(null);
+        }, 5000);
+      }
     }
   };
+  
+  
 
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
 
@@ -654,38 +734,40 @@ export default function MasterLocalityList() {
             </div>
             <div className="vg22"></div>
 
-            {formError && (
-              <>
-                <div className="error">{formError}</div>
-                <div className="vg22"></div>
-              </>
-            )}
+          
+            <div className="btn_and_msg_area">
+                {formError && (
+                  <div className={`msg_area big_font ${formErrorType}`}>
+                    {formError}
+                  </div>
+                )}
 
-            <div
-              className="d-flex align-items-center justify-content-end"
-              style={{
-                gap: "15px",
-              }}
-            >
-              <div
-                className="theme_btn btn_border no_icon text-center"
-                onClick={handleAddSection}
-                style={{
-                  minWidth: "140px",
-                }}
-              >
-                Cancel
+                <div
+                  className="d-flex align-items-center justify-content-end"
+                  style={{
+                    gap: "15px",
+                  }}
+                >
+                  <div
+                    className="theme_btn btn_border no_icon text-center"
+                    onClick={handleAddSection}
+                    style={{
+                      minWidth: "140px",
+                    }}
+                  >
+                    Cancel
+                  </div>
+                  <div
+                    className="theme_btn btn_fill no_icon text-center"
+                    onClick={isAdding ? null : handleSubmit}
+                    style={{
+                      minWidth: "140px",
+                    }}
+                  >
+                    {isAdding ? "Processing..." : formBtnText}
+                  </div>
+                </div>
               </div>
-              <div
-                className="theme_btn btn_fill no_icon text-center"
-                onClick={handleSubmit}
-                style={{
-                  minWidth: "140px",
-                }}
-              >
-                {formBtnText}
-              </div>
-            </div>
           </form>
           <hr />
         </div>

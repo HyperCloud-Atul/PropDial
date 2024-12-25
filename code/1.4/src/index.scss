@@ -1789,7 +1789,29 @@ textarea{
     flex-wrap: wrap;
   }
 }
-
+.btn_and_msg_area{
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 22px;
+  flex-direction: wrap;
+}
+.msg_area {
+  font-size: 15px;
+  padding: 4px 15px;
+  border-radius: 8px;
+  &.big_font{
+    font-size: 17px;
+  }
+  &.error_msg {
+    background: #ffe9e9;
+    color: red;
+  }
+  &.success_msg {
+    background: var(--theme-green-bg);
+    color: var(--theme-green2);
+  }
+}
 .table_filter_hide .filters .left {
   display: none !important;
 }
