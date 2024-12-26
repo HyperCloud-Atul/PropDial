@@ -504,7 +504,7 @@ export default function MasterLocalityList() {
   return (
     <div className="top_header_pg pg_bg pg_adminproperty">
       <div
-        className={`page_spacing ${masterLocality && masterLocality.length === 0 && "pg_min_height"
+        className={`page_spacing pg_min_height ${masterLocality && masterLocality.length === 0 && "pg_min_height"
           }`}
       >
         <NineDots nineDotsMenu={user && user.role === 'superAdmin' ? nineDotsMenu : nineDotsAdminMenu} />
@@ -625,25 +625,33 @@ export default function MasterLocalityList() {
                     </span>
                   </div>
                 </div>
-                <div
-                  onClick={handleAddSection}
-                  className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-                    }`}
-                >
-                  {handleAddSectionFlag ? "Cancel" : "Add New"}
-                </div>
+                {!handleAddSectionFlag && (
+  <div
+  onClick={handleAddSection}
+  className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+    }`}
+>
+  Add New
+</div>
+                )}
+              
               </div>
             </div>
-            <hr></hr>
+            
           </>
         )}
-        <div className="vg12"></div>
+       
         <div
           style={{
             overflow: handleAddSectionFlag ? "visible" : "hidden",
             // transition: "1s",
             opacity: handleAddSectionFlag ? "1" : "0",
             maxHeight: handleAddSectionFlag ? "100%" : "0",
+            background:"var(--theme-blue-bg)",
+            marginLeft: handleAddSectionFlag ? "-22px" : "0px",
+            marginRight: handleAddSectionFlag ? "-22px" : "0px",
+            marginTop: handleAddSectionFlag ? "22px" : "0px",
+            padding: handleAddSectionFlag ? "32px 22px" : "0px",
           }}
         >
           <form>
@@ -749,13 +757,13 @@ export default function MasterLocalityList() {
                   }}
                 >
                   <div
-                    className="theme_btn btn_border no_icon text-center"
+                    className="theme_btn btn_border_red no_icon text-center"
                     onClick={handleAddSection}
                     style={{
                       minWidth: "140px",
                     }}
                   >
-                    Cancel
+                    Close
                   </div>
                   <div
                     className="theme_btn btn_fill no_icon text-center"
@@ -768,19 +776,22 @@ export default function MasterLocalityList() {
                   </div>
                 </div>
               </div>
-          </form>
-          <hr />
+          </form>         
         </div>
         {filteredData && filteredData.length > 0 ? (
           <>
-            <div><strong> Filtered Locality: {filteredData.length}</strong></div>
-            <br></br>
+                      <div className="vg22"></div>          
+            {filteredData && filteredData.length > 0 ? (
+              <div className="m18">
+                Filtered Locality: <span className="text_orange">{filteredData.length}</span>
+              </div>
+            ) : (
+              ""
+            )} 
 
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>
-
-
                   {filteredData &&
                     (filteredData.map((data) => <div className="property-status-padding-div">
                       <div
@@ -894,7 +905,7 @@ export default function MasterLocalityList() {
           </>
         ) : "No Locality Available"}
 
-        <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+        
       </div>
 
     </div>

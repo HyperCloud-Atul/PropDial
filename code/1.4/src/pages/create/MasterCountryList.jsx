@@ -24,6 +24,8 @@ export default function MasterCountryList() {
 
   const [country, setCountry] = useState("");
   const [formError, setFormError] = useState(null);
+  const [formErrorType, setFormErrorType] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
@@ -34,46 +36,82 @@ export default function MasterCountryList() {
   let results = [];
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsAdding(true);
     setFormError(null);
-
-    let countryname = country.trim().toUpperCase();
-
+    setFormErrorType(null);
+  
+    const countryname = country.trim().toUpperCase();
+    const collectionRef = projectFirestore.collection("m_countries");
+  
     if (currentDocid) {
+      // Update existing document
       await updateDocument(currentDocid, {
         country: countryname,
       });
-
+  
+      setFormErrorType("success_msg");
       setFormError("Successfully updated");
+      setIsAdding(false);
+  
+      // Reset error message after 5 seconds
+      setTimeout(() => {
+        setFormError(null);
+        setFormErrorType(null);
+      }, 5000);
     } else {
-      let ref = projectFirestore
-        .collection("m_countries")
-        .where("country", "==", countryname);
-
-      const unsubscribe = ref.onSnapshot(async (snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          results.push({ ...doc.data(), id: doc.id });
-        });
-
-        if (results.length === 0) {
+      try {
+        // Query to check if country already exists
+        const querySnapshot = await collectionRef
+          .where("country", "==", countryname)
+          .get();
+  
+        if (querySnapshot.empty) {
+          // If no duplicate exists, add new document
           const dataSet = {
             docId: "_" + countryname.split(" ").join("_").toLowerCase(),
             country: countryname,
             status: "active",
           };
-          // await addDocument(dataSet);
-          // console.log("dataSet: ", dataSet)
-          const _customDocId = dataSet.docId
+          const _customDocId = dataSet.docId;
           await addDocumentWithCustomDocId(dataSet, _customDocId);
-
+  
+          setFormErrorType("success_msg");
           setFormError("Successfully added");
-          sethandleAddSectionFlag(!handleAddSectionFlag);
+          setIsAdding(false);
+  
+          // Reset form and messages after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+            setCountry("");
+          }, 5000);
         } else {
+          // Handle duplicate case
+          setFormErrorType("error_msg");
           setFormError("Already added");
-          sethandleAddSectionFlag(!handleAddSectionFlag);
+          setIsAdding(false);
+  
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
         }
-      });
+      } catch (error) {
+        console.error("Error adding/updating country:", error);
+        setFormErrorType("error_msg");
+        setFormError("An error occurred. Please try again.");
+        setIsAdding(false);
+  
+        // Reset error message after 5 seconds
+        setTimeout(() => {
+          setFormError(null);
+          setFormErrorType(null);
+        }, 5000);
+      }
     }
   };
+  
 
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
 
@@ -83,7 +121,6 @@ export default function MasterCountryList() {
   const closeMoreAddOptions = () => {
     setHandleMoreOptionsClick(false);
   };
-
 
   const handleAddSection = () => {
     setFormError(null);
@@ -134,12 +171,11 @@ export default function MasterCountryList() {
   // View mode end
 
   return (
-
-
     <div className="top_header_pg pg_bg pg_adminproperty">
       <div
-        className={`page_spacing ${masterCountry && masterCountry.length === 0 && "pg_min_height"
-          }`}
+        className={`page_spacing pg_min_height ${
+          masterCountry && masterCountry.length === 0 && "pg_min_height"
+        }`}
       >
         <NineDots nineDotsMenu={nineDotsMenu} />
 
@@ -149,8 +185,9 @@ export default function MasterCountryList() {
               No Country Yet!
               <div
                 onClick={handleAddSection}
-                className={`theme_btn no_icon header_btn mt-3 ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-                  }`}
+                className={`theme_btn no_icon header_btn mt-3 ${
+                  handleAddSectionFlag ? "btn_border" : "btn_fill"
+                }`}
               >
                 {handleAddSectionFlag ? "Cancel" : "Add New"}
               </div>
@@ -182,8 +219,8 @@ export default function MasterCountryList() {
                 <div className="rt_global_search search_field">
                   <input
                     placeholder="Search"
-                  // value={searchInput}
-                  // onChange={handleSearchInputChange}
+                    // value={searchInput}
+                    // onChange={handleSearchInputChange}
                   />
                   <div className="field_icon">
                     <span className="material-symbols-outlined">search</span>
@@ -193,8 +230,9 @@ export default function MasterCountryList() {
               <div className="right">
                 <div className="button_filter diff_views">
                   <div
-                    className={`bf_single ${viewMode === "card_view" ? "active" : ""
-                      }`}
+                    className={`bf_single ${
+                      viewMode === "card_view" ? "active" : ""
+                    }`}
                     onClick={() => handleModeChange("card_view")}
                   >
                     <span className="material-symbols-outlined">
@@ -202,35 +240,43 @@ export default function MasterCountryList() {
                     </span>
                   </div>
                   <div
-                    className={`bf_single ${viewMode === "table_view" ? "active" : ""
-                      }`}
+                    className={`bf_single ${
+                      viewMode === "table_view" ? "active" : ""
+                    }`}
                     onClick={() => handleModeChange("table_view")}
                   >
-                    <span className="material-symbols-outlined">
-                      view_list
-                    </span>
+                    <span className="material-symbols-outlined">view_list</span>
                   </div>
                 </div>
-                <div
-                  onClick={handleAddSection}
-                  className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                {!handleAddSectionFlag && (
+                  <div
+                    onClick={handleAddSection}
+                    className={`theme_btn no_icon header_btn ${
+                      handleAddSectionFlag ? "btn_border" : "btn_fill"
                     }`}
-                >
-                  {handleAddSectionFlag ? "Cancel" : "Add New"}
-                </div>
+                  >
+                    Add New
+                  </div>
+                )}
               </div>
-            </div>
-            <hr></hr>
+            </div>          
           </>
-        )}
-        <div className="vg12"></div>
+        )}     
+           
         <div
           style={{
             overflow: handleAddSectionFlag ? "visible" : "hidden",
             // transition: "1s",
             opacity: handleAddSectionFlag ? "1" : "0",
             maxHeight: handleAddSectionFlag ? "100%" : "0",
+            background:"var(--theme-blue-bg)",
+            marginLeft: handleAddSectionFlag ? "-22px" : "0px",
+            marginRight: handleAddSectionFlag ? "-22px" : "0px",
+            marginTop: handleAddSectionFlag ? "22px" : "0px",
+            padding: handleAddSectionFlag ? "32px 22px" : "0px",        
+
           }}
+          className="add_md_form"
         >
           <form>
             <div className="row row_gap form_full">
@@ -248,47 +294,48 @@ export default function MasterCountryList() {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="vg22"></div>
+            </div>          
+            <div className="btn_and_msg_area">
+                {formError && (
+                  <div className={`msg_area big_font ${formErrorType}`}>
+                    {formError}
+                  </div>
+                )}
 
-            {formError && (
-              <>
-                <div className="error">{formError}</div>
-                <div className="vg22"></div>
-              </>
-            )}
+                <div
+                  className="d-flex align-items-center justify-content-end"
+                  style={{
+                    gap: "15px",
+                  }}
+                >
+                  <div
+                    className="theme_btn btn_border_red no_icon text-center"
+                    onClick={handleAddSection}
+                    style={{
+                      minWidth: "140px",
+                    }}
+                  >
+                    Close
+                  </div>
+                  <div
+                    className="theme_btn btn_fill no_icon text-center"
+                    onClick={isAdding ? null : handleSubmit}
+                    style={{
+                      minWidth: "140px",
+                    }}
+                  >
+                    {isAdding ? "Processing..." : formBtnText}
+                  </div>
+                </div>
+              </div>
 
-            <div
-              className="d-flex align-items-center justify-content-end"
-              style={{
-                gap: "15px",
-              }}
-            >
-              <div
-                className="theme_btn btn_border no_icon text-center"
-                onClick={handleAddSection}
-                style={{
-                  minWidth: "140px",
-                }}
-              >
-                Cancel
-              </div>
-              <div
-                className="theme_btn btn_fill no_icon text-center"
-                onClick={handleSubmit}
-                style={{
-                  minWidth: "140px",
-                }}
-              >
-                {formBtnText}
-              </div>
-            </div>
+          
           </form>
-          <hr />
+       
         </div>
         {masterCountry && masterCountry.length !== 0 && (
           <>
-            <div className="master_data_card">
+            <div className="master_data_card">              
               {viewMode === "card_view" && (
                 <>
                   {masterCountry &&
@@ -359,7 +406,9 @@ export default function MasterCountryList() {
                                   style={{
                                     margin: "0",
                                     background:
-                                      data.status === "active" ? "green" : "red",
+                                      data.status === "active"
+                                        ? "green"
+                                        : "red",
                                     color: "#fff",
                                     padding: "3px 10px 3px 10px",
                                     borderRadius: "4px",
@@ -381,12 +430,15 @@ export default function MasterCountryList() {
             </div>
             {viewMode === "table_view" && (
               // <h5 className="text-center text_green">Coming Soon....</h5>
-              <>{masterCountry && <MasterCountryTable filterData={masterCountry} />}</>
+              <>
+                {masterCountry && (
+                  <MasterCountryTable filterData={masterCountry} />
+                )}
+              </>
             )}
           </>
         )}
       </div>
     </div>
-
   );
 }

@@ -155,7 +155,11 @@ a.theme_btn.btn_white {
   color: var(--theme-green);
   border: 1px solid var(--theme-green);
 }
-
+.theme_btn.btn_border_red {
+  background: none;
+  color: var(--theme-red);
+  border: 1px solid var(--theme-red);
+}
 .theme_btn.full_width {
   width: 100%;
 }

@@ -320,7 +320,13 @@ function App() {
                 <Routes>
                   <Route
                     path="/importexcel/:collectionName"
-                    element={<PGExportExcel />}
+                    element={
+                      user && (user.role === "superAdmin" || user.role === "admin" ) ? (
+                        <PGExportExcel />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
+                    }                 
                   ></Route>
                   <Route
                     path="/login"

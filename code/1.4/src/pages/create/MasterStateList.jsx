@@ -62,6 +62,8 @@ export default function MasterStateList() {
   const [stateCode, setStateCode] = useState("");
   const [gstStateCode, setGSTStateCode] = useState("");
   const [formError, setFormError] = useState(null);
+  const [formErrorType, setFormErrorType] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
@@ -80,39 +82,103 @@ export default function MasterStateList() {
   }, [masterCountry]);
 
   let results = [];
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setFormError(null);
+
+  //   let _addCityFlag = false;
+
+  //   let _state = camelCase(state.trim());
+  //   let _stateCode = stateCode.trim().toUpperCase();
+  //   let _gstStateCode = gstStateCode.trim().toUpperCase();
+  //   if (currentDocid != null) {
+  //     // console.log("Updated currentDocid: ", currentDocid)
+  //     setFormError("Updated Successfully");
+  //     await updateDocument(currentDocid, {
+  //       country: country.value,
+  //       state: _state,
+  //       stateCode: _stateCode,
+  //       gstStateCode: _gstStateCode
+  //     });
+
+  //   } else if (currentDocid == null) {
+  //     let ref = projectFirestore
+  //       .collection("m_states")
+  //       .where("state", "==", _state);
+
+  //     const unsubscribe = ref.onSnapshot(async (snapshot) => {
+  //       snapshot.docs.forEach((doc) => {
+  //         results.push({ ...doc.data(), id: doc.id });
+  //       });
+
+  //       // console.log("_addCityFlag: ", _addCityFlag)
+  //       // console.log("results.length: ", results.length)
+
+  //       if (results.length === 0) {
+  //         const dataSet = {
+  //           docId: "_" + _state.split(" ").join("_").toLowerCase(),
+  //           country: country.value,
+  //           state: _state,
+  //           stateCode: _stateCode,
+  //           gstStateCode: _gstStateCode,
+  //           status: "active",
+  //         };
+  //         _addCityFlag = true
+  //         // console.log("_addCityFlag: ", _addCityFlag)
+  //         setFormError("Successfully added");
+  //         // sethandleAddSectionFlag(!handleAddSectionFlag);
+  //         // console.log("Successfully added")
+  //         // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
+  //         // await addDocument(dataSet);
+  //         const _customDocId = dataSet.docId
+  //         await addDocumentWithCustomDocId(dataSet, _customDocId);
+
+  //       } else if (results.length > 0 && _addCityFlag === false) {
+  //         setFormError("Duplicate State");
+  //         // sethandleAddSectionFlag(!handleAddSectionFlag);
+  //       }
+  //     });
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsAdding(true);
     setFormError(null);
-
-    let _addCityFlag = false;
-
-    let _state = camelCase(state.trim());
-    let _stateCode = stateCode.trim().toUpperCase();
-    let _gstStateCode = gstStateCode.trim().toUpperCase();
-    if (currentDocid != null) {
-      // console.log("Updated currentDocid: ", currentDocid)
-      setFormError("Updated Successfully");
+    setFormErrorType(null);
+  
+    const _state = camelCase(state.trim());
+    const _stateCode = stateCode.trim().toUpperCase();
+    const _gstStateCode = gstStateCode.trim().toUpperCase();
+    const collectionRef = projectFirestore.collection("m_states");
+  
+    if (currentDocid) {
+      // Update existing document
       await updateDocument(currentDocid, {
         country: country.value,
         state: _state,
         stateCode: _stateCode,
-        gstStateCode: _gstStateCode
+        gstStateCode: _gstStateCode,
       });
-
-    } else if (currentDocid == null) {
-      let ref = projectFirestore
-        .collection("m_states")
-        .where("state", "==", _state);
-
-      const unsubscribe = ref.onSnapshot(async (snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          results.push({ ...doc.data(), id: doc.id });
-        });
-
-        // console.log("_addCityFlag: ", _addCityFlag)
-        // console.log("results.length: ", results.length)
-
-        if (results.length === 0) {
+  
+      setFormErrorType("success_msg");
+      setFormError("Updated Successfully");
+      setIsAdding(false);
+  
+      // Reset error message after 5 seconds
+      setTimeout(() => {
+        setFormError(null);
+        setFormErrorType(null);
+      }, 5000);
+    } else {
+      try {
+        // Query to check for duplicate state
+        const querySnapshot = await collectionRef
+          .where("state", "==", _state)
+          .get();
+  
+        if (querySnapshot.empty) {
+          // If no duplicate exists, add new document
           const dataSet = {
             docId: "_" + _state.split(" ").join("_").toLowerCase(),
             country: country.value,
@@ -121,23 +187,49 @@ export default function MasterStateList() {
             gstStateCode: _gstStateCode,
             status: "active",
           };
-          _addCityFlag = true
-          // console.log("_addCityFlag: ", _addCityFlag)
-          setFormError("Successfully added");
-          // sethandleAddSectionFlag(!handleAddSectionFlag);
-          // console.log("Successfully added")
-          // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
-          // await addDocument(dataSet);
-          const _customDocId = dataSet.docId
+          const _customDocId = dataSet.docId;
+  
           await addDocumentWithCustomDocId(dataSet, _customDocId);
-
-        } else if (results.length > 0 && _addCityFlag === false) {
+  
+          setFormErrorType("success_msg");
+          setFormError("Successfully added");
+          setIsAdding(false);
+  
+          // Reset form and messages after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+            setState("");
+            setStateCode("");
+            setGSTStateCode("");
+          }, 5000);
+        } else {
+          // Handle duplicate case
+          setFormErrorType("error_msg");
           setFormError("Duplicate State");
-          // sethandleAddSectionFlag(!handleAddSectionFlag);
+          setIsAdding(false);
+  
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
         }
-      });
+      } catch (error) {
+        // Handle errors if any
+        setFormErrorType("error_msg");
+        setFormError("An error occurred. Please try again.");
+        setIsAdding(false);
+  
+        // Reset error message after 5 seconds
+        setTimeout(() => {
+          setFormError(null);
+          setFormErrorType(null);
+        }, 5000);
+      }
     }
   };
+  
 
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
@@ -265,7 +357,7 @@ export default function MasterStateList() {
     <>
       <div className="top_header_pg pg_bg pg_adminproperty">
         <div
-          className={`page_spacing ${masterState && masterState.length === 0 && "pg_min_height"
+          className={`page_spacing pg_min_height ${masterState && masterState.length === 0 && "pg_min_height"
             }`}
         >
           <NineDots nineDotsMenu={nineDotsMenu} />
@@ -348,25 +440,32 @@ export default function MasterStateList() {
                     </div>
                   </div>
                   {/* No need to add new state from UI, It will be added from back-end only */}
-                  <div
+                  {!handleAddSectionFlag && (
+                    <div
                     onClick={handleAddSection}
                     className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
                       }`}
                   >
-                    {handleAddSectionFlag ? "Cancel" : "Add New"}
+                    Add New
                   </div>
+                  )}
+                  
                 </div>
               </div>
-              <hr></hr>
+             
             </>
-          )}
-          <div className="vg12"></div>
+          )}         
           <div
             style={{
               overflow: handleAddSectionFlag ? "visible" : "hidden",
               // transition: "1s",
               opacity: handleAddSectionFlag ? "1" : "0",
               maxHeight: handleAddSectionFlag ? "100%" : "0",
+              background:"var(--theme-blue-bg)",
+              marginLeft: handleAddSectionFlag ? "-22px" : "0px",
+              marginRight: handleAddSectionFlag ? "-22px" : "0px",
+              marginTop: handleAddSectionFlag ? "22px" : "0px",
+              padding: handleAddSectionFlag ? "32px 22px" : "0px",   
             }}
           >
             <form>
@@ -437,40 +536,40 @@ export default function MasterStateList() {
               </div>
               <div className="vg22"></div>
 
-              {formError && (
-                <>
-                  <div className="error">{formError}</div>
-                  <div className="vg22"></div>
-                </>
-              )}
+              <div className="btn_and_msg_area">
+                {formError && (
+                  <div className={`msg_area big_font ${formErrorType}`}>
+                    {formError}
+                  </div>
+                )}
 
-              <div
-                className="d-flex align-items-center justify-content-end"
-                style={{
-                  gap: "15px",
-                }}
-              >
                 <div
-                  className="theme_btn btn_border no_icon text-center"
-                  onClick={handleAddSection}
+                  className="d-flex align-items-center justify-content-end"
                   style={{
-                    minWidth: "140px",
+                    gap: "15px",
                   }}
                 >
-                  Cancel
-                </div>
-                <div
-                  className="theme_btn btn_fill no_icon text-center"
-                  onClick={handleSubmit}
-                  style={{
-                    minWidth: "140px",
-                  }}
-                >
-                  {formBtnText}
+                  <div
+                    className="theme_btn btn_border_red no_icon text-center"
+                    onClick={handleAddSection}
+                    style={{
+                      minWidth: "140px",
+                    }}
+                  >
+                    Close
+                  </div>
+                  <div
+                    className="theme_btn btn_fill no_icon text-center"
+                    onClick={isAdding ? null : handleSubmit}
+                    style={{
+                      minWidth: "140px",
+                    }}
+                  >
+                    {isAdding ? "Processing..." : formBtnText}
+                  </div>
                 </div>
               </div>
-            </form>
-            <hr />
+            </form>          
           </div>
           {masterState && masterState.length !== 0 && (
             <>

@@ -374,7 +374,9 @@ h4.user_name input {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
+    padding-top: 22px;
 }
+
 @media (max-width: 1199px) {
     .master_data_card {     
         grid-template-columns: repeat(3, 1fr);       

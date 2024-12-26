@@ -321,7 +321,7 @@ export default function MasterSocietyList() {
     setFormError(null);
     setFormErrorType(null);
     let societyname = camelCase(society.trim());
-  
+
     if (currentDocid) {
       // Update existing document
       await updateDocument(currentDocid, {
@@ -331,25 +331,28 @@ export default function MasterSocietyList() {
         locality: locality.value,
         society: societyname,
       });
-  
+
       setFormErrorType("success_msg");
-      setFormError("Successfully updated");    
+      setFormError("Successfully updated");
       setIsAdding(false);
-  
+
       // Reset error message and locality after 5 seconds
       setTimeout(() => {
         setFormError(null);
-        setFormErrorType(null);      
+        setFormErrorType(null);
       }, 5000);
     } else {
       // Check for duplicates before adding
       const ref = projectFirestore
         .collection("m_societies")
         .where("society", "==", societyname);
-  
+
       const snapshot = await ref.get(); // Use get() for one-time query
-      const results = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  
+      const results = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
       if (results.length === 0) {
         // Add new document
         const dataSet = {
@@ -361,11 +364,11 @@ export default function MasterSocietyList() {
           status: "active",
         };
         await addDocument(dataSet);
-  
+
         setFormErrorType("success_msg");
         setFormError("Successfully added");
         setIsAdding(false);
-  
+
         // Reset error message and locality after 5 seconds
         setTimeout(() => {
           setFormError(null);
@@ -377,7 +380,7 @@ export default function MasterSocietyList() {
         setFormErrorType("error_msg");
         setFormError("Already added");
         setIsAdding(false);
-  
+
         // Reset error message after 5 seconds
         setTimeout(() => {
           setFormError(null);
@@ -386,7 +389,6 @@ export default function MasterSocietyList() {
       }
     }
   };
-  
 
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
 
@@ -522,6 +524,8 @@ export default function MasterSocietyList() {
     setviewMode(newViewMode);
   };
   // View mode end
+
+  
 
   return (
     <>
@@ -684,26 +688,31 @@ export default function MasterSocietyList() {
                       </span>
                     </div>
                   </div>
-                  <div
-                    onClick={handleAddSection}
-                    className={`theme_btn no_icon header_btn ${
-                      handleAddSectionFlag ? "btn_border" : "btn_fill"
-                    }`}
-                  >
-                    {handleAddSectionFlag ? "Cancel" : "Add New"}
-                  </div>
+                  {!handleAddSectionFlag && (
+                    <div
+                      onClick={handleAddSection}
+                      className={`theme_btn no_icon header_btn ${
+                        handleAddSectionFlag ? "btn_border" : "btn_fill"
+                      }`}
+                    >
+                      Add New
+                    </div>
+                  )}
                 </div>
-              </div>
-              <hr></hr>
+              </div>           
             </>
           )}
-          <div className="vg12"></div>
-          <div
+                    <div
             style={{
               overflow: handleAddSectionFlag ? "visible" : "hidden",
-              // transition: "1s",
-              opacity: handleAddSectionFlag ? "1" : "0",
-              maxHeight: handleAddSectionFlag ? "100%" : "0",
+            // transition: "1s",
+            opacity: handleAddSectionFlag ? "1" : "0",
+            maxHeight: handleAddSectionFlag ? "100%" : "0",
+            background:"var(--theme-blue-bg)",
+            marginLeft: handleAddSectionFlag ? "-22px" : "0px",
+            marginRight: handleAddSectionFlag ? "-22px" : "0px",
+            marginTop: handleAddSectionFlag ? "22px" : "0px",
+            padding: handleAddSectionFlag ? "32px 22px" : "0px",
             }}
           >
             <form>
@@ -837,7 +846,7 @@ export default function MasterSocietyList() {
                       minWidth: "140px",
                     }}
                   >
-                    Cancel
+                    Close
                   </div>
                   <div
                     className="theme_btn btn_fill no_icon text-center"
@@ -850,17 +859,16 @@ export default function MasterSocietyList() {
                   </div>
                 </div>
               </div>
-            </form>
-            <hr />
+            </form>           
           </div>
-          {filteredData && filteredData.length > 0 ? (
-            <div>
-              <strong> Filtered Society: {filteredData.length}</strong>
-            </div>
-          ) : (
-            "No Society available, please add new"
-          )}
-          <br></br>
+          <div className="vg22"></div>          
+            {filteredData && filteredData.length > 0 ? (
+              <div className="m18">
+                Filtered Society: <span className="text_orange">{filteredData.length}</span>
+              </div>
+            ) : (
+              "No data"
+            )}        
           {filteredData && filteredData.length !== 0 && (
             <>
               <div className="master_data_card">

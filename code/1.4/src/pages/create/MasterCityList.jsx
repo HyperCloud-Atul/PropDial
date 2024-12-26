@@ -21,27 +21,34 @@ export default function MasterCityList() {
   const { camelCase } = useCommon();
   // Scroll to the top of the page whenever the location changes end
   // const { addDocument, response: responseAddDocument } = useFirestore("m_cities");
-  const { addDocumentWithCustomDocId, response: responseAddDocument } = useFirestore("m_cities");
+  const { addDocumentWithCustomDocId, response: responseAddDocument } =
+    useFirestore("m_cities");
 
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("m_cities");
 
   //Master Data Loading Initialisation - Start
-  const { documents: masterCountry, error: masterCountryerror } =
-    useCollection("m_countries", "", ["country", "asc"]);
+  const { documents: masterCountry, error: masterCountryerror } = useCollection(
+    "m_countries",
+    "",
+    ["country", "asc"]
+  );
 
   const { documents: masterState, error: masterStateError } = useCollection(
-    "m_states", "", ["state", "asc"]
+    "m_states",
+    "",
+    ["state", "asc"]
   );
   const { documents: masterCity, error: masterCityError } = useCollection(
-    "m_cities", "", ["city", "asc"]
+    "m_cities",
+    "",
+    ["city", "asc"]
   );
   // const { documents: masterLocality, error: masterLocalityerror } =
   //   useCollection("m_localities", "", ["locality", "asc"]);
 
   // const { documents: masterSociety, error: masterSocietyError } =
   //   useCollection("m_societies", "", ["society", "asc"]);
-
 
   const [country, setCountry] = useState();
   const [state, setState] = useState();
@@ -58,6 +65,8 @@ export default function MasterCityList() {
   //Master Data Loading Initialisation - End
 
   const [formError, setFormError] = useState(null);
+  const [formErrorType, setFormErrorType] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [filter, setFilter] = useState("INDIA");
@@ -73,10 +82,11 @@ export default function MasterCityList() {
       }));
     }
 
-    handleCountryChange({ label: "INDIA", value: "_india" })
-    filteredDataNew({ label: "Andaman & Nicobar Islands", value: "_andaman_&_nicobar_islands" })
-
-
+    handleCountryChange({ label: "INDIA", value: "_india" });
+    filteredDataNew({
+      label: "Andaman & Nicobar Islands",
+      value: "_andaman_&_nicobar_islands",
+    });
   }, [masterCountry]);
 
   // Populate Master Data - Start
@@ -100,16 +110,14 @@ export default function MasterCityList() {
           }));
 
           if (stateOptions.current.length === 0) {
-            console.log("No State")
-            handleStateChange(null)
-          }
-          else {
+            console.log("No State");
+            handleStateChange(null);
+          } else {
             handleStateChange({
               label: stateOptions.current[0].label,
               value: stateOptions.current[0].value,
             });
           }
-
         } else {
           // setError('No such document exists')
         }
@@ -151,7 +159,6 @@ export default function MasterCityList() {
           //     value: cityOptions.current[0].value,
           //   });
           // }
-
         } else {
           // handleCityChange(null)
           // setError('No such document exists')
@@ -223,7 +230,7 @@ export default function MasterCityList() {
   //             value: localityData.id,
   //           }));
 
-  //           // console.log("localityOptions: ", localityOptions)           
+  //           // console.log("localityOptions: ", localityOptions)
 
   //         } else {
   //           // setError('No such document exists')
@@ -277,97 +284,176 @@ export default function MasterCityList() {
 
   let results = [];
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setFormError("");
+
+  //   let _addCityFlag = false;
+
+  //   let cityname = camelCase(city.trim());
+  //   // console.log('cityname:', cityname)
+
+  //   let isDuplicateCity = state.value + "_" + cityname.split(" ").join("_").toLowerCase()
+  //   // console.log("value: ", isDuplicateLocality)
+
+  //   // console.log("Updated currentDocid: ", currentDocid)
+  //   if (currentDocid != null) {
+  //     // console.log("Updated currentDocid: ", currentDocid)
+  //     setFormError("Updated Successfully");
+  //     // sethandleAddSectionFlag(!handleAddSectionFlag);
+  //     await updateDocument(currentDocid, {
+  //       country: country.value,
+  //       state: state.value,
+  //       city: cityname,
+  //     });
+
+  //   } else if (currentDocid == null) {
+  //     let ref = projectFirestore
+  //       .collection("m_cities")
+  //       .where("docId", "==", isDuplicateCity);
+  //     const unsubscribe = ref.onSnapshot(async (snapshot) => {
+  //       snapshot.docs.forEach((doc) => {
+  //         results.push({ ...doc.data(), id: doc.id });
+  //       });
+  //       // console.log("_addCityFlag: ", _addCityFlag)
+  //       // console.log("results.length: ", results.length)
+  //       if (results.length === 0) {
+  //         const dataSet = {
+  //           docId: state.value + "_" + cityname.split(" ").join("_").toLowerCase(),
+  //           country: country.value,
+  //           state: state.value,
+  //           city: cityname,
+  //           status: "active",
+  //         };
+
+  //         _addCityFlag = true
+  //         // console.log("_addCityFlag: ", _addCityFlag)
+  //         setFormError("Successfully added");
+  //         // sethandleAddSectionFlag(!handleAddSectionFlag);
+  //         // console.log("Successfully added")
+  //         // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
+  //         // await addDocument(dataSet);
+  //         const _customDocId = dataSet.docId
+  //         await addDocumentWithCustomDocId(dataSet, _customDocId);
+  //       } else if (results.length > 0 && _addCityFlag === false) {
+  //         // console.log("Duplicate City")
+  //         setFormError("Duplicate City");
+  //         // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
+  //         // sethandleAddSectionFlag(!handleAddSectionFlag);
+  //       }
+
+  //     });
+
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsAdding(true);
     setFormError("");
+    setFormErrorType(null);
 
-    let _addCityFlag = false;
+    const cityname = camelCase(city.trim());
+    const isDuplicateCity =
+      state.value + "_" + cityname.split(" ").join("_").toLowerCase();
 
-    let cityname = camelCase(city.trim());
-    // console.log('cityname:', cityname)
-
-
-    let isDuplicateCity = state.value + "_" + cityname.split(" ").join("_").toLowerCase()
-    // console.log("value: ", isDuplicateLocality)
-
-
-    // console.log("Updated currentDocid: ", currentDocid)
-    if (currentDocid != null) {
-      // console.log("Updated currentDocid: ", currentDocid)
-      setFormError("Updated Successfully");
-      // sethandleAddSectionFlag(!handleAddSectionFlag);
+    if (currentDocid) {
+      // Update existing document
       await updateDocument(currentDocid, {
         country: country.value,
         state: state.value,
         city: cityname,
       });
 
-    } else if (currentDocid == null) {
-      let ref = projectFirestore
-        .collection("m_cities")
-        .where("docId", "==", isDuplicateCity);
-      const unsubscribe = ref.onSnapshot(async (snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          results.push({ ...doc.data(), id: doc.id });
-        });
-        // console.log("_addCityFlag: ", _addCityFlag)
-        // console.log("results.length: ", results.length)
-        if (results.length === 0) {
+      setFormErrorType("success_msg");
+      setFormError("Updated Successfully");
+      setIsAdding(false);
+
+      // Reset messages after 5 seconds
+      setTimeout(() => {
+        setFormError(null);
+        setFormErrorType(null);
+      }, 5000);
+    } else {
+      try {
+        // Check for duplicate city
+        const ref = projectFirestore
+          .collection("m_cities")
+          .where("docId", "==", isDuplicateCity);
+        const snapshot = await ref.get();
+
+        if (snapshot.empty) {
+          // No duplicates found, add new document
           const dataSet = {
-            docId: state.value + "_" + cityname.split(" ").join("_").toLowerCase(),
+            docId: isDuplicateCity,
             country: country.value,
             state: state.value,
             city: cityname,
             status: "active",
           };
 
-          _addCityFlag = true
-          // console.log("_addCityFlag: ", _addCityFlag)
+          await addDocumentWithCustomDocId(dataSet, dataSet.docId);
+
+          setFormErrorType("success_msg");
           setFormError("Successfully added");
-          // sethandleAddSectionFlag(!handleAddSectionFlag);
-          // console.log("Successfully added")
-          // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
-          // await addDocument(dataSet);
-          const _customDocId = dataSet.docId
-          await addDocumentWithCustomDocId(dataSet, _customDocId);
-        } else if (results.length > 0 && _addCityFlag === false) {
-          // console.log("Duplicate City")
+          setIsAdding(false);
+
+          // Reset form and messages after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+            setCity("");
+          }, 5000);
+        } else {
+          // Duplicate city found
+          setFormErrorType("error_msg");
           setFormError("Duplicate City");
-          // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
-          // sethandleAddSectionFlag(!handleAddSectionFlag);
+          setIsAdding(false);
+
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
         }
+      } catch (error) {
+        // Handle any errors
+        setFormErrorType("error_msg");
+        setFormError("An error occurred. Please try again.");
+        setIsAdding(false);
 
-      });
-
+        // Reset error message after 5 seconds
+        setTimeout(() => {
+          setFormError(null);
+          setFormErrorType(null);
+        }, 5000);
+      }
     }
   };
-
 
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
     // console.log(newFilter)
     let _counryCode = "_" + newFilter.toLowerCase();
-    console.log(newFilter, _counryCode)
-    let _filterList = []
+    console.log(newFilter, _counryCode);
+    let _filterList = [];
     // if (data) {
-    _filterList = masterCity.filter(e => e.country === _counryCode)
+    _filterList = masterCity.filter((e) => e.country === _counryCode);
     // console.log('_filterList', _filterList)
-    setFilteredData(_filterList)
+    setFilteredData(_filterList);
     // };
-  }
+  };
 
   // const changeStateFilter = (newFilter) => {
   //   setStateFilter(newFilter);
   // };
-
 
   const handleAddSection = () => {
     setCurrentDocid(null);
     setFormError("");
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Add");
-    setCountry({ label: "INDIA", value: "_india" })
-    setState(null)
+    setCountry({ label: "INDIA", value: "_india" });
+    // setState(null);
     setCity("");
   };
 
@@ -388,26 +474,30 @@ export default function MasterCityList() {
     setFormError(null);
 
     // console.log("country id: ", doccountry)
-    const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
+    const countryname = (
+      masterCountry && masterCountry.find((e) => e.id === doccountry)
+    ).country;
     // console.log("country name: ", countryname)
-    const statename = (masterState && masterState.find((e) => e.id === docstate)).state
+    const statename = (
+      masterState && masterState.find((e) => e.id === docstate)
+    ).state;
 
     setCountry({ label: countryname, value: doccountry });
     setState({ label: statename, value: docstate });
     setCity(doccity);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update City");
-
   };
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
-    let _searchkey = e.target.value.toLowerCase()
-    let _filterList = []
-    _filterList = masterCity.filter(e => e.docId.includes(_searchkey) || e.country.includes(_searchkey))
-    console.log('_filterList', _filterList)
-    setFilteredData(_filterList)
-
+    let _searchkey = e.target.value.toLowerCase();
+    let _filterList = [];
+    _filterList = masterCity.filter(
+      (e) => e.docId.includes(_searchkey) || e.country.includes(_searchkey)
+    );
+    console.log("_filterList", _filterList);
+    setFilteredData(_filterList);
   };
 
   const [searchInput, setSearchInput] = useState("");
@@ -417,14 +507,14 @@ export default function MasterCityList() {
     // console.log("filteredDataNew data: ", data)
     let _filterList = [];
     if (data) {
-      _filterList = masterCity && masterCity.filter(e => e.state === data.value)
+      _filterList =
+        masterCity && masterCity.filter((e) => e.state === data.value);
     }
     // console.log('_filterList', _filterList)
-    setFilteredData(_filterList)
+    setFilteredData(_filterList);
     // filterData
     // console.log('filteredData', filteredData)
-
-  }
+  };
 
   // const searchCountry = (data) => {
   //   // console.log(data)
@@ -478,7 +568,6 @@ export default function MasterCityList() {
   //         isFiltered = true;
   //     }
 
-
   //     // console.log("searchInput: ", searchInput)
 
   //     let searchMatch = "";
@@ -505,8 +594,7 @@ export default function MasterCityList() {
   //   })
   //   : null;
 
-
-  // nine dots menu start  
+  // nine dots menu start
 
   const nineDotsMenu = [
     // { title: "Country's List", link: "/countrylist", icon: "public" },
@@ -529,9 +617,7 @@ export default function MasterCityList() {
   // console.log(filteredData)
   return (
     <div className="top_header_pg pg_bg pg_adminproperty">
-      <div
-        className="page_spacing pg_min_height"
-      >
+      <div className="page_spacing pg_min_height">
         <NineDots nineDotsMenu={nineDotsMenu} />
 
         {masterCity && masterCity.length === 0 && (
@@ -540,8 +626,9 @@ export default function MasterCityList() {
               No City Yet!
               <div
                 onClick={handleAddSection}
-                className={`theme_btn no_icon header_btn mt-3 ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-                  }`}
+                className={`theme_btn no_icon header_btn mt-3 ${
+                  handleAddSectionFlag ? "btn_border" : "btn_fill"
+                }`}
               >
                 {handleAddSectionFlag ? "Cancel" : "Add New"}
               </div>
@@ -569,7 +656,10 @@ export default function MasterCityList() {
             </div>
             <div className="vg12"></div>
             <div className="filters">
-              <div className="left" style={{ display: "flex", alignItems: "center" }}>
+              <div
+                className="left"
+                style={{ display: "flex", alignItems: "center" }}
+              >
                 <div className="rt_global_search search_field">
                   <input
                     placeholder="Search"
@@ -587,9 +677,8 @@ export default function MasterCityList() {
                     // onChange={(option) => setState(option)}
                     // defaultValue={label:'DELHI', value:'_delhi' }
                     onChange={(e) => {
-                      setState(e)
-                      filteredDataNew(e)
-
+                      setState(e);
+                      filteredDataNew(e);
                     }}
                     // changeFilter={changeFilter}
                     options={stateOptions.current}
@@ -600,12 +689,11 @@ export default function MasterCityList() {
                         outline: "none",
                         background: "#eee",
                         borderBottom: " 1px solid var(--theme-blue)",
-                        width: '300px',
+                        width: "300px",
                       }),
                     }}
                   />
                 </div>
-
               </div>
               <div className="right">
                 <div className="new_inline">
@@ -619,8 +707,9 @@ export default function MasterCityList() {
                 </div>
                 <div className="button_filter diff_views">
                   <div
-                    className={`bf_single ${viewMode === "card_view" ? "active" : ""
-                      }`}
+                    className={`bf_single ${
+                      viewMode === "card_view" ? "active" : ""
+                    }`}
                     onClick={() => handleModeChange("card_view")}
                   >
                     <span className="material-symbols-outlined">
@@ -628,36 +717,41 @@ export default function MasterCityList() {
                     </span>
                   </div>
                   <div
-                    className={`bf_single ${viewMode === "table_view" ? "active" : ""
-                      }`}
+                    className={`bf_single ${
+                      viewMode === "table_view" ? "active" : ""
+                    }`}
                     onClick={() => handleModeChange("table_view")}
                   >
                     <span className="material-symbols-outlined">view_list</span>
                   </div>
                 </div>
-                <div
-                  onClick={handleAddSection}
-                  className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                {!handleAddSectionFlag && (
+                  <div
+                    onClick={handleAddSection}
+                    className={`theme_btn no_icon header_btn ${
+                      handleAddSectionFlag ? "btn_border" : "btn_fill"
                     }`}
-                >
-                  {handleAddSectionFlag ? "Cancel" : "Add New"}
-                </div>
+                  >
+                    Add New
+                  </div>
+                )}
               </div>
-            </div>
-
-            <hr></hr>
+            </div>         
           </>
-        )}
-        <div className="vg12"></div>
+        )}     
         <div
           style={{
             overflow: handleAddSectionFlag ? "visible" : "hidden",
             // transition: "1s",
             opacity: handleAddSectionFlag ? "1" : "0",
             maxHeight: handleAddSectionFlag ? "100%" : "0",
+            background:"var(--theme-blue-bg)",
+            marginLeft: handleAddSectionFlag ? "-22px" : "0px",
+            marginRight: handleAddSectionFlag ? "-22px" : "0px",
+            marginTop: handleAddSectionFlag ? "22px" : "0px",
+            padding: handleAddSectionFlag ? "32px 22px" : "0px", 
           }}
         >
-
           <div className="row row_gap form_full">
             <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
@@ -719,51 +813,52 @@ export default function MasterCityList() {
           </div>
           <div className="vg22"></div>
 
-          {formError && (
-            <>
-              <div className="error">{formError}</div>
-              <div className="vg22"></div>
-            </>
-          )}
+          <div className="btn_and_msg_area">
+                {formError && (
+                  <div className={`msg_area big_font ${formErrorType}`}>
+                    {formError}
+                  </div>
+                )}
 
-          <div
-            className="d-flex align-items-center justify-content-end"
-            style={{
-              gap: "15px",
-            }}
-          >
-            <div
-              className="theme_btn btn_border no_icon text-center"
-              onClick={handleAddSection}
-              style={{
-                minWidth: "140px",
-              }}
-            >
-              Cancel
-            </div>
-            <div
-              className="theme_btn btn_fill no_icon text-center"
-              onClick={(e) => handleSubmit(e)}
-              style={{
-                minWidth: "140px",
-              }}
-            >
-              {formBtnText}
-            </div>
-          </div>
+                <div
+                  className="d-flex align-items-center justify-content-end"
+                  style={{
+                    gap: "15px",
+                  }}
+                >
+                  <div
+                    className="theme_btn btn_border_red no_icon text-center"
+                    onClick={handleAddSection}
+                    style={{
+                      minWidth: "140px",
+                    }}
+                  >
+                    Close
+                  </div>
+                  <div
+                    className="theme_btn btn_fill no_icon text-center"
+                    onClick={isAdding ? null : handleSubmit}
+                    style={{
+                      minWidth: "140px",
+                    }}
+                  >
+                    {isAdding ? "Processing..." : formBtnText}
+                  </div>
+                </div>
+              </div>
 
-          <hr />
+        
         </div>
         {masterCity && masterCity.length !== 0 && (
-          <>
-            {/* {formError && (
-              <>
-                <div className="error">{formError}</div>
-                <div className="vg22"></div>
-              </>
-            )} */}
-            {filteredData && filteredData.length > 0 ? <div><strong> Filtered City: {filteredData.length}</strong></div> : ""}
-            <br></br>
+          <>  
+          <div className="vg22"></div>          
+            {filteredData && filteredData.length > 0 ? (
+              <div className="m18">
+                Filtered City: <span className="text_orange">{filteredData.length}</span>
+              </div>
+            ) : (
+              ""
+            )}         
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>
@@ -825,11 +920,23 @@ export default function MasterCityList() {
                                   }}
                                 >
                                   {/* {camelCase(data.state)}, */}
-                                  {(masterState && masterState.find((e) => e.id === data.state)).state}
-                                  {" "}
-                                  {(masterCountry && masterCountry.find((e) => e.id === data.country)).country}
+                                  {
+                                    (
+                                      masterState &&
+                                      masterState.find(
+                                        (e) => e.id === data.state
+                                      )
+                                    ).state
+                                  }{" "}
+                                  {
+                                    (
+                                      masterCountry &&
+                                      masterCountry.find(
+                                        (e) => e.id === data.country
+                                      )
+                                    ).country
+                                  }
                                   {/* {data.country} */}
-
                                 </small>
                               </div>
                               <div
@@ -875,7 +982,9 @@ export default function MasterCityList() {
               )}
             </div>
             {viewMode === "table_view" && (
-              <>{filteredData && <MasterCityTable filterData={filteredData} />}</>
+              <>
+                {filteredData && <MasterCityTable filterData={filteredData} />}
+              </>
             )}
           </>
         )}
