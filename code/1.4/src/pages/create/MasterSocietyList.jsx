@@ -50,7 +50,7 @@ export default function MasterSocietyList() {
     ["society", "asc"]
   );
 
-  const [country, setCountry] = useState();
+  const [country, setCountry] = useState({ label: "INDIA", value: "_india" });
   const [state, setState] = useState();
   const [city, setCity] = useState();
   const [locality, setLocality] = useState();
@@ -84,6 +84,14 @@ export default function MasterSocietyList() {
       handleCountryChange({ label: "INDIA", value: "_india" });
     }
   }, [masterCountry]);
+
+  useEffect(() => {
+    // console.log('in useeffect')
+    if (masterSociety) {
+
+      filteredDataNew(locality)
+    }
+  }, [masterSociety]);
 
   // Populate Master Data - Start
   //Country select onchange
@@ -220,6 +228,8 @@ export default function MasterSocietyList() {
               label: societyData.data().society,
               value: societyData.id,
             }));
+
+            filteredDataNew(option)
           } else {
             // handleSocietyChange(null)
           }
@@ -320,73 +330,121 @@ export default function MasterSocietyList() {
     setIsAdding(true);
     setFormError(null);
     setFormErrorType(null);
-    let societyname = camelCase(society.trim());
 
-    if (currentDocid) {
-      // Update existing document
-      await updateDocument(currentDocid, {
-        country: country.value,
-        state: state.value,
-        city: city.value,
-        locality: locality.value,
-        society: societyname,
-      });
+    if (society) {
 
-      setFormErrorType("success_msg");
-      setFormError("Successfully updated");
+      let societyname = camelCase(society.trim());
+
+      let locality_docid = locality.value;
+
+      console.log("Locality id: ", locality_docid)
+
+      if (currentDocid) {
+        // Check for duplicates before adding
+        const ref = projectFirestore
+          .collection("m_societies")
+          .where("locality", "==", locality_docid)
+          .where("society", "==", societyname);
+
+        const snapshot = await ref.get(); // Use get() for one-time query
+
+        if (snapshot.empty) {
+          // Update existing document
+          await updateDocument(currentDocid, {
+            country: country.value,
+            state: state.value,
+            city: city.value,
+            locality: locality.value,
+            society: societyname,
+          });
+
+          setFormErrorType("success_msg");
+          setFormError("Successfully updated");
+          setIsAdding(false);
+
+          // Reset error message and locality after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
+        else {
+          // Handle duplicate case
+          setFormErrorType("error_msg");
+          setFormError("Already added");
+          setIsAdding(false);
+
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
+      } else {
+        // Check for duplicates before adding
+        // const ref = projectFirestore
+        //   .collection("m_societies")
+        //   .where("society", "==", societyname);
+
+        const ref = projectFirestore
+          .collection("m_societies")
+          .where("locality", "==", locality_docid)
+          .where("society", "==", societyname);
+
+        const snapshot = await ref.get(); // Use get() for one-time query
+        const results = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+
+        if (results.length === 0) {
+          // Add new document
+          const dataSet = {
+            country: country.value,
+            state: state.value,
+            city: city.value,
+            locality: locality.value,
+            society: societyname,
+            status: "active",
+          };
+          await addDocument(dataSet);
+
+          setFormErrorType("success_msg");
+          setFormError("Successfully added");
+          setIsAdding(false);
+
+          // Reset error message and locality after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+            setSociety("");
+          }, 5000);
+        } else {
+          // Handle duplicate case
+          setFormErrorType("error_msg");
+          setFormError("Already added");
+          setIsAdding(false);
+
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
+      }
+    }
+    else {
+      // Handle blank case
+      setFormErrorType("error_msg");
+      setFormError("Society should not be blank ");
       setIsAdding(false);
 
-      // Reset error message and locality after 5 seconds
+      // Reset error message after 5 seconds
       setTimeout(() => {
         setFormError(null);
         setFormErrorType(null);
       }, 5000);
-    } else {
-      // Check for duplicates before adding
-      const ref = projectFirestore
-        .collection("m_societies")
-        .where("society", "==", societyname);
 
-      const snapshot = await ref.get(); // Use get() for one-time query
-      const results = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-
-      if (results.length === 0) {
-        // Add new document
-        const dataSet = {
-          country: country.value,
-          state: state.value,
-          city: city.value,
-          locality: locality.value,
-          society: societyname,
-          status: "active",
-        };
-        await addDocument(dataSet);
-
-        setFormErrorType("success_msg");
-        setFormError("Successfully added");
-        setIsAdding(false);
-
-        // Reset error message and locality after 5 seconds
-        setTimeout(() => {
-          setFormError(null);
-          setFormErrorType(null);
-          setSociety("");
-        }, 5000);
-      } else {
-        // Handle duplicate case
-        setFormErrorType("error_msg");
-        setFormError("Already added");
-        setIsAdding(false);
-
-        // Reset error message after 5 seconds
-        setTimeout(() => {
-          setFormError(null);
-          setFormErrorType(null);
-        }, 5000);
-      }
     }
   };
 
@@ -525,15 +583,14 @@ export default function MasterSocietyList() {
   };
   // View mode end
 
-  
+
 
   return (
     <>
       <div className="top_header_pg pg_bg pg_adminproperty">
         <div
-          className={`page_spacing ${
-            masterSociety && masterSociety.length === 0 && "pg_min_height"
-          }`}
+          className={`page_spacing ${masterSociety && masterSociety.length === 0 && "pg_min_height"
+            }`}
         >
           <NineDots
             nineDotsMenu={
@@ -549,9 +606,8 @@ export default function MasterSocietyList() {
                 No Society Yet!
                 <div
                   onClick={handleAddSection}
-                  className={`theme_btn no_icon header_btn mt-3 ${
-                    handleAddSectionFlag ? "btn_border" : "btn_fill"
-                  }`}
+                  className={`theme_btn no_icon header_btn mt-3 ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                    }`}
                 >
                   {handleAddSectionFlag ? "Cancel" : "Add New"}
                 </div>
@@ -668,9 +724,8 @@ export default function MasterSocietyList() {
                 <div className="right">
                   <div className="button_filter diff_views">
                     <div
-                      className={`bf_single ${
-                        viewMode === "card_view" ? "active" : ""
-                      }`}
+                      className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                        }`}
                       onClick={() => handleModeChange("card_view")}
                     >
                       <span className="material-symbols-outlined">
@@ -678,9 +733,8 @@ export default function MasterSocietyList() {
                       </span>
                     </div>
                     <div
-                      className={`bf_single ${
-                        viewMode === "table_view" ? "active" : ""
-                      }`}
+                      className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                        }`}
                       onClick={() => handleModeChange("table_view")}
                     >
                       <span className="material-symbols-outlined">
@@ -691,28 +745,27 @@ export default function MasterSocietyList() {
                   {!handleAddSectionFlag && (
                     <div
                       onClick={handleAddSection}
-                      className={`theme_btn no_icon header_btn ${
-                        handleAddSectionFlag ? "btn_border" : "btn_fill"
-                      }`}
+                      className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                        }`}
                     >
                       Add New
                     </div>
                   )}
                 </div>
-              </div>           
+              </div>
             </>
           )}
-                    <div
+          <div
             style={{
               overflow: handleAddSectionFlag ? "visible" : "hidden",
-            // transition: "1s",
-            opacity: handleAddSectionFlag ? "1" : "0",
-            maxHeight: handleAddSectionFlag ? "100%" : "0",
-            background:"var(--theme-blue-bg)",
-            marginLeft: handleAddSectionFlag ? "-22px" : "0px",
-            marginRight: handleAddSectionFlag ? "-22px" : "0px",
-            marginTop: handleAddSectionFlag ? "22px" : "0px",
-            padding: handleAddSectionFlag ? "32px 22px" : "0px",
+              // transition: "1s",
+              opacity: handleAddSectionFlag ? "1" : "0",
+              maxHeight: handleAddSectionFlag ? "100%" : "0",
+              background: "var(--theme-blue-bg)",
+              marginLeft: handleAddSectionFlag ? "-22px" : "0px",
+              marginRight: handleAddSectionFlag ? "-22px" : "0px",
+              marginTop: handleAddSectionFlag ? "22px" : "0px",
+              padding: handleAddSectionFlag ? "32px 22px" : "0px",
             }}
           >
             <form>
@@ -859,16 +912,16 @@ export default function MasterSocietyList() {
                   </div>
                 </div>
               </div>
-            </form>           
+            </form>
           </div>
-          <div className="vg22"></div>          
-            {filteredData && filteredData.length > 0 ? (
-              <div className="m18">
-                Filtered Society: <span className="text_orange">{filteredData.length}</span>
-              </div>
-            ) : (
-              "No data"
-            )}        
+          <div className="vg22"></div>
+          {filteredData && filteredData.length > 0 ? (
+            <div className="m18">
+              Filtered Society: <span className="text_orange">{filteredData.length}</span>
+            </div>
+          ) : (
+            "No data"
+          )}
           {filteredData && filteredData.length !== 0 && (
             <>
               <div className="master_data_card">

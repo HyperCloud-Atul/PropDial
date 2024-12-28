@@ -75,10 +75,17 @@ export default function MasterLocalityList() {
 
       // console.log("countryOptions: ", countryOptions)
       handleCountryChange({ label: "INDIA", value: "_india" })
-      filteredDataNew({ label: "Andaman & Nicobar Islands", value: "_andaman_&_nicobar_islands" })
     }
 
-  }, [masterCountry, masterLocality]);
+  }, [masterCountry]);
+
+  useEffect(() => {
+    // console.log('in useeffect')
+    if (masterLocality) {
+
+      filteredDataNew(city)
+    }
+  }, [masterLocality]);
 
   // Populate Master Data - Start
   //Country select onchange
