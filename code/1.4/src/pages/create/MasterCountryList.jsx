@@ -42,8 +42,6 @@ export default function MasterCountryList() {
 
     if (country) {
 
-
-
       const countryname = country.trim().toUpperCase();
       const collectionRef = projectFirestore.collection("m_countries");
 
@@ -138,7 +136,7 @@ export default function MasterCountryList() {
       }
     }
     else {
-      // Handle duplicate case
+      // Handle blank case
       setFormErrorType("error_msg");
       setFormError("Country should not be blank ");
       setIsAdding(false);

@@ -146,90 +146,131 @@ export default function MasterStateList() {
     setIsAdding(true);
     setFormError(null);
     setFormErrorType(null);
-  
-    const _state = camelCase(state.trim());
-    const _stateCode = stateCode.trim().toUpperCase();
-    const _gstStateCode = gstStateCode.trim().toUpperCase();
-    const collectionRef = projectFirestore.collection("m_states");
-  
-    if (currentDocid) {
-      // Update existing document
-      await updateDocument(currentDocid, {
-        country: country.value,
-        state: _state,
-        stateCode: _stateCode,
-        gstStateCode: _gstStateCode,
-      });
-  
-      setFormErrorType("success_msg");
-      setFormError("Updated Successfully");
-      setIsAdding(false);
-  
-      // Reset error message after 5 seconds
-      setTimeout(() => {
-        setFormError(null);
-        setFormErrorType(null);
-      }, 5000);
-    } else {
-      try {
-        // Query to check for duplicate state
+
+    if (state) {
+
+      const _state = camelCase(state.trim());
+      const _stateCode = stateCode.trim().toUpperCase();
+      const _gstStateCode = gstStateCode.trim().toUpperCase();
+      const collectionRef = projectFirestore.collection("m_states");
+
+
+      if (currentDocid) {
+        // Query to check if country already exists
+
         const querySnapshot = await collectionRef
           .where("state", "==", _state)
           .get();
-  
+
         if (querySnapshot.empty) {
-          // If no duplicate exists, add new document
-          const dataSet = {
-            docId: "_" + _state.split(" ").join("_").toLowerCase(),
+
+          // Update existing document
+          await updateDocument(currentDocid, {
             country: country.value,
             state: _state,
             stateCode: _stateCode,
             gstStateCode: _gstStateCode,
-            status: "active",
-          };
-          const _customDocId = dataSet.docId;
-  
-          await addDocumentWithCustomDocId(dataSet, _customDocId);
-  
+          });
+
           setFormErrorType("success_msg");
-          setFormError("Successfully added");
+          setFormError("Updated Successfully");
           setIsAdding(false);
-  
-          // Reset form and messages after 5 seconds
+
+          // Reset error message after 5 seconds
           setTimeout(() => {
             setFormError(null);
             setFormErrorType(null);
-            setState("");
-            setStateCode("");
-            setGSTStateCode("");
           }, 5000);
-        } else {
+
+        }
+        else {
           // Handle duplicate case
           setFormErrorType("error_msg");
-          setFormError("Duplicate State");
+          setFormError("Already added");
           setIsAdding(false);
-  
+
           // Reset error message after 5 seconds
           setTimeout(() => {
             setFormError(null);
             setFormErrorType(null);
           }, 5000);
         }
-      } catch (error) {
-        // Handle errors if any
-        setFormErrorType("error_msg");
-        setFormError("An error occurred. Please try again.");
-        setIsAdding(false);
-  
-        // Reset error message after 5 seconds
-        setTimeout(() => {
-          setFormError(null);
-          setFormErrorType(null);
-        }, 5000);
+
+      } else {
+        try {
+          // Query to check for duplicate state
+          const querySnapshot = await collectionRef
+            .where("state", "==", _state)
+            .get();
+
+          if (querySnapshot.empty) {
+            // If no duplicate exists, add new document
+            const dataSet = {
+              docId: "_" + _state.split(" ").join("_").toLowerCase(),
+              country: country.value,
+              state: _state,
+              stateCode: _stateCode,
+              gstStateCode: _gstStateCode,
+              status: "active",
+            };
+            const _customDocId = dataSet.docId;
+
+            await addDocumentWithCustomDocId(dataSet, _customDocId);
+
+            setFormErrorType("success_msg");
+            setFormError("Successfully added");
+            setIsAdding(false);
+
+            // Reset form and messages after 5 seconds
+            setTimeout(() => {
+              setFormError(null);
+              setFormErrorType(null);
+              setState("");
+              setStateCode("");
+              setGSTStateCode("");
+            }, 5000);
+          } else {
+            // Handle duplicate case
+            setFormErrorType("error_msg");
+            setFormError("Duplicate State");
+            setIsAdding(false);
+
+            // Reset error message after 5 seconds
+            setTimeout(() => {
+              setFormError(null);
+              setFormErrorType(null);
+            }, 5000);
+          }
+        } catch (error) {
+          // Handle errors if any
+          setFormErrorType("error_msg");
+          setFormError("An error occurred. Please try again.");
+          setIsAdding(false);
+
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
       }
     }
+    else {
+      // Handle blank case
+      setFormErrorType("error_msg");
+      setFormError("State should not be blank ");
+      setIsAdding(false);
+
+      // Reset error message after 5 seconds
+      setTimeout(() => {
+        setFormError(null);
+        setFormErrorType(null);
+      }, 5000);
+    }
+
+
   };
-  
+
 
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
@@ -442,30 +483,30 @@ export default function MasterStateList() {
                   {/* No need to add new state from UI, It will be added from back-end only */}
                   {!handleAddSectionFlag && (
                     <div
-                    onClick={handleAddSection}
-                    className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-                      }`}
-                  >
-                    Add New
-                  </div>
+                      onClick={handleAddSection}
+                      className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                        }`}
+                    >
+                      Add New
+                    </div>
                   )}
-                  
+
                 </div>
               </div>
-             
+
             </>
-          )}         
+          )}
           <div
             style={{
               overflow: handleAddSectionFlag ? "visible" : "hidden",
               // transition: "1s",
               opacity: handleAddSectionFlag ? "1" : "0",
               maxHeight: handleAddSectionFlag ? "100%" : "0",
-              background:"var(--theme-blue-bg)",
+              background: "var(--theme-blue-bg)",
               marginLeft: handleAddSectionFlag ? "-22px" : "0px",
               marginRight: handleAddSectionFlag ? "-22px" : "0px",
               marginTop: handleAddSectionFlag ? "22px" : "0px",
-              padding: handleAddSectionFlag ? "32px 22px" : "0px",   
+              padding: handleAddSectionFlag ? "32px 22px" : "0px",
             }}
           >
             <form>
@@ -569,7 +610,7 @@ export default function MasterStateList() {
                   </div>
                 </div>
               </div>
-            </form>          
+            </form>
           </div>
           {masterState && masterState.length !== 0 && (
             <>
