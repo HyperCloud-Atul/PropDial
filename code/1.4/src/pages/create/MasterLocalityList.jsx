@@ -78,7 +78,7 @@ export default function MasterLocalityList() {
       filteredDataNew({ label: "Andaman & Nicobar Islands", value: "_andaman_&_nicobar_islands" })
     }
 
-  }, [masterCountry]);
+  }, [masterCountry, masterLocality]);
 
   // Populate Master Data - Start
   //Country select onchange
@@ -297,6 +297,7 @@ export default function MasterLocalityList() {
 
       let localityname = camelCase(locality.trim());
       let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase();
+      console.log("Locality doc id: ", isDuplicateLocality)
 
       if (currentDocid) {
 
