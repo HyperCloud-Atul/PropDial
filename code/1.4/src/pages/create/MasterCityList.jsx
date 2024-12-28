@@ -352,29 +352,13 @@ export default function MasterCityList() {
     setFormError("");
     setFormErrorType(null);
 
-    const cityname = camelCase(city.trim());
-    const isDuplicateCity =
-      state.value + "_" + cityname.split(" ").join("_").toLowerCase();
+    if (city) {
 
-    if (currentDocid) {
-      // Update existing document
-      await updateDocument(currentDocid, {
-        country: country.value,
-        state: state.value,
-        city: cityname,
-      });
+      const cityname = camelCase(city.trim());
+      const isDuplicateCity =
+        state.value + "_" + cityname.split(" ").join("_").toLowerCase();
 
-      setFormErrorType("success_msg");
-      setFormError("Updated Successfully");
-      setIsAdding(false);
-
-      // Reset messages after 5 seconds
-      setTimeout(() => {
-        setFormError(null);
-        setFormErrorType(null);
-      }, 5000);
-    } else {
-      try {
+      if (currentDocid) {
         // Check for duplicate city
         const ref = projectFirestore
           .collection("m_cities")
@@ -382,31 +366,28 @@ export default function MasterCityList() {
         const snapshot = await ref.get();
 
         if (snapshot.empty) {
-          // No duplicates found, add new document
-          const dataSet = {
-            docId: isDuplicateCity,
+
+          // Update existing document
+          await updateDocument(currentDocid, {
             country: country.value,
             state: state.value,
             city: cityname,
-            status: "active",
-          };
-
-          await addDocumentWithCustomDocId(dataSet, dataSet.docId);
+          });
 
           setFormErrorType("success_msg");
-          setFormError("Successfully added");
+          setFormError("Updated Successfully");
           setIsAdding(false);
 
-          // Reset form and messages after 5 seconds
+          // Reset messages after 5 seconds
           setTimeout(() => {
             setFormError(null);
             setFormErrorType(null);
-            setCity("");
           }, 5000);
-        } else {
-          // Duplicate city found
+        }
+        else {
+          // Handle duplicate case
           setFormErrorType("error_msg");
-          setFormError("Duplicate City");
+          setFormError("Already added");
           setIsAdding(false);
 
           // Reset error message after 5 seconds
@@ -415,18 +396,73 @@ export default function MasterCityList() {
             setFormErrorType(null);
           }, 5000);
         }
-      } catch (error) {
-        // Handle any errors
-        setFormErrorType("error_msg");
-        setFormError("An error occurred. Please try again.");
-        setIsAdding(false);
+      } else {
+        try {
+          // Check for duplicate city
+          const ref = projectFirestore
+            .collection("m_cities")
+            .where("docId", "==", isDuplicateCity);
+          const snapshot = await ref.get();
 
-        // Reset error message after 5 seconds
-        setTimeout(() => {
-          setFormError(null);
-          setFormErrorType(null);
-        }, 5000);
+          if (snapshot.empty) {
+            // No duplicates found, add new document
+            const dataSet = {
+              docId: isDuplicateCity,
+              country: country.value,
+              state: state.value,
+              city: cityname,
+              status: "active",
+            };
+
+            await addDocumentWithCustomDocId(dataSet, dataSet.docId);
+
+            setFormErrorType("success_msg");
+            setFormError("Successfully added");
+            setIsAdding(false);
+
+            // Reset form and messages after 5 seconds
+            setTimeout(() => {
+              setFormError(null);
+              setFormErrorType(null);
+              setCity("");
+            }, 5000);
+          } else {
+            // Duplicate city found
+            setFormErrorType("error_msg");
+            setFormError("Duplicate City");
+            setIsAdding(false);
+
+            // Reset error message after 5 seconds
+            setTimeout(() => {
+              setFormError(null);
+              setFormErrorType(null);
+            }, 5000);
+          }
+        } catch (error) {
+          // Handle any errors
+          setFormErrorType("error_msg");
+          setFormError("An error occurred. Please try again.");
+          setIsAdding(false);
+
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
       }
+    }
+    else {
+      // Handle blank case
+      setFormErrorType("error_msg");
+      setFormError("City should not be blank ");
+      setIsAdding(false);
+
+      // Reset error message after 5 seconds
+      setTimeout(() => {
+        setFormError(null);
+        setFormErrorType(null);
+      }, 5000);
     }
   };
 
@@ -626,9 +662,8 @@ export default function MasterCityList() {
               No City Yet!
               <div
                 onClick={handleAddSection}
-                className={`theme_btn no_icon header_btn mt-3 ${
-                  handleAddSectionFlag ? "btn_border" : "btn_fill"
-                }`}
+                className={`theme_btn no_icon header_btn mt-3 ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                  }`}
               >
                 {handleAddSectionFlag ? "Cancel" : "Add New"}
               </div>
@@ -707,9 +742,8 @@ export default function MasterCityList() {
                 </div>
                 <div className="button_filter diff_views">
                   <div
-                    className={`bf_single ${
-                      viewMode === "card_view" ? "active" : ""
-                    }`}
+                    className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                      }`}
                     onClick={() => handleModeChange("card_view")}
                   >
                     <span className="material-symbols-outlined">
@@ -717,9 +751,8 @@ export default function MasterCityList() {
                     </span>
                   </div>
                   <div
-                    className={`bf_single ${
-                      viewMode === "table_view" ? "active" : ""
-                    }`}
+                    className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                      }`}
                     onClick={() => handleModeChange("table_view")}
                   >
                     <span className="material-symbols-outlined">view_list</span>
@@ -728,28 +761,27 @@ export default function MasterCityList() {
                 {!handleAddSectionFlag && (
                   <div
                     onClick={handleAddSection}
-                    className={`theme_btn no_icon header_btn ${
-                      handleAddSectionFlag ? "btn_border" : "btn_fill"
-                    }`}
+                    className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                      }`}
                   >
                     Add New
                   </div>
                 )}
               </div>
-            </div>         
+            </div>
           </>
-        )}     
+        )}
         <div
           style={{
             overflow: handleAddSectionFlag ? "visible" : "hidden",
             // transition: "1s",
             opacity: handleAddSectionFlag ? "1" : "0",
             maxHeight: handleAddSectionFlag ? "100%" : "0",
-            background:"var(--theme-blue-bg)",
+            background: "var(--theme-blue-bg)",
             marginLeft: handleAddSectionFlag ? "-22px" : "0px",
             marginRight: handleAddSectionFlag ? "-22px" : "0px",
             marginTop: handleAddSectionFlag ? "22px" : "0px",
-            padding: handleAddSectionFlag ? "32px 22px" : "0px", 
+            padding: handleAddSectionFlag ? "32px 22px" : "0px",
           }}
         >
           <div className="row row_gap form_full">
@@ -814,51 +846,51 @@ export default function MasterCityList() {
           <div className="vg22"></div>
 
           <div className="btn_and_msg_area">
-                {formError && (
-                  <div className={`msg_area big_font ${formErrorType}`}>
-                    {formError}
-                  </div>
-                )}
-
-                <div
-                  className="d-flex align-items-center justify-content-end"
-                  style={{
-                    gap: "15px",
-                  }}
-                >
-                  <div
-                    className="theme_btn btn_border_red no_icon text-center"
-                    onClick={handleAddSection}
-                    style={{
-                      minWidth: "140px",
-                    }}
-                  >
-                    Close
-                  </div>
-                  <div
-                    className="theme_btn btn_fill no_icon text-center"
-                    onClick={isAdding ? null : handleSubmit}
-                    style={{
-                      minWidth: "140px",
-                    }}
-                  >
-                    {isAdding ? "Processing..." : formBtnText}
-                  </div>
-                </div>
+            {formError && (
+              <div className={`msg_area big_font ${formErrorType}`}>
+                {formError}
               </div>
+            )}
 
-        
+            <div
+              className="d-flex align-items-center justify-content-end"
+              style={{
+                gap: "15px",
+              }}
+            >
+              <div
+                className="theme_btn btn_border_red no_icon text-center"
+                onClick={handleAddSection}
+                style={{
+                  minWidth: "140px",
+                }}
+              >
+                Close
+              </div>
+              <div
+                className="theme_btn btn_fill no_icon text-center"
+                onClick={isAdding ? null : handleSubmit}
+                style={{
+                  minWidth: "140px",
+                }}
+              >
+                {isAdding ? "Processing..." : formBtnText}
+              </div>
+            </div>
+          </div>
+
+
         </div>
         {masterCity && masterCity.length !== 0 && (
-          <>  
-          <div className="vg22"></div>          
+          <>
+            <div className="vg22"></div>
             {filteredData && filteredData.length > 0 ? (
               <div className="m18">
                 Filtered City: <span className="text_orange">{filteredData.length}</span>
               </div>
             ) : (
               ""
-            )}         
+            )}
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>
