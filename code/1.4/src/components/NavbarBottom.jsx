@@ -123,7 +123,10 @@ export default function NavbarBottom() {
           onClick={showDashboard}
         >
           <div className="menu_icon">
-            <span className="material-symbols-outlined">home</span>
+            {/* <span className="material-symbols-outlined">home</span> */}
+            <span className="menu_icon">
+              <img src="/assets/material-icons/home.svg" alt=""></img>
+            </span>
           </div>
           <div className="menu_name">{firstMenu}</div>
         </div>

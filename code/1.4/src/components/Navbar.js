@@ -247,8 +247,11 @@ export default function Navbar() {
                 className={`menu_single pointer ${location.pathname === "/" ? "active" : ""
                   }`}
               >
-                <span className="material-symbols-outlined">
+                {/* <span className="material-symbols-outlined">
                   {firstMenuIcon}
+                </span> */}
+                <span>
+                  <img src="/assets/material-icons/home.svg" alt=""></img>
                 </span>
                 {firstMenu}
               </div>
@@ -258,9 +261,13 @@ export default function Navbar() {
                 className={`menu_single pointer ${location.pathname === "/dashboard" ? "active" : ""
                   }`}
               >
-                <span className="material-symbols-outlined">
+                {/* <span className="material-symbols-outlined">
                   {secondMenuIcon}
+                </span> */}
+                <span>
+                  <img src="/assets/material-icons/dashboard.svg" alt=""></img>
                 </span>
+
                 {secondMenu}
               </div>
 
@@ -272,15 +279,23 @@ export default function Navbar() {
                   : ""
                   }`}
               >
-                <span className="material-symbols-outlined">
+                {/* <span className="material-symbols-outlined">
                   {thirdMenuIcon}
+                </span> */}
+                <span>
+                  <img src="/assets/material-icons/real_estate_agent.svg" alt=""></img>
                 </span>
+
                 {thirdMenu}
               </div>
 
               <Link to="/more-menu">
                 <div className={moreDesktopActiveClass}>
-                  <span className="material-symbols-outlined">More</span>
+                  {/* <span className="material-symbols-outlined">Settings</span> */}
+                  <span>
+                    <img src="/assets/material-icons/more.svg" alt=""></img>
+                  </span>
+
                   More
                 </div>
               </Link>
@@ -308,8 +323,11 @@ export default function Navbar() {
                     className={`menu_single login pointer ${location.pathname === "/login" ? "active" : ""
                       }`}
                   >
-                    <span className="material-symbols-outlined ba_animation">
+                    {/* <span className="material-symbols-outlined ba_animation">
                       login
+                    </span> */}
+                    <span>
+                      <img src="/assets/material-icons/login.svg" alt=""></img>
                     </span>
                     Login
                   </div>

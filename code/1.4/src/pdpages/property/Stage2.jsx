@@ -6,6 +6,7 @@ import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
 import { timestamp } from "../../firebase/config";
 import Select from "react-select";
+import { Category } from "@mui/icons-material";
 
 //Restrict to Input
 function restrictInput(event, maxLength) {
@@ -53,6 +54,7 @@ const Stage2 = (props) => {
 
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
+    Category: "",
     PropertyType: "",
     Bhk: "",
     SuperArea: "",
@@ -114,6 +116,7 @@ const Stage2 = (props) => {
         PropertyType: propertyDocument.propertyType
           ? propertyDocument.propertyType
           : "Select Property Type",
+        Category: propertyDocument.category,
         Bhk: propertyDocument.bhk ? propertyDocument.bhk : "Select BHK",
         SuperArea: propertyDocument.superArea,
         SuperAreaUnit: propertyDocument.superAreaUnit,
@@ -620,9 +623,9 @@ const Stage2 = (props) => {
       else errorMsg = errorMsg + ", Property Type";
       errorFlag = true;
     }
-    if (
-      propertyDetails.Bhk.toUpperCase() === "SELECT BHK" ||
-      propertyDetails.Bhk === ""
+    if (propertyDetails.Category !== 'Plot' &&
+      (propertyDetails.Bhk.toUpperCase() === "SELECT BHK" ||
+        propertyDetails.Bhk === "")
     ) {
       if (errorMsg === "Select BHK") errorMsg = errorMsg + "BHK";
       else errorMsg = errorMsg + ", BHK";
@@ -634,7 +637,7 @@ const Stage2 = (props) => {
     // );
     if (
       // propertyDetails && propertyDetails.NumberOfBedrooms.toUpperCase() === "SELECT BEDROOM" ||
-      Number(propertyDetails.NumberOfBedrooms) === 0
+      propertyDetails.Category !== 'Plot' && Number(propertyDetails.NumberOfBedrooms) === 0
     ) {
       if (errorMsg === "Select Bedroom") errorMsg = errorMsg + "Bedroom";
       else errorMsg = errorMsg + ", Bedroom";
@@ -642,7 +645,7 @@ const Stage2 = (props) => {
     }
     if (
       // propertyDetails && propertyDetails.NumberOfBedrooms.toUpperCase() === "SELECT BEDROOM" ||
-      propertyDetails.Furnishing === ""
+      propertyDetails.Category !== 'Plot' && propertyDetails.Furnishing === ""
     ) {
       if (errorMsg === "Select Furnishing") errorMsg = errorMsg + "Furnishing";
       else errorMsg = errorMsg + ", Furnishing";
@@ -651,7 +654,7 @@ const Stage2 = (props) => {
 
     if (
       // propertyDetails.NumberOfBathrooms.toUpperCase() === "SELECT BATHROOM" ||
-      Number(propertyDetails.NumberOfBathrooms) === 0
+      propertyDetails.Category !== 'Plot' && Number(propertyDetails.NumberOfBathrooms) === 0
     ) {
       if (errorMsg === "Select Bathroom") errorMsg = errorMsg + "Bathroom";
       else errorMsg = errorMsg + ", Bathroom";
@@ -663,9 +666,15 @@ const Stage2 = (props) => {
       (propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "") ||
       (propertyDetails.SuperArea === "0" && propertyDetails.CarpetArea === "0")
     ) {
-      if (errorMsg === "Enter Super Area or Carpet Area or both")
-        errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
-      else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
+      if (propertyDetails.Category === 'Plot') {
+        if (errorMsg === "Enter Super Area or Carpet Area or both")
+          errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
+        else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
+      } else {
+        if (errorMsg === "Enter Super Area or Carpet Area or both")
+          errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
+        else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
+      }
       errorFlag = true;
     }
     else if ((propertyDetails.SuperArea !== "" && propertyDetails.CarpetArea !== "") &&
@@ -690,7 +699,7 @@ const Stage2 = (props) => {
 
     //EV Charging Type
     if (
-      (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStatus.toLowerCase() === 'yes')
+      propertyDetails.Category !== 'Plot' && (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStatus.toLowerCase() === 'yes')
     ) {
       if (errorMsg === "Please select ")
         errorMsg = errorMsg + "EV Charging Type";
@@ -831,132 +840,315 @@ const Stage2 = (props) => {
       <div className="add_property_fields">
         <div className="row row_gap form_full">
           {/* Property Type */}
-          <div className="col-md-4">
+          <div className="col-xl-4 col-lg-6 col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Property Type</label>
               <div className="form_field_inner">
-                <select
-                  value={propertyDetails && propertyDetails.PropertyType}
-                  onChange={(e) => {
-                    setPropertyDetails({
-                      ...propertyDetails,
-                      PropertyType: e.target.value,
-                    });
-                  }}
-                >
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType.toUpperCase ===
-                        "SELECT PROPERTY TYPE"
-                        ? true
-                        : false
-                    }
-                  >
-                    Select Property Type
-                  </option>
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Multi Storey Apt"
-                        ? true
-                        : false
-                    }
-                  >
-                    Multi Storey Apt
-                  </option>
 
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Builder Floor"
-                        ? true
-                        : false
-                    }
+                {propertyDetails && propertyDetails.Category === 'Residential' ? (
+                  <select
+                    value={propertyDetails && propertyDetails.PropertyType}
+                    onChange={(e) => {
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        PropertyType: e.target.value,
+                      });
+                    }}
                   >
-                    Builder Floor
-                  </option>
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Kothi"
-                        ? true
-                        : false
-                    }
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType.toUpperCase ===
+                          "SELECT PROPERTY TYPE"
+                          ? true
+                          : false
+                      }
+                    >
+                      Select Property Type
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Multi Storey Apt"
+                          ? true
+                          : false
+                      }
+                    >
+                      Multi Storey Apt
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Builder Floor"
+                          ? true
+                          : false
+                      }
+                    >
+                      Builder Floor
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Kothi"
+                          ? true
+                          : false
+                      }
+                    >
+                      Kothi/Independent house{" "}
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Villa - Simplex"
+                          ? true
+                          : false
+                      }
+                    >
+                      Villa - Simplex
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Villa - Duplex"
+                          ? true
+                          : false
+                      }
+                    >
+                      Villa - Duplex
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Row House - Simplex"
+                          ? true
+                          : false
+                      }
+                    >
+                      Row House - Simplex
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Row House - Duplex"
+                          ? true
+                          : false
+                      }
+                    >
+                      Row House - Duplex
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Pent House - Simplex"
+                          ? true
+                          : false
+                      }
+                    >
+                      Pent House - Simplex
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Pent House - Duplex"
+                          ? true
+                          : false
+                      }
+                    >
+                      Pent House - Duplex
+                    </option>
+                  </select>
+                ) : propertyDetails && propertyDetails.Category === 'Commercial' ? (
+                  <select
+                    value={propertyDetails && propertyDetails.PropertyType}
+                    onChange={(e) => {
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        PropertyType: e.target.value,
+                      });
+                    }}
                   >
-                    Kothi/Independent house{" "}
-                  </option>
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Villa - Simplex"
-                        ? true
-                        : false
-                    }
-                  >
-                    Villa - Simplex
-                  </option>
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Villa - Duplex"
-                        ? true
-                        : false
-                    }
-                  >
-                    Villa - Duplex
-                  </option>
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Row House - Simplex"
-                        ? true
-                        : false
-                    }
-                  >
-                    Row House - Simplex
-                  </option>
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Row House - Duplex"
-                        ? true
-                        : false
-                    }
-                  >
-                    Row House - Duplex
-                  </option>
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Pent House - Simplex"
-                        ? true
-                        : false
-                    }
-                  >
-                    Pent House - Simplex
-                  </option>
-                  <option
-                    defaultValue={
-                      propertyDetails &&
-                        propertyDetails.PropertyType === "Pent House - Duplex"
-                        ? true
-                        : false
-                    }
-                  >
-                    Pent House - Duplex
-                  </option>
-                </select>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType.toUpperCase ===
+                          "SELECT PROPERTY TYPE"
+                          ? true
+                          : false
+                      }
+                    >
+                      Select Property Type
+                    </option>
+
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Land"
+                          ? true
+                          : false
+                      }
+                    >
+                      Land
+                    </option>
+
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Retail"
+                          ? true
+                          : false
+                      }
+                    >
+                      Retail
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Office"
+                          ? true
+                          : false
+                      }
+                    >
+                      Office
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Storage"
+                          ? true
+                          : false
+                      }
+                    >
+                      Storage
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Industry"
+                          ? true
+                          : false
+                      }
+                    >
+                      Industry
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Hospitality"
+                          ? true
+                          : false
+                      }
+                    >
+                      Hospitality
+                    </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                          propertyDetails.PropertyType === "Other"
+                          ? true
+                          : false
+                      }
+                    >
+                      Other
+                    </option>
+                  </select>
+                )
+
+                  :
+                  (
+                    <select
+                      value={propertyDetails && propertyDetails.PropertyType}
+                      onChange={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          PropertyType: e.target.value,
+                        });
+                      }}
+                    >
+                      <option
+                        defaultValue={
+                          propertyDetails &&
+                            propertyDetails.PropertyType.toUpperCase ===
+                            "SELECT PROPERTY TYPE"
+                            ? true
+                            : false
+                        }
+                      >
+                        Select Property Type
+                      </option>
+
+                      <option
+                        defaultValue={
+                          propertyDetails &&
+                            propertyDetails.PropertyType === "Residential"
+                            ? true
+                            : false
+                        }
+                      >
+                        Residential
+                      </option>
+                      <option
+                        defaultValue={
+                          propertyDetails &&
+                            propertyDetails.PropertyType === "Commercial"
+                            ? true
+                            : false
+                        }
+                      >
+                        Commercial
+                      </option>
+                      <option
+                        defaultValue={
+                          propertyDetails &&
+                            propertyDetails.PropertyType === "Industrial"
+                            ? true
+                            : false
+                        }
+                      >
+                        Industrial
+                      </option>
+                      <option
+                        defaultValue={
+                          propertyDetails &&
+                            propertyDetails.PropertyType === "Agriculture"
+                            ? true
+                            : false
+                        }
+                      >
+                        Agriculture
+                      </option>
+                      <option
+                        defaultValue={
+                          propertyDetails &&
+                            propertyDetails.PropertyType === "School Site"
+                            ? true
+                            : false
+                        }
+                      >
+                        School Site
+                      </option>
+                      <option
+                        defaultValue={
+                          propertyDetails &&
+                            propertyDetails.PropertyType === "Hospital Site"
+                            ? true
+                            : false
+                        }
+                      >
+                        Hospital Site
+                      </option>
+                    </select>
+                  )}
                 {/* <div className="field_icon">
-                  <span className="material-symbols-outlined">
-                    format_list_bulleted
-                  </span>
-                </div> */}
+                 <span className="material-symbols-outlined">
+                   format_list_bulleted
+                 </span>
+               </div> */}
               </div>
             </div>
           </div>
+
           {/* BHK */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">BHK</label>
               <div className="form_field_inner">
@@ -1130,9 +1322,9 @@ const Stage2 = (props) => {
                 </div> */}
               </div>
             </div>
-          </div>
+          </div>}
           {/* Furnishing */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Furnishing</label>
               <div
@@ -1234,9 +1426,9 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* Rooms */}
-          <div className="col-md-6">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-6">
             <div className="form_field label_top">
               <label htmlFor="">Rooms</label>
               <div className="increase_input_parent">
@@ -1414,9 +1606,9 @@ const Stage2 = (props) => {
                 </div> */}
               </div>
             </div>
-          </div>
+          </div>}
           {/* Additional Rooms */}
-          <div className="col-md-6">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">
                 {" "}
@@ -1806,9 +1998,9 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* Living & Dining */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Living & Dining Combined</label>
               <div className="form_field_inner">
@@ -1886,7 +2078,7 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* Living Area */}
           {propertyDetails.LivingAndDining.toLowerCase() === "no" && (
             <div className="col-md-4">
@@ -2054,7 +2246,7 @@ const Stage2 = (props) => {
           )}
 
           {/* Entrance Gallery */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Entrance Gallery</label>
               <div className="form_field_inner">
@@ -2132,9 +2324,9 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* Passages */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Passages</label>
               <div className="form_field_inner">
@@ -2212,7 +2404,7 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
 
           {/* Year of Construction */}
           <div className="col-md-4">
@@ -2513,7 +2705,7 @@ const Stage2 = (props) => {
             </div>
           </div>
           {/* Power Backup */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Power Backup</label>
               <div
@@ -2701,11 +2893,11 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* Super & Carpet Area */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
-              <label htmlFor="">Super area and Carpet area</label>
+              {propertyDetails.Category === 'Plot' ? <label htmlFor="">Area</label> : <label htmlFor="">Super area and Carpet area</label>}
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ width: "100%", padding: "5px 0 " }}>
                   <input
@@ -2727,7 +2919,7 @@ const Stage2 = (props) => {
                     value={propertyDetails && propertyDetails.SuperArea}
                   />
                 </div>
-                <div
+                {propertyDetails.Category !== 'Plot' && <div
                   style={{
                     width: "100%",
                     borderLeft: "2px solid #ddd",
@@ -2753,7 +2945,7 @@ const Stage2 = (props) => {
                     }
                     value={propertyDetails && propertyDetails.CarpetArea}
                   />
-                </div>
+                </div>}
               </div>
 
               <div style={{ width: "100%", padding: "5px 0" }}>
@@ -2915,12 +3107,62 @@ const Stage2 = (props) => {
                       </label>
                     </div>
                   </div>
+                  <div
+                    className="radio_group_single"
+                    style={{ padding: "5px 0", width: "100%" }}
+                  >
+                    <div
+                      className={
+                        propertyDetails.SuperAreaUnit === "Acre"
+                          ? "custom_radio_button radiochecked"
+                          : "custom_radio_button"
+                      }
+                    >
+                      <input
+                        type="checkbox"
+                        id="superareaunit_Acre"
+                        onClick={(e) => {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            CarpetAreaUnit: "Acre",
+                            SuperAreaUnit: "Acre",
+                          });
+                        }}
+                      />
+                      <label
+                        htmlFor="superareaunit_Acre"
+                        style={{ padding: "6px 0 10px 22px", height: "30px" }}
+                      >
+                        <div className="radio_icon">
+                          <span
+                            className="material-symbols-outlined add"
+                            style={{
+                              fontSize: "1rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            add
+                          </span>
+                          <span
+                            className="material-symbols-outlined check"
+                            style={{
+                              fontSize: "1rem",
+                              transform: "translateX(-3px)",
+                            }}
+                          >
+                            done
+                          </span>
+                        </div>
+                        <h6>Acre</h6>
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           {/* Flat Floor No */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Floor No.</label>
               <div className="plus_minus_input_wrapper">
@@ -2952,9 +3194,9 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* Total Floor */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Total Floor</label>
               <div className="plus_minus_input_wrapper">
@@ -2986,10 +3228,10 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
 
           {/* No of Apts on Floor */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Apt On Floor</label>
               <div className="plus_minus_input_wrapper">
@@ -3023,9 +3265,9 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* No of Lifts */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Lifts</label>
               <div className="plus_minus_input_wrapper">
@@ -3057,9 +3299,9 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* No of Close Car Parking */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Coverd Car Parking</label>
               <div className="plus_minus_input_wrapper">
@@ -3094,9 +3336,9 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* No of Open Car Parking */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Open Car Parking</label>
               <div className="plus_minus_input_wrapper">
@@ -3130,10 +3372,10 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
 
           {/* two wheeler parking */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">2-Wheeler Parking</label>
               <div className="form_field_inner">
@@ -3211,9 +3453,9 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* Charging Station for Electric Vehicle */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Is EV Charging Point Available? </label>
               <div className="form_field_inner">
@@ -3291,7 +3533,7 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* Private or Common Charging  Station for Electric Vehicle */}
           {propertyDetails.EVChargingPointStatus.toLowerCase() === "yes" &&
             <div className="col-md-4">
@@ -3374,6 +3616,88 @@ const Stage2 = (props) => {
               </div>
             </div>
           }
+
+          {<div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Gated Area? </label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.GatedArea === "Yes"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="gatedArea_yes"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              GatedArea: "Yes",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="gatedArea_yes"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.GatedArea === "No"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="gatedArea_no"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              GatedArea: "No",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="gatedArea_no"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>}
+
+
           {/* Lock-in Period */}
           <div className="col-md-4">
             <div className="form_field label_top">

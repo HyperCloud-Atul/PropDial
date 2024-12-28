@@ -1769,12 +1769,62 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                  propertyDetails.PropertyType === "Plot"
+                                  propertyDetails.PropertyType === "Residential"
                                   ? true
                                   : false
                               }
                             >
-                              Plot
+                              Residential
+                            </option>
+                            <option
+                              defaultValue={
+                                propertyDetails &&
+                                  propertyDetails.PropertyType === "Commercial"
+                                  ? true
+                                  : false
+                              }
+                            >
+                              Commercial
+                            </option>
+                            <option
+                              defaultValue={
+                                propertyDetails &&
+                                  propertyDetails.PropertyType === "Industrial"
+                                  ? true
+                                  : false
+                              }
+                            >
+                              Industrial
+                            </option>
+                            <option
+                              defaultValue={
+                                propertyDetails &&
+                                  propertyDetails.PropertyType === "Agriculture"
+                                  ? true
+                                  : false
+                              }
+                            >
+                              Agriculture
+                            </option>
+                            <option
+                              defaultValue={
+                                propertyDetails &&
+                                  propertyDetails.PropertyType === "School Site"
+                                  ? true
+                                  : false
+                              }
+                            >
+                              School Site
+                            </option>
+                            <option
+                              defaultValue={
+                                propertyDetails &&
+                                  propertyDetails.PropertyType === "Hospital Site"
+                                  ? true
+                                  : false
+                              }
+                            >
+                              Hospital Site
                             </option>
                           </select>
                         )}
