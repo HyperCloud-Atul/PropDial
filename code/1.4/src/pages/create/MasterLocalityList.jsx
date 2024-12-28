@@ -292,78 +292,116 @@ export default function MasterLocalityList() {
     setFormError(null);
     setFormErrorType(null);
     setIsAdding(true);
-  
-    let localityname = camelCase(locality.trim());
-    let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase();
-  
-    if (currentDocid) {
-      // Update existing document
-      await updateDocument(currentDocid, {
-        country: country.value,
-        state: state.value,
-        city: city.value,
-        locality: localityname,
-      });
-  
-      setFormErrorType("success_msg");
-      setFormError("Successfully updated");
-      setIsAdding(false);
-  
-      // Reset error message and locality after 5 seconds
-      setTimeout(() => {
-        setFormError(null);
-        setFormErrorType(null);       
-      }, 5000);
-    } else {
-      // Query Firestore for duplicate document
-      const ref = projectFirestore
-        .collection("m_localities")
-        .where("docId", "==", isDuplicateLocality);
-  
-      // Use `get()` for a one-time read instead of `onSnapshot` to avoid repeated triggers
-      const snapshot = await ref.get();
-      const results = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  
-      if (results.length === 0) {
-        // No duplicates, proceed to add
-        const dataSet = {
-          docId: city.value + "_" + localityname.split(" ").join("_").toLowerCase(),
-          country: country.value,
-          state: state.value,
-          city: city.value,
-          locality: localityname,
-          status: "active",
-        };
-  
-        const _customDocId = dataSet.docId;
-        await addDocumentWithCustomDocId(dataSet, _customDocId);
-  
-        setFormErrorType("success_msg");
-        setFormError("Successfully added");
-        setIsAdding(false);
-  
-        // Reset error message and locality after 5 seconds
-        setTimeout(() => {
-          setFormError(null);
-          setFormErrorType(null);
-          setLocality("");
-        }, 5000);
+
+    if (locality) {
+
+      let localityname = camelCase(locality.trim());
+      let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase();
+
+      if (currentDocid) {
+
+        const ref = projectFirestore
+          .collection("m_localities")
+          .where("docId", "==", isDuplicateLocality);
+
+        // Use `get()` for a one-time read instead of `onSnapshot` to avoid repeated triggers
+        const snapshot = await ref.get();
+
+        if (snapshot.empty) {
+
+          // Update existing document
+          await updateDocument(currentDocid, {
+            country: country.value,
+            state: state.value,
+            city: city.value,
+            locality: localityname,
+          });
+
+          setFormErrorType("success_msg");
+          setFormError("Successfully updated");
+          setIsAdding(false);
+
+          // Reset error message and locality after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
+        else {
+          // Handle duplicate case
+          setFormErrorType("error_msg");
+          setFormError("Already added");
+          setIsAdding(false);
+
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
       } else {
-        // Duplicate found
-        setFormErrorType("error_msg");
-        setFormError("Already added");
-        setIsAdding(false);
-  
-        // Reset error message after 5 seconds
-        setTimeout(() => {
-          setFormError(null);
-          setFormErrorType(null);
-        }, 5000);
+        // Query Firestore for duplicate document
+        const ref = projectFirestore
+          .collection("m_localities")
+          .where("docId", "==", isDuplicateLocality);
+
+        // Use `get()` for a one-time read instead of `onSnapshot` to avoid repeated triggers
+        const snapshot = await ref.get();
+        const results = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+        if (results.length === 0) {
+          // No duplicates, proceed to add
+          const dataSet = {
+            docId: city.value + "_" + localityname.split(" ").join("_").toLowerCase(),
+            country: country.value,
+            state: state.value,
+            city: city.value,
+            locality: localityname,
+            status: "active",
+          };
+
+          const _customDocId = dataSet.docId;
+          await addDocumentWithCustomDocId(dataSet, _customDocId);
+
+          setFormErrorType("success_msg");
+          setFormError("Successfully added");
+          setIsAdding(false);
+
+          // Reset error message and locality after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+            setLocality("");
+          }, 5000);
+        } else {
+          // Duplicate found
+          setFormErrorType("error_msg");
+          setFormError("Already added");
+          setIsAdding(false);
+
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
       }
     }
+    else {
+      // Handle blank case
+      setFormErrorType("error_msg");
+      setFormError("Locality should not be blank ");
+      setIsAdding(false);
+
+      // Reset error message after 5 seconds
+      setTimeout(() => {
+        setFormError(null);
+        setFormErrorType(null);
+      }, 5000);
+    }
   };
-  
-  
+
+
 
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
 
@@ -626,28 +664,28 @@ export default function MasterLocalityList() {
                   </div>
                 </div>
                 {!handleAddSectionFlag && (
-  <div
-  onClick={handleAddSection}
-  className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-    }`}
->
-  Add New
-</div>
+                  <div
+                    onClick={handleAddSection}
+                    className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
+                      }`}
+                  >
+                    Add New
+                  </div>
                 )}
-              
+
               </div>
             </div>
-            
+
           </>
         )}
-       
+
         <div
           style={{
             overflow: handleAddSectionFlag ? "visible" : "hidden",
             // transition: "1s",
             opacity: handleAddSectionFlag ? "1" : "0",
             maxHeight: handleAddSectionFlag ? "100%" : "0",
-            background:"var(--theme-blue-bg)",
+            background: "var(--theme-blue-bg)",
             marginLeft: handleAddSectionFlag ? "-22px" : "0px",
             marginRight: handleAddSectionFlag ? "-22px" : "0px",
             marginTop: handleAddSectionFlag ? "22px" : "0px",
@@ -742,52 +780,52 @@ export default function MasterLocalityList() {
             </div>
             <div className="vg22"></div>
 
-          
-            <div className="btn_and_msg_area">
-                {formError && (
-                  <div className={`msg_area big_font ${formErrorType}`}>
-                    {formError}
-                  </div>
-                )}
 
+            <div className="btn_and_msg_area">
+              {formError && (
+                <div className={`msg_area big_font ${formErrorType}`}>
+                  {formError}
+                </div>
+              )}
+
+              <div
+                className="d-flex align-items-center justify-content-end"
+                style={{
+                  gap: "15px",
+                }}
+              >
                 <div
-                  className="d-flex align-items-center justify-content-end"
+                  className="theme_btn btn_border_red no_icon text-center"
+                  onClick={handleAddSection}
                   style={{
-                    gap: "15px",
+                    minWidth: "140px",
                   }}
                 >
-                  <div
-                    className="theme_btn btn_border_red no_icon text-center"
-                    onClick={handleAddSection}
-                    style={{
-                      minWidth: "140px",
-                    }}
-                  >
-                    Close
-                  </div>
-                  <div
-                    className="theme_btn btn_fill no_icon text-center"
-                    onClick={isAdding ? null : handleSubmit}
-                    style={{
-                      minWidth: "140px",
-                    }}
-                  >
-                    {isAdding ? "Processing..." : formBtnText}
-                  </div>
+                  Close
+                </div>
+                <div
+                  className="theme_btn btn_fill no_icon text-center"
+                  onClick={isAdding ? null : handleSubmit}
+                  style={{
+                    minWidth: "140px",
+                  }}
+                >
+                  {isAdding ? "Processing..." : formBtnText}
                 </div>
               </div>
-          </form>         
+            </div>
+          </form>
         </div>
         {filteredData && filteredData.length > 0 ? (
           <>
-                      <div className="vg22"></div>          
+            <div className="vg22"></div>
             {filteredData && filteredData.length > 0 ? (
               <div className="m18">
                 Filtered Locality: <span className="text_orange">{filteredData.length}</span>
               </div>
             ) : (
               ""
-            )} 
+            )}
 
             <div className="master_data_card">
               {viewMode === "card_view" && (
@@ -905,7 +943,7 @@ export default function MasterLocalityList() {
           </>
         ) : "No Locality Available"}
 
-        
+
       </div>
 
     </div>
