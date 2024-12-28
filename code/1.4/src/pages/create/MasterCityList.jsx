@@ -87,7 +87,7 @@ export default function MasterCityList() {
       label: "Andaman & Nicobar Islands",
       value: "_andaman_&_nicobar_islands",
     });
-  }, [masterCountry]);
+  }, [masterCountry, masterCity]);
 
   // Populate Master Data - Start
   //Country select onchange
@@ -358,6 +358,8 @@ export default function MasterCityList() {
       const isDuplicateCity =
         state.value + "_" + cityname.split(" ").join("_").toLowerCase();
 
+      console.log("isDuplicateCity: ", isDuplicateCity)
+
       if (currentDocid) {
         // Check for duplicate city
         const ref = projectFirestore
@@ -369,6 +371,7 @@ export default function MasterCityList() {
 
           // Update existing document
           await updateDocument(currentDocid, {
+            docId: isDuplicateCity,
             country: country.value,
             state: state.value,
             city: cityname,
