@@ -956,31 +956,28 @@ export default function MasterCityList() {
                                 >
                                   {camelCase(data.city)}
                                 </h5>
-                                <small
+                                {masterCountry && masterState && <small
                                   style={{
                                     margin: "0",
                                     transform: "translateY(5px)",
                                   }}
                                 >
                                   {/* {camelCase(data.state)}, */}
-                                  {
-                                    (
-                                      masterState &&
-                                      masterState.find(
-                                        (e) => e.id === data.state
-                                      )
-                                    ).state
+                                  {(
+                                    masterState.length > 0 && masterState.find(
+                                      (e) => e.id === data.state
+                                    )
+                                  ).state
                                   }{" "}
                                   {
                                     (
-                                      masterCountry &&
-                                      masterCountry.find(
+                                      masterCountry.length > 0 && masterCountry.find(
                                         (e) => e.id === data.country
                                       )
                                     ).country
                                   }
                                   {/* {data.country} */}
-                                </small>
+                                </small>}
                               </div>
                               <div
                                 className=""

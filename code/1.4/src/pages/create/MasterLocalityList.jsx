@@ -304,7 +304,7 @@ export default function MasterLocalityList() {
 
       let localityname = camelCase(locality.trim());
       let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase();
-      console.log("Locality doc id: ", isDuplicateLocality)
+      // console.log("Locality doc id: ", isDuplicateLocality)
 
       if (currentDocid) {
 
@@ -470,7 +470,7 @@ export default function MasterLocalityList() {
   const [searchInput, setSearchInput] = useState("");
 
   const filteredDataNew = (data) => {
-    console.log(data)
+    // console.log(data)
     let _filterList = [];
     if (data) {
       // _filterList = masterCity.filter(e => e.state === data.value)

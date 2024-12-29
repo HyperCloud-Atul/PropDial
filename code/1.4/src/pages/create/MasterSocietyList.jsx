@@ -337,7 +337,7 @@ export default function MasterSocietyList() {
 
       let locality_docid = locality.value;
 
-      console.log("Locality id: ", locality_docid)
+      // console.log("Locality id: ", locality_docid)
 
       if (currentDocid) {
         // Check for duplicates before adding
@@ -517,7 +517,7 @@ export default function MasterSocietyList() {
   const [searchInput, setSearchInput] = useState("");
 
   const filteredDataNew = (data) => {
-    console.log(data);
+    // console.log(data);
     let _filterList = [];
     if (data) {
       // _filterList = masterCity.filter(e => e.state === data.value)
