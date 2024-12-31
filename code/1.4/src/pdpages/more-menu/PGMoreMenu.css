@@ -24,12 +24,19 @@
 .more_quick_card .icon span {
     font-size: 30px;
 }
+.more_quick_card svg {
+    height: 30px;
+    width: 30px;
+}
 .more_quick_card .mqc_single:hover .icon span {
     transition: 0.5s;
     font-variation-settings:
         'FILL' 1
 }
-
+.more_quick_card .mqc_single:hover svg {   
+       fill: 1;
+       transition: fill 0.5s; /* Smooth transition for fill color */
+}
 .mm_inner h6.title {
     padding: 15px;
     padding-bottom: 0px;
@@ -62,6 +69,16 @@ a.mm_single span {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+}
+a.mm_single svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 15px;
+}
+a.mm_single svg.mms_ra{
+    right: 15px;
+    left: inherit;
 }
 
 a.mm_single span.mms_icon {

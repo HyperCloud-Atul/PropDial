@@ -93,6 +93,9 @@ section.bottom_menu_bar {
 .b_menu_single.profile {
     width: 14%;
 }
+.b_menu_single .menu_icon{
+    margin-bottom: 5px;
+}
 .b_menu_active {
     background: var(--theme-orange);    
 }
@@ -103,6 +106,9 @@ section.bottom_menu_bar {
 .bottom_menu_bar .b_menu_active .menu_icon span{
     color: var(--white-color);
 
+}
+.bottom_menu_bar .b_menu_active svg{
+    fill: var(--white-color);
 }
 .b_menu_single.profile.b_menu_active {
     background: none;
@@ -119,6 +125,7 @@ section.bottom_menu_bar {
     justify-content: center;
     border-radius: 50%;
     margin: auto;
+    border: 2px solid;
 }
 .b_menu_single .menu_icon span {
     color: var(--theme-orange);
