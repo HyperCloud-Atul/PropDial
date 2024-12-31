@@ -701,9 +701,9 @@ const CreateProperty = () => {
           ...property,
           //other property fields
           country: "India",
-          region: (state.label === "Delhi" || state.label === "Haryana" || state.label === "Himachal Pradesh" || state.label === "Jammu and Kashmir" || state.label === "Punjab" || state.label === "Uttar Pradesh" || state.label === "Uttarakhand") ? "North India" :
-            (state.label === "Andhra Pradesh" || state.label === "Karnataka" || state.label === "Kerala" || state.label === "Tamilnadu" || state.label === "Telangana") ? "South India" :
-              (state.label === "Arunachal Pradesh" || state.label === "Assam" || state.label === "Bihar" || state.label === "Jharkhand" || state.label === "Manipur" || state.label === "Meghalaya" || state.label === "Mizoram" || state.label === "Nagaland" || state.label === "Odisha" || state.label === "Sikkim" || state.label === "Tripura") ? "East India" : "West India",
+          region: (state.label === "Delhi" || state.label === "Chandigarh" || state.label === "Haryana" || state.label === "Himachal Pradesh" || state.label === "Jammu and Kashmir" || state.label === "Punjab" || state.label === "Uttar Pradesh" || state.label === "Uttarakhand") ? "North India" :
+            (state.label === "Andhra Pradesh" || state.label === "Andaman & Nicobar Islands" || state.label === "Karnataka" || state.label === "Kerala" || state.label === "Lakshadweep" || state.label === "Tamilnadu" || state.label === "Telangana") ? "South India" :
+              (state.label === "Arunachal Pradesh" || state.label === "Assam" || state.label === "Bihar" || state.label === "Chhattisgarh" || state.label === "Jharkhand" || state.label === "Manipur" || state.label === "Meghalaya" || state.label === "Mizoram" || state.label === "Nagaland" || state.label === "Odisha" || state.label === "Sikkim" || state.label === "Tripura") ? "East India" : "West India",
           source: "Propdial",
           ownership: "",
           numberOfBedrooms: "0",
