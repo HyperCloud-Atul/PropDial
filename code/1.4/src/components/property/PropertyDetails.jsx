@@ -1197,7 +1197,7 @@ const PropertyDetails = () => {
         )}
 
       <div div className="pg_property pd_single pg_bg">
-        <div className="page_spacing full_card_width">
+        <div className="page_spacing full_card_width relative">
           {/* top search bar */}
           {!user && (
             <div className="top_search_bar">
@@ -1207,6 +1207,10 @@ const PropertyDetails = () => {
               </Link>
             </div>
           )}
+          <div className="top_right_badge">
+          {propertyDocument && propertyDocument.category}
+         
+          </div>
           <div className="property_cards">
             {propertyDocument && (
               <div className="">
