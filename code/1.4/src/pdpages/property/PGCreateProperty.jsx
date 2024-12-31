@@ -235,10 +235,10 @@ const CreateProperty = () => {
   //   useCollection("m_societies", "", ["society", "asc"]);
 
   // const [country, setCountry] = useState();
-  const [state, setState] = useState();
-  const [city, setCity] = useState();
-  const [locality, setLocality] = useState();
-  const [society, setSociety] = useState();
+  const [state, setState] = useState(null);
+  const [city, setCity] = useState(null);
+  const [locality, setLocality] = useState(null);
+  const [society, setSociety] = useState(null);
 
   let countryOptions = useRef([]);
   let stateOptions = useRef([]);
@@ -480,8 +480,8 @@ const CreateProperty = () => {
         propertyDetails.UnitNumber === null
       ) {
         if (errorMsg === "Error: Please select ")
-          errorMsg = errorMsg + propertyDetails.Category === 'Residential' ? " Unit Number" : " Plot Number";
-        else errorMsg = errorMsg + ", Unit Number";
+          errorMsg = errorMsg + propertyDetails.Category === 'Plot' ? " Plot Number" : " Unit Number";
+        else errorMsg = errorMsg + propertyDetails.Category === 'Plot' ? ", Plot Number" : ", Unit Number";
         errorFlag = true;
 
       }
@@ -582,160 +582,188 @@ const CreateProperty = () => {
           }
         }
       }
-
-      console.log("state:", state);
-      if (
-        state.label === "" ||
-        state === undefined ||
-        state.label === "Select State"
-      ) {
+      // if (
+      //   state.label === "" ||
+      //   state === null ||
+      //   state.label === "Select State"
+      // ) {
+      //   if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "State";
+      //   else errorMsg = errorMsg + ", State";
+      //   errorFlag = true;
+      // }
+      if (state === null) {
+        console.log("state is null")
         if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "State";
         else errorMsg = errorMsg + ", State";
         errorFlag = true;
       }
 
-      if (
-        city.label === "" ||
-        city === undefined ||
-        city.label === "Select City"
-      ) {
+      if (city === null) {
+        console.log("city is null")
         if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "City";
         else errorMsg = errorMsg + ", City";
         errorFlag = true;
       }
 
-      if (locality.label === "" || locality === undefined || locality === "Select Locality") {
-        if (errorMsg === "Error: Please select ")
-          errorMsg = errorMsg + "Locality";
+      if (locality === null) {
+        console.log("locality is null")
+        if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "Locality";
         else errorMsg = errorMsg + ", Locality";
         errorFlag = true;
       }
-      if (society === "" || society === undefined || society === "Select Society") {
-        if (errorMsg === "Error: Please select ")
-          errorMsg = errorMsg + "Society";
+
+      if (society === null) {
+        console.log("society is null")
+        if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "Society";
         else errorMsg = errorMsg + ", Society";
         errorFlag = true;
       }
 
-      if (errorFlag) setFormError(errorMsg);
-      else setFormError(null);
+      // if (
+      //   city.label === "" ||
+      //   city.label === undefined ||
+      //   city.label === "Select City"
+      // ) {
+      //   if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "City";
+      //   else errorMsg = errorMsg + ", City";
+      //   errorFlag = true;
+      // }
 
-      const property = {
-        package: propertyDetails.Package,
-        flag: propertyDetails.Flag,
-        category: propertyDetails.Category
-          ? propertyDetails.Category
-          : "Residential",
-        unitNumber: propertyDetails.UnitNumber
-          ? propertyDetails.UnitNumber.trim()
-          : "",
-        // purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
-        purpose: propertyDetails.Flag.toLowerCase() === "pms only" ? "PMS" : (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "pms after rent") ? "Rent" : (propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out") ? "Sale" : "RentSaleBoth",
-        propertyType: propertyDetails.PropertyType
-          ? propertyDetails.PropertyType
-          : "",
-        bhk: propertyDetails.Bhk ? propertyDetails.Bhk : "",
-        floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "1",
-        status:
-          propertyDetails.Purpose === "Rent"
-            ? "Available for Rent" : propertyDetails.Purpose === "Sale" ?
-              "Available for Sale" : propertyDetails.Purpose === "RentSaleBoth" ? "Available for Rent & Sale Both" : "PMS Only",
-        demandPriceRent: removeCommas(propertyDetails.DemandPriceRent)
-          ? removeCommas(propertyDetails.DemandPriceRent)
-          : "",
-        demandPriceSale: removeCommas(propertyDetails.DemandPriceSale)
-          ? removeCommas(propertyDetails.DemandPriceSale)
-          : "",
-        maintenanceFlag: propertyDetails.MaintenanceFlag
-          ? propertyDetails.MaintenanceFlag
-          : "",
-        maintenanceCharges: removeCommas(propertyDetails.MaintenanceCharges)
-          ? removeCommas(propertyDetails.MaintenanceCharges)
-          : "",
-        maintenanceChargesFrequency: propertyDetails.MaintenanceChargesFrequency
-          ? propertyDetails.MaintenanceChargesFrequency
-          : "NA",
-        securityDeposit: removeCommas(propertyDetails.SecurityDeposit)
-          ? removeCommas(propertyDetails.SecurityDeposit)
-          : "",
-        state: state.label,
-        city: city.label,
-        // city: camelCase(propertyDetails.City.toLowerCase().trim()),
-        locality: locality.label,
-        // locality:  camelCase(propertyDetails.Locality.toLowerCase().trim()),
-        society: society.label,
-        // society: camelCase(propertyDetails.Society.toLowerCase().trim()),
-        pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
-        propertyName: propertyDetails.UnitNumber.trim() + ", " + camelCase(propertyDetails.Society.toLowerCase().trim()),
-      };
+      // if (locality.label === "" || locality === undefined || locality === "Select Locality") {
+      //   if (errorMsg === "Error: Please select ")
+      //     errorMsg = errorMsg + "Locality";
+      //   else errorMsg = errorMsg + ", Locality";
+      //   errorFlag = true;
+      // }
+      // if (society === "" || society === undefined || society === "Select Society") {
+      //   if (errorMsg === "Error: Please select ")
+      //     errorMsg = errorMsg + "Society";
+      //   else errorMsg = errorMsg + ", Society";
+      //   errorFlag = true;
+      // }
 
-      const _newProperty = {
-        ...property,
-        //other property fields
-        country: "India",
-        region: (state.label === "Delhi" || state.label === "Haryana" || state.label === "Himachal Pradesh" || state.label === "Jammu and Kashmir" || state.label === "Punjab" || state.label === "Uttar Pradesh" || state.label === "Uttarakhand") ? "North India" :
-          (state.label === "Andhra Pradesh" || state.label === "Karnataka" || state.label === "Kerala" || state.label === "Tamilnadu" || state.label === "Telangana") ? "South India" :
-            (state.label === "Arunachal Pradesh" || state.label === "Assam" || state.label === "Bihar" || state.label === "Jharkhand" || state.label === "Manipur" || state.label === "Meghalaya" || state.label === "Mizoram" || state.label === "Nagaland" || state.label === "Odisha" || state.label === "Sikkim" || state.label === "Tripura") ? "East India" : "West India",
-        source: "Propdial",
-        ownership: "",
-        numberOfBedrooms: "0",
-        numberOfBathrooms: "0",
-        numberOfBalcony: 0,
-        numberOfKitchen: "0",
-        numberOfLivingArea: "0",
-        numberOfBasement: "0",
-        numberOfFloors: propertyDetails.FloorNo ? propertyDetails.FloorNo : "1",
-        numberOfFlatsOnFloor: "1",
-        numberOfLifts: "0",
-        numberOfOpenCarParking: "0",
-        numberOfCoveredCarParking: "0",
-        twoWheelarParking: "No",
-        evChargingPointStatus: "No",
-        evChargingPointType: "",
-        lockinPeriod: 6,
-        diningArea: "",
-        livingAndDining: "",
-        entranceGallery: "",
-        passage: "",
-        furnishing: "",
-        additionalRooms: [],
-        additionalArea: [],
-        plotArea: "",
-        superArea: "",
-        superAreaUnit: "",
-        builtupArea: "",
-        builtupAreaUnit: "",
-        carpetArea: "",
-        carpetAreaUnit: "",
-        images: [],
-        imgURL: [],
-        yearOfConstruction: "",
-        // ageOfProperty: "",
-        powerBackup: "",
-        mainDoorFacing: "",
-        overLooking: [],
-        balconyFacing: [],
-        visitingHrsFrom: "10:00",
-        visitingHrsTo: "18:00",
-        visitingDays: ["Monday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        bachlorsBoysAllowed: "",
-        bachlorsGirlsAllowed: "",
-        petsAllowed: "",
-        vegNonVeg: "",
-        propertyDescription: "",
-        ownerInstructions: "",
-        // propertyManager: user.uid,
-        // propertyCoManager: user.uid,
-        // propertySalesManager: user.uid,
-        // propertyOwner: user.uid,
-        // propertyCoOwner: user.uid,
-        // propertyPOC: user.uid,
-        // tenantList: [],
-        postedBy: "Propdial",
-        isActiveInactiveReview: "In-Review",
-        onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
-      };
-      if (!errorFlag) {
+      if (errorFlag) {
+        setFormError(errorMsg);
+      }
+      else {
+        setFormError(null);
+
+        const property = {
+          package: propertyDetails.Package,
+          flag: propertyDetails.Flag,
+          category: propertyDetails.Category
+            ? propertyDetails.Category
+            : "Residential",
+          unitNumber: propertyDetails.UnitNumber
+            ? propertyDetails.UnitNumber.trim()
+            : "",
+          // purpose: propertyDetails.Purpose ? propertyDetails.Purpose : "",
+          purpose: propertyDetails.Flag.toLowerCase() === "pms only" ? "PMS" : (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "pms after rent") ? "Rent" : (propertyDetails.Flag.toLowerCase() === "available for sale" || propertyDetails.Flag.toLowerCase() === "sold out") ? "Sale" : "RentSaleBoth",
+          propertyType: propertyDetails.PropertyType
+            ? propertyDetails.PropertyType
+            : "",
+          bhk: propertyDetails.Bhk ? propertyDetails.Bhk : "",
+          floorNo: propertyDetails.FloorNo ? propertyDetails.FloorNo : "1",
+          status:
+            propertyDetails.Purpose === "Rent"
+              ? "Available for Rent" : propertyDetails.Purpose === "Sale" ?
+                "Available for Sale" : propertyDetails.Purpose === "RentSaleBoth" ? "Available for Rent & Sale Both" : "PMS Only",
+          demandPriceRent: removeCommas(propertyDetails.DemandPriceRent)
+            ? removeCommas(propertyDetails.DemandPriceRent)
+            : "",
+          demandPriceSale: removeCommas(propertyDetails.DemandPriceSale)
+            ? removeCommas(propertyDetails.DemandPriceSale)
+            : "",
+          maintenanceFlag: propertyDetails.MaintenanceFlag
+            ? propertyDetails.MaintenanceFlag
+            : "",
+          maintenanceCharges: removeCommas(propertyDetails.MaintenanceCharges)
+            ? removeCommas(propertyDetails.MaintenanceCharges)
+            : "",
+          maintenanceChargesFrequency: propertyDetails.MaintenanceChargesFrequency
+            ? propertyDetails.MaintenanceChargesFrequency
+            : "NA",
+          securityDeposit: removeCommas(propertyDetails.SecurityDeposit)
+            ? removeCommas(propertyDetails.SecurityDeposit)
+            : "",
+          state: state.label,
+          city: city.label,
+          // city: camelCase(propertyDetails.City.toLowerCase().trim()),
+          locality: locality.label,
+          // locality:  camelCase(propertyDetails.Locality.toLowerCase().trim()),
+          society: society.label,
+          // society: camelCase(propertyDetails.Society.toLowerCase().trim()),
+          pincode: propertyDetails.Pincode ? propertyDetails.Pincode : "",
+          propertyName: propertyDetails.UnitNumber.trim() + ", " + camelCase(propertyDetails.Society.toLowerCase().trim()),
+        };
+
+        const _newProperty = {
+          ...property,
+          //other property fields
+          country: "India",
+          region: (state.label === "Delhi" || state.label === "Chandigarh" || state.label === "Haryana" || state.label === "Himachal Pradesh" || state.label === "Jammu and Kashmir" || state.label === "Punjab" || state.label === "Uttar Pradesh" || state.label === "Uttarakhand") ? "North India" :
+            (state.label === "Andhra Pradesh" || state.label === "Andaman & Nicobar Islands" || state.label === "Karnataka" || state.label === "Kerala" || state.label === "Lakshadweep" || state.label === "Tamilnadu" || state.label === "Telangana") ? "South India" :
+              (state.label === "Arunachal Pradesh" || state.label === "Assam" || state.label === "Bihar" || state.label === "Chhattisgarh" || state.label === "Jharkhand" || state.label === "Manipur" || state.label === "Meghalaya" || state.label === "Mizoram" || state.label === "Nagaland" || state.label === "Odisha" || state.label === "Sikkim" || state.label === "Tripura") ? "East India" : "West India",
+          source: "Propdial",
+          ownership: "",
+          numberOfBedrooms: "0",
+          numberOfBathrooms: "0",
+          numberOfBalcony: 0,
+          numberOfKitchen: "0",
+          numberOfLivingArea: "0",
+          numberOfBasement: "0",
+          numberOfFloors: propertyDetails.FloorNo ? propertyDetails.FloorNo : "1",
+          numberOfFlatsOnFloor: "1",
+          numberOfLifts: "0",
+          numberOfOpenCarParking: "0",
+          numberOfCoveredCarParking: "0",
+          twoWheelarParking: "No",
+          evChargingPointStatus: "No",
+          evChargingPointType: "",
+          lockinPeriod: 6,
+          diningArea: "",
+          livingAndDining: "",
+          entranceGallery: "",
+          passage: "",
+          furnishing: "",
+          additionalRooms: [],
+          additionalArea: [],
+          plotArea: "",
+          superArea: "",
+          superAreaUnit: "",
+          builtupArea: "",
+          builtupAreaUnit: "",
+          carpetArea: "",
+          carpetAreaUnit: "",
+          images: [],
+          imgURL: [],
+          yearOfConstruction: "",
+          // ageOfProperty: "",
+          powerBackup: "",
+          mainDoorFacing: "",
+          overLooking: [],
+          balconyFacing: [],
+          visitingHrsFrom: "10:00",
+          visitingHrsTo: "18:00",
+          visitingDays: ["Monday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          bachlorsBoysAllowed: "",
+          bachlorsGirlsAllowed: "",
+          petsAllowed: "",
+          vegNonVeg: "",
+          propertyDescription: "",
+          ownerInstructions: "",
+          // propertyManager: user.uid,
+          // propertyCoManager: user.uid,
+          // propertySalesManager: user.uid,
+          // propertyOwner: user.uid,
+          // propertyCoOwner: user.uid,
+          // propertyPOC: user.uid,
+          // tenantList: [],
+          postedBy: "Propdial",
+          isActiveInactiveReview: "In-Review",
+          onboardingDate: timestamp.fromDate(new Date(onboardingDate)),
+        };
+
         console.log("new property created: ");
         console.log(newProperty);
 
