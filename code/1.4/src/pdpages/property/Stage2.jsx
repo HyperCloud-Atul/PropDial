@@ -96,6 +96,7 @@ const Stage2 = (props) => {
     NumberOfCoveredCarParking: 0,
     TwoWheelarParking: "No",
     EVChargingPointStatus: "No",
+    GatedArea: "",
     EVChargingPointType: "",
     LockinPeriod: 6,
     YearOfConstruction: { label: 0, value: 0 },
@@ -256,6 +257,9 @@ const Stage2 = (props) => {
           : "No",
         EVChargingPointType: propertyDocument.evChargingPointType
           ? propertyDocument.evChargingPointType
+          : "",
+        GatedArea: propertyDocument.gatedArea
+          ? propertyDocument.gatedArea
           : "",
 
         LockinPeriod: propertyDocument.lockinPeriod
@@ -765,6 +769,10 @@ const Stage2 = (props) => {
         : "No",
       evChargingPointType: propertyDetails.EVChargingPointType
         ? propertyDetails.EVChargingPointType
+        : "",
+
+      gatedArea: propertyDetails.GatedArea
+        ? propertyDetails.GatedArea
         : "",
 
       lockinPeriod: propertyDetails.LockinPeriod
@@ -2407,7 +2415,7 @@ const Stage2 = (props) => {
           </div>}
 
           {/* Year of Construction */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Year of Constuction</label>
               <div className="form_field_inner">
@@ -2432,8 +2440,8 @@ const Stage2 = (props) => {
                 ></Select>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
+          </div>}
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Age Of Property</label>
               <div className="form_field_inner">
@@ -2456,9 +2464,9 @@ const Stage2 = (props) => {
                 />
               </div>
             </div>
-          </div>
+          </div>}
           {/* Additional Area */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">
                 {" "}
@@ -2703,7 +2711,7 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
           {/* Power Backup */}
           {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
@@ -3699,7 +3707,7 @@ const Stage2 = (props) => {
 
 
           {/* Lock-in Period */}
-          <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Lock-in Period</label>
               <div className="plus_minus_input_wrapper">
@@ -3731,7 +3739,7 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
 

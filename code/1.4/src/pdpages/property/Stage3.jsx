@@ -405,7 +405,7 @@ export default function Stage3(props) {
               {/* Main Door Facing */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
-                  <label htmlFor="">Main Door Facing</label>
+                  {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') ? <label htmlFor="">Main Door Facing</label> : <label htmlFor="">Direction Facing</label>}
                   <div className="radio_group">
                     <div className="radio_group_single">
                       <div
@@ -655,16 +655,17 @@ export default function Stage3(props) {
                         </label>
                       </div>
                     </div>
+
                   </div>
                 </div>
               </div>
 
-              {/* Balcony Facing */}
-              {propertyDocument &&
+
+
+              {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') &&
+                propertyDocument &&
                 propertyDocument.numberOfBalcony &&
-                propertyDocument.numberOfBalcony === 0 ? (
-                ""
-              ) : (
+                propertyDocument.numberOfBalcony > 0 &&
                 <div className="col-md-6">
                   <div className="form_field st-2 label_top">
                     <label htmlFor="">Balcony Facing</label>
@@ -1111,8 +1112,8 @@ export default function Stage3(props) {
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                </div>}
+
 
               {/* Overlooking */}
               <div className="col-md-12">
@@ -1791,7 +1792,7 @@ export default function Stage3(props) {
                         </label>
                       </div>
                     </div>
-                    <div className="radio_group_single">
+                    {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.SameSocietyTowerClick
@@ -1839,8 +1840,8 @@ export default function Stage3(props) {
                           <h6>Same Society Tower</h6>
                         </label>
                       </div>
-                    </div>
-                    <div className="radio_group_single">
+                    </div>}
+                    {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.OtherSocietyClick
@@ -1888,8 +1889,58 @@ export default function Stage3(props) {
                           <h6>Other Society</h6>
                         </label>
                       </div>
-                    </div>
+                    </div>}
 
+
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.Corner
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="corner_overlooking"
+                          onClick={(e) => {
+                            if (propertyDetails.Corner) {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking:
+                                  propertyDetails.OverLooking &&
+                                  propertyDetails.OverLooking.filter(
+                                    (elem) => elem !== "Corner"
+                                  ),
+                                Corner:
+                                  !propertyDetails.Corner,
+                              });
+                            } else {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                OverLooking: [
+                                  ...propertyDetails.OverLooking,
+                                  "Corner",
+                                ],
+                                Corner:
+                                  !propertyDetails.Corner,
+                              });
+                            }
+                          }}
+                        />
+                        <label htmlFor="corner_overlooking">
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                          </div>
+                          <h6>Corner</h6>
+                        </label>
+                      </div>
+                    </div>
 
                   </div>
                 </div>
@@ -2280,7 +2331,7 @@ export default function Stage3(props) {
               </div>
 
               {/* Bachelor Boys Allowed */}
-              <div className="col-md-6">
+              {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Bachelor Boys Allowed</label>
                   <div className="form_field_inner">
@@ -2358,9 +2409,9 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>}
               {/* Bachelor Girls Allowed */}
-              <div className="col-md-6">
+              {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Bachelor Girls Allowed</label>
                   <div className="form_field_inner">
@@ -2438,9 +2489,9 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>}
               {/* Pets Allowed */}
-              <div className="col-md-6">
+              {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Pets Allowed</label>
                   <div className="form_field_inner">
@@ -2518,9 +2569,9 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>}
               {/* Vegetarian / Non-Vegetarian */}
-              <div className="col-md-6">
+              {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Food Habit</label>
                   <div className="form_field_inner">
@@ -2598,7 +2649,7 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>}
 
               {/* New Property Description */}
               <div className="col-md-6">
