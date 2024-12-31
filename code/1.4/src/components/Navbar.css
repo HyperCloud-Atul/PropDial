@@ -80,11 +80,17 @@ li.main_menus {
   border-top: 2px solid var(--light-green);  
   transition: 0.4s;
 }
+.menu_single.active .menu_svg{
+  fill: var(--white-color);
+}
 .menu_single.login {
   background: var(--theme-green);
   top: 0px;
   margin-left: 20px;
   color: var(--white-color);
+}
+.menu_single.login svg{
+  fill: var(--white-color);
 }
 .menu_single.login.active{
   background: var(--theme-blue);
@@ -144,6 +150,9 @@ li.main_menus {
   color: var(--white-color);
   border-top: 2px solid var(--light-green);
 }
+.menu_single:hover .menu_svg{
+  fill: var(--white-color);
+}
 .menu_single {
   padding: 10px 15px;
   font-size: 16px;  
@@ -154,7 +163,7 @@ li.main_menus {
   border-top: 2px solid var(--white-color);
   transition: 0.4s;
 }
-.menu_single span{
+.menu_single span, .menu_single svg{
   margin-right: 5px;
 }
 

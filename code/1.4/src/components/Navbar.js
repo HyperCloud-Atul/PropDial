@@ -57,7 +57,7 @@ export default function Navbar() {
   };
 
   //Menus as per role
-  let firstMenuIcon = "home";
+  let firstMenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>;
   let firstMenu = "Home"; //This is for all user type
   let secondMenuIcon = "";
   let secondMenu = "";
@@ -67,28 +67,28 @@ export default function Navbar() {
   if (!user) {
     // firstMenuIcon = "home";
     // firstMenu = "Home";
-    secondMenuIcon = "real_estate_agent";
+    secondMenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg"  height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M760-400v-260L560-800 360-660v60h-80v-100l280-200 280 200v300h-80ZM560-800Zm20 160h40v-40h-40v40Zm-80 0h40v-40h-40v40Zm80 80h40v-40h-40v40Zm-80 0h40v-40h-40v40ZM280-220l278 76 238-74q-5-9-14.5-15.5T760-240H558q-27 0-43-2t-33-8l-93-31 22-78 81 27q17 5 40 8t68 4q0-11-6.5-21T578-354l-234-86h-64v220ZM40-80v-440h304q7 0 14 1.5t13 3.5l235 87q33 12 53.5 42t20.5 66h80q50 0 85 33t35 87v40L560-60l-280-78v58H40Zm80-80h80v-280h-80v280Z"/></svg>;
     secondMenu = "Property";
-    thirdMenuIcon = "import_contacts";
+    thirdMenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg"  height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M260-320q47 0 91.5 10.5T440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6Zm260 42q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-396q-33-14-68.5-21t-71.5-7q-47 0-93 12t-87 36v394Zm-40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740q51-30 106.5-45T700-800q52 0 102 12t96 36q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59ZM280-494Z"/></svg>;
     thirdMenu = "About Us";
   }
 
   if (user && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive")) {
-    secondMenuIcon = "dashboard";
+    secondMenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg"  height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z"/></svg>;
     secondMenu = "Dashboard";
-    thirdMenuIcon = "real_estate_agent";
+    thirdMenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg"  height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M760-400v-260L560-800 360-660v60h-80v-100l280-200 280 200v300h-80ZM560-800Zm20 160h40v-40h-40v40Zm-80 0h40v-40h-40v40Zm80 80h40v-40h-40v40Zm-80 0h40v-40h-40v40ZM280-220l278 76 238-74q-5-9-14.5-15.5T760-240H558q-27 0-43-2t-33-8l-93-31 22-78 81 27q17 5 40 8t68 4q0-11-6.5-21T578-354l-234-86h-64v220ZM40-80v-440h304q7 0 14 1.5t13 3.5l235 87q33 12 53.5 42t20.5 66h80q50 0 85 33t35 87v40L560-60l-280-78v58H40Zm80-80h80v-280h-80v280Z"/></svg>;
     thirdMenu = "Properties";
   }
   if (user && user.role === "owner") {
-    secondMenuIcon = "dashboard";
+    secondMenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg"  height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z"/></svg>;
     secondMenu = "Dashboard";
-    thirdMenuIcon = "real_estate_agent";
+    thirdMenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg"  height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M760-400v-260L560-800 360-660v60h-80v-100l280-200 280 200v300h-80ZM560-800Zm20 160h40v-40h-40v40Zm-80 0h40v-40h-40v40Zm80 80h40v-40h-40v40Zm-80 0h40v-40h-40v40ZM280-220l278 76 238-74q-5-9-14.5-15.5T760-240H558q-27 0-43-2t-33-8l-93-31 22-78 81 27q17 5 40 8t68 4q0-11-6.5-21T578-354l-234-86h-64v220ZM40-80v-440h304q7 0 14 1.5t13 3.5l235 87q33 12 53.5 42t20.5 66h80q50 0 85 33t35 87v40L560-60l-280-78v58H40Zm80-80h80v-280h-80v280Z"/></svg>;
     thirdMenu = "Contact";
   }
   if (user && user.role === "tenant") {
-    secondMenuIcon = "dashboard";
+    secondMenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z"/></svg>;
     secondMenu = "Dashboard";
-    thirdMenuIcon = "real_estate_agent";
+    thirdMenuIcon = <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg"  height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M760-400v-260L560-800 360-660v60h-80v-100l280-200 280 200v300h-80ZM560-800Zm20 160h40v-40h-40v40Zm-80 0h40v-40h-40v40Zm80 80h40v-40h-40v40Zm-80 0h40v-40h-40v40ZM280-220l278 76 238-74q-5-9-14.5-15.5T760-240H558q-27 0-43-2t-33-8l-93-31 22-78 81 27q17 5 40 8t68 4q0-11-6.5-21T578-354l-234-86h-64v220ZM40-80v-440h304q7 0 14 1.5t13 3.5l235 87q33 12 53.5 42t20.5 66h80q50 0 85 33t35 87v40L560-60l-280-78v58H40Zm80-80h80v-280h-80v280Z"/></svg>;
     thirdMenu = "Contact";
   }
   // if (user && user.role === "executive") {
@@ -247,12 +247,12 @@ export default function Navbar() {
                 className={`menu_single pointer ${location.pathname === "/" ? "active" : ""
                   }`}
               >
-                {/* <span className="material-symbols-outlined">
+                {/* <span className="material-symbols-outlined"> */}
                   {firstMenuIcon}
-                </span> */}
-                <span>
+                {/* </span> */}
+                {/* <span>
                   <img src="/assets/material-icons/home.svg" alt=""></img>
-                </span>
+                </span> */}
                 {firstMenu}
               </div>
 
@@ -261,12 +261,12 @@ export default function Navbar() {
                 className={`menu_single pointer ${location.pathname === "/dashboard" ? "active" : ""
                   }`}
               >
-                {/* <span className="material-symbols-outlined">
+                {/* <span className="material-symbols-outlined"> */}
                   {secondMenuIcon}
-                </span> */}
-                <span>
+                {/* </span> */}
+                {/* <span>
                   <img src="/assets/material-icons/dashboard.svg" alt=""></img>
-                </span>
+                </span> */}
 
                 {secondMenu}
               </div>
@@ -279,22 +279,23 @@ export default function Navbar() {
                   : ""
                   }`}
               >
-                {/* <span className="material-symbols-outlined">
+                {/* <span className="material-symbols-outlined"> */}
                   {thirdMenuIcon}
-                </span> */}
-                <span>
+                {/* </span> */}
+                {/* <span>
                   <img src="/assets/material-icons/real_estate_agent.svg" alt=""></img>
-                </span>
+                </span> */}
 
                 {thirdMenu}
               </div>
 
               <Link to="/more-menu">
                 <div className={moreDesktopActiveClass}>
-                  {/* <span className="material-symbols-outlined">Settings</span> */}
-                  <span>
+                  {/* <span className="material-symbols-outlined">more</span> */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="menu_svg"  height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+                  {/* <span>
                     <img src="/assets/material-icons/more.svg" alt=""></img>
-                  </span>
+                  </span> */}
 
                   More
                 </div>
@@ -326,9 +327,10 @@ export default function Navbar() {
                     {/* <span className="material-symbols-outlined ba_animation">
                       login
                     </span> */}
-                    <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#303030"><path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z"/></svg>
+                    {/* <span>
                       <img src="/assets/material-icons/login.svg" alt=""></img>
-                    </span>
+                    </span> */}
                     Login
                   </div>
                 </Link>
