@@ -8,7 +8,7 @@ import PropertyTable from "../../components/property/PropertyTable";
 import Switch from "react-switch";
 import Filters from "../../components/Filters"; // Using your existing Filters component
 import InactiveUserCard from "../../components/InactiveUserCard";
-const propertyFilter = ["Residential", "Commercial"];
+const propertyFilter = ["Residential", "Commercial", "Plot"];
 const statusFilter = ["In-Review", "Active", "Inactive"]; // Define the isActiveInactiveReview options
 
 const PGAdminProperty = () => {
@@ -57,7 +57,7 @@ const PGAdminProperty = () => {
     } else {
       _properties = allproperties &&
         allproperties.filter((item) =>
-          (filterOption.toLowerCase() === "in-review" || filterOption.toLowerCase() === "active" || filterOption.toLowerCase() === "inactive") ? item.isActiveInactiveReview.trim().toUpperCase() === filterOption.toUpperCase() : (filterOption.toLowerCase() === "residential" || filterOption.toLowerCase() === "commercial") ? item.category.trim().toUpperCase() === filterOption.toUpperCase() : item.purpose.trim().toUpperCase() === filterOption.toUpperCase()
+          (filterOption.toLowerCase() === "in-review" || filterOption.toLowerCase() === "active" || filterOption.toLowerCase() === "inactive") ? item.isActiveInactiveReview.trim().toUpperCase() === filterOption.toUpperCase() : (filterOption.toLowerCase() === "residential" || filterOption.toLowerCase() === "commercial" || filterOption.toLowerCase() === "plot") ? item.category.trim().toUpperCase() === filterOption.toUpperCase() : item.purpose.trim().toUpperCase() === filterOption.toUpperCase()
         );
     }
 
@@ -137,6 +137,10 @@ const PGAdminProperty = () => {
         case "Commercial":
           categoryMatch = document.category.toUpperCase() === "COMMERCIAL";
           break;
+        case "Plot":
+          categoryMatch = document.category.toUpperCase() === "PLOT";
+          break;
+
         default:
           categoryMatch = true;
       }
