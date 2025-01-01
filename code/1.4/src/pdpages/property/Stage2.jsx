@@ -1435,13 +1435,14 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>}
+
           {/* Rooms */}
           {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-6">
             <div className="form_field label_top">
               <label htmlFor="">Rooms</label>
               <div className="increase_input_parent">
                 <div className="plus_minus_input_wrapper">
-                  <span className="pmi_label">Bedroom</span>
+                  {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Rooms</span> : <span className="pmi_label">Bedrooms</span>}
                   <div className="plus_minus_input">
                     <div
                       className="left-minus-button pmbutton"
@@ -1471,7 +1472,7 @@ const Stage2 = (props) => {
                   </div>
                 </div>
                 <div className="plus_minus_input_wrapper">
-                  <span className="pmi_label">Bathroom</span>
+                  {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Toilets</span> : <span className="pmi_label">Bedrooms</span>}
                   <div className="plus_minus_input">
                     <div
                       className="left-minus-button pmbutton"
@@ -1616,7 +1617,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* Additional Rooms */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-6">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">
                 {" "}
@@ -2004,11 +2005,676 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>}
+
+          {/* Property Type Details */}
+          {propertyDetails && (propertyDetails.Category === 'Commercial') && <div className="col-md-6">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Property Type Details</label>
+              <div
+                className="radio_group"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                {propertyDetails.PropertyType === 'Office' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "IT Park"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="office_in_it_park"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["IT Park"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="office_in_it_park">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>IT Park</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Office' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Commercial Building"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="office_in_commercial_bld"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Commercial Building"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="office_in_commercial_bld">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Commercial Building</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Office' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Basement"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="office_in_basement"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Basement"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="office_in_basement">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Basement</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Office' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Mall"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="office_in_mall"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Mall"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="office_in_mall">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Mall</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Retail' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Shop"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="retail_shop"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Shop"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="retail_shop">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Shop</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Retail' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Showroom"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="retail_showroom"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Showroom"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="retail_showroom">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Showroom</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Storage' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Warehouse"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="storage_warehouse"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Warehouse"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="storage_warehouse">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Warehouse</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Storage' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Cold Storage"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="storage_cold_storage"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Cold Storage"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="storage_cold_storage">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Cold Storage</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Storage' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Basement"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="storage_basement"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Basement"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="storage_basement">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Basement</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Land' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Farm House"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="land_farm_house"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Farm House"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="land_farm_house">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Farm House</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Land' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Commercial Land"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="land_commercial_land"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Commercial Land"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="land_commercial_land">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Commercial Land</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Land' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Institutional Land"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="land_institutional_land"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Institutional Land"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="land_institutional_land">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Institutional Land</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Land' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Industrial Land"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="land_industrial_land"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Industrial Land"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="land_industrial_land">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Industrial Land</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Industry' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Factory"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="industry_factory"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Factory"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="industry_factory">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Factory</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Industry' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Building"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="industry_building"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Building"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="industry_building">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Building</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Industry' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Shed"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="industry_shed"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Shed"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="industry_shed">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Shed</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Hospitality' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Guest House"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="hospitality_guest_house"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Guest House"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="hospitality_guest_house">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Guest House</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Hospitality' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Hotel"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="hospitality_hotel"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Hotel"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="hospitality_hotel">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Hotel</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Hospitality' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Resort"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="hospitality_resort"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Resort"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="hospitality_resort">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Resort</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Hospitality' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Banquet-Hall"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="hospitality_banquethall"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Banquet-Hall"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="hospitality_banquethall">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Banquet-Hall</h6>
+                    </label>
+                  </div>
+                </div>}
+                {propertyDetails.PropertyType === 'Other' && <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.AdditionalRooms[0] === "Other"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_propertytypedetails"
+                      id="other_other"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          AdditionalRooms: ["Other"],
+                        });
+                      }}
+                    />
+                    <label htmlFor="other_other">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Other</h6>
+                    </label>
+                  </div>
+                </div>}
+              </div>
+            </div>
+          </div>}
+
           {/* Living & Dining */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Living & Dining Combined</label>
               <div className="form_field_inner">
