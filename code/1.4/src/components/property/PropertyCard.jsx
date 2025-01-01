@@ -379,11 +379,11 @@ const PropertyCard = ({ propertyid }) => {
                       PID: {" " + propertydoc.pid}
                     </span>
                   </div>
-                  <div className="right">
+                  {/* <div className="right">
                   <span className={`property_status card_badge ${propertydoc.status.toUpperCase() === 'AVAILABLE FOR RENT' ? "for_rent" : "for_sale"}`}>
                   {propertydoc.status}
                   </span>                
-                </div>
+                </div> */}
                 </div>
               </div>
             </Link>
