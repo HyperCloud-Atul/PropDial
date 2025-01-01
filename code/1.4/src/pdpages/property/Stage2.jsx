@@ -3107,6 +3107,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>}
+
           {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div id="id_demand" className="form_field label_top">
               <label htmlFor="">Age Of Property</label>
@@ -3131,6 +3132,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>}
+
           {/* Additional Area */}
           {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
@@ -3378,6 +3380,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>}
+
           {/* Power Backup */}
           {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
@@ -3568,6 +3571,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>}
+
           {/* Super & Carpet Area */}
           <div className="col-md-4">
             <div className="form_field st-2 label_top">
@@ -3781,10 +3785,7 @@ const Stage2 = (props) => {
                       </label>
                     </div>
                   </div>
-                  <div
-                    className="radio_group_single"
-                    style={{ padding: "5px 0", width: "100%" }}
-                  >
+                  {propertyDetails.Category === 'Plot' && <div className="radio_group_single" style={{ padding: "5px 0", width: "100%" }}>
                     <div
                       className={
                         propertyDetails.SuperAreaUnit === "Acre"
@@ -3830,7 +3831,7 @@ const Stage2 = (props) => {
                         <h6>Acre</h6>
                       </label>
                     </div>
-                  </div>
+                  </div>}
                 </div>
               </div>
             </div>
