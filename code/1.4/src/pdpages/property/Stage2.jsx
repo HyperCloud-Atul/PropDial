@@ -1156,7 +1156,7 @@ const Stage2 = (props) => {
           </div>
 
           {/* BHK */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">BHK</label>
               <div className="form_field_inner">
@@ -1332,7 +1332,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* Furnishing */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Furnishing</label>
               <div
@@ -1437,7 +1437,7 @@ const Stage2 = (props) => {
           </div>}
 
           {/* Rooms */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-6">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-6">
             <div className="form_field label_top">
               <label htmlFor="">Rooms</label>
               <div className="increase_input_parent">
@@ -2920,7 +2920,7 @@ const Stage2 = (props) => {
           )}
 
           {/* Entrance Gallery */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Entrance Gallery</label>
               <div className="form_field_inner">
@@ -3000,7 +3000,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* Passages */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Passages</label>
               <div className="form_field_inner">
@@ -3134,7 +3134,7 @@ const Stage2 = (props) => {
           </div>}
 
           {/* Additional Area */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">
                 {" "}
@@ -3382,7 +3382,7 @@ const Stage2 = (props) => {
           </div>}
 
           {/* Power Backup */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Power Backup</label>
               <div
@@ -3837,7 +3837,7 @@ const Stage2 = (props) => {
             </div>
           </div>
           {/* Flat Floor No */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Floor No.</label>
               <div className="plus_minus_input_wrapper">
@@ -3871,7 +3871,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* Total Floor */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Total Floor</label>
               <div className="plus_minus_input_wrapper">
@@ -3906,7 +3906,7 @@ const Stage2 = (props) => {
           </div>}
 
           {/* No of Apts on Floor */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Apt On Floor</label>
               <div className="plus_minus_input_wrapper">
@@ -3942,7 +3942,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* No of Lifts */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Lifts</label>
               <div className="plus_minus_input_wrapper">
@@ -3976,7 +3976,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* No of Close Car Parking */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Coverd Car Parking</label>
               <div className="plus_minus_input_wrapper">
@@ -4013,7 +4013,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* No of Open Car Parking */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Open Car Parking</label>
               <div className="plus_minus_input_wrapper">
@@ -4050,7 +4050,7 @@ const Stage2 = (props) => {
           </div>}
 
           {/* two wheeler parking */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">2-Wheeler Parking</label>
               <div className="form_field_inner">
@@ -4130,7 +4130,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* Charging Station for Electric Vehicle */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Is EV Charging Point Available? </label>
               <div className="form_field_inner">
