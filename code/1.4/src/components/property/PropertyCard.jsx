@@ -401,13 +401,15 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_carpet.png" alt="" />
                   </div>
                   <div className="left">
-                    <h6>
-                      {propertydoc.superArea
-                        ? "Super Area"
-                        : propertydoc.carpetArea
-                          ? "Carpet Area"
-                          : "Area"}
-                    </h6>
+                    {propertydoc.category === 'Plot' ?
+                      <h6>Area</h6>
+                      : <h6>
+                        {propertydoc.superArea
+                          ? "Super Area"
+                          : propertydoc.carpetArea
+                            ? "Carpet Area"
+                            : "Area"}
+                      </h6>}
                     <h5>
                       {propertydoc.superArea
                         ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
@@ -422,8 +424,17 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_bedroom.png" alt="" />
                   </div>
                   <div className="left">
-                    <h6>Bedroom</h6>
-                    <h5>{propertydoc.numberOfBedrooms}</h5>
+                    {propertydoc.category === 'Plot' ?
+                      <>
+                        <h6>Gated Area</h6>
+                        <h5>{propertydoc.gatedArea}</h5>
+                      </>
+                      :
+                      <>
+                        <h6>Bedroom</h6>
+                        <h5>{propertydoc.numberOfBedrooms}</h5>
+                      </>
+                    }
                   </div>
                 </div>
                 <div className="ms_child">
