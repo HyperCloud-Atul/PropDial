@@ -581,7 +581,7 @@
 
 .all_tenants .tc_single .left {
   display: flex;
-  gap: 6px;
+  gap: 12px;
   width: 85%;
   align-items: center;
 }

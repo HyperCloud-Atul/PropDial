@@ -424,7 +424,7 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_bedroom.png" alt="" />
                   </div>
                   <div className="left">
-                    {propertydoc.category === 'Plot' ?
+                    {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
                       <>
                         <h6>Gated Area</h6>
                         <h5>{propertydoc.gatedArea}</h5>
@@ -442,8 +442,18 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_bathroom.png" alt="" />
                   </div>
                   <div className="left">
-                    <h6>Bathroom</h6>
-                    <h5>{propertydoc.numberOfBathrooms}</h5>
+                  {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
+                      <>
+                        <h6>Direction Facing</h6>
+                        <h5>{propertydoc.mainDoorFacing}</h5>
+                      </>
+                      :
+                      <>
+                      <h6>Bathroom</h6>
+                      <h5>{propertydoc.numberOfBathrooms}</h5>
+                      </>
+                    }
+                    
                   </div>
                 </div>
               </div>
@@ -457,7 +467,14 @@ const PropertyCard = ({ propertyid }) => {
                       <img src="/assets/img/new_super_area.png" alt="" />
                     </div>
                     <div className="left">
-                      <h6>Floor</h6>
+                    {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
+                      <>
+                        <h6>Property Type</h6>
+                        <h5>{propertydoc.propertyType}</h5>
+                      </>
+                      :
+                      <>
+                    <h6>Floor</h6>
                       <h5>
                         {propertydoc.floorNo
                           ? propertydoc.floorNo === "Ground"
@@ -472,6 +489,9 @@ const PropertyCard = ({ propertyid }) => {
                                 }`
                           : ""}
                       </h5>
+                      </>
+                    }
+                     
                     </div>
                   </div>
                   <div className="ms_child">
@@ -479,8 +499,18 @@ const PropertyCard = ({ propertyid }) => {
                       <img src="/assets/img/new_bhk.png" alt="" />
                     </div>
                     <div className="left">
-                      <h6>BHK</h6>
-                      <h5>{propertydoc.bhk}</h5>
+                    {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
+                      <>
+                        <h6>Propety Sub-Type</h6>
+                        <h5>{propertydoc.additionalRooms[0]}</h5>
+                      </>
+                      :
+                      <>
+                         <h6>BHK</h6>
+                         <h5>{propertydoc.bhk}</h5>
+                      </>
+                    }
+                  
                     </div>
                   </div>
                   <div className="ms_child">
@@ -503,8 +533,23 @@ const PropertyCard = ({ propertyid }) => {
                       <img src="/assets/img/new_room.png" alt="" />
                     </div>
                     <div className="left">
-                      <h6>{propertydoc.displayName}</h6>
-                      <h5>
+                    {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
+                      <>
+                        <h6 className="mb-1">Overlooking</h6>
+                        <h5>
+                        {propertydoc.overLooking.length > 0
+                          ? propertydoc.overLooking.map(
+                            (overLooking) => (
+                              <span>{overLooking}</span>
+                            )
+                          )
+                          : "Yet to be added"}
+                      </h5>
+                      </>
+                      :
+                      <>
+                       <h6 className="mb-1">Additional Room</h6>
+                       <h5>
                         {propertydoc.additionalRooms.length > 0
                           ? propertydoc.additionalRooms.map(
                             (additionalroom) => (
@@ -513,6 +558,10 @@ const PropertyCard = ({ propertyid }) => {
                           )
                           : "No Additional Rooms"}
                       </h5>
+                      </>
+                    }
+                    
+                   
                     </div>
                   </div>
                 </div>

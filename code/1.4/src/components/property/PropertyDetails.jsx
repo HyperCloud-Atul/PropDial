@@ -482,7 +482,7 @@ const PropertyDetails = () => {
       userId: selectedUser,
       updatedAt: timestamp.fromDate(new Date()),
       updatedBy: user.uid,
-      userTag: "Owner"
+      userTag: "Owner",
     };
 
     // console.log('updateDocId: ', changedUser)
@@ -494,7 +494,7 @@ const PropertyDetails = () => {
 
   const handleSearchChange = (event) => {
     const query = event.target.value;
-    console.log("query: ", query)
+    console.log("query: ", query);
     setSearchQuery(query);
     filterUsers(query);
   };
@@ -725,17 +725,17 @@ const PropertyDetails = () => {
     const isAlreadyExist =
       _usertype === "propertyowner"
         ? propertyOwners &&
-        propertyOwners.filter(
-          (propuser) =>
-            propuser.userId === propertyDocument.createdBy &&
-            propuser.userType === _usertype
-        )
+          propertyOwners.filter(
+            (propuser) =>
+              propuser.userId === propertyDocument.createdBy &&
+              propuser.userType === _usertype
+          )
         : propertyManagers &&
-        propertyManagers.filter(
-          (propuser) =>
-            propuser.userId === propertyDocument.createdBy &&
-            propuser.userType === _usertype
-        );
+          propertyManagers.filter(
+            (propuser) =>
+              propuser.userId === propertyDocument.createdBy &&
+              propuser.userType === _usertype
+          );
 
     // console.log('isAlreadyExist: ', isAlreadyExist)
 
@@ -795,7 +795,7 @@ const PropertyDetails = () => {
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
     RichTextEditor.createValueFromString(
       propertyDocument &&
-      propertyDocument.ownerInstructions + editedOwnerInstruction,
+        propertyDocument.ownerInstructions + editedOwnerInstruction,
       "html"
     )
   );
@@ -1039,14 +1039,13 @@ const PropertyDetails = () => {
 
   // // Check if documents are available and then apply city and locality filters
   // const filteredAgentDocs = agentDoc
-  //   ? agentDoc.filter(doc => 
-  //       doc.city === propertyDocument.city && 
-  //       doc.locality && doc.locality.includes(propertyDocument.locality) 
+  //   ? agentDoc.filter(doc =>
+  //       doc.city === propertyDocument.city &&
+  //       doc.locality && doc.locality.includes(propertyDocument.locality)
 
   //     )
   //   : [];
   // // Debugging logs to check the filtered results
-
 
   return (
     <>
@@ -1208,8 +1207,7 @@ const PropertyDetails = () => {
             </div>
           )}
           <div className="top_right_badge">
-          {propertyDocument && propertyDocument.category}
-         
+            {propertyDocument && propertyDocument.category}
           </div>
           <div className="property_cards">
             {propertyDocument && (
@@ -1333,7 +1331,7 @@ const PropertyDetails = () => {
                                     <div
                                       className={
                                         propertyDocument.isActiveInactiveReview ===
-                                          "In-Review"
+                                        "In-Review"
                                           ? "custom_radio_button radiochecked"
                                           : "custom_radio_button"
                                       }
@@ -1372,7 +1370,7 @@ const PropertyDetails = () => {
                                         <div className="d-flex justify-content-between w-100 align-items-center">
                                           <div>
                                             {propertyDocument.isActiveInactiveReview ===
-                                              "In-Review"
+                                            "In-Review"
                                               ? "In-Review"
                                               : "Make In-Review"}
                                           </div>
@@ -1418,7 +1416,7 @@ const PropertyDetails = () => {
                                     <div
                                       className={
                                         propertyDocument.isActiveInactiveReview ===
-                                          "Active"
+                                        "Active"
                                           ? "custom_radio_button radiochecked"
                                           : "custom_radio_button"
                                       }
@@ -1440,7 +1438,7 @@ const PropertyDetails = () => {
                                         style={{
                                           background:
                                             propertyDocument.isActiveInactiveReview ===
-                                            "Active" &&
+                                              "Active" &&
                                             "var(--success-color)",
                                         }}
                                         className="pointer"
@@ -1456,7 +1454,7 @@ const PropertyDetails = () => {
                                         <div className="d-flex justify-content-between w-100 align-items-center">
                                           <div>
                                             {propertyDocument.isActiveInactiveReview ===
-                                              "Active"
+                                            "Active"
                                               ? "Active"
                                               : "Make Active"}
                                           </div>
@@ -1530,8 +1528,8 @@ const PropertyDetails = () => {
                                               ? "var(--theme-green2)"
                                               : selectedAorROption ===
                                                 "In-Review"
-                                                ? "var(--theme-blue)"
-                                                : "inherit",
+                                              ? "var(--theme-blue)"
+                                              : "inherit",
                                         }}
                                       >
                                         Make This {selectedAorROption}?
@@ -1552,8 +1550,9 @@ const PropertyDetails = () => {
                                         No
                                       </div>
                                       <div
-                                        className={`theme_btn btn_fill no_icon text-center ${isProcessing && "disabled"
-                                          }`}
+                                        className={`theme_btn btn_fill no_icon text-center ${
+                                          isProcessing && "disabled"
+                                        }`}
                                         onClick={
                                           !isProcessing ? handleConfirm : null
                                         } // Disable click when processing
@@ -1566,7 +1565,7 @@ const PropertyDetails = () => {
                                     <div
                                       className={
                                         propertyDocument.isActiveInactiveReview ===
-                                          "Inactive"
+                                        "Inactive"
                                           ? "custom_radio_button radiochecked"
                                           : "custom_radio_button"
                                       }
@@ -1576,7 +1575,7 @@ const PropertyDetails = () => {
                                         id={"toggleFlag_inactive" + propertyid}
                                         onClick={
                                           propertyDocument.isActiveInactiveReview ===
-                                            "Inactive"
+                                          "Inactive"
                                             ? null // Disable onClick if already inactive
                                             : handleShowWhyInactive
                                         }
@@ -1589,7 +1588,7 @@ const PropertyDetails = () => {
                                         style={{
                                           background:
                                             propertyDocument.isActiveInactiveReview ===
-                                            "Inactive" && "var(--theme-red)",
+                                              "Inactive" && "var(--theme-red)",
                                         }}
                                         className="pointer"
                                       >
@@ -1604,7 +1603,7 @@ const PropertyDetails = () => {
                                         <div className="d-flex justify-content-between w-100 align-items-center">
                                           <div>
                                             {propertyDocument.isActiveInactiveReview ===
-                                              "Inactive"
+                                            "Inactive"
                                               ? "Inactive"
                                               : "Make Inactive"}
                                           </div>
@@ -1810,7 +1809,7 @@ const PropertyDetails = () => {
                         <h4 className="property_name">
                           {propertyDocument.bhk} | For{" "}
                           {propertyDocument.purpose.toLowerCase() ===
-                            "rentsaleboth"
+                          "rentsaleboth"
                             ? "Rent / Sale"
                             : propertyDocument.purpose}
                           {/* {propertyDocument.furnishing === ""
@@ -1835,24 +1834,24 @@ const PropertyDetails = () => {
                             <span className="currency">₹</span>
                             {propertyDocument.flag.toLowerCase() ===
                               "pms only" ||
-                              propertyDocument.flag.toLowerCase() ===
+                            propertyDocument.flag.toLowerCase() ===
                               "available for rent" ||
-                              propertyDocument.flag.toLowerCase() === "rented out"
+                            propertyDocument.flag.toLowerCase() === "rented out"
                               ? new Intl.NumberFormat("en-IN").format(
-                                propertyDocument.demandPriceRent
-                              )
+                                  propertyDocument.demandPriceRent
+                                )
                               : propertyDocument.flag.toLowerCase() ===
-                                "rent and sale" ||
+                                  "rent and sale" ||
                                 propertyDocument.flag.toLowerCase() ===
-                                "rented but sale"
-                                ? new Intl.NumberFormat("en-IN").format(
+                                  "rented but sale"
+                              ? new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceRent
                                 ) +
                                 " / ₹" +
                                 new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceSale
                                 )
-                                : new Intl.NumberFormat("en-IN").format(
+                              : new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceSale
                                 )}
 
@@ -1866,24 +1865,24 @@ const PropertyDetails = () => {
                           <h6>
                             {propertyDocument.flag.toLowerCase() ===
                               "pms only" ||
-                              propertyDocument.flag.toLowerCase() ===
+                            propertyDocument.flag.toLowerCase() ===
                               "available for rent" ||
-                              propertyDocument.flag.toLowerCase() === "rented out"
+                            propertyDocument.flag.toLowerCase() === "rented out"
                               ? "Demand Price"
                               : propertyDocument.flag.toLowerCase() ===
-                                "rent and sale" ||
+                                  "rent and sale" ||
                                 propertyDocument.flag.toLowerCase() ===
-                                "rented but sale"
-                                ? "Demand Rent / Sale"
-                                : "Demand Price"}
+                                  "rented but sale"
+                              ? "Demand Rent / Sale"
+                              : "Demand Price"}
                           </h6>
                         </div>
                         {propertyDocument &&
                           (propertyDocument.purpose.toLowerCase() === "rent" ||
                             propertyDocument.purpose.toLowerCase() ===
-                            "rentsaleboth") &&
+                              "rentsaleboth") &&
                           (propertyDocument.maintenanceFlag.toLowerCase() ===
-                            "included" ? (
+                          "included" ? (
                             <div className="pdms_single">
                               <h4>Included</h4>
                               <h6>Maintenance</h6>
@@ -1909,7 +1908,7 @@ const PropertyDetails = () => {
                         {propertyDocument &&
                           (propertyDocument.purpose.toLowerCase() === "rent" ||
                             propertyDocument.purpose.toLowerCase() ===
-                            "rentsaleboth") && (
+                              "rentsaleboth") && (
                             <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
@@ -1925,25 +1924,68 @@ const PropertyDetails = () => {
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
                         <div className="pdms_single">
-                          <h4>
+                        {propertyDocument.category === 'Plot' || propertyDocument.category === 'Commercial' ?
+                      <>
+                        
+                        <h4>
+                            <img src="/assets/img/new_bhk.png"></img>
+                            {propertyDocument.gatedArea}
+                          </h4>
+                          <h6>Gated Area</h6>
+                      </>
+                      :
+                      <>
+                         <h4>
                             <img src="/assets/img/new_bhk.png"></img>
                             {propertyDocument.bhk}
                           </h4>
                           <h6>BHK</h6>
+                      </>
+                    }
+                         
                         </div>
+                       
                         <div className="pdms_single">
-                          <h4>
-                            <img src="/assets/img/new_bedroom.png"></img>
-                            {propertyDocument.numberOfBedrooms}
+                        {propertyDocument.category === 'Plot' || propertyDocument.category === 'Commercial' ?
+                      <>
+                        
+                        <h4>
+                            <img src="/assets/img/new_bathroom.png"></img>
+                            {propertyDocument.propertyType}
+                          </h4>
+                          <h6>Property Type</h6>
+                      </>
+                      :
+                      <>
+                       <h4>
+                       <img src="/assets/img/new_bedroom.png"></img>
+                       {propertyDocument.numberOfBedrooms}
                           </h4>
                           <h6>Bedroom</h6>
+                      </>
+                    }
+                       
                         </div>
                         <div className="pdms_single">
-                          <h4>
+                        {propertyDocument.category === 'Plot' || propertyDocument.category === 'Commercial' ?
+                      <>
+                        
+                        <h4>
+                            <img src="/assets/img/new_bathroom.png"></img>
+                            {propertyDocument.additionalRooms[0]}
+                          </h4>
+                          <h6>Propety Sub-Type</h6>
+                      </>
+                      :
+                      <>
+                       <h4>
                             <img src="/assets/img/new_bathroom.png"></img>
                             {propertyDocument.numberOfBathrooms}
                           </h4>
                           <h6>Bathroom</h6>
+                      </>
+                    }
+                       
                         </div>
                       </div>
                       <div className="divider"></div>
@@ -1952,8 +1994,9 @@ const PropertyDetails = () => {
                           <h4>
                             <img src="/assets/img/new_carpet.png"></img>
                             {propertyDocument.superArea}
-                            {propertyDocument.superArea && propertyDocument.carpetArea &&
-                              propertyDocument.carpetArea !== "0"
+                            {propertyDocument.superArea &&
+                            propertyDocument.carpetArea &&
+                            propertyDocument.carpetArea !== "0"
                               ? "/"
                               : ""}
                             {propertyDocument.carpetArea}
@@ -1967,42 +2010,57 @@ const PropertyDetails = () => {
                           </h4>
                           <h6>
                             {propertyDocument.superArea && "Super Area"}
-                            {propertyDocument.superArea && propertyDocument.carpetArea &&
-                              propertyDocument.carpetArea !== "0"
+                            {propertyDocument.superArea &&
+                            propertyDocument.carpetArea &&
+                            propertyDocument.carpetArea !== "0"
                               ? "/"
                               : ""}
-                            {propertyDocument.carpetArea && propertyDocument.carpetArea !== "0" &&
+                            {propertyDocument.carpetArea &&
+                              propertyDocument.carpetArea !== "0" &&
                               "Carpet Area"}
                           </h6>
                         </div>
+                       
                         <div className="pdms_single">
-                          <h4>
+                        {propertyDocument.category === 'Plot' || propertyDocument.category === 'Commercial' ?
+                      <>
+                        
+                        <h4>
+                            <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
+                            {propertyDocument.mainDoorFacing}
+                          </h4>
+                          <h6>Direction Facing</h6>
+                      </>
+                      :
+                      <>
+                      <h4>
                             <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
                             {propertyDocument.floorNo
-                              ? propertyDocument.floorNo ===
-                                "Ground"
+                              ? propertyDocument.floorNo === "Ground"
                                 ? "Ground"
-                                : propertyDocument.floorNo ===
-                                  "Stilt"
-                                  ? "Stilt"
-                                  : propertyDocument.floorNo ===
-                                    "Basement"
-                                    ? "Basement "
-                                    : `${propertyDocument.floorNo}${propertyDocument.numberOfFloors
+                                : propertyDocument.floorNo === "Stilt"
+                                ? "Stilt"
+                                : propertyDocument.floorNo === "Basement"
+                                ? "Basement "
+                                : `${propertyDocument.floorNo}${
+                                    propertyDocument.numberOfFloors
                                       ? " of " + propertyDocument.numberOfFloors
                                       : ""
-                                    }`
+                                  }`
                               : ""}
                           </h4>
                           <h6>
                             {propertyDocument.floorNo
                               ? ["Ground", "Stilt", "Basement"].includes(
-                                propertyDocument.floorNo
-                              )
+                                  propertyDocument.floorNo
+                                )
                                 ? "Floor"
                                 : "Floor no"
                               : ""}
                           </h6>
+                      </>
+                    }
+                       
                         </div>
 
                         <div className="pdms_single">
@@ -2487,138 +2545,149 @@ const PropertyDetails = () => {
                     }
                   ></PropertyLayoutComponent>
                 )}
-                {propertyLayouts &&
-                  (propertyLayouts.length > 0 ||
-                    (user &&
-                      (user.role === "admin" ||
-                        user.role === "superAdmin"))) && (
-                    <section className="property_card_single full_width_sec with_blue">
-                      <span className="verticall_title">
-                        Layout : {propertyLayouts && propertyLayouts.length}
-                      </span>
-                      <div className="more_detail_card_inner">
-                        <div className="row">
-                          {user &&
-                            user.status === "active" &&
+                {propertyDocument &&
+                  propertyDocument.category === "Residential" && (
+                    <>
+                      {propertyLayouts &&
+                        (propertyLayouts.length > 0 ||
+                          (user &&
                             (user.role === "admin" ||
-                              user.role === "superAdmin") && (
-                              <div
-                                className="col-sm-1 col-2"
-                                style={{
-                                  paddingRight: "0px",
-                                }}
-                              >
-                                <div className="plus_icon">
-                                  <Link
-                                    className="plus_icon_inner"
-                                    onClick={handleShowPropertyLayoutComponent}
-                                  >
-                                    <span className="material-symbols-outlined">
-                                      add
-                                    </span>
-                                  </Link>
-                                </div>
-                              </div>
-                            )}
-                          <div
-                            className={`${user &&
-                              user.status === "active" &&
-                              (user.role === "admin" ||
-                                user.role === "superAdmin")
-                              ? "col-sm-11 col-10"
-                              : "col-12"
-                              }`}
-                          >
-                            <div className="property_layout_card">
-                              <Swiper
-                                spaceBetween={15}
-                                slidesPerView={2.5}
-                                pagination={false}
-                                freeMode={true}
-                                className="all_tenants"
-                                breakpoints={{
-                                  320: {
-                                    slidesPerView: 1.1,
-                                    spaceBetween: 10,
-                                  },
-                                  767: {
-                                    slidesPerView: 1.5,
-                                    spaceBetween: 15,
-                                  },
-                                  991: {
-                                    slidesPerView: 2.5,
-                                    spaceBetween: 15,
-                                  },
-                                }}
-                              >
-                                {propertyLayouts &&
-                                  propertyLayouts.map((room, index) => (
-                                    <SwiperSlide key={index}>
-                                      <div className="ai_detail_show">
-                                        <div className="left relative">
-                                          {(() => {
-                                            if (room.roomType === "Bedroom") {
-                                              return (
-                                                <img
-                                                  src="/assets/img/icons/illustrate_bedroom.jpg"
-                                                  alt={room.roomType}
-                                                />
-                                              );
-                                            } else if (
-                                              room.roomType === "Kitchen"
-                                            ) {
-                                              return (
-                                                <img
-                                                  src="/assets/img/icons/illustrate_kitchen.jpg"
-                                                  alt={room.roomType}
-                                                />
-                                              );
-                                            } else if (
-                                              room.roomType === "Living Room"
-                                            ) {
-                                              return (
-                                                <img
-                                                  src="/assets/img/icons/illustrate_livingroom.jpg"
-                                                  alt={room.roomType}
-                                                />
-                                              );
-                                            } else if (
-                                              room.roomType === "Bathroom"
-                                            ) {
-                                              return (
-                                                <img
-                                                  src="/assets/img/icons/illustrate_bathroom.jpg"
-                                                  alt={room.roomType}
-                                                />
-                                              );
-                                            } else if (
-                                              room.roomType === "Dining Room"
-                                            ) {
-                                              return (
-                                                <img
-                                                  src="/assets/img/icons/illustrate_dining.jpg"
-                                                  alt={room.roomType}
-                                                />
-                                              );
-                                            } else if (
-                                              room.roomType === "Balcony"
-                                            ) {
-                                              return (
-                                                <img
-                                                  src="/assets/img/icons/illustrate_balcony.jpg"
-                                                  alt={room.roomType}
-                                                />
-                                              );
-                                            } else {
-                                              return (
-                                                <img
-                                                  src="/assets/img/icons/illustrate_basment.jpg"
-                                                  alt={room.roomType}
-                                                />
-                                              );
-                                            }
-                                          })()}
-                                          {/* {user && (user.role === "admin" || user.role === "superAdmin") && (
+                              user.role === "superAdmin"))) && (
+                          <section className="property_card_single full_width_sec with_blue">
+                            <span className="verticall_title">
+                              Layout :{" "}
+                              {propertyLayouts && propertyLayouts.length}
+                            </span>
+                            <div className="more_detail_card_inner">
+                              <div className="row">
+                                {user &&
+                                  user.status === "active" &&
+                                  (user.role === "admin" ||
+                                    user.role === "superAdmin") && (
+                                    <div
+                                      className="col-sm-1 col-2"
+                                      style={{
+                                        paddingRight: "0px",
+                                      }}
+                                    >
+                                      <div className="plus_icon">
+                                        <Link
+                                          className="plus_icon_inner"
+                                          onClick={
+                                            handleShowPropertyLayoutComponent
+                                          }
+                                        >
+                                          <span className="material-symbols-outlined">
+                                            add
+                                          </span>
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  )}
+                                <div
+                                  className={`${
+                                    user &&
+                                    user.status === "active" &&
+                                    (user.role === "admin" ||
+                                      user.role === "superAdmin")
+                                      ? "col-sm-11 col-10"
+                                      : "col-12"
+                                  }`}
+                                >
+                                  <div className="property_layout_card">
+                                    <Swiper
+                                      spaceBetween={15}
+                                      slidesPerView={2.5}
+                                      pagination={false}
+                                      freeMode={true}
+                                      className="all_tenants"
+                                      breakpoints={{
+                                        320: {
+                                          slidesPerView: 1.1,
+                                          spaceBetween: 10,
+                                        },
+                                        767: {
+                                          slidesPerView: 1.5,
+                                          spaceBetween: 15,
+                                        },
+                                        991: {
+                                          slidesPerView: 2.5,
+                                          spaceBetween: 15,
+                                        },
+                                      }}
+                                    >
+                                      {propertyLayouts &&
+                                        propertyLayouts.map((room, index) => (
+                                          <SwiperSlide key={index}>
+                                            <div className="ai_detail_show">
+                                              <div className="left relative">
+                                                {(() => {
+                                                  if (
+                                                    room.roomType === "Bedroom"
+                                                  ) {
+                                                    return (
+                                                      <img
+                                                        src="/assets/img/icons/illustrate_bedroom.jpg"
+                                                        alt={room.roomType}
+                                                      />
+                                                    );
+                                                  } else if (
+                                                    room.roomType === "Kitchen"
+                                                  ) {
+                                                    return (
+                                                      <img
+                                                        src="/assets/img/icons/illustrate_kitchen.jpg"
+                                                        alt={room.roomType}
+                                                      />
+                                                    );
+                                                  } else if (
+                                                    room.roomType ===
+                                                    "Living Room"
+                                                  ) {
+                                                    return (
+                                                      <img
+                                                        src="/assets/img/icons/illustrate_livingroom.jpg"
+                                                        alt={room.roomType}
+                                                      />
+                                                    );
+                                                  } else if (
+                                                    room.roomType === "Bathroom"
+                                                  ) {
+                                                    return (
+                                                      <img
+                                                        src="/assets/img/icons/illustrate_bathroom.jpg"
+                                                        alt={room.roomType}
+                                                      />
+                                                    );
+                                                  } else if (
+                                                    room.roomType ===
+                                                    "Dining Room"
+                                                  ) {
+                                                    return (
+                                                      <img
+                                                        src="/assets/img/icons/illustrate_dining.jpg"
+                                                        alt={room.roomType}
+                                                      />
+                                                    );
+                                                  } else if (
+                                                    room.roomType === "Balcony"
+                                                  ) {
+                                                    return (
+                                                      <img
+                                                        src="/assets/img/icons/illustrate_balcony.jpg"
+                                                        alt={room.roomType}
+                                                      />
+                                                    );
+                                                  } else {
+                                                    return (
+                                                      <img
+                                                        src="/assets/img/icons/illustrate_basment.jpg"
+                                                        alt={room.roomType}
+                                                      />
+                                                    );
+                                                  }
+                                                })()}
+                                                {/* {user && (user.role === "admin" || user.role === "superAdmin") && (
                                         <label htmlFor="imgupload" className="upload_img click_text by_text">
                                           Upload img
                                           <input
@@ -2627,430 +2696,477 @@ const PropertyDetails = () => {
                                           />
                                         </label>
                                       )} */}
-                                        </div>
-                                        <div className="right">
-                                          <h5>{room.roomName}</h5>
-                                          <div className="in_detail">
-                                            <span className="in_single">
-                                              Area: {room.roomTotalArea} SqFt
-                                            </span>
-                                            <span className="in_single">
-                                              Length: {room.roomLength} Ft
-                                            </span>
-                                            <span className="in_single">
-                                              Width: {room.roomWidth} Ft
-                                            </span>
-                                            {room.roomFixtures &&
-                                              room.roomFixtures.map(
-                                                (fixture, findex) => (
-                                                  <span
-                                                    className="in_single"
-                                                    key={findex}
-                                                  >
-                                                    {fixture}
+                                              </div>
+                                              <div className="right">
+                                                <h5>{room.roomName}</h5>
+                                                <div className="in_detail">
+                                                  <span className="in_single">
+                                                    Area: {room.roomTotalArea}{" "}
+                                                    SqFt
                                                   </span>
-                                                )
-                                              )}
-                                          </div>
-                                          <div
-                                            className="view_edit d-flex justify-content-between mt-2"
-                                            style={{ marginLeft: "7px" }}
-                                          >
-                                            {user &&
-                                              user.status === "active" &&
-                                              (user.role === "admin" ||
-                                                user.role === "superAdmin") && (
-                                                <span
-                                                  className="click_text pointer"
-                                                  onClick={() =>
-                                                    editPropertyLayout(room.id)
-                                                  }
+                                                  <span className="in_single">
+                                                    Length: {room.roomLength} Ft
+                                                  </span>
+                                                  <span className="in_single">
+                                                    Width: {room.roomWidth} Ft
+                                                  </span>
+                                                  {room.roomFixtures &&
+                                                    room.roomFixtures.map(
+                                                      (fixture, findex) => (
+                                                        <span
+                                                          className="in_single"
+                                                          key={findex}
+                                                        >
+                                                          {fixture}
+                                                        </span>
+                                                      )
+                                                    )}
+                                                </div>
+                                                <div
+                                                  className="view_edit d-flex justify-content-between mt-2"
+                                                  style={{ marginLeft: "7px" }}
                                                 >
-                                                  Edit
+                                                  {user &&
+                                                    user.status === "active" &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin") && (
+                                                      <span
+                                                        className="click_text pointer"
+                                                        onClick={() =>
+                                                          editPropertyLayout(
+                                                            room.id
+                                                          )
+                                                        }
+                                                      >
+                                                        Edit
+                                                      </span>
+                                                    )}
+                                                  <span
+                                                    className="click_text pointer"
+                                                    onClick={() =>
+                                                      handleShowRoomModal(room)
+                                                    }
+                                                  >
+                                                    View More
+                                                  </span>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </SwiperSlide>
+                                        ))}
+                                    </Swiper>
+
+                                    {selectedRoom && (
+                                      <>
+                                        <Modal
+                                          show={showRoomModal}
+                                          onHide={handleRoomModalClose}
+                                          className="margin_top detail_modal"
+                                          centered
+                                        >
+                                          <span
+                                            className="material-symbols-outlined modal_close"
+                                            onClick={handleRoomModalClose}
+                                          >
+                                            close
+                                          </span>
+                                          <h5 className="modal_title text-center">
+                                            {selectedRoom.roomName}
+                                          </h5>
+                                          <div className="modal_body">
+                                            <div className="img_area">
+                                              {(() => {
+                                                if (
+                                                  selectedRoom.roomType ===
+                                                  "Bedroom"
+                                                ) {
+                                                  return (
+                                                    <img
+                                                      style={{
+                                                        width: "100%",
+                                                      }}
+                                                      src="/assets/img/icons/illustrate_bedroom.jpg"
+                                                      alt={
+                                                        selectedRoom.roomType
+                                                      }
+                                                    />
+                                                  );
+                                                } else if (
+                                                  selectedRoom.roomType ===
+                                                  "Kitchen"
+                                                ) {
+                                                  return (
+                                                    <img
+                                                      style={{
+                                                        width: "100%",
+                                                      }}
+                                                      src="/assets/img/icons/illustrate_kitchen.jpg"
+                                                      alt={
+                                                        selectedRoom.roomType
+                                                      }
+                                                    />
+                                                  );
+                                                } else if (
+                                                  selectedRoom.roomType ===
+                                                  "Living Room"
+                                                ) {
+                                                  return (
+                                                    <img
+                                                      style={{
+                                                        width: "100%",
+                                                      }}
+                                                      src="/assets/img/icons/illustrate_livingroom.jpg"
+                                                      alt={
+                                                        selectedRoom.roomType
+                                                      }
+                                                    />
+                                                  );
+                                                } else if (
+                                                  selectedRoom.roomType ===
+                                                  "Bathroom"
+                                                ) {
+                                                  return (
+                                                    <img
+                                                      style={{
+                                                        width: "100%",
+                                                      }}
+                                                      src="/assets/img/icons/illustrate_bathroom.jpg"
+                                                      alt={
+                                                        selectedRoom.roomType
+                                                      }
+                                                    />
+                                                  );
+                                                } else if (
+                                                  selectedRoom.roomType ===
+                                                  "Dining Room"
+                                                ) {
+                                                  return (
+                                                    <img
+                                                      style={{
+                                                        width: "100%",
+                                                      }}
+                                                      src="/assets/img/icons/illustrate_dining.jpg"
+                                                      alt={
+                                                        selectedRoom.roomType
+                                                      }
+                                                    />
+                                                  );
+                                                } else if (
+                                                  selectedRoom.roomType ===
+                                                  "Balcony"
+                                                ) {
+                                                  return (
+                                                    <img
+                                                      style={{
+                                                        width: "100%",
+                                                      }}
+                                                      src="/assets/img/icons/illustrate_balcony.jpg"
+                                                      alt={
+                                                        selectedRoom.roomType
+                                                      }
+                                                    />
+                                                  );
+                                                } else {
+                                                  return (
+                                                    <img
+                                                      style={{
+                                                        width: "100%",
+                                                      }}
+                                                      src="/assets/img/icons/illustrate_basment.jpg"
+                                                      alt={
+                                                        selectedRoom.roomType
+                                                      }
+                                                    />
+                                                  );
+                                                }
+                                              })()}
+                                            </div>
+                                            <div className="main_detail">
+                                              <div className="md_single">
+                                                Area:{" "}
+                                                <span className="value">
+                                                  {selectedRoom.roomTotalArea}
                                                 </span>
+                                                <span className="unit">
+                                                  {" "}
+                                                  SqFt
+                                                </span>
+                                              </div>
+                                              <div className="md_single">
+                                                Length:{" "}
+                                                <span className="value">
+                                                  {selectedRoom.roomLength}
+                                                </span>
+                                                <span className="unit">
+                                                  {" "}
+                                                  Ft
+                                                </span>
+                                              </div>
+                                              <div className="md_single">
+                                                Width:{" "}
+                                                <span className="value">
+                                                  {selectedRoom.roomWidth}
+                                                </span>
+                                                <span className="unit">
+                                                  {" "}
+                                                  Ft
+                                                </span>
+                                              </div>
+                                            </div>
+                                            <div className="more_detail">
+                                              {selectedRoom.roomFixtures &&
+                                                selectedRoom.roomFixtures.map(
+                                                  (fixture, index) => (
+                                                    <span
+                                                      className="more_detail_single"
+                                                      key={index}
+                                                    >
+                                                      {fixture}
+                                                    </span>
+                                                  )
+                                                )}
+                                            </div>
+                                          </div>
+                                          {selectedRoom.roomAttachments
+                                            .length !== 0 && (
+                                            <div className="attached_with">
+                                              {selectedRoom.roomAttachments && (
+                                                <h6 className="text-center text_black">
+                                                  Attached with
+                                                </h6>
                                               )}
-                                            <span
-                                              className="click_text pointer"
+                                              <div className="more_detail">
+                                                {selectedRoom.roomAttachments &&
+                                                  selectedRoom.roomAttachments.map(
+                                                    (attachment, findex) => (
+                                                      <span className="more_detail_single">
+                                                        {attachment}
+                                                      </span>
+                                                    )
+                                                  )}
+                                              </div>
+                                            </div>
+                                          )}
+
+                                          {user &&
+                                            user.status === "active" &&
+                                            (user.role === "admin" ||
+                                              user.role === "superAdmin") && (
+                                              <div className="modal_footer">
+                                                <div
+                                                  onClick={handleConfirmShow}
+                                                  className="delete_bottom"
+                                                >
+                                                  <span className="material-symbols-outlined">
+                                                    delete
+                                                  </span>
+                                                  <span>Delete</span>
+                                                </div>
+                                              </div>
+                                            )}
+                                        </Modal>
+
+                                        <Modal
+                                          show={showConfirmModal}
+                                          onHide={handleConfirmClose}
+                                          className="delete_modal"
+                                          centered
+                                        >
+                                          <div className="alert_text text-center">
+                                            Alert
+                                          </div>
+
+                                          <div className="sure_content text-center">
+                                            Are you sure you want to delete?
+                                          </div>
+                                          <div className="yes_no_btn">
+                                            <div
+                                              className="theme_btn full_width no_icon text-center btn_border"
                                               onClick={() =>
-                                                handleShowRoomModal(room)
+                                                deletePropertyLayout(
+                                                  selectedRoom.id
+                                                )
                                               }
                                             >
-                                              View More
-                                            </span>
+                                              Yes
+                                            </div>
+                                            <div
+                                              className="theme_btn full_width no_icon text-center btn_fill"
+                                              onClick={handleConfirmClose}
+                                            >
+                                              No
+                                            </div>
                                           </div>
-                                        </div>
-                                      </div>
-                                    </SwiperSlide>
-                                  ))}
-                              </Swiper>
-
-                              {selectedRoom && (
-                                <>
-                                  <Modal
-                                    show={showRoomModal}
-                                    onHide={handleRoomModalClose}
-                                    className="margin_top detail_modal"
-                                    centered
-                                  >
-                                    <span
-                                      className="material-symbols-outlined modal_close"
-                                      onClick={handleRoomModalClose}
-                                    >
-                                      close
-                                    </span>
-                                    <h5 className="modal_title text-center">
-                                      {selectedRoom.roomName}
-                                    </h5>
-                                    <div className="modal_body">
-                                      <div className="img_area">
-                                        {(() => {
-                                          if (
-                                            selectedRoom.roomType === "Bedroom"
-                                          ) {
-                                            return (
-                                              <img
-                                                style={{
-                                                  width: "100%",
-                                                }}
-                                                src="/assets/img/icons/illustrate_bedroom.jpg"
-                                                alt={selectedRoom.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            selectedRoom.roomType === "Kitchen"
-                                          ) {
-                                            return (
-                                              <img
-                                                style={{
-                                                  width: "100%",
-                                                }}
-                                                src="/assets/img/icons/illustrate_kitchen.jpg"
-                                                alt={selectedRoom.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            selectedRoom.roomType ===
-                                            "Living Room"
-                                          ) {
-                                            return (
-                                              <img
-                                                style={{
-                                                  width: "100%",
-                                                }}
-                                                src="/assets/img/icons/illustrate_livingroom.jpg"
-                                                alt={selectedRoom.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            selectedRoom.roomType === "Bathroom"
-                                          ) {
-                                            return (
-                                              <img
-                                                style={{
-                                                  width: "100%",
-                                                }}
-                                                src="/assets/img/icons/illustrate_bathroom.jpg"
-                                                alt={selectedRoom.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            selectedRoom.roomType ===
-                                            "Dining Room"
-                                          ) {
-                                            return (
-                                              <img
-                                                style={{
-                                                  width: "100%",
-                                                }}
-                                                src="/assets/img/icons/illustrate_dining.jpg"
-                                                alt={selectedRoom.roomType}
-                                              />
-                                            );
-                                          } else if (
-                                            selectedRoom.roomType === "Balcony"
-                                          ) {
-                                            return (
-                                              <img
-                                                style={{
-                                                  width: "100%",
-                                                }}
-                                                src="/assets/img/icons/illustrate_balcony.jpg"
-                                                alt={selectedRoom.roomType}
-                                              />
-                                            );
-                                          } else {
-                                            return (
-                                              <img
-                                                style={{
-                                                  width: "100%",
-                                                }}
-                                                src="/assets/img/icons/illustrate_basment.jpg"
-                                                alt={selectedRoom.roomType}
-                                              />
-                                            );
-                                          }
-                                        })()}
-                                      </div>
-                                      <div className="main_detail">
-                                        <div className="md_single">
-                                          Area:{" "}
-                                          <span className="value">
-                                            {selectedRoom.roomTotalArea}
-                                          </span>
-                                          <span className="unit"> SqFt</span>
-                                        </div>
-                                        <div className="md_single">
-                                          Length:{" "}
-                                          <span className="value">
-                                            {selectedRoom.roomLength}
-                                          </span>
-                                          <span className="unit"> Ft</span>
-                                        </div>
-                                        <div className="md_single">
-                                          Width:{" "}
-                                          <span className="value">
-                                            {selectedRoom.roomWidth}
-                                          </span>
-                                          <span className="unit"> Ft</span>
-                                        </div>
-                                      </div>
-                                      <div className="more_detail">
-                                        {selectedRoom.roomFixtures &&
-                                          selectedRoom.roomFixtures.map(
-                                            (fixture, index) => (
-                                              <span
-                                                className="more_detail_single"
-                                                key={index}
-                                              >
-                                                {fixture}
-                                              </span>
-                                            )
-                                          )}
-                                      </div>
-                                    </div>
-                                    {selectedRoom.roomAttachments.length !==
-                                      0 && (
-                                        <div className="attached_with">
-                                          {selectedRoom.roomAttachments && (
-                                            <h6 className="text-center text_black">
-                                              Attached with
-                                            </h6>
-                                          )}
-                                          <div className="more_detail">
-                                            {selectedRoom.roomAttachments &&
-                                              selectedRoom.roomAttachments.map(
-                                                (attachment, findex) => (
-                                                  <span className="more_detail_single">
-                                                    {attachment}
-                                                  </span>
-                                                )
-                                              )}
-                                          </div>
-                                        </div>
-                                      )}
-
-                                    {user &&
-                                      user.status === "active" &&
-                                      (user.role === "admin" ||
-                                        user.role === "superAdmin") && (
-                                        <div className="modal_footer">
-                                          <div
-                                            onClick={handleConfirmShow}
-                                            className="delete_bottom"
-                                          >
-                                            <span className="material-symbols-outlined">
-                                              delete
-                                            </span>
-                                            <span>Delete</span>
-                                          </div>
-                                        </div>
-                                      )}
-                                  </Modal>
-
-                                  <Modal
-                                    show={showConfirmModal}
-                                    onHide={handleConfirmClose}
-                                    className="delete_modal"
-                                    centered
-                                  >
-                                    <div className="alert_text text-center">
-                                      Alert
-                                    </div>
-
-                                    <div className="sure_content text-center">
-                                      Are you sure you want to delete?
-                                    </div>
-                                    <div className="yes_no_btn">
-                                      <div
-                                        className="theme_btn full_width no_icon text-center btn_border"
-                                        onClick={() =>
-                                          deletePropertyLayout(selectedRoom.id)
-                                        }
-                                      >
-                                        Yes
-                                      </div>
-                                      <div
-                                        className="theme_btn full_width no_icon text-center btn_fill"
-                                        onClick={handleConfirmClose}
-                                      >
-                                        No
-                                      </div>
-                                    </div>
-                                  </Modal>
-                                </>
-                              )}
+                                        </Modal>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                          </section>
+                        )}
+                    </>
                   )}
+
                 {/* property layout section end  */}
 
                 {/* tenant card start */}
-                {user &&
-                  user.status === "active" &&
-                  ((user && user.role === "owner") ||
-                    (user && user.role === "coowner") ||
-                    (user &&
-                      (user.role === "admin" ||
-                        user.role === "superAdmin"))) && (
-                    <section className="property_card_single full_width_sec with_orange">
-                      <span className="verticall_title">
-                        Tenants
-                        {/* {tenantDocument && tenantDocument.length} */}
-                      </span>
-                      <div className="more_detail_card_inner">
-                        <div className="row">
-                          {user &&
-                            user.status === "active" &&
+                {propertyDocument &&
+                  (propertyDocument.category === "Residential" ||
+                    propertyDocument.category === "Commercial") && (
+                    <>
+                      {user &&
+                        user.status === "active" &&
+                        ((user && user.role === "owner") ||
+                          (user && user.role === "coowner") ||
+                          (user &&
                             (user.role === "admin" ||
-                              user.role === "superAdmin") && (
-                              <div
-                                className="col-sm-1 col-2"
-                                style={{
-                                  paddingRight: "0px",
-                                }}
-                              >
-                                <div className="plus_icon">
-                                  <Link
-                                    className="plus_icon_inner"
-                                    onClick={handleAddTenant}
-                                  >
-                                    <span className="material-symbols-outlined">
-                                      add
-                                    </span>
-                                  </Link>
+                              user.role === "superAdmin"))) && (
+                          <section className="property_card_single full_width_sec with_orange">
+                            <span className="verticall_title">
+                              Tenants
+                              {/* {tenantDocument && tenantDocument.length} */}
+                            </span>
+                            <div className="more_detail_card_inner">
+                              <div className="row">
+                                {user &&
+                                  user.status === "active" &&
+                                  (user.role === "admin" ||
+                                    user.role === "superAdmin") && (
+                                    <div
+                                      className="col-sm-1 col-2"
+                                      style={{
+                                        paddingRight: "0px",
+                                      }}
+                                    >
+                                      <div className="plus_icon">
+                                        <Link
+                                          className="plus_icon_inner"
+                                          onClick={handleAddTenant}
+                                        >
+                                          <span className="material-symbols-outlined">
+                                            add
+                                          </span>
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  )}
+                                <div
+                                  className={`${
+                                    user &&
+                                    user.status === "active" &&
+                                    (user.role === "admin" ||
+                                      user.role === "superAdmin")
+                                      ? "col-sm-11 col-10"
+                                      : "col-12"
+                                  }`}
+                                >
+                                  <div className="tenant_card">
+                                    <Swiper
+                                      spaceBetween={15}
+                                      slidesPerView={3.5}
+                                      pagination={false}
+                                      freeMode={true}
+                                      className="all_tenants"
+                                      breakpoints={{
+                                        320: {
+                                          slidesPerView: 1.1,
+                                          spaceBetween: 10,
+                                        },
+                                        767: {
+                                          slidesPerView: 1.5,
+                                          spaceBetween: 15,
+                                        },
+                                        991: {
+                                          slidesPerView: 2.5,
+                                          spaceBetween: 15,
+                                        },
+                                        1199: {
+                                          slidesPerView: 3.5,
+                                          spaceBetween: 15,
+                                        },
+                                      }}
+                                    >
+                                      {tenantDocument &&
+                                        tenantDocument.map((tenant, index) => (
+                                          <SwiperSlide key={index}>
+                                            <div
+                                              className={`tc_single relative item ${
+                                                tenant.status === "inactive"
+                                                  ? "t_inactive"
+                                                  : ""
+                                              }`}
+                                            >
+                                              <Link
+                                                className="left"
+                                                to={`/tenantdetails/${tenant.id}`}
+                                              >
+                                                <div className="tcs_img_container">
+                                                  <img
+                                                    src={
+                                                      tenant.tenantImgUrl ||
+                                                      "/assets/img/dummy_user.png"
+                                                    }
+                                                    alt="Preview"
+                                                  />
+                                                </div>
+                                                <div
+                                                  className={`tenant_detail ${
+                                                    editingTenantId ===
+                                                    tenant.id
+                                                      ? "td_edit"
+                                                      : ""
+                                                  }`}
+                                                >
+                                                  <h6 className="t_name">
+                                                    {tenant.name
+                                                      ? tenant.name
+                                                      : "Tenant Name"}
+                                                  </h6>
+                                                  <h6 className="t_number">
+                                                    {tenant.mobile
+                                                      ? tenant.mobile
+                                                      : "Tenant Phone"}
+                                                  </h6>
+                                                </div>
+                                              </Link>
+                                              <div className="wha_call_icon">
+                                                <Link
+                                                  className="call_icon wc_single"
+                                                  to={`tel:+${tenant.mobile}`}
+                                                  target="_blank"
+                                                >
+                                                  <img
+                                                    src="/assets/img/simple_call.png"
+                                                    alt=""
+                                                  />
+                                                </Link>
+                                                <Link
+                                                  className="wha_icon wc_single"
+                                                  to={`https://wa.me/+${tenant.mobile}`}
+                                                  target="_blank"
+                                                >
+                                                  <img
+                                                    src="/assets/img/whatsapp_simple.png"
+                                                    alt=""
+                                                  />
+                                                </Link>
+                                              </div>
+                                            </div>
+                                          </SwiperSlide>
+                                        ))}
+                                    </Swiper>
+                                  </div>
                                 </div>
                               </div>
-                            )}
-                          <div
-                            className={`${user &&
-                              user.status === "active" &&
-                              (user.role === "admin" ||
-                                user.role === "superAdmin")
-                              ? "col-sm-11 col-10"
-                              : "col-12"
-                              }`}
-                          >
-                            <div className="tenant_card">
-                              <Swiper
-                                spaceBetween={15}
-                                slidesPerView={3.5}
-                                pagination={false}
-                                freeMode={true}
-                                className="all_tenants"
-                                breakpoints={{
-                                  320: {
-                                    slidesPerView: 1.1,
-                                    spaceBetween: 10,
-                                  },
-                                  767: {
-                                    slidesPerView: 1.5,
-                                    spaceBetween: 15,
-                                  },
-                                  991: {
-                                    slidesPerView: 2.5,
-                                    spaceBetween: 15,
-                                  },
-                                  1199: {
-                                    slidesPerView: 3.5,
-                                    spaceBetween: 15,
-                                  },
-                                }}
-                              >
-                                {tenantDocument &&
-                                  tenantDocument.map((tenant, index) => (
-                                    <SwiperSlide key={index}>
-                                      <div
-                                        className={`tc_single relative item ${tenant.status === "inactive"
-                                          ? "t_inactive"
-                                          : ""
-                                          }`}
-                                      >
-                                        <Link
-                                          className="left"
-                                          to={`/tenantdetails/${tenant.id}`}
-                                        >
-                                          <div className="tcs_img_container">
-                                            <img
-                                              src={
-                                                tenant.tenantImgUrl ||
-                                                "/assets/img/dummy_user.png"
-                                              }
-                                              alt="Preview"
-                                            />
-                                          </div>
-                                          <div
-                                            className={`tenant_detail ${editingTenantId === tenant.id
-                                              ? "td_edit"
-                                              : ""
-                                              }`}
-                                          >
-                                            <h6 className="t_name">
-                                              {tenant.name
-                                                ? tenant.name
-                                                : "Tenant Name"}
-                                            </h6>
-                                            <h6 className="t_number">
-                                              {tenant.mobile
-                                                ? tenant.mobile
-                                                : "Tenant Phone"}
-                                            </h6>
-                                          </div>
-                                        </Link>
-                                        <div className="wha_call_icon">
-                                          <Link
-                                            className="call_icon wc_single"
-                                            to={`tel:+${tenant.mobile}`}
-                                            target="_blank"
-                                          >
-                                            <img
-                                              src="/assets/img/simple_call.png"
-                                              alt=""
-                                            />
-                                          </Link>
-                                          <Link
-                                            className="wha_icon wc_single"
-                                            to={`https://wa.me/+${tenant.mobile}`}
-                                            target="_blank"
-                                          >
-                                            <img
-                                              src="/assets/img/whatsapp_simple.png"
-                                              alt=""
-                                            />
-                                          </Link>
-                                        </div>
-                                      </div>
-                                    </SwiperSlide>
-                                  ))}
-                              </Swiper>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                          </section>
+                        )}
+                    </>
                   )}
+
                 {/* tenant card end  */}
 
                 {/* property user card  start */}
@@ -3097,13 +3213,14 @@ const PropertyDetails = () => {
                                 </div>
                               )}
                             <div
-                              className={`${user &&
+                              className={`${
+                                user &&
                                 user.status === "active" &&
                                 (user.role === "admin" ||
                                   user.role === "superAdmin")
-                                ? "col-sm-11 col-10"
-                                : "col-12"
-                                }`}
+                                  ? "col-sm-11 col-10"
+                                  : "col-12"
+                              }`}
                             >
                               <div className="tenant_card">
                                 <Swiper
@@ -3140,15 +3257,15 @@ const PropertyDetails = () => {
                                               className="property_people_designation d-flex align-items-end justify-content-center pointer"
                                               onClick={
                                                 user &&
-                                                  user.status === "active" &&
-                                                  (user.role === "admin" ||
-                                                    user.role === "superAdmin")
+                                                user.status === "active" &&
+                                                (user.role === "admin" ||
+                                                  user.role === "superAdmin")
                                                   ? (e) =>
-                                                    handleShowOwnerTags(
-                                                      e,
-                                                      propUser,
-                                                      "propowner"
-                                                    )
+                                                      handleShowOwnerTags(
+                                                        e,
+                                                        propUser,
+                                                        "propowner"
+                                                      )
                                                   : null
                                               }
                                             >
@@ -3157,7 +3274,7 @@ const PropertyDetails = () => {
                                                 user.status === "active" &&
                                                 (user.role === "admin" ||
                                                   user.role ===
-                                                  "superAdmin") && (
+                                                    "superAdmin") && (
                                                   <span
                                                     className="material-symbols-outlined click_icon text_near_icon"
                                                     style={{ fontSize: "10px" }}
@@ -3180,30 +3297,31 @@ const PropertyDetails = () => {
                                                 <h5
                                                   onClick={
                                                     user &&
-                                                      user.status === "active" &&
-                                                      (user.role === "admin" ||
-                                                        user.role ===
-                                                        "superAdmin")
-                                                      ? () =>
-                                                        openChangeUser(
-                                                          propUser.id
-                                                        )
-                                                      : ""
-                                                  }
-                                                  className={`t_name ${user &&
+                                                    user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin")
-                                                    ? "pointer"
-                                                    : ""
-                                                    }`}
+                                                        "superAdmin")
+                                                      ? () =>
+                                                          openChangeUser(
+                                                            propUser.id
+                                                          )
+                                                      : ""
+                                                  }
+                                                  className={`t_name ${
+                                                    user &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin")
+                                                      ? "pointer"
+                                                      : ""
+                                                  }`}
                                                 >
                                                   {propUser.fullName}
                                                   {user &&
                                                     user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin") && (
+                                                        "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
                                                       </span>
@@ -3219,7 +3337,7 @@ const PropertyDetails = () => {
                                                   user.status === "active" &&
                                                   (user.role === "admin" ||
                                                     user.role ===
-                                                    "superAdmin") && (
+                                                      "superAdmin") && (
                                                     <h6
                                                       className="text_red pointer"
                                                       style={{
@@ -3246,9 +3364,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `tel:+${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                               >
@@ -3262,9 +3380,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `https://wa.me/+${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                                 target="_blank"
@@ -3500,12 +3618,13 @@ const PropertyDetails = () => {
                                 </div>
                               )}
                             <div
-                              className={`${user &&
+                              className={`${
+                                user &&
                                 (user.role === "admin" ||
                                   user.role === "superAdmin")
-                                ? "col-sm-11 col-10"
-                                : "col-12"
-                                }`}
+                                  ? "col-sm-11 col-10"
+                                  : "col-12"
+                              }`}
                             >
                               <div className="tenant_card">
                                 <Swiper
@@ -3560,7 +3679,7 @@ const PropertyDetails = () => {
                                                 user.status === "active" &&
                                                 (user.role === "admin" ||
                                                   user.role ===
-                                                  "superAdmin") && (
+                                                    "superAdmin") && (
                                                   <span
                                                     className="material-symbols-outlined click_icon text_near_icon"
                                                     style={{
@@ -3585,30 +3704,31 @@ const PropertyDetails = () => {
                                                 <h5
                                                   onClick={
                                                     user &&
-                                                      user.status === "active" &&
-                                                      (user.role === "admin" ||
-                                                        user.role ===
-                                                        "superAdmin")
-                                                      ? () =>
-                                                        openChangeUser(
-                                                          propUser.id
-                                                        )
-                                                      : ""
-                                                  }
-                                                  className={`t_name ${user &&
+                                                    user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin")
-                                                    ? "pointer"
-                                                    : ""
-                                                    }`}
+                                                        "superAdmin")
+                                                      ? () =>
+                                                          openChangeUser(
+                                                            propUser.id
+                                                          )
+                                                      : ""
+                                                  }
+                                                  className={`t_name ${
+                                                    user &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin")
+                                                      ? "pointer"
+                                                      : ""
+                                                  }`}
                                                 >
                                                   {propUser.fullName}
                                                   {user &&
                                                     user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin") && (
+                                                        "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
                                                       </span>
@@ -3624,7 +3744,7 @@ const PropertyDetails = () => {
                                                   user.status === "active" &&
                                                   (user.role === "admin" ||
                                                     user.role ===
-                                                    "superAdmin") && (
+                                                      "superAdmin") && (
                                                     <h6
                                                       className="text_red pointer"
                                                       style={{
@@ -3651,9 +3771,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `tel:+${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                               >
@@ -3667,9 +3787,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `https://wa.me/+${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                                 target="_blank"
@@ -3832,8 +3952,18 @@ const PropertyDetails = () => {
                             />
                           </div>
                           <div className="pis_content">
-                            <h6>Type</h6>
-                            <h5>{propertyDocument.bhk}</h5>
+                            {propertyDocument.category === "Plot" ||
+                            propertyDocument.category === "Commercial" ? (
+                              <>
+                                <h6>Gated Area</h6>
+                                <h5>{propertyDocument.gatedArea}</h5>
+                              </>
+                            ) : (
+                              <>
+                                <h6>Type</h6>
+                                <h5>{propertyDocument.bhk}</h5>
+                              </>
+                            )}
                           </div>
                         </div>
                       )}
@@ -3851,7 +3981,7 @@ const PropertyDetails = () => {
                             <h6>Furnishing</h6>
                             <h5>
                               {propertyDocument.furnishing.toLowerCase() ===
-                                "raw"
+                              "raw"
                                 ? "Unfurnished"
                                 : propertyDocument.furnishing}
                             </h5>
@@ -3859,21 +3989,30 @@ const PropertyDetails = () => {
                         </div>
                       )}
                       {/* Bedroom   */}
-                      {propertyDocument &&
-                        propertyDocument.numberOfBedrooms && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/bedrooms.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
+
+                      <div className="p_info_single">
+                        <div className="pd_icon">
+                          <img
+                            src="/assets/img/property-detail-icon/bedrooms.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="pis_content">
+                          {propertyDocument.category === "Plot" ||
+                          propertyDocument.category === "Commercial" ? (
+                            <>
+                              <h6>Property Type</h6>
+                              <h5>{propertyDocument.propertyType}</h5>
+                            </>
+                          ) : (
+                            <>
                               <h6>Bedroom</h6>
                               <h5>{propertyDocument.numberOfBedrooms}</h5>
-                            </div>
-                          </div>
-                        )}
+                            </>
+                          )}
+                        </div>
+                      </div>
+
                       {/* Bathroom  */}
                       {propertyDocument &&
                         propertyDocument.numberOfBathrooms && (
@@ -3885,13 +4024,23 @@ const PropertyDetails = () => {
                               />
                             </div>
                             <div className="pis_content">
-                              <h6>Bathroom</h6>
-                              <h5>{propertyDocument.numberOfBathrooms}</h5>
+                              {propertyDocument.category === "Plot" ||
+                              propertyDocument.category === "Commercial" ? (
+                                <>
+                                  <h6>Property Sub-Type</h6>
+                                  <h5>{propertyDocument.additionalRooms[0]}</h5>
+                                </>
+                              ) : (
+                                <>
+                                  <h6>Bathroom</h6>
+                                  <h5>{propertyDocument.numberOfBathrooms}</h5>
+                                </>
+                              )}
                             </div>
                           </div>
                         )}
                       {/* Balcony  */}
-                      {propertyDocument &&
+                      {propertyDocument && propertyDocument.category === "Residential" &&
                         propertyDocument.numberOfBalcony !== 0 && (
                           <div className="p_info_single">
                             <div className="pd_icon">
@@ -3907,7 +4056,8 @@ const PropertyDetails = () => {
                           </div>
                         )}
                       {/* Kitchen  */}
-                      <div className="p_info_single">
+                      {propertyDocument.category === "Residential" && (
+                        <div className="p_info_single">
                         <div className="pd_icon">
                           <img
                             src="/assets/img/property-detail-icon/kitchen.png"
@@ -3920,8 +4070,10 @@ const PropertyDetails = () => {
                           <h5>Yes</h5>
                         </div>
                       </div>
+                      )}
+                      
                       {/* Living Area  */}
-                      {propertyDocument && propertyDocument.livingArea && (
+                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.livingArea && (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -3936,7 +4088,7 @@ const PropertyDetails = () => {
                         </div>
                       )}
                       {/* Dining  Area  */}
-                      {propertyDocument && propertyDocument.diningArea && (
+                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.diningArea && (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -3951,9 +4103,9 @@ const PropertyDetails = () => {
                         </div>
                       )}
                       {/* Living Area And Dining Area Combine  */}
-                      {propertyDocument &&
+                      {propertyDocument && propertyDocument.category === "Residential" &&
                         propertyDocument.livingAndDining.toLowerCase() ===
-                        "yes" && (
+                          "yes" && (
                           <div className="p_info_single">
                             <div className="pd_icon">
                               <img
@@ -3984,7 +4136,7 @@ const PropertyDetails = () => {
                         </div>
                       )} */}
                       {/* Passage  */}
-                      {propertyDocument && propertyDocument.passage && (
+                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.passage && (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -3999,7 +4151,7 @@ const PropertyDetails = () => {
                         </div>
                       )}
                       {/* Entrance Gallery  */}
-                      {propertyDocument && propertyDocument.entranceGallery && (
+                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.entranceGallery && (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -4014,7 +4166,7 @@ const PropertyDetails = () => {
                         </div>
                       )}
                       {/* Main Door Facing  */}
-                      {propertyDocument && propertyDocument.mainDoorFacing && (
+                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.mainDoorFacing && (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -4023,13 +4175,18 @@ const PropertyDetails = () => {
                             />
                           </div>
                           <div className="pis_content">
-                            <h6>Main Door Facing</h6>
+                            <h6>
+                              {propertyDocument.category === "Plot" ||
+                              propertyDocument.category === "Commercial"
+                                ? "Direction Facing"
+                                : "Main Door Facing"}
+                            </h6>
                             <h5>{propertyDocument.mainDoorFacing}</h5>
                           </div>
                         </div>
                       )}
                       {/* Balcony  */}
-                      {propertyDocument &&
+                      {propertyDocument && propertyDocument.category === "Residential" &&
                         propertyDocument.numberOfBalcony !== 0 &&
                         propertyDocument.balconyFacing && (
                           <div className="p_info_single">
@@ -4084,10 +4241,10 @@ const PropertyDetails = () => {
                                 {" "}
                                 {propertyDocument &&
                                   new Date().getFullYear() -
-                                  Number(
-                                    propertyDocument.yearOfConstruction
-                                  ) +
-                                  " Years"}{" "}
+                                    Number(
+                                      propertyDocument.yearOfConstruction
+                                    ) +
+                                    " Years"}{" "}
                               </h5>
                             </div>
                           </div>
@@ -4200,153 +4357,169 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   )}
+
                 {/* Additional Rooms */}
                 {propertyDocument &&
-                  propertyDocument.additionalRooms.length > 0 && (
-                    <div className="property_card_single mobile_full_card">
-                      <div className="more_detail_card_inner">
-                        <h2 className="card_title">Additional Rooms</h2>
-                        <div className="p_info">
-                          {(() => {
-                            const servantRooms =
-                              propertyDocument.additionalRooms.filter(
-                                (item) =>
-                                  item === "Servent Room 1" ||
-                                  item === "Servent Room 2"
-                              );
-                            const otherRooms =
-                              propertyDocument.additionalRooms.filter(
-                                (item) =>
-                                  item !== "Servent Room 1" &&
-                                  item !== "Servent Room 2"
-                              );
+                  propertyDocument.category === "Residential" && (
+                    <>
+                      {propertyDocument &&
+                        propertyDocument.additionalRooms.length > 0 && (
+                          <div className="property_card_single mobile_full_card">
+                            <div className="more_detail_card_inner">
+                              <h2 className="card_title">Additional Rooms</h2>
+                              <div className="p_info">
+                                {(() => {
+                                  const servantRooms =
+                                    propertyDocument.additionalRooms.filter(
+                                      (item) =>
+                                        item === "Servent Room 1" ||
+                                        item === "Servent Room 2"
+                                    );
+                                  const otherRooms =
+                                    propertyDocument.additionalRooms.filter(
+                                      (item) =>
+                                        item !== "Servent Room 1" &&
+                                        item !== "Servent Room 2"
+                                    );
 
-                            return (
-                              <>
-                                {servantRooms.length > 0 && (
+                                  return (
+                                    <>
+                                      {servantRooms.length > 0 && (
+                                        <div className="p_info_single">
+                                          <div className="pd_icon">
+                                            <img
+                                              src="/assets/img/property-detail-icon/servantRoom.png"
+                                              alt="Servant Room"
+                                            />
+                                          </div>
+                                          <div className="pis_content">
+                                            <h5>
+                                              {servantRooms.length > 1
+                                                ? `Servant Room (${servantRooms.length})`
+                                                : "Servant Room"}
+                                            </h5>
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {otherRooms.map((item) => (
+                                        <div
+                                          className="p_info_single"
+                                          key={item}
+                                        >
+                                          <div className="pd_icon">
+                                            {item === "Office Room" ? (
+                                              <img
+                                                src="/assets/img/property-detail-icon/officeRoom.png"
+                                                alt="Office Room"
+                                              />
+                                            ) : item === "Store Room" ? (
+                                              <img
+                                                src="/assets/img/property-detail-icon/storeRoom.png"
+                                                alt="Store Room"
+                                              />
+                                            ) : item === "Pooja Room" ? (
+                                              <img
+                                                src="/assets/img/property-detail-icon/poojaRoom.png"
+                                                alt="Pooja Room"
+                                              />
+                                            ) : item === "Study Room" ? (
+                                              <img
+                                                src="/assets/img/property-detail-icon/studyRoom.png"
+                                                alt="Study Room"
+                                              />
+                                            ) : item === "Power Room" ? (
+                                              <img
+                                                src="/assets/img/property-detail-icon/powerRoom.png"
+                                                alt="Power Room"
+                                              />
+                                            ) : item === "Powder Room" ? (
+                                              <img
+                                                src="/assets/img/property-detail-icon/powderroom.png"
+                                                alt="Power Room"
+                                              />
+                                            ) : item === "Basement" ? (
+                                              <img
+                                                src="/assets/img/property-detail-icon/basement.png"
+                                                alt="Power Room"
+                                              />
+                                            ) : null}
+                                          </div>
+                                          <div className="pis_content">
+                                            <h5>{item}</h5>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </>
+                                  );
+                                })()}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                    </>
+                  )}
+
+                {/* Additional Area */}
+                {propertyDocument &&
+                  propertyDocument.category === "Residential" && (
+                    <>
+                      {propertyDocument &&
+                        propertyDocument.additionalArea.length > 0 && (
+                          <div className="property_card_single mobile_full_card">
+                            <div className="more_detail_card_inner">
+                              <h2 className="card_title">Additional Area</h2>
+                              <div className="p_info">
+                                {propertyDocument.additionalArea.map((item) => (
                                   <div className="p_info_single">
                                     <div className="pd_icon">
-                                      <img
-                                        src="/assets/img/property-detail-icon/servantRoom.png"
-                                        alt="Servant Room"
-                                      />
+                                      {item === "Front Yard" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/frontyard.png"
+                                          alt=""
+                                        />
+                                      ) : item === "Back Yard" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/backyard.png"
+                                          alt=""
+                                        />
+                                      ) : item === "Terrace" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/terrace.png"
+                                          alt=""
+                                        />
+                                      ) : item === "Private Garden" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/privateGarden.png"
+                                          alt=""
+                                        />
+                                      ) : item === "Garage" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/garage.png"
+                                          alt=""
+                                        />
+                                      ) : item === "Roof Rights" ? (
+                                        <img
+                                          src="/assets/img/property-detail-icon/roofing.png"
+                                          alt=""
+                                        />
+                                      ) : (
+                                        ""
+                                      )}
                                     </div>
                                     <div className="pis_content">
-                                      <h5>
-                                        {servantRooms.length > 1
-                                          ? `Servant Room (${servantRooms.length})`
-                                          : "Servant Room"}
-                                      </h5>
-                                    </div>
-                                  </div>
-                                )}
-
-                                {otherRooms.map((item) => (
-                                  <div className="p_info_single" key={item}>
-                                    <div className="pd_icon">
-                                      {item === "Office Room" ? (
-                                        <img
-                                          src="/assets/img/property-detail-icon/officeRoom.png"
-                                          alt="Office Room"
-                                        />
-                                      ) : item === "Store Room" ? (
-                                        <img
-                                          src="/assets/img/property-detail-icon/storeRoom.png"
-                                          alt="Store Room"
-                                        />
-                                      ) : item === "Pooja Room" ? (
-                                        <img
-                                          src="/assets/img/property-detail-icon/poojaRoom.png"
-                                          alt="Pooja Room"
-                                        />
-                                      ) : item === "Study Room" ? (
-                                        <img
-                                          src="/assets/img/property-detail-icon/studyRoom.png"
-                                          alt="Study Room"
-                                        />
-                                      ) : item === "Power Room" ? (
-                                        <img
-                                          src="/assets/img/property-detail-icon/powerRoom.png"
-                                          alt="Power Room"
-                                        />
-                                      ) : item === "Powder Room" ? (
-                                        <img
-                                          src="/assets/img/property-detail-icon/powderroom.png"
-                                          alt="Power Room"
-                                        />
-                                      ) : item === "Basement" ? (
-                                        <img
-                                          src="/assets/img/property-detail-icon/basement.png"
-                                          alt="Power Room"
-                                        />
-                                      ) : null}
-                                    </div>
-                                    <div className="pis_content">
+                                      {/* <h6>1</h6> */}
                                       <h5>{item}</h5>
                                     </div>
                                   </div>
                                 ))}
-                              </>
-                            );
-                          })()}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                {/* Additional Area */}
-                {propertyDocument &&
-                  propertyDocument.additionalArea.length > 0 && (
-                    <div className="property_card_single mobile_full_card">
-                      <div className="more_detail_card_inner">
-                        <h2 className="card_title">Additional Area</h2>
-                        <div className="p_info">
-                          {propertyDocument.additionalArea.map((item) => (
-                            <div className="p_info_single">
-                              <div className="pd_icon">
-                                {item === "Front Yard" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/frontyard.png"
-                                    alt=""
-                                  />
-                                ) : item === "Back Yard" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/backyard.png"
-                                    alt=""
-                                  />
-                                ) : item === "Terrace" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/terrace.png"
-                                    alt=""
-                                  />
-                                ) : item === "Private Garden" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/privateGarden.png"
-                                    alt=""
-                                  />
-                                ) : item === "Garage" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/garage.png"
-                                    alt=""
-                                  />
-                                ) : item === "Roof Rights" ? (
-                                  <img
-                                    src="/assets/img/property-detail-icon/roofing.png"
-                                    alt=""
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                              <div className="pis_content">
-                                {/* <h6>1</h6> */}
-                                <h5>{item}</h5>
                               </div>
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                          </div>
+                        )}
+                    </>
                   )}
+
                 {/* Property Size  */}
 
                 <div className="property_card_single mobile_full_card">
@@ -4440,285 +4613,308 @@ const PropertyDetails = () => {
                 </div>
 
                 {/* Parking  */}
-                <div className="property_card_single mobile_full_card">
-                  <div className="more_detail_card_inner">
-                    <h2 className="card_title">Parking</h2>
-                    <div className="p_info">
-                      {/* Covered Parking  */}
-                      {(propertyDocument &&
-                        propertyDocument.numberOfCoveredCarParking === 0) ||
-                        propertyDocument.numberOfCoveredCarParking === "0" ? (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/car-parking.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Covered Car Parking</h6>
-                            <h5>No</h5>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/car-parking.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Covered Car Parking</h6>
-                            <h5>
-                              {propertyDocument.numberOfCoveredCarParking}
-                            </h5>
-                          </div>
-                        </div>
-                      )}
-                      {/* Open car parking  */}
-                      {(propertyDocument &&
-                        propertyDocument.numberOfOpenCarParking === 0) ||
-                        propertyDocument.numberOfOpenCarParking === "0" ? (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/car-parking.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Open Car Parking</h6>
-                            <h5>No</h5>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/car-parking.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Open Car Parking</h6>
-                            <h5>{propertyDocument.numberOfOpenCarParking}</h5>
-                          </div>
-                        </div>
-                      )}
-                      {/* 2 Wheeler Parking  */}
-                      {propertyDocument &&
-                        propertyDocument.twoWheelarParking && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/2Wheelerparking.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>2 Wheeler Parking</h6>
-                              <h5>{propertyDocument.twoWheelarParking}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Electric Vehicle Charging Point  */}
-                      {propertyDocument &&
-                        propertyDocument.evChargingPointStatus &&
-                        propertyDocument.evChargingPointStatus.toLowerCase() ===
-                        "yes" && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/2Wheelerparking.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>EV Charging Point</h6>
-                              <h5>
-                                {propertyDocument.evChargingPointStatus +
-                                  ", " +
-                                  propertyDocument.evChargingPointType}
-                              </h5>
-                            </div>
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                </div>
-                {/* Building  */}
-                <div className="property_card_single mobile_full_card">
-                  <div className="more_detail_card_inner">
-                    <h2 className="card_title">Building</h2>
-                    <div className="p_info">
-                      {/* Total Number Of Floors  */}
-                      {propertyDocument && propertyDocument.numberOfFloors && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/TotalFloors.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Total Floors</h6>
-                            <h5>{propertyDocument.numberOfFloors}</h5>
-                          </div>
-                        </div>
-                      )}
-                      {/* Floor No  */}
-                      {propertyDocument && propertyDocument.floorNo && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/FloorNumber.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Floor Number</h6>
-                            <h5>{propertyDocument.floorNo}</h5>
-                          </div>
-                        </div>
-                      )}
-                      {/* Number of flats on floor  */}
-                      {propertyDocument &&
-                        propertyDocument.numberOfFlatsOnFloor && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/apartmentOnFloor.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Number of Flats on a Floor</h6>
-                              <h5>{propertyDocument.numberOfFlatsOnFloor}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* number of lifts  */}
-                      {propertyDocument &&
-                        propertyDocument.numberOfLifts == 0 ? (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/lift.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Lift</h6>
-                            <h5>No</h5>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/lift.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Lift</h6>
-                            <h5>{propertyDocument.numberOfLifts}</h5>
-                          </div>
-                        </div>
-                      )}
-                      {/* Power Backup  */}
-                      {propertyDocument && propertyDocument.powerBackup && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/PowerBackup.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Power Backup</h6>
-                            <h5>{propertyDocument.powerBackup}</h5>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {/* Additional Info  */}
-                {propertyDocument.purpose.toLowerCase() !== "sale" && (
-                  <div className="property_card_single mobile_full_card">
-                    <div className="more_detail_card_inner">
-                      <h2 className="card_title">Additional Info</h2>
-                      <div className="p_info">
-                        {/* Bachelor Boys Allowed  */}
-                        {propertyDocument &&
-                          propertyDocument.bachlorsBoysAllowed && (
+                {propertyDocument &&
+                  propertyDocument.category === "Residential" && (
+                    <div className="property_card_single mobile_full_card">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">Parking</h2>
+                        <div className="p_info">
+                          {/* Covered Parking  */}
+                          {(propertyDocument &&
+                            propertyDocument.numberOfCoveredCarParking === 0) ||
+                          propertyDocument.numberOfCoveredCarParking === "0" ? (
                             <div className="p_info_single">
                               <div className="pd_icon">
                                 <img
-                                  src="/assets/img/property-detail-icon/BachelorBoys.png"
+                                  src="/assets/img/property-detail-icon/car-parking.png"
                                   alt=""
                                 />
                               </div>
                               <div className="pis_content">
-                                <h6>Bachelor Boys Allowed</h6>
-                                <h5>{propertyDocument.bachlorsBoysAllowed}</h5>
+                                <h6>Covered Car Parking</h6>
+                                <h5>No</h5>
                               </div>
                             </div>
-                          )}
-                        {/* Bachelor Girls Allowed  */}
-                        {propertyDocument &&
-                          propertyDocument.bachlorsGirlsAllowed && (
+                          ) : (
                             <div className="p_info_single">
                               <div className="pd_icon">
                                 <img
-                                  src="/assets/img/property-detail-icon/BachelorGirls.png"
+                                  src="/assets/img/property-detail-icon/car-parking.png"
                                   alt=""
                                 />
                               </div>
                               <div className="pis_content">
-                                <h6>Bachelor Girls Allowed</h6>
-                                <h5>{propertyDocument.bachlorsGirlsAllowed}</h5>
+                                <h6>Covered Car Parking</h6>
+                                <h5>
+                                  {propertyDocument.numberOfCoveredCarParking}
+                                </h5>
                               </div>
                             </div>
                           )}
-                        {/* Pets Allowed  */}
-                        {propertyDocument && propertyDocument.petsAllowed && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/pets.png"
-                                alt=""
-                              />
+                          {/* Open car parking  */}
+                          {(propertyDocument &&
+                            propertyDocument.numberOfOpenCarParking === 0) ||
+                          propertyDocument.numberOfOpenCarParking === "0" ? (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/car-parking.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Open Car Parking</h6>
+                                <h5>No</h5>
+                              </div>
                             </div>
-                            <div className="pis_content">
-                              <h6>Pets Allowed</h6>
-                              <h5>{propertyDocument.petsAllowed}</h5>
+                          ) : (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/car-parking.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Open Car Parking</h6>
+                                <h5>
+                                  {propertyDocument.numberOfOpenCarParking}
+                                </h5>
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        {/* Food Habit  */}
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/restaurant.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Food Habit</h6>
-                            <h5>
-                              {propertyDocument.vegNonVeg === "Veg"
-                                ? "Vegetarian"
-                                : "No-Restrictions"}
-                            </h5>
-                          </div>
+                          )}
+                          {/* 2 Wheeler Parking  */}
+                          {propertyDocument &&
+                            propertyDocument.twoWheelarParking && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/2Wheelerparking.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>2 Wheeler Parking</h6>
+                                  <h5>{propertyDocument.twoWheelarParking}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Electric Vehicle Charging Point  */}
+                          {propertyDocument &&
+                            propertyDocument.evChargingPointStatus &&
+                            propertyDocument.evChargingPointStatus.toLowerCase() ===
+                              "yes" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/2Wheelerparking.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>EV Charging Point</h6>
+                                  <h5>
+                                    {propertyDocument.evChargingPointStatus +
+                                      ", " +
+                                      propertyDocument.evChargingPointType}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+
+                {/* Building  */}
+                {propertyDocument &&
+                  propertyDocument.category === "Residential" && (
+                    <div className="property_card_single mobile_full_card">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">Building</h2>
+                        <div className="p_info">
+                          {/* Total Number Of Floors  */}
+                          {propertyDocument &&
+                            propertyDocument.numberOfFloors && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/TotalFloors.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Total Floors</h6>
+                                  <h5>{propertyDocument.numberOfFloors}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Floor No  */}
+                          {propertyDocument && propertyDocument.floorNo && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/FloorNumber.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Floor Number</h6>
+                                <h5>{propertyDocument.floorNo}</h5>
+                              </div>
+                            </div>
+                          )}
+                          {/* Number of flats on floor  */}
+                          {propertyDocument &&
+                            propertyDocument.numberOfFlatsOnFloor && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/apartmentOnFloor.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Number of Flats on a Floor</h6>
+                                  <h5>
+                                    {propertyDocument.numberOfFlatsOnFloor}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* number of lifts  */}
+                          {propertyDocument &&
+                          propertyDocument.numberOfLifts == 0 ? (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/lift.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Lift</h6>
+                                <h5>No</h5>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/lift.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Lift</h6>
+                                <h5>{propertyDocument.numberOfLifts}</h5>
+                              </div>
+                            </div>
+                          )}
+                          {/* Power Backup  */}
+                          {propertyDocument && propertyDocument.powerBackup && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/PowerBackup.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Power Backup</h6>
+                                <h5>{propertyDocument.powerBackup}</h5>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                {/* Additional Info  */}
+                {propertyDocument &&
+                  propertyDocument.category === "Residential" && (
+                    <>
+                      {propertyDocument.purpose.toLowerCase() !== "sale" && (
+                        <div className="property_card_single mobile_full_card">
+                          <div className="more_detail_card_inner">
+                            <h2 className="card_title">Additional Info</h2>
+                            <div className="p_info">
+                              {/* Bachelor Boys Allowed  */}
+                              {propertyDocument &&
+                                propertyDocument.bachlorsBoysAllowed && (
+                                  <div className="p_info_single">
+                                    <div className="pd_icon">
+                                      <img
+                                        src="/assets/img/property-detail-icon/BachelorBoys.png"
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div className="pis_content">
+                                      <h6>Bachelor Boys Allowed</h6>
+                                      <h5>
+                                        {propertyDocument.bachlorsBoysAllowed}
+                                      </h5>
+                                    </div>
+                                  </div>
+                                )}
+                              {/* Bachelor Girls Allowed  */}
+                              {propertyDocument &&
+                                propertyDocument.bachlorsGirlsAllowed && (
+                                  <div className="p_info_single">
+                                    <div className="pd_icon">
+                                      <img
+                                        src="/assets/img/property-detail-icon/BachelorGirls.png"
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div className="pis_content">
+                                      <h6>Bachelor Girls Allowed</h6>
+                                      <h5>
+                                        {propertyDocument.bachlorsGirlsAllowed}
+                                      </h5>
+                                    </div>
+                                  </div>
+                                )}
+                              {/* Pets Allowed  */}
+                              {propertyDocument &&
+                                propertyDocument.petsAllowed && (
+                                  <div className="p_info_single">
+                                    <div className="pd_icon">
+                                      <img
+                                        src="/assets/img/property-detail-icon/pets.png"
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div className="pis_content">
+                                      <h6>Pets Allowed</h6>
+                                      <h5>{propertyDocument.petsAllowed}</h5>
+                                    </div>
+                                  </div>
+                                )}
+                              {/* Food Habit  */}
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/restaurant.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Food Habit</h6>
+                                  <h5>
+                                    {propertyDocument.vegNonVeg === "Veg"
+                                      ? "Vegetarian"
+                                      : "No-Restrictions"}
+                                  </h5>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+
                 <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Visiting Details</h2>
