@@ -627,11 +627,11 @@ const Stage2 = (props) => {
       else errorMsg = errorMsg + ", Property Type";
       errorFlag = true;
     }
-    if (propertyDetails.Category !== 'Plot' &&
+
+    if (propertyDetails.Category === 'Residential' &&
       (propertyDetails.Bhk.toUpperCase() === "SELECT BHK" ||
         propertyDetails.Bhk === "")
-    )
-     {
+    ) {
       if (errorMsg === "Select BHK") errorMsg = errorMsg + "BHK";
       else errorMsg = errorMsg + ", BHK";
       errorFlag = true;
@@ -642,7 +642,7 @@ const Stage2 = (props) => {
     // );
     if (
       // propertyDetails && propertyDetails.NumberOfBedrooms.toUpperCase() === "SELECT BEDROOM" ||
-      propertyDetails.Category !== 'Plot' && Number(propertyDetails.NumberOfBedrooms) === 0
+      propertyDetails.Category === 'Residential' && Number(propertyDetails.NumberOfBedrooms) === 0
     ) {
       if (errorMsg === "Select Bedroom") errorMsg = errorMsg + "Bedroom";
       else errorMsg = errorMsg + ", Bedroom";
@@ -650,7 +650,7 @@ const Stage2 = (props) => {
     }
     if (
       // propertyDetails && propertyDetails.NumberOfBedrooms.toUpperCase() === "SELECT BEDROOM" ||
-      propertyDetails.Category !== 'Plot' && propertyDetails.Furnishing === ""
+      propertyDetails.Category !== 'Plot' && (propertyDetails.Category === 'Commercial' && propertyDetails.PropertyType !== 'Land') && propertyDetails.Furnishing === ""
     ) {
       if (errorMsg === "Select Furnishing") errorMsg = errorMsg + "Furnishing";
       else errorMsg = errorMsg + ", Furnishing";
@@ -659,7 +659,7 @@ const Stage2 = (props) => {
 
     if (
       // propertyDetails.NumberOfBathrooms.toUpperCase() === "SELECT BATHROOM" ||
-      propertyDetails.Category !== 'Plot' && Number(propertyDetails.NumberOfBathrooms) === 0
+      propertyDetails.Category === 'Residential' && Number(propertyDetails.NumberOfBathrooms) === 0
     ) {
       if (errorMsg === "Select Bathroom") errorMsg = errorMsg + "Bathroom";
       else errorMsg = errorMsg + ", Bathroom";
