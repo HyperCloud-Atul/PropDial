@@ -1924,68 +1924,65 @@ const PropertyDetails = () => {
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
                         <div className="pdms_single">
-                        {propertyDocument.category === 'Plot' || propertyDocument.category === 'Commercial' ?
-                      <>
-                        
-                        <h4>
-                            <img src="/assets/img/new_bhk.png"></img>
-                            {propertyDocument.gatedArea}
-                          </h4>
-                          <h6>Gated Area</h6>
-                      </>
-                      :
-                      <>
-                         <h4>
-                            <img src="/assets/img/new_bhk.png"></img>
-                            {propertyDocument.bhk}
-                          </h4>
-                          <h6>BHK</h6>
-                      </>
-                    }
-                         
+                          {propertyDocument.category === "Plot" ||
+                          propertyDocument.category === "Commercial" ? (
+                            <>
+                              <h4>
+                                <img src="/assets/img/new_bhk.png"></img>
+                                {propertyDocument.gatedArea}
+                              </h4>
+                              <h6>Gated Area</h6>
+                            </>
+                          ) : (
+                            <>
+                              <h4>
+                                <img src="/assets/img/new_bhk.png"></img>
+                                {propertyDocument.bhk}
+                              </h4>
+                              <h6>BHK</h6>
+                            </>
+                          )}
                         </div>
-                       
+
                         <div className="pdms_single">
-                        {propertyDocument.category === 'Plot' || propertyDocument.category === 'Commercial' ?
-                      <>
-                        
-                        <h4>
-                            <img src="/assets/img/new_bathroom.png"></img>
-                            {propertyDocument.propertyType}
-                          </h4>
-                          <h6>Property Type</h6>
-                      </>
-                      :
-                      <>
-                       <h4>
-                       <img src="/assets/img/new_bedroom.png"></img>
-                       {propertyDocument.numberOfBedrooms}
-                          </h4>
-                          <h6>Bedroom</h6>
-                      </>
-                    }
-                       
+                          {propertyDocument.category === "Plot" ||
+                          propertyDocument.category === "Commercial" ? (
+                            <>
+                              <h4>
+                                <img src="/assets/img/new_bathroom.png"></img>
+                                {propertyDocument.propertyType}
+                              </h4>
+                              <h6>Property Type</h6>
+                            </>
+                          ) : (
+                            <>
+                              <h4>
+                                <img src="/assets/img/new_bedroom.png"></img>
+                                {propertyDocument.numberOfBedrooms}
+                              </h4>
+                              <h6>Bedroom</h6>
+                            </>
+                          )}
                         </div>
                         <div className="pdms_single">
-                        {propertyDocument.category === 'Plot' || propertyDocument.category === 'Commercial' ?
-                      <>
-                        
-                        <h4>
-                            <img src="/assets/img/new_bathroom.png"></img>
-                            {propertyDocument.additionalRooms[0]}
-                          </h4>
-                          <h6>Propety Sub-Type</h6>
-                      </>
-                      :
-                      <>
-                       <h4>
-                            <img src="/assets/img/new_bathroom.png"></img>
-                            {propertyDocument.numberOfBathrooms}
-                          </h4>
-                          <h6>Bathroom</h6>
-                      </>
-                    }
-                       
+                          {propertyDocument.category === "Plot" ||
+                          propertyDocument.category === "Commercial" ? (
+                            <>
+                              <h4>
+                                <img src="/assets/img/new_bathroom.png"></img>
+                                {propertyDocument.additionalRooms[0]}
+                              </h4>
+                              <h6>Propety Sub-Type</h6>
+                            </>
+                          ) : (
+                            <>
+                              <h4>
+                                <img src="/assets/img/new_bathroom.png"></img>
+                                {propertyDocument.numberOfBathrooms}
+                              </h4>
+                              <h6>Bathroom</h6>
+                            </>
+                          )}
                         </div>
                       </div>
                       <div className="divider"></div>
@@ -2020,47 +2017,47 @@ const PropertyDetails = () => {
                               "Carpet Area"}
                           </h6>
                         </div>
-                       
+
                         <div className="pdms_single">
-                        {propertyDocument.category === 'Plot' || propertyDocument.category === 'Commercial' ?
-                      <>
-                        
-                        <h4>
-                            <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
-                            {propertyDocument.mainDoorFacing}
-                          </h4>
-                          <h6>Direction Facing</h6>
-                      </>
-                      :
-                      <>
-                      <h4>
-                            <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
-                            {propertyDocument.floorNo
-                              ? propertyDocument.floorNo === "Ground"
-                                ? "Ground"
-                                : propertyDocument.floorNo === "Stilt"
-                                ? "Stilt"
-                                : propertyDocument.floorNo === "Basement"
-                                ? "Basement "
-                                : `${propertyDocument.floorNo}${
-                                    propertyDocument.numberOfFloors
-                                      ? " of " + propertyDocument.numberOfFloors
-                                      : ""
-                                  }`
-                              : ""}
-                          </h4>
-                          <h6>
-                            {propertyDocument.floorNo
-                              ? ["Ground", "Stilt", "Basement"].includes(
-                                  propertyDocument.floorNo
-                                )
-                                ? "Floor"
-                                : "Floor no"
-                              : ""}
-                          </h6>
-                      </>
-                    }
-                       
+                          {propertyDocument.category === "Plot" ||
+                          propertyDocument.category === "Commercial" ? (
+                            <>
+                              <h4>
+                                <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
+                                {propertyDocument.mainDoorFacing}
+                              </h4>
+                              <h6>Direction Facing</h6>
+                            </>
+                          ) : (
+                            <>
+                              <h4>
+                                <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
+                                {propertyDocument.floorNo
+                                  ? propertyDocument.floorNo === "Ground"
+                                    ? "Ground"
+                                    : propertyDocument.floorNo === "Stilt"
+                                    ? "Stilt"
+                                    : propertyDocument.floorNo === "Basement"
+                                    ? "Basement "
+                                    : `${propertyDocument.floorNo}${
+                                        propertyDocument.numberOfFloors
+                                          ? " of " +
+                                            propertyDocument.numberOfFloors
+                                          : ""
+                                      }`
+                                  : ""}
+                              </h4>
+                              <h6>
+                                {propertyDocument.floorNo
+                                  ? ["Ground", "Stilt", "Basement"].includes(
+                                      propertyDocument.floorNo
+                                    )
+                                    ? "Floor"
+                                    : "Floor no"
+                                  : ""}
+                              </h6>
+                            </>
+                          )}
                         </div>
 
                         <div className="pdms_single">
@@ -4040,7 +4037,8 @@ const PropertyDetails = () => {
                           </div>
                         )}
                       {/* Balcony  */}
-                      {propertyDocument && propertyDocument.category === "Residential" &&
+                      {propertyDocument &&
+                        propertyDocument.category === "Residential" &&
                         propertyDocument.numberOfBalcony !== 0 && (
                           <div className="p_info_single">
                             <div className="pd_icon">
@@ -4058,52 +4056,57 @@ const PropertyDetails = () => {
                       {/* Kitchen  */}
                       {propertyDocument.category === "Residential" && (
                         <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/kitchen.png"
-                            alt=""
-                          />
+                          <div className="pd_icon">
+                            <img
+                              src="/assets/img/property-detail-icon/kitchen.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="pis_content">
+                            <h6>Kitchen</h6>
+                            {/* <h5>{propertyDocument.numberOfKitchen}</h5> */}
+                            <h5>Yes</h5>
+                          </div>
                         </div>
-                        <div className="pis_content">
-                          <h6>Kitchen</h6>
-                          {/* <h5>{propertyDocument.numberOfKitchen}</h5> */}
-                          <h5>Yes</h5>
-                        </div>
-                      </div>
                       )}
-                      
+
                       {/* Living Area  */}
-                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.livingArea && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/livingArea.png"
-                              alt=""
-                            />
+                      {propertyDocument &&
+                        propertyDocument.category === "Residential" &&
+                        propertyDocument.livingArea && (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/livingArea.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Living Area</h6>
+                              <h5>{propertyDocument.livingArea}</h5>
+                            </div>
                           </div>
-                          <div className="pis_content">
-                            <h6>Living Area</h6>
-                            <h5>{propertyDocument.livingArea}</h5>
-                          </div>
-                        </div>
-                      )}
+                        )}
                       {/* Dining  Area  */}
-                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.diningArea && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/diningArea.png"
-                              alt=""
-                            />
+                      {propertyDocument &&
+                        propertyDocument.category === "Residential" &&
+                        propertyDocument.diningArea && (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/diningArea.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Dining Area</h6>
+                              <h5>{propertyDocument.diningArea}</h5>
+                            </div>
                           </div>
-                          <div className="pis_content">
-                            <h6>Dining Area</h6>
-                            <h5>{propertyDocument.diningArea}</h5>
-                          </div>
-                        </div>
-                      )}
+                        )}
                       {/* Living Area And Dining Area Combine  */}
-                      {propertyDocument && propertyDocument.category === "Residential" &&
+                      {propertyDocument &&
+                        propertyDocument.category === "Residential" &&
                         propertyDocument.livingAndDining.toLowerCase() ===
                           "yes" && (
                           <div className="p_info_single">
@@ -4136,57 +4139,64 @@ const PropertyDetails = () => {
                         </div>
                       )} */}
                       {/* Passage  */}
-                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.passage && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/passages.png"
-                              alt=""
-                            />
+                      {propertyDocument &&
+                        propertyDocument.category === "Residential" &&
+                        propertyDocument.passage && (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/passages.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Passage</h6>
+                              <h5>{propertyDocument.passage}</h5>
+                            </div>
                           </div>
-                          <div className="pis_content">
-                            <h6>Passage</h6>
-                            <h5>{propertyDocument.passage}</h5>
-                          </div>
-                        </div>
-                      )}
+                        )}
                       {/* Entrance Gallery  */}
-                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.entranceGallery && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/browser.png"
-                              alt=""
-                            />
+                      {propertyDocument &&
+                        propertyDocument.category === "Residential" &&
+                        propertyDocument.entranceGallery && (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/browser.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Entrance Gallery</h6>
+                              <h5>{propertyDocument.entranceGallery}</h5>
+                            </div>
                           </div>
-                          <div className="pis_content">
-                            <h6>Entrance Gallery</h6>
-                            <h5>{propertyDocument.entranceGallery}</h5>
-                          </div>
-                        </div>
-                      )}
+                        )}
                       {/* Main Door Facing  */}
-                      {propertyDocument && propertyDocument.category === "Residential" && propertyDocument.mainDoorFacing && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/mainDoorFacing.png"
-                              alt=""
-                            />
+                      {propertyDocument &&
+                        propertyDocument.category === "Residential" &&
+                        propertyDocument.mainDoorFacing && (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/mainDoorFacing.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
+                              <h6>
+                                {propertyDocument.category === "Plot" ||
+                                propertyDocument.category === "Commercial"
+                                  ? "Direction Facing"
+                                  : "Main Door Facing"}
+                              </h6>
+                              <h5>{propertyDocument.mainDoorFacing}</h5>
+                            </div>
                           </div>
-                          <div className="pis_content">
-                            <h6>
-                              {propertyDocument.category === "Plot" ||
-                              propertyDocument.category === "Commercial"
-                                ? "Direction Facing"
-                                : "Main Door Facing"}
-                            </h6>
-                            <h5>{propertyDocument.mainDoorFacing}</h5>
-                          </div>
-                        </div>
-                      )}
+                        )}
                       {/* Balcony  */}
-                      {propertyDocument && propertyDocument.category === "Residential" &&
+                      {propertyDocument &&
+                        propertyDocument.category === "Residential" &&
                         propertyDocument.numberOfBalcony !== 0 &&
                         propertyDocument.balconyFacing && (
                           <div className="p_info_single">

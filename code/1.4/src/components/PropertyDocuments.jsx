@@ -116,20 +116,69 @@ const PropertyDocuments = () => {
     }
   }, [propertyDocument]);
 
+  // old code of upload document without delete picture from storage 
+  // (Don't delete this code) 
+  // const uploadDocumentImage = async () => {
+  //   try {
+  //     setIsUploading(true);
+  //     setUploadingDocId(newDocId);
+  //     const fileType = getFileType(documentFile);
+  //     const storageRef = projectStorage.ref(
+  //       `docs-propdial/${newDocId}/${documentFile.name}`
+  //     );
+  //     await storageRef.put(documentFile);
+  //     const fileURL = await storageRef.getDownloadURL();
+  //     await updateDocument(newDocId, {
+  //       documentUrl: fileURL,
+  //       mediaType: fileType,
+  //     });
+  //     setDocumentFile(null);
+  //     setIsUploading(false);
+  //     setUploadingDocId(null);
+  //     fileInputRef.current.value = "";
+  //   } catch (error) {
+  //     console.error("Error uploading document image:", error);
+  //     setIsUploading(false);
+  //     setUploadingDocId(null);
+  //   }
+  // };
+
+  
+// new code of upload document with delete picture from storage 
   const uploadDocumentImage = async () => {
     try {
       setIsUploading(true);
       setUploadingDocId(newDocId);
+  
+      // Check if there's an existing document for the newDocId
+      const currentDoc = propertyDocument?.find((doc) => doc.id === newDocId);
+      if (currentDoc?.documentUrl) {
+        // Extract the file path from the URL to delete the existing file
+        const oldFileRef = projectStorage.refFromURL(currentDoc.documentUrl);
+        await oldFileRef.delete();
+      }
+  
+      // Determine the file type
       const fileType = getFileType(documentFile);
+  
+      // Reference for the new file
       const storageRef = projectStorage.ref(
         `docs-propdial/${newDocId}/${documentFile.name}`
       );
+  
+      // Upload the new file
       await storageRef.put(documentFile);
+  
+      // Get the download URL of the new file
       const fileURL = await storageRef.getDownloadURL();
+  
+      // Update the document with the new file URL and media type
       await updateDocument(newDocId, {
         documentUrl: fileURL,
         mediaType: fileType,
       });
+  
+      // Reset states and clear the file input
       setDocumentFile(null);
       setIsUploading(false);
       setUploadingDocId(null);
@@ -140,6 +189,8 @@ const PropertyDocuments = () => {
       setUploadingDocId(null);
     }
   };
+  
+  
 
   // code for delete document with popup start
   const [showModal, setShowModal] = useState(false); // Modal visibility
@@ -152,19 +203,59 @@ const PropertyDocuments = () => {
     setShowModal(true); // Open the modal
   };
 
+  // old handle delete document code without delete image from storage 
+  // (Don't delete this code) 
+  // const handleDelete = async () => {
+  //   if (!selectedDocId) {
+  //     console.error("No document ID selected for deletion."); // Debug log
+  //     return;
+  //   }
+
+  //   setIsDeleting(true); // Show loading state
+
+  //   try {
+  //     await deletePropertyDocument(selectedDocId); // Call your delete function
+  //     console.log(`Document with ID ${selectedDocId} deleted successfully.`);
+  //   } catch (error) {
+  //     console.error("Error deleting document:", error);
+  //   } finally {
+  //     setIsDeleting(false); // Reset loading state
+  //     setShowModal(false); // Close modal
+  //     setSelectedDocId(null); // Reset selected document
+  //   }
+  // };
+
+  // new code of handle delete document code with delete image from storage 
   const handleDelete = async () => {
     if (!selectedDocId) {
       console.error("No document ID selected for deletion."); // Debug log
       return;
     }
-
+  
     setIsDeleting(true); // Show loading state
-
+  
     try {
-      await deletePropertyDocument(selectedDocId); // Call your delete function
+      // Fetch the document details to get the `documentUrl`
+      const docRef = projectFirestore.collection("docs-propdial").doc(selectedDocId);
+      const docSnapshot = await docRef.get();
+  
+      if (docSnapshot.exists) {
+        const { documentUrl } = docSnapshot.data();
+        if (documentUrl) {
+          // Delete the file from Firebase Storage
+          const fileRef = projectStorage.refFromURL(documentUrl);
+          await fileRef.delete();
+          console.log(`File at ${documentUrl} deleted successfully.`);
+        }
+      } else {
+        console.error(`Document with ID ${selectedDocId} does not exist.`);
+      }
+  
+      // Delete the Firestore document
+      await deleteDocument(selectedDocId);
       console.log(`Document with ID ${selectedDocId} deleted successfully.`);
     } catch (error) {
-      console.error("Error deleting document:", error);
+      console.error("Error deleting document or its file:", error);
     } finally {
       setIsDeleting(false); // Reset loading state
       setShowModal(false); // Close modal
