@@ -630,7 +630,8 @@ const Stage2 = (props) => {
     if (propertyDetails.Category !== 'Plot' &&
       (propertyDetails.Bhk.toUpperCase() === "SELECT BHK" ||
         propertyDetails.Bhk === "")
-    ) {
+    )
+     {
       if (errorMsg === "Select BHK") errorMsg = errorMsg + "BHK";
       else errorMsg = errorMsg + ", BHK";
       errorFlag = true;

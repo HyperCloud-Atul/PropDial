@@ -29,8 +29,8 @@ const ViewAgent = ({ agentDoc, handleShowAIForm }) => {
   const [filteredData, setFilteredData] = useState(agentDoc);
   const [allData, setAllData] = useState(agentDoc);
   const [page, setPage] = useState(1); // Current page
-const [hasMore, setHasMore] = useState(true); // Whether there's more data to load
-const itemsPerPage = 100; // Number of items per page
+  const [hasMore, setHasMore] = useState(true); // Whether there's more data to load
+  const itemsPerPage = 100; // Number of items per page
 
   stateOptions.current =
     masterState &&
@@ -54,15 +54,15 @@ const itemsPerPage = 100; // Number of items per page
     setFilteredData(_filterList);
   };
 
-  // old filteragent code with no loader while change state 
-  // don't delete 
+  // old filteragent code with no loader while change state
+  // don't delete
   // const filteredAgentList = async (data) => {
   //   setIsLoading(true);
   //   console.log("filteredDataNew data: ", data);
   //   // console.log("agentDoc : ", agentDoc)
   //   let _filterList = [];
   //   setSearchInput("");
-    
+
   //   const ref = await projectFirestore
   //     .collection("agent-propdial")
   //     .where("state", "==", data.label);
@@ -98,36 +98,38 @@ const itemsPerPage = 100; // Number of items per page
   // };
   const filteredAgentList = (data) => {
     setIsLoading(true); // Set loading to true when fetching begins
-  
+
     const ref = projectFirestore
       .collection("agent-propdial")
       .where("state", "==", data.label);
-  
-    ref.get().then((snapshot) => {
-      const _filterList = snapshot.docs.map((agentData) => ({
-        agentCompnayName: agentData.data().agentCompnayName,
-        agentEmail: agentData.data().agentEmail,
-        agentName: agentData.data().agentName,
-        agentPhone: agentData.data().agentPhone,
-        city: agentData.data().city,
-        id: agentData.id,
-        state: agentData.data().state,
-        createdAt: agentData.data().createdAt,
-        createdBy: agentData.data().createdBy,
-        searchKey:
-          agentData.data().agentName.toLowerCase() +
-          agentData.data().city.toLowerCase() +
-          agentData.id.toLowerCase(),
-      }));
-      setFilteredData(_filterList);
-      setAllData(_filterList);
-      setIsLoading(false); // Set loading to false once data is fetched
-    }).catch((error) => {
-      console.error("Error fetching filtered data: ", error);
-      setIsLoading(false); // Ensure loading is false even if there's an error
-    });
+
+    ref
+      .get()
+      .then((snapshot) => {
+        const _filterList = snapshot.docs.map((agentData) => ({
+          agentCompnayName: agentData.data().agentCompnayName,
+          agentEmail: agentData.data().agentEmail,
+          agentName: agentData.data().agentName,
+          agentPhone: agentData.data().agentPhone,
+          city: agentData.data().city,
+          id: agentData.id,
+          state: agentData.data().state,
+          createdAt: agentData.data().createdAt,
+          createdBy: agentData.data().createdBy,
+          searchKey:
+            agentData.data().agentName.toLowerCase() +
+            agentData.data().city.toLowerCase() +
+            agentData.id.toLowerCase(),
+        }));
+        setFilteredData(_filterList);
+        setAllData(_filterList);
+        setIsLoading(false); // Set loading to false once data is fetched
+      })
+      .catch((error) => {
+        console.error("Error fetching filtered data: ", error);
+        setIsLoading(false); // Ensure loading is false even if there's an error
+      });
   };
-  
 
   // View mode start
   const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
@@ -141,14 +143,13 @@ const itemsPerPage = 100; // Number of items per page
       <div className="pg_header d-flex justify-content-between">
         <div className="left">
           <h2 className="m22">
-            Total Agent:{" "}
+            Filtered Agent:{" "}
             {/* {agentDoc && <span className="text_orange">{agentDoc.length}</span>} */}
             {filteredData && (
               <span className="text_orange">
                 {isLoading ? "" : filteredData.length}
-               
               </span>
-            )}           
+            )}
           </h2>
         </div>
         <div className="right">
@@ -225,13 +226,14 @@ const itemsPerPage = 100; // Number of items per page
       {/* view agent pg header and filters end  */}
 
       {filteredData && filteredData.length <= 0 && (
-        <div>No Agent Data Available</div>
+        <div className="pg_msg">No agents in {state.label}.</div>
       )}
       {/* agent card and table  */}
-      {isLoading &&
-       <div className="filter_loading">
-        <BeatLoader color={"var(--theme-green)"} />
-        </div>}
+      {isLoading && (
+        <div className="filter_loading">
+          <BeatLoader color={"var(--theme-green)"} />
+        </div>
+      )}
       {!isLoading && (
         <div>
           {viewMode === "card_view" && filteredData && (

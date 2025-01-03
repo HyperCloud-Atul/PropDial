@@ -639,7 +639,7 @@ export default function MasterSocietyList() {
               <div className="filters">
                 <div
                   className="left"
-                  style={{ display: "flex", alignItems: "center" }}
+                  style={{ display: "flex", alignItems: "center", flexWrap:"wrap", gap:"15px" }}
                 >
                   <div className="rt_global_search search_field">
                     <input
@@ -651,7 +651,7 @@ export default function MasterSocietyList() {
                       <span className="material-symbols-outlined">search</span>
                     </div>
                   </div>
-                  <div style={{ padding: "0 10px" }}>
+                  <div>
                     <Select
                       className=""
                       // onChange={(option) => handleFilterStateChange(option)}
@@ -674,7 +674,7 @@ export default function MasterSocietyList() {
                       }}
                     />
                   </div>
-                  <div style={{ padding: "0 10px" }}>
+                  <div>
                     <Select
                       className=""
                       // onChange={(option) => handleFilterStateChange(option)}
@@ -697,7 +697,7 @@ export default function MasterSocietyList() {
                       }}
                     />
                   </div>
-                  <div style={{ padding: "0 10px" }}>
+                  <div>
                     <Select
                       className=""
                       // onChange={(option) => handleFilterStateChange(option)}
