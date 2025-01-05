@@ -53,14 +53,25 @@ const PropertyDocuments = () => {
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
   const handleDocWhatChange = (event) => setSelectedDocWhat(event.target.value);
-  const handleFileChange = (event, docId) => {
-    const file = event.target.files[0];
-    if (file) {
-      setDocumentFile(file);
-      setNewDocId(docId);
-    }
-  };
 
+const MAX_FILE_SIZE_MB = 50; // Maximum file size in MB
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024; // Convert MB to bytes
+
+const handleFileChange = (event, docId) => {
+  const file = event.target.files[0];
+
+  if (file) {
+    // Check file size
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      alert(`File size exceeds the maximum limit of ${MAX_FILE_SIZE_MB} MB. Please upload a smaller file.`);
+      fileInputRef.current.value = ""; // Reset the file input
+      return;
+    }
+
+    setDocumentFile(file);
+    setNewDocId(docId);
+  }
+};
   const getFileType = (file) => {
     const fileExtension = file.name.split(".").pop().toLowerCase();
     return fileExtension === "pdf" ? "pdf" : "image";

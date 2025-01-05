@@ -1907,6 +1907,49 @@ export default function PGUserProfileDetails2() {
         </div>
         <div className="property_card_single mobile_full_card overflow_unset">
           <div className="more_detail_card_inner">
+            <h2 className="card_title">Properties owned within the city</h2>
+          <div className="vg12"></div>
+            <div className="row row_gap">
+              <div className="col-lg-4 col-md-6 col-sm-12">
+                <div className="form_field label_top">
+                  <label>City</label>
+                  <div className="form_field_inner">
+                    <Select                     
+                      // onChange={handleCountryChange}
+                      // options={countryOptions.current}
+                      // value={country}
+                      placeholder="Select City"
+                    />
+                  </div>
+                </div>
+              </div>          
+            </div>
+            <div className="vg12"></div>
+            <div className="btn_msg_area">
+              <button
+                // onClick={handleEdCancelClick}
+                // disabled={isEdUpdating}
+                className={`theme_btn btn_border no_icon min_width ${
+                  isEdUpdating ? "disabled" : ""
+                }`}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveAccessMgmt}
+                // disabled={isEdUpdating}
+                className={`theme_btn btn_fill no_icon min_width ${
+                  isEdUpdating ? "disabled" : ""
+                }`}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+        {userProfileDoc && userProfileDoc.isEmployee && (
+        <div className="property_card_single mobile_full_card overflow_unset">
+          <div className="more_detail_card_inner">
             <h2 className="card_title">Access Management</h2>
             <div className="form_field">
               <div className="field_box theme_radio_new">
@@ -2032,6 +2075,7 @@ export default function PGUserProfileDetails2() {
             </div>
           </div>
         </div>
+        )}
         {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">

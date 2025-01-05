@@ -6,6 +6,7 @@ import { projectFirestore } from "../../firebase/config";
 import PropertyCard from "../../components/property/PropertyCard";
 import PropertyTable from "../../components/property/PropertyTable";
 import Switch from "react-switch";
+import { Offcanvas, Button } from "react-bootstrap";
 import Filters from "../../components/Filters"; // Using your existing Filters component
 import InactiveUserCard from "../../components/InactiveUserCard";
 const propertyFilter = ["Residential", "Commercial", "Plot"];
@@ -18,16 +19,19 @@ const PGAdminProperty = () => {
 
   // const { documents: allproperties, error: propertieserror } =
   //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
-  const { documents: allproperties, error: propertieserror } =
-    useCollection("properties-propdial", "", ["createdAt", "desc"]);
-
-  const { documents: assignedPopertyUserList, error: errassignedPopertyUserList } = useCollection(
-    "propertyusers"
+  const { documents: allproperties, error: propertieserror } = useCollection(
+    "properties-propdial",
+    "",
+    ["createdAt", "desc"]
   );
 
-  const { documents: userList, error: erruserList } = useCollection(
-    "users-propdial"
-  );
+  const {
+    documents: assignedPopertyUserList,
+    error: errassignedPopertyUserList,
+  } = useCollection("propertyusers");
+
+  const { documents: userList, error: erruserList } =
+    useCollection("users-propdial");
 
   const [propertyListWithUsers, setPropertyListWithUsers] = useState();
   const [properties, setProperties] = useState();
@@ -52,43 +56,61 @@ const PGAdminProperty = () => {
 
   useEffect(() => {
     let _properties = null;
-    if (filterOption === 'all') {
-      _properties = allproperties
+    if (filterOption === "all") {
+      _properties = allproperties;
     } else {
-      _properties = allproperties &&
+      _properties =
+        allproperties &&
         allproperties.filter((item) =>
-          (filterOption.toLowerCase() === "in-review" || filterOption.toLowerCase() === "active" || filterOption.toLowerCase() === "inactive") ? item.isActiveInactiveReview.trim().toUpperCase() === filterOption.toUpperCase() : (filterOption.toLowerCase() === "residential" || filterOption.toLowerCase() === "commercial" || filterOption.toLowerCase() === "plot") ? item.category.trim().toUpperCase() === filterOption.toUpperCase() : item.purpose.trim().toUpperCase() === filterOption.toUpperCase()
+          filterOption.toLowerCase() === "in-review" ||
+          filterOption.toLowerCase() === "active" ||
+          filterOption.toLowerCase() === "inactive"
+            ? item.isActiveInactiveReview.trim().toUpperCase() ===
+              filterOption.toUpperCase()
+            : filterOption.toLowerCase() === "residential" ||
+              filterOption.toLowerCase() === "commercial" ||
+              filterOption.toLowerCase() === "plot"
+            ? item.category.trim().toUpperCase() === filterOption.toUpperCase()
+            : item.purpose.trim().toUpperCase() === filterOption.toUpperCase()
         );
     }
 
     setProperties(_properties);
 
     let _propertyListWithUsers = [];
-    _properties && _properties.forEach(prop => {
+    _properties &&
+      _properties.forEach((prop) => {
+        let assigneduserList =
+          assignedPopertyUserList &&
+          assignedPopertyUserList.filter(
+            (propdoc) => propdoc.propertyId === prop.id
+          );
 
-      let assigneduserList = assignedPopertyUserList && assignedPopertyUserList.filter(propdoc => propdoc.propertyId === prop.id);
+        let userDetails = "";
 
-      let userDetails = '';
+        if (assigneduserList && assigneduserList.length > 0) {
+          assigneduserList.forEach((user) => {
+            let userObt = userList.filter(
+              (userDoc) => userDoc.id === user.userId
+            );
+            userDetails =
+              userDetails +
+              (userObt &&
+                userObt[0] &&
+                " " + userObt[0].fullName + " " + userObt[0].phoneNumber);
+          });
+        }
 
-      if (assigneduserList && assigneduserList.length > 0) {
-        assigneduserList.forEach(user => {
-          let userObt = userList.filter(userDoc => userDoc.id === user.userId);
-          userDetails = userDetails + (userObt && userObt[0] && (' ' + userObt[0].fullName + ' ' + userObt[0].phoneNumber));
-        });
-      }
+        prop = {
+          ...prop,
+          userList: userDetails,
+        };
 
-      prop = {
-        ...prop,
-        userList: userDetails
-      };
-
-      _propertyListWithUsers.push(prop);
-    });
+        _propertyListWithUsers.push(prop);
+      });
 
     setPropertyListWithUsers(_propertyListWithUsers);
   }, [assignedPopertyUserList, allproperties, userList]);
-
-
 
   // // Rent/Sale switch state
   const [rentSaleFilter, setRentSaleFilter] = useState("Rent");
@@ -96,75 +118,96 @@ const PGAdminProperty = () => {
     setRentSaleFilter(checked ? "Sale" : "Rent");
   };
 
-
-
   let caseFilter = user.accessType;
 
   // console.log("propertyListWithUsers: ", propertyListWithUsers)
 
   const accessedPropertyList = propertyListWithUsers
     ? propertyListWithUsers.filter((document) => {
-      switch (caseFilter) {
-        case "country":
-          const lowerCaseCountryArray = user.accessValue.map(element => element.toLowerCase());
-          return document.country && lowerCaseCountryArray.includes(document.country.toLowerCase());
-        case "region":
-          const lowerCaseRegionArray = user.accessValue.map(element => element.toLowerCase());
-          return document.region && lowerCaseRegionArray.includes(document.region.toLowerCase());
-        case "state":
-          const lowerCaseStateArray = user.accessValue.map(element => element.toLowerCase());
-          return document.state && lowerCaseStateArray.includes(document.state.toLowerCase());
-        case "city":
-          const lowerCaseCityArray = user.accessValue.map(element => element.toLowerCase());
-          return document.city && lowerCaseCityArray.includes(document.city.toLowerCase());
-        default: return true;
-      }
-    }) : null;
+        switch (caseFilter) {
+          case "country":
+            const lowerCaseCountryArray = user.accessValue.map((element) =>
+              element.toLowerCase()
+            );
+            return (
+              document.country &&
+              lowerCaseCountryArray.includes(document.country.toLowerCase())
+            );
+          case "region":
+            const lowerCaseRegionArray = user.accessValue.map((element) =>
+              element.toLowerCase()
+            );
+            return (
+              document.region &&
+              lowerCaseRegionArray.includes(document.region.toLowerCase())
+            );
+          case "state":
+            const lowerCaseStateArray = user.accessValue.map((element) =>
+              element.toLowerCase()
+            );
+            return (
+              document.state &&
+              lowerCaseStateArray.includes(document.state.toLowerCase())
+            );
+          case "city":
+            const lowerCaseCityArray = user.accessValue.map((element) =>
+              element.toLowerCase()
+            );
+            return (
+              document.city &&
+              lowerCaseCityArray.includes(document.city.toLowerCase())
+            );
+          default:
+            return true;
+        }
+      })
+    : null;
 
   // Filter properties based on search input, isActiveInactiveReview, and other filters
   const filteredProperties = accessedPropertyList
     ? accessedPropertyList.filter((document) => {
-      let categoryMatch = true;
-      let purposeMatch = true;
-      let searchMatch = true;
-      let statusMatch = true;
+        let categoryMatch = true;
+        let purposeMatch = true;
+        let searchMatch = true;
+        let statusMatch = true;
 
-      // Filter by category
-      switch (filter) {
-        case "Residential":
-          categoryMatch = document.category.toUpperCase() === "RESIDENTIAL";
-          break;
-        case "Commercial":
-          categoryMatch = document.category.toUpperCase() === "COMMERCIAL";
-          break;
-        case "Plot":
-          categoryMatch = document.category.toUpperCase() === "PLOT";
-          break;
+        // Filter by category
+        switch (filter) {
+          case "Residential":
+            categoryMatch = document.category.toUpperCase() === "RESIDENTIAL";
+            break;
+          case "Commercial":
+            categoryMatch = document.category.toUpperCase() === "COMMERCIAL";
+            break;
+          case "Plot":
+            categoryMatch = document.category.toUpperCase() === "PLOT";
+            break;
 
-        default:
-          categoryMatch = true;
-      }
+          default:
+            categoryMatch = true;
+        }
 
-      // Filter by purpose
-      purposeMatch = document.purpose.toUpperCase() === rentSaleFilter.toUpperCase();
+        // Filter by purpose
+        purposeMatch =
+          document.purpose.toUpperCase() === rentSaleFilter.toUpperCase();
 
-      // Filter by search input
-      searchMatch = searchInput
-        ? Object.values(document).some(
-          (field) =>
-            typeof field === "string" &&
-            field.toUpperCase().includes(searchInput.toUpperCase())
-        )
-        : true;
+        // Filter by search input
+        searchMatch = searchInput
+          ? Object.values(document).some(
+              (field) =>
+                typeof field === "string" &&
+                field.toUpperCase().includes(searchInput.toUpperCase())
+            )
+          : true;
 
-      // Filter by status
-      statusMatch = document.isActiveInactiveReview.toUpperCase() === status.toUpperCase();
+        // Filter by status
+        statusMatch =
+          document.isActiveInactiveReview.toUpperCase() ===
+          status.toUpperCase();
 
-      return categoryMatch && searchMatch && statusMatch;
-    })
+        return categoryMatch && searchMatch && statusMatch;
+      })
     : null;
-
-
 
   //--------------------------- --------------------------  -------------
 
@@ -182,6 +225,11 @@ const PGAdminProperty = () => {
   const closeMoreAddOptions = () => {
     setHandleMoreOptionsClick(false);
   };
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
     <>
@@ -211,7 +259,9 @@ const PGAdminProperty = () => {
                 </div>
                 <Link to="/newproperty" className="more-add-options-icons">
                   <h1>Add property</h1>
-                  <span className="material-symbols-outlined">location_city</span>
+                  <span className="material-symbols-outlined">
+                    location_city
+                  </span>
                 </Link>
                 <Link to="/dashboard" className="more-add-options-icons">
                   <h1>Dashboard</h1>
@@ -225,7 +275,9 @@ const PGAdminProperty = () => {
                 <h2 className="m22">
                   Filtered properties:{" "}
                   {filteredProperties && (
-                    <span className="text_orange">{filteredProperties.length}</span>
+                    <span className="text_orange">
+                      {filteredProperties.length}
+                    </span>
                   )}
                 </h2>
               </div>
@@ -250,12 +302,10 @@ const PGAdminProperty = () => {
                     <span className="material-symbols-outlined">search</span>
                   </div>
                 </div>
-
               </div>
 
               <div className="right">
                 <div className="new_inline">
-
                   {filteredProperties && (
                     <Filters
                       changeFilter={changeStatusFilter}
@@ -265,7 +315,6 @@ const PGAdminProperty = () => {
                   )}
                 </div>
                 <div className="new_inline">
-
                   {filteredProperties && (
                     <Filters
                       changeFilter={changeFilter}
@@ -273,7 +322,7 @@ const PGAdminProperty = () => {
                       filterLength={filteredProperties.length}
                     />
                   )}
-                </div>
+                </div>             
                 {/* <div className="mobile_size residentail_commercial rent_sale">
                  <label className={rentSaleFilter === "Sale" ? "on" : "off"}>
                    <div className="switch">
@@ -302,8 +351,9 @@ const PGAdminProperty = () => {
                </div> */}
                 <div className="button_filter diff_views">
                   <div
-                    className={`bf_single ${viewMode === "card_view" ? "active" : ""
-                      }`}
+                    className={`bf_single ${
+                      viewMode === "card_view" ? "active" : ""
+                    }`}
                     onClick={() => handleModeChange("card_view")}
                   >
                     <span className="material-symbols-outlined">
@@ -311,8 +361,9 @@ const PGAdminProperty = () => {
                     </span>
                   </div>
                   <div
-                    className={`bf_single ${viewMode === "table_view" ? "active" : ""
-                      }`}
+                    className={`bf_single ${
+                      viewMode === "table_view" ? "active" : ""
+                    }`}
                     onClick={() => handleModeChange("table_view")}
                   >
                     <span className="material-symbols-outlined">view_list</span>
@@ -324,6 +375,24 @@ const PGAdminProperty = () => {
                 >
                   Create Property
                 </Link>
+                <>
+                  <Button variant="primary" onClick={handleShow}>
+                    Filters
+                  </Button>
+
+                  <Offcanvas show={show} onHide={handleClose} placement="start">
+                    <Offcanvas.Header closeButton>
+                      <Offcanvas.Title>Filters</Offcanvas.Title>
+                    </Offcanvas.Header>
+                    <Offcanvas.Body>
+               
+                      <Button variant="outline-secondary">In-Review</Button>
+                      <Button variant="outline-secondary">Active</Button>
+                      <Button variant="outline-secondary">Inactive</Button>
+                     
+                    </Offcanvas.Body>
+                  </Offcanvas>
+                </>
               </div>
             </div>
             <hr></hr>
@@ -333,13 +402,20 @@ const PGAdminProperty = () => {
                 <>
                   {filteredProperties &&
                     filteredProperties.map((property) => (
-                      <PropertyCard key={property.id} propertyid={property.id} />
+                      <PropertyCard
+                        key={property.id}
+                        propertyid={property.id}
+                      />
                     ))}
                 </>
               )}
             </div>
             {viewMode === "table_view" && (
-              <>{filteredProperties && <PropertyTable properties={filteredProperties} />}</>
+              <>
+                {filteredProperties && (
+                  <PropertyTable properties={filteredProperties} />
+                )}
+              </>
             )}
           </div>
         </div>
@@ -347,7 +423,6 @@ const PGAdminProperty = () => {
         <InactiveUserCard />
       )}
     </>
-
   );
 };
 
