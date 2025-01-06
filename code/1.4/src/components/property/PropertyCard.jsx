@@ -296,9 +296,24 @@ const PropertyCard = ({ propertyid }) => {
                 {/* <img src="/assets/img/admin_banner.jpg" alt="" /> */}
                 {propertydoc.images.length > 0 ? (
                   <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
-                ) : (
-                  <img src="/assets/img/admin_banner.jpg" alt="" />
-                )}
+                ) : propertydoc.category === "Residential" ? (
+                  <img
+                    src="/assets/img/admin_banner.jpg"
+                    alt="Residential Property"
+                  />
+                ) : propertydoc.category === "Commercial" ? (
+                  <img
+                    src="/assets/img/commercial.jpg"
+                    alt="Commercial Property"
+                  />
+                ) :
+                propertydoc.category === "Plot" ? (
+                  <img
+                    src="/assets/img/plot.jpg"
+                    alt="Plot Property"
+                  />
+                ) :
+                null}
               </div>
               <div className="left_side relative">
                 {user &&
@@ -317,19 +332,19 @@ const PropertyCard = ({ propertyid }) => {
                   <span>₹</span>
                   {/* <span>{propertydoc.demandPriceRent}</span> */}
                   {propertydoc.flag.toLowerCase() === "pms only" ||
-                    propertydoc.flag.toLowerCase() === "pms after rent" ||
-                    propertydoc.flag.toLowerCase() === "available for rent" ||
-                    propertydoc.flag.toLowerCase() === "rented out"
+                  propertydoc.flag.toLowerCase() === "pms after rent" ||
+                  propertydoc.flag.toLowerCase() === "available for rent" ||
+                  propertydoc.flag.toLowerCase() === "rented out"
                     ? propertydoc.demandPriceRent &&
-                    formatNumberWithCommas(propertydoc.demandPriceRent)
+                      formatNumberWithCommas(propertydoc.demandPriceRent)
                     : propertydoc.flag.toLowerCase() === "rent and sale" ||
                       propertydoc.flag.toLowerCase() === "rented but sale"
-                      ? propertydoc.demandPriceRent &&
+                    ? propertydoc.demandPriceRent &&
                       formatNumberWithCommas(propertydoc.demandPriceRent) +
-                      " / ₹" +
-                      propertydoc.demandPriceSale &&
+                        " / ₹" +
+                        propertydoc.demandPriceSale &&
                       formatNumberWithCommas(propertydoc.demandPriceSale)
-                      : propertydoc.demandPriceSale &&
+                    : propertydoc.demandPriceSale &&
                       formatNumberWithCommas(propertydoc.demandPriceSale)}
 
                   {propertydoc.maintenanceCharges !== "" && (
@@ -372,8 +387,8 @@ const PropertyCard = ({ propertyid }) => {
                               ? "var(--success-color)" // Green for Active
                               : propertydoc.isActiveInactiveReview ===
                                 "Inactive"
-                                ? "var(--theme-red)" // Red for Inactive
-                                : "var(--theme-blue)", // Dark Gold for In-Review (or any of the options above)
+                              ? "var(--theme-red)" // Red for Inactive
+                              : "var(--theme-blue)", // Dark Gold for In-Review (or any of the options above)
                         }}
                       ></span>
                       PID: {" " + propertydoc.pid}
@@ -401,21 +416,23 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_carpet.png" alt="" />
                   </div>
                   <div className="left">
-                    {propertydoc.category === 'Plot' ?
+                    {propertydoc.category === "Plot" ? (
                       <h6>Area</h6>
-                      : <h6>
+                    ) : (
+                      <h6>
                         {propertydoc.superArea
                           ? "Super Area"
                           : propertydoc.carpetArea
-                            ? "Carpet Area"
-                            : "Area"}
-                      </h6>}
+                          ? "Carpet Area"
+                          : "Area"}
+                      </h6>
+                    )}
                     <h5>
                       {propertydoc.superArea
                         ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
                         : propertydoc.carpetArea
-                          ? `${propertydoc.carpetArea} ${propertydoc.superAreaUnit}`
-                          : "Yet to added"}
+                        ? `${propertydoc.carpetArea} ${propertydoc.superAreaUnit}`
+                        : "Yet to added"}
                     </h5>
                   </div>
                 </div>
@@ -424,17 +441,18 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_bedroom.png" alt="" />
                   </div>
                   <div className="left">
-                    {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
+                    {propertydoc.category === "Plot" ||
+                    propertydoc.category === "Commercial" ? (
                       <>
                         <h6>Gated Area</h6>
                         <h5>{propertydoc.gatedArea}</h5>
                       </>
-                      :
+                    ) : (
                       <>
                         <h6>Bedroom</h6>
                         <h5>{propertydoc.numberOfBedrooms}</h5>
                       </>
-                    }
+                    )}
                   </div>
                 </div>
                 <div className="ms_child">
@@ -442,18 +460,18 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_bathroom.png" alt="" />
                   </div>
                   <div className="left">
-                  {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
+                    {propertydoc.category === "Plot" ||
+                    propertydoc.category === "Commercial" ? (
                       <>
                         <h6>Direction Facing</h6>
                         <h5>{propertydoc.mainDoorFacing}</h5>
                       </>
-                      :
+                    ) : (
                       <>
-                      <h6>Bathroom</h6>
-                      <h5>{propertydoc.numberOfBathrooms}</h5>
+                        <h6>Bathroom</h6>
+                        <h5>{propertydoc.numberOfBathrooms}</h5>
                       </>
-                    }
-                    
+                    )}
                   </div>
                 </div>
               </div>
@@ -461,111 +479,109 @@ const PropertyCard = ({ propertyid }) => {
             {expanded
               ? ""
               : propertydoc && (
-                <div className="middle_single">
-                  <div className="ms_child">
-                    <div className="icon_container">
-                      <img src="/assets/img/new_super_area.png" alt="" />
+                  <div className="middle_single">
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_super_area.png" alt="" />
+                      </div>
+                      <div className="left">
+                        {propertydoc.category === "Plot" ||
+                        propertydoc.category === "Commercial" ? (
+                          <>
+                            <h6>Property Type</h6>
+                            <h5>{propertydoc.propertyType}</h5>
+                          </>
+                        ) : (
+                          <>
+                            <h6>Floor</h6>
+                            <h5>
+                              {propertydoc.floorNo
+                                ? propertydoc.floorNo === "Ground"
+                                  ? "Ground"
+                                  : propertydoc.floorNo === "Stilt"
+                                  ? "Stilt"
+                                  : propertydoc.floorNo === "Basement"
+                                  ? "Basement "
+                                  : `${propertydoc.floorNo}${
+                                      propertydoc.numberOfFloors
+                                        ? " of " + propertydoc.numberOfFloors
+                                        : ""
+                                    }`
+                                : ""}
+                            </h5>
+                          </>
+                        )}
+                      </div>
                     </div>
-                    <div className="left">
-                    {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
-                      <>
-                        <h6>Property Type</h6>
-                        <h5>{propertydoc.propertyType}</h5>
-                      </>
-                      :
-                      <>
-                    <h6>Floor</h6>
-                      <h5>
-                        {propertydoc.floorNo
-                          ? propertydoc.floorNo === "Ground"
-                            ? "Ground"
-                            : propertydoc.floorNo === "Stilt"
-                              ? "Stilt"
-                              : propertydoc.floorNo === "Basement"
-                                ? "Basement "
-                                : `${propertydoc.floorNo}${propertydoc.numberOfFloors
-                                  ? " of " + propertydoc.numberOfFloors
-                                  : ""
-                                }`
-                          : ""}
-                      </h5>
-                      </>
-                    }
-                     
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_bhk.png" alt="" />
+                      </div>
+                      <div className="left">
+                        {propertydoc.category === "Plot" ||
+                        propertydoc.category === "Commercial" ? (
+                          <>
+                            <h6>Propety Sub-Type</h6>
+                            <h5>{propertydoc.additionalRooms[0]}</h5>
+                          </>
+                        ) : (
+                          <>
+                            <h6>BHK</h6>
+                            <h5>{propertydoc.bhk}</h5>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_furniture.png" alt="" />
+                      </div>
+                      <div className="left">
+                        <h6>furnishing</h6>
+                        <h5>{propertydoc.furnishing}</h5>
+                      </div>
                     </div>
                   </div>
-                  <div className="ms_child">
-                    <div className="icon_container">
-                      <img src="/assets/img/new_bhk.png" alt="" />
-                    </div>
-                    <div className="left">
-                    {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
-                      <>
-                        <h6>Propety Sub-Type</h6>
-                        <h5>{propertydoc.additionalRooms[0]}</h5>
-                      </>
-                      :
-                      <>
-                         <h6>BHK</h6>
-                         <h5>{propertydoc.bhk}</h5>
-                      </>
-                    }
-                  
-                    </div>
-                  </div>
-                  <div className="ms_child">
-                    <div className="icon_container">
-                      <img src="/assets/img/new_furniture.png" alt="" />
-                    </div>
-                    <div className="left">
-                      <h6>furnishing</h6>
-                      <h5>{propertydoc.furnishing}</h5>
-                    </div>
-                  </div>
-                </div>
-              )}
+                )}
             {expanded
               ? ""
               : propertydoc && (
-                <div className="middle_single addtional_rooms">
-                  <div className="ms_child">
-                    <div className="icon_container">
-                      <img src="/assets/img/new_room.png" alt="" />
-                    </div>
-                    <div className="left">
-                    {propertydoc.category === 'Plot' || propertydoc.category === 'Commercial' ?
-                      <>
-                        <h6 className="mb-1">Overlooking</h6>
-                        <h5>
-                        {propertydoc.overLooking.length > 0
-                          ? propertydoc.overLooking.map(
-                            (overLooking) => (
-                              <span>{overLooking}</span>
-                            )
-                          )
-                          : "Yet to be added"}
-                      </h5>
-                      </>
-                      :
-                      <>
-                       <h6 className="mb-1">Additional Room</h6>
-                       <h5>
-                        {propertydoc.additionalRooms.length > 0
-                          ? propertydoc.additionalRooms.map(
-                            (additionalroom) => (
-                              <span>{additionalroom}</span>
-                            )
-                          )
-                          : "No Additional Rooms"}
-                      </h5>
-                      </>
-                    }
-                    
-                   
+                  <div className="middle_single addtional_rooms">
+                    <div className="ms_child">
+                      <div className="icon_container">
+                        <img src="/assets/img/new_room.png" alt="" />
+                      </div>
+                      <div className="left">
+                        {propertydoc.category === "Plot" ||
+                        propertydoc.category === "Commercial" ? (
+                          <>
+                            <h6 className="mb-1">Overlooking</h6>
+                            <h5>
+                              {propertydoc.overLooking.length > 0
+                                ? propertydoc.overLooking.map((overLooking) => (
+                                    <span>{overLooking}</span>
+                                  ))
+                                : "Yet to be added"}
+                            </h5>
+                          </>
+                        ) : (
+                          <>
+                            <h6 className="mb-1">Additional Room</h6>
+                            <h5>
+                              {propertydoc.additionalRooms.length > 0
+                                ? propertydoc.additionalRooms.map(
+                                    (additionalroom) => (
+                                      <span>{additionalroom}</span>
+                                    )
+                                  )
+                                : "No Additional Rooms"}
+                            </h5>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
           </div>
           <div className="card_upcoming">
             <div className="parent">

@@ -1776,7 +1776,7 @@ export default function PGUserProfileDetails2() {
                       id: "owner",
                       label: "Owner",
                       isEmployee: false,
-                      showInBoth: false,
+                      showInBoth: true,
                     },
                     {
                       id: "frontdesk",

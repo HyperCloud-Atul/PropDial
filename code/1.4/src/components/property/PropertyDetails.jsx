@@ -1206,7 +1206,8 @@ const PropertyDetails = () => {
               </Link>
             </div>
           )}
-          <div className="top_right_badge">
+         
+          <div className={`top_right_badge ${propertyDocument && propertyDocument.isActiveInactiveReview.toLowerCase()}`}>
             {propertyDocument && propertyDocument.category}
           </div>
           <div className="property_cards">

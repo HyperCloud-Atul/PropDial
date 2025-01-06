@@ -376,9 +376,9 @@ const PGAdminProperty = () => {
                   Create Property
                 </Link>
                 <>
-                  <Button variant="primary" onClick={handleShow}>
+                  {/* <Button variant="primary" onClick={handleShow}>
                     Filters
-                  </Button>
+                  </Button> */}
 
                   <Offcanvas show={show} onHide={handleClose} placement="start">
                     <Offcanvas.Header closeButton>
