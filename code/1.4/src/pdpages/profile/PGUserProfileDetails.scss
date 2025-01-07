@@ -305,6 +305,39 @@
     }
   }
 }
+@media only screen and (max-width: 1199px) {
+  .user_detail_pg{
+    flex-direction: column;
+    gap: 22px;
+    .basic_info {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background: var(--white-color);
+      width: 100%;
+      position: unset;
+      height: auto;   
+      .pic_are {      
+        aspect-ratio: inherit;     
+        height: 140px;
+        .pic{
+          width: 150px;
+        }
+        .icon.right {
+          right: 26px;
+      }
+      .icon.left {
+        left: 26px;
+    }
+    }
+  }
+  .detail_info {
+    min-height: auto;
+    padding: 0px;
+    width: 100%;
+   
+}
+  }
+}
 /* For Webkit-based browsers (Chrome, Edge, Safari) */
 .basic_info::-webkit-scrollbar {
   width: 2px; /* Scrollbar width */
