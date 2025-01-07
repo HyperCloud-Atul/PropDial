@@ -444,7 +444,7 @@ const PropertyCard = ({ propertyid }) => {
                     {propertydoc.category === "Plot" ||
                     propertydoc.category === "Commercial" ? (
                       <>
-                        <h6>Gated Area</h6>
+                        <h6>Gated Community</h6>
                         <h5>{propertydoc.gatedArea}</h5>
                       </>
                     ) : (
@@ -478,7 +478,7 @@ const PropertyCard = ({ propertyid }) => {
             )}
             {expanded
               ? ""
-              : propertydoc && (
+              : propertydoc && (propertydoc.category === "Commercial" || propertydoc.category === "Residential") &&  (
                   <div className="middle_single">
                     <div className="ms_child">
                       <div className="icon_container">
