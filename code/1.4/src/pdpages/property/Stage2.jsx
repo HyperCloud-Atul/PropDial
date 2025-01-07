@@ -61,6 +61,8 @@ const Stage2 = (props) => {
     SuperAreaUnit: "",
     CarpetArea: "",
     CarpetAreaUnit: "",
+    RoadWidth: "",
+    RoadWidthUnit: "",
     NumberOfBedrooms: "",
     NumberOfBathrooms: "",
     NumberOfBalcony: "",
@@ -97,6 +99,8 @@ const Stage2 = (props) => {
     TwoWheelarParking: "No",
     EVChargingPointStatus: "No",
     GatedArea: "",
+    IsCornerSidePlot: "",
+    IsParkFacingPlot: "",
     EVChargingPointType: "",
     LockinPeriod: 6,
     YearOfConstruction: { label: 0, value: 0 },
@@ -123,6 +127,8 @@ const Stage2 = (props) => {
         SuperAreaUnit: propertyDocument.superAreaUnit,
         CarpetArea: propertyDocument.carpetArea,
         CarpetAreaUnit: propertyDocument.carpetAreaUnit,
+        RoadWidth: propertyDocument.roadWidth,
+        RoadWidthUnit: propertyDocument.roadWidthUnit,
         NumberOfBedrooms: propertyDocument.numberOfBedrooms
           ? propertyDocument.numberOfBedrooms
           : "0",
@@ -260,6 +266,13 @@ const Stage2 = (props) => {
           : "",
         GatedArea: propertyDocument.gatedArea
           ? propertyDocument.gatedArea
+          : "",
+        IsCornerSidePlot: propertyDocument.isCornerSidePlot
+          ? propertyDocument.isCornerSidePlot
+          : "",
+
+        IsParkFacingPlot: propertyDocument.isParkFacingPlot
+          ? propertyDocument.isParkFacingPlot
           : "",
 
         LockinPeriod: propertyDocument.lockinPeriod
@@ -741,6 +754,9 @@ const Stage2 = (props) => {
       superAreaUnit: propertyDetails.SuperAreaUnit,
       carpetAreaUnit: propertyDetails.SuperAreaUnit,
 
+      roadWidth: propertyDetails.RoadWidth ? propertyDetails.RoadWidth : "",
+      roadWidthUnit: propertyDetails.RoadWidthUnit,
+
       powerBackup: propertyDetails.PowerBackup
         ? propertyDetails.PowerBackup
         : "",
@@ -774,6 +790,14 @@ const Stage2 = (props) => {
 
       gatedArea: propertyDetails.GatedArea
         ? propertyDetails.GatedArea
+        : "",
+
+      isCornerSidePlot: propertyDetails.IsCornerSidePlot
+        ? propertyDetails.IsCornerSidePlot
+        : "",
+
+      isParkFacingPlot: propertyDetails.IsParkFacingPlot
+        ? propertyDetails.IsParkFacingPlot
         : "",
 
       lockinPeriod: propertyDetails.LockinPeriod
@@ -3837,6 +3861,196 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>
+
+          {/* Road Width */}
+          {propertyDetails && propertyDetails.Category === 'Plot' &&
+            <div className="col-md-4">
+              <div className="form_field st-2 label_top">
+                <label htmlFor="">Road Width</label>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <div style={{ width: "100%", padding: "5px 0 " }}>
+                    <input
+                      id="id_roadWidth"
+                      className="custom-input"
+                      style={{ paddingRight: "10px" }}
+                      type="text"
+                      placeholder="Road Width"
+                      maxLength={6}
+                      onInput={(e) => {
+                        restrictInput(e, 5);
+                      }}
+                      onChange={(e) =>
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          RoadWidth: e.target.value,
+                        })
+                      }
+                      value={propertyDetails && propertyDetails.RoadWidth}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ width: "100%", padding: "5px 0" }}>
+                  <div
+                    className="radio_group"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <div
+                      className="radio_group_single"
+                      style={{ padding: "5px 0", width: "100%" }}
+                    >
+                      <div
+                        className={
+                          propertyDetails.RaodWidthUnit === "Feet"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="roadwidth_Feet"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              RaodWidthUnit: "Feet",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="roadwidth_Feet"
+                          style={{ padding: "6px 0 10px 22px", height: "30px" }}
+                        >
+                          <div className="radio_icon">
+                            <span
+                              className="material-symbols-outlined add"
+                              style={{
+                                fontSize: "1.2rem",
+                                transform: "translateX(-3px)",
+                              }}
+                            >
+                              add
+                            </span>
+                            <span
+                              className="material-symbols-outlined check"
+                              style={{
+                                fontSize: "1.2rem",
+                                transform: "translateX(-3px)",
+                              }}
+                            >
+                              done
+                            </span>
+                          </div>
+                          <h6>Feet</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      className="radio_group_single"
+                      style={{ padding: "5px 0", width: "100%" }}
+                    >
+                      <div
+                        className={
+                          propertyDetails.RaodWidthUnit === "Yard"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="roadwidth_Yard"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              RaodWidthUnit: "Yard",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="roadwidth_Yard"
+                          style={{ padding: "6px 0 10px 22px", height: "30px" }}
+                        >
+                          <div className="radio_icon">
+                            <span
+                              className="material-symbols-outlined add"
+                              style={{
+                                fontSize: "1.2rem",
+                                transform: "translateX(-3px)",
+                              }}
+                            >
+                              add
+                            </span>
+                            <span
+                              className="material-symbols-outlined check"
+                              style={{
+                                fontSize: "1.2rem",
+                                transform: "translateX(-3px)",
+                              }}
+                            >
+                              done
+                            </span>
+                          </div>
+                          <h6>Yard</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      className="radio_group_single"
+                      style={{ padding: "5px 0", width: "100%" }}
+                    >
+                      <div
+                        className={
+                          propertyDetails.RaodWidthUnit === "Meter"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="roadwidth_Meter"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              RaodWidthUnit: "Meter",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="roadwidth_Meter"
+                          style={{ padding: "6px 0 10px 22px", height: "30px" }}
+                        >
+                          <div className="radio_icon">
+                            <span
+                              className="material-symbols-outlined add"
+                              style={{
+                                fontSize: "1.2rem",
+                                transform: "translateX(-3px)",
+                              }}
+                            >
+                              add
+                            </span>
+                            <span
+                              className="material-symbols-outlined check"
+                              style={{
+                                fontSize: "1.2rem",
+                                transform: "translateX(-3px)",
+                              }}
+                            >
+                              done
+                            </span>
+                          </div>
+                          <h6>Meter</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
           {/* Flat Floor No */}
           {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
             <div className="form_field label_top">
@@ -4292,6 +4506,166 @@ const Stage2 = (props) => {
               </div>
             </div>
           }
+
+          {propertyDetails && propertyDetails.Category === 'Plot' && <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Corner Side Plot? </label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.IsCornerSidePlot === "Yes"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="cornersideplot_yes"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              IsCornerSidePlot: "Yes",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="cornersideplot_yes"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.IsCornerSidePlot === "No"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="cornersideplot_no"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              IsCornerSidePlot: "No",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="cornersideplot_no"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>}
+
+          {propertyDetails && propertyDetails.Category === 'Plot' && <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Park Facing Plot? </label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.IsParkFacingPlot === "Yes"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="parkfacingplot_yes"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              IsParkFacingPlot: "Yes",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="parkfacingplot_yes"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.IsParkFacingPlot === "No"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="parkfacingplot_no"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              IsParkFacingPlot: "No",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="parkfacingplot_no"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>}
 
           {<div className="col-md-4">
             <div className="form_field st-2 label_top">
