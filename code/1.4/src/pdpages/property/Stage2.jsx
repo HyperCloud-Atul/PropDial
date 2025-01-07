@@ -4295,7 +4295,7 @@ const Stage2 = (props) => {
 
           {<div className="col-md-4">
             <div className="form_field st-2 label_top">
-              <label htmlFor="">Gated Area? </label>
+              <label htmlFor="">Gated Community? </label>
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
