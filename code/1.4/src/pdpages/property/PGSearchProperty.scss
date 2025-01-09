@@ -235,12 +235,12 @@
       .header {
         background: transparent;
         text-align: center;
-       padding: 0px;
+        padding: 0px;
         border-radius: 0px;
-        height: inherit;       
+        height: inherit;
         border-top: 1px solid #c7c7c7;
         padding-top: 15px;
-    }
+      }
     }
   }
   .pg_property.guest_property {
@@ -714,7 +714,19 @@ h6.value_per_sqf {
   background: var(--white-color);
   padding: 15px;
 }
-
+.pp_sidebarcard_single .cat_badge {
+  position: absolute;
+  top: 0;
+  text-align: center;
+  width: fit-content;
+  background: #e6e6e6;
+  padding: 3px 6px;
+  font-size: 14px;
+  color: var(--theme-orange);
+  font-weight: 500;
+  right: 0;
+  border-radius: 0px 8px;
+}
 .ppss_footer,
 .ppss_header {
   display: grid;

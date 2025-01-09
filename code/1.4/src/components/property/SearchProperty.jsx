@@ -3,8 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 import { useFirestore } from "../../hooks/useFirestore";
 import EnquiryAddModal from "../EnquiryAddModal";
 
-const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }) => {
-  console.log('activeOption in SearchProperty: ', activeOption)
+const SearchProperty = ({
+  propertiesdocuments,
+  onUpdateFavorites,
+  activeOption,
+}) => {
+  console.log("activeOption in SearchProperty: ", activeOption);
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,7 +36,6 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
-
   // add enquiry with modal and add document start
   const { addDocument, updateDocument, deleteDocument, error } =
     useFirestore("enquiry-propdial");
@@ -45,7 +48,6 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
     setShowEnquiryModal(true);
   };
   // add enquiry with modal and add document end
-
 
   return (
     <>
@@ -61,22 +63,36 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                 to={`/propertydetails/${property.id}`}
               >
                 <div className="pcs_image_area">
-                  {/* <img src="/assets/img/property/p1.jpg" className="bigimage" alt="Property" /> */}
                   {property.images.length > 0 ? (
                     <img
                       src={property.images[0]}
                       className="bigimage"
                       alt={property.bhk}
                     />
+                  ) : property.category === "Plot" ? (
+                    <img
+                      src="/assets/img/plot.jpg"
+                      className="bigimage"
+                      alt="Plot"
+                    />
+                  ) : property.category === "Commercial" ? (
+                    <img
+                      src="/assets/img/commercial.jpg"
+                      className="bigimage"
+                      alt="Commercial"
+                    />
                   ) : (
                     <img
-                      src="/assets/img/property/p1.jpg"
+                      src="/assets/img/admin_banner.jpg"
                       className="bigimage"
-                      alt="Property"
+                      alt="Residential"
                     />
                   )}
                 </div>
-                <div className="id_badge on_mobile_767">PID: {" " + property.pid}</div>
+
+                <div className="id_badge on_mobile_767">
+                  PID: {" " + property.pid}
+                </div>
                 <div className="pcs_main_detail">
                   <div className="pmd_top relative">
                     <h4 className="property_name">{property.society}</h4>
@@ -85,7 +101,9 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                       {property.furnishing === ""
                         ? ""
                         : property.furnishing + " Furnished | "}{" "}
-                      {activeOption.toLowerCase() === 'rent' ? "Available for Rent" : "Available for Sale"}
+                      {activeOption.toLowerCase() === "rent"
+                        ? "Available for Rent"
+                        : "Available for Sale"}
                     </h4>
                     <h6 className="property_location">
                       {property.locality}, {property.city} | {property.state}
@@ -96,19 +114,13 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                       <div className="pi_single">
                         <h6>
                           {property.superArea && "Super "}
-                          {property.superArea &&
-                            property.carpetArea
-                            ? "/"
-                            : ""}
+                          {property.superArea && property.carpetArea ? "/" : ""}
                           {property.carpetArea && " Carpet "}
                           Area
                         </h6>
                         <h5>
                           {property.superArea}
-                          {property.superArea &&
-                            property.carpetArea
-                            ? "/"
-                            : ""}
+                          {property.superArea && property.carpetArea ? "/" : ""}
                           {property.carpetArea}&nbsp;{property.superAreaUnit}
                         </h5>
                       </div>
@@ -124,27 +136,25 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                         <h6>
                           {property.floorNo
                             ? ["Ground", "Stilt", "Basement"].includes(
-                              property.floorNo
-                            )
+                                property.floorNo
+                              )
                               ? "Floor"
                               : "Floor no"
                             : ""}
                         </h6>
                         <h5>
                           {property.floorNo
-                            ? property.floorNo ===
-                              "Ground"
+                            ? property.floorNo === "Ground"
                               ? "Ground"
-                              : property.floorNo ===
-                                "Stilt"
-                                ? "Stilt"
-                                : property.floorNo ===
-                                  "Basement"
-                                  ? "Basement "
-                                  : `${property.floorNo}${property.numberOfFloors
+                              : property.floorNo === "Stilt"
+                              ? "Stilt"
+                              : property.floorNo === "Basement"
+                              ? "Basement "
+                              : `${property.floorNo}${
+                                  property.numberOfFloors
                                     ? " of " + property.numberOfFloors
                                     : ""
-                                  }`
+                                }`
                             : ""}
                         </h5>
                       </div>
@@ -156,15 +166,15 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                         <h6>Furnishing</h6>
                         <h5>{property.furnishing}</h5>
                       </div>
-
                     </div>
                   </div>
                 </div>
               </Link>
               <div className="fav_and_share">
                 <span
-                  className={`material-symbols-outlined mr-2 fav ${favorites.includes(property.id) ? "favorited" : ""
-                    }`}
+                  className={`material-symbols-outlined mr-2 fav ${
+                    favorites.includes(property.id) ? "favorited" : ""
+                  }`}
                   onClick={() => handleFavoriteClick(property.id)}
                 >
                   favorite
@@ -172,7 +182,9 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
               </div>
             </div>
             <div className="pcs_other_info">
-              <div className="id_badge on_desktop_hide_767">PID:{" "}{property.pid}</div>
+              <div className="id_badge on_desktop_hide_767">
+                PID: {property.pid}
+              </div>
               <div className="poi_inner">
                 <div>
                   <h6 className="value_per_sqf">
@@ -209,13 +221,13 @@ const SearchProperty = ({ propertiesdocuments, onUpdateFavorites, activeOption }
                         : new Intl.NumberFormat("en-IN").format(
                           property.demandPriceSale
                         )} */}
-                    {activeOption.toLowerCase() === 'rent'
+                    {activeOption.toLowerCase() === "rent"
                       ? new Intl.NumberFormat("en-IN").format(
-                        property.demandPriceRent
-                      )
+                          property.demandPriceRent
+                        )
                       : new Intl.NumberFormat("en-IN").format(
-                        property.demandPriceSale
-                      )}
+                          property.demandPriceSale
+                        )}
                   </h6>
                 </div>
                 <button

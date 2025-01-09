@@ -306,14 +306,9 @@ const PropertyCard = ({ propertyid }) => {
                     src="/assets/img/commercial.jpg"
                     alt="Commercial Property"
                   />
-                ) :
-                propertydoc.category === "Plot" ? (
-                  <img
-                    src="/assets/img/plot.jpg"
-                    alt="Plot Property"
-                  />
-                ) :
-                null}
+                ) : propertydoc.category === "Plot" ? (
+                  <img src="/assets/img/plot.jpg" alt="Plot Property" />
+                ) : null}
               </div>
               <div className="left_side relative">
                 {user &&
@@ -366,7 +361,13 @@ const PropertyCard = ({ propertyid }) => {
                     {propertydoc.unitNumber} | {propertydoc.society}{" "}
                   </h6>
                   <h6>
-                    {propertydoc.bhk} | {propertydoc.propertyType}{" "}
+                    {propertydoc &&
+                      propertydoc.category === "Residential" &&
+                      propertydoc.bhk}{" "}
+                    {propertydoc &&
+                      propertydoc.category === "Residential" &&
+                      "|"}{" "}
+                    {propertydoc.propertyType}{" "}
                     {propertydoc.furnishing === ""
                       ? ""
                       : " | " + propertydoc.furnishing + "Furnished"}{" "}
@@ -416,23 +417,32 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_carpet.png" alt="" />
                   </div>
                   <div className="left">
-                    {propertydoc.category === "Plot" ? (
-                      <h6>Area</h6>
-                    ) : (
-                      <h6>
-                        {propertydoc.superArea
+                    <h6>
+                      {propertydoc.category === "Plot"
+                        ? "Area"
+                        : propertydoc.category === "Commercial"
+                        ? "Super Area"
+                        : propertydoc.category === "Residential"
+                        ? propertydoc.superArea
                           ? "Super Area"
                           : propertydoc.carpetArea
                           ? "Carpet Area"
-                          : "Area"}
-                      </h6>
-                    )}
+                          : "Area"
+                        : "Area"}
+                    </h6>
                     <h5>
-                      {propertydoc.superArea
-                        ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
-                        : propertydoc.carpetArea
-                        ? `${propertydoc.carpetArea} ${propertydoc.superAreaUnit}`
-                        : "Yet to added"}
+                      {propertydoc.category === "Residential"
+                        ? propertydoc.superArea
+                          ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
+                          : propertydoc.carpetArea
+                          ? `${propertydoc.carpetArea} ${propertydoc.superAreaUnit}`
+                          : "Yet to be added"
+                        : propertydoc.category === "Commercial" ||
+                          propertydoc.category === "Plot"
+                        ? propertydoc.superArea
+                          ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
+                          : "Yet to be added"
+                        : "Yet to be added"}
                     </h5>
                   </div>
                 </div>
@@ -441,11 +451,15 @@ const PropertyCard = ({ propertyid }) => {
                     <img src="/assets/img/new_bedroom.png" alt="" />
                   </div>
                   <div className="left">
-                    {propertydoc.category === "Plot" ||
-                    propertydoc.category === "Commercial" ? (
+                    {propertydoc.category === "Plot" ? (
                       <>
-                        <h6>Gated Community</h6>
+                        <h6>Park Facing</h6>
                         <h5>{propertydoc.gatedArea}</h5>
+                      </>
+                    ) : propertydoc.category === "Commercial" ? (
+                      <>
+                        <h6>Carpet Area</h6>
+                        <h5>{propertydoc.carpetArea}</h5>
                       </>
                     ) : (
                       <>
@@ -478,7 +492,9 @@ const PropertyCard = ({ propertyid }) => {
             )}
             {expanded
               ? ""
-              : propertydoc && (propertydoc.category === "Commercial" || propertydoc.category === "Residential") &&  (
+              : propertydoc &&
+                (propertydoc.category === "Commercial" ||
+                  propertydoc.category === "Residential") && (
                   <div className="middle_single">
                     <div className="ms_child">
                       <div className="icon_container">
