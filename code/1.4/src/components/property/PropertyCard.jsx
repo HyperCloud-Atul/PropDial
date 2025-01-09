@@ -361,17 +361,18 @@ const PropertyCard = ({ propertyid }) => {
                     {propertydoc.unitNumber} | {propertydoc.society}{" "}
                   </h6>
                   <h6>
-                    {propertydoc &&
-                      propertydoc.category === "Residential" &&
-                      propertydoc.bhk}{" "}
-                    {propertydoc &&
-                      propertydoc.category === "Residential" &&
-                      "|"}{" "}
-                    {propertydoc.propertyType}{" "}
-                    {propertydoc.furnishing === ""
-                      ? ""
-                      : " | " + propertydoc.furnishing + "Furnished"}{" "}
-                  </h6>
+  {propertydoc &&
+    (propertydoc.category === "Residential" ? (
+      <>
+        {propertydoc.bhk} {propertydoc.furnishing && "|"} {propertydoc.furnishing && `${propertydoc.furnishing} Furnished`}
+      </>
+    ) : propertydoc.category === "Commercial" || propertydoc.category === "Plot" ? (
+      <>
+        {propertydoc.propertyType}
+      </>
+    ) : null)}
+</h6>
+
                   <h6>
                     {propertydoc.locality}, {propertydoc.city} |{" "}
                     {propertydoc.state}
@@ -454,17 +455,19 @@ const PropertyCard = ({ propertyid }) => {
                     {propertydoc.category === "Plot" ? (
                       <>
                         <h6>Park Facing</h6>
-                        <h5>{propertydoc.gatedArea}</h5>
+                        <h5>{propertydoc.parkFacing || "Yet to be added"}</h5>
                       </>
                     ) : propertydoc.category === "Commercial" ? (
                       <>
                         <h6>Carpet Area</h6>
-                        <h5>{propertydoc.carpetArea}</h5>
+                        <h5>{propertydoc.carpetArea || "Yet to be added"}</h5>
                       </>
                     ) : (
                       <>
                         <h6>Bedroom</h6>
-                        <h5>{propertydoc.numberOfBedrooms}</h5>
+                        <h5>
+                          {propertydoc.numberOfBedrooms || "Yet to be added"}
+                        </h5>
                       </>
                     )}
                   </div>
@@ -478,12 +481,16 @@ const PropertyCard = ({ propertyid }) => {
                     propertydoc.category === "Commercial" ? (
                       <>
                         <h6>Direction Facing</h6>
-                        <h5>{propertydoc.mainDoorFacing}</h5>
+                        <h5>
+                          {propertydoc.mainDoorFacing || "Yet to be added"}
+                        </h5>
                       </>
                     ) : (
                       <>
                         <h6>Bathroom</h6>
-                        <h5>{propertydoc.numberOfBathrooms}</h5>
+                        <h5>
+                          {propertydoc.numberOfBathrooms || "Yet to be added"}
+                        </h5>
                       </>
                     )}
                   </div>
@@ -492,22 +499,14 @@ const PropertyCard = ({ propertyid }) => {
             )}
             {expanded
               ? ""
-              : propertydoc &&
-                (propertydoc.category === "Commercial" ||
-                  propertydoc.category === "Residential") && (
+              : propertydoc && (
                   <div className="middle_single">
                     <div className="ms_child">
                       <div className="icon_container">
                         <img src="/assets/img/new_super_area.png" alt="" />
                       </div>
                       <div className="left">
-                        {propertydoc.category === "Plot" ||
-                        propertydoc.category === "Commercial" ? (
-                          <>
-                            <h6>Property Type</h6>
-                            <h5>{propertydoc.propertyType}</h5>
-                          </>
-                        ) : (
+                        {propertydoc.category === "Residential" ? (
                           <>
                             <h6>Floor</h6>
                             <h5>
@@ -517,14 +516,37 @@ const PropertyCard = ({ propertyid }) => {
                                   : propertydoc.floorNo === "Stilt"
                                   ? "Stilt"
                                   : propertydoc.floorNo === "Basement"
-                                  ? "Basement "
+                                  ? "Basement"
                                   : `${propertydoc.floorNo}${
                                       propertydoc.numberOfFloors
                                         ? " of " + propertydoc.numberOfFloors
                                         : ""
                                     }`
-                                : ""}
+                                : "Yet to be added"}
                             </h5>
+                          </>
+                        ) : propertydoc.category === "Commercial" ? (
+                          <>
+                            <h6>Property Type</h6>
+                            <h5>
+                              {propertydoc.propertyType || "Yet to be added"}
+                            </h5>
+                          </>
+                        ) : propertydoc.category === "Plot" ? (
+                          <>
+                            <h6>Is Corner</h6>
+                            <h5>
+                              {propertydoc.isCorner !== undefined
+                                ? propertydoc.isCorner
+                                  ? "Yes"
+                                  : "No"
+                                : "Yet to be added"}
+                            </h5>
+                          </>
+                        ) : (
+                          <>
+                            <h6>Property Details</h6>
+                            <h5>Yet to be added</h5>
                           </>
                         )}
                       </div>
@@ -534,16 +556,32 @@ const PropertyCard = ({ propertyid }) => {
                         <img src="/assets/img/new_bhk.png" alt="" />
                       </div>
                       <div className="left">
-                        {propertydoc.category === "Plot" ||
-                        propertydoc.category === "Commercial" ? (
+                        {propertydoc.category === "Residential" ? (
                           <>
-                            <h6>Propety Sub-Type</h6>
-                            <h5>{propertydoc.additionalRooms[0]}</h5>
+                            <h6>BHK</h6>
+                            <h5>{propertydoc.bhk || "Yet to be added"}</h5>
+                          </>
+                        ) : propertydoc.category === "Commercial" ? (
+                          <>
+                            <h6>Property Sub-Type</h6>
+                            <h5>
+                              {propertydoc.additionalRooms &&
+                              propertydoc.additionalRooms.length > 0
+                                ? propertydoc.additionalRooms[0]
+                                : "Yet to be added"}
+                            </h5>
+                          </>
+                        ) : propertydoc.category === "Plot" ? (
+                          <>
+                            <h6>Gated Community</h6>
+                            <h5>
+                              {propertydoc.gatedArea || "Yet to be added"}
+                            </h5>
                           </>
                         ) : (
                           <>
-                            <h6>BHK</h6>
-                            <h5>{propertydoc.bhk}</h5>
+                            <h6>Property Details</h6>
+                            <h5>Yet to be added</h5>
                           </>
                         )}
                       </div>
@@ -553,15 +591,36 @@ const PropertyCard = ({ propertyid }) => {
                         <img src="/assets/img/new_furniture.png" alt="" />
                       </div>
                       <div className="left">
-                        <h6>furnishing</h6>
-                        <h5>{propertydoc.furnishing}</h5>
+                        {propertydoc.category === "Plot" ? (
+                          <>
+                            <h6>Road Width</h6>
+                            <h5>
+                              {propertydoc.roadWidth || "Yet to be added"}
+                            </h5>
+                          </>
+                        ) : propertydoc.category === "Residential" ||
+                          propertydoc.category === "Commercial" ? (
+                          <>
+                            <h6>Furnishing</h6>
+                            <h5>
+                              {propertydoc.furnishing || "Yet to be added"}
+                            </h5>
+                          </>
+                        ) : (
+                          <>
+                            <h6>Details</h6>
+                            <h5>Yet to be added</h5>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
                 )}
             {expanded
               ? ""
-              : propertydoc && (
+              : propertydoc &&
+                (propertydoc.category === "Commercial" ||
+                  propertydoc.category === "Residential") && (
                   <div className="middle_single addtional_rooms">
                     <div className="ms_child">
                       <div className="icon_container">

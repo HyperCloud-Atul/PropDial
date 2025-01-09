@@ -1742,27 +1742,33 @@ const PropertyDetails = () => {
                 <div className="property_card_single mobile_full_card">
                   <div className="pcs_inner pointer" to="/pdsingle">
                     <div className="pcs_image_area relative">
-                      {images.length > 0 ? (
-                        <div className="bigimage_container">
-                          {" "}
-                          <Gallery
-                            style={{ background: "red" }}
-                            items={images
-                              .filter((url) => url)
-                              .map((url, index) => ({
-                                original: url,
-                                thumbnail: url,
-                              }))}
-                            slideDuration={1000}
-                          />
-                        </div>
-                      ) : (
-                        <img
-                          className="default_prop_img"
-                          src="/assets/img/admin_banner.jpg"
-                          alt=""
-                        />
-                      )}
+                    {images.length > 0 ? (
+  <div className="bigimage_container">
+    <Gallery
+      style={{ background: "red" }}
+      items={images
+        .filter((url) => url)
+        .map((url, index) => ({
+          original: url,
+          thumbnail: url,
+        }))}
+      slideDuration={1000}
+    />
+  </div>
+) : (
+  <img
+    className="default_prop_img"
+    src={
+      propertyDocument.category === "Plot"
+        ? "/assets/img/plot.jpg" // Default image for Plot
+        : propertyDocument.category === "Commercial"
+        ? "/assets/img/commercial.jpg" // Default image for Commercial
+        : "/assets/img/admin_banner.jpg" // Default image for Residential or other categories
+    }
+    alt="Default"
+  />
+)}
+
                       {user &&
                         user.status === "active" &&
                         (user.role === "admin" ||

@@ -44,23 +44,36 @@ const SearchPropAgentProperty = ({ activeOption, propagentProperties }) => {
           <div className="cat_badge">{property.category}</div>
           <div className="ppss_header">
             <h5>
-              {property.bhk} |{" "}For{" "}
-              {property.purpose.toLowerCase() ===
-                            "rentsaleboth"
-                            ? "Rent / Sale"
-                            : property.purpose}
+              {property.category === "Residential" ? (
+                <>
+                  {property.bhk} | For{" "}
+                  {property.purpose.toLowerCase() === "rentsaleboth"
+                    ? "Rent / Sale"
+                    : property.purpose}
+                </>
+              ) : property.category === "Commercial" ? (
+                <>
+                  {property.propertyType} | For{" "}
+                  {property.purpose.toLowerCase() === "rentsaleboth"
+                    ? "Rent / Sale"
+                    : property.purpose}
+                </>
+              ) : property.category === "Plot" ? (
+                <>
+                  {property.mainDoorFacing}-facing | {property.superArea}{" "}
+                  {property.superAreaUnit} Plot
+                </>
+              ) : (
+                "Details not available"
+              )}
             </h5>
+
             <h5>{property.locality}</h5>
             <h6 className="location">
               {property.city}, {property.state}
             </h6>
           </div>
           <div className="ppss_footer">
-            <h6>
-              {property.furnishing === ""
-                ? ""
-                : property.furnishing + "Furnished"}{" "}
-            </h6>
             <h6>
               <span>
                 ₹{" "}
@@ -82,9 +95,27 @@ const SearchPropAgentProperty = ({ activeOption, propagentProperties }) => {
                                         : new Intl.NumberFormat("en-IN").format(
                                             property.demandPriceSale
                                         )} */}
-                {activeOption.toLowerCase() === "rent"
+                {/* {activeOption.toLowerCase() === "rent"
                   ? new Intl.NumberFormat("en-IN").format(
                       property.demandPriceRent
+                    )
+                  : new Intl.NumberFormat("en-IN").format(
+                      property.demandPriceSale
+                    )} */}
+                {property.flag.toLowerCase() === "pms only" ||
+                property.flag.toLowerCase() === "available for rent" ||
+                property.flag.toLowerCase() === "rented out"
+                  ? new Intl.NumberFormat("en-IN").format(
+                      property.demandPriceRent
+                    )
+                  : property.flag.toLowerCase() === "rent and sale" ||
+                    property.flag.toLowerCase() === "rented but sale"
+                  ? new Intl.NumberFormat("en-IN").format(
+                      property.demandPriceRent
+                    ) +
+                    " / ₹" +
+                    new Intl.NumberFormat("en-IN").format(
+                      property.demandPriceSale
                     )
                   : new Intl.NumberFormat("en-IN").format(
                       property.demandPriceSale
