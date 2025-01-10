@@ -679,15 +679,14 @@ const Stage2 = (props) => {
       errorFlag = true;
     }
 
-    console.log("propertyDetails.Category: ", propertyDetails.Category)
     //SuperArea & CarpetArea Value
     if (propertyDetails && propertyDetails.Category === 'Commercial') {
       if (
         (propertyDetails.SuperArea === "" || propertyDetails.CarpetArea === "" ||
           propertyDetails.SuperArea === "0" || propertyDetails.CarpetArea === "0")
       ) {
-        if (errorMsg === "Enter Super Area and Carpet Area both")
-          errorMsg = errorMsg + "Enter Super Area and Carpet Area both";
+        if (errorMsg === "Please select ")
+          errorMsg = "Enter Super Area and Carpet Area both";
         else errorMsg = errorMsg + ", Enter Super Area and Carpet Area both";
         errorFlag = true;
       }
@@ -698,12 +697,12 @@ const Stage2 = (props) => {
         (propertyDetails.SuperArea === "0" && propertyDetails.CarpetArea === "0")
       ) {
         if (propertyDetails.Category === 'Plot') {
-          if (errorMsg === "Enter Super Area or Carpet Area or both")
-            errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
+          if (errorMsg === "Please select ")
+            errorMsg = "Enter Super Area or Carpet Area or both";
           else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
         } else {
-          if (errorMsg === "Enter Super Area or Carpet Area or both")
-            errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
+          if (errorMsg === "Please select ")
+            errorMsg = "Enter Super Area or Carpet Area or both";
           else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
         }
         errorFlag = true;
@@ -720,26 +719,75 @@ const Stage2 = (props) => {
 
     }
 
+    if ((propertyDetails.SuperArea !== "" && propertyDetails.CarpetArea !== "") &&
+      Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
+      if (errorMsg === "Please select ") {
+        errorMsg = "Carpet Area should be less than Super Area";
+      } else {
+        errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
+      }
+      errorFlag = true;
+    }
+
     //SuperArea & CarpetArea Unit
     if (
       (propertyDetails.SuperAreaUnit === "" && propertyDetails.CarpetAreaUnit === "")
     ) {
       if (errorMsg === "Please select ")
-        errorMsg = errorMsg + "Super Area / Carpet Area Unit";
+        errorMsg = "Super Area / Carpet Area Unit";
       else errorMsg = errorMsg + ", Select Super Area / Carpet Area Unit";
       errorFlag = true;
     }
-
-
 
     //EV Charging Type
     if (
       propertyDetails.Category !== 'Plot' && (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStatus.toLowerCase() === 'yes')
     ) {
       if (errorMsg === "Please select ")
-        errorMsg = errorMsg + "EV Charging Type";
+        errorMsg = "EV Charging Type";
       else errorMsg = errorMsg + ", EV Charging Type";
       errorFlag = true;
+    }
+
+
+    //Plot - Field Validations
+    if (propertyDetails && propertyDetails.Category === 'Plot') {
+      //Road Width Validation
+      if (propertyDetails.RoadWidth === "" || propertyDetails.RoadWidth === "0") {
+        if (errorMsg === "Please select ")
+          errorMsg = "Enter Road Width";
+        else errorMsg = errorMsg + ", Enter Road Width";
+        errorFlag = true;
+      }
+
+      if (propertyDetails.RoadWidthUnit === "") {
+        if (errorMsg === "Please select ")
+          errorMsg = "Enter Road Width Unit";
+        else errorMsg = errorMsg + ", Enter Road Width Unit";
+        errorFlag = true;
+      }
+
+      if (propertyDetails.isCornerSidePlot === "") {
+        if (errorMsg === "Please select ")
+          errorMsg = "Select Corner Side Plot";
+        else errorMsg = errorMsg + ", Select Corner Side Plot";
+        errorFlag = true;
+      }
+
+      if (propertyDetails.IsParkFacingPlot === "") {
+        if (errorMsg === "Please select ")
+          errorMsg = "Select Park Facing Plot";
+        else errorMsg = errorMsg + ", Select Park Facing Plot";
+        errorFlag = true;
+      }
+
+      if (propertyDetails.GatedArea === "") {
+        if (errorMsg === "Please select ")
+          errorMsg = "Select Gated Community";
+        else errorMsg = errorMsg + ", Select Gated Community";
+        errorFlag = true;
+      }
+
     }
 
     if (errorFlag) setFormError(errorMsg);
@@ -3898,7 +3946,7 @@ const Stage2 = (props) => {
                       placeholder="Road Width"
                       maxLength={6}
                       onInput={(e) => {
-                        restrictInput(e, 5);
+                        restrictInput(e, 2);
                       }}
                       onChange={(e) =>
                         setPropertyDetails({
@@ -3926,7 +3974,7 @@ const Stage2 = (props) => {
                     >
                       <div
                         className={
-                          propertyDetails.RaodWidthUnit === "Feet"
+                          propertyDetails.RoadWidthUnit === "Feet"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -3937,7 +3985,7 @@ const Stage2 = (props) => {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              RaodWidthUnit: "Feet",
+                              RoadWidthUnit: "Feet",
                             });
                           }}
                         />
@@ -3975,7 +4023,7 @@ const Stage2 = (props) => {
                     >
                       <div
                         className={
-                          propertyDetails.RaodWidthUnit === "Yard"
+                          propertyDetails.RoadWidthUnit === "Yard"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -3986,7 +4034,7 @@ const Stage2 = (props) => {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              RaodWidthUnit: "Yard",
+                              RoadWidthUnit: "Yard",
                             });
                           }}
                         />
@@ -4024,7 +4072,7 @@ const Stage2 = (props) => {
                     >
                       <div
                         className={
-                          propertyDetails.RaodWidthUnit === "Meter"
+                          propertyDetails.RoadWidthUnit === "Meter"
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -4035,7 +4083,7 @@ const Stage2 = (props) => {
                           onClick={(e) => {
                             setPropertyDetails({
                               ...propertyDetails,
-                              RaodWidthUnit: "Meter",
+                              RoadWidthUnit: "Meter",
                             });
                           }}
                         />
