@@ -814,13 +814,13 @@ const Stage1 = (props) => {
         ? removeCommas(propertyDetails.DemandPriceSale)
         : "",
       securityDeposit: removeCommas(propertyDetails.SecurityDeposit) ? removeCommas(propertyDetails.SecurityDeposit) : "",
-      maintenanceflag: propertyDetails.MaintenanceFlag
+      maintenanceFlag: propertyDetails.MaintenanceFlag
         ? propertyDetails.MaintenanceFlag
         : "Extra",
-      maintenancecharges: removeCommas(propertyDetails.MaintenanceCharges)
+      maintenanceCharges: removeCommas(propertyDetails.MaintenanceCharges)
         ? removeCommas(propertyDetails.MaintenanceCharges)
         : "",
-      maintenancechargesfrequency: propertyDetails.MaintenanceChargesFrequency
+      maintenanceChargesFrequency: propertyDetails.MaintenanceChargesFrequency
         ? propertyDetails.MaintenanceChargesFrequency
         : "NA",
       state: state.label,
