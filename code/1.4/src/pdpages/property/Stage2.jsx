@@ -3949,7 +3949,7 @@ const Stage2 = (props) => {
                       style={{ paddingRight: "10px" }}
                       type="text"
                       placeholder="Road Width"
-                      maxLength={6}
+                      maxLength={2}
                       onInput={(e) => {
                         restrictInput(e, 2);
                       }}

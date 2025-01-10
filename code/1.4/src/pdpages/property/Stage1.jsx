@@ -2812,6 +2812,9 @@ const Stage1 = (props) => {
                   type="text" // Use type="text" to control length
                   placeholder="Enter here"
                   maxLength={6} // Limits input to 6 characters
+                  onInput={(e) => {
+                    restrictInput(e, 6);
+                  }}
                   onChange={(e) => {
                     const value = e.target.value.trim();
                     // Check if the input is numeric and has a maximum length of 6
