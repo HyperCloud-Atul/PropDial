@@ -1595,62 +1595,67 @@ const Stage2 = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="plus_minus_input_wrapper">
-                  <span className="pmi_label">Balcony</span>
-                  <div className="plus_minus_input">
-                    <div
-                      className="left-minus-button pmbutton"
-                      onClick={() => {
-                        decrementInput("balconyNumberInput");
-                      }}
-                    >
-                      <span className="material-symbols-outlined">remove</span>
-                    </div>
+                {propertyDetails.PropertyType !== "Storage" &&
+                  <div className="plus_minus_input_wrapper">
+                    <span className="pmi_label">Balcony</span>
+                    <div className="plus_minus_input">
+                      <div
+                        className="left-minus-button pmbutton"
+                        onClick={() => {
+                          decrementInput("balconyNumberInput");
+                        }}
+                      >
+                        <span className="material-symbols-outlined">remove</span>
+                      </div>
 
-                    <input
-                      id="balconyNumberInput"
-                      type="number"
-                      disabled
-                      value={propertyDetails && propertyDetails.NumberOfBalcony}
-                    />
-                    <div
-                      className="right-plus-button pmbutton"
-                      onClick={() => {
-                        incrementInput("balconyNumberInput");
-                      }}
-                    >
-                      <span className="material-symbols-outlined">add</span>
+                      <input
+                        id="balconyNumberInput"
+                        type="number"
+                        disabled
+                        value={propertyDetails && propertyDetails.NumberOfBalcony}
+                      />
+                      <div
+                        className="right-plus-button pmbutton"
+                        onClick={() => {
+                          incrementInput("balconyNumberInput");
+                        }}
+                      >
+                        <span className="material-symbols-outlined">add</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="plus_minus_input_wrapper">
-                  <span className="pmi_label">Kitchen</span>
-                  <div className="plus_minus_input">
-                    <div
-                      className="left-minus-button pmbutton"
-                      onClick={() => {
-                        decrementInput("kitchenNumberInput");
-                      }}
-                    >
-                      <span className="material-symbols-outlined">remove</span>
-                    </div>
+                }
+                {
+                  propertyDetails.PropertyType !== "Storage" &&
+                  <div className="plus_minus_input_wrapper">
+                    <span className="pmi_label">Kitchen</span>
+                    <div className="plus_minus_input">
+                      <div
+                        className="left-minus-button pmbutton"
+                        onClick={() => {
+                          decrementInput("kitchenNumberInput");
+                        }}
+                      >
+                        <span className="material-symbols-outlined">remove</span>
+                      </div>
 
-                    <input
-                      id="kitchenNumberInput"
-                      type="number"
-                      disabled
-                      value={propertyDetails && propertyDetails.NumberOfKitchen}
-                    />
-                    <div
-                      className="right-plus-button pmbutton"
-                      onClick={() => {
-                        incrementInput("kitchenNumberInput");
-                      }}
-                    >
-                      <span className="material-symbols-outlined">add</span>
+                      <input
+                        id="kitchenNumberInput"
+                        type="number"
+                        disabled
+                        value={propertyDetails && propertyDetails.NumberOfKitchen}
+                      />
+                      <div
+                        className="right-plus-button pmbutton"
+                        onClick={() => {
+                          incrementInput("kitchenNumberInput");
+                        }}
+                      >
+                        <span className="material-symbols-outlined">add</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                }
                 {/* <div className="plus_minus_input_wrapper">
                   <span className="pmi_label">Living Area</span>
                   <div className="plus_minus_input">
