@@ -679,30 +679,45 @@ const Stage2 = (props) => {
       errorFlag = true;
     }
 
+    console.log("propertyDetails.Category: ", propertyDetails.Category)
     //SuperArea & CarpetArea Value
-    if (
-      (propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "") ||
-      (propertyDetails.SuperArea === "0" && propertyDetails.CarpetArea === "0")
-    ) {
-      if (propertyDetails.Category === 'Plot') {
-        if (errorMsg === "Enter Super Area or Carpet Area or both")
-          errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
-        else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
-      } else {
-        if (errorMsg === "Enter Super Area or Carpet Area or both")
-          errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
-        else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
+    if (propertyDetails && propertyDetails.Category === 'Commercial') {
+      if (
+        (propertyDetails.SuperArea === "" || propertyDetails.CarpetArea === "" ||
+          propertyDetails.SuperArea === "0" || propertyDetails.CarpetArea === "0")
+      ) {
+        if (errorMsg === "Enter Super Area and Carpet Area both")
+          errorMsg = errorMsg + "Enter Super Area and Carpet Area both";
+        else errorMsg = errorMsg + ", Enter Super Area and Carpet Area both";
+        errorFlag = true;
       }
-      errorFlag = true;
     }
-    else if ((propertyDetails.SuperArea !== "" && propertyDetails.CarpetArea !== "") &&
-      Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
-      if (errorMsg === "Please select ") {
-        errorMsg = "Carpet Area should be less than Super Area";
-      } else {
-        errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
+    else {
+      if (
+        (propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "") ||
+        (propertyDetails.SuperArea === "0" && propertyDetails.CarpetArea === "0")
+      ) {
+        if (propertyDetails.Category === 'Plot') {
+          if (errorMsg === "Enter Super Area or Carpet Area or both")
+            errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
+          else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
+        } else {
+          if (errorMsg === "Enter Super Area or Carpet Area or both")
+            errorMsg = errorMsg + "Enter Super Area or Carpet Area or both";
+          else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
+        }
+        errorFlag = true;
       }
-      errorFlag = true;
+      else if ((propertyDetails.SuperArea !== "" && propertyDetails.CarpetArea !== "") &&
+        Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
+        if (errorMsg === "Please select ") {
+          errorMsg = "Carpet Area should be less than Super Area";
+        } else {
+          errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
+        }
+        errorFlag = true;
+      }
+
     }
 
     //SuperArea & CarpetArea Unit
@@ -714,6 +729,8 @@ const Stage2 = (props) => {
       else errorMsg = errorMsg + ", Select Super Area / Carpet Area Unit";
       errorFlag = true;
     }
+
+
 
     //EV Charging Type
     if (
@@ -816,8 +833,10 @@ const Stage2 = (props) => {
         updatedBy: user.uid,
       };
 
+
+
       if (!errorFlag) {
-        console.log("updatedProperty:", updatedProperty);
+        console.log("Property id: ", propertyid, " and updatedProperty Object: ", updatedProperty);
         // console.log('propertyid:', propertyid)
         await updateDocument(propertyid, updatedProperty);
 
@@ -826,6 +845,9 @@ const Stage2 = (props) => {
         } else {
           props.setStateFlag("stage3");
         }
+      }
+      else {
+        console.log("Error Flag: ", errorFlag)
       }
     }
   };
