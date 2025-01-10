@@ -361,17 +361,24 @@ const PropertyCard = ({ propertyid }) => {
                     {propertydoc.unitNumber} | {propertydoc.society}{" "}
                   </h6>
                   <h6>
-  {propertydoc &&
-    (propertydoc.category === "Residential" ? (
-      <>
-        {propertydoc.bhk} {propertydoc.furnishing && "|"} {propertydoc.furnishing && `${propertydoc.furnishing} Furnished`}
-      </>
-    ) : propertydoc.category === "Commercial" || propertydoc.category === "Plot" ? (
-      <>
-        {propertydoc.propertyType}
-      </>
-    ) : null)}
-</h6>
+                    {propertydoc &&
+                      (propertydoc.category === "Residential" ? (
+                        <>
+                          {propertydoc.bhk} {propertydoc.furnishing && "|"}{" "}
+                          {propertydoc.furnishing &&
+                            `${propertydoc.furnishing} Furnished`}{" "}
+                          {propertydoc.purpose && " | "}
+                          For{" "}
+                          {propertydoc.purpose.toLowerCase() === "rentsaleboth"
+                            ? "Rent / Sale"
+                            : propertydoc.purpose}
+                        </>
+                      ) : propertydoc.category === "Commercial" ? (
+                        <>Perfect for {propertydoc.propertyType} Needs</>
+                      ) : propertydoc.category === "Plot" ? (
+                        <>{propertydoc.propertyType} Plot</>
+                      ) : null)}
+                  </h6>
 
                   <h6>
                     {propertydoc.locality}, {propertydoc.city} |{" "}
@@ -455,7 +462,9 @@ const PropertyCard = ({ propertyid }) => {
                     {propertydoc.category === "Plot" ? (
                       <>
                         <h6>Park Facing</h6>
-                        <h5>{propertydoc.parkFacing || "Yet to be added"}</h5>
+                        <h5>
+                          {propertydoc.isParkFacingPlot || "Yet to be added"}
+                        </h5>
                       </>
                     ) : propertydoc.category === "Commercial" ? (
                       <>
@@ -466,7 +475,10 @@ const PropertyCard = ({ propertyid }) => {
                       <>
                         <h6>Bedroom</h6>
                         <h5>
-                          {propertydoc.numberOfBedrooms || "Yet to be added"}
+                          {propertydoc.numberOfBedrooms === "0" ||
+                          propertydoc.numberOfBedrooms === 0
+                            ? "Yet to be added"
+                            : propertydoc.numberOfBedrooms}
                         </h5>
                       </>
                     )}
@@ -489,7 +501,10 @@ const PropertyCard = ({ propertyid }) => {
                       <>
                         <h6>Bathroom</h6>
                         <h5>
-                          {propertydoc.numberOfBathrooms || "Yet to be added"}
+                          {propertydoc.numberOfBathrooms === "0" ||
+                          propertydoc.numberOfBathrooms === 0
+                            ? "Yet to be added"
+                            : propertydoc.numberOfBathrooms}
                         </h5>
                       </>
                     )}
@@ -536,11 +551,8 @@ const PropertyCard = ({ propertyid }) => {
                           <>
                             <h6>Is Corner</h6>
                             <h5>
-                              {propertydoc.isCorner !== undefined
-                                ? propertydoc.isCorner
-                                  ? "Yes"
-                                  : "No"
-                                : "Yet to be added"}
+                              {propertydoc.isCornerSidePlot ||
+                                "Yet to be added"}
                             </h5>
                           </>
                         ) : (

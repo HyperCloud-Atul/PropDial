@@ -97,14 +97,28 @@ const SearchProperty = ({
                   <div className="pmd_top relative">
                     <h4 className="property_name">{property.society}</h4>
                     <h4 className="property_name">
-                      {property.bhk} |{" "}
-                      {property.furnishing === ""
-                        ? ""
-                        : property.furnishing + " Furnished | "}{" "}
-                      {activeOption.toLowerCase() === "rent"
-                        ? "Available for Rent"
-                        : "Available for Sale"}
+                    {property &&
+    (property.category === "Residential" ? (
+      <>
+        {property.bhk} {property.furnishing && "|"}{" "}
+        {property.furnishing &&
+          `${property.furnishing} Furnished`}{" "}{property.purpose && " | "}
+        For{" "}
+        {property.purpose.toLowerCase() === "rentsaleboth"
+          ? "Rent / Sale"
+          : property.purpose}
+      </>
+    ) : property.category === "Commercial" ? (
+      <>Perfect for {property.propertyType} Needs</>
+    ) : property.category === "Plot" ? (
+      <>{property.propertyType} Plot</>
+    ) : null)}
+                          
+                  
+
                     </h4>
+                  
+                    
                     <h6 className="property_location">
                       {property.locality}, {property.city} | {property.state}
                     </h6>
@@ -113,15 +127,31 @@ const SearchProperty = ({
                     <div className="property_information">
                       <div className="pi_single">
                         <h6>
-                          {property.superArea && "Super "}
-                          {property.superArea && property.carpetArea ? "/" : ""}
-                          {property.carpetArea && " Carpet "}
-                          Area
+                        {property.category === "Plot"
+                        ? "Area"
+                        : property.category === "Commercial"
+                        ? "Super Area"
+                        : property.category === "Residential"
+                        ? property.superArea
+                          ? "Super Area"
+                          : property.carpetArea
+                          ? "Carpet Area"
+                          : "Area"
+                        : "Area"}
                         </h6>
                         <h5>
-                          {property.superArea}
-                          {property.superArea && property.carpetArea ? "/" : ""}
-                          {property.carpetArea}&nbsp;{property.superAreaUnit}
+                        {property.category === "Residential"
+                        ? property.superArea
+                          ? `${property.superArea} ${property.superAreaUnit}`
+                          : property.carpetArea
+                          ? `${property.carpetArea} ${property.superAreaUnit}`
+                          : "Yet to be added"
+                        : property.category === "Commercial" ||
+                          property.category === "Plot"
+                        ? property.superArea
+                          ? `${property.superArea} ${property.superAreaUnit}`
+                          : "Yet to be added"
+                        : "Yet to be added"}
                         </h5>
                       </div>
                       <div className="pi_single">
