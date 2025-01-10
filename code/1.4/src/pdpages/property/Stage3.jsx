@@ -660,9 +660,7 @@ export default function Stage3(props) {
                 </div>
               </div>
 
-
-
-              {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') &&
+              {propertyDetails && propertyDetails.Category !== 'Plot' &&
                 propertyDocument &&
                 propertyDocument.numberOfBalcony &&
                 propertyDocument.numberOfBalcony > 0 &&
