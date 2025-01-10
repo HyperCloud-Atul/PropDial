@@ -772,7 +772,7 @@ const Stage2 = (props) => {
       carpetAreaUnit: propertyDetails.SuperAreaUnit,
 
       roadWidth: propertyDetails.RoadWidth ? propertyDetails.RoadWidth : "",
-      roadWidthUnit: propertyDetails.RoadWidthUnit,
+      roadWidthUnit: propertyDetails.RoadWidthUnit ? propertyDetails.RoadWidthUnit : "",
 
       powerBackup: propertyDetails.PowerBackup
         ? propertyDetails.PowerBackup
@@ -833,11 +833,10 @@ const Stage2 = (props) => {
         updatedBy: user.uid,
       };
 
-
-
       if (!errorFlag) {
+        console.log("Error Flag: ", errorFlag)
         console.log("Property id: ", propertyid, " and updatedProperty Object: ", updatedProperty);
-        // console.log('propertyid:', propertyid)
+
         await updateDocument(propertyid, updatedProperty);
 
         if (updateDocumentResponse.error) {
