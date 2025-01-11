@@ -549,7 +549,7 @@ const PropertyCard = ({ propertyid }) => {
                           </>
                         ) : propertydoc.category === "Plot" ? (
                           <>
-                            <h6>Is Corner</h6>
+                            <h6>Is Corner?</h6>
                             <h5>
                               {propertydoc.isCornerSidePlot ||
                                 "Yet to be added"}
@@ -607,7 +607,8 @@ const PropertyCard = ({ propertyid }) => {
                           <>
                             <h6>Road Width</h6>
                             <h5>
-                              {propertydoc.roadWidth || "Yet to be added"}
+                              {propertydoc.roadWidth || "Yet to be added"}{" "}
+                              {propertydoc.roadWidthUnit}
                             </h5>
                           </>
                         ) : propertydoc.category === "Residential" ||

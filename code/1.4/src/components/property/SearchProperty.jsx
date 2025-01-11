@@ -155,47 +155,129 @@ const SearchProperty = ({
                         </h5>
                       </div>
                       <div className="pi_single">
-                        <h6>Bedrooms</h6>
-                        <h5>{property.numberOfBedrooms}</h5>
-                      </div>
-                      <div className="pi_single">
-                        <h6>Bathroom</h6>
-                        <h5>{property.numberOfBathrooms}</h5>
-                      </div>
-                      <div className="pi_single">
-                        <h6>
-                          {property.floorNo
-                            ? ["Ground", "Stilt", "Basement"].includes(
-                                property.floorNo
-                              )
-                              ? "Floor"
-                              : "Floor no"
-                            : ""}
-                        </h6>
-                        <h5>
-                          {property.floorNo
-                            ? property.floorNo === "Ground"
-                              ? "Ground"
-                              : property.floorNo === "Stilt"
-                              ? "Stilt"
-                              : property.floorNo === "Basement"
-                              ? "Basement "
-                              : `${property.floorNo}${
-                                  property.numberOfFloors
-                                    ? " of " + property.numberOfFloors
-                                    : ""
-                                }`
-                            : ""}
-                        </h5>
-                      </div>
-                      <div className="pi_single">
-                        <h6>BHK</h6>
-                        <h5>{property.bhk}</h5>
-                      </div>
-                      <div className="pi_single">
-                        <h6>Furnishing</h6>
-                        <h5>{property.furnishing}</h5>
-                      </div>
+  {property.category === "Residential" ? (
+    <>
+      <h6>Bedrooms</h6>
+      <h5>
+        {property.numberOfBedrooms === 0 || property.numberOfBedrooms === "0"
+          ? "Yet to be added"
+          : property.numberOfBedrooms}
+      </h5>
+    </>
+  ) : property.category === "Commercial" ? (
+    <>
+      <h6>Carpet Area</h6>
+      <h5>
+        {property.carpetArea ? property.carpetArea : "Yet to be added"}
+      </h5>
+    </>
+  ) : property.category === "Plot" ? (
+    <>
+      <h6>Park Facing</h6>
+      <h5>
+        {property.isParkFacingPlot ? property.isParkFacingPlot : "Yet to be added"}
+      </h5>
+    </>
+  ) : null}
+</div>
+
+<div className="pi_single">
+  {property.category === "Residential" ? (
+    <>
+      <h6>Bathroom</h6>
+      <h5>
+        {property.numberOfBathrooms === 0 || property.numberOfBathrooms === "0"
+          ? "Yet to be added"
+          : property.numberOfBathrooms}
+      </h5>
+    </>
+  ) : property.category === "Commercial" || property.category === "Plot" ? (
+    <>
+      <h6>Direction Facing</h6>
+      <h5>
+        {property.mainDoorFacing ? property.mainDoorFacing : "Yet to be added"}
+      </h5>
+    </>
+  ) : null}
+</div>
+
+<div className="pi_single">
+  {property.category === "Residential" ? (
+    <>
+      <h6>
+        {property.floorNo
+          ? ["Ground", "Stilt", "Basement"].includes(property.floorNo)
+            ? "Floor"
+            : "Floor no"
+          : ""}
+      </h6>
+      <h5>
+        {property.floorNo
+          ? property.floorNo === "Ground"
+            ? "Ground"
+            : property.floorNo === "Stilt"
+            ? "Stilt"
+            : property.floorNo === "Basement"
+            ? "Basement"
+            : `${property.floorNo}${
+                property.numberOfFloors ? " of " + property.numberOfFloors : ""
+              }`
+          : "Yet to be added"}
+      </h5>
+    </>
+  ) : property.category === "Commercial" ? (
+    <>
+      <h6>Property Type</h6>
+      <h5>{property.propertyType || "Yet to be added"}</h5>
+    </>
+  ) : property.category === "Plot" ? (
+    <>
+      <h6>Is Corner?</h6>
+      <h5> {property.isCornerSidePlot ||
+                                "Yet to be added"}</h5>
+    </>
+  ) : null}
+</div>
+
+<div className="pi_single">
+  {property.category === "Residential" ? (
+    <>
+      <h6>BHK</h6>
+      <h5>{property.bhk || "Yet to be added"}</h5>
+    </>
+  ) : property.category === "Commercial" ? (
+    <>
+      <h6>Property Sub-Type</h6>
+      <h5>  {property.additionalRooms &&
+                              property.additionalRooms.length > 0
+                                ? property.additionalRooms[0]
+                                : "Yet to be added"}</h5>
+    </>
+  ) : property.category === "Plot" ? (
+    <>
+      <h6>Gated Community</h6>
+      <h5> {property.gatedArea || "Yet to be added"}</h5>
+    </>
+  ) : null}
+</div>
+
+<div className="pi_single">
+  {property.category === "Residential" || property.category === "Commercial" ? (
+    <>
+      <h6>Furnishing</h6>
+      <h5>{property.furnishing || "Yet to be added"}</h5>
+    </>
+  ) : property.category === "Plot" ? (
+    <>
+      <h6>Road Width</h6>
+      <h5>{property.roadWidth || "Yet to be added"}
+      {" "}
+      {property.roadWidthUnit}
+      </h5>
+    </>
+  ) : null}
+</div>
+
                     </div>
                   </div>
                 </div>
