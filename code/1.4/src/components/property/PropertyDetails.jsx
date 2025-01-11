@@ -1995,13 +1995,9 @@ const PropertyDetails = () => {
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
-                       
                         <div className="pdms_single">
                           <h4>
-                            <img
-                              src="/assets/img/new_carpet.png"
-                              alt="Area Icon"
-                            />
+                          <img src="/assets/img/superarea.png" alt="" />
                             {propertyDocument.category === "Residential" ? (
                               <>
                                 {propertyDocument.superArea}
@@ -2074,18 +2070,44 @@ const PropertyDetails = () => {
       }
       alt=""
     /> */}
-                            <img src="/assets/img/new_bedroom.png"></img>
-                            {propertyDocument.category === "Residential"
-                              ? propertyDocument.numberOfBedrooms === 0 ||
-                                propertyDocument.numberOfBedrooms === "0"
-                                ? "Yet to be added"
-                                : propertyDocument.numberOfBedrooms
-                              : propertyDocument.category === "Commercial"
-                              ? propertyDocument.carpetArea || "Yet to be added"
-                              : propertyDocument.category === "Plot"
-                              ? propertyDocument.isParkFacingPlot ||
+                            <img  src={
+      propertyDocument.category === "Residential"
+        ? "/assets/img/new_bedroom.png"
+        : propertyDocument.category === "Commercial"
+        ? "/assets/img/new_carpet.png"
+        : propertyDocument.category === "Plot"
+        ? "/assets/img/park.png"
+        : "/assets/img/default.png" // Fallback image for other categories
+    }></img>
+                            {propertyDocument.category === "Residential" ? (
+                              propertyDocument.numberOfBedrooms === 0 ||
+                              propertyDocument.numberOfBedrooms === "0" ? (
                                 "Yet to be added"
-                              : null}
+                              ) : (
+                                propertyDocument.numberOfBedrooms
+                              )
+                            ) : propertyDocument.category === "Commercial" ? (
+                              propertyDocument.carpetArea ? (
+                                <>
+                                  {propertyDocument.carpetArea}{" "}
+                                  <h6
+                                    style={{
+                                      marginLeft: "3px",
+                                    }}
+                                  >
+                                    {propertyDocument.superAreaUnit || ""}
+                                  </h6>
+                                </>
+                              ) : (
+                                "Yet to be added"
+                              )
+                            ) : propertyDocument.category === "Plot" ? (
+                              propertyDocument.isParkFacingPlot ? (
+                                propertyDocument.isParkFacingPlot
+                              ) : (
+                                "Yet to be added"
+                              )
+                            ) : null}
                           </h4>
                           <h6>
                             {propertyDocument.category === "Residential"
@@ -2108,7 +2130,15 @@ const PropertyDetails = () => {
       }
       alt=""
     /> */}
-                            <img src="/assets/img/new_bathroom.png"></img>
+                            <img  src={
+                          propertyDocument.category === "Residential"
+                            ? "/assets/img/new_bathroom.png"
+                            : propertyDocument.category === "Commercial"
+                            ? "/assets/img/directions.png"
+                            : propertyDocument.category === "Plot"
+                            ? "/assets/img/directions.png"
+                            : "/assets/img/default.png" // Fallback image for other categories
+                        }></img>
                             {propertyDocument.category === "Residential"
                               ? propertyDocument.numberOfBathrooms === 0 ||
                                 propertyDocument.numberOfBathrooms === "0"
@@ -2132,9 +2162,17 @@ const PropertyDetails = () => {
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2 pmd_section3">
-                      <div className="pdms_single">
+                        <div className="pdms_single">
                           <h4>
-                            <img src="/assets/img/property-detail-icon/TotalFloors.png"></img>
+                            <img src={
+                            propertyDocument.category === "Residential"
+                              ? "/assets/img/floor.png"
+                              : propertyDocument.category === "Commercial"
+                              ? "/assets/img/propertytype.png"
+                              : propertyDocument.category === "Plot"
+                              ? "/assets/img/corner.png"
+                              : "/assets/img/default.png" // Fallback image for other categories
+                          }></img>
                             {propertyDocument.category === "Residential"
                               ? propertyDocument.floorNo
                                 ? propertyDocument.floorNo === "Ground"
@@ -2174,9 +2212,17 @@ const PropertyDetails = () => {
                               : ""}
                           </h6>
                         </div>
-                      <div className="pdms_single">
+                        <div className="pdms_single">
                           <h4>
-                            <img src="/assets/img/new_bhk.png" alt="bhk icon" />
+                            <img src={
+                          propertyDocument.category === "Residential"
+                            ? "/assets/img/new_bhk.png"
+                            : propertyDocument.category === "Commercial"
+                            ? "/assets/img/propertysubtype.png"
+                            : propertyDocument.category === "Plot"
+                            ? "/assets/img/gatedcomunity.png"
+                            : "/assets/img/default.png" // Fallback image for other categories
+                        } alt="bhk icon" />
                             {propertyDocument.category === "Residential"
                               ? propertyDocument.bhk || "Yet to be added"
                               : propertyDocument.category === "Commercial"
@@ -2197,24 +2243,47 @@ const PropertyDetails = () => {
                               ? "Gated Community"
                               : ""}
                           </h6>
-                        </div>                    
+                        </div>
 
                         <div className="pdms_single">
                           <h4>
                             <img
-                              src="/assets/img/new_furniture.png"
+                              src={
+                                propertyDocument.category === "Residential"
+                                  ? "/assets/img/new_furniture.png"
+                                  : propertyDocument.category === "Commercial"
+                                  ? "/assets/img/new_furniture.png"
+                                  : propertyDocument.category === "Plot"
+                                  ? "/assets/img/road.png"
+                                  : "/assets/img/default.png" // Fallback image for other categories
+                              }
                               alt="furnishing icon"
                             />
                             {propertyDocument.category === "Residential" ||
-                            propertyDocument.category === "Commercial"
-                              ? propertyDocument.furnishing?.toLowerCase() ===
-                                "raw"
-                                ? "Unfurnished"
-                                : propertyDocument.furnishing ||
-                                  "Yet to be added"
-                              : propertyDocument.category === "Plot"
-                              ? propertyDocument.roadWidth || "Yet to be added"
-                              : ""}
+                            propertyDocument.category === "Commercial" ? (
+                              propertyDocument.furnishing?.toLowerCase() ===
+                              "raw" ? (
+                                "Unfurnished"
+                              ) : (
+                                propertyDocument.furnishing || "Yet to be added"
+                              )
+                            ) : propertyDocument.category === "Plot" ? (
+                              propertyDocument.roadWidth ? (
+                                <>
+                                  {propertyDocument.roadWidth}{" "}
+                                  <h6   
+                                    style={{
+                                      marginLeft: "3px",
+                                    }}>
+                                    {propertyDocument.roadWidthUnit || ""}
+                                  </h6>
+                                </>
+                              ) : (
+                                "Yet to be added"
+                              )
+                            ) : (
+                              ""
+                            )}
                           </h4>
                           <h6>
                             {propertyDocument.category === "Residential" ||

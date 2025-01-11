@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // component
 import Hero from "../../components/Hero";
@@ -43,7 +44,9 @@ const PGAboutUs = () => {
                 </p>
                 <p>Choose Propdial for all your property management needs, and experience the peace of mind that comes with having a reliable partner by your side.</p>
                 <div>
-                  <button className="theme_btn btn_fill">Get In Touch</button>
+                  <Link className="theme_btn btn_fill mt-3" style={{
+                    display:"inline-block"
+                  }} to="/contact-us">Get In Touch</Link>
                 </div>
               </div>
             </div>

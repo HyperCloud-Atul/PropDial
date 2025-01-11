@@ -422,7 +422,8 @@ const PropertyCard = ({ propertyid }) => {
               <div className="middle_single">
                 <div className="ms_child">
                   <div className="icon_container">
-                    <img src="/assets/img/new_carpet.png" alt="" />
+                  
+                    <img src="/assets/img/superarea.png" alt="" />
                   </div>
                   <div className="left">
                     <h6>
@@ -455,9 +456,21 @@ const PropertyCard = ({ propertyid }) => {
                   </div>
                 </div>
                 <div className="ms_child">
-                  <div className="icon_container">
-                    <img src="/assets/img/new_bedroom.png" alt="" />
-                  </div>
+                <div className="icon_container">
+  <img 
+    src={
+      propertydoc.category === "Residential"
+        ? "/assets/img/new_bedroom.png"
+        : propertydoc.category === "Commercial"
+        ? "/assets/img/new_carpet.png"
+        : propertydoc.category === "Plot"
+        ? "/assets/img/park.png"
+        : "/assets/img/default.png" // Fallback image for other categories
+    }
+    alt={propertydoc.category || "Category"}
+  />
+</div>
+
                   <div className="left">
                     {propertydoc.category === "Plot" ? (
                       <>
@@ -486,7 +499,18 @@ const PropertyCard = ({ propertyid }) => {
                 </div>
                 <div className="ms_child">
                   <div className="icon_container">
-                    <img src="/assets/img/new_bathroom.png" alt="" />
+                    <img 
+                        src={
+                          propertydoc.category === "Residential"
+                            ? "/assets/img/new_bathroom.png"
+                            : propertydoc.category === "Commercial"
+                            ? "/assets/img/directions.png"
+                            : propertydoc.category === "Plot"
+                            ? "/assets/img/directions.png"
+                            : "/assets/img/default.png" // Fallback image for other categories
+                        }
+                        alt={propertydoc.category || "Category"}
+                    />
                   </div>
                   <div className="left">
                     {propertydoc.category === "Plot" ||
@@ -518,7 +542,16 @@ const PropertyCard = ({ propertyid }) => {
                   <div className="middle_single">
                     <div className="ms_child">
                       <div className="icon_container">
-                        <img src="/assets/img/new_super_area.png" alt="" />
+                        <img 
+                           src={
+                            propertydoc.category === "Residential"
+                              ? "/assets/img/floor.png"
+                              : propertydoc.category === "Commercial"
+                              ? "/assets/img/propertytype.png"
+                              : propertydoc.category === "Plot"
+                              ? "/assets/img/corner.png"
+                              : "/assets/img/default.png" // Fallback image for other categories
+                          } alt="" />
                       </div>
                       <div className="left">
                         {propertydoc.category === "Residential" ? (
@@ -565,7 +598,18 @@ const PropertyCard = ({ propertyid }) => {
                     </div>
                     <div className="ms_child">
                       <div className="icon_container">
-                        <img src="/assets/img/new_bhk.png" alt="" />
+                        <img 
+                        src={
+                          propertydoc.category === "Residential"
+                            ? "/assets/img/new_bhk.png"
+                            : propertydoc.category === "Commercial"
+                            ? "/assets/img/propertysubtype.png"
+                            : propertydoc.category === "Plot"
+                            ? "/assets/img/gatedcomunity.png"
+                            : "/assets/img/default.png" // Fallback image for other categories
+                        }
+                        
+                        alt="" />
                       </div>
                       <div className="left">
                         {propertydoc.category === "Residential" ? (
@@ -600,7 +644,17 @@ const PropertyCard = ({ propertyid }) => {
                     </div>
                     <div className="ms_child">
                       <div className="icon_container">
-                        <img src="/assets/img/new_furniture.png" alt="" />
+                        <img 
+                          src={
+                            propertydoc.category === "Residential"
+                              ? "/assets/img/new_furniture.png"
+                              : propertydoc.category === "Commercial"
+                              ? "/assets/img/new_furniture.png"
+                              : propertydoc.category === "Plot"
+                              ? "/assets/img/road.png"
+                              : "/assets/img/default.png" // Fallback image for other categories
+                          }
+                        alt="" />
                       </div>
                       <div className="left">
                         {propertydoc.category === "Plot" ? (
@@ -637,7 +691,19 @@ const PropertyCard = ({ propertyid }) => {
                   <div className="middle_single addtional_rooms">
                     <div className="ms_child">
                       <div className="icon_container">
-                        <img src="/assets/img/new_room.png" alt="" />
+                        <img 
+                        src={
+                          propertydoc.category === "Residential"
+                            ? "/assets/img/new_room.png"
+                            : propertydoc.category === "Commercial"
+                            ? "/assets/img/overlooking.png"
+                            : propertydoc.category === "Plot"
+                            ? "/assets/img/overlooking.png"
+                            : "/assets/img/default.png" // Fallback image for other categories
+                        }
+                        alt="" />
+
+                        
                       </div>
                       <div className="left">
                         {propertydoc.category === "Plot" ||
