@@ -16,6 +16,7 @@ import { projectFirestore } from "../../firebase/config";
 
 // import scss
 import "./PGUserProfileDetails.scss";
+import PropertyDetails from "../../components/property/PropertyDetails";
 
 export default function PGUserProfileDetails2() {
   const { userProfileId } = useParams();
@@ -27,6 +28,9 @@ export default function PGUserProfileDetails2() {
     "users-propdial",
     userProfileId
   );
+
+  // console.log("userProfileDoc: ", userProfileDoc)
+
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("users-propdial");
   // get and update code end
@@ -42,6 +46,13 @@ export default function PGUserProfileDetails2() {
     "",
     ["country", "asc"]
   );
+
+  const { documents: masterCity, error: masterCityError } = useCollection(
+    "m_cities",
+    ["status", "==", "active"],
+    ["city", "asc"]
+  );
+
   const [selectedAmLevel, setSelectedAmLevel] = useState("country");
   const handleAmRadioChange = (e) => {
     setSelectedAmLevel(e.target.value);
@@ -67,9 +78,20 @@ export default function PGUserProfileDetails2() {
       }));
     }
 
+    if (masterCity) {
+      cityOptions.current = masterCity.map((cityData) => ({
+        label: cityData.city,
+        value: cityData.id,
+      }));
+
+    }
+    // console.log('userProfileDoc.propertiesOwnedInCities', userProfileDoc.propertiesOwnedInCities)
+    setCity(userProfileDoc && userProfileDoc.propertiesOwnedInCities ? userProfileDoc.propertiesOwnedInCities : [])
+
+
     // handleCountryChange({ label: "INDIA", value: "_india" })
     // filteredDataNew({ label: "Andaman & Nicobar Islands", value: "_andaman_&_nicobar_islands" })
-  }, [masterCountry]);
+  }, [masterCountry, userProfileDoc]);
 
   // Populate Master Data - Start
   //Country select onchange
@@ -119,6 +141,29 @@ export default function PGUserProfileDetails2() {
   };
 
   // Populate Master Data - Ends
+
+  //Stae select onchange
+  const handleCityChange = async (option) => {
+    setCity(option);
+    // console.log('state.id:', option.value)
+  };
+
+  // handleSavePropertyOwnedInCities
+  const handleSavePropertyOwnedInCities = async () => {
+    console.log("selected cities", city);
+    const updatedData = {
+      propertiesOwnedInCities: city
+    };
+
+    // console.log("updatedData: ", updatedData);
+
+    try {
+      await updateDocument(userProfileId, updatedData);
+    } catch (error) {
+      console.error("Error updating details:", error);
+    } finally {
+    }
+  }
 
   // Save Access Mgmt details
   const handleSaveAccessMgmt = async () => {
@@ -285,7 +330,7 @@ export default function PGUserProfileDetails2() {
     // Check if there are changes
     if (
       JSON.stringify(selectedRoles) ===
-        JSON.stringify(userProfileDoc.rolesPropDial || []) &&
+      JSON.stringify(userProfileDoc.rolesPropDial || []) &&
       primaryRole === (userProfileDoc.rolePropDial || "")
     ) {
       setSaveRoleMessage(
@@ -365,10 +410,10 @@ export default function PGUserProfileDetails2() {
   const handleEdCancelClick = () => {
     setIsEdEditing(!isEdEditing);
     if (userProfileDoc) {
-      setEmployeeId(userProfileDoc.employeeId || "");   
+      setEmployeeId(userProfileDoc.employeeId || "");
       setDepartment(userProfileDoc.department || "");
       setDesignation(userProfileDoc.designation || "");
-            setUanNumber(userProfileDoc.uanNumber || "");
+      setUanNumber(userProfileDoc.uanNumber || "");
       setPanNumber(userProfileDoc.panNumber || "");
       setAadhaarNumber(userProfileDoc.aadhaarNumber || "");
       setDateOfJoining(userProfileDoc.dateOfJoining || "");
@@ -383,7 +428,7 @@ export default function PGUserProfileDetails2() {
     if (userProfileDoc) {
       setEmployeeId(userProfileDoc.employeeId || "");
       setDepartment(userProfileDoc.department || "");
-      setDesignation(userProfileDoc.designation || "");     
+      setDesignation(userProfileDoc.designation || "");
       setUanNumber(userProfileDoc.uanNumber || "");
       setPanNumber(userProfileDoc.panNumber || "");
       setAadhaarNumber(userProfileDoc.aadhaarNumber || "");
@@ -403,7 +448,7 @@ export default function PGUserProfileDetails2() {
       setManagerName("");
     }
   }, [userProfileDoc]);
-  
+
 
   // Department and Designation Dropdowns
   const departmentOptions = [
@@ -452,7 +497,7 @@ export default function PGUserProfileDetails2() {
       }, 5000);
       return;
     }
-    
+
 
     // Validation for PAN card (minimum 10 characters)
     if (panNumber.length < 10) {
@@ -622,7 +667,7 @@ export default function PGUserProfileDetails2() {
   const validateRef1Form = () => {
     if (
       !ref1FormData.name ||
-      !ref1FormData.phone ||     
+      !ref1FormData.phone ||
       !ref1FormData.address
     ) {
       setSaveRef1Message("Please fill all required fields.");
@@ -747,7 +792,7 @@ export default function PGUserProfileDetails2() {
   const validateRef2Form = () => {
     if (
       !ref2FormData.name ||
-      !ref2FormData.phone ||      
+      !ref2FormData.phone ||
       !ref2FormData.address
     ) {
       setSaveRef2Message("Please fill all required fields.");
@@ -869,7 +914,7 @@ export default function PGUserProfileDetails2() {
     if (
       !bankDetailFormData.acHolderName ||
       !bankDetailFormData.acNumber ||
-      !bankDetailFormData.bankName ||     
+      !bankDetailFormData.bankName ||
       !bankDetailFormData.ifscCode
     ) {
       setSaveBankDetailMessage("Please fill all required fields.");
@@ -1263,9 +1308,8 @@ export default function PGUserProfileDetails2() {
             <img src="/assets/img/gmailbig.png" alt="" />
           </Link>
           <Link
-            to={`https://wa.me/+${
-              userProfileDoc && userProfileDoc.phoneNumber
-            }`}
+            to={`https://wa.me/+${userProfileDoc && userProfileDoc.phoneNumber
+              }`}
             className="icon right"
           >
             <img src="/assets/img/whatsappbig.png" alt="" />
@@ -1332,9 +1376,9 @@ export default function PGUserProfileDetails2() {
                   <h5>
                     {userProfileDoc && userProfileDoc.createdAt
                       ? format(
-                          userProfileDoc.lastLoginTimestamp.toDate(),
-                          "dd-MMM-yyyy hh:mm a"
-                        )
+                        userProfileDoc.lastLoginTimestamp.toDate(),
+                        "dd-MMM-yyyy hh:mm a"
+                      )
                       : ""}
                   </h5>
                 </div>
@@ -1735,11 +1779,10 @@ export default function PGUserProfileDetails2() {
               <div className="blue_single is_employee">
                 <h5>Mode - </h5>
                 <h6
-                  className={` ${
-                    userProfileDoc && userProfileDoc.online
-                      ? "text_green2"
-                      : "text_red"
-                  }`}
+                  className={` ${userProfileDoc && userProfileDoc.online
+                    ? "text_green2"
+                    : "text_red"
+                    }`}
                 >
                   {userProfileDoc && userProfileDoc.online
                     ? "Online"
@@ -1754,9 +1797,8 @@ export default function PGUserProfileDetails2() {
             <h2 className="card_title">
               Roles
               <span
-                className={`material-symbols-outlined action_icon ${
-                  isRoleEditing ? "text_red" : "text_green"
-                }`}
+                className={`material-symbols-outlined action_icon ${isRoleEditing ? "text_red" : "text_green"
+                  }`}
                 onClick={handleRoleEditClick}
               >
                 {isRoleEditing ? "close" : "border_color"}
@@ -1886,18 +1928,16 @@ export default function PGUserProfileDetails2() {
                 <button
                   onClick={handleRoleEditClick}
                   disabled={isRoleSaving}
-                  className={`theme_btn btn_border no_icon min_width ${
-                    isRoleSaving ? "disabled" : ""
-                  }`}
+                  className={`theme_btn btn_border no_icon min_width ${isRoleSaving ? "disabled" : ""
+                    }`}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveRole}
                   disabled={isRoleSaving}
-                  className={`theme_btn btn_fill no_icon min_width ${
-                    isRoleSaving ? "disabled" : ""
-                  }`}
+                  className={`theme_btn btn_fill no_icon min_width ${isRoleSaving ? "disabled" : ""
+                    }`}
                 >
                   {isRoleSaving ? "Saving..." : "Save"}
                 </button>
@@ -1908,39 +1948,55 @@ export default function PGUserProfileDetails2() {
         <div className="property_card_single mobile_full_card overflow_unset">
           <div className="more_detail_card_inner">
             <h2 className="card_title">Properties owned within the city</h2>
-          <div className="vg12"></div>
+            <div className="vg12"></div>
             <div className="row row_gap">
               <div className="col-lg-4 col-md-6 col-sm-12">
                 <div className="form_field label_top">
-                  <label>City</label>
+                  <label>City123</label>
                   <div className="form_field_inner">
-                    <Select                     
-                      // onChange={handleCountryChange}
-                      // options={countryOptions.current}
-                      // value={country}
-                      placeholder="Select City"
+                    <Select
+                      className=""
+                      // onChange={(e) => {
+                      //   handleCityChange({
+                      //     label: e.label,
+                      //     value: e.label
+                      //   }, locality, society)
+                      // }}
+                      onChange={handleCityChange}
+                      isMulti
+                      options={cityOptions.current}
+                      value={city}
+                    // styles={{
+                    //   control: (baseStyles, state) => ({
+                    //     ...baseStyles,
+                    //     outline: "none",
+                    //     background: "#efefef",
+                    //     border: "none",
+                    //     borderBottom: "none",
+                    //     paddingLeft: "10px",
+                    //     textTransform: "capitalize",
+                    //   }),
+                    // }}
                     />
                   </div>
                 </div>
-              </div>          
+              </div>
             </div>
             <div className="vg12"></div>
             <div className="btn_msg_area">
-              <button
+              {/* <button
                 // onClick={handleEdCancelClick}
                 // disabled={isEdUpdating}
-                className={`theme_btn btn_border no_icon min_width ${
-                  isEdUpdating ? "disabled" : ""
-                }`}
+                className={`theme_btn btn_border no_icon min_width ${isEdUpdating ? "disabled" : ""
+                  }`}
               >
                 Cancel
-              </button>
+              </button> */}
               <button
-                onClick={handleSaveAccessMgmt}
+                onClick={handleSavePropertyOwnedInCities}
                 // disabled={isEdUpdating}
-                className={`theme_btn btn_fill no_icon min_width ${
-                  isEdUpdating ? "disabled" : ""
-                }`}
+                className={`theme_btn btn_fill no_icon min_width ${isEdUpdating ? "disabled" : ""
+                  }`}
               >
                 Save
               </button>
@@ -1948,133 +2004,131 @@ export default function PGUserProfileDetails2() {
           </div>
         </div>
         {userProfileDoc && userProfileDoc.isEmployee && (
-        <div className="property_card_single mobile_full_card overflow_unset">
-          <div className="more_detail_card_inner">
-            <h2 className="card_title">Access Management</h2>
-            <div className="form_field">
-              <div className="field_box theme_radio_new">
-                <div
-                  className="theme_radio_container"
-                  style={{
-                    padding: "0px",
-                    border: "none",
-                  }}
+          <div className="property_card_single mobile_full_card overflow_unset">
+            <div className="more_detail_card_inner">
+              <h2 className="card_title">Access Management</h2>
+              <div className="form_field">
+                <div className="field_box theme_radio_new">
+                  <div
+                    className="theme_radio_container"
+                    style={{
+                      padding: "0px",
+                      border: "none",
+                    }}
+                  >
+                    {[
+                      { id: "country", label: "Country" },
+                      { id: "region", label: "Region" },
+                      { id: "state", label: "State" },
+                      { id: "city", label: "City" },
+                    ].map(({ id, label }) => (
+                      <div className="radio_single" key={id}>
+                        <input
+                          type="radio"
+                          name="user_role"
+                          value={id}
+                          id={id}
+                          onChange={handleAmRadioChange}
+                          defaultChecked={id === "country"} // Default check for Country
+                        />
+                        <label htmlFor={id}>{label}</label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="vg22"></div>
+              <div className="vg12"></div>
+              <div className="row row_gap">
+                <div className="col-lg-4 col-md-6 col-sm-12">
+                  <div className="form_field label_top">
+                    <label>Country</label>
+                    <div className="form_field_inner">
+                      <Select
+                        // value={designation}
+                        // onChange={setDesignation}
+                        // options={designationOptions}
+                        onChange={handleCountryChange}
+                        options={countryOptions.current}
+                        value={country}
+                        placeholder="Select Country"
+                      />
+                    </div>
+                  </div>
+                </div>
+                {(selectedAmLevel === "region" ||
+                  selectedAmLevel === "state" ||
+                  selectedAmLevel === "city") && (
+                    <div className="col-lg-4 col-md-6 col-sm-12">
+                      <div className="form_field label_top">
+                        <label>Region</label>
+                        <div className="form_field_inner">
+                          <Select
+                            // value={designation}
+                            // onChange={setDesignation}
+                            // options={designationOptions}
+                            // onChange={handleCountryChange}
+                            // options={countryOptions.current}
+                            // value={country}
+                            placeholder="Select Region"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                {(selectedAmLevel === "state" || selectedAmLevel === "city") && (
+                  <div className="col-lg-4 col-md-6 col-sm-12">
+                    <div className="form_field label_top">
+                      <label>State</label>
+                      <div className="form_field_inner">
+                        <Select
+                          isMulti
+                          onChange={handleStateChange}
+                          options={stateOptions.current}
+                          value={state}
+                          placeholder="Select state"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {selectedAmLevel === "city" && (
+                  <div className="col-lg-12 col-md-12 col-sm-12">
+                    <div className="form_field label_top">
+                      <label>City</label>
+                      <div className="form_field_inner">
+                        <Select
+                          // value={designation}
+                          // onChange={setDesignation}
+                          // options={designationOptions}
+                          placeholder="Select city"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="vg12"></div>
+              <div className="btn_msg_area">
+                <button
+                  // onClick={handleEdCancelClick}
+                  // disabled={isEdUpdating}
+                  className={`theme_btn btn_border no_icon min_width ${isEdUpdating ? "disabled" : ""
+                    }`}
                 >
-                  {[
-                    { id: "country", label: "Country" },
-                    { id: "region", label: "Region" },
-                    { id: "state", label: "State" },
-                    { id: "city", label: "City" },
-                  ].map(({ id, label }) => (
-                    <div className="radio_single" key={id}>
-                      <input
-                        type="radio"
-                        name="user_role"
-                        value={id}
-                        id={id}
-                        onChange={handleAmRadioChange}
-                        defaultChecked={id === "country"} // Default check for Country
-                      />
-                      <label htmlFor={id}>{label}</label>
-                    </div>
-                  ))}
-                </div>
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveAccessMgmt}
+                  // disabled={isEdUpdating}
+                  className={`theme_btn btn_fill no_icon min_width ${isEdUpdating ? "disabled" : ""
+                    }`}
+                >
+                  Save
+                </button>
               </div>
-            </div>
-            <div className="vg22"></div>
-            <div className="vg12"></div>
-            <div className="row row_gap">
-              <div className="col-lg-4 col-md-6 col-sm-12">
-                <div className="form_field label_top">
-                  <label>Country</label>
-                  <div className="form_field_inner">
-                    <Select
-                      // value={designation}
-                      // onChange={setDesignation}
-                      // options={designationOptions}
-                      onChange={handleCountryChange}
-                      options={countryOptions.current}
-                      value={country}
-                      placeholder="Select Country"
-                    />
-                  </div>
-                </div>
-              </div>
-              {(selectedAmLevel === "region" ||
-                selectedAmLevel === "state" ||
-                selectedAmLevel === "city") && (
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                  <div className="form_field label_top">
-                    <label>Region</label>
-                    <div className="form_field_inner">
-                      <Select
-                        // value={designation}
-                        // onChange={setDesignation}
-                        // options={designationOptions}
-                        // onChange={handleCountryChange}
-                        // options={countryOptions.current}
-                        // value={country}
-                        placeholder="Select Region"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-              {(selectedAmLevel === "state" || selectedAmLevel === "city") && (
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                  <div className="form_field label_top">
-                    <label>State</label>
-                    <div className="form_field_inner">
-                      <Select
-                        isMulti
-                        onChange={handleStateChange}
-                        options={stateOptions.current}
-                        value={state}
-                        placeholder="Select state"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-              {selectedAmLevel === "city" && (
-                <div className="col-lg-12 col-md-12 col-sm-12">
-                  <div className="form_field label_top">
-                    <label>City</label>
-                    <div className="form_field_inner">
-                      <Select
-                        // value={designation}
-                        // onChange={setDesignation}
-                        // options={designationOptions}
-                        placeholder="Select city"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="vg12"></div>
-            <div className="btn_msg_area">
-              <button
-                // onClick={handleEdCancelClick}
-                // disabled={isEdUpdating}
-                className={`theme_btn btn_border no_icon min_width ${
-                  isEdUpdating ? "disabled" : ""
-                }`}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveAccessMgmt}
-                // disabled={isEdUpdating}
-                className={`theme_btn btn_fill no_icon min_width ${
-                  isEdUpdating ? "disabled" : ""
-                }`}
-              >
-                Save
-              </button>
             </div>
           </div>
-        </div>
         )}
         {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
@@ -2082,9 +2136,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Employee Detail
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isEdEditing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isEdEditing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isEdEditing ? handleEdCancelClick : handleEdEditClick
                   }
@@ -2106,9 +2159,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc && userProfileDoc.dateOfJoining
                           ? format(
-                              new Date(userProfileDoc.dateOfJoining), // Ensure it's converted to a Date object
-                              "dd-MMM-yyyy"
-                            )
+                            new Date(userProfileDoc.dateOfJoining), // Ensure it's converted to a Date object
+                            "dd-MMM-yyyy"
+                          )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -2126,9 +2179,9 @@ export default function PGUserProfileDetails2() {
                         <h5>
                           {userProfileDoc && userProfileDoc.dateOfLeaving
                             ? format(
-                                new Date(userProfileDoc.dateOfLeaving), // Ensure it's converted to a Date object
-                                "dd-MMM-yyyy"
-                              )
+                              new Date(userProfileDoc.dateOfLeaving), // Ensure it's converted to a Date object
+                              "dd-MMM-yyyy"
+                            )
                             : "Not provided yet"}
                         </h5>
                       </div>
@@ -2395,18 +2448,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleEdCancelClick}
                       disabled={isEdUpdating}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isEdUpdating ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isEdUpdating ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleUpdateEmployeeDetails}
                       disabled={isEdUpdating}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isEdUpdating ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isEdUpdating ? "disabled" : ""
+                        }`}
                     >
                       {isEdUpdating ? "Saving..." : "Save"}
                     </button>
@@ -2539,9 +2590,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Bank Detail
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isBankDetailEditing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isBankDetailEditing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isBankDetailEditing
                       ? handleBankDetailCancelClick
@@ -2561,7 +2611,7 @@ export default function PGUserProfileDetails2() {
                       <h6>A/C Holder Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.acHolderName
+                          userProfileDoc.bankDetail.acHolderName
                           ? userProfileDoc.bankDetail.acHolderName
                           : "Not provided yet"}
                       </h5>
@@ -2575,7 +2625,7 @@ export default function PGUserProfileDetails2() {
                       <h6>A/C Number</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.acNumber
+                          userProfileDoc.bankDetail.acNumber
                           ? userProfileDoc.bankDetail.acNumber
                           : "Not provided yet"}
                       </h5>
@@ -2589,7 +2639,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Bank Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.bankName
+                          userProfileDoc.bankDetail.bankName
                           ? userProfileDoc.bankDetail.bankName
                           : "Not provided yet"}
                       </h5>
@@ -2603,7 +2653,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Branch Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.branchName
+                          userProfileDoc.bankDetail.branchName
                           ? userProfileDoc.bankDetail.branchName
                           : "Not provided yet"}
                       </h5>
@@ -2617,7 +2667,7 @@ export default function PGUserProfileDetails2() {
                       <h6>IFSC Code</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.ifscCode
+                          userProfileDoc.bankDetail.ifscCode
                           ? userProfileDoc.bankDetail.ifscCode
                           : "Not provided yet"}
                       </h5>
@@ -2721,18 +2771,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleBankDetailCancelClick}
                       disabled={isBankDetailSaving}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isBankDetailSaving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isBankDetailSaving ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleBankDetailSubmit}
                       disabled={isBankDetailSaving}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isBankDetailSaving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isBankDetailSaving ? "disabled" : ""
+                        }`}
                     >
                       {isBankDetailSaving ? "Saving..." : "Save"}
                     </button>
@@ -2748,9 +2796,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Reference 1
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isRef1Editing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isRef1Editing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isRef1Editing ? handleRef1CancelClick : handleRef1EditClick
                   }
@@ -2782,9 +2829,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc.ref1 && userProfileDoc.ref1.phone
                           ? userProfileDoc.ref1.phone.replace(
-                              /(\d{2})(\d{5})(\d{5})/,
-                              "+$1 $2-$3"
-                            )
+                            /(\d{2})(\d{5})(\d{5})/,
+                            "+$1 $2-$3"
+                          )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -2818,9 +2865,8 @@ export default function PGUserProfileDetails2() {
                   <div className="p_info_single actions">
                     {userProfileDoc.ref1 && userProfileDoc.ref1.phone && (
                       <Link
-                        to={`https://wa.me/+${
-                          userProfileDoc.ref1 && userProfileDoc.ref1.phone
-                        }`}
+                        to={`https://wa.me/+${userProfileDoc.ref1 && userProfileDoc.ref1.phone
+                          }`}
                         className="icon"
                       >
                         <img src="/assets/img/whatsappbig.png" alt="" />
@@ -2828,9 +2874,8 @@ export default function PGUserProfileDetails2() {
                     )}
                     {userProfileDoc.ref1 && userProfileDoc.ref1.phone && (
                       <Link
-                        to={`tel:+${
-                          userProfileDoc.ref1 && userProfileDoc.ref1.phone
-                        }`}
+                        to={`tel:+${userProfileDoc.ref1 && userProfileDoc.ref1.phone
+                          }`}
                         className="icon"
                       >
                         <img src="/assets/img/call-icon.png" alt="" />
@@ -2838,9 +2883,8 @@ export default function PGUserProfileDetails2() {
                     )}
                     {userProfileDoc.ref1 && userProfileDoc.ref1.email && (
                       <Link
-                        to={`mailto:${
-                          userProfileDoc.ref1 && userProfileDoc.ref1.email
-                        }`}
+                        to={`mailto:${userProfileDoc.ref1 && userProfileDoc.ref1.email
+                          }`}
                         className="icon"
                       >
                         <img src="/assets/img/gmailbig.png" alt="" />
@@ -2944,18 +2988,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleRef1CancelClick}
                       disabled={isRef1Saving}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isRef1Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isRef1Saving ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleRef1Submit}
                       disabled={isRef1Saving}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isRef1Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isRef1Saving ? "disabled" : ""
+                        }`}
                     >
                       {isRef1Saving ? "Saving..." : "Save"}
                     </button>
@@ -2971,9 +3013,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Reference 2
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isRef2Editing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isRef2Editing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isRef2Editing ? handleRef2CancelClick : handleRef2EditClick
                   }
@@ -3005,9 +3046,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc.ref2 && userProfileDoc.ref2.phone
                           ? userProfileDoc.ref2.phone.replace(
-                              /(\d{2})(\d{5})(\d{5})/,
-                              "+$1 $2-$3"
-                            )
+                            /(\d{2})(\d{5})(\d{5})/,
+                            "+$1 $2-$3"
+                          )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -3041,9 +3082,8 @@ export default function PGUserProfileDetails2() {
                   <div className="p_info_single actions">
                     {userProfileDoc.ref2 && userProfileDoc.ref2.phone && (
                       <Link
-                        to={`https://wa.me/+${
-                          userProfileDoc.ref2 && userProfileDoc.ref2.phone
-                        }`}
+                        to={`https://wa.me/+${userProfileDoc.ref2 && userProfileDoc.ref2.phone
+                          }`}
                         className="icon"
                       >
                         <img src="/assets/img/whatsappbig.png" alt="" />
@@ -3051,9 +3091,8 @@ export default function PGUserProfileDetails2() {
                     )}
                     {userProfileDoc.ref2 && userProfileDoc.ref2.phone && (
                       <Link
-                        to={`tel:+${
-                          userProfileDoc.ref2 && userProfileDoc.ref2.phone
-                        }`}
+                        to={`tel:+${userProfileDoc.ref2 && userProfileDoc.ref2.phone
+                          }`}
                         className="icon"
                       >
                         <img src="/assets/img/call-icon.png" alt="" />
@@ -3061,9 +3100,8 @@ export default function PGUserProfileDetails2() {
                     )}
                     {userProfileDoc.ref2 && userProfileDoc.ref2.email && (
                       <Link
-                        to={`mailto:${
-                          userProfileDoc.ref2 && userProfileDoc.ref2.email
-                        }`}
+                        to={`mailto:${userProfileDoc.ref2 && userProfileDoc.ref2.email
+                          }`}
                         className="icon"
                       >
                         <img src="/assets/img/gmailbig.png" alt="" />
@@ -3167,18 +3205,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleRef2CancelClick}
                       disabled={isRef2Saving}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isRef2Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isRef2Saving ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleRef2Submit}
                       disabled={isRef2Saving}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isRef2Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isRef2Saving ? "disabled" : ""
+                        }`}
                     >
                       {isRef2Saving ? "Saving..." : "Save"}
                     </button>
