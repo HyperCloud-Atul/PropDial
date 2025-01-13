@@ -535,17 +535,19 @@ const PropertyDetails = () => {
     // console.log('query: ', query)
     let filtered = null;
 
+    // console.log("onlyOwners: ", onlyOwners)
 
     if (changeUserRole === "owner") {
       filtered =
         onlyOwners &&
         onlyOwners.filter(ee =>
           (ee.displayName.toLowerCase().includes(query.toLowerCase()) ||
-            ee.phoneNumber.includes(query)
+            ee.phoneNumber.includes(query) ||
+            propertyDocument.city.toLowerCase().includes(query.toLowerCase())
           ) &&
           ee.propertiesOwnedInCities &&
           propertyDocument &&
-          ee.propertiesOwnedInCities.filter(e => e.label === propertyDocument.city)
+          ee.propertiesOwnedInCities.find(e => e.label === propertyDocument.city)
         );
     }
 
@@ -1148,7 +1150,7 @@ const PropertyDetails = () => {
           >
             close
           </span>
-          <h5 className="text_orange text-center">Change User</h5>
+          {changeUserRole === 'owner' ? <h5 className="text_orange text-center">Owner List of {propertyDocument.city}</h5> : <h5 className="text_orange text-center">Change User</h5>}
           <div className="vg12"></div>
           <div>
             <div className="enq_fields">
