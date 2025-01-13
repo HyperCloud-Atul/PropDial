@@ -1945,7 +1945,11 @@ export default function PGUserProfileDetails2() {
             )}
           </div>
         </div>
-        <div className="property_card_single mobile_full_card overflow_unset">
+        {userProfileDoc && 
+  (userProfileDoc.rolePropDial === "owner" || 
+   (userProfileDoc.rolesPropDial && userProfileDoc.rolesPropDial.includes("owner"))
+  ) && (
+          <div className="property_card_single mobile_full_card overflow_unset">
           <div className="more_detail_card_inner">
             <h2 className="card_title">Properties owned within the city</h2>
             <div className="vg12"></div>
@@ -2003,6 +2007,8 @@ export default function PGUserProfileDetails2() {
             </div>
           </div>
         </div>
+        )}
+        
         {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">
