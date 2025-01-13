@@ -336,6 +336,11 @@ export default function Stage3(props) {
             propertyDocument.overLooking.find((e) => e === "Same Society Tower")
             ? true
             : false,
+        CornerClick:
+          propertyDocument.overLooking &&
+            propertyDocument.overLooking.find((e) => e === "Corner")
+            ? true
+            : false,
       });
     }
   }, [propertyDocument]);
@@ -1890,10 +1895,10 @@ export default function Stage3(props) {
                     </div>}
 
 
-                    <div className="radio_group_single">
+                    {/* <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Corner
+                          propertyDetails.CornerClick
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -1902,7 +1907,7 @@ export default function Stage3(props) {
                           type="checkbox"
                           id="corner_overlooking"
                           onClick={(e) => {
-                            if (propertyDetails.Corner) {
+                            if (propertyDetails.CornerClick) {
                               setPropertyDetails({
                                 ...propertyDetails,
                                 OverLooking:
@@ -1910,8 +1915,8 @@ export default function Stage3(props) {
                                   propertyDetails.OverLooking.filter(
                                     (elem) => elem !== "Corner"
                                   ),
-                                Corner:
-                                  !propertyDetails.Corner,
+                                CornerClick:
+                                  !propertyDetails.CornerClick,
                               });
                             } else {
                               setPropertyDetails({
@@ -1920,8 +1925,8 @@ export default function Stage3(props) {
                                   ...propertyDetails.OverLooking,
                                   "Corner",
                                 ],
-                                Corner:
-                                  !propertyDetails.Corner,
+                                CornerClick:
+                                  !propertyDetails.CornerClick,
                               });
                             }
                           }}
@@ -1938,7 +1943,7 @@ export default function Stage3(props) {
                           <h6>Corner</h6>
                         </label>
                       </div>
-                    </div>
+                    </div> */}
 
                   </div>
                 </div>
