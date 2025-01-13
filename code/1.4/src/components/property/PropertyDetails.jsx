@@ -1150,7 +1150,7 @@ const PropertyDetails = () => {
           >
             close
           </span>
-          {changeUserRole === 'owner' ? <h5 className="text_orange text-center">Owner List of {propertyDocument.city}</h5> : <h5 className="text_orange text-center">Change User</h5>}
+          {changeUserRole === 'owner' ? <h5 className="text_orange text-center">Owner List of {propertyDocument && propertyDocument.city}</h5> : <h5 className="text_orange text-center">Change User</h5>}
           <div className="vg12"></div>
           <div>
             <div className="enq_fields">
