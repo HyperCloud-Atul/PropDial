@@ -86,6 +86,16 @@ const PropertyDetails = () => {
     ["rolePropDial", "==", "manager"]
   );
 
+  const { documents: users_Executive_Manager, error: users_Executive_ManagerError } = useCollection(
+    "users-propdial",
+    ["rolePropDial", "in", ["executive", "manager"]]
+  );
+
+  const { documents: users_Admin_Executive_Manager, error: users_Admin_Executive_ManagerError } = useCollection(
+    "users-propdial",
+    ["rolePropDial", "in", ["admin", "executive", "manager"]]
+  );
+
   const { documents: onlyExecutives, error: onlyExecutivesError } =
     useCollection("users-propdial", ["rolePropDial", "==", "executive"]);
 
@@ -481,7 +491,7 @@ const PropertyDetails = () => {
   //   setchangeManagerPopup(true);
   // }
   const openChangeUser = (docId, userRole) => {
-    console.log("Open Change User: ", userRole);
+    // console.log("Open Change User: ", userRole);
     setchangeManagerPopup(true);
     // setUserdbFieldName(option);
     setFilteredUsers(null);
@@ -511,20 +521,22 @@ const PropertyDetails = () => {
   const handleSearchChange = (event) => {
 
     const query = event.target.value;
-    // console.log("query: ", query);
+    console.log("query: ", query);
+
     setSearchQuery(query);
-    filterUsers(query);
+
+    if (query !== "") {
+      filterUsers(query);
+    }
+
   };
 
   const filterUsers = (query) => {
     // console.log('query: ', query)
     let filtered = null;
 
+
     if (changeUserRole === "owner") {
-
-      console.log("Property City: ", propertyDocument && propertyDocument.city)
-      console.log("onlyOwners: ", onlyOwners)
-
       filtered =
         onlyOwners &&
         onlyOwners.filter(ee =>
@@ -536,35 +548,52 @@ const PropertyDetails = () => {
           ee.propertiesOwnedInCities.filter(e => e.label === propertyDocument.city)
         );
     }
-    if (changeUserRole === "admin") {
+
+    if (changeUserRole === "admin" || changeUserRole === "manager" || changeUserRole === "executive") {
       filtered =
-        onlyAdmins &&
-        onlyAdmins.filter(
+        users_Admin_Executive_Manager &&
+        users_Admin_Executive_Manager.filter(
           (user) =>
+            user.rolePropDial.toLowerCase().includes(query.toLowerCase()) ||
             user.fullName.toLowerCase().includes(query.toLowerCase()) ||
-            user.phoneNumber.includes(query)
+            user.phoneNumber.includes(query) ||
+            user.city.toLowerCase().includes(query.toLowerCase())
         );
     }
-    if (changeUserRole === "manager") {
-      filtered =
-        onlyManagers &&
-        onlyManagers.filter(
-          (user) =>
-            user.fullName.toLowerCase().includes(query.toLowerCase()) ||
-            user.phoneNumber.includes(query)
-        );
-    }
-    if (changeUserRole === "executive") {
-      filtered =
-        onlyExecutives &&
-        onlyExecutives.filter(
-          (user) =>
-            user.fullName.toLowerCase().includes(query.toLowerCase()) ||
-            user.phoneNumber.includes(query)
-        );
-    }
+
+
+    // if (changeUserRole === "admin") {
+    //   filtered =
+    //     onlyAdmins &&
+    //     onlyAdmins.filter(
+    //       (user) =>
+    //         user.fullName.toLowerCase().includes(query.toLowerCase()) ||
+    //         user.phoneNumber.includes(query)
+    //     );
+    // }
+
+    // if (changeUserRole === "manager") {
+    //   filtered =
+    //     onlyManagers &&
+    //     onlyManagers.filter(
+    //       (user) =>
+    //         user.fullName.toLowerCase().includes(query.toLowerCase()) ||
+    //         user.phoneNumber.includes(query)
+    //     );
+    // }
+
+    // if (changeUserRole === "executive") {
+    //   filtered =
+    //     onlyExecutives &&
+    //     onlyExecutives.filter(
+    //       (user) =>
+    //         user.fullName.toLowerCase().includes(query.toLowerCase()) ||
+    //         user.phoneNumber.includes(query)
+    //     );
+    // }
     // console.log("filtered: ", filtered);
     setFilteredUsers(filtered);
+
   };
 
   const handleUserSelect = (userId) => {
@@ -763,10 +792,10 @@ const PropertyDetails = () => {
 
     setfilteredPropertyManagers(filteredPropertyManagerList);
 
-    console.log(
-      "filteredProperty manager Users: ",
-      filteredPropertyManagerList
-    );
+    // console.log(
+    //   "filteredProperty manager Users: ",
+    //   filteredPropertyManagerList
+    // );
   }, [allPropertyUsers, dbUsers]);
 
   //Add Property Users
@@ -1144,7 +1173,8 @@ const PropertyDetails = () => {
                 <li key={user.id}>{user.fullName} ({user.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')})</li>
               ))}
             </ul> */}
-            <ul className="search_results">
+
+            {searchQuery !== "" ? <ul className="search_results">
               {filteredUsers &&
                 filteredUsers.map((user) => (
                   <li className="search_result_single" key={user.id}>
@@ -1158,7 +1188,7 @@ const PropertyDetails = () => {
                         onChange={() => handleUserSelect(user.id)}
                       />
                       <div>
-                        <strong> {user.fullName} </strong> (
+                        <strong>{user.rolePropDial.toUpperCase()} - {user.fullName} </strong> (
                         {user.phoneNumber.replace(
                           /(\d{2})(\d{5})(\d{5})/,
                           "+$1 $2-$3"
@@ -1168,7 +1198,7 @@ const PropertyDetails = () => {
                     </label>
                   </li>
                 ))}
-            </ul>
+            </ul> : ""}
           </div>
           <div className="vg12"></div>
           <div
