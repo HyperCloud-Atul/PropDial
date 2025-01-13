@@ -10,6 +10,7 @@ import { useCollection } from "../../hooks/useCollection";
 
 import { projectFirestore, timestamp } from "../../firebase/config";
 import SearchBarAutoComplete from "../../pages/search/SearchBarAutoComplete";
+import PropertyDetails from "../../components/property/PropertyDetails";
 
 // import { projectID } from 'firebase-functions/params';
 
@@ -397,8 +398,42 @@ const Stage1 = (props) => {
   //State select onchange
   const handleStateChange = async (option, selectedCity, selectedLocality, selectedSociety) => {
     setState(option);
-    // console.log('state option:', option, state)
+    console.log('state option:', option)
     const statename = option.label
+
+    // propertyDetails.Region:
+    // state.label === "Delhi" ||
+    //   state.label === "Chandigarh" ||
+    //   state.label === "Haryana" ||
+    //   state.label === "Himachal Pradesh" ||
+    //   state.label === "Jammu and Kashmir" ||
+    //   state.label === "Punjab" ||
+    //   state.label === "Uttar Pradesh" ||
+    //   state.label === "Uttarakhand"
+    //   ? "North India"
+    //   : state.label === "Andhra Pradesh" ||
+    //     state.label === "Andaman & Nicobar Islands" ||
+    //     state.label === "Karnataka" ||
+    //     state.label === "Kerala" ||
+    //     state.label === "Lakshadweep" ||
+    //     state.label === "Tamilnadu" ||
+    //     state.label === "Telangana"
+    //     ? "South India"
+    //     : state.label === "Arunachal Pradesh" ||
+    //       state.label === "Assam" ||
+    //       state.label === "Bihar" ||
+    //       state.label === "Chhattisgarh" ||
+    //       state.label === "Jharkhand" ||
+    //       state.label === "Manipur" ||
+    //       state.label === "Meghalaya" ||
+    //       state.label === "Mizoram" ||
+    //       state.label === "Nagaland" ||
+    //       state.label === "Odisha" ||
+    //       state.label === "Sikkim" ||
+    //       state.label === "Tripura"
+    //       ? "East India"
+    //       : "West India";
+
 
     if (state && state.label !== option.label) {
       setCity({
@@ -2513,12 +2548,23 @@ const Stage1 = (props) => {
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
-                    <div className="radio_group_single">
+                    {<div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Region === "North India"
+                          // propertyDetails.Region === "North India"
+                          //   ? "custom_radio_button radiochecked"
+                          //   : "custom_radio_button"
+                          state && (state.label === "Delhi" ||
+                            state.label === "Chandigarh" ||
+                            state.label === "Haryana" ||
+                            state.label === "Himachal Pradesh" ||
+                            state.label === "Jammu and Kashmir" ||
+                            state.label === "Punjab" ||
+                            state.label === "Uttar Pradesh" ||
+                            state.label === "Uttarakhand")
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
+
                         }
                       >
                         <input
@@ -2547,11 +2593,17 @@ const Stage1 = (props) => {
                           North India
                         </label>
                       </div>
-                    </div>
+                    </div>}
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Region === "South India"
+                          state && (state.label === "Andhra Pradesh" ||
+                            state.label === "Andaman & Nicobar Islands" ||
+                            state.label === "Karnataka" ||
+                            state.label === "Kerala" ||
+                            state.label === "Lakshadweep" ||
+                            state.label === "Tamilnadu" ||
+                            state.label === "Telangana")
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -2586,7 +2638,18 @@ const Stage1 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Region === "East India"
+                          state && (state.label === "Arunachal Pradesh" ||
+                            state.label === "Assam" ||
+                            state.label === "Bihar" ||
+                            state.label === "Chhattisgarh" ||
+                            state.label === "Jharkhand" ||
+                            state.label === "Manipur" ||
+                            state.label === "Meghalaya" ||
+                            state.label === "Mizoram" ||
+                            state.label === "Nagaland" ||
+                            state.label === "Odisha" ||
+                            state.label === "Sikkim" ||
+                            state.label === "Tripura")
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
@@ -2621,7 +2684,15 @@ const Stage1 = (props) => {
                     <div className="radio_group_single">
                       <div
                         className={
-                          propertyDetails.Region === "West India"
+                          state && (state.label === "Dadra & Nagar Haveli" ||
+                            state.label === "Daman & Diu" ||
+                            state.label === "Goa" ||
+                            state.label === "Gujarat" ||
+                            state.label === "Madhya Pradesh" ||
+                            state.label === "Maharashtra" ||
+                            state.label === "Puducherry" ||
+                            state.label === "Rajasthan" ||
+                            state.label === "Sikkim")
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"
                         }
