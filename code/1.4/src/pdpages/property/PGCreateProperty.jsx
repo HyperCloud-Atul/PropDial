@@ -2977,6 +2977,12 @@ const CreateProperty = () => {
                 {propertyDetails &&
                   (propertyDetails.Category === "Residential" ||
                     propertyDetails.Category === "Commercial") &&
+                  (propertyDetails.Flag.toLowerCase() ===
+                    "available for rent" ||
+                    propertyDetails.Flag.toLowerCase() === "rented out" ||
+                    propertyDetails.Flag.toLowerCase() === "rent and sale" ||
+                    propertyDetails.Flag.toLowerCase() ===
+                    "rented but sale") &&
                   propertyDetails.MaintenanceFlag === "Extra" && (
                     <div className="col-xl-4 col-lg-6">
                       <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
