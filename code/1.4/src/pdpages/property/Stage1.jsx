@@ -2149,7 +2149,7 @@ const Stage1 = (props) => {
             </div>
           )}
 
-          {propertyDetails && propertyDetails.MaintenanceFlag === "Extra" && (
+          {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") && propertyDetails.MaintenanceFlag === "Extra" && (
             <div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                 <label>Maintenance fees</label>
