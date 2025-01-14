@@ -179,7 +179,7 @@ const PGAdminDashboard = () => {
     properties &&
     properties.filter(
       (item) =>
-        item.state.trim().toUpperCase() === "TAMILNADU" ||
+        item.state.trim().toUpperCase() === "TAMIL NADU" ||
         item.state.trim().toUpperCase() === "TAMIL NADU"
     );
 
@@ -770,7 +770,7 @@ const PGAdminDashboard = () => {
                               </div>
                             </div>
                             <div className="pi_cities_single mt-4">
-                              <h6>Tamilnadu</h6>
+                              <h6>Tamil Nadu</h6>
                               <h5>
                                 {tamilnaduProperties &&
                                   tamilnaduProperties.length > 0

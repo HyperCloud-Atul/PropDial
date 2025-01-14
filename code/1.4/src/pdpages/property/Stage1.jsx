@@ -401,40 +401,6 @@ const Stage1 = (props) => {
     console.log('state option:', option)
     const statename = option.label
 
-    // propertyDetails.Region:
-    // state.label === "Delhi" ||
-    //   state.label === "Chandigarh" ||
-    //   state.label === "Haryana" ||
-    //   state.label === "Himachal Pradesh" ||
-    //   state.label === "Jammu and Kashmir" ||
-    //   state.label === "Punjab" ||
-    //   state.label === "Uttar Pradesh" ||
-    //   state.label === "Uttarakhand"
-    //   ? "North India"
-    //   : state.label === "Andhra Pradesh" ||
-    //     state.label === "Andaman & Nicobar Islands" ||
-    //     state.label === "Karnataka" ||
-    //     state.label === "Kerala" ||
-    //     state.label === "Lakshadweep" ||
-    //     state.label === "Tamilnadu" ||
-    //     state.label === "Telangana"
-    //     ? "South India"
-    //     : state.label === "Arunachal Pradesh" ||
-    //       state.label === "Assam" ||
-    //       state.label === "Bihar" ||
-    //       state.label === "Chhattisgarh" ||
-    //       state.label === "Jharkhand" ||
-    //       state.label === "Manipur" ||
-    //       state.label === "Meghalaya" ||
-    //       state.label === "Mizoram" ||
-    //       state.label === "Nagaland" ||
-    //       state.label === "Odisha" ||
-    //       state.label === "Sikkim" ||
-    //       state.label === "Tripura"
-    //       ? "East India"
-    //       : "West India";
-
-
     if (state && state.label !== option.label) {
       setCity({
         label: '',
@@ -653,7 +619,7 @@ const Stage1 = (props) => {
               value: societyData.id,
             }));
 
-            // console.log("societyOptions.current: ", societyOptions.current);
+            console.log("societyOptions.current: ", societyOptions.current);
 
             if (societyOptions.current.length === 0) {
               console.log("No Society");
@@ -798,17 +764,18 @@ const Stage1 = (props) => {
       errorFlag = true;
     }
 
-    if (propertyDetails.City === "") {
+    if (city.label === "") {
       if (errorMsg === "Please select ") errorMsg = errorMsg + "City";
       else errorMsg = errorMsg + ", City";
       errorFlag = true;
     }
-    if (propertyDetails.Locality === "") {
+    if (locality.label === "") {
       if (errorMsg === "Please select ") errorMsg = errorMsg + "Locality";
       else errorMsg = errorMsg + ", Locality";
       errorFlag = true;
     }
-    if (propertyDetails.Society === "") {
+
+    if (society.label === "") {
       if (errorMsg === "Please select ") errorMsg = errorMsg + "Society";
       else errorMsg = errorMsg + ", Society";
 
@@ -2602,7 +2569,7 @@ const Stage1 = (props) => {
                             state.label === "Karnataka" ||
                             state.label === "Kerala" ||
                             state.label === "Lakshadweep" ||
-                            state.label === "Tamilnadu" ||
+                            state.label === "Tamil Nadu" ||
                             state.label === "Telangana")
                             ? "custom_radio_button radiochecked"
                             : "custom_radio_button"

@@ -217,7 +217,7 @@ const CreateProperty = () => {
   // Scroll to the top of the page whenever the location changes end
   const navigate = useNavigate();
 
-  function setRedirectFlag(flag, key) {}
+  function setRedirectFlag(flag, key) { }
   const { user } = useAuthContext();
 
   // const { amountToWords, response: amountToWordsResponse } = useCommon();
@@ -707,11 +707,11 @@ const CreateProperty = () => {
               : propertyDetails.Flag.toLowerCase() === "available for rent" ||
                 propertyDetails.Flag.toLowerCase() === "rented out" ||
                 propertyDetails.Flag.toLowerCase() === "pms after rent"
-              ? "Rent"
-              : propertyDetails.Flag.toLowerCase() === "available for sale" ||
-                propertyDetails.Flag.toLowerCase() === "sold out"
-              ? "Sale"
-              : "RentSaleBoth",
+                ? "Rent"
+                : propertyDetails.Flag.toLowerCase() === "available for sale" ||
+                  propertyDetails.Flag.toLowerCase() === "sold out"
+                  ? "Sale"
+                  : "RentSaleBoth",
           propertyType: propertyDetails.PropertyType
             ? propertyDetails.PropertyType
             : "",
@@ -721,10 +721,10 @@ const CreateProperty = () => {
             propertyDetails.Purpose === "Rent"
               ? "Available for Rent"
               : propertyDetails.Purpose === "Sale"
-              ? "Available for Sale"
-              : propertyDetails.Purpose === "RentSaleBoth"
-              ? "Available for Rent & Sale Both"
-              : "PMS Only",
+                ? "Available for Sale"
+                : propertyDetails.Purpose === "RentSaleBoth"
+                  ? "Available for Rent & Sale Both"
+                  : "PMS Only",
           demandPriceRent: removeCommas(propertyDetails.DemandPriceRent)
             ? removeCommas(propertyDetails.DemandPriceRent)
             : "",
@@ -764,36 +764,36 @@ const CreateProperty = () => {
           country: "India",
           region:
             state.label === "Delhi" ||
-            state.label === "Chandigarh" ||
-            state.label === "Haryana" ||
-            state.label === "Himachal Pradesh" ||
-            state.label === "Jammu and Kashmir" ||
-            state.label === "Punjab" ||
-            state.label === "Uttar Pradesh" ||
-            state.label === "Uttarakhand"
+              state.label === "Chandigarh" ||
+              state.label === "Haryana" ||
+              state.label === "Himachal Pradesh" ||
+              state.label === "Jammu and Kashmir" ||
+              state.label === "Punjab" ||
+              state.label === "Uttar Pradesh" ||
+              state.label === "Uttarakhand"
               ? "North India"
               : state.label === "Andhra Pradesh" ||
                 state.label === "Andaman & Nicobar Islands" ||
                 state.label === "Karnataka" ||
                 state.label === "Kerala" ||
                 state.label === "Lakshadweep" ||
-                state.label === "Tamilnadu" ||
+                state.label === "Tamil Nadu" ||
                 state.label === "Telangana"
-              ? "South India"
-              : state.label === "Arunachal Pradesh" ||
-                state.label === "Assam" ||
-                state.label === "Bihar" ||
-                state.label === "Chhattisgarh" ||
-                state.label === "Jharkhand" ||
-                state.label === "Manipur" ||
-                state.label === "Meghalaya" ||
-                state.label === "Mizoram" ||
-                state.label === "Nagaland" ||
-                state.label === "Odisha" ||
-                state.label === "Sikkim" ||
-                state.label === "Tripura"
-              ? "East India"
-              : "West India",
+                ? "South India"
+                : state.label === "Arunachal Pradesh" ||
+                  state.label === "Assam" ||
+                  state.label === "Bihar" ||
+                  state.label === "Chhattisgarh" ||
+                  state.label === "Jharkhand" ||
+                  state.label === "Manipur" ||
+                  state.label === "Meghalaya" ||
+                  state.label === "Mizoram" ||
+                  state.label === "Nagaland" ||
+                  state.label === "Odisha" ||
+                  state.label === "Sikkim" ||
+                  state.label === "Tripura"
+                  ? "East India"
+                  : "West India",
           source: "Propdial",
           ownership: "",
           numberOfBedrooms: "0",
@@ -1190,297 +1190,297 @@ const CreateProperty = () => {
                           {(propertyDetails.Package.toLowerCase() ===
                             "pms premium" ||
                             propertyDetails.Package.toLowerCase() ===
-                              "pms light" ||
+                            "pms light" ||
                             propertyDetails.Package.toLowerCase() ===
-                              "rent only") && (
-                            <div className="radio_group_single">
-                              <div
-                                className={
-                                  propertyDetails.Flag === "Available For Rent"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                                }
-                              >
-                                <input
-                                  type="checkbox"
-                                  id="flag_availableforrent"
-                                  onClick={(e) => {
-                                    setPropertyDetails({
-                                      ...propertyDetails,
-                                      Flag: "Available For Rent",
-                                      Purpose: "Rent",
-                                    });
-                                  }}
-                                />
-                                <label htmlFor="flag_availableforrent">
-                                  <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">
-                                      add
-                                    </span>
-                                    <span className="material-symbols-outlined check">
-                                      done
-                                    </span>
-                                  </div>
-                                  Available For Rent
-                                </label>
+                            "rent only") && (
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    propertyDetails.Flag === "Available For Rent"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="flag_availableforrent"
+                                    onClick={(e) => {
+                                      setPropertyDetails({
+                                        ...propertyDetails,
+                                        Flag: "Available For Rent",
+                                        Purpose: "Rent",
+                                      });
+                                    }}
+                                  />
+                                  <label htmlFor="flag_availableforrent">
+                                    <div className="radio_icon">
+                                      <span className="material-symbols-outlined add">
+                                        add
+                                      </span>
+                                      <span className="material-symbols-outlined check">
+                                        done
+                                      </span>
+                                    </div>
+                                    Available For Rent
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                           {(propertyDetails.Package.toLowerCase() ===
                             "pms premium" ||
                             propertyDetails.Package.toLowerCase() ===
-                              "pms light" ||
+                            "pms light" ||
                             propertyDetails.Package.toLowerCase() ===
-                              "rent only") && (
-                            <div className="radio_group_single">
-                              <div
-                                className={
-                                  propertyDetails.Flag === "Rented Out"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                                }
-                              >
-                                <input
-                                  type="checkbox"
-                                  id="flag_rentedout"
-                                  onClick={(e) => {
-                                    setPropertyDetails({
-                                      ...propertyDetails,
-                                      Flag: "Rented Out",
-                                      Purpose: "Rent",
-                                    });
-                                  }}
-                                />
-                                <label htmlFor="flag_rentedout">
-                                  <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">
-                                      add
-                                    </span>
-                                    <span className="material-symbols-outlined check">
-                                      done
-                                    </span>
-                                  </div>
-                                  Rented Out
-                                </label>
+                            "rent only") && (
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    propertyDetails.Flag === "Rented Out"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="flag_rentedout"
+                                    onClick={(e) => {
+                                      setPropertyDetails({
+                                        ...propertyDetails,
+                                        Flag: "Rented Out",
+                                        Purpose: "Rent",
+                                      });
+                                    }}
+                                  />
+                                  <label htmlFor="flag_rentedout">
+                                    <div className="radio_icon">
+                                      <span className="material-symbols-outlined add">
+                                        add
+                                      </span>
+                                      <span className="material-symbols-outlined check">
+                                        done
+                                      </span>
+                                    </div>
+                                    Rented Out
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                           {(propertyDetails.Package.toLowerCase() ===
                             "pms premium" ||
                             propertyDetails.Package.toLowerCase() ===
-                              "pms sale") && (
-                            <div className="radio_group_single">
-                              <div
-                                className={
-                                  propertyDetails.Flag === "Available For Sale"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                                }
-                              >
-                                <input
-                                  type="checkbox"
-                                  id="flag_availableforsale"
-                                  onClick={(e) => {
-                                    setPropertyDetails({
-                                      ...propertyDetails,
-                                      Flag: "Available For Sale",
-                                      Purpose: "Sale",
-                                    });
-                                  }}
-                                />
-                                <label htmlFor="flag_availableforsale">
-                                  <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">
-                                      add
-                                    </span>
-                                    <span className="material-symbols-outlined check">
-                                      done
-                                    </span>
-                                  </div>
-                                  Available For Sale
-                                </label>
+                            "pms sale") && (
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    propertyDetails.Flag === "Available For Sale"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="flag_availableforsale"
+                                    onClick={(e) => {
+                                      setPropertyDetails({
+                                        ...propertyDetails,
+                                        Flag: "Available For Sale",
+                                        Purpose: "Sale",
+                                      });
+                                    }}
+                                  />
+                                  <label htmlFor="flag_availableforsale">
+                                    <div className="radio_icon">
+                                      <span className="material-symbols-outlined add">
+                                        add
+                                      </span>
+                                      <span className="material-symbols-outlined check">
+                                        done
+                                      </span>
+                                    </div>
+                                    Available For Sale
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                           {(propertyDetails.Package.toLowerCase() ===
                             "pms premium" ||
                             propertyDetails.Package.toLowerCase() ===
-                              "pms sale") && (
-                            <div className="radio_group_single">
-                              <div
-                                className={
-                                  propertyDetails.Flag === "Sold Out"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                                }
-                              >
-                                <input
-                                  type="checkbox"
-                                  id="flag_soldout"
-                                  onClick={(e) => {
-                                    setPropertyDetails({
-                                      ...propertyDetails,
-                                      Flag: "Sold Out",
-                                      Purpose: "Sale",
-                                    });
-                                  }}
-                                />
-                                <label htmlFor="flag_soldout">
-                                  <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">
-                                      add
-                                    </span>
-                                    <span className="material-symbols-outlined check">
-                                      done
-                                    </span>
-                                  </div>
-                                  Sold Out
-                                </label>
+                            "pms sale") && (
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    propertyDetails.Flag === "Sold Out"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="flag_soldout"
+                                    onClick={(e) => {
+                                      setPropertyDetails({
+                                        ...propertyDetails,
+                                        Flag: "Sold Out",
+                                        Purpose: "Sale",
+                                      });
+                                    }}
+                                  />
+                                  <label htmlFor="flag_soldout">
+                                    <div className="radio_icon">
+                                      <span className="material-symbols-outlined add">
+                                        add
+                                      </span>
+                                      <span className="material-symbols-outlined check">
+                                        done
+                                      </span>
+                                    </div>
+                                    Sold Out
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                           {propertyDetails.Package.toLowerCase() ===
                             "pms premium" && (
-                            <div className="radio_group_single">
-                              <div
-                                className={
-                                  propertyDetails.Flag === "Rent and Sale"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                                }
-                              >
-                                <input
-                                  type="checkbox"
-                                  id="flag_rentsale"
-                                  onClick={(e) => {
-                                    setPropertyDetails({
-                                      ...propertyDetails,
-                                      Flag: "Rent and Sale",
-                                      Purpose: "RentSaleBoth",
-                                    });
-                                  }}
-                                />
-                                <label htmlFor="flag_rentsale">
-                                  <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">
-                                      add
-                                    </span>
-                                    <span className="material-symbols-outlined check">
-                                      done
-                                    </span>
-                                  </div>
-                                  Rent and Sale
-                                </label>
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    propertyDetails.Flag === "Rent and Sale"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="flag_rentsale"
+                                    onClick={(e) => {
+                                      setPropertyDetails({
+                                        ...propertyDetails,
+                                        Flag: "Rent and Sale",
+                                        Purpose: "RentSaleBoth",
+                                      });
+                                    }}
+                                  />
+                                  <label htmlFor="flag_rentsale">
+                                    <div className="radio_icon">
+                                      <span className="material-symbols-outlined add">
+                                        add
+                                      </span>
+                                      <span className="material-symbols-outlined check">
+                                        done
+                                      </span>
+                                    </div>
+                                    Rent and Sale
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                           {(propertyDetails.Package.toLowerCase() ===
                             "pms premium" ||
                             propertyDetails.Package.toLowerCase() ===
-                              "pms light") && (
-                            <div className="radio_group_single">
-                              <div
-                                className={
-                                  propertyDetails.Flag === "Rented But Sale"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                                }
-                              >
-                                <input
-                                  type="checkbox"
-                                  id="flag_rentedbutsale"
-                                  onClick={(e) => {
-                                    setPropertyDetails({
-                                      ...propertyDetails,
-                                      Flag: "Rented But Sale",
-                                      Purpose: "RentSaleBoth",
-                                    });
-                                  }}
-                                />
-                                <label htmlFor="flag_rentedbutsale">
-                                  <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">
-                                      add
-                                    </span>
-                                    <span className="material-symbols-outlined check">
-                                      done
-                                    </span>
-                                  </div>
-                                  Rented But Sale
-                                </label>
+                            "pms light") && (
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    propertyDetails.Flag === "Rented But Sale"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="flag_rentedbutsale"
+                                    onClick={(e) => {
+                                      setPropertyDetails({
+                                        ...propertyDetails,
+                                        Flag: "Rented But Sale",
+                                        Purpose: "RentSaleBoth",
+                                      });
+                                    }}
+                                  />
+                                  <label htmlFor="flag_rentedbutsale">
+                                    <div className="radio_icon">
+                                      <span className="material-symbols-outlined add">
+                                        add
+                                      </span>
+                                      <span className="material-symbols-outlined check">
+                                        done
+                                      </span>
+                                    </div>
+                                    Rented But Sale
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                           {propertyDetails.Package.toLowerCase() ===
                             "pms premium" && (
-                            <div className="radio_group_single">
-                              <div
-                                className={
-                                  propertyDetails.Flag === "PMS Only"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                                }
-                              >
-                                <input
-                                  type="checkbox"
-                                  id="flag_rentedpmsonly"
-                                  onClick={(e) => {
-                                    setPropertyDetails({
-                                      ...propertyDetails,
-                                      Flag: "PMS Only",
-                                      Purpose: "PMS",
-                                    });
-                                  }}
-                                />
-                                <label htmlFor="flag_rentedpmsonly">
-                                  <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">
-                                      add
-                                    </span>
-                                    <span className="material-symbols-outlined check">
-                                      done
-                                    </span>
-                                  </div>
-                                  PMS Only
-                                </label>
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    propertyDetails.Flag === "PMS Only"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="flag_rentedpmsonly"
+                                    onClick={(e) => {
+                                      setPropertyDetails({
+                                        ...propertyDetails,
+                                        Flag: "PMS Only",
+                                        Purpose: "PMS",
+                                      });
+                                    }}
+                                  />
+                                  <label htmlFor="flag_rentedpmsonly">
+                                    <div className="radio_icon">
+                                      <span className="material-symbols-outlined add">
+                                        add
+                                      </span>
+                                      <span className="material-symbols-outlined check">
+                                        done
+                                      </span>
+                                    </div>
+                                    PMS Only
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                           {propertyDetails.Package.toLowerCase() ===
                             "pre pms" && (
-                            <div className="radio_group_single">
-                              <div
-                                className={
-                                  propertyDetails.Flag === "PMS After Rent"
-                                    ? "custom_radio_button radiochecked"
-                                    : "custom_radio_button"
-                                }
-                              >
-                                <input
-                                  type="checkbox"
-                                  id="flag_prepms"
-                                  onClick={(e) => {
-                                    setPropertyDetails({
-                                      ...propertyDetails,
-                                      Flag: "PMS After Rent",
-                                      Purpose: "Rent",
-                                    });
-                                  }}
-                                />
-                                <label htmlFor="flag_prepms">
-                                  <div className="radio_icon">
-                                    <span className="material-symbols-outlined add">
-                                      add
-                                    </span>
-                                    <span className="material-symbols-outlined check">
-                                      done
-                                    </span>
-                                  </div>
-                                  PMS After Rent
-                                </label>
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    propertyDetails.Flag === "PMS After Rent"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="flag_prepms"
+                                    onClick={(e) => {
+                                      setPropertyDetails({
+                                        ...propertyDetails,
+                                        Flag: "PMS After Rent",
+                                        Purpose: "Rent",
+                                      });
+                                    }}
+                                  />
+                                  <label htmlFor="flag_prepms">
+                                    <div className="radio_icon">
+                                      <span className="material-symbols-outlined add">
+                                        add
+                                      </span>
+                                      <span className="material-symbols-outlined check">
+                                        done
+                                      </span>
+                                    </div>
+                                    PMS After Rent
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                         </div>
                       </div>
                     </div>
@@ -1603,14 +1603,14 @@ const CreateProperty = () => {
                             <div
                               className={
                                 propertyDetails.Purpose !== "" &&
-                                (propertyDetails.Purpose === "Rent" ||
-                                  propertyDetails.Flag.toLowerCase() ===
+                                  (propertyDetails.Purpose === "Rent" ||
+                                    propertyDetails.Flag.toLowerCase() ===
                                     "available for rent" ||
-                                  propertyDetails.Flag.toLowerCase() ===
+                                    propertyDetails.Flag.toLowerCase() ===
                                     "rented out" ||
-                                  propertyDetails.Flag.toLowerCase() ===
+                                    propertyDetails.Flag.toLowerCase() ===
                                     "rent and sale" ||
-                                  propertyDetails.Flag.toLowerCase() ===
+                                    propertyDetails.Flag.toLowerCase() ===
                                     "rented but sale")
                                   ? "custom_radio_button radiochecked"
                                   : "custom_radio_button"
@@ -1626,7 +1626,7 @@ const CreateProperty = () => {
                                     Purpose:
                                       propertyDetails.Category ===
                                         "Residential" ||
-                                      propertyDetails.Category === "Plot"
+                                        propertyDetails.Category === "Plot"
                                         ? "Rent"
                                         : "Lease",
                                   });
@@ -1642,7 +1642,7 @@ const CreateProperty = () => {
                                   </span>
                                 </div>
                                 {propertyDetails.Category === "Residential" ||
-                                propertyDetails.Category === "Plot"
+                                  propertyDetails.Category === "Plot"
                                   ? "Rent"
                                   : "Lease"}
                               </label>
@@ -1652,14 +1652,14 @@ const CreateProperty = () => {
                             <div
                               className={
                                 propertyDetails.Purpose !== "" &&
-                                (propertyDetails.Purpose === "Sale" ||
-                                  propertyDetails.Flag.toLowerCase() ===
+                                  (propertyDetails.Purpose === "Sale" ||
+                                    propertyDetails.Flag.toLowerCase() ===
                                     "available for sale" ||
-                                  propertyDetails.Flag.toLowerCase() ===
+                                    propertyDetails.Flag.toLowerCase() ===
                                     "sold out" ||
-                                  propertyDetails.Flag.toLowerCase() ===
+                                    propertyDetails.Flag.toLowerCase() ===
                                     "rent and sale" ||
-                                  propertyDetails.Flag.toLowerCase() ===
+                                    propertyDetails.Flag.toLowerCase() ===
                                     "rented but sale")
                                   ? "custom_radio_button radiochecked"
                                   : "custom_radio_button"
@@ -1694,8 +1694,8 @@ const CreateProperty = () => {
                             <div
                               className={
                                 propertyDetails.Purpose !== "" &&
-                                (propertyDetails.Purpose === "PMS" ||
-                                  propertyDetails.Flag === "PMS Only")
+                                  (propertyDetails.Purpose === "PMS" ||
+                                    propertyDetails.Flag === "PMS Only")
                                   ? "custom_radio_button radiochecked"
                                   : "custom_radio_button"
                               }
@@ -1736,7 +1736,7 @@ const CreateProperty = () => {
                     <label htmlFor="">Property Type</label>
                     <div className="form_field_inner">
                       {propertyDetails &&
-                      propertyDetails.Category === "Residential" ? (
+                        propertyDetails.Category === "Residential" ? (
                         <select
                           value={
                             propertyDetails && propertyDetails.PropertyType
@@ -1751,7 +1751,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType.toUpperCase ===
+                                propertyDetails.PropertyType.toUpperCase ===
                                 "SELECT PROPERTY TYPE"
                                 ? true
                                 : false
@@ -1762,7 +1762,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType ===
+                                propertyDetails.PropertyType ===
                                 "Multi Storey Apt"
                                 ? true
                                 : false
@@ -1773,7 +1773,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Builder Floor"
+                                propertyDetails.PropertyType === "Builder Floor"
                                 ? true
                                 : false
                             }
@@ -1783,7 +1783,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Kothi"
+                                propertyDetails.PropertyType === "Kothi"
                                 ? true
                                 : false
                             }
@@ -1793,7 +1793,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Villa - Simplex"
+                                propertyDetails.PropertyType === "Villa - Simplex"
                                 ? true
                                 : false
                             }
@@ -1803,7 +1803,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Villa - Duplex"
+                                propertyDetails.PropertyType === "Villa - Duplex"
                                 ? true
                                 : false
                             }
@@ -1813,7 +1813,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType ===
+                                propertyDetails.PropertyType ===
                                 "Row House - Simplex"
                                 ? true
                                 : false
@@ -1824,7 +1824,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType ===
+                                propertyDetails.PropertyType ===
                                 "Row House - Duplex"
                                 ? true
                                 : false
@@ -1835,7 +1835,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType ===
+                                propertyDetails.PropertyType ===
                                 "Pent House - Simplex"
                                 ? true
                                 : false
@@ -1846,7 +1846,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType ===
+                                propertyDetails.PropertyType ===
                                 "Pent House - Duplex"
                                 ? true
                                 : false
@@ -1871,7 +1871,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType.toUpperCase ===
+                                propertyDetails.PropertyType.toUpperCase ===
                                 "SELECT PROPERTY TYPE"
                                 ? true
                                 : false
@@ -1883,7 +1883,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Land"
+                                propertyDetails.PropertyType === "Land"
                                 ? true
                                 : false
                             }
@@ -1894,7 +1894,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Retail"
+                                propertyDetails.PropertyType === "Retail"
                                 ? true
                                 : false
                             }
@@ -1904,7 +1904,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Office"
+                                propertyDetails.PropertyType === "Office"
                                 ? true
                                 : false
                             }
@@ -1914,7 +1914,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Storage"
+                                propertyDetails.PropertyType === "Storage"
                                 ? true
                                 : false
                             }
@@ -1924,7 +1924,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Industry"
+                                propertyDetails.PropertyType === "Industry"
                                 ? true
                                 : false
                             }
@@ -1934,7 +1934,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Hospitality"
+                                propertyDetails.PropertyType === "Hospitality"
                                 ? true
                                 : false
                             }
@@ -1944,7 +1944,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Other"
+                                propertyDetails.PropertyType === "Other"
                                 ? true
                                 : false
                             }
@@ -1967,7 +1967,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType.toUpperCase ===
+                                propertyDetails.PropertyType.toUpperCase ===
                                 "SELECT PROPERTY TYPE"
                                 ? true
                                 : false
@@ -1979,7 +1979,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Residential"
+                                propertyDetails.PropertyType === "Residential"
                                 ? true
                                 : false
                             }
@@ -1989,7 +1989,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Commercial"
+                                propertyDetails.PropertyType === "Commercial"
                                 ? true
                                 : false
                             }
@@ -1999,7 +1999,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Industrial"
+                                propertyDetails.PropertyType === "Industrial"
                                 ? true
                                 : false
                             }
@@ -2009,7 +2009,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Agriculture"
+                                propertyDetails.PropertyType === "Agriculture"
                                 ? true
                                 : false
                             }
@@ -2019,7 +2019,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "School Site"
+                                propertyDetails.PropertyType === "School Site"
                                 ? true
                                 : false
                             }
@@ -2029,7 +2029,7 @@ const CreateProperty = () => {
                           <option
                             defaultValue={
                               propertyDetails &&
-                              propertyDetails.PropertyType === "Hospital Site"
+                                propertyDetails.PropertyType === "Hospital Site"
                                 ? true
                                 : false
                             }
@@ -2066,7 +2066,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.Bhk === "Select BHK"
+                                  propertyDetails.Bhk === "Select BHK"
                                   ? true
                                   : false
                               }
@@ -2085,7 +2085,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.Bhk === "1 RK"
+                                  propertyDetails.Bhk === "1 RK"
                                   ? true
                                   : false
                               }
@@ -2095,7 +2095,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.Bhk === "Studio"
+                                  propertyDetails.Bhk === "Studio"
                                   ? true
                                   : false
                               }
@@ -2150,7 +2150,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.Bhk === "3.5 "
+                                  propertyDetails.Bhk === "3.5 "
                                   ? true
                                   : false
                               }
@@ -2251,7 +2251,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "Select Floor No"
+                                  propertyDetails.FloorNo === "Select Floor No"
                                   ? true
                                   : false
                               }
@@ -2261,7 +2261,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "Basement"
+                                  propertyDetails.FloorNo === "Basement"
                                   ? true
                                   : false
                               }
@@ -2271,7 +2271,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "Ground"
+                                  propertyDetails.FloorNo === "Ground"
                                   ? true
                                   : false
                               }
@@ -2281,7 +2281,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "Stilt"
+                                  propertyDetails.FloorNo === "Stilt"
                                   ? true
                                   : false
                               }
@@ -2291,7 +2291,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "1"
+                                  propertyDetails.FloorNo === "1"
                                   ? true
                                   : false
                               }
@@ -2301,7 +2301,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "2"
+                                  propertyDetails.FloorNo === "2"
                                   ? true
                                   : false
                               }
@@ -2311,7 +2311,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "3"
+                                  propertyDetails.FloorNo === "3"
                                   ? true
                                   : false
                               }
@@ -2321,7 +2321,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "4"
+                                  propertyDetails.FloorNo === "4"
                                   ? true
                                   : false
                               }
@@ -2331,7 +2331,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "5"
+                                  propertyDetails.FloorNo === "5"
                                   ? true
                                   : false
                               }
@@ -2341,7 +2341,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "6"
+                                  propertyDetails.FloorNo === "6"
                                   ? true
                                   : false
                               }
@@ -2351,7 +2351,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "7"
+                                  propertyDetails.FloorNo === "7"
                                   ? true
                                   : false
                               }
@@ -2361,7 +2361,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "8"
+                                  propertyDetails.FloorNo === "8"
                                   ? true
                                   : false
                               }
@@ -2371,7 +2371,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "9"
+                                  propertyDetails.FloorNo === "9"
                                   ? true
                                   : false
                               }
@@ -2381,7 +2381,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "10"
+                                  propertyDetails.FloorNo === "10"
                                   ? true
                                   : false
                               }
@@ -2391,7 +2391,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "11"
+                                  propertyDetails.FloorNo === "11"
                                   ? true
                                   : false
                               }
@@ -2401,7 +2401,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "12"
+                                  propertyDetails.FloorNo === "12"
                                   ? true
                                   : false
                               }
@@ -2411,7 +2411,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "13"
+                                  propertyDetails.FloorNo === "13"
                                   ? true
                                   : false
                               }
@@ -2421,7 +2421,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "14"
+                                  propertyDetails.FloorNo === "14"
                                   ? true
                                   : false
                               }
@@ -2431,7 +2431,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "15"
+                                  propertyDetails.FloorNo === "15"
                                   ? true
                                   : false
                               }
@@ -2441,7 +2441,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "16"
+                                  propertyDetails.FloorNo === "16"
                                   ? true
                                   : false
                               }
@@ -2451,7 +2451,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "17"
+                                  propertyDetails.FloorNo === "17"
                                   ? true
                                   : false
                               }
@@ -2461,7 +2461,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "18"
+                                  propertyDetails.FloorNo === "18"
                                   ? true
                                   : false
                               }
@@ -2471,7 +2471,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "19"
+                                  propertyDetails.FloorNo === "19"
                                   ? true
                                   : false
                               }
@@ -2481,7 +2481,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "20"
+                                  propertyDetails.FloorNo === "20"
                                   ? true
                                   : false
                               }
@@ -2491,7 +2491,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "21"
+                                  propertyDetails.FloorNo === "21"
                                   ? true
                                   : false
                               }
@@ -2501,7 +2501,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "22"
+                                  propertyDetails.FloorNo === "22"
                                   ? true
                                   : false
                               }
@@ -2511,7 +2511,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "23"
+                                  propertyDetails.FloorNo === "23"
                                   ? true
                                   : false
                               }
@@ -2521,7 +2521,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "24"
+                                  propertyDetails.FloorNo === "24"
                                   ? true
                                   : false
                               }
@@ -2531,7 +2531,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "25"
+                                  propertyDetails.FloorNo === "25"
                                   ? true
                                   : false
                               }
@@ -2541,7 +2541,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "26"
+                                  propertyDetails.FloorNo === "26"
                                   ? true
                                   : false
                               }
@@ -2551,7 +2551,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "27"
+                                  propertyDetails.FloorNo === "27"
                                   ? true
                                   : false
                               }
@@ -2561,7 +2561,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "28"
+                                  propertyDetails.FloorNo === "28"
                                   ? true
                                   : false
                               }
@@ -2571,7 +2571,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "29"
+                                  propertyDetails.FloorNo === "29"
                                   ? true
                                   : false
                               }
@@ -2581,7 +2581,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "30"
+                                  propertyDetails.FloorNo === "30"
                                   ? true
                                   : false
                               }
@@ -2591,7 +2591,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "31"
+                                  propertyDetails.FloorNo === "31"
                                   ? true
                                   : false
                               }
@@ -2601,7 +2601,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "32"
+                                  propertyDetails.FloorNo === "32"
                                   ? true
                                   : false
                               }
@@ -2611,7 +2611,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "33"
+                                  propertyDetails.FloorNo === "33"
                                   ? true
                                   : false
                               }
@@ -2621,7 +2621,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "34"
+                                  propertyDetails.FloorNo === "34"
                                   ? true
                                   : false
                               }
@@ -2631,7 +2631,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "35"
+                                  propertyDetails.FloorNo === "35"
                                   ? true
                                   : false
                               }
@@ -2641,7 +2641,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "36"
+                                  propertyDetails.FloorNo === "36"
                                   ? true
                                   : false
                               }
@@ -2651,7 +2651,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "37"
+                                  propertyDetails.FloorNo === "37"
                                   ? true
                                   : false
                               }
@@ -2661,7 +2661,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "38"
+                                  propertyDetails.FloorNo === "38"
                                   ? true
                                   : false
                               }
@@ -2671,7 +2671,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "39"
+                                  propertyDetails.FloorNo === "39"
                                   ? true
                                   : false
                               }
@@ -2681,7 +2681,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "40"
+                                  propertyDetails.FloorNo === "40"
                                   ? true
                                   : false
                               }
@@ -2691,7 +2691,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "41"
+                                  propertyDetails.FloorNo === "41"
                                   ? true
                                   : false
                               }
@@ -2701,7 +2701,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "42"
+                                  propertyDetails.FloorNo === "42"
                                   ? true
                                   : false
                               }
@@ -2711,7 +2711,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "43"
+                                  propertyDetails.FloorNo === "43"
                                   ? true
                                   : false
                               }
@@ -2721,7 +2721,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "44"
+                                  propertyDetails.FloorNo === "44"
                                   ? true
                                   : false
                               }
@@ -2731,7 +2731,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "45"
+                                  propertyDetails.FloorNo === "45"
                                   ? true
                                   : false
                               }
@@ -2741,7 +2741,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "46"
+                                  propertyDetails.FloorNo === "46"
                                   ? true
                                   : false
                               }
@@ -2751,7 +2751,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "47"
+                                  propertyDetails.FloorNo === "47"
                                   ? true
                                   : false
                               }
@@ -2761,7 +2761,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "48"
+                                  propertyDetails.FloorNo === "48"
                                   ? true
                                   : false
                               }
@@ -2771,7 +2771,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "49"
+                                  propertyDetails.FloorNo === "49"
                                   ? true
                                   : false
                               }
@@ -2781,7 +2781,7 @@ const CreateProperty = () => {
                             <option
                               defaultValue={
                                 propertyDetails &&
-                                propertyDetails.FloorNo === "50+"
+                                  propertyDetails.FloorNo === "50+"
                                   ? true
                                   : false
                               }
@@ -2805,86 +2805,86 @@ const CreateProperty = () => {
                   propertyDetails.Flag.toLowerCase() === "rented out" ||
                   propertyDetails.Flag.toLowerCase() === "rent and sale" ||
                   propertyDetails.Flag.toLowerCase() === "rented but sale") && (
-                  <div className="col-xl-4 col-lg-6">
-                    <div id="id_demand" className="form_field label_top">
-                      <label htmlFor="">Demand/Price for Rent</label>
-                      <div className="form_field_inner price_input">
-                        <input
-                          id="id_demandpricerent"
-                          className="custom-input"
-                          required
-                          type="text"
-                          placeholder="Demand for Rent"
-                          maxLength={10}
-                          onInput={(e) => {
-                            restrictInput(e, 9);
-                          }}
-                          onChange={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              DemandPriceRent: e.target.value.replace(/,/g, ""),
-                            });
-                          }}
-                          value={
-                            propertyDetails &&
-                            formatNumberWithCommas(
-                              propertyDetails.DemandPriceRent
-                            )
-                          }
-                        />
-                      </div>
-                      <div
-                        style={{ fontSize: "smaller" }}
-                        className="mt-2 text-capitalize"
-                      >
-                        {convertToWords(propertyDetails.DemandPriceRent)}
+                    <div className="col-xl-4 col-lg-6">
+                      <div id="id_demand" className="form_field label_top">
+                        <label htmlFor="">Demand/Price for Rent</label>
+                        <div className="form_field_inner price_input">
+                          <input
+                            id="id_demandpricerent"
+                            className="custom-input"
+                            required
+                            type="text"
+                            placeholder="Demand for Rent"
+                            maxLength={10}
+                            onInput={(e) => {
+                              restrictInput(e, 9);
+                            }}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                DemandPriceRent: e.target.value.replace(/,/g, ""),
+                              });
+                            }}
+                            value={
+                              propertyDetails &&
+                              formatNumberWithCommas(
+                                propertyDetails.DemandPriceRent
+                              )
+                            }
+                          />
+                        </div>
+                        <div
+                          style={{ fontSize: "smaller" }}
+                          className="mt-2 text-capitalize"
+                        >
+                          {convertToWords(propertyDetails.DemandPriceRent)}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Demand/Price for Sale */}
                 {(propertyDetails.Flag.toLowerCase() === "available for sale" ||
                   propertyDetails.Flag.toLowerCase() === "sold out" ||
                   propertyDetails.Flag.toLowerCase() === "rent and sale" ||
                   propertyDetails.Flag.toLowerCase() === "rented but sale") && (
-                  <div className="col-xl-4 col-lg-6">
-                    <div id="id_demand" className="form_field label_top">
-                      <label htmlFor="">Demand/Price for Sale</label>
-                      <div className="form_field_inner price_input">
-                        <input
-                          id="id_demandpricesale"
-                          className="custom-input"
-                          required
-                          type="text"
-                          placeholder="Demand for Sale"
-                          maxLength={12}
-                          onInput={(e) => {
-                            restrictInput(e, 12);
-                          }}
-                          onChange={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              DemandPriceSale: e.target.value.replace(/,/g, ""),
-                            });
-                          }}
-                          value={
-                            propertyDetails &&
-                            formatNumberWithCommas(
-                              propertyDetails.DemandPriceSale
-                            )
-                          }
-                        />
-                      </div>
-                      <div
-                        style={{ fontSize: "smaller" }}
-                        className="mt-2 text-capitalize"
-                      >
-                        {convertToWords(propertyDetails.DemandPriceSale)}
+                    <div className="col-xl-4 col-lg-6">
+                      <div id="id_demand" className="form_field label_top">
+                        <label htmlFor="">Demand/Price for Sale</label>
+                        <div className="form_field_inner price_input">
+                          <input
+                            id="id_demandpricesale"
+                            className="custom-input"
+                            required
+                            type="text"
+                            placeholder="Demand for Sale"
+                            maxLength={12}
+                            onInput={(e) => {
+                              restrictInput(e, 12);
+                            }}
+                            onChange={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                DemandPriceSale: e.target.value.replace(/,/g, ""),
+                              });
+                            }}
+                            value={
+                              propertyDetails &&
+                              formatNumberWithCommas(
+                                propertyDetails.DemandPriceSale
+                              )
+                            }
+                          />
+                        </div>
+                        <div
+                          style={{ fontSize: "smaller" }}
+                          className="mt-2 text-capitalize"
+                        >
+                          {convertToWords(propertyDetails.DemandPriceSale)}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Maintenance Status */}
                 {propertyDetails &&
@@ -2895,7 +2895,7 @@ const CreateProperty = () => {
                     propertyDetails.Flag.toLowerCase() === "rented out" ||
                     propertyDetails.Flag.toLowerCase() === "rent and sale" ||
                     propertyDetails.Flag.toLowerCase() ===
-                      "rented but sale") && (
+                    "rented but sale") && (
                     <div className="col-xl-4 col-lg-6">
                       <div className="form_field st-2 label_top">
                         <label htmlFor="">Maintenance Status</label>
@@ -2906,7 +2906,7 @@ const CreateProperty = () => {
                                 <div
                                   className={
                                     propertyDetails.MaintenanceFlag ===
-                                    "Included"
+                                      "Included"
                                       ? "custom_radio_button radiochecked"
                                       : "custom_radio_button"
                                   }
@@ -3025,7 +3025,7 @@ const CreateProperty = () => {
                                 <div
                                   className={
                                     propertyDetails.MaintenanceChargesFrequency ===
-                                    "Monthly"
+                                      "Monthly"
                                       ? "custom_radio_button radiochecked"
                                       : "custom_radio_button"
                                   }
@@ -3077,7 +3077,7 @@ const CreateProperty = () => {
                                 <div
                                   className={
                                     propertyDetails.MaintenanceChargesFrequency ===
-                                    "Quarterly"
+                                      "Quarterly"
                                       ? "custom_radio_button radiochecked"
                                       : "custom_radio_button"
                                   }
@@ -3131,7 +3131,7 @@ const CreateProperty = () => {
                                 <div
                                   className={
                                     propertyDetails.MaintenanceChargesFrequency ===
-                                    "Half Yearly"
+                                      "Half Yearly"
                                       ? "custom_radio_button radiochecked"
                                       : "custom_radio_button"
                                   }
@@ -3184,7 +3184,7 @@ const CreateProperty = () => {
                                 <div
                                   className={
                                     propertyDetails.MaintenanceChargesFrequency ===
-                                    "Yearly"
+                                      "Yearly"
                                       ? "custom_radio_button radiochecked"
                                       : "custom_radio_button"
                                   }
@@ -3257,7 +3257,7 @@ const CreateProperty = () => {
                     propertyDetails.Flag.toLowerCase() === "rented out" ||
                     propertyDetails.Flag.toLowerCase() === "rent and sale" ||
                     propertyDetails.Flag.toLowerCase() ===
-                      "rented but sale") && (
+                    "rented but sale") && (
                     <div className="col-xl-4 col-lg-6">
                       <div id="id_demand" className="form_field label_top">
                         <label htmlFor="">Security Deposit</label>
@@ -3444,8 +3444,8 @@ const CreateProperty = () => {
                 <div className="col-xl-4 col-lg-6">
                   <div className="form_field label_top">
                     {propertyDetails &&
-                    (propertyDetails.Category === "Residential" ||
-                      propertyDetails.Category === "Commercial") ? (
+                      (propertyDetails.Category === "Residential" ||
+                        propertyDetails.Category === "Commercial") ? (
                       <label htmlFor="">Unit Number</label>
                     ) : (
                       <label htmlFor="">Plot Number</label>
