@@ -1902,6 +1902,7 @@ const PropertyDetails = () => {
                             )}{" "}
                           {propertyDocument.society}
                         </h4>
+                     
                         {/* <h6>
                           {propertyDocument.status.toUpperCase() ===
                             "AVAILABLE FOR RENT" ||
@@ -2970,15 +2971,7 @@ const PropertyDetails = () => {
                                                     );
                                                   }
                                                 })()}
-                                                {/* {user && (user.role === "admin" || user.role === "superAdmin") && (
-                                        <label htmlFor="imgupload" className="upload_img click_text by_text">
-                                          Upload img
-                                          <input
-                                            type="file"
-                                            id="imgupload"
-                                          />
-                                        </label>
-                                      )} */}
+                                    
                                               </div>
                                               <div className="right">
                                                 <h5>{room.roomName}</h5>
@@ -3234,8 +3227,7 @@ const PropertyDetails = () => {
 
                                           {user &&
                                             user.status === "active" &&
-                                            (user.role === "admin" ||
-                                              user.role === "superAdmin") && (
+                                            user.role === "superAdmin" && (
                                               <div className="modal_footer">
                                                 <div
                                                   onClick={handleConfirmShow}
@@ -4533,8 +4525,8 @@ const PropertyDetails = () => {
                                 </div>
                               </div>
                             )}
-                            {/* lock in period  */}
-{propertyDocument &&
+                          {/* lock in period  */}
+                          {propertyDocument &&
                             propertyDocument.lockinPeriod && (
                               <div className="p_info_single">
                                 <div className="pd_icon">
@@ -4545,9 +4537,7 @@ const PropertyDetails = () => {
                                 </div>
                                 <div className="pis_content">
                                   <h6>Lock in period</h6>
-                                  <h5>
-                                  {propertyDocument.lockinPeriod}
-                                  </h5>
+                                  <h5>{propertyDocument.lockinPeriod}</h5>
                                 </div>
                               </div>
                             )}
@@ -4595,92 +4585,117 @@ const PropertyDetails = () => {
                                 </div>
                               </div>
                             )}
-                         {/* Furnishing */}
-{propertyDocument && 
-  propertyDocument.propertyType.toLowerCase() !== "land" &&
-  propertyDocument.propertyType.toLowerCase() !== "other" &&
-  propertyDocument.furnishing && (
-    <div className="p_info_single">
-      <div className="pd_icon">
-        <img
-          src="/assets/img/property-detail-icon/furnishing.png"
-          alt=""
-        />
-      </div>
-      <div className="pis_content">
-        <h6>Furnishing</h6>
-        <h5>
-          {propertyDocument.furnishing.toLowerCase() === "raw"
-            ? "Unfurnished"
-            : propertyDocument.furnishing}
-        </h5>
-      </div>
-    </div>
-)}
+                          {/* Furnishing */}
+                          {propertyDocument &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "land" &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "other" &&
+                            propertyDocument.furnishing && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/furnishing.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Furnishing</h6>
+                                  <h5>
+                                    {propertyDocument.furnishing.toLowerCase() ===
+                                    "raw"
+                                      ? "Unfurnished"
+                                      : propertyDocument.furnishing}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
 
- {/* Rooms   */}
- {propertyDocument && 
-  propertyDocument.propertyType.toLowerCase() !== "land" &&
-  propertyDocument.propertyType.toLowerCase() !== "other" &&
-   (
-                            <div className="p_info_single">
-                              <div className="pd_icon">
-                                <img
-                                  src="/assets/img/property-detail-icon/bedrooms.png"
-                                  alt=""
-                                />
+                          {/* Rooms   */}
+                          {propertyDocument &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "land" &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "other" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/bedrooms.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Rooms</h6>
+                                  <h5>
+                                    {propertyDocument.numberOfBedrooms === 0 ||
+                                    propertyDocument.numberOfBedrooms === "0"
+                                      ? "No"
+                                      : propertyDocument.numberOfBedrooms}
+                                  </h5>
+                                  {/* <h5>Yes</h5> */}
+                                </div>
                               </div>
-                              <div className="pis_content">
-                                <h6>Rooms</h6>
-                                <h5>{(propertyDocument.numberOfBedrooms === 0 || propertyDocument.numberOfBedrooms === "0") ? "No" : propertyDocument.numberOfBedrooms}</h5>
-                                {/* <h5>Yes</h5> */}
-                              </div>
-                            </div>)}
+                            )}
 
-                            {/* Toilet   */}
- {propertyDocument && 
-  propertyDocument.propertyType.toLowerCase() !== "land" &&
-  propertyDocument.propertyType.toLowerCase() !== "other" &&
-   (
-                            <div className="p_info_single">
-                              <div className="pd_icon">
-                                <img
-                                  src="/assets/img/property-detail-icon/public-toilet.png"
-                                  alt=""
-                                />
+                          {/* Toilet   */}
+                          {propertyDocument &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "land" &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "other" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/public-toilet.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Toilet</h6>
+                                  <h5>
+                                    {propertyDocument.numberOfBathrooms === 0 ||
+                                    propertyDocument.numberOfBathrooms === "0"
+                                      ? "No"
+                                      : propertyDocument.numberOfBathrooms}
+                                  </h5>
+                                  {/* <h5>Yes</h5> */}
+                                </div>
                               </div>
-                              <div className="pis_content">
-                                <h6>Toilet</h6>
-                                <h5>{(propertyDocument.numberOfBathrooms === 0 || propertyDocument.numberOfBathrooms === "0") ? "No" : propertyDocument.numberOfBathrooms}</h5>
-                                {/* <h5>Yes</h5> */}
-                              </div>
-                            </div>)}
+                            )}
 
                           {/* Kitchen  */}
-                          {propertyDocument && 
-  propertyDocument.propertyType.toLowerCase() !== "land" &&
-  propertyDocument.propertyType.toLowerCase() !== "other" &&
-   (
-                            <div className="p_info_single">
-                              <div className="pd_icon">
-                                <img
-                                  src="/assets/img/property-detail-icon/kitchen.png"
-                                  alt=""
-                                />
+                          {propertyDocument &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "land" &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "other" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/kitchen.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Kitchen</h6>
+                                  <h5>
+                                    {propertyDocument.numberOfKitchen === 0 ||
+                                    propertyDocument.numberOfKitchen === "0"
+                                      ? "No"
+                                      : propertyDocument.numberOfKitchen}
+                                  </h5>
+                                  {/* <h5>Yes</h5> */}
+                                </div>
                               </div>
-                              <div className="pis_content">
-                                <h6>Kitchen</h6>
-                                <h5>{(propertyDocument.numberOfKitchen === 0 || propertyDocument.numberOfKitchen === "0") ? "No" : propertyDocument.numberOfKitchen}</h5>
-                                {/* <h5>Yes</h5> */}
-                              </div>
-                            </div>)}
-                         
+                            )}
+
                           {/* Balcony  */}
                           {propertyDocument &&
                             propertyDocument.numberOfBalcony !== 0 &&
-                            propertyDocument.propertyType.toLowerCase() !== "land" &&
-  propertyDocument.propertyType.toLowerCase() !== "other" &&
-                            (
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "land" &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "other" && (
                               <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img
@@ -4690,18 +4705,26 @@ const PropertyDetails = () => {
                                 </div>
                                 <div className="pis_content">
                                   <h6>Balcony</h6>
-                              
-                                  <h5>{(propertyDocument.numberOfBalcony === 0 || propertyDocument.numberOfBalcony === "0") ? "No" : propertyDocument.numberOfBalcony}</h5>
+
+                                  <h5>
+                                    {propertyDocument.numberOfBalcony === 0 ||
+                                    propertyDocument.numberOfBalcony === "0"
+                                      ? "No"
+                                      : propertyDocument.numberOfBalcony}
+                                  </h5>
                                 </div>
                               </div>
                             )}
 
                           {/* Balcony facing  */}
-                          {propertyDocument &&                         
-                            (propertyDocument.numberOfBalcony !== 0 || propertyDocument.numberOfBalcony !== "0") &&
+                          {propertyDocument &&
+                            (propertyDocument.numberOfBalcony !== 0 ||
+                              propertyDocument.numberOfBalcony !== "0") &&
                             propertyDocument.balconyFacing &&
-                            propertyDocument.propertyType.toLowerCase() !== "land" &&
-  propertyDocument.propertyType.toLowerCase() !== "other" && (
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "land" &&
+                            propertyDocument.propertyType.toLowerCase() !==
+                              "other" && (
                               <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img
@@ -4782,8 +4805,8 @@ const PropertyDetails = () => {
                                 </div>
                               </div>
                             )}
-{/* lock in period  */}
-{propertyDocument &&
+                          {/* lock in period  */}
+                          {propertyDocument &&
                             propertyDocument.lockinPeriod && (
                               <div className="p_info_single">
                                 <div className="pd_icon">
@@ -4794,9 +4817,7 @@ const PropertyDetails = () => {
                                 </div>
                                 <div className="pis_content">
                                   <h6>Lock in period</h6>
-                                  <h5>
-                                  {propertyDocument.lockinPeriod}
-                                  </h5>
+                                  <h5>{propertyDocument.lockinPeriod}</h5>
                                 </div>
                               </div>
                             )}
@@ -4805,117 +4826,191 @@ const PropertyDetails = () => {
                     </div>
                   )}
 
-                   {/* Property Detail for plot  */}
-                {propertyDocument &&
-                  propertyDocument.category === "Plot" && (
+                {/* Property Detail for plot  */}
+                {propertyDocument && propertyDocument.category === "Plot" && (
+                  <div className="property_card_single mobile_full_card">
+                    <div className="more_detail_card_inner">
+                      <h2 className="card_title">Property Detail</h2>
+                      <div className="p_info">
+                        {/* property type  */}
+                        {propertyDocument && propertyDocument.propertyType && (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/propertytype.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Property Type</h6>
+                              <h5>{propertyDocument.propertyType}</h5>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* is corner  */}
+                        {propertyDocument &&
+                          propertyDocument.isCornerSidePlot && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img src="/assets/img/corner.png" alt="" />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Is corner?</h6>
+                                <h5>{propertyDocument.isCornerSidePlot}</h5>
+                              </div>
+                            </div>
+                          )}
+
+                        {/* is park facing  */}
+                        {propertyDocument &&
+                          propertyDocument.isParkFacingPlot && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img src="/assets/img/park.png" alt="" />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Is Park Facing?</h6>
+                                <h5>{propertyDocument.isParkFacingPlot}</h5>
+                              </div>
+                            </div>
+                          )}
+
+                        {/* Road Width  */}
+                        {propertyDocument && propertyDocument.roadWidth && (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/road.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Road Width</h6>
+                              <h5>
+                                {propertyDocument.roadWidth}{" "}
+                                {propertyDocument.roadWidthUnit}
+                              </h5>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Gated Community  */}
+                        {propertyDocument && propertyDocument.gatedArea && (
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img src="/assets/img/gatedcomunity.png" alt="" />
+                            </div>
+                            <div className="pis_content">
+                              <h6>Gated Community</h6>
+                              <h5>{propertyDocument.gatedArea}</h5>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Main Door Facing  */}
+                        {propertyDocument &&
+                          propertyDocument.mainDoorFacing && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/mainDoorFacing.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Direction Facing</h6>
+                                <h5>{propertyDocument.mainDoorFacing}</h5>
+                              </div>
+                            </div>
+                          )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+
+  {/* Property Detail for residential  */}
+  {propertyDocument &&
+                  propertyDocument.category === "Residential" && (
                     <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
-                        <h2 className="card_title">Property Detail</h2>
+                        <h2 className="card_title">Property Address</h2>
                         <div className="p_info">
-                          {/* property type  */}
-                          {propertyDocument &&
-                            propertyDocument.propertyType && (
-                              <div className="p_info_single">
+                        {user &&
+                            user.status === "active" &&
+                            user.role !== "guest" && (
+                        <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img
-                                    src="/assets/img/propertytype.png"
+                                    src="/assets/img/property-detail-icon/unitnumber.png"
                                     alt=""
                                   />
                                 </div>
                                 <div className="pis_content">
-                                  <h6>Property Type</h6>
-                                  <h5>{propertyDocument.propertyType}</h5>
+                                  <h6>Unit Number</h6>
+                                  <h5>
+                             
+                             {propertyDocument.unitNumber}</h5>
                                 </div>
                               </div>
                             )}
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/society.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Society</h6>
+                                  <h5>  {propertyDocument.society}</h5>
+                                </div>
+                              </div>
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/locality.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>locality</h6>
+                                  <h5>  {propertyDocument.locality}</h5>
+                                </div>
+                              </div>
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/city.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>city</h6>
+                                  <h5>  {propertyDocument.city}</h5>
+                                </div>
+                              </div>
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/state.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>state</h6>
+                                  <h5>  {propertyDocument.state}</h5>
+                                </div>
+                              </div>
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/pincode.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Pincode</h6>
+                                  <h5>  {propertyDocument.pincode}</h5>
+                                </div>
+                              </div>
+
                          
-                           {/* is corner  */}
-                           {propertyDocument &&
-                            propertyDocument.isCornerSidePlot && (
-                              <div className="p_info_single">
-                                <div className="pd_icon">
-                                  <img
-                                    src="/assets/img/corner.png"
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="pis_content">
-                                  <h6>Is corner?</h6>
-                                  <h5>{propertyDocument.isCornerSidePlot}</h5>
-                                </div>
-                              </div>
-                            )}
-
-                                {/* is park facing  */}
-                           {propertyDocument &&
-                            propertyDocument.isParkFacingPlot && (
-                              <div className="p_info_single">
-                                <div className="pd_icon">
-                                  <img
-                                    src="/assets/img/park.png"
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="pis_content">
-                                  <h6>Is Park Facing?</h6>
-                                  <h5>{propertyDocument.isParkFacingPlot}</h5>
-                                </div>
-                              </div>
-                            )}
-                      
-
-                            {/* Road Width  */}
-                            {propertyDocument &&
-                            propertyDocument.roadWidth && (
-                              <div className="p_info_single">
-                                <div className="pd_icon">
-                                  <img
-                                    src="/assets/img/road.png"
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="pis_content">
-                                  <h6>Road Width</h6>
-                                  <h5>{propertyDocument.roadWidth} {propertyDocument.roadWidthUnit}</h5>
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Gated Community  */}
-                            {propertyDocument &&
-                            propertyDocument.gatedArea && (
-                              <div className="p_info_single">
-                                <div className="pd_icon">
-                                  <img
-                                    src="/assets/img/gatedcomunity.png"
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="pis_content">
-                                  <h6>Gated Community</h6>
-                                  <h5>{propertyDocument.gatedArea}</h5>
-                                </div>
-                              </div>
-                            )}
-
-
-                          {/* Main Door Facing  */}
-                          {propertyDocument &&
-                            propertyDocument.mainDoorFacing && (
-                              <div className="p_info_single">
-                                <div className="pd_icon">
-                                  <img
-                                    src="/assets/img/property-detail-icon/mainDoorFacing.png"
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="pis_content">
-                                  <h6>Direction Facing</h6>
-                                  <h5>{propertyDocument.mainDoorFacing}</h5>
-                                </div>
-                              </div>
-                            )}
-
                        
                         </div>
                       </div>
