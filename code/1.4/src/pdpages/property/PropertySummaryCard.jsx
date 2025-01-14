@@ -58,11 +58,20 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
           <div className="on_desktop_hide_575">
             <div className="left">
               <div className="img">
-                {propertydoc.images.length > 0 ? (
-                  <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
-                ) : (
-                  <img src="/assets/img/admin_banner.jpg" alt="" />
-                )}
+                <img
+                  src={
+                    propertydoc.images.length > 0
+                      ? propertydoc.images[0]
+                      : propertydoc.category === "Residential"
+                      ? "/assets/img/admin_banner.jpg"
+                      : propertydoc.category === "Commercial"
+                      ? "/assets/img/commercial.jpg"
+                      : propertydoc.category === "Plot"
+                      ? "/assets/img/plot.jpg"
+                      : "/assets/img/admin_banner.jpg"
+                  }
+                  alt={propertydoc.bhk || "Property Image"}
+                />
               </div>
               <div className="detail">
                 <div>
@@ -90,29 +99,49 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
                       formatNumberWithCommas(propertydoc.demandPriceSale)
                     : propertydoc.demandPriceSale &&
                       formatNumberWithCommas(propertydoc.demandPriceSale)}
-
-                  {propertydoc.maintenancecharges !== "" && (
-                    <span
-                      style={{
-                        fontSize: "10px",
-                      }}
-                    >
-                      + ₹{propertydoc.maintenancecharges} (
-                      {propertydoc.maintenancechargesfrequency})
-                    </span>
-                  )}
+<span  style={{
+                       marginLeft:"3px"
+                        }}>
+  Demand for {propertydoc.purpose}
+</span>
+                    {/* {propertydoc.maintenancecharges !== "" && (
+                      <span
+                        style={{
+                          fontSize: "10px",
+                        }}
+                      >
+                        + ₹{propertydoc.maintenancecharges} (
+                        {propertydoc.maintenancechargesfrequency})
+                      </span>
+                    )} */}
+                    
                 </h6>
                 <h6>
                   {propertydoc.unitNumber} | {propertydoc.society}{" "}
                 </h6>
                 <h6>
-                  {propertydoc.bhk} | {propertydoc.propertyType}{" "}
-                  {propertydoc.furnishing === ""
-                    ? ""
-                    : " | " + propertydoc.furnishing + "Furnished"}{" "}
+                {propertydoc &&
+                            (propertydoc.category === "Residential" ? (
+                              <>
+                                {propertydoc.bhk}{" "}
+                                {propertydoc.furnishing && "|"}{" "}
+                                {propertydoc.furnishing &&
+                                  `${propertydoc.furnishing} Furnished`}{" "}
+                               
+                             
+                              </>
+                            ) : propertydoc.category === "Commercial" ? (
+                              <>
+                                Perfect for {propertydoc.propertyType}{" "}
+                                Needs
+                              </>
+                            ) : propertydoc.category === "Plot" ? (
+                              <>{propertydoc.propertyType} Plot</>
+                            ) : null)}
                 </h6>
                 <h6>
-                  {propertydoc.locality}, {propertydoc.city} | {propertydoc.state}
+                  {propertydoc.locality}, {propertydoc.city} |{" "}
+                  {propertydoc.state}
                 </h6>
               </div>
             </div>
@@ -147,30 +176,19 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
                     <span>₹</span>
                     {propertydoc.flag.toLowerCase() === "pms only" ||
                     propertydoc.flag.toLowerCase() === "pms after rent" ||
-                    propertydoc.flag.toLowerCase() ===
-                      "available for rent" ||
+                    propertydoc.flag.toLowerCase() === "available for rent" ||
                     propertydoc.flag.toLowerCase() === "rented out"
                       ? propertydoc.demandPriceRent &&
-                        formatNumberWithCommas(
-                          propertydoc.demandPriceRent
-                        )
-                      : propertydoc.flag.toLowerCase() ===
-                          "rent and sale" ||
-                        propertydoc.flag.toLowerCase() ===
-                          "rented but sale"
+                        formatNumberWithCommas(propertydoc.demandPriceRent)
+                      : propertydoc.flag.toLowerCase() === "rent and sale" ||
+                        propertydoc.flag.toLowerCase() === "rented but sale"
                       ? propertydoc.demandPriceRent &&
-                        formatNumberWithCommas(
-                          propertydoc.demandPriceRent
-                        ) +
+                        formatNumberWithCommas(propertydoc.demandPriceRent) +
                           " / ₹" +
                           propertydoc.demandPriceSale &&
-                        formatNumberWithCommas(
-                          propertydoc.demandPriceSale
-                        )
+                        formatNumberWithCommas(propertydoc.demandPriceSale)
                       : propertydoc.demandPriceSale &&
-                        formatNumberWithCommas(
-                          propertydoc.demandPriceSale
-                        )}
+                        formatNumberWithCommas(propertydoc.demandPriceSale)}
 
                     {propertydoc.maintenancecharges !== "" && (
                       <span

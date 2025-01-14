@@ -66,13 +66,13 @@ export default function Footer() {
               <div
                 className="loc_em_ph_inner"
                 style={{
-                  backgroundImage: "url('./assets/img/contact_info_belt.jpg')",
+                  backgroundImage: "url('/assets/img/contact_info_belt.jpg')",
                 }}
               >
                 <div className="lep_single">
                   <div>
                     <div className="icon_div ">
-                      <img src="./assets/img/home/location_f_cpg.png" alt="Location" />
+                      <img src="/assets/img/home/location_f_cpg.png" alt="Location" />
                     </div>
                     <h4>Address</h4>
                   </div>
@@ -84,7 +84,7 @@ export default function Footer() {
                 <div className="lep_single">
                   <div>
                     <div className="icon_div">
-                      <img src="./assets/img/home/emailcpg.png" alt="Email" />
+                      <img src="/assets/img/home/emailcpg.png" alt="Email" />
                     </div>
                     <h4>Email</h4>
                   </div>
@@ -93,7 +93,7 @@ export default function Footer() {
                 <div className="lep_single">
                   <div>
                     <div className="icon_div">
-                      <img src="./assets/img/home/callcpg.png" alt="Phone" />
+                      <img src="/assets/img/home/callcpg.png" alt="Phone" />
                     </div>
                     <h4>Phone</h4>
                   </div>

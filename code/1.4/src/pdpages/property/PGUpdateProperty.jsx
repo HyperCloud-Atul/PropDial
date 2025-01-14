@@ -29,6 +29,14 @@ const PGUpdateProperty = () => {
     {user && user.status === "active" ? (
        <div className='top_header_pg pg_bg pg_update_property'>
        <div className="page_spacing">
+       <div
+            className={`top_right_badge ${
+              propertydoc &&
+              propertydoc.isActiveInactiveReview.toLowerCase()
+            }`}
+          >
+            {propertydoc && propertydoc.category}
+          </div>
          <div className="row row_reverse_991">
            <div className="col-lg-6">
              <div className="title_card mobile_full_575 mobile_gap">

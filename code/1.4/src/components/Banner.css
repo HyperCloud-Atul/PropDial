@@ -22,7 +22,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    opacity: 0.7;
+    /* opacity: 0.7; */
+    opacity: 0.6;
     z-index: 0;
 }
 
@@ -30,7 +31,10 @@
     width: 100%;
     aspect-ratio: 3/1.20;
 }
-
+.home_banner  img {
+    width: 100%;
+    aspect-ratio: 3/1.20;
+}
 .swiper-button-prev,
 .swiper-button-next {
     display: none;
@@ -251,6 +255,10 @@ h2.banner_heading {
       display: none;
     }
     .home_banner .ad_container img {
+        aspect-ratio: unset;
+        height: 255px;
+    }
+    .home_banner img {
         aspect-ratio: unset;
         height: 255px;
     }

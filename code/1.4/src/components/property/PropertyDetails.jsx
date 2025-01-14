@@ -86,15 +86,23 @@ const PropertyDetails = () => {
     ["rolePropDial", "==", "manager"]
   );
 
-  const { documents: users_Executive_Manager, error: users_Executive_ManagerError } = useCollection(
-    "users-propdial",
-    ["rolePropDial", "in", ["executive", "manager"]]
-  );
+  const {
+    documents: users_Executive_Manager,
+    error: users_Executive_ManagerError,
+  } = useCollection("users-propdial", [
+    "rolePropDial",
+    "in",
+    ["executive", "manager"],
+  ]);
 
-  const { documents: users_Admin_Executive_Manager, error: users_Admin_Executive_ManagerError } = useCollection(
-    "users-propdial",
-    ["rolePropDial", "in", ["admin", "executive", "manager"]]
-  );
+  const {
+    documents: users_Admin_Executive_Manager,
+    error: users_Admin_Executive_ManagerError,
+  } = useCollection("users-propdial", [
+    "rolePropDial",
+    "in",
+    ["admin", "executive", "manager"],
+  ]);
 
   const { documents: onlyExecutives, error: onlyExecutivesError } =
     useCollection("users-propdial", ["rolePropDial", "==", "executive"]);
@@ -519,7 +527,6 @@ const PropertyDetails = () => {
   };
 
   const handleSearchChange = (event) => {
-
     const query = event.target.value;
     console.log("query: ", query);
 
@@ -528,7 +535,6 @@ const PropertyDetails = () => {
     if (query !== "") {
       filterUsers(query);
     }
-
   };
 
   const filterUsers = (query) => {
@@ -540,18 +546,26 @@ const PropertyDetails = () => {
     if (changeUserRole === "owner") {
       filtered =
         onlyOwners &&
-        onlyOwners.filter(ee =>
-          (ee.displayName.toLowerCase().includes(query.toLowerCase()) ||
-            ee.phoneNumber.includes(query) ||
-            propertyDocument.city.toLowerCase().includes(query.toLowerCase())
-          ) &&
-          ee.propertiesOwnedInCities &&
-          propertyDocument &&
-          ee.propertiesOwnedInCities.find(e => e.label === propertyDocument.city)
+        onlyOwners.filter(
+          (ee) =>
+            (ee.displayName.toLowerCase().includes(query.toLowerCase()) ||
+              ee.phoneNumber.includes(query) ||
+              propertyDocument.city
+                .toLowerCase()
+                .includes(query.toLowerCase())) &&
+            ee.propertiesOwnedInCities &&
+            propertyDocument &&
+            ee.propertiesOwnedInCities.find(
+              (e) => e.label === propertyDocument.city
+            )
         );
     }
 
-    if (changeUserRole === "admin" || changeUserRole === "manager" || changeUserRole === "executive") {
+    if (
+      changeUserRole === "admin" ||
+      changeUserRole === "manager" ||
+      changeUserRole === "executive"
+    ) {
       filtered =
         users_Admin_Executive_Manager &&
         users_Admin_Executive_Manager.filter(
@@ -562,7 +576,6 @@ const PropertyDetails = () => {
             user.city.toLowerCase().includes(query.toLowerCase())
         );
     }
-
 
     // if (changeUserRole === "admin") {
     //   filtered =
@@ -595,7 +608,6 @@ const PropertyDetails = () => {
     // }
     // console.log("filtered: ", filtered);
     setFilteredUsers(filtered);
-
   };
 
   const handleUserSelect = (userId) => {
@@ -811,17 +823,17 @@ const PropertyDetails = () => {
     const isAlreadyExist =
       _usertype === "propertyowner"
         ? propertyOwners &&
-        propertyOwners.filter(
-          (propuser) =>
-            propuser.userId === propertyDocument.createdBy &&
-            propuser.userType === _usertype
-        )
+          propertyOwners.filter(
+            (propuser) =>
+              propuser.userId === propertyDocument.createdBy &&
+              propuser.userType === _usertype
+          )
         : propertyManagers &&
-        propertyManagers.filter(
-          (propuser) =>
-            propuser.userId === propertyDocument.createdBy &&
-            propuser.userType === _usertype
-        );
+          propertyManagers.filter(
+            (propuser) =>
+              propuser.userId === propertyDocument.createdBy &&
+              propuser.userType === _usertype
+          );
 
     // console.log('isAlreadyExist: ', isAlreadyExist)
 
@@ -881,7 +893,7 @@ const PropertyDetails = () => {
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
     RichTextEditor.createValueFromString(
       propertyDocument &&
-      propertyDocument.ownerInstructions + editedOwnerInstruction,
+        propertyDocument.ownerInstructions + editedOwnerInstruction,
       "html"
     )
   );
@@ -1150,7 +1162,13 @@ const PropertyDetails = () => {
           >
             close
           </span>
-          {changeUserRole === 'owner' ? <h5 className="text_orange text-center">Owner List of {propertyDocument && propertyDocument.city}</h5> : <h5 className="text_orange text-center">Change User</h5>}
+          {changeUserRole === "owner" ? (
+            <h5 className="text_orange text-center">
+              Owner List of {propertyDocument && propertyDocument.city}
+            </h5>
+          ) : (
+            <h5 className="text_orange text-center">Change User</h5>
+          )}
           <div className="vg12"></div>
           <div>
             <div className="enq_fields">
@@ -1176,31 +1194,38 @@ const PropertyDetails = () => {
               ))}
             </ul> */}
 
-            {searchQuery !== "" ? <ul className="search_results">
-              {filteredUsers &&
-                filteredUsers.map((user) => (
-                  <li className="search_result_single" key={user.id}>
-                    <label>
-                      <input
-                        name="selectedUser"
-                        // type="checkbox"
-                        // checked={selectedUsers.includes(user.id)}
-                        type="radio"
-                        checked={selectedUser === user.id}
-                        onChange={() => handleUserSelect(user.id)}
-                      />
-                      <div>
-                        <strong>{user.rolePropDial.toUpperCase()} - {user.fullName} </strong> (
-                        {user.phoneNumber.replace(
-                          /(\d{2})(\d{5})(\d{5})/,
-                          "+$1 $2-$3"
-                        )}
-                        )<br></br> {user.email}, {user.city}, {user.country}
-                      </div>
-                    </label>
-                  </li>
-                ))}
-            </ul> : ""}
+            {searchQuery !== "" ? (
+              <ul className="search_results">
+                {filteredUsers &&
+                  filteredUsers.map((user) => (
+                    <li className="search_result_single" key={user.id}>
+                      <label>
+                        <input
+                          name="selectedUser"
+                          // type="checkbox"
+                          // checked={selectedUsers.includes(user.id)}
+                          type="radio"
+                          checked={selectedUser === user.id}
+                          onChange={() => handleUserSelect(user.id)}
+                        />
+                        <div>
+                          <strong>
+                            {user.rolePropDial.toUpperCase()} - {user.fullName}{" "}
+                          </strong>{" "}
+                          (
+                          {user.phoneNumber.replace(
+                            /(\d{2})(\d{5})(\d{5})/,
+                            "+$1 $2-$3"
+                          )}
+                          )<br></br> {user.email}, {user.city}, {user.country}
+                        </div>
+                      </label>
+                    </li>
+                  ))}
+              </ul>
+            ) : (
+              ""
+            )}
           </div>
           <div className="vg12"></div>
           <div
@@ -1297,9 +1322,10 @@ const PropertyDetails = () => {
           )}
 
           <div
-            className={`top_right_badge ${propertyDocument &&
+            className={`top_right_badge ${
+              propertyDocument &&
               propertyDocument.isActiveInactiveReview.toLowerCase()
-              }`}
+            }`}
           >
             {propertyDocument && propertyDocument.category}
           </div>
@@ -1395,6 +1421,7 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Property Source</h6>
+
                               <h5>
                                 {propertyDocument && propertyDocument.source}
                               </h5>
@@ -1409,9 +1436,12 @@ const PropertyDetails = () => {
                             </div>
                             <div className="pis_content">
                               <h6>Ownership</h6>
-                              <h5>
-                                {propertyDocument && propertyDocument.ownership}
-                              </h5>
+                              {propertyDocument && (
+                                <h5>
+                                  {propertyDocument.ownership ||
+                                    "Yet to be added"}
+                                </h5>
+                              )}
                             </div>
                           </div>
                           {user &&
@@ -1425,7 +1455,7 @@ const PropertyDetails = () => {
                                     <div
                                       className={
                                         propertyDocument.isActiveInactiveReview ===
-                                          "In-Review"
+                                        "In-Review"
                                           ? "custom_radio_button radiochecked"
                                           : "custom_radio_button"
                                       }
@@ -1464,7 +1494,7 @@ const PropertyDetails = () => {
                                         <div className="d-flex justify-content-between w-100 align-items-center">
                                           <div>
                                             {propertyDocument.isActiveInactiveReview ===
-                                              "In-Review"
+                                            "In-Review"
                                               ? "In-Review"
                                               : "Make In-Review"}
                                           </div>
@@ -1510,7 +1540,7 @@ const PropertyDetails = () => {
                                     <div
                                       className={
                                         propertyDocument.isActiveInactiveReview ===
-                                          "Active"
+                                        "Active"
                                           ? "custom_radio_button radiochecked"
                                           : "custom_radio_button"
                                       }
@@ -1532,7 +1562,7 @@ const PropertyDetails = () => {
                                         style={{
                                           background:
                                             propertyDocument.isActiveInactiveReview ===
-                                            "Active" &&
+                                              "Active" &&
                                             "var(--success-color)",
                                         }}
                                         className="pointer"
@@ -1548,7 +1578,7 @@ const PropertyDetails = () => {
                                         <div className="d-flex justify-content-between w-100 align-items-center">
                                           <div>
                                             {propertyDocument.isActiveInactiveReview ===
-                                              "Active"
+                                            "Active"
                                               ? "Active"
                                               : "Make Active"}
                                           </div>
@@ -1622,8 +1652,8 @@ const PropertyDetails = () => {
                                               ? "var(--theme-green2)"
                                               : selectedAorROption ===
                                                 "In-Review"
-                                                ? "var(--theme-blue)"
-                                                : "inherit",
+                                              ? "var(--theme-blue)"
+                                              : "inherit",
                                         }}
                                       >
                                         Make This {selectedAorROption}?
@@ -1644,8 +1674,9 @@ const PropertyDetails = () => {
                                         No
                                       </div>
                                       <div
-                                        className={`theme_btn btn_fill no_icon text-center ${isProcessing && "disabled"
-                                          }`}
+                                        className={`theme_btn btn_fill no_icon text-center ${
+                                          isProcessing && "disabled"
+                                        }`}
                                         onClick={
                                           !isProcessing ? handleConfirm : null
                                         } // Disable click when processing
@@ -1658,7 +1689,7 @@ const PropertyDetails = () => {
                                     <div
                                       className={
                                         propertyDocument.isActiveInactiveReview ===
-                                          "Inactive"
+                                        "Inactive"
                                           ? "custom_radio_button radiochecked"
                                           : "custom_radio_button"
                                       }
@@ -1668,7 +1699,7 @@ const PropertyDetails = () => {
                                         id={"toggleFlag_inactive" + propertyid}
                                         onClick={
                                           propertyDocument.isActiveInactiveReview ===
-                                            "Inactive"
+                                          "Inactive"
                                             ? null // Disable onClick if already inactive
                                             : handleShowWhyInactive
                                         }
@@ -1681,7 +1712,7 @@ const PropertyDetails = () => {
                                         style={{
                                           background:
                                             propertyDocument.isActiveInactiveReview ===
-                                            "Inactive" && "var(--theme-red)",
+                                              "Inactive" && "var(--theme-red)",
                                         }}
                                         className="pointer"
                                       >
@@ -1696,7 +1727,7 @@ const PropertyDetails = () => {
                                         <div className="d-flex justify-content-between w-100 align-items-center">
                                           <div>
                                             {propertyDocument.isActiveInactiveReview ===
-                                              "Inactive"
+                                            "Inactive"
                                               ? "Inactive"
                                               : "Make Inactive"}
                                           </div>
@@ -1802,10 +1833,10 @@ const PropertyDetails = () => {
                           className="default_prop_img"
                           src={
                             propertyDocument.category === "Plot"
-                              ? "/assets/img/plot.jpg" // Default image for Plot
+                              ? "/assets/img/plot.jpg"
                               : propertyDocument.category === "Commercial"
-                                ? "/assets/img/commercial.jpg" // Default image for Commercial
-                                : "/assets/img/admin_banner.jpg" // Default image for Residential or other categories
+                              ? "/assets/img/commercial.jpg"
+                              : "/assets/img/admin_banner.jpg"
                           }
                           alt="Default"
                         />
@@ -1916,7 +1947,7 @@ const PropertyDetails = () => {
                                 {propertyDocument.purpose && " | "}
                                 For{" "}
                                 {propertyDocument.purpose.toLowerCase() ===
-                                  "rentsaleboth"
+                                "rentsaleboth"
                                   ? "Rent / Sale"
                                   : propertyDocument.purpose}
                               </>
@@ -1944,24 +1975,24 @@ const PropertyDetails = () => {
                             <span className="currency">₹</span>
                             {propertyDocument.flag.toLowerCase() ===
                               "pms only" ||
-                              propertyDocument.flag.toLowerCase() ===
+                            propertyDocument.flag.toLowerCase() ===
                               "available for rent" ||
-                              propertyDocument.flag.toLowerCase() === "rented out"
+                            propertyDocument.flag.toLowerCase() === "rented out"
                               ? new Intl.NumberFormat("en-IN").format(
-                                propertyDocument.demandPriceRent
-                              )
+                                  propertyDocument.demandPriceRent
+                                )
                               : propertyDocument.flag.toLowerCase() ===
-                                "rent and sale" ||
+                                  "rent and sale" ||
                                 propertyDocument.flag.toLowerCase() ===
-                                "rented but sale"
-                                ? new Intl.NumberFormat("en-IN").format(
+                                  "rented but sale"
+                              ? new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceRent
                                 ) +
                                 " / ₹" +
                                 new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceSale
                                 )
-                                : new Intl.NumberFormat("en-IN").format(
+                              : new Intl.NumberFormat("en-IN").format(
                                   propertyDocument.demandPriceSale
                                 )}
 
@@ -1975,24 +2006,24 @@ const PropertyDetails = () => {
                           <h6>
                             {propertyDocument.flag.toLowerCase() ===
                               "pms only" ||
-                              propertyDocument.flag.toLowerCase() ===
+                            propertyDocument.flag.toLowerCase() ===
                               "available for rent" ||
-                              propertyDocument.flag.toLowerCase() === "rented out"
+                            propertyDocument.flag.toLowerCase() === "rented out"
                               ? "Demand Price"
                               : propertyDocument.flag.toLowerCase() ===
-                                "rent and sale" ||
+                                  "rent and sale" ||
                                 propertyDocument.flag.toLowerCase() ===
-                                "rented but sale"
-                                ? "Demand Rent / Sale"
-                                : "Demand Price"}
+                                  "rented but sale"
+                              ? "Demand Rent / Sale"
+                              : "Demand Price"}
                           </h6>
                         </div>
                         {propertyDocument &&
                           (propertyDocument.purpose.toLowerCase() === "rent" ||
                             propertyDocument.purpose.toLowerCase() ===
-                            "rentsaleboth") &&
+                              "rentsaleboth") &&
                           (propertyDocument.maintenanceFlag.toLowerCase() ===
-                            "included" ? (
+                          "included" ? (
                             <div className="pdms_single">
                               <h4>Included</h4>
                               <h6>Maintenance</h6>
@@ -2018,7 +2049,7 @@ const PropertyDetails = () => {
                         {propertyDocument &&
                           (propertyDocument.purpose.toLowerCase() === "rent" ||
                             propertyDocument.purpose.toLowerCase() ===
-                            "rentsaleboth") && (
+                              "rentsaleboth") && (
                             <div className="pdms_single">
                               <h4>
                                 <span className="currency">₹</span>
@@ -2040,8 +2071,8 @@ const PropertyDetails = () => {
                               <>
                                 {propertyDocument.superArea}
                                 {propertyDocument.superArea &&
-                                  propertyDocument.carpetArea &&
-                                  propertyDocument.carpetArea !== "0"
+                                propertyDocument.carpetArea &&
+                                propertyDocument.carpetArea !== "0"
                                   ? "/"
                                   : ""}
                                 {propertyDocument.carpetArea}
@@ -2078,8 +2109,8 @@ const PropertyDetails = () => {
                               <>
                                 {propertyDocument.superArea && "Super Area"}
                                 {propertyDocument.superArea &&
-                                  propertyDocument.carpetArea &&
-                                  propertyDocument.carpetArea !== "0"
+                                propertyDocument.carpetArea &&
+                                propertyDocument.carpetArea !== "0"
                                   ? " / "
                                   : ""}
                                 {propertyDocument.carpetArea &&
@@ -2098,28 +2129,20 @@ const PropertyDetails = () => {
                         </div>
                         <div className="pdms_single">
                           <h4>
-                            {/* <img
-      src={
-        propertyDocument.category === "Residential"
-          ? "/assets/img/new_bedroom.png"
-          : propertyDocument.category === "Commercial"
-          ? "/assets/img/new_carpet.png"
-          : "/assets/img/new_park_facing.png"
-      }
-      alt=""
-    /> */}
-                            <img src={
-                              propertyDocument.category === "Residential"
-                                ? "/assets/img/new_bedroom.png"
-                                : propertyDocument.category === "Commercial"
+                            <img
+                              src={
+                                propertyDocument.category === "Residential"
+                                  ? "/assets/img/new_bedroom.png"
+                                  : propertyDocument.category === "Commercial"
                                   ? "/assets/img/new_carpet.png"
                                   : propertyDocument.category === "Plot"
-                                    ? "/assets/img/park.png"
-                                    : "/assets/img/default.png" // Fallback image for other categories
-                            }></img>
+                                  ? "/assets/img/park.png"
+                                  : "/assets/img/default.png"
+                              }
+                            ></img>
                             {propertyDocument.category === "Residential" ? (
                               propertyDocument.numberOfBedrooms === 0 ||
-                                propertyDocument.numberOfBedrooms === "0" ? (
+                              propertyDocument.numberOfBedrooms === "0" ? (
                                 "Yet to be added"
                               ) : (
                                 propertyDocument.numberOfBedrooms
@@ -2151,32 +2174,26 @@ const PropertyDetails = () => {
                             {propertyDocument.category === "Residential"
                               ? "Bedroom"
                               : propertyDocument.category === "Commercial"
-                                ? "Carpet Area"
-                                : propertyDocument.category === "Plot"
-                                  ? "Park Facing"
-                                  : ""}
+                              ? "Carpet Area"
+                              : propertyDocument.category === "Plot"
+                              ? "Park Facing"
+                              : ""}
                           </h6>
                         </div>
 
                         <div className="pdms_single">
                           <h4>
-                            {/* <img
-      src={
-        propertyDocument.category === "Residential"
-          ? "/assets/img/new_bathroom.png"
-          : "/assets/img/new_direction_facing.png"
-      }
-      alt=""
-    /> */}
-                            <img src={
-                              propertyDocument.category === "Residential"
-                                ? "/assets/img/new_bathroom.png"
-                                : propertyDocument.category === "Commercial"
+                            <img
+                              src={
+                                propertyDocument.category === "Residential"
+                                  ? "/assets/img/new_bathroom.png"
+                                  : propertyDocument.category === "Commercial"
                                   ? "/assets/img/directions.png"
                                   : propertyDocument.category === "Plot"
-                                    ? "/assets/img/directions.png"
-                                    : "/assets/img/default.png" // Fallback image for other categories
-                            }></img>
+                                  ? "/assets/img/directions.png"
+                                  : "/assets/img/default.png"
+                              }
+                            ></img>
                             {propertyDocument.category === "Residential"
                               ? propertyDocument.numberOfBathrooms === 0 ||
                                 propertyDocument.numberOfBathrooms === "0"
@@ -2184,17 +2201,17 @@ const PropertyDetails = () => {
                                 : propertyDocument.numberOfBathrooms
                               : propertyDocument.category === "Commercial" ||
                                 propertyDocument.category === "Plot"
-                                ? propertyDocument.mainDoorFacing ||
+                              ? propertyDocument.mainDoorFacing ||
                                 "Yet to be added"
-                                : null}
+                              : null}
                           </h4>
                           <h6>
                             {propertyDocument.category === "Residential"
                               ? "Bathroom"
                               : propertyDocument.category === "Commercial" ||
                                 propertyDocument.category === "Plot"
-                                ? "Direction Facing"
-                                : ""}
+                              ? "Direction Facing"
+                              : ""}
                           </h6>
                         </div>
                       </div>
@@ -2202,83 +2219,89 @@ const PropertyDetails = () => {
                       <div className="pmd_section2 pmd_section3">
                         <div className="pdms_single">
                           <h4>
-                            <img src={
-                              propertyDocument.category === "Residential"
-                                ? "/assets/img/floor.png"
-                                : propertyDocument.category === "Commercial"
+                            <img
+                              src={
+                                propertyDocument.category === "Residential"
+                                  ? "/assets/img/floor.png"
+                                  : propertyDocument.category === "Commercial"
                                   ? "/assets/img/propertytype.png"
                                   : propertyDocument.category === "Plot"
-                                    ? "/assets/img/corner.png"
-                                    : "/assets/img/default.png" // Fallback image for other categories
-                            }></img>
+                                  ? "/assets/img/corner.png"
+                                  : "/assets/img/default.png"
+                              }
+                            ></img>
                             {propertyDocument.category === "Residential"
                               ? propertyDocument.floorNo
                                 ? propertyDocument.floorNo === "Ground"
                                   ? "Ground"
                                   : propertyDocument.floorNo === "Stilt"
-                                    ? "Stilt"
-                                    : propertyDocument.floorNo === "Basement"
-                                      ? "Basement"
-                                      : `${propertyDocument.floorNo}${propertyDocument.numberOfFloors
+                                  ? "Stilt"
+                                  : propertyDocument.floorNo === "Basement"
+                                  ? "Basement"
+                                  : `${propertyDocument.floorNo}${
+                                      propertyDocument.numberOfFloors
                                         ? " of " +
-                                        propertyDocument.numberOfFloors
+                                          propertyDocument.numberOfFloors
                                         : ""
-                                      }`
+                                    }`
                                 : ""
                               : propertyDocument.category === "Commercial"
-                                ? propertyDocument.propertyType ||
+                              ? propertyDocument.propertyType ||
                                 "Yet to be added"
-                                : propertyDocument.category === "Plot"
-                                  ? propertyDocument.isCornerSidePlot ||
-                                  "Yet to be added"
-                                  : ""}
+                              : propertyDocument.category === "Plot"
+                              ? propertyDocument.isCornerSidePlot ||
+                                "Yet to be added"
+                              : ""}
                           </h4>
                           <h6>
                             {propertyDocument.category === "Residential"
                               ? propertyDocument.floorNo
                                 ? ["Ground", "Stilt", "Basement"].includes(
-                                  propertyDocument.floorNo
-                                )
+                                    propertyDocument.floorNo
+                                  )
                                   ? "Floor"
                                   : "Floor no"
                                 : ""
                               : propertyDocument.category === "Commercial"
-                                ? "Property Type"
-                                : propertyDocument.category === "Plot"
-                                  ? "Is Corner?"
-                                  : ""}
+                              ? "Property Type"
+                              : propertyDocument.category === "Plot"
+                              ? "Is Corner?"
+                              : ""}
                           </h6>
                         </div>
                         <div className="pdms_single">
                           <h4>
-                            <img src={
-                              propertyDocument.category === "Residential"
-                                ? "/assets/img/new_bhk.png"
-                                : propertyDocument.category === "Commercial"
+                            <img
+                              src={
+                                propertyDocument.category === "Residential"
+                                  ? "/assets/img/new_bhk.png"
+                                  : propertyDocument.category === "Commercial"
                                   ? "/assets/img/propertysubtype.png"
                                   : propertyDocument.category === "Plot"
-                                    ? "/assets/img/gatedcomunity.png"
-                                    : "/assets/img/default.png" // Fallback image for other categories
-                            } alt="bhk icon" />
+                                  ? "/assets/img/gatedcomunity.png"
+                                  : "/assets/img/default.png"
+                              }
+                              alt="bhk icon"
+                            />
                             {propertyDocument.category === "Residential"
                               ? propertyDocument.bhk || "Yet to be added"
                               : propertyDocument.category === "Commercial"
-                                ? propertyDocument.additionalRooms &&
-                                  propertyDocument.additionalRooms.length > 0
-                                  ? propertyDocument.additionalRooms[0]
-                                  : "Yet to be added"
-                                : propertyDocument.category === "Plot"
-                                  ? propertyDocument.gatedArea || "Yet to be added"
-                                  : ""}
+                              ? propertyDocument.additionalRooms &&
+                                propertyDocument.additionalRooms.length > 0
+                                ? propertyDocument.additionalRooms[0]
+                                : "Yet to be added"
+                              : propertyDocument.category === "Plot"
+                              ? propertyDocument.gatedArea || "Yet to be added"
+                              : ""}
                           </h4>
                           <h6>
                             {propertyDocument.category === "Residential"
                               ? "BHK"
                               : propertyDocument.category === "Commercial"
-                                ? "Property Sub-Type"
-                                : propertyDocument.category === "Plot"
-                                  ? "Gated Community"
-                                  : ""}
+                              ? "Property Sub-Type"
+                              : propertyDocument.category === "Plot"
+                              ? "Gated Community"
+                              : ""}
                           </h6>
                         </div>
 
@@ -2289,17 +2312,17 @@ const PropertyDetails = () => {
                                 propertyDocument.category === "Residential"
                                   ? "/assets/img/new_furniture.png"
                                   : propertyDocument.category === "Commercial"
-                                    ? "/assets/img/new_furniture.png"
-                                    : propertyDocument.category === "Plot"
-                                      ? "/assets/img/road.png"
-                                      : "/assets/img/default.png" // Fallback image for other categories
+                                  ? "/assets/img/new_furniture.png"
+                                  : propertyDocument.category === "Plot"
+                                  ? "/assets/img/road.png"
+                                  : "/assets/img/default.png"
                               }
                               alt="furnishing icon"
                             />
                             {propertyDocument.category === "Residential" ||
-                              propertyDocument.category === "Commercial" ? (
+                            propertyDocument.category === "Commercial" ? (
                               propertyDocument.furnishing?.toLowerCase() ===
-                                "raw" ? (
+                              "raw" ? (
                                 "Unfurnished"
                               ) : (
                                 propertyDocument.furnishing || "Yet to be added"
@@ -2311,7 +2334,8 @@ const PropertyDetails = () => {
                                   <h6
                                     style={{
                                       marginLeft: "3px",
-                                    }}>
+                                    }}
+                                  >
                                     {propertyDocument.roadWidthUnit || ""}
                                   </h6>
                                 </>
@@ -2324,11 +2348,11 @@ const PropertyDetails = () => {
                           </h4>
                           <h6>
                             {propertyDocument.category === "Residential" ||
-                              propertyDocument.category === "Commercial"
+                            propertyDocument.category === "Commercial"
                               ? "Furnishing"
                               : propertyDocument.category === "Plot"
-                                ? "Road Width"
-                                : ""}
+                              ? "Road Width"
+                              : ""}
                           </h6>
                         </div>
                       </div>
@@ -2844,13 +2868,14 @@ const PropertyDetails = () => {
                                     </div>
                                   )}
                                 <div
-                                  className={`${user &&
+                                  className={`${
+                                    user &&
                                     user.status === "active" &&
                                     (user.role === "admin" ||
                                       user.role === "superAdmin")
-                                    ? "col-sm-11 col-10"
-                                    : "col-12"
-                                    }`}
+                                      ? "col-sm-11 col-10"
+                                      : "col-12"
+                                  }`}
                                 >
                                   <div className="property_layout_card">
                                     <Swiper
@@ -2988,7 +3013,7 @@ const PropertyDetails = () => {
                                                     user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin") && (
+                                                        "superAdmin") && (
                                                       <span
                                                         className="click_text pointer"
                                                         onClick={() =>
@@ -3188,24 +3213,24 @@ const PropertyDetails = () => {
                                           </div>
                                           {selectedRoom.roomAttachments
                                             .length !== 0 && (
-                                              <div className="attached_with">
-                                                {selectedRoom.roomAttachments && (
-                                                  <h6 className="text-center text_black">
-                                                    Attached with
-                                                  </h6>
-                                                )}
-                                                <div className="more_detail">
-                                                  {selectedRoom.roomAttachments &&
-                                                    selectedRoom.roomAttachments.map(
-                                                      (attachment, findex) => (
-                                                        <span className="more_detail_single">
-                                                          {attachment}
-                                                        </span>
-                                                      )
-                                                    )}
-                                                </div>
+                                            <div className="attached_with">
+                                              {selectedRoom.roomAttachments && (
+                                                <h6 className="text-center text_black">
+                                                  Attached with
+                                                </h6>
+                                              )}
+                                              <div className="more_detail">
+                                                {selectedRoom.roomAttachments &&
+                                                  selectedRoom.roomAttachments.map(
+                                                    (attachment, findex) => (
+                                                      <span className="more_detail_single">
+                                                        {attachment}
+                                                      </span>
+                                                    )
+                                                  )}
                                               </div>
-                                            )}
+                                            </div>
+                                          )}
 
                                           {user &&
                                             user.status === "active" &&
@@ -3277,8 +3302,14 @@ const PropertyDetails = () => {
                     <>
                       {user &&
                         user.status === "active" &&
-                        ((user && user.role === "owner") ||
-                          (user && user.role === "coowner") ||
+                        ((user &&
+                          user.role === "owner" &&
+                          tenantDocument &&
+                          tenantDocument.length > 0) ||
+                          (user &&
+                            user.role === "coowner" &&
+                            tenantDocument &&
+                            tenantDocument.length > 0) ||
                           (user &&
                             (user.role === "admin" ||
                               user.role === "superAdmin"))) && (
@@ -3312,13 +3343,14 @@ const PropertyDetails = () => {
                                     </div>
                                   )}
                                 <div
-                                  className={`${user &&
+                                  className={`${
+                                    user &&
                                     user.status === "active" &&
                                     (user.role === "admin" ||
                                       user.role === "superAdmin")
-                                    ? "col-sm-11 col-10"
-                                    : "col-12"
-                                    }`}
+                                      ? "col-sm-11 col-10"
+                                      : "col-12"
+                                  }`}
                                 >
                                   <div className="tenant_card">
                                     <Swiper
@@ -3350,10 +3382,11 @@ const PropertyDetails = () => {
                                         tenantDocument.map((tenant, index) => (
                                           <SwiperSlide key={index}>
                                             <div
-                                              className={`tc_single relative item ${tenant.status === "inactive"
-                                                ? "t_inactive"
-                                                : ""
-                                                }`}
+                                              className={`tc_single relative item ${
+                                                tenant.status === "inactive"
+                                                  ? "t_inactive"
+                                                  : ""
+                                              }`}
                                             >
                                               <Link
                                                 className="left"
@@ -3369,11 +3402,12 @@ const PropertyDetails = () => {
                                                   />
                                                 </div>
                                                 <div
-                                                  className={`tenant_detail ${editingTenantId ===
+                                                  className={`tenant_detail ${
+                                                    editingTenantId ===
                                                     tenant.id
-                                                    ? "td_edit"
-                                                    : ""
-                                                    }`}
+                                                      ? "td_edit"
+                                                      : ""
+                                                  }`}
                                                 >
                                                   <h6 className="t_name">
                                                     {tenant.name
@@ -3468,13 +3502,14 @@ const PropertyDetails = () => {
                                 </div>
                               )}
                             <div
-                              className={`${user &&
+                              className={`${
+                                user &&
                                 user.status === "active" &&
                                 (user.role === "admin" ||
                                   user.role === "superAdmin")
-                                ? "col-sm-11 col-10"
-                                : "col-12"
-                                }`}
+                                  ? "col-sm-11 col-10"
+                                  : "col-12"
+                              }`}
                             >
                               <div className="tenant_card">
                                 <Swiper
@@ -3511,15 +3546,15 @@ const PropertyDetails = () => {
                                               className="property_people_designation d-flex align-items-end justify-content-center pointer"
                                               onClick={
                                                 user &&
-                                                  user.status === "active" &&
-                                                  (user.role === "admin" ||
-                                                    user.role === "superAdmin")
+                                                user.status === "active" &&
+                                                (user.role === "admin" ||
+                                                  user.role === "superAdmin")
                                                   ? (e) =>
-                                                    handleShowOwnerTags(
-                                                      e,
-                                                      propUser,
-                                                      "propowner"
-                                                    )
+                                                      handleShowOwnerTags(
+                                                        e,
+                                                        propUser,
+                                                        "propowner"
+                                                      )
                                                   : null
                                               }
                                             >
@@ -3528,7 +3563,7 @@ const PropertyDetails = () => {
                                                 user.status === "active" &&
                                                 (user.role === "admin" ||
                                                   user.role ===
-                                                  "superAdmin") && (
+                                                    "superAdmin") && (
                                                   <span
                                                     className="material-symbols-outlined click_icon text_near_icon"
                                                     style={{ fontSize: "10px" }}
@@ -3551,31 +3586,32 @@ const PropertyDetails = () => {
                                                 <h5
                                                   onClick={
                                                     user &&
-                                                      user.status === "active" &&
-                                                      (user.role === "admin" ||
-                                                        user.role ===
-                                                        "superAdmin")
-                                                      ? () =>
-                                                        openChangeUser(
-                                                          propUser.id,
-                                                          "owner"
-                                                        )
-                                                      : ""
-                                                  }
-                                                  className={`t_name ${user &&
+                                                    user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin")
-                                                    ? "pointer"
-                                                    : ""
-                                                    }`}
+                                                        "superAdmin")
+                                                      ? () =>
+                                                          openChangeUser(
+                                                            propUser.id,
+                                                            "owner"
+                                                          )
+                                                      : ""
+                                                  }
+                                                  className={`t_name ${
+                                                    user &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin")
+                                                      ? "pointer"
+                                                      : ""
+                                                  }`}
                                                 >
                                                   {propUser.fullName}
                                                   {user &&
                                                     user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin") && (
+                                                        "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
                                                       </span>
@@ -3591,7 +3627,7 @@ const PropertyDetails = () => {
                                                   user.status === "active" &&
                                                   (user.role === "admin" ||
                                                     user.role ===
-                                                    "superAdmin") && (
+                                                      "superAdmin") && (
                                                     <h6
                                                       className="text_red pointer"
                                                       style={{
@@ -3618,9 +3654,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `tel:+${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                               >
@@ -3634,9 +3670,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `https://wa.me/+${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                                 target="_blank"
@@ -3872,12 +3908,13 @@ const PropertyDetails = () => {
                                 </div>
                               )}
                             <div
-                              className={`${user &&
+                              className={`${
+                                user &&
                                 (user.role === "admin" ||
                                   user.role === "superAdmin")
-                                ? "col-sm-11 col-10"
-                                : "col-12"
-                                }`}
+                                  ? "col-sm-11 col-10"
+                                  : "col-12"
+                              }`}
                             >
                               <div className="tenant_card">
                                 <Swiper
@@ -3932,7 +3969,7 @@ const PropertyDetails = () => {
                                                 user.status === "active" &&
                                                 (user.role === "admin" ||
                                                   user.role ===
-                                                  "superAdmin") && (
+                                                    "superAdmin") && (
                                                   <span
                                                     className="material-symbols-outlined click_icon text_near_icon"
                                                     style={{
@@ -3957,31 +3994,32 @@ const PropertyDetails = () => {
                                                 <h5
                                                   onClick={
                                                     user &&
-                                                      user.status === "active" &&
-                                                      (user.role === "admin" ||
-                                                        user.role ===
-                                                        "superAdmin")
-                                                      ? () =>
-                                                        openChangeUser(
-                                                          propUser.id,
-                                                          "admin"
-                                                        )
-                                                      : ""
-                                                  }
-                                                  className={`t_name ${user &&
+                                                    user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin")
-                                                    ? "pointer"
-                                                    : ""
-                                                    }`}
+                                                        "superAdmin")
+                                                      ? () =>
+                                                          openChangeUser(
+                                                            propUser.id,
+                                                            "admin"
+                                                          )
+                                                      : ""
+                                                  }
+                                                  className={`t_name ${
+                                                    user &&
+                                                    (user.role === "admin" ||
+                                                      user.role ===
+                                                        "superAdmin")
+                                                      ? "pointer"
+                                                      : ""
+                                                  }`}
                                                 >
                                                   {propUser.fullName}
                                                   {user &&
                                                     user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin") && (
+                                                        "superAdmin") && (
                                                       <span className="material-symbols-outlined click_icon text_near_icon">
                                                         edit
                                                       </span>
@@ -3997,7 +4035,7 @@ const PropertyDetails = () => {
                                                   user.status === "active" &&
                                                   (user.role === "admin" ||
                                                     user.role ===
-                                                    "superAdmin") && (
+                                                      "superAdmin") && (
                                                     <h6
                                                       className="text_red pointer"
                                                       style={{
@@ -4024,9 +4062,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `tel:+${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                               >
@@ -4040,9 +4078,9 @@ const PropertyDetails = () => {
                                                 to={
                                                   propUser
                                                     ? `https://wa.me/+${propUser.phoneNumber.replace(
-                                                      /\D/g,
-                                                      ""
-                                                    )}`
+                                                        /\D/g,
+                                                        ""
+                                                      )}`
                                                     : "#"
                                                 }
                                                 target="_blank"
@@ -4191,206 +4229,179 @@ const PropertyDetails = () => {
                   )}
                 {/* propdial managers / user card end  */}
 
-                <div className="property_card_single mobile_full_card">
-                  <div className="more_detail_card_inner">
-                    <h2 className="card_title">Property Type</h2>
-                    <div className="p_info">
-                      {/* BHK  */}
-                      {propertyDocument && propertyDocument.bhk && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/twin-bed.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            {propertyDocument.category === "Plot" ||
-                              propertyDocument.category === "Commercial" ? (
-                              <>
-                                <h6>Gated Area</h6>
-                                <h5>{propertyDocument.gatedArea}</h5>
-                              </>
-                            ) : (
-                              <>
-                                <h6>Type</h6>
+                {/* Property Detail for residential  */}
+                {propertyDocument &&
+                  propertyDocument.category === "Residential" && (
+                    <div className="property_card_single mobile_full_card">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">Property Detail</h2>
+                        <div className="p_info">
+                          {/* BHK  */}
+                          {propertyDocument && propertyDocument.bhk && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/twin-bed.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>BHK Type</h6>
                                 <h5>{propertyDocument.bhk}</h5>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      )}
+                              </div>
+                            </div>
+                          )}
 
-                      {/* Furnishing  */}
-                      {propertyDocument && propertyDocument.furnishing && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/furnishing.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Furnishing</h6>
-                            <h5>
-                              {propertyDocument.furnishing.toLowerCase() ===
-                                "raw"
-                                ? "Unfurnished"
-                                : propertyDocument.furnishing}
-                            </h5>
-                          </div>
-                        </div>
-                      )}
-                      {/* Bedroom   */}
+                          {/* Furnishing  */}
+                          {propertyDocument && propertyDocument.furnishing && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/furnishing.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Furnishing</h6>
+                                <h5>
+                                  {propertyDocument.furnishing.toLowerCase() ===
+                                  "raw"
+                                    ? "Unfurnished"
+                                    : propertyDocument.furnishing}
+                                </h5>
+                              </div>
+                            </div>
+                          )}
+                          {/* Bedroom   */}
 
-                      <div className="p_info_single">
-                        <div className="pd_icon">
-                          <img
-                            src="/assets/img/property-detail-icon/bedrooms.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="pis_content">
-                          {propertyDocument.category === "Plot" ||
-                            propertyDocument.category === "Commercial" ? (
-                            <>
-                              <h6>Property Type</h6>
-                              <h5>{propertyDocument.propertyType}</h5>
-                            </>
-                          ) : (
-                            <>
+                          <div className="p_info_single">
+                            <div className="pd_icon">
+                              <img
+                                src="/assets/img/property-detail-icon/bedrooms.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="pis_content">
                               <h6>Bedroom</h6>
                               <h5>
                                 {propertyDocument.numberOfBedrooms === 0 ||
-                                  propertyDocument.numberOfBedrooms === "0"
+                                propertyDocument.numberOfBedrooms === "0"
                                   ? "Yet to be added"
                                   : propertyDocument.numberOfBedrooms}
                               </h5>
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Bathroom  */}
-                      {propertyDocument &&
-                        propertyDocument.numberOfBathrooms && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/bathrroms.png"
-                                alt=""
-                              />
                             </div>
-                            <div className="pis_content">
-                              {propertyDocument.category === "Plot" ||
-                                propertyDocument.category === "Commercial" ? (
-                                <>
-                                  <h6>Property Sub-Type</h6>
-                                  <h5>{propertyDocument.additionalRooms[0]}</h5>
-                                </>
-                              ) : (
-                                <>
+                          </div>
+
+                          {/* Bathroom  */}
+                          {propertyDocument &&
+                            propertyDocument.numberOfBathrooms && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/bathrroms.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
                                   <h6>Bathroom</h6>
                                   <h5>
                                     {propertyDocument.numberOfBathrooms === 0 ||
-                                      propertyDocument.numberOfBathrooms === "0"
+                                    propertyDocument.numberOfBathrooms === "0"
                                       ? "Yet to be added"
                                       : propertyDocument.numberOfBathrooms}
                                   </h5>
-                                </>
-                              )}
+                                </div>
+                              </div>
+                            )}
+                          {/* Balcony  */}
+                          {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.numberOfBalcony !== 0 && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/balcony.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Balcony</h6>
+                                  <h5>{propertyDocument.numberOfBalcony}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Kitchen  */}
+                          {propertyDocument.category === "Residential" && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/kitchen.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Kitchen</h6>
+                                {/* <h5>{propertyDocument.numberOfKitchen}</h5> */}
+                                <h5>Yes</h5>
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      {/* Balcony  */}
-                      {propertyDocument &&
-                        propertyDocument.category === "Residential" &&
-                        propertyDocument.numberOfBalcony !== 0 && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/balcony.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Balcony</h6>
-                              <h5>{propertyDocument.numberOfBalcony}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Kitchen  */}
-                      {propertyDocument.category === "Residential" && (
-                        <div className="p_info_single">
-                          <div className="pd_icon">
-                            <img
-                              src="/assets/img/property-detail-icon/kitchen.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="pis_content">
-                            <h6>Kitchen</h6>
-                            {/* <h5>{propertyDocument.numberOfKitchen}</h5> */}
-                            <h5>Yes</h5>
-                          </div>
-                        </div>
-                      )}
+                          )}
 
-                      {/* Living Area  */}
-                      {propertyDocument &&
-                        propertyDocument.category === "Residential" &&
-                        propertyDocument.livingArea && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/livingArea.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Living Area</h6>
-                              <h5>{propertyDocument.livingArea}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Dining  Area  */}
-                      {propertyDocument &&
-                        propertyDocument.category === "Residential" &&
-                        propertyDocument.diningArea && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/diningArea.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Dining Area</h6>
-                              <h5>{propertyDocument.diningArea}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Living Area And Dining Area Combine  */}
-                      {propertyDocument &&
-                        propertyDocument.category === "Residential" &&
-                        propertyDocument.livingAndDining.toLowerCase() ===
-                        "yes" && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/livingDining.png"
-                                alt=""
-                              />
-                            </div>
+                          {/* Living Area  */}
+                          {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.livingArea && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/livingArea.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Living Area</h6>
+                                  <h5>{propertyDocument.livingArea}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Dining  Area  */}
+                          {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.diningArea && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/diningArea.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Dining Area</h6>
+                                  <h5>{propertyDocument.diningArea}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Living Area And Dining Area Combine  */}
+                          {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.livingAndDining.toLowerCase() ===
+                              "yes" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/livingDining.png"
+                                    alt=""
+                                  />
+                                </div>
 
-                            <div className="pis_content">
-                              <h6>Living & Dining:</h6>
-                              <h5>{propertyDocument.livingAndDining}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Number Of Basment  */}
-                      {/* {propertyDocument.numberOfBasement !== "0" && (
+                                <div className="pis_content">
+                                  <h6>Living & Dining:</h6>
+                                  <h5>{propertyDocument.livingAndDining}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Number Of Basment  */}
+                          {/* {propertyDocument.numberOfBasement !== "0" && (
                         <div className="p_info_single">
                           <div className="pd_icon">
                             <img
@@ -4404,132 +4415,514 @@ const PropertyDetails = () => {
                           </div>
                         </div>
                       )} */}
-                      {/* Passage  */}
-                      {propertyDocument &&
-                        propertyDocument.category === "Residential" &&
-                        propertyDocument.passage && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/passages.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Passage</h6>
-                              <h5>{propertyDocument.passage}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Entrance Gallery  */}
-                      {propertyDocument &&
-                        propertyDocument.category === "Residential" &&
-                        propertyDocument.entranceGallery && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/browser.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Entrance Gallery</h6>
-                              <h5>{propertyDocument.entranceGallery}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Main Door Facing  */}
-                      {propertyDocument &&
-                        propertyDocument.category === "Residential" &&
-                        propertyDocument.mainDoorFacing && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/mainDoorFacing.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>
-                                {propertyDocument.category === "Plot" ||
-                                  propertyDocument.category === "Commercial"
-                                  ? "Direction Facing"
-                                  : "Main Door Facing"}
-                              </h6>
-                              <h5>{propertyDocument.mainDoorFacing}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Balcony  */}
-                      {propertyDocument &&
-                        propertyDocument.category === "Residential" &&
-                        propertyDocument.numberOfBalcony !== 0 &&
-                        propertyDocument.balconyFacing && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/balcony_windowsFacing.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>
-                                Balcony({propertyDocument.numberOfBalcony})
-                                Facing
-                              </h6>
-                              <h5>
-                                {propertyDocument.balconyFacing
-                                  ? propertyDocument.balconyFacing.join(", ")
-                                  : ""}
-                              </h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Year Of Consturction  */}
-                      {propertyDocument &&
-                        propertyDocument.yearOfConstruction && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/yearOfConstruction.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Year of Constuction</h6>
-                              <h5>{propertyDocument.yearOfConstruction}</h5>
-                            </div>
-                          </div>
-                        )}
-                      {/* Age of Property  */}
-                      {propertyDocument &&
-                        propertyDocument.yearOfConstruction && (
-                          <div className="p_info_single">
-                            <div className="pd_icon">
-                              <img
-                                src="/assets/img/property-detail-icon/ageOfproperty.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="pis_content">
-                              <h6>Age of Property</h6>
-                              <h5>
-                                {" "}
-                                {propertyDocument &&
-                                  new Date().getFullYear() -
-                                  Number(
-                                    propertyDocument.yearOfConstruction
-                                  ) +
-                                  " Years"}{" "}
-                              </h5>
-                            </div>
-                          </div>
-                        )}
+                          {/* Passage  */}
+                          {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.passage && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/passages.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Passage</h6>
+                                  <h5>{propertyDocument.passage}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Entrance Gallery  */}
+                          {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.entranceGallery && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/browser.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Entrance Gallery</h6>
+                                  <h5>{propertyDocument.entranceGallery}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Main Door Facing  */}
+                          {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.mainDoorFacing && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/mainDoorFacing.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Main Door Facing</h6>
+                                  <h5>{propertyDocument.mainDoorFacing}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Balcony facing  */}
+                          {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.numberOfBalcony !== 0 &&
+                            propertyDocument.balconyFacing && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/balcony_windowsFacing.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>
+                                    Balcony({propertyDocument.numberOfBalcony})
+                                    Facing
+                                  </h6>
+                                  <h5>
+                                    {propertyDocument.balconyFacing
+                                      ? propertyDocument.balconyFacing.join(
+                                          ", "
+                                        )
+                                      : ""}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Year Of Consturction  */}
+                          {propertyDocument &&
+                            propertyDocument.yearOfConstruction && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/yearOfConstruction.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Year of Constuction</h6>
+                                  <h5>{propertyDocument.yearOfConstruction}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Age of Property  */}
+                          {propertyDocument &&
+                            propertyDocument.yearOfConstruction && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/ageOfproperty.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Age of Property</h6>
+                                  <h5>
+                                    {" "}
+                                    {propertyDocument &&
+                                      new Date().getFullYear() -
+                                        Number(
+                                          propertyDocument.yearOfConstruction
+                                        ) +
+                                        " Years"}{" "}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
+                            {/* lock in period  */}
+{propertyDocument &&
+                            propertyDocument.lockinPeriod && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/expire.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Lock in period</h6>
+                                  <h5>
+                                  {propertyDocument.lockinPeriod}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  )}
 
-                {/*Overlooking */}
+                {/* Property Detail for commercial  */}
+                {propertyDocument &&
+                  propertyDocument.category === "Commercial" && (
+                    <div className="property_card_single mobile_full_card">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">Property Detail</h2>
+                        <div className="p_info">
+                          {/* property type  */}
+                          {propertyDocument &&
+                            propertyDocument.propertyType && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/propertytype.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Property Type</h6>
+                                  <h5>{propertyDocument.propertyType}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* property sub type  */}
+                          {propertyDocument &&
+                            propertyDocument.additionalRooms && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/propertysubtype.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Property Sub-Type</h6>
+                                  <h5>{propertyDocument.additionalRooms[0]}</h5>
+                                </div>
+                              </div>
+                            )}
+                         {/* Furnishing */}
+{propertyDocument && 
+  propertyDocument.propertyType.toLowerCase() !== "land" &&
+  propertyDocument.propertyType.toLowerCase() !== "other" &&
+  propertyDocument.furnishing && (
+    <div className="p_info_single">
+      <div className="pd_icon">
+        <img
+          src="/assets/img/property-detail-icon/furnishing.png"
+          alt=""
+        />
+      </div>
+      <div className="pis_content">
+        <h6>Furnishing</h6>
+        <h5>
+          {propertyDocument.furnishing.toLowerCase() === "raw"
+            ? "Unfurnished"
+            : propertyDocument.furnishing}
+        </h5>
+      </div>
+    </div>
+)}
+
+ {/* Rooms   */}
+ {propertyDocument && 
+  propertyDocument.propertyType.toLowerCase() !== "land" &&
+  propertyDocument.propertyType.toLowerCase() !== "other" &&
+   (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/bedrooms.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Rooms</h6>
+                                <h5>{(propertyDocument.numberOfBedrooms === 0 || propertyDocument.numberOfBedrooms === "0") ? "No" : propertyDocument.numberOfBedrooms}</h5>
+                                {/* <h5>Yes</h5> */}
+                              </div>
+                            </div>)}
+
+                            {/* Toilet   */}
+ {propertyDocument && 
+  propertyDocument.propertyType.toLowerCase() !== "land" &&
+  propertyDocument.propertyType.toLowerCase() !== "other" &&
+   (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/public-toilet.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Toilet</h6>
+                                <h5>{(propertyDocument.numberOfBathrooms === 0 || propertyDocument.numberOfBathrooms === "0") ? "No" : propertyDocument.numberOfBathrooms}</h5>
+                                {/* <h5>Yes</h5> */}
+                              </div>
+                            </div>)}
+
+                          {/* Kitchen  */}
+                          {propertyDocument && 
+  propertyDocument.propertyType.toLowerCase() !== "land" &&
+  propertyDocument.propertyType.toLowerCase() !== "other" &&
+   (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/kitchen.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Kitchen</h6>
+                                <h5>{(propertyDocument.numberOfKitchen === 0 || propertyDocument.numberOfKitchen === "0") ? "No" : propertyDocument.numberOfKitchen}</h5>
+                                {/* <h5>Yes</h5> */}
+                              </div>
+                            </div>)}
+                         
+                          {/* Balcony  */}
+                          {propertyDocument &&
+                            propertyDocument.numberOfBalcony !== 0 &&
+                            propertyDocument.propertyType.toLowerCase() !== "land" &&
+  propertyDocument.propertyType.toLowerCase() !== "other" &&
+                            (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/balcony.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Balcony</h6>
+                              
+                                  <h5>{(propertyDocument.numberOfBalcony === 0 || propertyDocument.numberOfBalcony === "0") ? "No" : propertyDocument.numberOfBalcony}</h5>
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Balcony facing  */}
+                          {propertyDocument &&                         
+                            (propertyDocument.numberOfBalcony !== 0 || propertyDocument.numberOfBalcony !== "0") &&
+                            propertyDocument.balconyFacing &&
+                            propertyDocument.propertyType.toLowerCase() !== "land" &&
+  propertyDocument.propertyType.toLowerCase() !== "other" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/balcony_windowsFacing.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>
+                                    Balcony({propertyDocument.numberOfBalcony})
+                                    Facing
+                                  </h6>
+                                  <h5>
+                                    {propertyDocument.balconyFacing
+                                      ? propertyDocument.balconyFacing.join(
+                                          ", "
+                                        )
+                                      : ""}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Main Door Facing  */}
+                          {propertyDocument &&
+                            propertyDocument.mainDoorFacing && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/mainDoorFacing.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Direction Facing</h6>
+                                  <h5>{propertyDocument.mainDoorFacing}</h5>
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Year Of Consturction  */}
+                          {propertyDocument &&
+                            propertyDocument.yearOfConstruction && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/yearOfConstruction.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Year of Constuction</h6>
+                                  <h5>{propertyDocument.yearOfConstruction}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Age of Property  */}
+                          {propertyDocument &&
+                            propertyDocument.yearOfConstruction && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/ageOfproperty.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Age of Property</h6>
+                                  <h5>
+                                    {" "}
+                                    {propertyDocument &&
+                                      new Date().getFullYear() -
+                                        Number(
+                                          propertyDocument.yearOfConstruction
+                                        ) +
+                                        " Years"}{" "}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
+{/* lock in period  */}
+{propertyDocument &&
+                            propertyDocument.lockinPeriod && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/expire.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Lock in period</h6>
+                                  <h5>
+                                  {propertyDocument.lockinPeriod}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                   {/* Property Detail for plot  */}
+                {propertyDocument &&
+                  propertyDocument.category === "Plot" && (
+                    <div className="property_card_single mobile_full_card">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">Property Detail</h2>
+                        <div className="p_info">
+                          {/* property type  */}
+                          {propertyDocument &&
+                            propertyDocument.propertyType && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/propertytype.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Property Type</h6>
+                                  <h5>{propertyDocument.propertyType}</h5>
+                                </div>
+                              </div>
+                            )}
+                         
+                           {/* is corner  */}
+                           {propertyDocument &&
+                            propertyDocument.isCornerSidePlot && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/corner.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Is corner?</h6>
+                                  <h5>{propertyDocument.isCornerSidePlot}</h5>
+                                </div>
+                              </div>
+                            )}
+
+                                {/* is park facing  */}
+                           {propertyDocument &&
+                            propertyDocument.isParkFacingPlot && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/park.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Is Park Facing?</h6>
+                                  <h5>{propertyDocument.isParkFacingPlot}</h5>
+                                </div>
+                              </div>
+                            )}
+                      
+
+                            {/* Road Width  */}
+                            {propertyDocument &&
+                            propertyDocument.roadWidth && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/road.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Road Width</h6>
+                                  <h5>{propertyDocument.roadWidth} {propertyDocument.roadWidthUnit}</h5>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Gated Community  */}
+                            {propertyDocument &&
+                            propertyDocument.gatedArea && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/gatedcomunity.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Gated Community</h6>
+                                  <h5>{propertyDocument.gatedArea}</h5>
+                                </div>
+                              </div>
+                            )}
+
+
+                          {/* Main Door Facing  */}
+                          {propertyDocument &&
+                            propertyDocument.mainDoorFacing && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/mainDoorFacing.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Direction Facing</h6>
+                                  <h5>{propertyDocument.mainDoorFacing}</h5>
+                                </div>
+                              </div>
+                            )}
+
+                       
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                {/*Overlooking for all category */}
                 {propertyDocument &&
                   propertyDocument.overLooking.length > 0 && (
                     <div className="property_card_single mobile_full_card">
@@ -4634,7 +5027,7 @@ const PropertyDetails = () => {
                     </div>
                   )}
 
-                {/* Additional Rooms */}
+                {/* Additional Rooms for residential */}
                 {propertyDocument &&
                   propertyDocument.category === "Residential" && (
                     <>
@@ -4736,7 +5129,7 @@ const PropertyDetails = () => {
                     </>
                   )}
 
-                {/* Additional Area */}
+                {/* Additional Area for residential */}
                 {propertyDocument &&
                   propertyDocument.category === "Residential" && (
                     <>
@@ -4796,7 +5189,7 @@ const PropertyDetails = () => {
                     </>
                   )}
 
-                {/* Property Size  */}
+                {/* Property Size for all category */}
 
                 <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
@@ -4888,7 +5281,7 @@ const PropertyDetails = () => {
                   </div>
                 </div>
 
-                {/* Parking  */}
+                {/* Parking for category residential  */}
                 {propertyDocument &&
                   propertyDocument.category === "Residential" && (
                     <div className="property_card_single mobile_full_card">
@@ -4898,7 +5291,7 @@ const PropertyDetails = () => {
                           {/* Covered Parking  */}
                           {(propertyDocument &&
                             propertyDocument.numberOfCoveredCarParking === 0) ||
-                            propertyDocument.numberOfCoveredCarParking === "0" ? (
+                          propertyDocument.numberOfCoveredCarParking === "0" ? (
                             <div className="p_info_single">
                               <div className="pd_icon">
                                 <img
@@ -4930,7 +5323,7 @@ const PropertyDetails = () => {
                           {/* Open car parking  */}
                           {(propertyDocument &&
                             propertyDocument.numberOfOpenCarParking === 0) ||
-                            propertyDocument.numberOfOpenCarParking === "0" ? (
+                          propertyDocument.numberOfOpenCarParking === "0" ? (
                             <div className="p_info_single">
                               <div className="pd_icon">
                                 <img
@@ -4979,7 +5372,7 @@ const PropertyDetails = () => {
                           {propertyDocument &&
                             propertyDocument.evChargingPointStatus &&
                             propertyDocument.evChargingPointStatus.toLowerCase() ===
-                            "yes" && (
+                              "yes" && (
                               <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img
@@ -5002,7 +5395,124 @@ const PropertyDetails = () => {
                     </div>
                   )}
 
-                {/* Building  */}
+                {/* Parking for category commercial  */}
+                {propertyDocument &&
+                  propertyDocument.category === "Commercial" &&
+                  (propertyDocument.propertyType.toLowerCase() !== "land" ||
+                    propertyDocument.propertyType.toLowerCase() !==
+                      "other") && (
+                    <div className="property_card_single mobile_full_card">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">Parking</h2>
+                        <div className="p_info">
+                          {/* Covered Parking  */}
+                          {(propertyDocument &&
+                            propertyDocument.numberOfCoveredCarParking === 0) ||
+                          propertyDocument.numberOfCoveredCarParking === "0" ? (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/car-parking.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Covered Car Parking</h6>
+                                <h5>No</h5>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/car-parking.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Covered Car Parking</h6>
+                                <h5>
+                                  {propertyDocument.numberOfCoveredCarParking}
+                                </h5>
+                              </div>
+                            </div>
+                          )}
+                          {/* Open car parking  */}
+                          {(propertyDocument &&
+                            propertyDocument.numberOfOpenCarParking === 0) ||
+                          propertyDocument.numberOfOpenCarParking === "0" ? (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/car-parking.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Open Car Parking</h6>
+                                <h5>No</h5>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/car-parking.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Open Car Parking</h6>
+                                <h5>
+                                  {propertyDocument.numberOfOpenCarParking}
+                                </h5>
+                              </div>
+                            </div>
+                          )}
+                          {/* 2 Wheeler Parking  */}
+                          {propertyDocument &&
+                            propertyDocument.twoWheelarParking && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/2Wheelerparking.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>2 Wheeler Parking</h6>
+                                  <h5>{propertyDocument.twoWheelarParking}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Electric Vehicle Charging Point  */}
+                          {propertyDocument &&
+                            propertyDocument.evChargingPointStatus &&
+                            propertyDocument.evChargingPointStatus.toLowerCase() ===
+                              "yes" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/2Wheelerparking.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>EV Charging Point</h6>
+                                  <h5>
+                                    {propertyDocument.evChargingPointStatus +
+                                      ", " +
+                                      propertyDocument.evChargingPointType}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                {/* Building for category residential  */}
                 {propertyDocument &&
                   propertyDocument.category === "Residential" && (
                     <div className="property_card_single mobile_full_card">
@@ -5060,7 +5570,7 @@ const PropertyDetails = () => {
                             )}
                           {/* number of lifts  */}
                           {propertyDocument &&
-                            propertyDocument.numberOfLifts == 0 ? (
+                          propertyDocument.numberOfLifts == 0 ? (
                             <div className="p_info_single">
                               <div className="pd_icon">
                                 <img
@@ -5106,7 +5616,69 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   )}
-                {/* Additional Info  */}
+
+                {/* Building for category commercial  */}
+                {propertyDocument &&
+                  propertyDocument.category === "Commercial" &&
+                  (propertyDocument.propertyType.toLowerCase() !== "land" ||
+                    propertyDocument.propertyType.toLowerCase() !==
+                      "other") && (
+                    <div className="property_card_single mobile_full_card">
+                      <div className="more_detail_card_inner">
+                        <h2 className="card_title">Building</h2>
+                        <div className="p_info">
+                          {/* number of lifts  */}
+                          {propertyDocument &&
+                          propertyDocument.numberOfLifts == 0 ? (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/lift.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Lift</h6>
+                                <h5>No</h5>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/lift.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Lift</h6>
+                                <h5>{propertyDocument.numberOfLifts}</h5>
+                              </div>
+                            </div>
+                          )}
+                          {/* Power Backup  */}
+                          {propertyDocument && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/PowerBackup.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Power Backup</h6>
+                                <h5>
+                                  {propertyDocument.powerBackup ||
+                                    "Yet to be added"}
+                                </h5>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                {/* Additional Info only for category residential  */}
                 {propertyDocument &&
                   propertyDocument.category === "Residential" && (
                     <>
@@ -5191,6 +5763,7 @@ const PropertyDetails = () => {
                     </>
                   )}
 
+                {/* visiting detail for all category */}
                 <div className="property_card_single mobile_full_card">
                   <div className="more_detail_card_inner">
                     <h2 className="card_title">Visiting Details</h2>
@@ -5217,10 +5790,28 @@ const PropertyDetails = () => {
                                 "hh:mm aa"
                               )}
                           </h5> */}
-                          <h5>
+                          {/* <h5>
                             {propertyDocument.visitingHrsFrom}
                             {propertyDocument.visitingHrsTo && " to"}{" "}
                             {propertyDocument.visitingHrsTo}
+                          </h5> */}
+                          <h5>
+                            {propertyDocument.visitingHrsFrom &&
+                              new Date(
+                                `1970-01-01T${propertyDocument.visitingHrsFrom}:00+05:30`
+                              ).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              })}{" "}
+                            {propertyDocument.visitingHrsTo &&
+                              `to ${new Date(
+                                `1970-01-01T${propertyDocument.visitingHrsTo}:00+05:30`
+                              ).toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              })}`}
                           </h5>
                         </div>
                       </div>
@@ -5239,9 +5830,8 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                 </div>
-
+                {/* Property Description for all category   */}
                 <div className="row">
-                  {/* Property Description  */}
                   <div className="col-lg-6">
                     <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">

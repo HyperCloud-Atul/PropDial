@@ -16,7 +16,7 @@ const FooterBefore = () => {
     <div>
       <section className={className}
         style={{
-          backgroundImage: "url('./assets/img/home/footer-before-bg.jpg')"
+          backgroundImage: "url('/assets/img/home/footer-before-bg.jpg')"
         }}
       >
         <div className='container'>

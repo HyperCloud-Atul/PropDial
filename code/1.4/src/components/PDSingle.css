@@ -321,6 +321,7 @@
   font-size: 12px;
   line-height: normal;
   margin-top: 0px;
+  text-transform: capitalize;
 }
 
 .pd_single .p_info_single h5 {
@@ -1512,5 +1513,17 @@ label.upload_img input {
   }
   .aai_form .form_field {
     width: 100%;
+  }
+  .top_right_badge {   
+    font-size: 11px;
+    font-weight: 400;
+    padding: 8px 2px; 
+   
+  }
+  .top_right_badge::after {     
+    left: -6px;  
+    width: 7px;
+    height: 7px;  
+ 
   }
 }

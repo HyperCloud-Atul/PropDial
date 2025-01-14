@@ -26,7 +26,7 @@ function Banner() {
     <div className="home_banner">
       <div className="swipercomp">
         <div className="swipercomp_inner relative">
-          <Carousel>
+          {/* <Carousel>
             <Carousel.Item>
               <div className="ad_container">
                 <img src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/assets%2Fimg%2Fhomebanner2.webp?alt=media&token=93f3b3d7-23b3-4027-90b9-73275ff37278" alt="propdial" />
@@ -37,7 +37,10 @@ function Banner() {
                 <img src="https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/assets%2Fimg%2Fhomebanner3.webp?alt=media&token=47b43718-dc60-4c28-aba4-70e1cac334b3" alt="propdial" />
               </div>
             </Carousel.Item>
-          </Carousel>
+          </Carousel> */}
+          <div className="banner_video">
+<img src="/assets/img/home_banner.jpg" alt="" />
+          </div>
           <div className="banner_content">
             <div className="bc_inner">
               <div className="container">
