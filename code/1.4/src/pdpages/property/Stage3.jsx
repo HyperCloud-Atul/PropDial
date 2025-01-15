@@ -665,10 +665,8 @@ export default function Stage3(props) {
                 </div>
               </div>
 
-              {propertyDetails && propertyDetails.Category !== 'Plot' &&
-                propertyDocument &&
-                propertyDocument.numberOfBalcony &&
-                propertyDocument.numberOfBalcony > 0 &&
+              {/* Balcony: {propertyDocument.numberOfBalcony} */}
+              {(propertyDetails && propertyDetails.Category !== 'Plot') && (propertyDocument && propertyDocument.numberOfBalcony > 0) &&
                 <div className="col-md-6">
                   <div className="form_field st-2 label_top">
                     <label htmlFor="">Balcony Facing</label>

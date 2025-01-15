@@ -1566,7 +1566,7 @@ const Stage2 = (props) => {
                   </div>
                 </div>
                 <div className="plus_minus_input_wrapper">
-                  {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Toilets</span> : <span className="pmi_label">Bedrooms</span>}
+                  {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Toilets</span> : <span className="pmi_label">Bathrooms</span>}
                   <div className="plus_minus_input">
                     <div
                       className="left-minus-button pmbutton"
