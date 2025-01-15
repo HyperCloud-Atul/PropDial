@@ -1956,11 +1956,25 @@ const PropertyDetails = () => {
                               </>
                             ) : propertyDocument.category === "Commercial" ? (
                               <>
-                                Perfect for {propertyDocument.propertyType}{" "}
-                                Needs
-                              </>
+                              Your perfect {propertyDocument.propertyType} awaits—on{" "}
+                               {propertyDocument.purpose.toLowerCase() === "rentsaleboth"
+                                 ? "Rent / Lease Now"
+                                 : propertyDocument.purpose.toLowerCase() === "rent"
+                                 ? "Lease Now"
+                                 : propertyDocument.purpose.toLowerCase() === "sale"
+                                 ? "Sale Now"
+                                 : ""}
+                             </>
                             ) : propertyDocument.category === "Plot" ? (
-                              <>{propertyDocument.propertyType} Plot</>
+                              <>{propertyDocument.propertyType} Plot | For{" "}
+                              {propertyDocument.purpose.toLowerCase() === "rentsaleboth"
+                                 ? "Rent / Lease"
+                                 : propertyDocument.purpose.toLowerCase() === "rent"
+                                 ? "Lease"
+                                 : propertyDocument.purpose.toLowerCase() === "sale"
+                                 ? "Sale"
+                                 : ""}
+                              </>
                             ) : null)}
                         </h4>
                         <h6 className="property_location">

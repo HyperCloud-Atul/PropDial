@@ -374,9 +374,28 @@ const PropertyCard = ({ propertyid }) => {
                             : propertydoc.purpose}
                         </>
                       ) : propertydoc.category === "Commercial" ? (
-                        <>Perfect for {propertydoc.propertyType} Needs</>
+                        <>
+                       Your perfect {propertydoc.propertyType} awaits—on{" "}
+                        {propertydoc.purpose.toLowerCase() === "rentsaleboth"
+                          ? "Rent / Lease Now"
+                          : propertydoc.purpose.toLowerCase() === "rent"
+                          ? "Lease Now"
+                          : propertydoc.purpose.toLowerCase() === "sale"
+                          ? "Sale Now"
+                          : ""}
+                      </>
+                      
+                       
                       ) : propertydoc.category === "Plot" ? (
-                        <>{propertydoc.propertyType} Plot</>
+                        <>{propertydoc.propertyType} Plot | For{" "}
+                         {propertydoc.purpose.toLowerCase() === "rentsaleboth"
+                          ? "Rent / Lease"
+                          : propertydoc.purpose.toLowerCase() === "rent"
+                          ? "Lease"
+                          : propertydoc.purpose.toLowerCase() === "sale"
+                          ? "Sale"
+                          : ""}
+                        </>
                       ) : null)}
                   </h6>
 
@@ -482,7 +501,13 @@ const PropertyCard = ({ propertyid }) => {
                     ) : propertydoc.category === "Commercial" ? (
                       <>
                         <h6>Carpet Area</h6>
-                        <h5>{propertydoc.carpetArea || "Yet to be added"}</h5>
+                        <h5>
+  {propertydoc.carpetArea ? (
+    `${propertydoc.carpetArea} ${propertydoc.superAreaUnit || ''}`
+  ) : (
+    "Yet to be added"
+  )}
+</h5>
                       </>
                     ) : (
                       <>

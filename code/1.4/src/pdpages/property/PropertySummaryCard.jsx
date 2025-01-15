@@ -132,11 +132,25 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
                               </>
                             ) : propertydoc.category === "Commercial" ? (
                               <>
-                                Perfect for {propertydoc.propertyType}{" "}
-                                Needs
-                              </>
+                              Your perfect {propertydoc.propertyType} awaits—on{" "}
+                               {propertydoc.purpose.toLowerCase() === "rentsaleboth"
+                                 ? "Rent / Lease Now"
+                                 : propertydoc.purpose.toLowerCase() === "rent"
+                                 ? "Lease Now"
+                                 : propertydoc.purpose.toLowerCase() === "sale"
+                                 ? "Sale Now"
+                                 : ""}
+                             </>
                             ) : propertydoc.category === "Plot" ? (
-                              <>{propertydoc.propertyType} Plot</>
+                              <>{propertydoc.propertyType} Plot | For{" "}
+                              {propertydoc.purpose.toLowerCase() === "rentsaleboth"
+                                 ? "Rent / Lease"
+                                 : propertydoc.purpose.toLowerCase() === "rent"
+                                 ? "Lease"
+                                 : propertydoc.purpose.toLowerCase() === "sale"
+                                 ? "Sale"
+                                 : ""}
+                              </>
                             ) : null)}
                 </h6>
                 <h6>
