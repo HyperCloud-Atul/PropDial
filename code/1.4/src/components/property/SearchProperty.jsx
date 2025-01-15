@@ -109,9 +109,26 @@ const SearchProperty = ({
           : property.purpose}
       </>
     ) : property.category === "Commercial" ? (
-      <>Perfect for {property.propertyType} Needs</>
+      <>
+      Your perfect {property.propertyType} awaits—on{" "}
+       {property.purpose.toLowerCase() === "rentsaleboth"
+         ? "Rent / Lease Now"
+         : property.purpose.toLowerCase() === "rent"
+         ? "Lease Now"
+         : property.purpose.toLowerCase() === "sale"
+         ? "Sale Now"
+         : ""}
+     </>
     ) : property.category === "Plot" ? (
-      <>{property.propertyType} Plot</>
+      <>{property.propertyType} Plot | For{" "}
+       {property.purpose.toLowerCase() === "rentsaleboth"
+         ? "Rent / Lease"
+         : property.purpose.toLowerCase() === "rent"
+         ? "Lease"
+         : property.purpose.toLowerCase() === "sale"
+         ? "Sale"
+         : ""}
+      </>
     ) : null)}
                           
                   
@@ -168,8 +185,13 @@ const SearchProperty = ({
     <>
       <h6>Carpet Area</h6>
       <h5>
-        {property.carpetArea ? property.carpetArea : "Yet to be added"}
-      </h5>
+  {property.carpetArea ? (
+    `${property.carpetArea} ${property.superAreaUnit || ''}`
+  ) : (
+    "Yet to be added"
+  )}
+</h5>
+
     </>
   ) : property.category === "Plot" ? (
     <>

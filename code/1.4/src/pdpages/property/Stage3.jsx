@@ -2779,7 +2779,7 @@ no_icon"
                             ></p>
                             {!isEditingOwnerInstruction &&
                               user &&
-                              user.role === "admin" && (
+                              (user.role === "admin" || user.role === "superAdmin") && (
                                 <span
                                   className="material-symbols-outlined click_icon text_near_icon"
                                   onClick={() =>
