@@ -384,6 +384,16 @@ span.material-symbols-outlined.fav {
   display: grid;
   gap: 2px;
   padding-right: 56px;
+  position: relative;
+  .google_map {
+    position: absolute;
+    top: 0;
+    right: 0;
+    img {
+      width: 46px;
+      aspect-ratio: 1/1;
+    }
+  }
 }
 
 .pmd_top .property_name {
