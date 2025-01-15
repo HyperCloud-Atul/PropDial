@@ -134,6 +134,7 @@ export default function Stage3(props) {
     VegNonVeg: "",
     PropertyDescription: "",
     OwnerInstructions: "",
+    PropertyGoogleMap: ""
   });
 
   useEffect(() => {
@@ -174,6 +175,10 @@ export default function Stage3(props) {
         OwnerInstructions: propertyDocument.ownerInstructions
           ? propertyDocument.ownerInstructions
           : "",
+        PropertyGoogleMap: propertyDocument.propertyGoogleMap
+          ? propertyDocument.propertyGoogleMap
+          : "",
+
 
         // Visiting days Values
         MondayClick:
@@ -371,6 +376,8 @@ export default function Stage3(props) {
       vegNonVeg: propertyDetails.VegNonVeg,
       propertyDescription: propertyDetails.PropertyDescription,
       ownerInstructions: propertyDetails.OwnerInstructions,
+      propertyGoogleMap: propertyDetails.PropertyGoogleMap,
+
     };
 
     // console.log('property:', property)
@@ -2795,6 +2802,29 @@ no_icon"
                           </div>
                         </>
                       )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Property Google Map Link */}
+              <div className="col-md-12">
+                <div className="form_field st-2 label_top">
+                  <label htmlFor="">Property Google Map Link</label>
+                  <div className="form_field_inner">
+                    <div className="form_field_container">
+                      <input
+                        type="text"
+                        placeholder="Enter Property Google Map Link"
+                        maxLength={1000}
+                        onChange={(e) =>
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            PropertyGoogleMap: e.target.value,
+                          })
+                        }
+                        value={propertyDetails && propertyDetails.PropertyGoogleMap}
+                      />
                     </div>
                   </div>
                 </div>
