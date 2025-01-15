@@ -543,7 +543,10 @@ const PropertyDetails = () => {
 
     // console.log("onlyOwners: ", onlyOwners)
 
-    if (changeUserRole === "owner") {
+    if (
+      changeUserRole === "superadmin" ||
+      changeUserRole === "admin" ||
+      changeUserRole === "owner") {
       filtered =
         onlyOwners &&
         onlyOwners.filter(
@@ -562,13 +565,14 @@ const PropertyDetails = () => {
     }
 
     if (
+      changeUserRole === "superadmin" ||
       changeUserRole === "admin" ||
       changeUserRole === "manager" ||
       changeUserRole === "executive"
     ) {
       filtered =
-        users_Admin_Executive_Manager &&
-        users_Admin_Executive_Manager.filter(
+        users_Executive_Manager &&
+        users_Executive_Manager.filter(
           (user) =>
             user.rolePropDial.toLowerCase().includes(query.toLowerCase()) ||
             user.fullName.toLowerCase().includes(query.toLowerCase()) ||
