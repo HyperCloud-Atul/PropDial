@@ -915,10 +915,7 @@ const handleFileChange = (event, docId) => {
                   )}
                   {viewMode === "card_view" && (
                    <div className="blog_sect">
-                   <div className="row">
-                     {filteredMaintainanceDocLength === 0 && (
-                       <h5 className="m20 text_red mt-4">No data found</h5>
-                     )}
+                   <div className="row">                    
                      {filteredPropertyMaintainanceDocuments.map(
                        (doc, index) => (
                          <div className="col-xl-4 col-md-6" key={index}>

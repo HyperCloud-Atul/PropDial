@@ -105,16 +105,21 @@ const PropertyDetails = () => {
   ]);
 
   const { documents: onlyExecutives, error: onlyExecutivesError } =
-    useCollection("users-propdial", ["rolePropDial", "==", "executive"]);
+    useCollection("users-propdial", ["rolePropDial", "==", "executive"]);  
 
-  // add data of tenant in firebase start
-  const { documents: tenantDocument, errors: tenantDocError } = useCollection(
+  const { documents: tenantDocument, errors: tenantDocError } =
+  useCollection(
     "tenants",
-    ["propertyId", "==", propertyid]
+    ["propertyId", "==", propertyid],
+    ["createdAt", "desc"]
   );
 
   const { documents: propertyLayouts, errors: propertyLayoutsError } =
-    useCollection("propertylayouts", ["propertyId", "==", propertyid]);
+    useCollection(
+      "propertylayouts",
+      ["propertyId", "==", propertyid],
+      ["createdAt", "desc"]
+    );
 
   const { documents: allPropertyUsers, errors: propertyUsersError } =
     useCollection("propertyusers", ["propertyId", "==", propertyid]);
@@ -128,7 +133,7 @@ const PropertyDetails = () => {
     allPropertyUsers.filter((doc) => doc.userType === "propertymanager");
 
   const { documents: propertyDocList, errors: propertyDocListError } =
-    useCollection("docs", ["masterRefId", "==", propertyid]);
+    useCollection("docs-propdial", ["masterRefId", "==", propertyid]);
 
   // console.log("propertyDocList: ", propertyDocList && propertyDocList.length);
 
@@ -3900,12 +3905,18 @@ const PropertyDetails = () => {
 
                 {/* propdial managers / users card  start */}
                 {user &&
-                  user.status === "active" &&
-                  ((user && user.role === "owner") ||
-                    (user && user.role === "coowner") ||
-                    (user &&
-                      (user.role === "admin" ||
-                        user.role === "superAdmin"))) && (
+                        user.status === "active" &&
+                        ((user &&
+                          user.role === "owner" &&
+                          tenantDocument &&
+                          tenantDocument.length > 0) ||
+                          (user &&
+                            user.role === "coowner" &&
+                            tenantDocument &&
+                            tenantDocument.length > 0) ||
+                          (user &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin"))) && (
                     <>
                       <section className="property_card_single full_width_sec with_orange property_user">
                         <span className="verticall_title">

@@ -594,7 +594,7 @@ export default function PGProfile() {
       <div className="container">
         {user && user.status === "active" ? (
           <div className="visit_dashboard">
-            <span>Visit Dashboard for more deatils</span>
+            <span>Visit Dashboard for more details</span>
             <span
               className="theme_btn btn_fill pointer"
               onClick={showDashboard}
