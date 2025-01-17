@@ -1181,6 +1181,13 @@ textarea{
 .pg_utility_bill .my_small_card_parent, .property_adv_pg .my_small_card_parent .my_small_card .left {
   margin-top: 13px;
 }
+.property_adv_pg{
+  .field_error{
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: -10px;
+}
+}
 .pg_enquiry {
   .my_small_card_parent {
     grid-template-columns: repeat(4, 1fr);
@@ -1960,6 +1967,12 @@ textarea{
   font-size: 18px;
   font-weight: 500;
   color: #666;
+}
+.price_input.two::after{
+  left: 8px;
+}
+.price_input.two input{
+  padding-left: 22px !important;
 }
 .price_input input {
   padding-left: 13px !important;

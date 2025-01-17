@@ -350,7 +350,9 @@ img.excel_dowanload {
 .row_gap {
     row-gap: 30px;
 }
-
+.row_gap_20 {
+    row-gap: 20px;
+}
 .bottom_add_button {
     position: fixed;
     right: 3%;

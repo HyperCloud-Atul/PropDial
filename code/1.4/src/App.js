@@ -148,6 +148,32 @@ function App() {
 
   const { authIsReady, user } = useAuthContext();
   const [fcmMessage, setFCMMessage] = useState(null);
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
+
+  useEffect(() => {
+    // Fetch the latest version from the server
+    fetch("/version.json")
+      .then((response) => response.json())
+      .then((data) => {
+        const latestVersion = data.version;
+        const currentVersion = process.env.REACT_APP_VERSION;
+
+        // Compare versions
+        if (
+          latestVersion &&
+          currentVersion &&
+          latestVersion !== currentVersion
+        ) {
+          setIsUpdateAvailable(true);
+        }
+      })
+      .catch((error) => console.error("Error fetching version:", error));
+  }, []);
+
+  const refreshApp = () => {
+    // Reload the page to get the latest build
+    window.location.reload(true);
+  };
 
   //FCM Messaging User Request Permission and get the user token
   const requestPermission = async () => {
@@ -281,6 +307,16 @@ function App() {
           <BrowserRouter>
             <div>
               <div>
+                {isUpdateAvailable && (
+                  <div className="update-notification">
+                    <p>A new version of the app is available!</p>
+                    <button onClick={refreshApp}>Update Now</button>
+                  </div>
+                )}
+                {/* Rest of your app */}
+             
+              </div>
+              <div>
                 {/* PWA INSTALLATION CODE START */}
                 {dbTextContentDocuments &&
                 dbTextContentDocuments.status == "active" ? (
@@ -321,12 +357,13 @@ function App() {
                   <Route
                     path="/importexcel/:collectionName"
                     element={
-                      user && (user.role === "superAdmin" || user.role === "admin" ) ? (
+                      user &&
+                      (user.role === "superAdmin" || user.role === "admin") ? (
                         <PGExportExcel />
                       ) : (
                         <Navigate to="/login" />
                       )
-                    }                 
+                    }
                   ></Route>
                   <Route
                     path="/login"
@@ -869,12 +906,11 @@ function App() {
                   <Route
                     path="/notification"
                     element={<PGNotification />}
-                  ></Route>                
+                  ></Route>
                   <Route
                     path="/profiledetails/:userProfileId"
                     element={
-                      user && user.role === "superAdmin"
-                      ? (
+                      user && user.role === "superAdmin" ? (
                         <PGUserProfileDetails />
                       ) : (
                         <Navigate to="/login" />

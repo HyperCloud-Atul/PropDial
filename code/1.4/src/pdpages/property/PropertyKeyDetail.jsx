@@ -31,6 +31,15 @@ const PropertyKeyDetail = () => {
     propertyId
   );
 
+    const { documents: dbUsers, error: dbuserserror } = useCollection(
+      "users-propdial",
+      ["status", "==", "active"]
+    );
+    const [dbUserState, setdbUserState] = useState(dbUsers);
+    useEffect(() => {
+      setdbUserState(dbUsers);
+    });
+
   // all usestates
   const [showAIForm, setShowAIForm] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -315,7 +324,12 @@ const PropertyKeyDetail = () => {
                 propertyKeyDoc.map((doc, index) => (
                   <div className="key_card_single relative" key={index}>
                     <div className="top relative">
-                      By <b>Sanskar Solanki</b>, On{" "}
+                      By <b>
+                      {dbUserState &&
+                    dbUserState.find(
+                      (user) => user.id === doc.createdBy
+                    )?.fullName}
+                        </b>, On{" "}
                       <b>{format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}</b>
                       {user && user.role === "superAdmin" && (
                         <span

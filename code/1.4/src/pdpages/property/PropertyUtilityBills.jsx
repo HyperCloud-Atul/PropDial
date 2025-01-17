@@ -44,20 +44,63 @@ const PropertyUtilityBills = () => {
 
   // functions
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
-  const handleBillTypeChange = (event) =>
+  const cancelClick = () => {
+    setShowAIForm(!showAIForm);
+    setSelectedBillType("");
+    setAuthorityName("");
+    setBillId("");
+    setSelectedPaymentType("");
+    setAmountDue("");
+    setDueDate("");
+    setRawDate("");
+
+    setErrors([]);
+  };
+
+  const handleBillTypeChange = (event) => {
     setSelectedBillType(event.target.value);
-  const handleauthorityNameChange = (event) =>
+    if (errors.selectedBillType) {
+      setErrors((prevErrors) => ({ ...prevErrors, selectedBillType: "" }));
+    }
+  };
+
+  const handleauthorityNameChange = (event) => {
     setAuthorityName(event.target.value);
-  const handleBillIdChange = (event) => setBillId(event.target.value);
-  const handlePaymentTypeChange = (event) =>
+    if (errors.authorityName) {
+      setErrors((prevErrors) => ({ ...prevErrors, authorityName: "" }));
+    }
+  };
+
+  const handleBillIdChange = (event) => {
+    setBillId(event.target.value);
+    if (errors.billId) {
+      setErrors((prevErrors) => ({ ...prevErrors, billId: "" })); // Corrected key
+    }
+  };
+
+  const handlePaymentTypeChange = (event) => {
     setSelectedPaymentType(event.target.value);
-  const handleAmountDueChange = (event) => setAmountDue(event.target.value);
-  //   const handleDueDateChange = (event) => setDueDate(event.target.value);
+    if (errors.selectedPaymentType) {
+      setErrors((prevErrors) => ({ ...prevErrors, selectedPaymentType: "" }));
+    }
+  };
+
+  const handleAmountDueChange = (event) => {
+    const value = Math.max(0, Number(event?.target?.value || 0)); // Ensure non-negative values
+    setAmountDue(value); // Use the processed value
+    if (errors.amountDue) {
+      setErrors((prevErrors) => ({ ...prevErrors, amountDue: "" }));
+    }
+  };
+
   const handleDueDateChange = (date) => {
     // Format the selected date as '17 Sep 2024'
     const formattedDate = date ? format(date, "dd MMM yyyy") : "";
     setRawDate(date); // Store raw date
     setDueDate(formattedDate); // Store formatted date
+    if (errors.rawDate) {
+      setErrors((prevErrors) => ({ ...prevErrors, rawDate: "" }));
+    }
   };
 
   const handleDeleteClick = (docId) => {
@@ -105,19 +148,51 @@ const PropertyUtilityBills = () => {
     return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
   }
 
+  // error set code
+  const [errors, setErrors] = useState({});
+
+  // Validate form and set error messages
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!selectedBillType)
+      newErrors.selectedBillType = "Please select an advertisement portal.";
+    if (!authorityName)
+      newErrors.authorityName = "Please enter the property ID";
+    if (!billId) newErrors.billId = "Please select the property type.";
+    if (!selectedPaymentType)
+      newErrors.selectedPaymentType = "Please enter a valid URL.";
+    if (!amountDue) newErrors.amountDue = "Please enter a valid URL.";
+    if (!rawDate) newErrors.rawDate = "Please enter a valid URL.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Returns true if no errors
+  };
+
+  useEffect(() => {
+    // Clear errors whenever the fields change
+    if (selectedBillType)
+      setErrors((prevErrors) => ({ ...prevErrors, selectedBillType: "" }));
+    if (authorityName)
+      setErrors((prevErrors) => ({ ...prevErrors, authorityName: "" }));
+    if (billId) setErrors((prevErrors) => ({ ...prevErrors, billId: "" }));
+    if (selectedPaymentType)
+      setErrors((prevErrors) => ({ ...prevErrors, selectedPaymentType: "" }));
+    if (amountDue)
+      setErrors((prevErrors) => ({ ...prevErrors, amountDue: "" }));
+    if (rawDate) setErrors((prevErrors) => ({ ...prevErrors, rawDate: "" }));
+  }, [
+    selectedBillType,
+    authorityName,
+    billId,
+    selectedPaymentType,
+    amountDue,
+    rawDate,
+  ]);
+
   // add document code
   const addUtilityBill = async () => {
-    if (
-      !selectedBillType ||
-      !authorityName ||
-      !billId ||
-      !selectedPaymentType ||
-      !amountDue ||
-      !dueDate
-    ) {
-      alert("All fields are required!");
-      return;
-    }
+    if (!validateForm()) return;
 
     try {
       setIsUploading(true);
@@ -219,243 +294,331 @@ const PropertyUtilityBills = () => {
 
   return (
     <>
-    {user && user.status === "active" ? (
-    <div className="top_header_pg pg_bg pg_utility_bill ">
-    <div className="page_spacing pg_min_height">
-      <div className="row row_reverse_991">
-        <div className="col-lg-6">
-          <div className="title_card mobile_full_575 mobile_gap h-100">
-            <h2 className="text-center mb-4">
-              OnePlace for Property Utility Bills
-            </h2>
-            {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
-            {!showAIForm && (
-              <div
-                className="theme_btn btn_fill no_icon text-center short_btn"
-                onClick={handleShowAIForm}
-              >
-                Add New Utility Bill
-              </div>
-            )}
-          </div>
-        </div>
-        <PropertySummaryCard
-          propertydoc={propertydoc}
-          propertyId={propertyId}
-        />
-      </div>
-      {showAIForm && (
-        <>
-          <div className="vg22"></div>
-          <section className="my_big_card add_doc_form mobile_full_575 ">
-            {/* <h2 className="card_title">Select any one document ID</h2> */}
-            <div className="aai_form">
-              <div className="row align-items-center">
-                <div className="col-xl-8 col-lg-7 col-12">
-                  <div className="form_field">
-                    <div className="field_box theme_radio_new">
-                      <div className="theme_radio_container">
-                        {billType.map((bill) => (
-                          <div className="radio_single" key={bill.id}>
-                            <input
-                              type="radio"
-                              name="bill_type"
-                              id={bill.id}
-                              value={bill.value}
-                              onChange={handleBillTypeChange}
-                              checked={selectedBillType === bill.value}
-                            />
-                            <label htmlFor={bill.id}>{bill.label}</label>
-                          </div>
-                        ))}
-                      </div>
+      {user && user.status === "active" ? (
+        <div className="top_header_pg pg_bg pg_utility_bill ">
+          <div className="page_spacing pg_min_height">
+            <div className="row row_reverse_991">
+              <div className="col-lg-6">
+                <div className="title_card mobile_full_575 mobile_gap h-100">
+                  <h2 className="text-center mb-4">
+                    OnePlace for Property Utility Bills
+                  </h2>
+                  {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
+                  {!showAIForm && (
+                    <div
+                      className="theme_btn btn_fill no_icon text-center short_btn"
+                      onClick={handleShowAIForm}
+                    >
+                      Add New Utility Bill
                     </div>
-                  </div>
+                  )}
                 </div>
-                <div className="col-xl-4 col-lg-5 col-12">
-                  <div className="vg22_991"></div>
-                  <div className="row" style={{ rowGap: "18px" }}>
-                    <div className="col-sm-6">
-                      <div className="add_info_text w-100">
-                        <div className="form_field w-100">
+              </div>
+              <PropertySummaryCard
+                propertydoc={propertydoc}
+                propertyId={propertyId}
+              />
+            </div>
+            {showAIForm && (
+              <>
+                <div className="vg22"></div>
+                <section className="my_big_card add_doc_form mobile_full_575 ">
+                  {/* <h2 className="card_title">Select any one document ID</h2> */}
+                  <div className="aai_form">
+                    <div className="row row_gap_20">
+                      <div className="col-12">
+                        <div
+                          className="form_field"
+                          style={{
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid rgb(3 70 135 / 22%)",
+                          }}
+                        >
+                          <h6
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "500",
+                              marginBottom: "8px",
+                              color: "var(--theme-blue)",
+                            }}
+                          >
+                            Select Bill Type*
+                          </h6>
+
+                          <div className="field_box theme_radio_new">
+                            <div className="theme_radio_container">
+                              {billType.map((bill) => (
+                                <div className="radio_single" key={bill.id}>
+                                  <input
+                                    type="radio"
+                                    name="bill_type"
+                                    id={bill.id}
+                                    value={bill.value}
+                                    onChange={handleBillTypeChange}
+                                    checked={selectedBillType === bill.value}
+                                  />
+                                  <label htmlFor={bill.id}>{bill.label}</label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          {errors.selectedBillType && (
+                            <div className="field_error w-100">
+                              {errors.selectedBillType}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div
+                          className="form_field w-100"
+                          style={{
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid rgb(3 70 135 / 22%)",
+                          }}
+                        >
+                          <h6
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "500",
+                              marginBottom: "8px",
+                              color: "var(--theme-blue)",
+                            }}
+                          >
+                            Name of Authority*
+                          </h6>
                           <div className="relative">
                             <input
                               type="text"
                               value={authorityName}
                               onChange={handleauthorityNameChange}
-                              placeholder="Name of authority"
+                              placeholder="Enter the name of the authority"
                               className="w-100"
-
+                              onKeyPress={(e) => {
+                                const regex = /^[a-zA-Z\s]*$/; // Only letters and spaces allowed
+                                if (!regex.test(e.key)) {
+                                  e.preventDefault(); // Prevent invalid input
+                                }
+                              }}
                             />
                           </div>
+                          {errors.authorityName && (
+                            <div className="field_error w-100">
+                              {errors.authorityName}
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                    <div className="col-sm-6">
-                      <div className="add_info_text w-100">
-                        <div className="form_field w-100">
+                      <div className="col-md-6">
+                        <div
+                          className="form_field w-100"
+                          style={{
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid rgb(3 70 135 / 22%)",
+                          }}
+                        >
+                          <h6
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "500",
+                              marginBottom: "8px",
+                              color: "var(--theme-blue)",
+                            }}
+                          >
+                            Bill ID*
+                          </h6>
                           <div className="relative">
                             <input
                               type="text"
                               value={billId}
                               onChange={handleBillIdChange}
-                              placeholder="Bill ID"
+                              placeholder="Enter bill ID"
                               className="w-100"
-                              style={{
-                                background: "whitesmoke"
-                              }}
                             />
                           </div>
+                          {errors.billId && (
+                            <div className="field_error w-100">
+                              {errors.billId}
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form_field">
-                        <div className="field_box theme_radio_new">
-                          <div className="theme_radio_container">
-                            {paymentType.map((pt) => (
-                              <div className="radio_single" key={pt.id}>
-                                <input
-                                  type="radio"
-                                  name="payment_type"
-                                  id={pt.id}
-                                  value={pt.value}
-                                  onChange={handlePaymentTypeChange}
-                                  checked={selectedPaymentType === pt.value}
-                                />
-                                <label htmlFor={pt.id}>{pt.label}</label>
-                              </div>
-                            ))}
+                      <div className="col-md-4">
+                        <div
+                          className="form_field w-100"
+                          style={{
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid rgb(3 70 135 / 22%)",
+                          }}
+                        >
+                          <h6
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "500",
+                              marginBottom: "8px",
+                              color: "var(--theme-blue)",
+                            }}
+                          >
+                            Payment Type*
+                          </h6>
+                          <div className="field_box theme_radio_new">
+                            <div className="theme_radio_container">
+                              {paymentType.map((pt) => (
+                                <div className="radio_single" key={pt.id}>
+                                  <input
+                                    type="radio"
+                                    name="payment_type"
+                                    id={pt.id}
+                                    value={pt.value}
+                                    onChange={handlePaymentTypeChange}
+                                    checked={selectedPaymentType === pt.value}
+                                  />
+                                  <label htmlFor={pt.id}>{pt.label}</label>
+                                </div>
+                              ))}
+                            </div>
                           </div>
+                          {errors.selectedPaymentType && (
+                            <div className="field_error w-100">
+                              {errors.selectedPaymentType}
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                    <div className="col-sm-6">
-                      <div className="add_info_text w-100">
-                        <div className="form_field price_input relative w-100">
-                          <input
-                            type="number"
-                            value={amountDue}
-                            onChange={handleAmountDueChange}
-                            placeholder="Amount due"
-                            className="w-100"
-                          />
+                      <div className="col-md-4">
+                        <div
+                          className="form_field w-100"
+                          style={{
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid rgb(3 70 135 / 22%)",
+                          }}
+                        >
+                          <h6
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "500",
+                              marginBottom: "8px",
+                              color: "var(--theme-blue)",
+                            }}
+                          >
+                            Amount Due*
+                          </h6>
+                          <div className="price_input two relative">
+                            <input
+                              type="number"
+                              value={amountDue}
+                              onChange={handleAmountDueChange}
+                              min="0"
+                              placeholder="Enter the due amount"
+                              className="w-100"
+                            />
+                          </div>
+                          {errors.amountDue && (
+                            <div className="field_error w-100">
+                              {errors.amountDue}
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                    <div className="col-sm-6">
-                      <div className="add_info_text w-100">
-                        <div className="form_field w-100">
+
+                      <div className="col-md-4">
+                        <div
+                          className="form_field w-100"
+                          style={{
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid rgb(3 70 135 / 22%)",
+                          }}
+                        >
+                          <h6
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "500",
+                              marginBottom: "8px",
+                              color: "var(--theme-blue)",
+                            }}
+                          >
+                            Amount Due Date*
+                          </h6>
                           <div className="relative">
                             <DatePicker
                               selected={rawDate}
                               onChange={handleDueDateChange}
                               dateFormat="dd/MM/yyyy"
-                              placeholderText="Amount due date"
+                              placeholderText="Select the due date"
                               className="w-100"
-                            // isClearable
+                              // isClearable
                             />
                           </div>
+                          {errors.rawDate && (
+                            <div className="field_error w-100">
+                              {errors.rawDate}
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="row">
-                        <div className="col-6">
-                          <div
-                            className="theme_btn btn_border text-center no_icon"
-                            onClick={isUploading ? null : handleShowAIForm}
-                          >
-                            Cancel
+
+                      <div className="col-12">
+                        <div className="row">
+                          <div className="col-7"></div>
+                          <div className="col-md-2 col-6">
+                            <div
+                              className="theme_btn btn_border text-center no_icon"
+                              onClick={isUploading ? null : cancelClick}
+                            >
+                              Cancel
+                            </div>
                           </div>
-                        </div>
-                        <div className="col-6">
-                          <div
-                            className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
+                          <div className="col-md-3 col-6">
+                            <div
+                              className={`theme_btn btn_fill text-center no_icon ${
+                                isUploading ? "disabled" : ""
                               }`}
-                            onClick={isUploading ? null : addUtilityBill}
-                          >
-                            {isUploading ? "Uploading..." : "Save"}
+                              onClick={isUploading ? null : addUtilityBill}
+                            >
+                              {isUploading ? "Uploading..." : "Save"}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </>
-      )}
-      {utilityBillsDoc && utilityBillsDoc.length !== 0 && (
-        <>
-          {/* <div className="vg22"></div>
+                </section>
+              </>
+            )}
+            {utilityBillsDoc && utilityBillsDoc.length !== 0 && (
+              <>
+                {/* <div className="vg22"></div>
           <hr /> */}
-          <div className="vg22"></div>
-        </>
-      )}
-      {utilityBillsDoc && utilityBillsDoc.length === 0 && (
-        <div
-          className="pg_msg"
-          style={{
-            height: "calc(55vh)",
-          }}
-        >
-          <div>No Utility Bill Yet!</div>
-        </div>
-      )}
-      <div className="my_small_card_parent">
-        {utilityBillsDoc &&
-          utilityBillsDoc.map((doc, index) => (
-            <div className="my_small_card notification_card" key={index}>
-              <div className="left">
-                <div className="img_div">
-                  {doc.billType === "Common Area Maintenance (CAM)" ||
-                    doc.billType.toLowerCase() === "maintenance" ? (
-                    <img src="/assets/img/icons/maintainance.png" alt="" />
-                  ) : doc.billType.toLowerCase() === "club" ? (
-                    <img src="/assets/img/icons/clubill.png" alt="" />
-                  ) : doc.billType === "Common Area Electricity (CAE)" ||
-                    doc.billType.toLowerCase() === "electricity" ? (
-                    <img src="/assets/img/icons/electicitybill.png" alt="" />
-                  ) : doc.billType.toLowerCase() === "water" ? (
-                    <img src="/assets/img/icons/waterbill.png" alt="" />
-                  ) : doc.billType === "PNG/LPG" ? (
-                    <img src="/assets/img/icons/lpgbill.png" alt="" />
-                  ) : doc.billType === "Power Back-up" ? (
-                    <img src="/assets/img/icons/powerbackup.png" alt="" />
-                  ) : doc.billType === "Property Tax" ? (
-                    <img src="/assets/img/icons/propertytax.png" alt="" />
-                  ) : doc.billType === "Main + Elect + Water" ||
-                    doc.billType === "CAM & CAE & Water" ? (
-                    <img src="/assets/img/icons/emw.png" alt="" />
-                  ) : doc.billType === "Maintenance & Electricity" ||
-                    doc.billType === "CAM & CAE" ? (
-                    <img src="/assets/img/icons/em.png" alt="" />
-                  ) : doc.billType === "Electricity & Water" ? (
-                    <img src="/assets/img/icons/ew.png" alt="" />
-                  ) : doc.billType === "Water & Sewerage" ? (
-                    <img src="/assets/img/icons/sw.png" alt="" />
-                  ) : doc.billType === "Electricity / Utility Bill" ? (
-                    <img src="/assets/img/icons/ue.png" alt="" />
-                  ) : null}
-                </div>
-                <div className="right">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div>
-                      <h5 className="title">{doc.authorityName}</h5>
-                      <h6 className="sub_title">{doc.paymentType}</h6>
-                    </div>
+                <div className="vg22"></div>
+              </>
+            )}
+            {utilityBillsDoc && utilityBillsDoc.length === 0 && (
+              <div
+                className="pg_msg"
+                style={{
+                  height: "calc(55vh)",
+                }}
+              >
+                <div>No Utility Bill Yet!</div>
+              </div>
+            )}
+            <div className="my_small_card_parent">
+              {utilityBillsDoc &&
+                utilityBillsDoc.map((doc, index) => (
+                  <div className="my_small_card notification_card" key={index}>
                     {user && user.role === "superAdmin" && (
-                      <div
+                      <span
+                        className="material-symbols-outlined delete_icon_top"
                         onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
-                        className="text_red pointer"
-                        style={{
-                          fontSize: "12px",
-                        }}
                       >
-                        Remove
-                      </div>
+                        delete_forever
+                      </span>
                     )}
                     <Modal
                       show={showConfirmModal}
@@ -483,41 +646,82 @@ const PropertyUtilityBills = () => {
                         </div>
                       </div>
                     </Modal>
-                  </div>
-                  <h6 className="sub_title text-capitalize">Bill ID:-{" "}{doc.billId}</h6>
-                </div>
-              </div>
-              <h4 className="top_right_content">
-                <span>
-                  {format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}
-                </span>
-              </h4>
-              <h4 className="top_left_content">
-                <span className="text-capitalize">{doc.billType}</span>
-              </h4>
+                    <div className="left">
+                      <div className="img_div">
+                        {doc.billType === "Common Area Maintenance (CAM)" ||
+                        doc.billType.toLowerCase() === "maintenance" ? (
+                          <img
+                            src="/assets/img/icons/maintainance.png"
+                            alt=""
+                          />
+                        ) : doc.billType.toLowerCase() === "club" ? (
+                          <img src="/assets/img/icons/clubill.png" alt="" />
+                        ) : doc.billType === "Common Area Electricity (CAE)" ||
+                          doc.billType.toLowerCase() === "electricity" ? (
+                          <img
+                            src="/assets/img/icons/electicitybill.png"
+                            alt=""
+                          />
+                        ) : doc.billType.toLowerCase() === "water" ? (
+                          <img src="/assets/img/icons/waterbill.png" alt="" />
+                        ) : doc.billType === "PNG/LPG" ? (
+                          <img src="/assets/img/icons/lpgbill.png" alt="" />
+                        ) : doc.billType === "Power Back-up" ? (
+                          <img src="/assets/img/icons/powerbackup.png" alt="" />
+                        ) : doc.billType === "Property Tax" ? (
+                          <img src="/assets/img/icons/propertytax.png" alt="" />
+                        ) : doc.billType === "Main + Elect + Water" ||
+                          doc.billType === "CAM & CAE & Water" ? (
+                          <img src="/assets/img/icons/emw.png" alt="" />
+                        ) : doc.billType === "Maintenance & Electricity" ||
+                          doc.billType === "CAM & CAE" ? (
+                          <img src="/assets/img/icons/em.png" alt="" />
+                        ) : doc.billType === "Electricity & Water" ? (
+                          <img src="/assets/img/icons/ew.png" alt="" />
+                        ) : doc.billType === "Water & Sewerage" ? (
+                          <img src="/assets/img/icons/sw.png" alt="" />
+                        ) : doc.billType === "Electricity / Utility Bill" ? (
+                          <img src="/assets/img/icons/ue.png" alt="" />
+                        ) : null}
+                      </div>
+                      <div className="right">
+                        <h5 className="title">{doc.authorityName}</h5>
+                        <h6 className="sub_title text-capitalize">
+                          Bill ID:- {doc.billId}
+                        </h6>
+                        <h6 className="sub_title">
+                          Payment Type: {doc.paymentType}
+                        </h6>
+                      </div>
+                    </div>
+                    <h4 className="top_right_content">
+                      <span>
+                        {format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}
+                      </span>
+                    </h4>
 
-              <div className="bottom_strip">
-                <div className="bs_left">
-                  <h5>
-                    {doc.dueDate}
-                    <span>(Due Date)</span>
-                  </h5>
-                  <h6></h6>
-                </div>
-                <div className="bs_right">
-                  <h4>₹ {formatNumberWithCommas(doc.amountDue)}</h4>
-                </div>
-              </div>
+                    <div className="top_tag_left working">{doc.billType}</div>
+                    <div className="bottom_strip">
+                      <div className="bs_left">
+                        <h5>
+                          {doc.dueDate}
+                          <span>(Due Date)</span>
+                        </h5>
+                        <h6></h6>
+                      </div>
+                      <div className="bs_right">
+                        <h4>₹ {formatNumberWithCommas(doc.amountDue)}</h4>
+                      </div>
+                    </div>
+                  </div>
+                ))}
             </div>
-          ))}
-      </div>
-    </div>
-  </div>
-    ):(
-      <InactiveUserCard/>
-    )}
-  </>
-  
+          </div>
+        </div>
+      ) : (
+        <InactiveUserCard />
+      )}
+    </>
   );
 };
 
