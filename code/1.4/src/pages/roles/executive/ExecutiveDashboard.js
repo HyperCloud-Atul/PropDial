@@ -21,7 +21,7 @@ export default function ExecutiveDashboard() {
   // const navigate = useNavigate();
 
   useEffect(() => {
-    let flag = user && user.role === "propertymanager";
+    let flag = user && user.role === "manager";
     if (!flag) {
       logout();
     }

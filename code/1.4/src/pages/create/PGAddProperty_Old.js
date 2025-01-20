@@ -123,7 +123,7 @@ export default function PGAddProperty_Old({ propertyid }) {
   // const { documents: userList } = useCollection("users-propdial")
   const { documents: ownerList } = useCollection("users-propdial", ["role", "==", "owner"])
   const { documents: coownerList } = useCollection("users-propdial", ["role", "==", "coowner"])
-  const { documents: propertymanagerList } = useCollection("users-propdial", ["role", "==", "propertymanager"])
+  const { documents: propertymanagerList } = useCollection("users-propdial", ["role", "==", "manager"])
 
   const { document: property, error: propertyerror } = useDocument("properties-propdial", propertyid);
   const { updateDocument, updateResponse } = useFirestore("properties-propdial"); // Firestore collection name

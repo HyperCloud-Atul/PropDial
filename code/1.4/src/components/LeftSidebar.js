@@ -36,7 +36,7 @@ const LeftSidebar = () => {
       // console.log('in user', user.role)
       navigate("/tenantdashboard");
     }
-    if (user && user.role === "propertymanager") {
+    if (user && user.role === "manager") {
       // console.log('in user', user.role)
       navigate("/executivedashboard");
     }
@@ -128,7 +128,7 @@ const LeftSidebar = () => {
     secondMenu = "Rent";
     thirdMenu = "Tickets";
   }
-  if (user && user.role === "propertymanager") {
+  if (user && user.role === "manager") {
     firstMenu = "";
     secondMenu = "Bills";
     thirdMenu = "Tickets";
