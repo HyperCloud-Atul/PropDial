@@ -94,6 +94,7 @@ const Stage2 = (props) => {
     FloorNo: 0,
     NumberOfFlatsOnFloor: 1,
     NumberOfLifts: 0,
+    IsCarParkingAvailable: "Yes",
     NumberOfOpenCarParking: 0,
     NumberOfCoveredCarParking: 0,
     TwoWheelarParking: "No",
@@ -248,6 +249,9 @@ const Stage2 = (props) => {
         NumberOfLifts: propertyDocument.numberOfLifts
           ? propertyDocument.numberOfLifts
           : 0,
+        IsCarParkingAvailable: propertyDetails.isCarParkingAvailable
+          ? propertyDetails.isCarParkingAvailable
+          : "Yes",
         NumberOfOpenCarParking: propertyDocument.numberOfOpenCarParking
           ? propertyDocument.numberOfOpenCarParking
           : 0,
@@ -739,6 +743,9 @@ const Stage2 = (props) => {
       errorFlag = true;
     }
 
+
+
+
     //EV Charging Type
     if (
       propertyDetails.Category !== 'Plot' && (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStatus.toLowerCase() === 'yes')
@@ -835,6 +842,10 @@ const Stage2 = (props) => {
       numberOfLifts: propertyDetails.NumberOfLifts
         ? propertyDetails.NumberOfLifts
         : 0,
+
+      isCarParkingAvailable: propertyDetails.IsCarParkingAvailable
+        ? propertyDetails.IsCarParkingAvailable
+        : "No",
       numberOfOpenCarParking: propertyDetails.NumberOfOpenCarParking
         ? propertyDetails.NumberOfOpenCarParking
         : 0,
@@ -4264,12 +4275,95 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>}
+
+          {/* Is Car Parking available */}
+          {(propertyDetails && propertyDetails.Category !== 'Plot') && <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              {propertyDetails.Category === 'Residential' ? <label htmlFor="">Is Car Parking Available? </label> : <label htmlFor="">Is Private Car Parking Available? </label>}
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.IsCarParkingAvailable === "Yes"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="isCarParkingAvailable_yes"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              IsCarParkingAvailable: "Yes",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="isCarParkingAvailable_yes"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>Yes</h6>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.IsCarParkingAvailable === "No"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="isCarParkingAvailable_no"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              IsCarParkingAvailable: "No",
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="isCarParkingAvailable_no"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          <h6>No</h6>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>}
+
+
           {/* No of Close Car Parking */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.IsCarParkingAvailable.toLowerCase() === "yes") && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field label_top">
-              <label htmlFor="">No. of Coverd Car Parking</label>
+              {propertyDetails.Category === 'Residential' ? <label htmlFor="">No. of Coverd Car Parking</label> : <label htmlFor="">No. of Car Parking</label>}
               <div className="plus_minus_input_wrapper">
-                <span className="pmi_label">#Covered</span>
+                {propertyDetails.Category === 'Residential' ? <span className="pmi_label">#Covered</span> : <span className="pmi_label">#Count</span>}
                 <div className="plus_minus_input">
                   <div
                     className="left-minus-button pmbutton"
@@ -4302,7 +4396,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* No of Open Car Parking */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && (propertyDetails.IsCarParkingAvailable.toLowerCase() === "yes") && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">No. of Open Car Parking</label>
               <div className="plus_minus_input_wrapper">
@@ -4339,7 +4433,7 @@ const Stage2 = (props) => {
           </div>}
 
           {/* two wheeler parking */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">2-Wheeler Parking</label>
               <div className="form_field_inner">
@@ -4419,7 +4513,8 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* Charging Station for Electric Vehicle */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
+
+          {(propertyDetails && propertyDetails.Category !== 'Plot') && <div className="col-md-4">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Is EV Charging Point Available? </label>
               <div className="form_field_inner">
@@ -4499,7 +4594,7 @@ const Stage2 = (props) => {
             </div>
           </div>}
           {/* Private or Common Charging  Station for Electric Vehicle */}
-          {propertyDetails.EVChargingPointStatus.toLowerCase() === "yes" &&
+          {(propertyDetails && propertyDetails.Category !== 'Plot') && propertyDetails.EVChargingPointStatus.toLowerCase() === "yes" &&
             <div className="col-md-4">
               <div className="form_field st-2 label_top">
                 <label htmlFor="">EV Charging Point Type</label>
@@ -4743,7 +4838,7 @@ const Stage2 = (props) => {
 
           {<div className="col-md-4">
             <div className="form_field st-2 label_top">
-              <label htmlFor="">Gated Community? </label>
+              {propertyDetails.Category === 'Residential' ? <label htmlFor=""> Gated Community? </label> : <label htmlFor=""> Gated Complex? </label>}
               <div className="form_field_inner">
                 <div className="form_field_container">
                   <div className="radio_group">
