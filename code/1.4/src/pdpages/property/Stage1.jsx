@@ -1708,6 +1708,74 @@ const Stage1 = (props) => {
                         </label>
                       </div>
                     </div>}
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OwnerShip === "Co-operative society"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="ownership_co-operative_society"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              OwnerShip: "Co-operative society"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="ownership_co-operative_society"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Co-operative society
+                        </label>
+                      </div>
+                    </div>}
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OwnerShip === "Power of attorney"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="ownership_power_of_attorney"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              OwnerShip: "Power of attorney"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="ownership_power_of_attorney"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Power of attorney
+                        </label>
+                      </div>
+                    </div>}
 
                   </div>
                 </div>
