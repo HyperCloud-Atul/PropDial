@@ -81,6 +81,7 @@ const Stage2 = (props) => {
     IsCentrallyAirconditioned: "",
     IsReceptionArea: "",
     PantryCafeteria: "",
+    Washrooms: "",
     AdditionalRooms: [],
     ServentRoomOneClick: false,
     ServentRoomTwoClick: false,
@@ -191,7 +192,9 @@ const Stage2 = (props) => {
         PantryCafeteria: propertyDetails.pantryCafeteria
           ? propertyDetails.pantryCafeteria
           : "",
-
+        Washrooms: propertyDetails.washrooms
+          ? propertyDetails.washrooms
+          : "",
         AdditionalRooms: propertyDocument.additionalRooms
           ? propertyDocument.additionalRooms
           : [],
@@ -891,6 +894,9 @@ const Stage2 = (props) => {
         : "No",
       pantryCafeteria: propertyDetails.PantryCafeteria
         ? propertyDetails.PantryCafeteria
+        : "",
+      washrooms: propertyDetails.Washrooms
+        ? propertyDetails.Washrooms
         : "",
       furnishing: propertyDetails.Furnishing,
       additionalRooms: propertyDetails.AdditionalRooms
@@ -2563,133 +2569,250 @@ const Stage2 = (props) => {
               </div>
             </div>}
 
+          {/* Washrooms*/}
+          {(propertyDetails && (propertyDetails.Category === 'Commercial' && propertyDetails.PropertyType !== 'Land')) &&
+            <div className="col-md-4">
+              <div className="form_field st-2 label_top">
+                <label htmlFor=""> Washrooms </label>
+                <div className="form_field_inner">
+                  <div className="form_field_container">
+                    <div className="radio_group">
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.Washrooms === "Private"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="washrooms_private"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                Washrooms: "Private",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="washrooms_private"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Private</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.Washrooms === "Shared"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="washrooms_shared"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                Washrooms: "Shared",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="washrooms_shared"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Shared</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.Washrooms === "Not Available"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="washrooms_not_available"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                Washrooms: "Not Available",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="washrooms_not_available"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Not Available</h6>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>}
+
           {/* Rooms */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-6">
-            <div className="form_field label_top">
-              <label htmlFor="">Rooms</label>
-              <div className="increase_input_parent">
-                <div className="plus_minus_input_wrapper">
-                  {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Rooms</span> : <span className="pmi_label">Bedrooms</span>}
-                  <div className="plus_minus_input">
-                    <div
-                      className="left-minus-button pmbutton"
-                      onClick={() => {
-                        decrementInput("bedroomNumberInput");
-                      }}
-                    >
-                      <span className="material-symbols-outlined">remove</span>
-                    </div>
-
-                    <input
-                      id="bedroomNumberInput"
-                      type="number"
-                      disabled
-                      value={
-                        propertyDetails && propertyDetails.NumberOfBedrooms
-                      }
-                    />
-                    <div
-                      className="right-plus-button pmbutton"
-                      onClick={() => {
-                        incrementInput("bedroomNumberInput");
-                      }}
-                    >
-                      <span className="material-symbols-outlined">add</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="plus_minus_input_wrapper">
-                  {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Toilets</span> : <span className="pmi_label">Bathrooms</span>}
-                  <div className="plus_minus_input">
-                    <div
-                      className="left-minus-button pmbutton"
-                      onClick={() => {
-                        decrementInput("bathroomNumberInput");
-                      }}
-                    >
-                      <span className="material-symbols-outlined">remove</span>
-                    </div>
-
-                    <input
-                      id="bathroomNumberInput"
-                      type="number"
-                      disabled
-                      value={
-                        propertyDetails && propertyDetails.NumberOfBathrooms
-                      }
-                    />
-                    <div
-                      className="right-plus-button pmbutton"
-                      onClick={() => {
-                        incrementInput("bathroomNumberInput");
-                      }}
-                    >
-                      <span className="material-symbols-outlined">add</span>
-                    </div>
-                  </div>
-                </div>
-                {propertyDetails.PropertyType !== "Storage" &&
+          {propertyDetails && (propertyDetails.Category === 'Residential') &&
+            <div className="col-md-6">
+              <div className="form_field label_top">
+                <label htmlFor="">Rooms</label>
+                <div className="increase_input_parent">
                   <div className="plus_minus_input_wrapper">
-                    <span className="pmi_label">Balcony</span>
+                    {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Rooms</span> : <span className="pmi_label">Bedrooms</span>}
                     <div className="plus_minus_input">
                       <div
                         className="left-minus-button pmbutton"
                         onClick={() => {
-                          decrementInput("balconyNumberInput");
+                          decrementInput("bedroomNumberInput");
                         }}
                       >
                         <span className="material-symbols-outlined">remove</span>
                       </div>
 
                       <input
-                        id="balconyNumberInput"
+                        id="bedroomNumberInput"
                         type="number"
                         disabled
-                        value={propertyDetails && propertyDetails.NumberOfBalcony}
+                        value={
+                          propertyDetails && propertyDetails.NumberOfBedrooms
+                        }
                       />
                       <div
                         className="right-plus-button pmbutton"
                         onClick={() => {
-                          incrementInput("balconyNumberInput");
+                          incrementInput("bedroomNumberInput");
                         }}
                       >
                         <span className="material-symbols-outlined">add</span>
                       </div>
                     </div>
                   </div>
-                }
-                {
-                  propertyDetails.PropertyType !== "Storage" &&
                   <div className="plus_minus_input_wrapper">
-                    <span className="pmi_label">Kitchen</span>
+                    {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Toilets</span> : <span className="pmi_label">Bathrooms</span>}
                     <div className="plus_minus_input">
                       <div
                         className="left-minus-button pmbutton"
                         onClick={() => {
-                          decrementInput("kitchenNumberInput");
+                          decrementInput("bathroomNumberInput");
                         }}
                       >
                         <span className="material-symbols-outlined">remove</span>
                       </div>
 
                       <input
-                        id="kitchenNumberInput"
+                        id="bathroomNumberInput"
                         type="number"
                         disabled
-                        value={propertyDetails && propertyDetails.NumberOfKitchen}
+                        value={
+                          propertyDetails && propertyDetails.NumberOfBathrooms
+                        }
                       />
                       <div
                         className="right-plus-button pmbutton"
                         onClick={() => {
-                          incrementInput("kitchenNumberInput");
+                          incrementInput("bathroomNumberInput");
                         }}
                       >
                         <span className="material-symbols-outlined">add</span>
                       </div>
                     </div>
                   </div>
-                }
-                {/* <div className="plus_minus_input_wrapper">
+                  {propertyDetails.PropertyType !== "Storage" &&
+                    <div className="plus_minus_input_wrapper">
+                      <span className="pmi_label">Balcony</span>
+                      <div className="plus_minus_input">
+                        <div
+                          className="left-minus-button pmbutton"
+                          onClick={() => {
+                            decrementInput("balconyNumberInput");
+                          }}
+                        >
+                          <span className="material-symbols-outlined">remove</span>
+                        </div>
+
+                        <input
+                          id="balconyNumberInput"
+                          type="number"
+                          disabled
+                          value={propertyDetails && propertyDetails.NumberOfBalcony}
+                        />
+                        <div
+                          className="right-plus-button pmbutton"
+                          onClick={() => {
+                            incrementInput("balconyNumberInput");
+                          }}
+                        >
+                          <span className="material-symbols-outlined">add</span>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                  {
+                    propertyDetails.PropertyType !== "Storage" &&
+                    <div className="plus_minus_input_wrapper">
+                      <span className="pmi_label">Kitchen</span>
+                      <div className="plus_minus_input">
+                        <div
+                          className="left-minus-button pmbutton"
+                          onClick={() => {
+                            decrementInput("kitchenNumberInput");
+                          }}
+                        >
+                          <span className="material-symbols-outlined">remove</span>
+                        </div>
+
+                        <input
+                          id="kitchenNumberInput"
+                          type="number"
+                          disabled
+                          value={propertyDetails && propertyDetails.NumberOfKitchen}
+                        />
+                        <div
+                          className="right-plus-button pmbutton"
+                          onClick={() => {
+                            incrementInput("kitchenNumberInput");
+                          }}
+                        >
+                          <span className="material-symbols-outlined">add</span>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                  {/* <div className="plus_minus_input_wrapper">
                   <span className="pmi_label">Living Area</span>
                   <div className="plus_minus_input">
                     <div
@@ -2717,7 +2840,7 @@ const Stage2 = (props) => {
                     </div>
                   </div>
                 </div> */}
-                {/* <div className="plus_minus_input_wrapper">
+                  {/* <div className="plus_minus_input_wrapper">
                   <span className="pmi_label">Basement</span>
                   <div className="plus_minus_input">
                     <div
@@ -2745,9 +2868,9 @@ const Stage2 = (props) => {
                     </div>
                   </div>
                 </div> */}
+                </div>
               </div>
-            </div>
-          </div>}
+            </div>}
 
           {/* Office Workstations, Cabins & Meeting Rooms */}
           {propertyDetails && (propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType === 'Office') &&
