@@ -69,9 +69,9 @@ const Stage2 = (props) => {
     NumberOfKitchen: "",
     NumberOfLivingArea: "",
     NumberOfBasement: "",
-    NumberOfWorkstations: "",
-    NumberOfCabins: "",
-    NumberOfMeetingRooms: "",
+    NumberOfWorkstations: 0,
+    NumberOfCabins: 0,
+    NumberOfMeetingRooms: 0,
     LivingArea: "",
     DiningArea: "",
     LivingAndDining: "",
@@ -79,6 +79,7 @@ const Stage2 = (props) => {
     EntranceGallery: "",
     Furnishing: "",
     IsCentrallyAirconditioned: "No",
+    IsReceptionArea: "No",
     AdditionalRooms: [],
     ServentRoomOneClick: false,
     ServentRoomTwoClick: false,
@@ -166,12 +167,26 @@ const Stage2 = (props) => {
           : "",
         Passage: propertyDocument.passage ? propertyDocument.passage : "",
 
+        NumberOfWorkstations: propertyDocument.numberOfWorkstations
+          ? propertyDocument.numberOfWorkstations
+          : "0",
+        NumberOfCabins: propertyDocument.numberOfCabins
+          ? propertyDocument.numberOfCabins
+          : "0",
+        NumberOfMeetingRooms: propertyDocument.numberOfMeetingRooms
+          ? propertyDocument.numberOfMeetingRooms
+          : "0",
+
         Furnishing: propertyDocument.furnishing
           ? propertyDocument.furnishing
           : "",
         IsCentrallyAirconditioned: propertyDetails.isCentrallyAirconditioned
           ? propertyDetails.isCentrallyAirconditioned
           : "No",
+        IsReceptionArea: propertyDetails.isReceptionArea
+          ? propertyDetails.isReceptionArea
+          : "No",
+
         AdditionalRooms: propertyDocument.additionalRooms
           ? propertyDocument.additionalRooms
           : [],
@@ -855,16 +870,9 @@ const Stage2 = (props) => {
       numberOfKitchen: propertyDetails.NumberOfKitchen,
       numberOfLivingArea: propertyDetails.NumberOfLivingArea,
       numberOfBasement: propertyDetails.NumberOfBasement,
-      numberOfWorkstations: propertyDetails.NumberOfWorkstations
-        ? propertyDetails.NumberOfWorkstations
-        : 0,
-      numberOfCabins: propertyDetails.NumberOfCabins
-        ? propertyDetails.NumberOfCabins
-        : 0,
-      numberOfMeetingRooms: propertyDetails.NumberOfMeetingRooms
-        ? propertyDetails.NumberOfMeetingRooms
-        : 0,
-
+      numberOfWorkstations: propertyDetails.NumberOfWorkstations,
+      numberOfCabins: propertyDetails.NumberOfCabins,
+      numberOfMeetingRooms: propertyDetails.NumberOfMeetingRooms,
       livingArea: propertyDetails.LivingArea,
       diningArea: propertyDetails.DiningArea,
       livingAndDining: propertyDetails.LivingAndDining,
@@ -872,6 +880,9 @@ const Stage2 = (props) => {
       entranceGallery: propertyDetails.EntranceGallery,
       isCentrallyAirconditioned: propertyDetails.IsCentrallyAirconditioned
         ? propertyDetails.IsCentrallyAirconditioned
+        : "No",
+      isReceptionArea: propertyDetails.IsReceptionArea
+        ? propertyDetails.IsReceptionArea
         : "No",
       furnishing: propertyDetails.Furnishing,
       additionalRooms: propertyDetails.AdditionalRooms
@@ -2346,6 +2357,88 @@ const Stage2 = (props) => {
               </div>
             </div>}
 
+          {/* Reception Area */}
+          {(propertyDetails && propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType === 'Office') &&
+            <div className="col-md-4">
+              <div className="form_field st-2 label_top">
+                <label htmlFor=""> Reception Area? </label>
+                <div className="form_field_inner">
+                  <div className="form_field_container">
+                    <div className="radio_group">
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.IsReceptionArea === "Yes"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="isReceptionArea_yes"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                IsReceptionArea: "Yes",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="isReceptionArea_yes"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Yes</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.IsReceptionArea === "No"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="isReceptionArea_no"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                IsReceptionArea: "No",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="isReceptionArea_no"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>No</h6>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>}
+
           {/* Rooms */}
           {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-6">
             <div className="form_field label_top">
@@ -2628,37 +2721,7 @@ const Stage2 = (props) => {
                       </div>
                     </div>
                   }
-                  {
-                    propertyDetails.PropertyType !== "Storage" &&
-                    <div className="plus_minus_input_wrapper">
-                      <span className="pmi_label">Kitchen</span>
-                      <div className="plus_minus_input">
-                        <div
-                          className="left-minus-button pmbutton"
-                          onClick={() => {
-                            decrementInput("kitchenNumberInput");
-                          }}
-                        >
-                          <span className="material-symbols-outlined">remove</span>
-                        </div>
 
-                        <input
-                          id="kitchenNumberInput"
-                          type="number"
-                          disabled
-                          value={propertyDetails && propertyDetails.NumberOfKitchen}
-                        />
-                        <div
-                          className="right-plus-button pmbutton"
-                          onClick={() => {
-                            incrementInput("kitchenNumberInput");
-                          }}
-                        >
-                          <span className="material-symbols-outlined">add</span>
-                        </div>
-                      </div>
-                    </div>
-                  }
                   {/* <div className="plus_minus_input_wrapper">
                   <span className="pmi_label">Living Area</span>
                   <div className="plus_minus_input">
