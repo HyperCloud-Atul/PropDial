@@ -78,8 +78,9 @@ const Stage2 = (props) => {
     Passage: "",
     EntranceGallery: "",
     Furnishing: "",
-    IsCentrallyAirconditioned: "No",
-    IsReceptionArea: "No",
+    IsCentrallyAirconditioned: "",
+    IsReceptionArea: "",
+    PantryCafeteria: "",
     AdditionalRooms: [],
     ServentRoomOneClick: false,
     ServentRoomTwoClick: false,
@@ -186,6 +187,10 @@ const Stage2 = (props) => {
         IsReceptionArea: propertyDetails.isReceptionArea
           ? propertyDetails.isReceptionArea
           : "No",
+
+        PantryCafeteria: propertyDetails.pantryCafeteria
+          ? propertyDetails.pantryCafeteria
+          : "",
 
         AdditionalRooms: propertyDocument.additionalRooms
           ? propertyDocument.additionalRooms
@@ -884,6 +889,9 @@ const Stage2 = (props) => {
       isReceptionArea: propertyDetails.IsReceptionArea
         ? propertyDetails.IsReceptionArea
         : "No",
+      pantryCafeteria: propertyDetails.PantryCafeteria
+        ? propertyDetails.PantryCafeteria
+        : "",
       furnishing: propertyDetails.Furnishing,
       additionalRooms: propertyDetails.AdditionalRooms
         ? propertyDetails.AdditionalRooms
@@ -2430,6 +2438,122 @@ const Stage2 = (props) => {
                               </span>
                             </div>
                             <h6>No</h6>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>}
+
+          {/* Pantry/Cafeteria*/}
+          {(propertyDetails && propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType === 'Office' || propertyDetails.PropertyType === 'Retail') &&
+            <div className="col-md-4">
+              <div className="form_field st-2 label_top">
+                <label htmlFor=""> Pantry/Cafeteria </label>
+                <div className="form_field_inner">
+                  <div className="form_field_container">
+                    <div className="radio_group">
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.PantryCafeteria === "Private"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="pantrycafeteria_private"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                PantryCafeteria: "Private",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="pantrycafeteria_private"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Private</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.PantryCafeteria === "Shared"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="pantrycafeteria_shared"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                PantryCafeteria: "Shared",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="pantrycafeteria_shared"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Shared</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.PantryCafeteria === "Not Available"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="pantrycafeteria_not_available"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                PantryCafeteria: "Not Available",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="pantrycafeteria_not_available"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Not Available</h6>
                           </label>
                         </div>
                       </div>
@@ -4531,43 +4655,9 @@ const Stage2 = (props) => {
               </div>
             </div>
           }
-          {/* Flat Floor No */}
-          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
-            <div className="form_field label_top">
-              <label htmlFor="">Floor No.</label>
-              <div className="plus_minus_input_wrapper">
-                <span className="pmi_label">Floor no</span>
-                <div className="plus_minus_input">
-                  <div
-                    className="left-minus-button pmbutton"
-                    onClick={() => {
-                      decrementInput("floorNoInput");
-                    }}
-                  >
-                    <span className="material-symbols-outlined">remove</span>
-                  </div>
-
-                  <input
-                    id="floorNoInput"
-                    type="number"
-                    disabled
-                    value={propertyDetails && propertyDetails.FloorNo}
-                  />
-                  <div
-                    className="right-plus-button pmbutton"
-                    onClick={() => {
-                      incrementInput("floorNoInput");
-                    }}
-                  >
-                    <span className="material-symbols-outlined">add</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>}
 
           {/* Total Floor */}
-          {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
+          {propertyDetails && (propertyDetails.Category === 'Residential' || (propertyDetails.Category === 'Commercial' && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other'))) && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Total Floor</label>
               <div className="plus_minus_input_wrapper">
@@ -4592,6 +4682,41 @@ const Stage2 = (props) => {
                     className="right-plus-button pmbutton"
                     onClick={() => {
                       incrementInput("numberOfFloorsInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">add</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>}
+
+          {/* Flat Floor No */}
+          {propertyDetails && (propertyDetails.Category === 'Residential' || (propertyDetails.Category === 'Commercial' && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other'))) && <div className="col-md-4">
+            <div className="form_field label_top">
+              <label htmlFor="">Floor No.</label>
+              <div className="plus_minus_input_wrapper">
+                <span className="pmi_label">Floor no</span>
+                <div className="plus_minus_input">
+                  <div
+                    className="left-minus-button pmbutton"
+                    onClick={() => {
+                      decrementInput("floorNoInput");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">remove</span>
+                  </div>
+
+                  <input
+                    id="floorNoInput"
+                    type="number"
+                    disabled
+                    value={propertyDetails && propertyDetails.FloorNo}
+                  />
+                  <div
+                    className="right-plus-button pmbutton"
+                    onClick={() => {
+                      incrementInput("floorNoInput");
                     }}
                   >
                     <span className="material-symbols-outlined">add</span>
@@ -4754,7 +4879,6 @@ const Stage2 = (props) => {
             </div>
           </div>}
 
-
           {/* No of Close Car Parking */}
           {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.IsCarParkingAvailable.toLowerCase() === "yes") && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field label_top">
@@ -4792,6 +4916,7 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>}
+
           {/* No of Open Car Parking */}
           {propertyDetails && (propertyDetails.Category === 'Residential') && (propertyDetails.IsCarParkingAvailable.toLowerCase() === "yes") && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
             <div className="form_field label_top">
