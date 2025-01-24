@@ -182,18 +182,18 @@ const Stage2 = (props) => {
         Furnishing: propertyDocument.furnishing
           ? propertyDocument.furnishing
           : "",
-        IsCentrallyAirconditioned: propertyDetails.isCentrallyAirconditioned
-          ? propertyDetails.isCentrallyAirconditioned
+        IsCentrallyAirconditioned: propertyDocument.isCentrallyAirconditioned
+          ? propertyDocument.isCentrallyAirconditioned
           : "No",
-        IsReceptionArea: propertyDetails.isReceptionArea
-          ? propertyDetails.isReceptionArea
+        IsReceptionArea: propertyDocument.isReceptionArea
+          ? propertyDocument.isReceptionArea
           : "No",
 
-        PantryCafeteria: propertyDetails.pantryCafeteria
-          ? propertyDetails.pantryCafeteria
+        PantryCafeteria: propertyDocument.pantryCafeteria
+          ? propertyDocument.pantryCafeteria
           : "",
-        Washrooms: propertyDetails.washrooms
-          ? propertyDetails.washrooms
+        Washrooms: propertyDocument.washrooms
+          ? propertyDocument.washrooms
           : "",
         AdditionalRooms: propertyDocument.additionalRooms
           ? propertyDocument.additionalRooms
