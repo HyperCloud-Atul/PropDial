@@ -80,6 +80,7 @@ const Stage2 = (props) => {
     Furnishing: "",
     IsCentrallyAirconditioned: "",
     IsReceptionArea: "",
+    IsPreleased: "",
     PantryCafeteria: "",
     Washrooms: "",
     AdditionalRooms: [],
@@ -184,10 +185,13 @@ const Stage2 = (props) => {
           : "",
         IsCentrallyAirconditioned: propertyDocument.isCentrallyAirconditioned
           ? propertyDocument.isCentrallyAirconditioned
-          : "No",
+          : "",
         IsReceptionArea: propertyDocument.isReceptionArea
           ? propertyDocument.isReceptionArea
-          : "No",
+          : "",
+        IsPreleased: propertyDocument.isPreleased
+          ? propertyDocument.isPreleased
+          : "",
 
         PantryCafeteria: propertyDocument.pantryCafeteria
           ? propertyDocument.pantryCafeteria
@@ -888,10 +892,15 @@ const Stage2 = (props) => {
       entranceGallery: propertyDetails.EntranceGallery,
       isCentrallyAirconditioned: propertyDetails.IsCentrallyAirconditioned
         ? propertyDetails.IsCentrallyAirconditioned
-        : "No",
+        : "",
       isReceptionArea: propertyDetails.IsReceptionArea
         ? propertyDetails.IsReceptionArea
-        : "No",
+        : "",
+
+      isPreleased: propertyDetails.IsPreleased
+        ? propertyDetails.IsPreleased
+        : "",
+
       pantryCafeteria: propertyDetails.PantryCafeteria
         ? propertyDetails.PantryCafeteria
         : "",
@@ -5596,6 +5605,89 @@ const Stage2 = (props) => {
               </div>
             </div>
           </div>}
+
+          {/* Pre-leased*/}
+          {(propertyDetails && propertyDetails.Category === 'Commercial') &&
+            <div className="col-md-4">
+              <div className="form_field st-2 label_top">
+                <label htmlFor=""> Pre-leased? </label>
+                <div className="form_field_inner">
+                  <div className="form_field_container">
+                    <div className="radio_group">
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.IsPreleased === "Yes"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="isPreleased_yes"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                IsPreleased: "Yes",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="isPreleased_yes"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Yes</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.IsPreleased === "No"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="isPreleased_no"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                IsPreleased: "No",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="isPreleased_no"
+                            style={{ paddingTop: "7px" }}
+                          >
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>No</h6>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>}
+
         </div>
       </div>
 
