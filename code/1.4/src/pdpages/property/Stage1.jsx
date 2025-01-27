@@ -398,7 +398,7 @@ const Stage1 = (props) => {
   //State select onchange
   const handleStateChange = async (option, selectedCity, selectedLocality, selectedSociety) => {
     setState(option);
-    console.log('state option:', option)
+    // console.log('state option:', option)
     const statename = option.label
 
     if (state && state.label !== option.label) {
@@ -619,7 +619,7 @@ const Stage1 = (props) => {
               value: societyData.id,
             }));
 
-            console.log("societyOptions.current: ", societyOptions.current);
+            // console.log("societyOptions.current: ", societyOptions.current);
 
             if (societyOptions.current.length === 0) {
               console.log("No Society");

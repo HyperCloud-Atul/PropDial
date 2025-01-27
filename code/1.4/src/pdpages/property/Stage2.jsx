@@ -15,15 +15,39 @@ function restrictInput(event, maxLength) {
 
   // Remove any non-numeric characters using a regular expression
   let numericValue = inputValue.replace(/[^0-9]/g, "");
+  // console.log("numericValue: ", numericValue)
 
-  // Limit the maximum length to 10 characters
-  // let maxLength = 9;
   if (numericValue.length > maxLength) {
     numericValue = numericValue.slice(0, maxLength);
   }
 
   // Update the input field with the numeric value
   event.target.value = numericValue;
+}
+
+//Restrict to Input
+function restrictInputWith2DecimalPoints(event, maxLength) {
+  // Get the value entered in the input field
+  let inputValue = event.target.value;
+  console.log("inputValue: ", inputValue)
+
+  // Allow only numbers and a single decimal point
+  inputValue = inputValue.replace(/[^0-9.]/g, ""); // Remove non-numeric characters except '.'
+  inputValue = inputValue.replace(/(\..*?)\..*/g, "$1"); // Prevent multiple decimal points
+
+  // Split the input into integer and decimal parts
+  const [integerPart, decimalPart] = inputValue.split(".");
+
+  // Limit the integer part to 4 digits
+  let sanitizedInput = integerPart?.slice(0, maxLength) || "";
+
+  // Add the decimal part if it exists and limit it to 2 digits
+  if (decimalPart !== undefined) {
+    sanitizedInput += `.${decimalPart.slice(0, 2)}`;
+  }
+
+  // Update the input field with the numeric value
+  event.target.value = sanitizedInput;
 }
 
 const Stage2 = (props) => {
@@ -4365,9 +4389,9 @@ const Stage2 = (props) => {
                     style={{ paddingRight: "10px" }}
                     type="text"
                     placeholder="Super Area"
-                    maxLength={6}
+                    maxLength={8}
                     onInput={(e) => {
-                      restrictInput(e, 5);
+                      restrictInputWith2DecimalPoints(e, 5);
                     }}
                     onChange={(e) =>
                       setPropertyDetails({
@@ -4392,9 +4416,9 @@ const Stage2 = (props) => {
                     style={{ paddingRight: "10px" }}
                     type="text"
                     placeholder="Carpet Area"
-                    maxLength={6}
+                    maxLength={8}
                     onInput={(e) => {
-                      restrictInput(e, 5);
+                      restrictInputWith2DecimalPoints(e, 5);
                     }}
                     onChange={(e) =>
                       setPropertyDetails({
