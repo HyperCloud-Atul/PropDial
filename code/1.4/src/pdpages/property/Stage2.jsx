@@ -44,6 +44,10 @@ const Stage2 = (props) => {
     label: "Year of Construction",
     value: "Year of Construction",
   });
+
+  let floornooptions = ["LB", "UB", "Basement", "Stilt", "Ground", "1"]
+
+
   const { document: propertyDocument, error: propertyerror } = useDocument(
     "properties-propdial",
     propertyid
@@ -601,6 +605,7 @@ const Stage2 = (props) => {
 
   function decrementInput(input) {
     var inputValue = document.getElementById(input).value;
+    console.log("decrementInput; ", input + " and value; ", inputValue)
 
     if (input === "floorNoInput" && inputValue > -1) {
       inputValue--; // Allow FloorNo to go to -1
@@ -614,7 +619,15 @@ const Stage2 = (props) => {
     ) {
       inputValue--; // Ensure total floors and flats on floor don't go below 1
       if (input === "numberOfFloorsInput") {
-        if (propertyDetails.NumberOfFloors > propertyDetails.FloorNo) {
+        let currentFloor;
+        if (propertyDetails.FloorNo === "LB" || propertyDetails.FloorNo === "UB" || propertyDetails.FloorNo === "Basement" || propertyDetails.FloorNo === "Stilt" || propertyDetails.FloorNo === "Ground") {
+          currentFloor = 1
+        }
+        else {
+          currentFloor = propertyDetails.FloorNo
+
+        }
+        if (propertyDetails.NumberOfFloors > currentFloor) {
           setPropertyDetails({
             ...propertyDetails,
             NumberOfFloors: inputValue,
@@ -1002,7 +1015,14 @@ const Stage2 = (props) => {
       }
     }
   };
-
+  function addFloorNumber(floorno) {
+    let iFloor = 2
+    while (iFloor <= Number(floorno)) {
+      floornooptions.push(iFloor)
+      iFloor = iFloor + 1
+    }
+    // console.log('floornooptions', floornooptions)
+  }
   // const [years, setYears] = useState([]);
   // Function to generate years from 1980 to current year
   const generateYears = () => {
@@ -4808,6 +4828,7 @@ const Stage2 = (props) => {
                     id="numberOfFloorsInput"
                     type="number"
                     disabled
+                    onChange={addFloorNumber(propertyDetails && propertyDetails.NumberOfFloors)}
                     value={propertyDetails && propertyDetails.NumberOfFloors}
                   />
                   <div
@@ -4823,8 +4844,8 @@ const Stage2 = (props) => {
             </div>
           </div>}
 
-          {/* Flat Floor No */}
-          {propertyDetails && (propertyDetails.Category === 'Residential' || (propertyDetails.Category === 'Commercial' && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other'))) && <div className="col-md-4">
+          {/* Flat Floor No for Residential */}
+          {/* {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-4">
             <div className="form_field label_top">
               <label htmlFor="">Floor No.</label>
               <div className="plus_minus_input_wrapper">
@@ -4856,7 +4877,35 @@ const Stage2 = (props) => {
                 </div>
               </div>
             </div>
-          </div>}
+          </div>} */}
+
+          {/* Floor No for Commercial */}
+          {propertyDetails && (propertyDetails.Category === 'Residential' || (propertyDetails.Category === 'Commercial' && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other'))) &&
+            <div className="col-xl-4 col-lg-6 col-md-4">
+              <div className="form_field label_top">
+                <label htmlFor="">Floor No</label>
+                <div className="form_field_inner">
+
+                  <select id="dropdown"
+                    value={propertyDetails && propertyDetails.FloorNo}
+                    onChange={(e) => {
+                      setPropertyDetails({
+                        ...propertyDetails,
+                        FloorNo: e.target.value,
+                      });
+
+                    }}
+                  >
+                    {floornooptions.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+
+                  </select>
+                </div>
+              </div>
+            </div>}
 
           {/* No of Apts on Floor */}
           {propertyDetails && (propertyDetails.Category === 'Residential') && <div className="col-md-4">
