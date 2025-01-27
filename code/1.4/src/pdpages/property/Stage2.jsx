@@ -795,12 +795,13 @@ const Stage2 = (props) => {
     //SuperArea & CarpetArea Value
     if (propertyDetails && propertyDetails.Category === 'Commercial') {
       if (
-        (propertyDetails.SuperArea === "" || propertyDetails.CarpetArea === "" ||
-          propertyDetails.SuperArea === "0" || propertyDetails.CarpetArea === "0")
+        // (propertyDetails.SuperArea === "" || propertyDetails.CarpetArea === "" ||
+        //   propertyDetails.SuperArea === "0" || propertyDetails.CarpetArea === "0")
+        (propertyDetails.CarpetArea === "" || propertyDetails.CarpetArea === "0") //Carpet are is mandatory
       ) {
         if (errorMsg === "Please select ")
-          errorMsg = "Enter Super Area and Carpet Area both";
-        else errorMsg = errorMsg + ", Enter Super Area and Carpet Area both";
+          errorMsg = "Carpet Area is mandatory";
+        else errorMsg = errorMsg + ", Carpet Area is mandatory";
         errorFlag = true;
       }
     }
