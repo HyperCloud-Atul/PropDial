@@ -2135,7 +2135,7 @@ const Stage1 = (props) => {
             </div>
           </div>}
 
-          {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") && (
+          {propertyDetails && (propertyDetails.Category === 'Residential' && propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") || (propertyDetails.Category === 'Commercial') && (
             <div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 label_top">
                 <label htmlFor="">Maintenance Status</label>
@@ -2217,8 +2217,9 @@ const Stage1 = (props) => {
             </div>
           )}
 
-          {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") && propertyDetails.MaintenanceFlag === "Extra" && (
-            <div className="col-xl-4 col-lg-6">
+          {/* {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") && propertyDetails.MaintenanceFlag === "Extra" && ( */}
+          {propertyDetails.MaintenanceFlag === "Extra" &&
+            (<div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                 <label>Maintenance fees</label>
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -2354,58 +2355,7 @@ const Stage1 = (props) => {
                           </label>
                         </div>
                       </div>
-                      <div className="radio_group_single">
-                        <div
-                          className={
-                            propertyDetails.MaintenanceChargesFrequency ===
-                              "Half Yearly"
-                              ? "custom_radio_button radiochecked"
-                              : "custom_radio_button"
-                          }
-                        >
-                          <input
-                            type="checkbox"
-                            id="maintenance_halfyearly"
-                            onClick={(e) => {
-                              setPropertyDetails({
-                                ...propertyDetails,
-                                MaintenanceChargesFrequency: "Half Yearly",
-                              });
-                            }}
-                          />
-                          <label
-                            htmlFor="maintenance_halfyearly"
-                            style={{
-                              padding: "6px 0 10px 22px",
-                              height: "30px",
-                            }}
-                          >
-                            <div className="radio_icon">
-                              <span
-                                className="material-symbols-outlined add"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
-                                add
-                              </span>
-                              <span
-                                className="material-symbols-outlined check"
-                                style={{
-                                  fontSize: "1.2rem",
-                                  transform: "translateX(-3px)",
-                                }}
-                              >
-                                done
-                              </span>
-                            </div>
-                            <h6 style={{ fontSize: "0.8rem" }}>
-                              Half Yearly
-                            </h6>
-                          </label>
-                        </div>
-                      </div>
+
                       <div className="radio_group_single">
                         <div
                           className={
@@ -2457,6 +2407,58 @@ const Stage1 = (props) => {
                           </label>
                         </div>
                       </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.MaintenanceChargesFrequency ===
+                              "One Time"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="maintenance_onetime"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                MaintenanceChargesFrequency: "One Time",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="maintenance_onetime"
+                            style={{
+                              padding: "6px 0 10px 22px",
+                              height: "30px",
+                            }}
+                          >
+                            <div className="radio_icon">
+                              <span
+                                className="material-symbols-outlined add"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                add
+                              </span>
+                              <span
+                                className="material-symbols-outlined check"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                done
+                              </span>
+                            </div>
+                            <h6 style={{ fontSize: "0.8rem" }}>
+                              One Time
+                            </h6>
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2468,7 +2470,7 @@ const Stage1 = (props) => {
                 </div>
               </div>
             </div>
-          )}
+            )}
 
           {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale") && (
             <div className="col-xl-4 col-lg-6">

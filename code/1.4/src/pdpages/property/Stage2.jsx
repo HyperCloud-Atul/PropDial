@@ -106,6 +106,7 @@ const Stage2 = (props) => {
     Passage: "",
     EntranceGallery: "",
     Furnishing: "",
+    Readiness: "",
     IsCentrallyAirconditioned: "",
     IsReceptionArea: "",
     IsPreleased: "",
@@ -211,6 +212,11 @@ const Stage2 = (props) => {
         Furnishing: propertyDocument.furnishing
           ? propertyDocument.furnishing
           : "",
+
+        Readiness: propertyDocument.readiness
+          ? propertyDocument.readiness
+          : "",
+
         IsCentrallyAirconditioned: propertyDocument.isCentrallyAirconditioned
           ? propertyDocument.isCentrallyAirconditioned
           : "",
@@ -946,6 +952,8 @@ const Stage2 = (props) => {
         ? propertyDetails.Washrooms
         : "",
       furnishing: propertyDetails.Furnishing,
+      readiness: propertyDetails.Readiness,
+
       additionalRooms: propertyDetails.AdditionalRooms
         ? propertyDetails.AdditionalRooms
         : [],
@@ -2234,6 +2242,82 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>}
+              </div>
+            </div>
+          </div>}
+
+          {/*  Readiness  */}
+          {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && (propertyDetails.PropertyType !== 'Land' && propertyDetails.PropertyType !== 'Other') && <div className="col-md-4">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Property Readiness</label>
+              <div
+                className="radio_group"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Readiness === "Ready to Move-In"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_readiness"
+                      id="readiness_ready_to_move-in"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Readiness: "Ready to Move-In",
+                        });
+                      }}
+                    />
+                    <label htmlFor="readiness_ready_to_move-in">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Ready to Move-In</h6>
+                    </label>
+                  </div>
+                </div>
+                <div className="radio_group_single" style={{ width: "100%" }}>
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Readiness === "Under Construction"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_readiness"
+                      id="readiness_under_construction"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Readiness: "Under Construction",
+                        });
+                      }}
+                    />
+                    <label htmlFor="readiness_under_construction">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Under Construction</h6>
+                    </label>
+                  </div>
+                </div>
+
+
               </div>
             </div>
           </div>}
