@@ -17,7 +17,7 @@ import PhoneLogin from "./pdpages/phonelogin/PhoneLogin_reCaptchaV2";
 import PGProfile from "./pdpages/profile/PGProfile";
 import PGUserProfileDetails from "./pdpages/profile/PGUserProfileDetails";
 import PGNotification from "./pdpages/notification/PGNotification";
-import PGAttendence from "./pdpages/attendence/PGAttendence";
+import PGAttendance from "./pdpages/attendance/PGAttendance";
 import PGAboutUs from "./pdpages/about_us/PGAboutUs";
 import PGPriacyPolicy from "./pdpages/privacypolicy/PGPrivacyPolicy";
 import PGTerms from "./pdpages/terms/PGTerms";
@@ -920,7 +920,7 @@ function App() {
                   ></Route>
                   <Route
                     path="/attendence"
-                    element={<PGAttendence />}
+                    element={<PGAttendance />}
                   ></Route>
                 </Routes>
                 {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}
