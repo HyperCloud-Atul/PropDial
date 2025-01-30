@@ -40,7 +40,7 @@ const AttendanceTable = ({ attendanceDoc }) => {
             disableFilters: true,
         },
         {
-            Header: "Meter Reading",
+            Header: "Trip Reading",
             // accessor: "attendanceDoc",
             Cell: ({ row }) => (
                 <>

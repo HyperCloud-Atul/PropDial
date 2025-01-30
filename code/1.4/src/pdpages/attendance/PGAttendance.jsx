@@ -76,19 +76,21 @@ const PGAttendance = () => {
     const [tripStart, setTripStart] = useState(null);
     const [tripEnd, setTripEnd] = useState(null);
 
-
     // console.log("attendence: ", attendance)
     const today = new Date();
     const formattedTodaysDate = format(today, "dd-MMM-yy"); // Formats as DD-MMM-YY
-    const weekDay = days[today.getDay()]
+    const weekDay = days[today.getDay()] // Current weekday
 
     const { addDocument, updateDocument, deleteDocument, error } = useFirestore("attendance-propdial");
     const { documents: attendanceData, errors: attendanceDataError } =
         useCollection(
             "attendance-propdial",
             ["userId", "==", user.uid],
-            ["date", "desc"]
+            ["date", "desc"],
+            ["5"]
         );
+
+    // const [attendanceData, setAttendanceData] = useState(false);
 
     //Popup Flags
     const [showPopupPunchInFlag, setShowPopupPunchInFlag] = useState(false);
@@ -148,15 +150,17 @@ const PGAttendance = () => {
 
         setGreeting(getGreeting());
 
+        lastFiveRecords()
+
         // Update the time every second
-        const timer = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
+        // const timer = setInterval(() => {
+        //     setCurrentTime(new Date());
+        // }, 1000);
 
         // Cleanup the interval on component unmount
-        return () => clearInterval(timer);
+        // return () => clearInterval(timer);
 
-    }, []); // Run once when the component mounts
+    }, [attendanceData]); // Run once when the component mounts
 
 
     const handlePunchIn = async () => {
@@ -243,6 +247,68 @@ const PGAttendance = () => {
         }
     };
 
+    const lastFiveRecords = async () => {
+        // Find the punch-in record for today
+        const record = await projectFirestore
+            .collection("attendance-propdial")
+            .where("userId", "==", user.uid)
+            // .where("date", "==", formattedTodaysDate)
+            .limit(5)
+            .get();
+
+        // console.log("record: ", record.docs[0].data())
+
+        return record.docs
+
+    }
+
+    //Fetch Second Last Record
+    const [record, setRecord] = useState(null);
+    useEffect(() => {
+        const fetchSecondLastRecord = async () => {
+            try {
+                // Step 1: Get the latest record
+                const latestRecordRef = projectFirestore
+                    .collection("attendance-propdial")
+                    .where("userId", "==", user.uid)
+                    .orderBy("date", "desc")
+                    .limit(1);
+
+                const latestSnapshot = await latestRecordRef.get();
+
+                if (latestSnapshot.empty) {
+                    console.log("No records found");
+                    return;
+                }
+
+                const latestDoc = latestSnapshot.docs[0];
+
+                // Step 2: Get the second last record, skipping the latest one
+                const secondLastRecordRef = projectFirestore
+                    .collection("attendance-propdial")
+                    .where("userId", "==", user.uid)
+                    .orderBy("date", "desc")
+                    .startAfter(latestDoc) // Skip the latest record
+                    .limit(1);
+
+                const secondLastSnapshot = await secondLastRecordRef.get();
+
+                if (!secondLastSnapshot.empty) {
+                    setRecord({
+                        id: secondLastSnapshot.docs[0].id,
+                        ...secondLastSnapshot.docs[0].data(),
+                    });
+                } else {
+                    console.log("No second last record found");
+                }
+            } catch (error) {
+                console.error("Error fetching second last record:", error);
+            }
+        };
+
+        fetchSecondLastRecord();
+    }, [user.id]);
+
     // console.log("user details: ", user)
 
     return (
@@ -321,7 +387,8 @@ const PGAttendance = () => {
                 </div>
                 <hr></hr>
                 <p style={{ fontSize: "33px", fontWeight: "bolder", marginTop: "0px" }}>
-                    {currentTime.toLocaleTimeString()} {/* Example: 11:45:03 AM */}
+                    {/* {currentTime.toLocaleTimeString()}  */}
+                    {/* Example: 11:45:03 AM */}
                 </p>
                 <div style={{ width: "100%", display: 'flex', justifyContent: 'center', }}>
                     <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'space-around', maxWidth: '400px' }} >
