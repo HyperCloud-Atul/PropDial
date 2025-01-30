@@ -16,6 +16,7 @@ const AttendanceTable = ({ attendanceDoc }) => {
     // console.log("attendanceDoc: ", attendanceDoc)
 
     const columns = [
+
         {
             Header: "Date",
             accessor: "date",
@@ -28,39 +29,59 @@ const AttendanceTable = ({ attendanceDoc }) => {
             disableFilters: true,
         },
         {
-            Header: "Punch-In",
-            accessor: "punchIn",
-            Cell: ({ value }) => (
-                <div className="mobile_min_width">
-                    {/* {value && format(value.toDate(), "dd-MMM-yy hh:mm a")} */}
-                    {/* {value && format(value.toDate(), "hh:mm a")} */}
-                    <div className="name">{value}</div>
-                </div>
+            Header: "Attendance",
+            // accessor: "attendanceDoc",
+            Cell: ({ row }) => (
+                <>
+                    <div className="name" style={{ fontSize: "2rem", fontWeight: "bolder" }} >{row.original.workHrs}</div>
+                    <div className="name"><strong>Punch-In:</strong> {row.original.punchIn}</div>
+                    <div className="name"><strong>Punch-Out:</strong>  {row.original.punchOut}</div>
+                </>
             ),
             disableFilters: true,
         },
         {
-            Header: "Punch-Out",
-            accessor: "punchOut",
-            Cell: ({ value }) => (
-                <div className="mobile_min_width">
-                    {/* {value && format(value.toDate(), "dd-MMM-yy hh:mm a")} */}
-                    {/* {value && format(value.toDate(), "hh:mm a")} */}
-                    <div className="name">{value}</div>
-                </div>
+            Header: "Meter Reading",
+            // accessor: "attendanceDoc",
+            Cell: ({ row }) => (
+                <>
+                    <div className="name" style={{ fontSize: "2rem", fontWeight: "bolder" }} >{row.original.tripDistance} Km.</div>
+                    <div className="name"><strong>Trip-Start:</strong> {row.original.tripStart}</div>
+                    <div className="name"><strong>Trip-End:</strong>  {row.original.tripEnd}</div>
+                </>
             ),
             disableFilters: true,
         },
-        {
-            Header: "Work Hours",
-            accessor: "workHrs",
-            Cell: ({ value }) => (
-                <div className="mobile_min_width">
-                    <div className="name">{value}</div>
-                </div>
-            ),
-            disableFilters: true,
-        }
+        // {
+        //     Header: "Punch-In",
+        //     accessor: "punchIn",
+        //     Cell: ({ value }) => (
+        //         <div className="mobile_min_width">                   
+        //             <div className="name">{value}</div>
+        //         </div>
+        //     ),
+        //     disableFilters: true,
+        // },
+        // {
+        //     Header: "Punch-Out",
+        //     accessor: "punchOut",
+        //     Cell: ({ value }) => (
+        //         <div className="mobile_min_width">                    
+        //             <div className="name">{value}</div>
+        //         </div>
+        //     ),
+        //     disableFilters: true,
+        // },
+        // {
+        //     Header: "Work Hours",
+        //     accessor: "workHrs",
+        //     Cell: ({ value }) => (
+        //         <div className="mobile_min_width">
+        //             <div className="name">{value}</div>
+        //         </div>
+        //     ),
+        //     disableFilters: true,
+        // }
 
     ]
 

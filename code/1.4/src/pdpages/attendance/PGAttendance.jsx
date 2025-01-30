@@ -73,8 +73,8 @@ const PGAttendance = () => {
     const [greeting, setGreeting] = useState("");
     const [attendance, setAttendance] = useState([]);
     const [punchIn, setPunchIn] = useState(null);
-    const [punchInMeterReading, setPunchInMeterReading] = useState(null);
-    const [punchOutMeterReading, setPunchOutMeterReading] = useState(null);
+    const [tripStart, setTripStart] = useState(null);
+    const [tripEnd, setTripEnd] = useState(null);
 
 
     // console.log("attendence: ", attendance)
@@ -178,7 +178,7 @@ const PGAttendance = () => {
                 workHrs: null,
                 date: formattedTodaysDate,
                 weekDay,
-                punchInMeterReading
+                tripStart
             }
 
             await addDocument(data);
@@ -214,13 +214,22 @@ const PGAttendance = () => {
             }
 
             const docId = record.docs[0].id;
+            const tripStart = record.docs[0].data().tripStart
+
+            //Validation Start Trip Reading should not be greater than End Trip Reading
+            if (Number(tripEnd) <= Number(tripStart)) {
+                alert("Trip End Reading should not be less than Trip Start Reading!");
+                return;
+            }
+            const tripDistance = tripEnd - tripStart
             // console.log("record.docs[0]: ", record.docs[0].data())
 
             // Update the punch-out time
             const data = {
                 punchOut: formattedPunchoutTime,
                 workHrs: calculateTimeDifference(record.docs[0].data().punchIn, formattedPunchoutTime),
-                punchOutMeterReading
+                tripEnd,
+                tripDistance
             }
 
             await updateDocument(docId, data)
@@ -245,17 +254,17 @@ const PGAttendance = () => {
                             {showPopupPunchInFlag && (" Are you sure you want to Punch-In now? ")}
                         </p><br />
                         <input
-                            id="id_punchinmeterreading"
+                            id="id_tripstart"
                             className="custom-input"
                             style={{ paddingRight: "10px" }}
                             type="number"
-                            placeholder="Punch In - Meter Reading"
+                            placeholder="Trip Start - Meter Reading"
                             maxLength={7}
                             onInput={(e) => {
                                 restrictInput(e, 7);
                             }}
                             onChange={(e) =>
-                                setPunchInMeterReading(e.target.value)
+                                setTripStart(e.target.value)
                             }
                             value={attendanceData && attendanceData[0].punchInMeterReading}
                         />
@@ -272,22 +281,22 @@ const PGAttendance = () => {
                         </p>
 
                         <p>
-                            Punch-In Meter Reading: {attendanceData && attendanceData[0].punchInMeterReading}
+                            Trip Start: {attendanceData && attendanceData[0].tripStart}
                         </p>
                         <input
-                            id="id_punchinmeterreading"
+                            id="id_tripend"
                             className="custom-input"
                             style={{ paddingRight: "10px" }}
                             type="number"
-                            placeholder="Punch Out - Meter Reading"
+                            placeholder="Trip End - Meter Reading"
                             maxLength={7}
                             onInput={(e) => {
                                 restrictInput(e, 7);
                             }}
                             onChange={(e) =>
-                                setPunchOutMeterReading(e.target.value)
+                                setTripEnd(e.target.value)
                             }
-                            value={attendanceData && attendanceData[0].punchOutMeterReading}
+                            value={attendanceData && attendanceData[0].tripEnd}
                         />
                         <br></br><br></br>
                         <button onClick={() => handlePunchOutPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0 20px' }}>CONFIRM</button>
