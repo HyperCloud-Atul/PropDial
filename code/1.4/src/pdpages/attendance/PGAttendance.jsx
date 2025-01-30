@@ -16,6 +16,22 @@ import Popup from '../../components/Popup';
 import './PGAttendance.scss'
 
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+//Restrict to Input
+function restrictInput(event, maxLength) {
+    // Get the value entered in the input field
+    let inputValue = event.target.value;
+
+    // Remove any non-numeric characters using a regular expression
+    let numericValue = inputValue.replace(/[^0-9]/g, "");
+    // console.log("numericValue: ", numericValue)
+
+    if (numericValue.length > maxLength) {
+        numericValue = numericValue.slice(0, maxLength);
+    }
+
+    // Update the input field with the numeric value
+    event.target.value = numericValue;
+}
 
 const calculateTimeDifference = (punchIn, punchOut) => {
     // Convert 12-hour format to Date object
@@ -57,6 +73,9 @@ const PGAttendance = () => {
     const [greeting, setGreeting] = useState("");
     const [attendance, setAttendance] = useState([]);
     const [punchIn, setPunchIn] = useState(null);
+    const [punchInMeterReading, setPunchInMeterReading] = useState(null);
+    const [punchOutMeterReading, setPunchOutMeterReading] = useState(null);
+
 
     // console.log("attendence: ", attendance)
     const today = new Date();
@@ -72,16 +91,47 @@ const PGAttendance = () => {
         );
 
     //Popup Flags
-    const [showPopupFlag, setShowPopupFlag] = useState(false);
+    const [showPopupPunchInFlag, setShowPopupPunchInFlag] = useState(false);
+    // const [showPopupFlag, setShowPopupFlag] = useState(false);
     const [popupReturn, setPopupReturn] = useState(false);
+    const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
+    // const [popupReturn, setPopupReturn] = useState(false);
 
-    //Popup Flags
-    const showPopup = async (e) => {
-        e.preventDefault();
-        setShowPopupFlag(true);
+    const showPunchInPopup = () => {
+        // e.preventDefault();
+        setShowPopupPunchInFlag(true);
         setPopupReturn(false);
-    };
+    }
 
+    const handlePunchInPopup = (action) => {
+        // console.log('Popup Action:', action)
+        if (action === 'CANCEL') {
+            setPopupReturn(false)
+        }
+        if (action === 'CONFIRM') {
+            // setPopupReturn(true)
+            handlePunchIn()
+        }
+        setShowPopupPunchInFlag(false)
+    }
+
+    const showPunchOutPopup = () => {
+        // e.preventDefault();
+        setShowPopupPunchOutFlag(true);
+        setPopupReturn(false);
+    }
+
+    const handlePunchOutPopup = (action) => {
+        // console.log('Popup Action:', action)
+        if (action === 'CANCEL') {
+            setPopupReturn(false)
+        }
+        if (action === 'CONFIRM') {
+            // setPopupReturn(true)
+            handlePunchOut()
+        }
+        setShowPopupPunchOutFlag(false)
+    }
 
     useEffect(() => {
         const getGreeting = () => {
@@ -110,15 +160,13 @@ const PGAttendance = () => {
 
 
     const handlePunchIn = async () => {
+
         if (!user) {
             alert("Please log in to punch in.");
             return;
         }
 
-        showPopup()
-
         const formattedPunchinTime = format(today, "hh:mm a"); // Formats as DD-MMM-YY
-
 
         try {
             // Add a punch-in record  
@@ -129,12 +177,13 @@ const PGAttendance = () => {
                 punchOut: null,
                 workHrs: null,
                 date: formattedTodaysDate,
-                weekDay
+                weekDay,
+                punchInMeterReading
             }
 
             await addDocument(data);
 
-            alert("Punch In successful!");
+            // alert("Punch In successful!");
 
 
         } catch (error) {
@@ -170,12 +219,13 @@ const PGAttendance = () => {
             // Update the punch-out time
             const data = {
                 punchOut: formattedPunchoutTime,
-                workHrs: calculateTimeDifference(record.docs[0].data().punchIn, formattedPunchoutTime)
+                workHrs: calculateTimeDifference(record.docs[0].data().punchIn, formattedPunchoutTime),
+                punchOutMeterReading
             }
 
             await updateDocument(docId, data)
 
-            alert("Punch Out successful!");
+            // alert("Punch Out successful!");
             setPunchIn(null);
 
 
@@ -184,20 +234,68 @@ const PGAttendance = () => {
         }
     };
 
-
-
     return (
         <>
             <br></br><br></br>
-            <div className='container' style={{ textAlign: "center" }}>
-                {/* Popup Component */}
-                <Popup
-                    showPopupFlag={showPopupFlag}
-                    setShowPopupFlag={setShowPopupFlag}
-                    setPopupReturn={setPopupReturn}
-                    msg={"Are you sure you want to Punch-In Now?"}
-                />
+            {/* Pupup */}
+            <div>
+                <div className={showPopupPunchInFlag ? 'pop-up-div open' : 'pop-up-div'}>
+                    <div>
+                        <p>
+                            {showPopupPunchInFlag && (" Are you sure you want to Punch-In now? ")}
+                        </p><br />
+                        <input
+                            id="id_punchinmeterreading"
+                            className="custom-input"
+                            style={{ paddingRight: "10px" }}
+                            type="number"
+                            placeholder="Punch In - Meter Reading"
+                            maxLength={7}
+                            onInput={(e) => {
+                                restrictInput(e, 7);
+                            }}
+                            onChange={(e) =>
+                                setPunchInMeterReading(e.target.value)
+                            }
+                            value={attendanceData && attendanceData[0].punchInMeterReading}
+                        />
 
+                        <br></br><br></br>
+                        <button onClick={() => handlePunchInPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0 20px' }}>CONFIRM</button>
+                        <button onClick={() => handlePunchInPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0 20px' }}>CANCEL</button>
+                    </div>
+                </div>
+                <div className={showPopupPunchOutFlag ? 'pop-up-div open' : 'pop-up-div'}>
+                    <div>
+                        <p>
+                            {showPopupPunchOutFlag && (" Are you sure you want to Punch-Out now? ")}
+                        </p>
+
+                        <p>
+                            Punch-In Meter Reading: {attendanceData && attendanceData[0].punchInMeterReading}
+                        </p>
+                        <input
+                            id="id_punchinmeterreading"
+                            className="custom-input"
+                            style={{ paddingRight: "10px" }}
+                            type="number"
+                            placeholder="Punch Out - Meter Reading"
+                            maxLength={7}
+                            onInput={(e) => {
+                                restrictInput(e, 7);
+                            }}
+                            onChange={(e) =>
+                                setPunchOutMeterReading(e.target.value)
+                            }
+                            value={attendanceData && attendanceData[0].punchOutMeterReading}
+                        />
+                        <br></br><br></br>
+                        <button onClick={() => handlePunchOutPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0 20px' }}>CONFIRM</button>
+                        <button onClick={() => handlePunchOutPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0 20px' }}>CANCEL</button>
+                    </div>
+                </div>
+            </div >
+            <div className='container' style={{ textAlign: "center" }}>
                 <div style={{ fontSize: "24px", marginTop: "20px" }}>
                     <h1>{greeting}!</h1>
                     <p>Welcome {user.fullName}</p>
@@ -208,14 +306,14 @@ const PGAttendance = () => {
                 </p>
                 <div style={{ width: "100%", display: 'flex', justifyContent: 'center', }}>
                     <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'space-around', maxWidth: '400px' }} >
-                        <button className={attendanceData && (!attendanceData[0].punchIn || attendanceData[0].date !== formattedTodaysDate) ? 'attendance-punch-button active' : 'attendance-punch-button'} onClick={showPopup}
+                        <button className={attendanceData && (!attendanceData[0].punchIn || attendanceData[0].date !== formattedTodaysDate) ? 'attendance-punch-button active' : 'attendance-punch-button'} onClick={showPunchInPopup}
                             disabled={!(attendanceData && (!attendanceData[0].punchIn || attendanceData[0].date !== formattedTodaysDate))}
                         // disabled={!!punchIn}
                         >
                             Punch In
                         </button>
 
-                        <button className={attendanceData && attendanceData[0].punchOut ? 'attendance-punch-button ' : 'attendance-punch-button active'} onClick={handlePunchOut}
+                        <button className={attendanceData && attendanceData[0].punchOut ? 'attendance-punch-button ' : 'attendance-punch-button active'} onClick={showPunchOutPopup}
                             disabled={attendanceData && attendanceData[0].punchOut}
                         // disabled={!punchIn}
                         >
