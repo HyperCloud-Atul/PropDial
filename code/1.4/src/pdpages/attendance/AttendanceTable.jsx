@@ -12,7 +12,6 @@ const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
 
 const AttendanceTable = ({ attendanceDoc }) => {
     // const { user } = useAuthContext();
-
     // console.log("attendanceDoc: ", attendanceDoc)
 
     const columns = [
@@ -45,7 +44,7 @@ const AttendanceTable = ({ attendanceDoc }) => {
             // accessor: "attendanceDoc",
             Cell: ({ row }) => (
                 <>
-                    <div className="name" style={{ fontSize: "2rem", fontWeight: "bolder" }} >{row.original.tripDistance} Km.</div>
+                    <div className="name" style={{ fontSize: "2rem", fontWeight: "bolder" }} >{row.original.tripDistance ? row.original.tripDistance : "0"} Km.</div>
                     <div className="name"><strong>Trip-Start:</strong> {row.original.tripStart}</div>
                     <div className="name"><strong>Trip-End:</strong>  {row.original.tripEnd}</div>
                 </>

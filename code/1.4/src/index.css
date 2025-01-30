@@ -25,7 +25,7 @@
   --theme-purple-bg: #efe5ff;
   --theme-blue-bg: #dae7ff;
   --theme-blue-light-bg: #eef3ff;
---theme-inreview:#FFC107;
+  --theme-inreview: #FFC107;
   --theme-purple-bg-light: #f9f5ff80;
   --theme-orange-bg: #ffefe5;
   --page-bg: #f5f5f5;
@@ -82,7 +82,7 @@ body {
 }
 
 .theme_btn {
-  padding: 10px 20px;
+  padding: 10px 10px;
   border-radius: 9px;
   font-size: 16px;
   font-weight: 500;
@@ -90,6 +90,7 @@ body {
   border: none;
   cursor: pointer;
 }
+
 .theme_btn.header_btn {
   border-radius: 5px;
   font-size: 15px;
@@ -97,11 +98,12 @@ body {
   letter-spacing: 0.5px;
   padding: 5px 20px;
 }
+
 .theme_btn.icon_left {
   padding-right: 20px;
 }
 
-.theme_btn.no_icon { 
+.theme_btn.no_icon {
   padding: 10px 20px;
 }
 
@@ -141,9 +143,11 @@ a.theme_btn.btn_white {
   border: 1px solid var(--theme-green);
   color: var(--white-color);
 }
-.theme_btn.min_width{
+
+.theme_btn.min_width {
   min-width: 100px;
 }
+
 .theme_btn.btn_red {
   border: none;
   background: var(--theme-red);
@@ -155,11 +159,13 @@ a.theme_btn.btn_white {
   color: var(--theme-green);
   border: 1px solid var(--theme-green);
 }
+
 .theme_btn.btn_border_red {
   background: none;
   color: var(--theme-red);
   border: 1px solid var(--theme-red);
 }
+
 .theme_btn.full_width {
   width: 100%;
 }
@@ -204,9 +210,11 @@ a.theme_btn.btn_white {
 .relative {
   position: relative;
 }
-.break_all{
+
+.break_all {
   word-break: break-all;
 }
+
 .error {
   /* color: var(--red-color); */
   color: #fff;
@@ -268,7 +276,7 @@ a.theme_btn.btn_white {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 0px;
   transition: 1s;
 }
 
@@ -281,9 +289,9 @@ a.theme_btn.btn_white {
   position: relative;
   background: var(--warning-color);
   ;
-  padding: 20px 10px;
+  padding: 20px 8px;
   border-radius: 10px;
-  max-width: 500px;
+  max-width: 310px;
   /* width: 100%; */
   text-align: center;
 }
@@ -358,12 +366,16 @@ form.auth-form .theme_btn {
   margin-left: auto;
   margin-right: auto;
 }
-.on_mobile_767, .on_mobile_575{
+
+.on_mobile_767,
+.on_mobile_575 {
   display: none;
 }
-.on_desktop_hide_575{
+
+.on_desktop_hide_575 {
   display: block !important;
 }
+
 /* sanskar css end  */
 
 
@@ -390,12 +402,15 @@ form.auth-form .theme_btn {
   .d_none_767 {
     display: none !important;
   }
-  .on_desktop_hide_767{
+
+  .on_desktop_hide_767 {
     display: none !important;
   }
-  .on_mobile_767{
+
+  .on_mobile_767 {
     display: block !important;
   }
+
   .d_block_767 {
     display: block !important;
   }
@@ -405,15 +420,17 @@ form.auth-form .theme_btn {
     font-size: 14px;
     padding-right: 30px;
   }
-  .theme_btn.no_icon { 
+
+  .theme_btn.no_icon {
     padding: 6px 12px;
   }
+
   .theme_btn.with_icon {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 3px;
-}
+  }
 
   .theme_btn.icon_left {
     padding-right: 12px;
@@ -433,9 +450,10 @@ form.auth-form .theme_btn {
   .sect_padding {
     padding: 28px 0px;
   }
+
   .more-menus.sect_padding {
     padding: 0px;
-}
+  }
 
 
   .section_title_effect {
@@ -470,9 +488,11 @@ form.auth-form .theme_btn {
     justify-content: center;
     margin-top: 14px !important;
   }
-.logo_carousel .owl-nav{
-  display: none;
-}
+
+  .logo_carousel .owl-nav {
+    display: none;
+  }
+
   button.owl-prev,
   button.owl-next {
     position: unset;
@@ -570,7 +590,8 @@ select {
   cursor: pointer;
 }
 
-.form_field.outline, .fields_box {
+.form_field.outline,
+.fields_box {
   background: #f0f5ff;
   border: none;
   border-radius: 8px;
@@ -637,8 +658,9 @@ select {
   grid-column-gap: 10px;
   grid-row-gap: 10px;
 }
+
 .form_field.st-2 .radio_group.air {
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .form_field.st-2 .radio_group_single label {
@@ -673,9 +695,11 @@ select {
   top: 50%;
   transform: translateY(-50%);
 }
-.form_field.st-2 .radio_group_single label .radio_icon span{
+
+.form_field.st-2 .radio_group_single label .radio_icon span {
   font-size: 20px;
 }
+
 .form_field.st-2 .radio_group_single label .radio_icon .check {
   display: none;
 }
@@ -913,7 +937,7 @@ h2.card_title {
 @media (max-width: 767px) {
   .bottom_fixed_button {
     padding: 25px 15px;
-  
+
 
   }
 
@@ -921,14 +945,17 @@ h2.card_title {
     gap: 15px;
   }
 }
+
 @media (max-width: 575px) {
-  .on_mobile_575{
+  .on_mobile_575 {
     display: block !important;
   }
+
   .form_field.st-2 .radio_group.air {
-    grid-template-columns: repeat(1, 1fr); 
+    grid-template-columns: repeat(1, 1fr);
   }
-  .on_desktop_hide_575{
+
+  .on_desktop_hide_575 {
     display: none !important;
   }
-  }
+}

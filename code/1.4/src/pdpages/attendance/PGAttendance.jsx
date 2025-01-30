@@ -243,6 +243,8 @@ const PGAttendance = () => {
         }
     };
 
+    // console.log("user details: ", user)
+
     return (
         <>
             <br></br><br></br>
@@ -253,25 +255,28 @@ const PGAttendance = () => {
                         <p>
                             {showPopupPunchInFlag && (" Are you sure you want to Punch-In now? ")}
                         </p><br />
-                        <input
-                            id="id_tripstart"
-                            className="custom-input"
-                            style={{ paddingRight: "10px" }}
-                            type="number"
-                            placeholder="Trip Start - Meter Reading"
-                            maxLength={7}
-                            onInput={(e) => {
-                                restrictInput(e, 7);
-                            }}
-                            onChange={(e) =>
-                                setTripStart(e.target.value)
-                            }
-                            value={attendanceData && attendanceData[0].punchInMeterReading}
-                        />
+
+                        {user && user.vehicleStatus &&
+                            <input
+                                id="id_tripstart"
+                                className="custom-input"
+                                style={{ paddingRight: "10px" }}
+                                type="number"
+                                placeholder="Trip Start - Meter Reading"
+                                maxLength={7}
+                                onInput={(e) => {
+                                    restrictInput(e, 7);
+                                }}
+                                onChange={(e) =>
+                                    setTripStart(e.target.value)
+                                }
+                                value={attendanceData && attendanceData[0].punchInMeterReading}
+                            />
+                        }
 
                         <br></br><br></br>
-                        <button onClick={() => handlePunchInPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0 20px' }}>CONFIRM</button>
-                        <button onClick={() => handlePunchInPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0 20px' }}>CANCEL</button>
+                        <button onClick={() => handlePunchInPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0 0px' }}>CONFIRM</button>
+                        <button onClick={() => handlePunchInPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0 0px' }}>CANCEL</button>
                     </div>
                 </div>
                 <div className={showPopupPunchOutFlag ? 'pop-up-div open' : 'pop-up-div'}>
@@ -280,27 +285,32 @@ const PGAttendance = () => {
                             {showPopupPunchOutFlag && (" Are you sure you want to Punch-Out now? ")}
                         </p>
 
-                        <p>
-                            Trip Start: {attendanceData && attendanceData[0].tripStart}
-                        </p>
-                        <input
-                            id="id_tripend"
-                            className="custom-input"
-                            style={{ paddingRight: "10px" }}
-                            type="number"
-                            placeholder="Trip End - Meter Reading"
-                            maxLength={7}
-                            onInput={(e) => {
-                                restrictInput(e, 7);
-                            }}
-                            onChange={(e) =>
-                                setTripEnd(e.target.value)
-                            }
-                            value={attendanceData && attendanceData[0].tripEnd}
-                        />
+
+                        {user && user.vehicleStatus &&
+                            <>
+                                <p>
+                                    Trip Start: {attendanceData && attendanceData[0].tripStart}
+                                </p>
+                                <input
+                                    id="id_tripend"
+                                    className="custom-input"
+                                    style={{ paddingRight: "10px" }}
+                                    type="number"
+                                    placeholder="Trip End - Meter Reading"
+                                    maxLength={7}
+                                    onInput={(e) => {
+                                        restrictInput(e, 7);
+                                    }}
+                                    onChange={(e) =>
+                                        setTripEnd(e.target.value)
+                                    }
+                                    value={attendanceData && attendanceData[0].tripEnd}
+                                />
+                            </>
+                        }
                         <br></br><br></br>
-                        <button onClick={() => handlePunchOutPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0 20px' }}>CONFIRM</button>
-                        <button onClick={() => handlePunchOutPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0 20px' }}>CANCEL</button>
+                        <button onClick={() => handlePunchOutPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0px' }}>CONFIRM</button>
+                        <button onClick={() => handlePunchOutPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0px' }}>CANCEL</button>
                     </div>
                 </div>
             </div >
