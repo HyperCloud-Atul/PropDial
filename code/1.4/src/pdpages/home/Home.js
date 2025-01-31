@@ -19,6 +19,7 @@ import ProductCarousel from "../../components/ProductCarousel";
 import CounterSection from "../../components/CounterSection";
 import Testimonial from "../../components/Testimonial";
 import Blog from "../../components/Blog";
+import PunchInOut from "../../components/attendance/PunchInOut";
 import BottomRightFixedIcon from "../../components/BottomRightFixedIcon";
 import CollapsibleGroup from "../../components/CollapsibleGroup";
 import AirBnb from "../../components/AirBnb";
@@ -55,6 +56,7 @@ const Home = () => {
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
         <ProductCarousel></ProductCarousel>
+<PunchInOut/>
         <section className="work_flow sect_padding">
           <div className="container">
             <div className="section_title">

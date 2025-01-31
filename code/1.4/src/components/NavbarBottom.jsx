@@ -212,6 +212,11 @@ export default function NavbarBottom() {
           <div className="menu_name">More</div>
         </div>
       </section>
+      {/* <div className="bottom_punch_in">
+        <div className="theme_btn btn_fill no_icon text-center w-100">
+          Punch In
+        </div>
+      </div> */}
     </div>
   );
 }
