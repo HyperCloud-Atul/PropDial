@@ -245,7 +245,7 @@ export default function MasterSocietyList() {
 
 
   const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value); 
+    setSelectedCategory(event.target.value);
   };
 
   const category = [
@@ -368,39 +368,39 @@ export default function MasterSocietyList() {
 
         const snapshot = await ref.get(); // Use get() for one-time query
 
-        if (snapshot.empty) {
-          // Update existing document
-          await updateDocument(currentDocid, {
-            country: country.value,
-            state: state.value,
-            city: city.value,
-            locality: locality.value,
-            society: societyname,
-            category: selectedCategory,
-          });
+        // if (snapshot.empty) {
+        // Update existing document
+        await updateDocument(currentDocid, {
+          country: country.value,
+          state: state.value,
+          city: city.value,
+          locality: locality.value,
+          society: societyname,
+          category: selectedCategory,
+        });
 
-          setFormErrorType("success_msg");
-          setFormError("Successfully updated");
-          setIsAdding(false);
+        setFormErrorType("success_msg");
+        setFormError("Successfully updated");
+        setIsAdding(false);
 
-          // Reset error message and locality after 5 seconds
-          setTimeout(() => {
-            setFormError(null);
-            setFormErrorType(null);
-          }, 5000);
-        }
-        else {
-          // Handle duplicate case
-          setFormErrorType("error_msg");
-          setFormError("Already added");
-          setIsAdding(false);
+        // Reset error message and locality after 5 seconds
+        setTimeout(() => {
+          setFormError(null);
+          setFormErrorType(null);
+        }, 5000);
+        // }
+        // else {
+        //   // Handle duplicate case
+        //   setFormErrorType("error_msg");
+        //   setFormError("Already added");
+        //   setIsAdding(false);
 
-          // Reset error message after 5 seconds
-          setTimeout(() => {
-            setFormError(null);
-            setFormErrorType(null);
-          }, 5000);
-        }
+        //   // Reset error message after 5 seconds
+        //   setTimeout(() => {
+        //     setFormError(null);
+        //     setFormErrorType(null);
+        //   }, 5000);
+        // }
       } else {
         // Check for duplicates before adding
         // const ref = projectFirestore
@@ -663,7 +663,7 @@ export default function MasterSocietyList() {
               <div className="filters">
                 <div
                   className="left"
-                  style={{ display: "flex", alignItems: "center", flexWrap:"wrap", gap:"15px" }}
+                  style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "15px" }}
                 >
                   <div className="rt_global_search search_field">
                     <input
@@ -901,33 +901,33 @@ export default function MasterSocietyList() {
                   </div>
                 </div>
                 <div className="col-xl-4 col-lg-6">
-                <div className="form_field st-2 label_top">
+                  <div className="form_field st-2 label_top">
                     <label htmlFor="">Category</label>
                     <div className="field_box theme_radio_new">
-                            <div className="theme_radio_container" style={{
-                              padding:"0px",
-                              border:"none",
-                              margin:"10px 0px"
-                            }}>
-                              {category.map((c) => (
-                                <div className="radio_single" key={c.id}>
-                                  <input
-                                    type="radio"
-                                    name="category_type"
-                                    id={c.id}
-                                    value={c.value}
-                                    onChange={handleCategoryChange}
-                                    checked={selectedCategory === c.value}
-                                  />
-                                  <label className="label" htmlFor={c.id}>{c.label}</label>
-                                </div>
-                              ))}
-                            </div>
+                      <div className="theme_radio_container" style={{
+                        padding: "0px",
+                        border: "none",
+                        margin: "10px 0px"
+                      }}>
+                        {category.map((c) => (
+                          <div className="radio_single" key={c.id}>
+                            <input
+                              type="radio"
+                              name="category_type"
+                              id={c.id}
+                              value={c.value}
+                              onChange={handleCategoryChange}
+                              checked={selectedCategory === c.value}
+                            />
+                            <label className="label" htmlFor={c.id}>{c.label}</label>
                           </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-               
-                
+
+
               </div>
               <div className="vg22"></div>
 
