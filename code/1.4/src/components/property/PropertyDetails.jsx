@@ -2593,10 +2593,15 @@ const PropertyDetails = () => {
                         </SwiperSlide>
                         <SwiperSlide>
                           {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
+                          <Link to={`/inspection/${propertyid}`} >
+                          
+                          
+                         
                           <div className="eicp_single coming_soon">
                             <div className="icon">
                               <span className="material-symbols-outlined">
                                 pageview
+                                
                               </span>
                               <div className="text">
                                 <h6>{inspections && inspections.length}</h6>
@@ -2604,7 +2609,7 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                           </div>
-                          {/* </Link> */}
+                          </Link>
                         </SwiperSlide>
                         {/* Transactions */}
                         {/* <SwiperSlide>

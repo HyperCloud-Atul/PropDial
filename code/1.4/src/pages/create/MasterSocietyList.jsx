@@ -55,6 +55,7 @@ export default function MasterSocietyList() {
   const [city, setCity] = useState();
   const [locality, setLocality] = useState();
   const [society, setSociety] = useState();
+  const [selectedCategory, setSelectedCategory] = useState("Residential");
 
   let countryOptions = useRef([]);
   let stateOptions = useRef([]);
@@ -242,6 +243,25 @@ export default function MasterSocietyList() {
     }
   };
 
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value); 
+  };
+
+  const category = [
+    { id: "residential", value: "Residential", label: "Residential" },
+    {
+      id: "commercial",
+      value: "Commercial",
+      label: "Commercial",
+    },
+    {
+      id: "both",
+      value: "Both",
+      label: "Both",
+    },
+  ];
+
   //Society select onchange
   // const handleSocietyChange = async (option) => {
   //   setSociety(option);
@@ -356,6 +376,7 @@ export default function MasterSocietyList() {
             city: city.value,
             locality: locality.value,
             society: societyname,
+            category: selectedCategory,
           });
 
           setFormErrorType("success_msg");
@@ -406,6 +427,7 @@ export default function MasterSocietyList() {
             locality: locality.value,
             society: societyname,
             status: "active",
+            category: selectedCategory,
           };
           await addDocument(dataSet);
 
@@ -485,7 +507,8 @@ export default function MasterSocietyList() {
     docstate,
     doccity,
     doclocality,
-    docsociety
+    docsociety,
+    doccategory
   ) => {
     // console.log('data:', data)
     // console.log("country id: ", doccountry)
@@ -509,6 +532,7 @@ export default function MasterSocietyList() {
     setCity({ label: cityname, value: doccity });
     setLocality({ label: localityname, value: doclocality });
     setSociety(docsociety);
+    setSelectedCategory(doccategory);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update Society");
     setCurrentDocid(docid);
@@ -876,6 +900,34 @@ export default function MasterSocietyList() {
                     </div>
                   </div>
                 </div>
+                <div className="col-xl-4 col-lg-6">
+                <div className="form_field st-2 label_top">
+                    <label htmlFor="">Category</label>
+                    <div className="field_box theme_radio_new">
+                            <div className="theme_radio_container" style={{
+                              padding:"0px",
+                              border:"none",
+                              margin:"10px 0px"
+                            }}>
+                              {category.map((c) => (
+                                <div className="radio_single" key={c.id}>
+                                  <input
+                                    type="radio"
+                                    name="category_type"
+                                    id={c.id}
+                                    value={c.value}
+                                    onChange={handleCategoryChange}
+                                    checked={selectedCategory === c.value}
+                                  />
+                                  <label className="label" htmlFor={c.id}>{c.label}</label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                  </div>
+                </div>
+               
+                
               </div>
               <div className="vg22"></div>
 
@@ -958,7 +1010,8 @@ export default function MasterSocietyList() {
                                       data.state,
                                       data.city,
                                       data.locality,
-                                      data.society
+                                      data.society,
+                                      data.category ? data.category : "Residential"
                                     )
                                   }
                                   style={{

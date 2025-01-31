@@ -28,6 +28,8 @@ import PGSearchProperty from "./pdpages/property/PGSearchProperty";
 import PGProperties from "./pdpages/property/PGProperties";
 import PGCreateProperty from "./pdpages/property/PGCreateProperty";
 import PGUpdateProperty from "./pdpages/property/PGUpdateProperty";
+import ViewInspection from "./pdpages/inspection/ViewInspection";
+import AddInspection from "./pdpages/inspection/AddInspection";
 import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
 import HowUse from "./pdpages/howUse/HowUse";
 
@@ -473,6 +475,12 @@ function App() {
                     path="/propertydetails/:propertyid"
                     element={<PropertyDetails></PropertyDetails>}
                   ></Route>
+                   <Route
+                    path="/inspection/:propertyid"
+                    element={<ViewInspection></ViewInspection>}
+                  ></Route>
+                  <Route path="/add-inspection/:propertyid/:inspectionId?" element={<AddInspection />} />
+
 
                   <Route
                     path="/tenantdetails/:tenantId"

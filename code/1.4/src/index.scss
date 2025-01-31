@@ -183,6 +183,10 @@
     position: absolute;
     top: -10px;
     text-transform: capitalize;
+    &.label{
+      position: unset;
+      box-shadow: none;
+    }
   }
 
   .form-control:focus {
@@ -1182,6 +1186,14 @@ textarea{
   margin-top: 13px;
 }
 .property_adv_pg{
+  .field_error{
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: -10px;
+}
+
+}
+.pg_utility_bill {
   .field_error{
     margin-left: -10px;
     margin-right: -10px;
