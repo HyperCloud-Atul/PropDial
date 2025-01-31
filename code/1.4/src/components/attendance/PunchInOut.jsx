@@ -148,30 +148,30 @@ const PunchInOut = () => {
   //   else setIsPunchInToday(true)
   // }
 
-  const [isPunchInToday, setIsPunchInToday] = useState(false);
-  useEffect(() => {
-    const checkPunchInRecordForToday = async () => {
-      try {
-        // Find the punch-in record for today
-        const record = await projectFirestore
-          .collection("attendance-propdial")
-          .where("userId", "==", user.uid)
-          .where("date", "==", formattedTodaysDate)
-          .get();
+  // const [isPunchInToday, setIsPunchInToday] = useState(false);
+  // useEffect(() => {
+  //   const checkPunchInRecordForToday = async () => {
+  //     try {
+  //       // Find the punch-in record for today
+  //       const record = await projectFirestore
+  //         .collection("attendance-propdial")
+  //         .where("userId", "==", user.uid)
+  //         .where("date", "==", formattedTodaysDate)
+  //         .get();
 
-        if (record.empty) {
-          // alert("You have not punched in yet!");
-          setIsPunchInToday(false)
+  //       if (record.empty) {
+  //         // alert("You have not punched in yet!");
+  //         setIsPunchInToday(false)
 
-        }
-        else setIsPunchInToday(true)
-      } catch (error) {
-        console.error("Error fetching second last record:", error);
-      }
-    };
+  //       }
+  //       else setIsPunchInToday(true)
+  //     } catch (error) {
+  //       console.error("Error fetching second last record:", error);
+  //     }
+  //   };
 
-    checkPunchInRecordForToday();
-  }, [user.id]);
+  //   checkPunchInRecordForToday();
+  // }, [user.id]);
 
 
 
@@ -335,70 +335,142 @@ const PunchInOut = () => {
   }, [user.id]);
 
   return (
-    <div className="punch_in_out">
-      <div className="container">
-        <div className="pio_inner">
-          <div className="pioi_2">
-            <div className="pio_left">
-              <h3 className="title">
-                {greeting} <span>{user.displayName}</span>
-              </h3>
-              {!isPunchInToday && <h6 className="no_punch">You have not yet Punch-in for TODAY!</h6>}
-              {isPunchInToday && attendanceData &&
-                <div className="piol_inner">
-                  <div className="pioli_single">
-                    <h4 className="punch_in">Punch In</h4>
-                    <h6>{attendanceData[0].punchIn}</h6>
+    <>
+      {/* Pupup */}
+      <div>
+        <div className={showPopupPunchInFlag ? 'pop-up-div open' : 'pop-up-div'}>
+          <div>
+            <p>
+              {showPopupPunchInFlag && (" Are you sure you want to Punch-In now? ")}
+            </p><br />
+
+            {user && user.vehicleStatus &&
+              <input
+                id="id_tripstart"
+                className="custom-input"
+                style={{ paddingRight: "10px" }}
+                type="number"
+                placeholder="Trip Start - Meter Reading"
+                maxLength={7}
+                onInput={(e) => {
+                  restrictInput(e, 7);
+                }}
+                onChange={(e) =>
+                  setTripStart(e.target.value)
+                }
+                value={attendanceData && attendanceData[0].punchInMeterReading}
+              />
+            }
+
+            <br></br><br></br>
+            <button onClick={() => handlePunchInPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0 0px' }}>CONFIRM</button>
+            <button onClick={() => handlePunchInPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0 0px' }}>CANCEL</button>
+          </div>
+        </div>
+        <div className={showPopupPunchOutFlag ? 'pop-up-div open' : 'pop-up-div'}>
+          <div>
+            <p>
+              {showPopupPunchOutFlag && (" Are you sure you want to Punch-Out now? ")}
+            </p>
+
+
+            {user && user.vehicleStatus &&
+              <>
+                <p>
+                  Trip Start: {attendanceData && attendanceData[0].tripStart}
+                </p>
+                <input
+                  id="id_tripend"
+                  className="custom-input"
+                  style={{ paddingRight: "10px" }}
+                  type="number"
+                  placeholder="Trip End - Meter Reading"
+                  maxLength={7}
+                  onInput={(e) => {
+                    restrictInput(e, 7);
+                  }}
+                  onChange={(e) =>
+                    setTripEnd(e.target.value)
+                  }
+                  value={attendanceData && attendanceData[0].tripEnd}
+                />
+              </>
+            }
+            <br></br><br></br>
+            <button onClick={() => handlePunchOutPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0px' }}>CONFIRM</button>
+            <button onClick={() => handlePunchOutPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0px' }}>CANCEL</button>
+          </div>
+        </div>
+      </div >
+
+      <div className="punch_in_out">
+        <div className="container">
+          <div className="pio_inner">
+            <div className="pioi_2">
+              <div className="pio_left">
+                <h3 className="title">
+                  {greeting} <span>{user.displayName}</span>
+                </h3>
+                {attendanceData && attendanceData[0].date !== formattedTodaysDate && <h6 className="no_punch">You have not yet Punch-in for TODAY!</h6>}
+                {attendanceData && attendanceData[0].date === formattedTodaysDate &&
+                  <div className="piol_inner">
+                    <h2>{attendanceData && attendanceData[0].workHrs}</h2>
+                    <div className="pioli_single">
+                      <h4 className="punch_in">Punch In</h4>
+                      <h6>{attendanceData && attendanceData[0].punchIn}</h6>
+                    </div>
+                    <div className="pioli_single">
+                      <h4 className="punch_out">Punch Out</h4>
+                      <h6>{attendanceData && attendanceData[0].punchOut}</h6>
+                    </div>
+                  </div>}
+              </div>
+              <div className="pio_right">
+                {attendanceData && (!attendanceData[0].punchIn || attendanceData[0].date !== formattedTodaysDate) ?
+                  <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchInPopup}>Punch In</div> : attendanceData && (attendanceData[0].date === formattedTodaysDate && !attendanceData[0].punchOut) ? <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchOutPopup}>Punch Out</div> : "view log"}
+              </div>
+            </div>
+            <div className="pio_bottom">
+
+              <div className="piob_top">
+                <div className="piobt_single">
+                  <h5 >Last Punch In/Out</h5>
+                </div>
+              </div>
+              {secondLastRecord &&
+                <div className="piob_body">
+                  <div>{secondLastRecord.workHrs}</div>
+                  <div className="piobb_single">
+                    <h6>Date</h6>
+                    <h5>{secondLastRecord.date}</h5>
                   </div>
-                  <div className="pioli_single">
-                    <h4 className="punch_out">Punch Out</h4>
-                    <h6>{attendanceData[0].punchOut}</h6>
+                  <div className="piobb_single">
+                    <h6>Day</h6>
+                    <h5>{secondLastRecord.weekDay}</h5>
+                  </div>
+                  <div className="piobb_single">
+                    <h6>Punch-in Time</h6>
+                    <h5>{secondLastRecord.punchIn}</h5>
+                  </div>
+                  <div className="piobb_single">
+                    <h6>Punch-out Time</h6>
+                    <h5>{secondLastRecord.punchOut}</h5>
+                  </div>
+                  <div className="piobb_single">
+                    <h6>Trip Start</h6>
+                    <h5>{secondLastRecord.tripStart}</h5>
+                  </div>
+                  <div className="piobb_single">
+                    <h6>Trip End</h6>
+                    <h5>{secondLastRecord.tripEnd}</h5>
                   </div>
                 </div>}
             </div>
-            <div className="pio_right">
-              <div className="theme_btn btn_fill no_icon text-center">Punch In</div>
-            </div>
-          </div>
-          <div className="pio_bottom">
-
-            <div className="piob_top">
-              <div className="piobt_single">
-                <h5 >Last Punch In/Out</h5>
-              </div>
-            </div>
-            {secondLastRecord &&
-              <div className="piob_body">
-                <div>{secondLastRecord.workHrs}</div>
-                <div className="piobb_single">
-                  <h6>Date</h6>
-                  <h5>{secondLastRecord.date}</h5>
-                </div>
-                <div className="piobb_single">
-                  <h6>Day</h6>
-                  <h5>{secondLastRecord.weekDay}</h5>
-                </div>
-                <div className="piobb_single">
-                  <h6>Punch-in Time</h6>
-                  <h5>{secondLastRecord.punchIn}</h5>
-                </div>
-                <div className="piobb_single">
-                  <h6>Punch-out Time</h6>
-                  <h5>{secondLastRecord.punchOut}</h5>
-                </div>
-                <div className="piobb_single">
-                  <h6>Trip Start</h6>
-                  <h5>{secondLastRecord.tripStart}</h5>
-                </div>
-                <div className="piobb_single">
-                  <h6>Trip End</h6>
-                  <h5>{secondLastRecord.tripEnd}</h5>
-                </div>
-              </div>}
           </div>
         </div>
       </div>
-    </div>
+
+    </>
   );
 };
 
