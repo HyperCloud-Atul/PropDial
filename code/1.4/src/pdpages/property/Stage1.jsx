@@ -588,7 +588,7 @@ const Stage1 = (props) => {
   //Locality select onchange
   const handleLocalityChange = async (option, selectedSociety) => {
     setLocality(option);
-    // console.log('locality option:', option, 'selectedSociety', selectedSociety)
+    console.log('locality option:', option, 'selectedSociety', selectedSociety)
     if (locality && locality.label !== option.label) {
       selectedSociety = {
         label: '',
@@ -601,10 +601,10 @@ const Stage1 = (props) => {
       })
     }
     if (option) {
-      const localityname = option.label
+      const localityname = option.value
       // console.log("localityname: ", option)
       // console.log("masterLocality: ", masterLocality)
-      const localityid = (masterLocality && masterLocality.find((e) => e.locality.toLowerCase() === localityname.toLowerCase())).id
+      const localityid = (masterLocality && masterLocality.find((e) => e.id.toLowerCase() === localityname.toLowerCase())).id
       // console.log('localityid', localityid)
       const ref = await projectFirestore
         .collection("m_societies")
@@ -2807,7 +2807,7 @@ const Stage1 = (props) => {
                   onChange={(e) => {
                     handleLocalityChange({
                       label: e.label,
-                      value: e.label
+                      value: e.value
                     }, society)
                   }}
                   options={localityOptions.current}
