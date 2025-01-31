@@ -1,5 +1,5 @@
 // serviceWorkerRegistration.js
-// import { event } from "jquery";
+import { event } from 'jquery';
 import { Workbox } from "workbox-window";
 
 // Check if service worker is supported by the browser

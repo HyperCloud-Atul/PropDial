@@ -334,7 +334,7 @@ const PhoneLogin_reCaptchaV2 = () => {
           displayName: camelCase(displayName.toLowerCase()),
           fullName: camelCase(name.toLowerCase()),
           phoneNumber: phone,
-          email: camelCase(email.toLowerCase().trim()),
+          email: email.toLowerCase().trim(),
           city: camelCase(city.toLowerCase().trim()),
           address: camelCase(address.toLowerCase().trim()),
           gender,

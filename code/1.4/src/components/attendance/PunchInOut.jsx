@@ -418,10 +418,12 @@ const PunchInOut = () => {
                     <div className="pioli_single">
                       <h4 className="punch_in">Punch In</h4>
                       <h6>{attendanceData && attendanceData[0].punchIn}</h6>
+                      <h6>{attendanceData && attendanceData[0].tripStart}</h6>
                     </div>
                     <div className="pioli_single">
                       <h4 className="punch_out">Punch Out</h4>
                       <h6>{attendanceData && attendanceData[0].punchOut}</h6>
+                      <h6>{attendanceData && attendanceData[0].tripEnd}</h6>
                     </div>
                   </div>}
               </div>
