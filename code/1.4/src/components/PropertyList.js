@@ -146,7 +146,7 @@ export default function PropertyList({ properties }) {
                       </div>
                     )}
                     {
-                      user.role === "propertymanager" ?
+                      user.role === "manager" ?
                         <>
                           <div
                             className="secondary-details-inside-display"

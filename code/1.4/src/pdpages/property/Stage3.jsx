@@ -124,6 +124,7 @@ export default function Stage3(props) {
   const [propertyDetails, setPropertyDetails] = useState({
     MainDoorFacing: "",
     OverLooking: [],
+    Amenities: [],
     BalconyFacing: [],
     VisitingHrsFrom: "10:00 AM",
     VisitingHrsTo: "06:00 PM",
@@ -146,6 +147,9 @@ export default function Stage3(props) {
           : "",
         OverLooking: propertyDocument.overLooking
           ? propertyDocument.overLooking
+          : [],
+        Amenities: propertyDocument.amenities
+          ? propertyDocument.amenities
           : [],
         BalconyFacing: propertyDocument.balconyFacing
           ? propertyDocument.balconyFacing
@@ -346,6 +350,85 @@ export default function Stage3(props) {
             propertyDocument.overLooking.find((e) => e === "Corner")
             ? true
             : false,
+
+        // Amenities
+        MaintenanceStaffClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Maintenance Staff")
+            ? true
+            : false,
+        ATMClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "ATM")
+            ? true
+            : false,
+        ShoppingCenterClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Shopping Center")
+            ? true
+            : false,
+        CommonCafeteriaClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Common Cafeteria")
+            ? true
+            : false,
+        FoodCourtClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Food Court")
+            ? true
+            : false,
+        DGAvailabilityClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "DG Availability")
+            ? true
+            : false,
+        CCTVClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "CCTV")
+            ? true
+            : false,
+        GroceryShopClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Grocery Shop")
+            ? true
+            : false,
+        VisitiorParkingClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Visitior Parking")
+            ? true
+            : false,
+        PowerBackupClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Power Backup")
+            ? true
+            : false,
+        VastuComplaintClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Vastu Complaint")
+            ? true
+            : false,
+        SecurityStaffClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Security Staff")
+            ? true
+            : false,
+        IntercomClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Intercom")
+            ? true
+            : false,
+        LiftsClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "Lifts")
+            ? true
+            : false,
+        HighSpeedLiftsClick:
+          propertyDocument.amenities &&
+            propertyDocument.amenities.find((e) => e === "HighSpeed Lifts")
+            ? true
+            : false,
+
+
       });
     }
   }, [propertyDocument]);
@@ -361,6 +444,9 @@ export default function Stage3(props) {
       mainDoorFacing: propertyDetails.MainDoorFacing,
       overLooking: propertyDetails.OverLooking
         ? propertyDetails.OverLooking
+        : [],
+      amenities: propertyDetails.Amenities
+        ? propertyDetails.Amenities
         : [],
       balconyFacing: propertyDetails.BalconyFacing
         ? propertyDetails.BalconyFacing
@@ -1953,6 +2039,750 @@ export default function Stage3(props) {
                   </div>
                 </div>
               </div>
+
+              {/* Amenities: */}
+              {propertyDetails && propertyDetails.Category === 'Commercial' &&
+                <div className="col-md-12">
+                  <div className="form_field st-2 label_top">
+                    <label htmlFor="">Amenities</label>
+                    <div className="radio_group">
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.MaintenanceStaffClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_maintenancestaff"
+                            onClick={(e) => {
+                              if (propertyDetails.MaintenanceStaffClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Maintenance Staff"
+                                    ),
+                                  MaintenanceStaffClick: !propertyDetails.MaintenanceStaffClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Maintenance Staff",
+                                  ],
+                                  MaintenanceStaffClick: !propertyDetails.MaintenanceStaffClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_maintenancestaff">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Maintenance Staff</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.ATMClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_atm"
+                            onClick={(e) => {
+                              if (propertyDetails.ATMClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "ATM"
+                                    ),
+                                  ATMClick:
+                                    !propertyDetails.ATMClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "ATM",
+                                  ],
+                                  ATMClick:
+                                    !propertyDetails.ATMClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_atm">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>ATM</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.ShoppingCenterClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_shoppingcenter"
+                            onClick={(e) => {
+                              if (propertyDetails.ShoppingCenterClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Shopping Center"
+                                    ),
+                                  ShoppingCenterClick:
+                                    !propertyDetails.ShoppingCenterClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Shopping Center",
+                                  ],
+                                  ShoppingCenterClick:
+                                    !propertyDetails.ShoppingCenterClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_shoppingcenter">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Shopping Center</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.CommonCafeteriaClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_commoncafeteria"
+                            onClick={(e) => {
+                              if (propertyDetails.CommonCafeteriaClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Common Cafeteria"
+                                    ),
+                                  CommonCafeteriaClick:
+                                    !propertyDetails.CommonCafeteriaClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Common Cafeteria",
+                                  ],
+                                  CommonCafeteriaClick:
+                                    !propertyDetails.CommonCafeteriaClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_commoncafeteria">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Common Cafeteria</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.FoodCourtClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_foodcourt"
+                            onClick={(e) => {
+                              if (propertyDetails.FoodCourtClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Food Court"
+                                    ),
+                                  FoodCourtClick:
+                                    !propertyDetails.FoodCourtClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Food Court",
+                                  ],
+                                  FoodCourtClick:
+                                    !propertyDetails.FoodCourtClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_foodcourt">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Food Court</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.DGAvailabilityClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_dgavailability"
+                            onClick={(e) => {
+                              if (propertyDetails.DGAvailabilityClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "DG Availability"
+                                    ),
+                                  DGAvailabilityClick:
+                                    !propertyDetails.DGAvailabilityClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "DG Availability",
+                                  ],
+                                  DGAvailabilityClick:
+                                    !propertyDetails.DGAvailabilityClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_dgavailability">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>DG Availability</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.CCTVClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_cctv"
+                            onClick={(e) => {
+                              if (propertyDetails.CCTVClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "CCTV"
+                                    ),
+                                  CCTVClick:
+                                    !propertyDetails.CCTVClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "CCTV",
+                                  ],
+                                  CCTVClick:
+                                    !propertyDetails.CCTVClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_cctv">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>CCTV</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.GroceryShopClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_groceryshop"
+                            onClick={(e) => {
+                              if (propertyDetails.GroceryShopClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Grocery Shop"
+                                    ),
+                                  GroceryShopClick:
+                                    !propertyDetails.GroceryShopClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Grocery Shop",
+                                  ],
+                                  GroceryShopClick:
+                                    !propertyDetails.GroceryShopClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_groceryshop">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Grocery Shop</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.VisitiorParkingClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_visitiorparking"
+                            onClick={(e) => {
+                              if (propertyDetails.VisitiorParkingClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Visitior Parking"
+                                    ),
+                                  VisitiorParkingClick:
+                                    !propertyDetails.VisitiorParkingClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Visitior Parking",
+                                  ],
+                                  VisitiorParkingClick:
+                                    !propertyDetails.VisitiorParkingClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_visitiorparking">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Visitior Parking</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.PowerBackupClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_powerbackup"
+                            onClick={(e) => {
+                              if (propertyDetails.PowerBackupClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Power Backup"
+                                    ),
+                                  PowerBackupClick:
+                                    !propertyDetails.PowerBackupClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Power Backup",
+                                  ],
+                                  PowerBackupClick:
+                                    !propertyDetails.PowerBackupClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_powerbackup">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Power Backup</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.VastuComplaintClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_vastucomplaint"
+                            onClick={(e) => {
+                              if (propertyDetails.VastuComplaintClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Vastu Complaint"
+                                    ),
+                                  VastuComplaintClick:
+                                    !propertyDetails.VastuComplaintClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Vastu Complaint",
+                                  ],
+                                  VastuComplaintClick:
+                                    !propertyDetails.VastuComplaintClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_vastucomplaint">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Vastu Complaint</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.SecurityStaffClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_securitystaff"
+                            onClick={(e) => {
+                              if (propertyDetails.SecurityStaffClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Security Staff"
+                                    ),
+                                  SecurityStaffClick:
+                                    !propertyDetails.SecurityStaffClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Security Staff",
+                                  ],
+                                  SecurityStaffClick:
+                                    !propertyDetails.SecurityStaffClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_securitystaff">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Security Staff</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.IntercomClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_intercom"
+                            onClick={(e) => {
+                              if (propertyDetails.IntercomClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Intercom"
+                                    ),
+                                  IntercomClick:
+                                    !propertyDetails.IntercomClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Intercom",
+                                  ],
+                                  IntercomClick:
+                                    !propertyDetails.IntercomClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_intercom">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Intercom</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.LiftsClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_lifts"
+                            onClick={(e) => {
+                              if (propertyDetails.LiftsClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "Lifts"
+                                    ),
+                                  LiftsClick:
+                                    !propertyDetails.LiftsClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "Lifts",
+                                  ],
+                                  LiftsClick:
+                                    !propertyDetails.LiftsClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_lifts">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>Lifts</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="radio_group_single">
+                        <div
+                          className={
+                            propertyDetails.HighSpeedLiftsClick
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="amenities_highspeedlifts"
+                            onClick={(e) => {
+                              if (propertyDetails.HighSpeedLiftsClick) {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities:
+                                    propertyDetails.Amenities &&
+                                    propertyDetails.Amenities.filter(
+                                      (elem) => elem !== "HighSpeed Lifts"
+                                    ),
+                                  HighSpeedLiftsClick:
+                                    !propertyDetails.HighSpeedLiftsClick,
+                                });
+                              } else {
+                                setPropertyDetails({
+                                  ...propertyDetails,
+                                  Amenities: [
+                                    ...propertyDetails.Amenities,
+                                    "HighSpeed Lifts",
+                                  ],
+                                  HighSpeedLiftsClick:
+                                    !propertyDetails.HighSpeedLiftsClick,
+                                });
+                              }
+                            }}
+                          />
+                          <label htmlFor="amenities_highspeedlifts">
+                            <div className="radio_icon">
+                              <span className="material-symbols-outlined add">
+                                add
+                              </span>
+                              <span className="material-symbols-outlined check">
+                                done
+                              </span>
+                            </div>
+                            <h6>HighSpeed Lifts</h6>
+                          </label>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>}
 
               {/* Visiting Hours From */}
               <div className="col-md-6">
