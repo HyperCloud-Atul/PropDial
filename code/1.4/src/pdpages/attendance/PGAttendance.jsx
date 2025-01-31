@@ -90,8 +90,6 @@ const PGAttendance = () => {
             ["5"]
         );
 
-    // const [attendanceData, setAttendanceData] = useState(false);
-
     //Popup Flags
     const [showPopupPunchInFlag, setShowPopupPunchInFlag] = useState(false);
     // const [showPopupFlag, setShowPopupFlag] = useState(false);
@@ -160,7 +158,7 @@ const PGAttendance = () => {
         // Cleanup the interval on component unmount
         // return () => clearInterval(timer);
 
-    }, [attendanceData]); // Run once when the component mounts
+    }, []); // Run once when the component mounts
 
 
     const handlePunchIn = async () => {
