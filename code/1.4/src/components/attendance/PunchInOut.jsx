@@ -414,7 +414,7 @@ const PunchInOut = () => {
                 {attendanceData && attendanceData[0].date !== formattedTodaysDate && <h6 className="no_punch">You have not yet Punch-in for TODAY!</h6>}
                 {attendanceData && attendanceData[0].date === formattedTodaysDate &&
                   <div className="piol_inner">
-                    <h2>{attendanceData && attendanceData[0].workHrs}</h2>
+
                     <div className="pioli_single">
                       <h4 className="punch_in">Punch In</h4>
                       <h6>{attendanceData && attendanceData[0].punchIn}</h6>
@@ -429,7 +429,7 @@ const PunchInOut = () => {
               </div>
               <div className="pio_right">
                 {attendanceData && (!attendanceData[0].punchIn || attendanceData[0].date !== formattedTodaysDate) ?
-                  <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchInPopup}>Punch In</div> : attendanceData && (attendanceData[0].date === formattedTodaysDate && !attendanceData[0].punchOut) ? <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchOutPopup}>Punch Out</div> : "view log"}
+                  <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchInPopup}>Punch In</div> : attendanceData && (attendanceData[0].date === formattedTodaysDate && !attendanceData[0].punchOut) ? <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchOutPopup}>Punch Out</div> : <h2>{attendanceData && attendanceData[0].workHrs}</h2>}
               </div>
             </div>
             <div className="pio_bottom">
