@@ -57,6 +57,7 @@ const Home = () => {
         <Banner></Banner>
         <ProductCarousel></ProductCarousel>
 <PunchInOut/>
+
         <section className="work_flow sect_padding">
           <div className="container">
             <div className="section_title">

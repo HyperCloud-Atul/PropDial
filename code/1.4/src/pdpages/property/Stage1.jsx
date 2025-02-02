@@ -2937,6 +2937,7 @@ const Stage1 = (props) => {
                 />
                 <div className="field_icon"></div>
               </div>
+              <div className="field_error">Pincode is required field</div>
             </div>
           </div>
         </div>

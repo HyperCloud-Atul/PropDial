@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 
 import AttendanceTable from './AttendanceTable';
 import Popup from '../../components/Popup';
+import PunchInOut from '../../components/attendance/PunchInOut';
 
 // import scss 
 import './PGAttendance.scss'
@@ -379,14 +380,13 @@ const PGAttendance = () => {
                 </div>
             </div >
             <div className='container' style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "24px", marginTop: "20px" }}>
+                {/* <div style={{ fontSize: "24px", marginTop: "20px" }}>
                     <h1>{greeting}!</h1>
                     <p>Welcome {user.fullName}</p>
                 </div>
                 <hr></hr>
                 <p style={{ fontSize: "33px", fontWeight: "bolder", marginTop: "0px" }}>
-                    {/* {currentTime.toLocaleTimeString()}  */}
-                    {/* Example: 11:45:03 AM */}
+                  
                 </p>
                 <div style={{ width: "100%", display: 'flex', justifyContent: 'center', }}>
                     <div style={{ width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'space-around', maxWidth: '400px' }} >
@@ -404,8 +404,10 @@ const PGAttendance = () => {
                             Punch Out
                         </button>
                     </div>
-                </div>
-                <br></br><br></br>
+                </div> */}
+                <br></br>
+                <PunchInOut/>
+                <br />
                 <h2>Attendance Records</h2>
                 <div>
                     {attendanceData && <AttendanceTable attendanceDoc={attendanceData} />}
