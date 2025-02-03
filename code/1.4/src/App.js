@@ -927,7 +927,7 @@ function App() {
                     }
                   ></Route>
                   <Route
-                    path="/attendence"
+                    path="/attendance"
                     element={<PGAttendance />}
                   ></Route>
                 </Routes>

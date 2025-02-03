@@ -198,7 +198,7 @@ const PunchInOut = () => {
 
     try {
       // Add a punch-in record  
-
+      console.log("punch in click");
       const data = {
         userId: user.uid,
         punchIn: formattedPunchinTime,
