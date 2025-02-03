@@ -107,7 +107,7 @@ export const useFirestore = (collection) => {
       //   emailID: user.email,
       //   photoURL: user.photoURL
       // }    
-      console.log("doc data: ", doc)
+      // console.log("doc data: ", doc)
       const createdBy = user ? user.uid : "guest";
       const createdAt = timestamp.fromDate(new Date());
       const addedDocument = await ref.add({ ...doc, createdAt, createdBy });

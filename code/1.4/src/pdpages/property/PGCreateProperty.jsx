@@ -488,23 +488,24 @@ const CreateProperty = () => {
       navigate("/allproperties/all");
     } else {
       let errorFlag = false;
-      let errorMsg = "Error: Please select ";
+      let errorMsg = "Please resolve ERRORs before proceeding...";
 
       if (
         propertyDetails.UnitNumber === "" ||
         propertyDetails.UnitNumber === "undefined" ||
         propertyDetails.UnitNumber === null
       ) {
-        if (errorMsg === "Error: Please select ")
-          errorMsg =
-            errorMsg + propertyDetails.Category === "Plot"
-              ? " Plot Number"
-              : " Unit Number";
-        else
-          errorMsg =
-            errorMsg + propertyDetails.Category === "Plot"
-              ? ", Plot Number"
-              : ", Unit Number";
+        // if (errorMsg === "Error: Please select ")
+        //   errorMsg =
+        //     errorMsg + propertyDetails.Category === "Plot"
+        //       ? " Plot Number"
+        //       : " Unit Number";
+        // else
+        //   errorMsg =
+        //     errorMsg + propertyDetails.Category === "Plot"
+        //       ? ", Plot Number"
+        //       : ", Unit Number";
+
         errorFlag = true;
       }
 
@@ -513,43 +514,43 @@ const CreateProperty = () => {
         propertyDetails.Flag === "undefined" ||
         propertyDetails.Flag === null
       ) {
-        if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "Flag";
-        else errorMsg = errorMsg + ", Flag";
+        // if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "Flag";
+        // else errorMsg = errorMsg + ", Flag";
         errorFlag = true;
       }
 
-      if (
-        propertyDetails.Purpose === "" ||
-        propertyDetails.Purpose === "undefined" ||
-        propertyDetails.Purpose === null
-      ) {
-        if (errorMsg === "Error: Please select ")
-          errorMsg = errorMsg + "Purpose";
-        else errorMsg = errorMsg + ", Purpose";
-        errorFlag = true;
-      } else {
-        if (
-          propertyDetails.Category === "Residential" &&
-          (propertyDetails.Purpose === "Rent" ||
-            propertyDetails.Purpose === "RentSaleBoth") &&
-          (propertyDetails.MaintenanceFlag === "" ||
-            propertyDetails.MaintenanceFlag === "undefined" ||
-            propertyDetails.MaintenanceFlag == null)
-        ) {
-          if (errorMsg === "Error: Please select ")
-            errorMsg = errorMsg + "Maintenance Status";
-          else errorMsg = errorMsg + ", Maintenance Status";
-          errorFlag = true;
-        }
-      }
+      // if (
+      //   propertyDetails.Purpose === "" ||
+      //   propertyDetails.Purpose === "undefined" ||
+      //   propertyDetails.Purpose === null
+      // ) {
+      //   // if (errorMsg === "Error: Please select ")
+      //   //   errorMsg = errorMsg + "Purpose";
+      //   // else errorMsg = errorMsg + ", Purpose";
+      //   errorFlag = true;
+      // } else {
+      //   if (
+      //     propertyDetails.Category === "Residential" &&
+      //     (propertyDetails.Purpose === "Rent" ||
+      //       propertyDetails.Purpose === "RentSaleBoth") &&
+      //     (propertyDetails.MaintenanceFlag === "" ||
+      //       propertyDetails.MaintenanceFlag === "undefined" ||
+      //       propertyDetails.MaintenanceFlag == null)
+      //   ) {
+      //     if (errorMsg === "Error: Please select ")
+      //       errorMsg = errorMsg + "Maintenance Status";
+      //     else errorMsg = errorMsg + ", Maintenance Status";
+      //     errorFlag = true;
+      //   }
+      // }
 
       if (
         propertyDetails.PropertyType === "" ||
         propertyDetails.PropertyType === "Select Property Type"
       ) {
-        if (errorMsg === "Error: Please select ")
-          errorMsg = "Please Enter Property Type";
-        else errorMsg = errorMsg + ", Property Type";
+        // if (errorMsg === "Error: Please select ")
+        //   errorMsg = "Please Enter Property Type";
+        // else errorMsg = errorMsg + ", Property Type";
         errorFlag = true;
       }
 
@@ -557,8 +558,8 @@ const CreateProperty = () => {
         propertyDetails.Category === "Residential" &&
         propertyDetails.Bhk === ""
       ) {
-        if (errorMsg === "Error: Please select ") errorMsg = "Please Enter BHK";
-        else errorMsg = errorMsg + ", BHK";
+        // if (errorMsg === "Error: Please select ") errorMsg = "Please Enter BHK";
+        // else errorMsg = errorMsg + ", BHK";
         errorFlag = true;
       }
 
@@ -567,9 +568,9 @@ const CreateProperty = () => {
         (propertyDetails.FloorNo === "" ||
           propertyDetails.FloorNo === "Select Floor No")
       ) {
-        if (errorMsg === "Error: Please select ")
-          errorMsg = "Please Enter Floor No";
-        else errorMsg = errorMsg + ", Floor No";
+        // if (errorMsg === "Error: Please select ")
+        //   errorMsg = "Please Enter Floor No";
+        // else errorMsg = errorMsg + ", Floor No";
         errorFlag = true;
       }
 
@@ -634,32 +635,32 @@ const CreateProperty = () => {
       //   errorFlag = true;
       // }
       if (state === null) {
-        console.log("state is null");
-        if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "State";
-        else errorMsg = errorMsg + ", State";
+        // console.log("state is null");
+        // if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "State";
+        // else errorMsg = errorMsg + ", State";
         errorFlag = true;
       }
 
       if (city === null) {
-        console.log("city is null");
-        if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "City";
-        else errorMsg = errorMsg + ", City";
+        // console.log("city is null");
+        // if (errorMsg === "Error: Please select ") errorMsg = errorMsg + "City";
+        // else errorMsg = errorMsg + ", City";
         errorFlag = true;
       }
 
       if (locality === null) {
-        console.log("locality is null");
-        if (errorMsg === "Error: Please select ")
-          errorMsg = errorMsg + "Locality";
-        else errorMsg = errorMsg + ", Locality";
+        // console.log("locality is null");
+        // if (errorMsg === "Error: Please select ")
+        //   errorMsg = errorMsg + "Locality";
+        // else errorMsg = errorMsg + ", Locality";
         errorFlag = true;
       }
 
       if (society === null) {
-        console.log("society is null");
-        if (errorMsg === "Error: Please select ")
-          errorMsg = errorMsg + "Society";
-        else errorMsg = errorMsg + ", Society";
+        // console.log("society is null");
+        // if (errorMsg === "Error: Please select ")
+        //   errorMsg = errorMsg + "Society";
+        // else errorMsg = errorMsg + ", Society";
         errorFlag = true;
       }
 
@@ -1484,6 +1485,7 @@ const CreateProperty = () => {
                         </div>
                       </div>
                     </div>
+                    {(propertyDetails.Flag === "") ? <div className="field_error">Please select Flag</div> : ""}
                   </div>
                 </div>
                 {/* Category */}
@@ -2044,6 +2046,7 @@ const CreateProperty = () => {
                  </span>
                </div> */}
                     </div>
+                    {(propertyDetails.PropertyType === "" || propertyDetails.PropertyType === "Select Property Type") ? <div className="field_error">Please select Property Type</div> : ""}
                   </div>
                 </div>
 
@@ -2227,6 +2230,7 @@ const CreateProperty = () => {
                  </span>
                </div> */}
                         </div>
+                        {(propertyDetails.Bhk === "" || propertyDetails.Bhk === "Select BHK") ? <div className="field_error">Please select BHK Type</div> : ""}
                       </div>
                     </div>
                   )}
@@ -2795,6 +2799,7 @@ const CreateProperty = () => {
                  </span>
                </div> */}
                         </div>
+                        {(propertyDetails.FloorNo === "" || propertyDetails.FloorNo === "Select Floor No") ? <div className="field_error">Please select Floor No</div> : ""}
                       </div>
                     </div>
                   )}
@@ -2839,6 +2844,7 @@ const CreateProperty = () => {
                         >
                           {convertToWords(propertyDetails.DemandPriceRent)}
                         </div>
+                        {(propertyDetails.DemandPriceRent === "") ? <div className="field_error">Please enter Demand Price</div> : ""}
                       </div>
                     </div>
                   )}
@@ -3328,6 +3334,7 @@ const CreateProperty = () => {
                         }}
                       />
                     </div>
+                    {(state === "" || state === null || state === "Select...") ? <div className="field_error">Please select State</div> : ""}
                   </div>
                 </div>
 
@@ -3354,6 +3361,7 @@ const CreateProperty = () => {
                         }}
                       />
                     </div>
+                    {(city === "" || city === null || city === "Select...") ? <div className="field_error">Please select City</div> : ""}
                   </div>
                 </div>
 
@@ -3380,6 +3388,7 @@ const CreateProperty = () => {
                         }}
                       />
                     </div>
+                    {(locality === "" || locality === null || locality === "Select...") ? <div className="field_error">Please select Locality</div> : ""}
                   </div>
                 </div>
 
@@ -3425,6 +3434,7 @@ const CreateProperty = () => {
                         }}
                       />
                     </div>
+                    {(society === "" || society === null || society === "Select...") ? <div className="field_error">Please select Society</div> : ""}
                   </div>
                 </div>
                 {/* <div className="col-xl-4 col-lg-6">
@@ -3471,6 +3481,7 @@ const CreateProperty = () => {
                         value={propertyDetails && propertyDetails.UnitNumber}
                       />
                       <div className="field_icon"></div>
+                      {(propertyDetails.UnitNumber === "" && propertyDetails.Category === "Plot") ? <div className="field_error">Please enter Plot number</div> : (propertyDetails.UnitNumber === "") ? <div className="field_error">Please enter Unit number</div> : ""}
                     </div>
                   </div>
                 </div>

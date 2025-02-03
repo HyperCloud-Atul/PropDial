@@ -106,12 +106,14 @@ const PGAttendance = () => {
       ["5"]
     );
 
-  //Popup Flags
-  const [showPopupPunchInFlag, setShowPopupPunchInFlag] = useState(false);
-  // const [showPopupFlag, setShowPopupFlag] = useState(false);
-  const [popupReturn, setPopupReturn] = useState(false);
-  const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
-  // const [popupReturn, setPopupReturn] = useState(false);
+    console.log("attendanceData: ", attendanceData)
+
+    //Popup Flags
+    const [showPopupPunchInFlag, setShowPopupPunchInFlag] = useState(false);
+    // const [showPopupFlag, setShowPopupFlag] = useState(false);
+    const [popupReturn, setPopupReturn] = useState(false);
+    const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
+    // const [popupReturn, setPopupReturn] = useState(false);
 
   const showPunchInPopup = () => {
     // e.preventDefault();
@@ -370,7 +372,7 @@ const PGAttendance = () => {
                                 onChange={(e) =>
                                     setTripStart(e.target.value)
                                 }
-                                value={attendanceData && attendanceData[0].punchInMeterReading}
+                                value={attendanceData && attendanceData.length > 0 && attendanceData[0].punchInMeterReading}
                             />
                         }
 
@@ -389,7 +391,7 @@ const PGAttendance = () => {
                         {user && user.vehicleStatus &&
                             <>
                                 <p>
-                                    Trip Start: {attendanceData && attendanceData[0].tripStart}
+                                    Trip Start: {attendanceData && attendanceData.length > 0 && attendanceData[0].tripStart}
                                 </p>
                                 <input
                                     id="id_tripend"
@@ -404,7 +406,7 @@ const PGAttendance = () => {
                                     onChange={(e) =>
                                         setTripEnd(e.target.value)
                                     }
-                                    value={attendanceData && attendanceData[0].tripEnd}
+                                    value={attendanceData && attendanceData.length > 0 && attendanceData[0].tripEnd}
                                 />
                             </>
                         }
@@ -441,7 +443,7 @@ const PGAttendance = () => {
                     </div>
                 </div>
                 <br></br>
-                <PunchInOut/>
+                <PunchInOut />
                 <br />
                 <h2>Attendance Records</h2>
                 <div>

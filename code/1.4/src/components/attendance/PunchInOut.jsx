@@ -358,7 +358,7 @@ const PunchInOut = () => {
                 onChange={(e) =>
                   setTripStart(e.target.value)
                 }
-                value={attendanceData && attendanceData[0].punchInMeterReading}
+                value={attendanceData && attendanceData.length > 0 && attendanceData[0].punchInMeterReading}
               />
             }
 
@@ -377,7 +377,7 @@ const PunchInOut = () => {
             {user && user.vehicleStatus &&
               <>
                 <p>
-                  Trip Start: {attendanceData && attendanceData[0].tripStart}
+                  Trip Start: {attendanceData && attendanceData.length > 0 && attendanceData[0].tripStart}
                 </p>
                 <input
                   id="id_tripend"
@@ -392,7 +392,7 @@ const PunchInOut = () => {
                   onChange={(e) =>
                     setTripEnd(e.target.value)
                   }
-                  value={attendanceData && attendanceData[0].tripEnd}
+                  value={attendanceData && attendanceData.length > 0 && attendanceData[0].tripEnd}
                 />
               </>
             }
@@ -411,25 +411,27 @@ const PunchInOut = () => {
                 <h3 className="title">
                   {greeting} <span>{user.displayName}</span>
                 </h3>
-                {attendanceData && attendanceData[0].date !== formattedTodaysDate && <h6 className="no_punch">You have not yet Punch-in for TODAY!</h6>}
-                {attendanceData && attendanceData[0].date === formattedTodaysDate &&
+                {attendanceData && attendanceData.length === 0 ? <h6 className="no_punch">You have not yet Punch-in for TODAY!</h6> :
+                  attendanceData && attendanceData.length > 0 && attendanceData[0].date !== formattedTodaysDate && <h6 className="no_punch">You have not yet Punch-in for TODAY!</h6>}
+                {attendanceData && attendanceData.length > 0 && attendanceData[0].date === formattedTodaysDate &&
                   <div className="piol_inner">
 
                     <div className="pioli_single">
                       <h4 className="punch_in">Punch In</h4>
-                      <h6>{attendanceData && attendanceData[0].punchIn}</h6>
-                      <h6>{attendanceData && attendanceData[0].tripStart}</h6>
+                      <h6>{attendanceData && attendanceData.length > 0 && attendanceData[0].punchIn}</h6>
+                      <h6>{attendanceData && attendanceData.length > 0 && attendanceData[0].tripStart}</h6>
                     </div>
                     <div className="pioli_single">
                       <h4 className="punch_out">Punch Out</h4>
-                      <h6>{attendanceData && attendanceData[0].punchOut}</h6>
-                      <h6>{attendanceData && attendanceData[0].tripEnd}</h6>
+                      <h6>{attendanceData && attendanceData.length > 0 && attendanceData[0].punchOut}</h6>
+                      <h6>{attendanceData && attendanceData.length > 0 && attendanceData[0].tripEnd}</h6>
                     </div>
                   </div>}
               </div>
               <div className="pio_right">
-                {attendanceData && (!attendanceData[0].punchIn || attendanceData[0].date !== formattedTodaysDate) ?
-                  <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchInPopup}>Punch In</div> : attendanceData && (attendanceData[0].date === formattedTodaysDate && !attendanceData[0].punchOut) ? <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchOutPopup}>Punch Out</div> : <h2>{attendanceData && attendanceData[0].workHrs}</h2>}
+                {attendanceData && attendanceData.length === 0 ? <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchInPopup}>Punch In</div> :
+                  attendanceData && attendanceData.length > 0 && (!attendanceData[0].punchIn || attendanceData[0].date !== formattedTodaysDate) ?
+                    <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchInPopup}>Punch In</div> : attendanceData && attendanceData.length > 0 && (attendanceData[0].date === formattedTodaysDate && !attendanceData[0].punchOut) ? <div className="theme_btn btn_fill no_icon text-center" onClick={showPunchOutPopup}>Punch Out</div> : <h2>{attendanceData && attendanceData.length > 0 && attendanceData[0].workHrs}</h2>}
               </div>
             </div>
             <div className="pio_bottom">
