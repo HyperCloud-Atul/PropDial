@@ -19,3 +19,146 @@
     background: #0b6e4a;
     color: #fff;
 }
+
+.attendance_pg{
+    display: flex;
+    align-items: center;
+    .attendance_list{
+        min-height: calc(100vh - 68px);
+        padding: 22px;
+        width: 70%;
+        margin-right: auto;
+    }
+   .punch{
+    -webkit-box-shadow: 0rem 0.3125rem 0.3125rem 0rem rgba(82, 63, 105, 0.05);
+    box-shadow: 0rem 0.3125rem 0.3125rem 0rem rgba(82, 63, 105, 0.05);
+    background: var(--white-color);
+    width: 30%;
+    position: fixed;
+    height: calc(100vh - 68px);
+    overflow-y: auto;
+    top: 68px;
+    right: 0;
+    padding: 22px;
+    overflow: hidden;
+    &::after{
+        content: '';
+        position: absolute;
+        top: -35px;
+      left: -35px;
+        width: 150px;
+        height: 150px;
+        background: var(--theme-green);
+    border-radius: 50%;
+    opacity: 0.1;
+    }
+    .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .left{
+            h3 {
+                font-size: 22px;
+                color: var(--light-black);
+                text-transform: capitalize;
+                font-weight: 600;
+                margin-bottom: 2px;
+            }
+            h6{
+                color: var(--theme-grey);
+                font-size: 15px;
+                font-weight: 400;
+            }
+        }
+        .right{
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            img{
+                border-radius: 50%;
+                width: 100%;
+                height: 100%;
+            }
+        }
+      
+    }
+    .date_time {
+        margin: 30px 0px;
+        text-align: center;
+        h3{
+            font-size: 36px;
+            color: var(--light-black);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+        h6{
+            color: var(--theme-grey);
+            font-size: 15px;
+            font-weight: 400;
+        }
+    }
+    .punch_button{
+        cursor: pointer;
+        &.outer {
+            width: 185px;
+            height: 185px;
+            border-radius: 50%;           
+            // box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+            // box-shadow: rgb(229 246 246) 0px 30px 60px -12px inset, rgb(229 246 246) 0px 18px 36px -18px inset;
+            box-shadow: rgb(229 246 246) 0px 30px 60px -12px inset, rgb(229 246 246) 60px 18px 36px 60px inset;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .inner_one {
+                border-radius: 50%;
+                width: 155px;
+                height: 155px;
+                background: white;
+                /* margin: auto; */
+                // box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+                box-shadow: rgb(0 168 168 / 50%) 0px 1px 4px;
+                box-shadow: rgb(0 168 168 / 50%) 0px 0px 1px 1px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .inner_two {
+                border-radius: 50%;
+                width: 125px;
+                height: 125px;
+                background: white;
+                /* margin: auto; */
+                box-shadow: rgb(0 168 168 / 15%) 0px 30px 60px -12px inset, rgb(0 168 168 / 15%) 0px 18px 36px -18px inset;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                img{
+                    height: 35px;
+                    width: auto;
+                }
+                h6{
+                    font-size: 15px;
+                    color: var(--theme-green);
+                    margin-top: 10px;
+                }
+            }
+    }
+    }
+    .punch_detail {
+        display: flex
+    ;
+        justify-content: space-between;
+        gap: 15px;
+        .pd_single{
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+   }
+}
+
