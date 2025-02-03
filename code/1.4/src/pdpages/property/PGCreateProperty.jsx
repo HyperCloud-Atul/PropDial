@@ -293,6 +293,7 @@ const CreateProperty = () => {
     UnitNumber: "",
     DemandPriceRent: "",
     DemandPriceSale: "",
+    MaintenanceFlag: "",
     MaintenanceCharges: "",
     MaintenanceChargesFrequency: "",
     SecurityDeposit: "",
@@ -2223,6 +2224,16 @@ const CreateProperty = () => {
                             >
                               9+ BHK{" "}
                             </option>
+                            <option
+                              defaultValue={
+                                propertyDetails &&
+                                  propertyDetails.Bhk === "Hall"
+                                  ? true
+                                  : false
+                              }
+                            >
+                              Hall
+                            </option>
                           </select>
                           {/* <div className="field_icon">
                  <span className="material-symbols-outlined">
@@ -2975,6 +2986,8 @@ const CreateProperty = () => {
                             </div>
                           </div>
                         </div>
+
+                        {propertyDetails && propertyDetails.MaintenanceFlag === "" ? <div className="field_error">Please select maintenance status</div> : ""}
                       </div>
                     </div>
                   )}
@@ -3307,6 +3320,7 @@ const CreateProperty = () => {
                         >
                           {convertToWords(propertyDetails.SecurityDeposit)}
                         </div>
+                        {(propertyDetails.SecurityDeposit === 0 || propertyDetails.SecurityDeposit === "") ? <div className="field_error">Please enter security deposit</div> : ""}
                       </div>
                     </div>
                   )}

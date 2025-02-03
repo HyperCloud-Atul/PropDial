@@ -106,7 +106,7 @@ const Stage2 = (props) => {
     Passage: "",
     EntranceGallery: "",
     Furnishing: "",
-    Readiness: "",
+    Readiness: "Ready To Move-In",
     IsCentrallyAirconditioned: "",
     IsReceptionArea: "",
     IsPreleased: "",
@@ -215,7 +215,7 @@ const Stage2 = (props) => {
 
         Readiness: propertyDocument.readiness
           ? propertyDocument.readiness
-          : "",
+          : "Ready to Move-In",
 
         IsCentrallyAirconditioned: propertyDocument.isCentrallyAirconditioned
           ? propertyDocument.isCentrallyAirconditioned
@@ -1456,6 +1456,7 @@ const Stage2 = (props) => {
                   >
                     Studio
                   </option>
+
                   <option
                     defaultValue={
                       propertyDetails && propertyDetails.Bhk === "1"
@@ -1572,6 +1573,15 @@ const Stage2 = (props) => {
                     }
                   >
                     9+ BHK{" "}
+                  </option>
+                  <option
+                    defaultValue={
+                      propertyDetails && propertyDetails.Bhk === "Hall"
+                        ? true
+                        : false
+                    }
+                  >
+                    Hall
                   </option>
                 </select>
                 {/* <div className="field_icon">

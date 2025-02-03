@@ -267,6 +267,7 @@ const Stage1 = (props) => {
     UnitNumber: "",
     DemandPriceRent: "",
     DemandPriceSale: "",
+    MaintenanceFlag: "",
     MaintenanceCharges: "",
     MaintenanceChargesFrequency: "",
     Purpose: "",
@@ -2219,7 +2220,7 @@ const Stage1 = (props) => {
             </div>
           )}
 
-          {propertyDetails && propertyDetails.MaintenanceFlag === "Extra" &&
+          {propertyDetails && propertyDetails.Purpose === "Rent" && propertyDetails.MaintenanceFlag === "Extra" &&
             (<div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                 <label>Maintenance fees</label>
@@ -2911,6 +2912,7 @@ const Stage1 = (props) => {
                 />
                 <div className="field_icon"></div>
               </div>
+              {(propertyDetails.UnitNumber === "" && propertyDetails.Category === "Plot") ? <div className="field_error">Please enter Plot number</div> : (propertyDetails.UnitNumber === "") ? <div className="field_error">Please enter Unit number</div> : ""}
             </div>
           </div>
 
