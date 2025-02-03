@@ -2100,6 +2100,7 @@ const Stage1 = (props) => {
                 <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
                   {convertToWords(propertyDetails.DemandPriceRent)}
                 </div>
+                {(propertyDetails.DemandPriceRent === 0 || propertyDetails.DemandPriceRent === "") ? <div className="field_error">Please enter demand price</div> : ""}
               </div>
             </div>}
 
@@ -2132,10 +2133,11 @@ const Stage1 = (props) => {
               <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
                 {convertToWords(propertyDetails.DemandPriceSale)}
               </div>
+              {(propertyDetails.DemandPriceSale === 0 || propertyDetails.DemandPriceSale === "") ? <div className="field_error">Please enter demand price</div> : ""}
             </div>
           </div>}
 
-          {propertyDetails && (propertyDetails.Category === 'Residential' && propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") || (propertyDetails.Category === 'Commercial') && (
+          {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") && (
             <div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 label_top">
                 <label htmlFor="">Maintenance Status</label>
@@ -2217,8 +2219,7 @@ const Stage1 = (props) => {
             </div>
           )}
 
-          {/* {propertyDetails && (propertyDetails.Flag.toLowerCase() === "available for rent" || propertyDetails.Flag.toLowerCase() === "rented out" || propertyDetails.Flag.toLowerCase() === "rent and sale" || propertyDetails.Flag.toLowerCase() === "rented but sale" || propertyDetails.Flag.toLowerCase() === "pms only") && propertyDetails.MaintenanceFlag === "Extra" && ( */}
-          {propertyDetails.MaintenanceFlag === "Extra" &&
+          {propertyDetails && propertyDetails.MaintenanceFlag === "Extra" &&
             (<div className="col-xl-4 col-lg-6">
               <div className="form_field st-2 new_radio_groups_parent new_single_field n_select_bg label_top">
                 <label>Maintenance fees</label>
@@ -2504,6 +2505,7 @@ const Stage1 = (props) => {
                 <div style={{ fontSize: "smaller" }} className="mt-2 text-capitalize">
                   {convertToWords(propertyDetails.SecurityDeposit)}
                 </div>
+                {(propertyDetails.SecurityDeposit === 0 || propertyDetails.SecurityDeposit === "") ? <div className="field_error">Please enter security deposit</div> : ""}
               </div>
             </div>
           )}
@@ -2937,7 +2939,7 @@ const Stage1 = (props) => {
                 />
                 <div className="field_icon"></div>
               </div>
-              <div className="field_error">Pincode is required field</div>
+              {/* <div className="field_error">Pincode is required field</div> */}
             </div>
           </div>
         </div>

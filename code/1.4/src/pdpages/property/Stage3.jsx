@@ -135,7 +135,8 @@ export default function Stage3(props) {
     VegNonVeg: "",
     PropertyDescription: "",
     OwnerInstructions: "",
-    PropertyGoogleMap: ""
+    PropertyGoogleMap: "",
+    PropertyVideoYouTubeLink: ""
   });
 
   useEffect(() => {
@@ -181,6 +182,9 @@ export default function Stage3(props) {
           : "",
         PropertyGoogleMap: propertyDocument.propertyGoogleMap
           ? propertyDocument.propertyGoogleMap
+          : "",
+        PropertyVideoYouTubeLink: propertyDocument.propertyVideoYouTubeLink
+          ? propertyDocument.propertyVideoYouTubeLink
           : "",
 
 
@@ -463,6 +467,8 @@ export default function Stage3(props) {
       propertyDescription: propertyDetails.PropertyDescription,
       ownerInstructions: propertyDetails.OwnerInstructions,
       propertyGoogleMap: propertyDetails.PropertyGoogleMap,
+      propertyVideoYouTubeLink: propertyDetails.PropertyVideoYouTubeLink
+
 
     };
 
@@ -503,7 +509,7 @@ export default function Stage3(props) {
               {/* Main Door Facing */}
               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
-                  {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') ? <label htmlFor="">Main Door Facing</label> : <label htmlFor="">Direction Facing</label>}
+                  {propertyDocument && (propertyDocument.category === 'Residential' || propertyDocument.category === 'Commercial') ? <label htmlFor="">Main Door Facing</label> : <label htmlFor="">Direction Facing</label>}
                   <div className="radio_group">
                     <div className="radio_group_single">
                       <div
@@ -1886,7 +1892,7 @@ export default function Stage3(props) {
                         </label>
                       </div>
                     </div>
-                    {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="radio_group_single">
+                    {propertyDocument && (propertyDocument.category === 'Residential' || propertyDocument.category === 'Commercial') && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.SameSocietyTowerClick
@@ -1935,7 +1941,7 @@ export default function Stage3(props) {
                         </label>
                       </div>
                     </div>}
-                    {propertyDetails && (propertyDetails.Category === 'Residential' || propertyDetails.Category === 'Commercial') && <div className="radio_group_single">
+                    {propertyDocument && (propertyDocument.category === 'Residential' || propertyDocument.category === 'Commercial') && <div className="radio_group_single">
                       <div
                         className={
                           propertyDetails.OtherSocietyClick
@@ -3169,87 +3175,90 @@ export default function Stage3(props) {
               </div>
 
               {/* Bachelor Boys Allowed */}
-              {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-6">
-                <div className="form_field st-2 label_top">
-                  <label htmlFor="">Bachelor Boys Allowed</label>
-                  <div className="form_field_inner">
-                    <div className="form_field_container">
-                      <div className="radio_group">
-                        <div className="radio_group_single">
-                          <div
-                            className={
-                              propertyDetails.BachlorsBoysAllowed === "Yes"
-                                ? "custom_radio_button radiochecked"
-                                : "custom_radio_button"
-                            }
-                          >
-                            <input
-                              type="checkbox"
-                              id="bachloresboysallowed_yes"
-                              onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  BachlorsBoysAllowed: "Yes",
-                                });
-                              }}
-                            />
-                            <label
-                              htmlFor="bachloresboysallowed_yes"
-                              style={{ paddingTop: "7px" }}
-                            >
-                              <div className="radio_icon">
-                                <span className="material-symbols-outlined add">
-                                  add
-                                </span>
-                                <span className="material-symbols-outlined check">
-                                  done
-                                </span>
+              {
+                (propertyDocument && propertyDocument.category === 'Residential')
+                && (
+                  <div className="col-md-6">
+                    <div className="form_field st-2 label_top">
+                      <label htmlFor="">Bachelor Boys Allowed</label>
+                      <div className="form_field_inner">
+                        <div className="form_field_container">
+                          <div className="radio_group">
+                            <div className="radio_group_single">
+                              <div
+                                className={
+                                  propertyDetails.BachlorsBoysAllowed === "Yes"
+                                    ? "custom_radio_button radiochecked"
+                                    : "custom_radio_button"
+                                }
+                              >
+                                <input
+                                  type="checkbox"
+                                  id="bachloresboysallowed_yes"
+                                  onClick={(e) => {
+                                    setPropertyDetails({
+                                      ...propertyDetails,
+                                      BachlorsBoysAllowed: "Yes",
+                                    });
+                                  }}
+                                />
+                                <label
+                                  htmlFor="bachloresboysallowed_yes"
+                                  style={{ paddingTop: "7px" }}
+                                >
+                                  <div className="radio_icon">
+                                    <span className="material-symbols-outlined add">
+                                      add
+                                    </span>
+                                    <span className="material-symbols-outlined check">
+                                      done
+                                    </span>
+                                  </div>
+                                  <h6>Yes</h6>
+                                </label>
                               </div>
-                              <h6>Yes</h6>
-                            </label>
-                          </div>
-                        </div>
-                        <div className="radio_group_single">
-                          <div
-                            className={
-                              propertyDetails.BachlorsBoysAllowed === "No"
-                                ? "custom_radio_button radiochecked"
-                                : "custom_radio_button"
-                            }
-                          >
-                            <input
-                              type="checkbox"
-                              id="bachloresboysallowed_no"
-                              onClick={(e) => {
-                                setPropertyDetails({
-                                  ...propertyDetails,
-                                  BachlorsBoysAllowed: "No",
-                                });
-                              }}
-                            />
-                            <label
-                              htmlFor="bachloresboysallowed_no"
-                              style={{ paddingTop: "7px" }}
-                            >
-                              <div className="radio_icon">
-                                <span className="material-symbols-outlined add">
-                                  add
-                                </span>
-                                <span className="material-symbols-outlined check">
-                                  done
-                                </span>
+                            </div>
+                            <div className="radio_group_single">
+                              <div
+                                className={
+                                  propertyDetails.BachlorsBoysAllowed === "No"
+                                    ? "custom_radio_button radiochecked"
+                                    : "custom_radio_button"
+                                }
+                              >
+                                <input
+                                  type="checkbox"
+                                  id="bachloresboysallowed_no"
+                                  onClick={(e) => {
+                                    setPropertyDetails({
+                                      ...propertyDetails,
+                                      BachlorsBoysAllowed: "No",
+                                    });
+                                  }}
+                                />
+                                <label
+                                  htmlFor="bachloresboysallowed_no"
+                                  style={{ paddingTop: "7px" }}
+                                >
+                                  <div className="radio_icon">
+                                    <span className="material-symbols-outlined add">
+                                      add
+                                    </span>
+                                    <span className="material-symbols-outlined check">
+                                      done
+                                    </span>
+                                  </div>
+                                  <h6>No</h6>
+                                </label>
                               </div>
-                              <h6>No</h6>
-                            </label>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>}
+                  </div>)}
               {/* Bachelor Girls Allowed */}
-              {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-6">
+              {propertyDocument && propertyDocument.category === 'Residential' && <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Bachelor Girls Allowed</label>
                   <div className="form_field_inner">
@@ -3329,7 +3338,7 @@ export default function Stage3(props) {
                 </div>
               </div>}
               {/* Pets Allowed */}
-              {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-6">
+              {propertyDocument && propertyDocument.category === 'Residential' && <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Pets Allowed</label>
                   <div className="form_field_inner">
@@ -3409,7 +3418,7 @@ export default function Stage3(props) {
                 </div>
               </div>}
               {/* Vegetarian / Non-Vegetarian */}
-              {propertyDetails && propertyDetails.Category === 'Residential' && <div className="col-md-6">
+              {propertyDocument && propertyDocument.category === 'Residential' && <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Food Habit</label>
                   <div className="form_field_inner">
@@ -3654,6 +3663,29 @@ no_icon"
                           })
                         }
                         value={propertyDetails && propertyDetails.PropertyGoogleMap}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Property Video YouTube Link */}
+              <div className="col-md-12">
+                <div className="form_field st-2 label_top">
+                  <label htmlFor="">Property Video YouTube Link</label>
+                  <div className="form_field_inner">
+                    <div className="form_field_container">
+                      <input
+                        type="text"
+                        placeholder="Enter Property Video YouTube Link"
+                        maxLength={1000}
+                        onChange={(e) =>
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            PropertyVideoYouTubeLink: e.target.value,
+                          })
+                        }
+                        value={propertyDetails && propertyDetails.PropertyVideoYouTubeLink}
                       />
                     </div>
                   </div>

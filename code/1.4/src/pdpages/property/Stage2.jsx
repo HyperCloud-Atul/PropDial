@@ -2332,7 +2332,7 @@ const Stage2 = (props) => {
               >
                 <div className="radio_group_single" style={{ width: "100%" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi"
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi-Furnished"
                       ? "radiochecked"
                       : ""
                       }`}
@@ -2344,7 +2344,7 @@ const Stage2 = (props) => {
                       onClick={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          Furnishing: "Semi",
+                          Furnishing: "Semi-Furnished",
                         });
                       }}
                     />
@@ -2357,13 +2357,13 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6>Semi</h6>
+                      <h6>Semi-Furnished</h6>
                     </label>
                   </div>
                 </div>
                 <div className="radio_group_single" style={{ width: "100%" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully"
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully-Furnished"
                       ? "radiochecked"
                       : ""
                       }`}
@@ -2375,7 +2375,7 @@ const Stage2 = (props) => {
                       onClick={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          Furnishing: "Fully",
+                          Furnishing: "Fully-Furnished",
                         });
                       }}
                     />
@@ -2388,13 +2388,13 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      <h6>Fully</h6>
+                      <h6>Fully-Furnished</h6>
                     </label>
                   </div>
                 </div>
                 <div className="radio_group_single" style={{ width: "100%" }}>
                   <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Raw"
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Unfurnished"
                       ? "radiochecked"
                       : ""
                       }`}
@@ -2406,7 +2406,7 @@ const Stage2 = (props) => {
                       onClick={(e) => {
                         setPropertyDetails({
                           ...propertyDetails,
-                          Furnishing: "Raw",
+                          Furnishing: "Unfurnished",
                         });
                       }}
                     />
@@ -2419,7 +2419,7 @@ const Stage2 = (props) => {
                           done
                         </span>
                       </div>
-                      {propertyDetails.Category === 'Commercial' ? <h6>Bareshell</h6> : <h6>Raw</h6>}
+                      {propertyDetails.Category === 'Commercial' ? <h6>Bareshell</h6> : <h6>Unfurnished</h6>}
                     </label>
                   </div>
                 </div>
