@@ -583,9 +583,9 @@ const CreateProperty = () => {
         (propertyDetails.DemandPriceRent === "" ||
           propertyDetails.DemandPriceRent === "0")
       ) {
-        if (errorMsg === "Error: Please select ")
-          errorMsg = "Please Enter Demand for Rent";
-        else errorMsg = errorMsg + ", Demand for Rent";
+        // if (errorMsg === "Error: Please select ")
+        //   errorMsg = "Please Enter Demand for Rent";
+        // else errorMsg = errorMsg + ", Demand for Rent";
         errorFlag = true;
       }
 
@@ -597,9 +597,9 @@ const CreateProperty = () => {
         (propertyDetails.DemandPriceSale === "" ||
           propertyDetails.DemandPriceSale === "0")
       ) {
-        if (errorMsg === "Error: Please select ")
-          errorMsg = "Please Enter Demand for Sale";
-        else errorMsg = errorMsg + ", Demand for Sale";
+        // if (errorMsg === "Error: Please select ")
+        //   errorMsg = "Please Enter Demand for Sale";
+        // else errorMsg = errorMsg + ", Demand for Sale";
         errorFlag = true;
       }
 

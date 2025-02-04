@@ -709,7 +709,7 @@ const Stage1 = (props) => {
     setFormSuccess(null);
 
     let errorFlag = false;
-    let errorMsg = "Please select ";
+    let errorMsg = "Please resolve ERRORs before proceeding...";
 
     if (propertyDetails.Purpose === "") {
       if (errorMsg === "Please select ") errorMsg = errorMsg + "Purpose";
@@ -718,20 +718,28 @@ const Stage1 = (props) => {
     }
 
     if (propertyDetails.Purpose === "Rent" && (propertyDetails.DemandPriceRent === "" || propertyDetails.DemandPriceRent === "0")) {
-      if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price for Rent";
-      else errorMsg = errorMsg + ", Demand Price for Rent";
+      // if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price for Rent";
+      // else errorMsg = errorMsg + ", Demand Price for Rent";
       errorFlag = true;
     }
 
     if (propertyDetails.Purpose === "Sale" && (propertyDetails.DemandPriceSale === "" || propertyDetails.DemandPriceSale === "0")) {
-      if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price for Sale";
-      else errorMsg = errorMsg + ", Demand Price for Sale";
+      // if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price for Sale";
+      // else errorMsg = errorMsg + ", Demand Price for Sale";
       errorFlag = true;
     }
 
     if (propertyDetails.Purpose === "RentSaleBoth" && (propertyDetails.DemandPriceSale === "" || propertyDetails.DemandPriceRent === "" || propertyDetails.DemandPriceRent === "0" || propertyDetails.DemandPriceSale === 0)) {
-      if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price for Rent & Sale both";
-      else errorMsg = errorMsg + ", Demand Price for Rent & Sale Both";
+      // if (errorMsg === "Please select ") errorMsg = "Please Enter Demand Price for Rent & Sale both";
+      // else errorMsg = errorMsg + ", Demand Price for Rent & Sale Both";
+      errorFlag = true;
+    }
+
+    if (propertyDetails.OwnerShip === "") {
+      errorFlag = true;
+    }
+
+    if (propertyDetails.SecurityDeposit === "") {
       errorFlag = true;
     }
 
@@ -1781,6 +1789,7 @@ const Stage1 = (props) => {
                   </div>
                 </div>
               </div>
+              {(propertyDetails.OwnerShip === "") ? <div className="field_error">Please select Ownership</div> : ""}
             </div>
           </div>
           {/* <div className="col-xl-4 col-lg-6">
