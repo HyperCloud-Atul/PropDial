@@ -755,8 +755,8 @@ const Stage2 = (props) => {
       propertyDetails.PropertyType.toUpperCase() === "SELECT PROPERTY TYPE" ||
       propertyDetails.PropertyType === ""
     ) {
-      if (errorMsg === "Please select ") errorMsg = errorMsg + "Property Type";
-      else errorMsg = errorMsg + ", Property Type";
+      // if (errorMsg === "Please select ") errorMsg = errorMsg + "Property Type";
+      // else errorMsg = errorMsg + ", Property Type";
       errorFlag = true;
     }
 
@@ -764,39 +764,25 @@ const Stage2 = (props) => {
       (propertyDetails.Bhk.toUpperCase() === "SELECT BHK" ||
         propertyDetails.Bhk === "")
     ) {
-      if (errorMsg === "Select BHK") errorMsg = errorMsg + "BHK";
-      else errorMsg = errorMsg + ", BHK";
+      // if (errorMsg === "Select BHK") errorMsg = errorMsg + "BHK";
+      // else errorMsg = errorMsg + ", BHK";
       errorFlag = true;
     }
     // console.log(
     //   "propertyDetails.NumberOfBedrooms:",
     //   propertyDetails.NumberOfBedrooms
     // );
-    if (
-      // propertyDetails && propertyDetails.NumberOfBedrooms.toUpperCase() === "SELECT BEDROOM" ||
-      propertyDetails.Category === 'Residential' && Number(propertyDetails.NumberOfBedrooms) === 0
-    ) {
-      if (errorMsg === "Select Bedroom") errorMsg = errorMsg + "Bedroom";
-      else errorMsg = errorMsg + ", Bedroom";
-      errorFlag = true;
-    }
+
     if (
       // propertyDetails && propertyDetails.NumberOfBedrooms.toUpperCase() === "SELECT BEDROOM" ||
       propertyDetails.Category !== 'Plot' && (propertyDetails.Category === 'Commercial' && propertyDetails.PropertyType !== 'Land') && propertyDetails.Furnishing === ""
     ) {
-      if (errorMsg === "Select Furnishing") errorMsg = errorMsg + "Furnishing";
-      else errorMsg = errorMsg + ", Furnishing";
+      // if (errorMsg === "Select Furnishing") errorMsg = errorMsg + "Furnishing";
+      // else errorMsg = errorMsg + ", Furnishing";
       errorFlag = true;
     }
 
-    if (
-      // propertyDetails.NumberOfBathrooms.toUpperCase() === "SELECT BATHROOM" ||
-      propertyDetails.Category === 'Residential' && Number(propertyDetails.NumberOfBathrooms) === 0
-    ) {
-      if (errorMsg === "Select Bathroom") errorMsg = errorMsg + "Bathroom";
-      else errorMsg = errorMsg + ", Bathroom";
-      errorFlag = true;
-    }
+
 
     //SuperArea & CarpetArea Value
     if (propertyDetails && propertyDetails.Category === 'Commercial') {
@@ -1403,6 +1389,7 @@ const Stage2 = (props) => {
                  </span>
                </div> */}
               </div>
+              {(propertyDetails.PropertyType === "" || propertyDetails.PropertyType === "Select Property Type") ? <div className="field_error">Please select Property Type</div> : ""}
             </div>
           </div>
 
@@ -1590,6 +1577,8 @@ const Stage2 = (props) => {
                   </span>
                 </div> */}
               </div>
+              {(propertyDetails.Bhk === "" || propertyDetails.Bhk === "Select BHK") ? <div className="field_error">Please select BHK</div> : ""}
+
             </div>
           </div>}
 
@@ -2434,6 +2423,7 @@ const Stage2 = (props) => {
                   </div>
                 </div>
               </div>
+              {(propertyDetails.Furnishing === "") ? <div className="field_error">Please select Furnishing</div> : ""}
             </div>
           </div>}
 
@@ -4734,7 +4724,13 @@ const Stage2 = (props) => {
                   </div>}
                 </div>
               </div>
+              <div>
+                {(propertyDetails.Category === "Plot") ? <div className="field_error">Please enter Area & Unit</div> :
+                  (propertyDetails.Category === "Residential" && (propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "" && propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Please enter Super or Carpet Area & Unit  </div> :
+                    (propertyDetails.Category === "Commercial") ? <div className="field_error">Please enter Super Area & Carpet Area both and Unit</div> : ""}
+              </div>
             </div>
+
           </div>
 
           {/* Road Width */}
