@@ -56,7 +56,7 @@ const Home = () => {
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
         <ProductCarousel></ProductCarousel>
-{/* <PunchInOut/> */}
+<PunchInOut/>
 
         <section className="work_flow sect_padding">
           <div className="container">

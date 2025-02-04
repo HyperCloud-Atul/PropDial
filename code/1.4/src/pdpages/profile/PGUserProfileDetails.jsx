@@ -583,6 +583,96 @@ export default function PGUserProfileDetails2() {
 
   // full code for employee detail end
 
+  // full code for vehicle detail start
+
+  const [vehicleNumberPlate, setVehicleNumberPlate] = useState("");
+  const [vehicleStatus, setVehicleStatus] = useState("");
+  const [vehicleType, setVehicleType] = useState("");
+  const [drivingLicence, setDrivingLicence] = useState("");
+  const [vehicleDetailUpdateMessage, setVehicleDetailUpdateMessage] =
+    useState("");
+  const [isVdUpdating, setIsVdUpdating] = useState(false);
+  const [isVdEditing, setIsVdEditing] = useState(false);
+  const [vdMessageType, setVdMessageType] = useState("");
+  const handleVdEditClick = () => {
+    setIsVdEditing(!isVdEditing);
+  };
+  const handleVdCancelClick = () => {
+    setIsVdEditing(!isVdEditing);
+    if (userProfileDoc) {
+      setVehicleNumberPlate(userProfileDoc.vehicleNumberPlate || "");
+      setVehicleStatus(userProfileDoc.vehicleStatus || "");
+      setVehicleType(userProfileDoc.vehicleType || "");
+      setDrivingLicence(userProfileDoc.drivingLicence || "");
+    }
+  };
+
+  useEffect(() => {
+    if (userProfileDoc) {
+      setVehicleNumberPlate(userProfileDoc.vehicleNumberPlate || "");
+      setVehicleStatus(userProfileDoc.vehicleStatus || "");
+      setVehicleType(userProfileDoc.vehicleType || "");
+      setDrivingLicence(userProfileDoc.drivingLicence || "");
+    } else {
+      // Set default values for new entries
+      setVehicleNumberPlate("");
+      setVehicleStatus("");
+      setVehicleType("");
+      setDrivingLicence("");
+    }
+  }, [userProfileDoc]);
+  console.log("vehicleStatus", vehicleStatus);
+
+  const handleUpdateVehicleDetail = async () => {
+    // Validation for required fields
+    if (
+      vehicleStatus === "" ||
+      vehicleStatus === undefined ||
+      vehicleStatus === null
+    ) {
+      setVehicleDetailUpdateMessage("Please select vehicle status.");
+      setVdMessageType("error_msg");
+      setTimeout(() => {
+        setVehicleDetailUpdateMessage("");
+        setVdMessageType("");
+      }, 5000); // Clear message after 5 seconds
+      return;
+    }
+
+    const dataSet = {
+      vehicleNumberPlate,
+      vehicleStatus,
+      vehicleType,
+      drivingLicence,
+    };
+
+    setIsVdUpdating(true);
+    setVehicleDetailUpdateMessage("");
+
+    try {
+      await updateDocument(userProfileId, dataSet);
+      setVdMessageType("success_msg");
+      setVehicleDetailUpdateMessage("Vehicle details updated successfully!");
+      setTimeout(() => {
+        setIsVdEditing(!isVdEditing);
+      }, 5000);
+    } catch (error) {
+      console.error("Error updating vehicle details:", error);
+      setVdMessageType("error_msg");
+      setVehicleDetailUpdateMessage(
+        "Failed to update vehicle details. Please try again."
+      );
+    } finally {
+      setIsVdUpdating(false);
+      setTimeout(() => {
+        setVehicleDetailUpdateMessage("");
+        setVdMessageType("");
+      }, 5000); // Clear message after 5 seconds
+    }
+  };
+
+  // full code for full code for vehicle detail end
+
   // code for isemployee start
   const [isEmployee, setIsEmployee] = useState(false); // Default is 'false'
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
@@ -2278,7 +2368,7 @@ export default function PGUserProfileDetails2() {
 
               {isEdEditing && (
                 <>
-                  <div className="row row_gap form_full">
+                  <div className="row row_gap form_full mt-4">
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
                         <label>Date of Joining*</label>
@@ -2477,6 +2567,339 @@ export default function PGUserProfileDetails2() {
             </div>
           </div>
         )}
+
+        {userProfileDoc && userProfileDoc.isEmployee && (
+          <div className="property_card_single mobile_full_card overflow_unset">
+            <div className="more_detail_card_inner">
+              <h2 className="card_title">
+                Vehicle Detail
+                <span
+                  className={`material-symbols-outlined action_icon ${
+                    isVdEditing ? "text_red" : "text_green"
+                  }`}
+                  onClick={
+                    isVdEditing ? handleVdCancelClick : handleVdEditClick
+                  }
+                >
+                  {isVdEditing ? "close" : "border_color"}
+                </span>
+              </h2>
+              {!isVdEditing && (
+                <div className="p_info">
+                  <div className="p_info_single">
+                    <div className="pd_icon">
+                      <img src="/assets/img/edicon/steering-wheel.png" alt="" />
+                    </div>
+                    <div className="pis_content">
+                      <h6>Is Vehicle</h6>
+                      <h5>
+                        {userProfileDoc && userProfileDoc.vehicleStatus === true
+                          ? "Yes"
+                          : "No"}
+                      </h5>
+                    </div>
+                  </div>
+                  {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
+                    <div className="p_info_single">
+                    <div className="pd_icon">
+                    <img
+  src={`/assets/img/edicon/${
+    userProfileDoc
+      ? userProfileDoc.vehicleType === "2-Wheeler"
+        ? "bike.png"
+        : userProfileDoc.vehicleType === "4-Wheeler"
+        ? "car.png"
+        : "vehicles.png"
+      : "vehicles.png"
+  }`}
+    alt=""
+/>
+
+                      
+                      
+                    </div>
+                    <div className="pis_content">
+                      <h6>Vehicle Type</h6>
+  
+                      <h5>
+                        {userProfileDoc && userProfileDoc.vehicleType
+                          ? userProfileDoc.vehicleType
+                          : "Not provided yet"}
+                      </h5>
+                    </div>
+                  </div>
+                  )
+                :(
+                ""
+                )}
+                   {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
+                   <div className="p_info_single">
+                   <div className="pd_icon">
+                     <img src="/assets/img/edicon/numberplate.png" alt="" />
+                   </div>
+                   <div className="pis_content">
+                     <h6>Number Plate</h6>
+                     <h5>
+                       {userProfileDoc && userProfileDoc.vehicleNumberPlate
+                         ? userProfileDoc.vehicleNumberPlate
+                         : "Not provided yet"}
+                     </h5>
+                   </div>
+                 </div>
+                  )
+                :(
+                ""
+                )}
+                 {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
+                   <div className="p_info_single">
+                   <div className="pd_icon">
+                     <img src="/assets/img/edicon/id-card.png" alt="" />
+                   </div>
+                   <div className="pis_content">
+                     <h6>Driving Licence</h6>
+                     <h5>
+                       {userProfileDoc && userProfileDoc.drivingLicence
+                         ? userProfileDoc.drivingLicence
+                         : "Not provided yet"}
+                     </h5>
+                   </div>
+                 </div>
+                  )
+                :(
+                ""
+                )}
+               
+               
+                </div>
+              )}
+
+              {isVdEditing && (
+                <>
+                  <div className="row row_gap form_full mt-4">
+                    <div className="col-lg-4 col-md-6 col-sm-12">
+                      <div className="form_field st-2 label_top">
+                        <label htmlFor="">Is Vehicle*</label>
+                        <div className="radio_group">
+                          <div className="radio_group_single">
+                            <div
+                              className={
+                                vehicleStatus === true
+                                  ? "custom_radio_button radiochecked"
+                                  : "custom_radio_button"
+                              }
+                            >
+                              <input
+                                type="radio"
+                                name="vehicleStatus"
+                                id="vsyes"
+                                value="true"
+                                onChange={() => setVehicleStatus(true)}
+                                checked={vehicleStatus === true}
+                              />
+
+                              <label htmlFor="vsyes">
+                                <div className="radio_icon">
+                                  <span className="material-symbols-outlined add">
+                                    add
+                                  </span>
+                                  <span className="material-symbols-outlined check">
+                                    done
+                                  </span>
+                                </div>
+                                <h6>Yes</h6>
+                              </label>
+                            </div>
+                          </div>
+                          <div className="radio_group_single">
+                            <div
+                              className={
+                                vehicleStatus !== true
+                                  ? "custom_radio_button radiochecked"
+                                  : "custom_radio_button"
+                              }
+                            >
+                              <input
+                                type="radio"
+                                name="vehicleStatus"
+                                id="vsno"
+                                value="false"
+                                onChange={() => setVehicleStatus(false)}
+                                checked={vehicleStatus === false}
+                              />
+
+                              <label htmlFor="vsno">
+                                <div className="radio_icon">
+                                  <span className="material-symbols-outlined add">
+                                    add
+                                  </span>
+                                  <span className="material-symbols-outlined check">
+                                    done
+                                  </span>
+                                </div>
+                                <h6>No</h6>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* <div className="form_field_inner">
+                          <Select
+                            // isMulti
+                            value={vehicleStatus}
+                            onChange={setVehicleStatus}
+                            options={vehicleStatusOptions}
+                            placeholder="Select"
+                          />
+            
+                        </div> */}
+                    </div>
+                    {userProfileDoc && vehicleStatus === true && (
+                      <div className="col-lg-4 col-md-6 col-sm-12">
+                        {/* <div className="form_field label_top">
+                          <label>Vehicle Type*</label>
+                          <div className="form_field_inner">
+                            <Select
+                              value={vehicleType}
+                              onChange={setVehicleType}
+                              options={vehicleTypeOptions}
+                              placeholder="Select Vehicle Type"
+                            />
+                          </div>
+                        </div> */}
+                        <div className="form_field st-2 label_top">
+                          <label htmlFor="">Vehicle Type*</label>
+                          <div className="radio_group">
+                            <div className="radio_group_single">
+                              <div
+                                className={
+                                  vehicleType === "2-Wheeler"
+                                    ? "custom_radio_button radiochecked"
+                                    : "custom_radio_button"
+                                }
+                              >
+                                <input
+                                  type="radio"
+                                  name="vehicleType"
+                                  id="2-Wheeler"
+                                  value="2-Wheeler"
+                                  onChange={() => setVehicleType("2-Wheeler")}
+                                  checked={vehicleType === "2-Wheeler"}
+                                />
+
+                                <label htmlFor="2-Wheeler">
+                                  <div className="radio_icon">
+                                    <span className="material-symbols-outlined add">
+                                      add
+                                    </span>
+                                    <span className="material-symbols-outlined check">
+                                      done
+                                    </span>
+                                  </div>
+                                  <h6>2-Wheeler</h6>
+                                </label>
+                              </div>
+                            </div>
+                            <div className="radio_group_single">
+                              <div
+                                className={
+                                  vehicleType === "4-Wheeler"
+                                    ? "custom_radio_button radiochecked"
+                                    : "custom_radio_button"
+                                }
+                              >
+                                <input
+                                  type="radio"
+                                  name="4-Wheeler"
+                                  id="4-Wheeler"
+                                  value="4-Wheeler"
+                                  onChange={() => setVehicleType("4-Wheeler")}
+                                  checked={vehicleType === "4-Wheeler"}
+                                />
+
+                                <label htmlFor="4-Wheeler">
+                                  <div className="radio_icon">
+                                    <span className="material-symbols-outlined add">
+                                      add
+                                    </span>
+                                    <span className="material-symbols-outlined check">
+                                      done
+                                    </span>
+                                  </div>
+                                  <h6>4-Wheeler</h6>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {userProfileDoc && vehicleStatus === true && (
+                      <div className="col-lg-4 col-md-6 col-sm-12">
+                        <div className="form_field label_top">
+                          <label>Number Plate</label>
+                          <div className="form_field_inner">
+                            <input
+                              type="text"
+                              value={vehicleNumberPlate}
+                              onChange={(e) =>
+                                setVehicleNumberPlate(e.target.value)
+                              }
+                              placeholder="Enter Number Plate"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {userProfileDoc && vehicleStatus === true && (
+                      <div className="col-lg-4 col-md-6 col-sm-12">
+                        <div className="form_field label_top">
+                          <label>Driving Licence Number</label>
+                          <div className="form_field_inner">
+                            <input
+                              type="text"
+                              value={drivingLicence}
+                              onChange={(e) =>
+                                setDrivingLicence(e.target.value)
+                              }
+                              placeholder="Enter Driving Licence Number"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="btn_msg_area">
+                    {vehicleDetailUpdateMessage && (
+                      <p className={`msg_area ${vdMessageType}`}>
+                        {vehicleDetailUpdateMessage}
+                      </p>
+                    )}
+
+                    <button
+                      onClick={handleVdCancelClick}
+                      disabled={isVdUpdating}
+                      className={`theme_btn btn_border no_icon min_width ${
+                        isVdUpdating ? "disabled" : ""
+                      }`}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleUpdateVehicleDetail}
+                      disabled={isVdUpdating}
+                      className={`theme_btn btn_fill no_icon min_width ${
+                        isVdUpdating ? "disabled" : ""
+                      }`}
+                    >
+                      {isVdUpdating ? "Saving..." : "Save"}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
         {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">
@@ -2689,7 +3112,7 @@ export default function PGUserProfileDetails2() {
 
               {isBankDetailEditing && (
                 <>
-                  <div className="row row_gap form_full">
+                  <div className="row row_gap form_full mt-4">
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
                         <label>A/C Holder Name*</label>
@@ -2913,7 +3336,7 @@ export default function PGUserProfileDetails2() {
 
               {isRef1Editing && (
                 <>
-                  <div className="row row_gap form_full">
+                  <div className="row row_gap form_full mt-4">
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
                         <label>Name*</label>
@@ -3136,7 +3559,7 @@ export default function PGUserProfileDetails2() {
 
               {isRef2Editing && (
                 <>
-                  <div className="row row_gap form_full">
+                  <div className="row row_gap form_full mt-4">
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
                         <label>Name*</label>

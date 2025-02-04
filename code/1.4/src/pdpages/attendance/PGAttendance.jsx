@@ -106,14 +106,14 @@ const PGAttendance = () => {
       ["5"]
     );
 
-    console.log("attendanceData: ", attendanceData)
+  console.log("attendanceData: ", attendanceData);
 
-    //Popup Flags
-    const [showPopupPunchInFlag, setShowPopupPunchInFlag] = useState(false);
-    // const [showPopupFlag, setShowPopupFlag] = useState(false);
-    const [popupReturn, setPopupReturn] = useState(false);
-    const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
-    // const [popupReturn, setPopupReturn] = useState(false);
+  //Popup Flags
+  const [showPopupPunchInFlag, setShowPopupPunchInFlag] = useState(false);
+  // const [showPopupFlag, setShowPopupFlag] = useState(false);
+  const [popupReturn, setPopupReturn] = useState(false);
+  const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
+  // const [popupReturn, setPopupReturn] = useState(false);
 
   const showPunchInPopup = () => {
     // e.preventDefault();
@@ -346,6 +346,7 @@ const PGAttendance = () => {
   const formattedTime = currentDateTime.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
+    second:"2-digit",
     hour12: true,
   });
 
@@ -452,6 +453,72 @@ const PGAttendance = () => {
 
                 <br />
             </div> */}
+             {/* Pupup */}
+      <div>
+        <div className={showPopupPunchInFlag ? 'pop-up-div open' : 'pop-up-div'}>
+          <div>
+            <p>
+              {showPopupPunchInFlag && (" Are you sure you want to Punch-In now? ")}
+            </p><br />
+
+            {user && user.vehicleStatus &&
+              <input
+                id="id_tripstart"
+                className="custom-input"
+                style={{ paddingRight: "10px" }}
+                type="number"
+                placeholder="Trip Start - Meter Reading"
+                maxLength={7}
+                onInput={(e) => {
+                  restrictInput(e, 7);
+                }}
+                onChange={(e) =>
+                  setTripStart(e.target.value)
+                }
+                value={attendanceData && attendanceData.length > 0 && attendanceData[0].punchInMeterReading}
+              />
+            }
+
+            <br></br><br></br>
+            <button onClick={() => handlePunchInPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0 0px' }}>CONFIRM</button>
+            <button onClick={() => handlePunchInPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0 0px' }}>CANCEL</button>
+          </div>
+        </div>
+        <div className={showPopupPunchOutFlag ? 'pop-up-div open' : 'pop-up-div'}>
+          <div>
+            <p>
+              {showPopupPunchOutFlag && (" Are you sure you want to Punch-Out now? ")}
+            </p>
+
+
+            {user && user.vehicleStatus &&
+              <>
+                <p>
+                  Trip Start: {attendanceData && attendanceData.length > 0 && attendanceData[0].tripStart}
+                </p>
+                <input
+                  id="id_tripend"
+                  className="custom-input"
+                  style={{ paddingRight: "10px" }}
+                  type="number"
+                  placeholder="Trip End - Meter Reading"
+                  maxLength={7}
+                  onInput={(e) => {
+                    restrictInput(e, 7);
+                  }}
+                  onChange={(e) =>
+                    setTripEnd(e.target.value)
+                  }
+                  value={attendanceData && attendanceData.length > 0 && attendanceData[0].tripEnd}
+                />
+              </>
+            }
+            <br></br><br></br>
+            <button onClick={() => handlePunchOutPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0px' }}>CONFIRM</button>
+            <button onClick={() => handlePunchOutPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0px' }}>CANCEL</button>
+          </div>
+        </div>
+      </div >
       <div className="top_header_pg pg_bg attendance_pg relative">
         <div className="attendance_list">cards</div>
         <div className="punch">
@@ -466,25 +533,85 @@ const PGAttendance = () => {
           </div>
           <div className="body">
             <div className="date_time">
-            <h3>{formattedTime}
-            </h3>
-                <h6>{formattedDate} - {weekday}
-                </h6>
-              
+              <h3>{formattedTime}</h3>
+              <h6>
+                {formattedDate} - {weekday}
+              </h6>
             </div>
-            <div className="punch_button outer">
-      <div className="inner_one">
-        <div className="inner_two">
-           <img src="/assets/img/hand-pointer.png" alt="" />
-           <h6>Punch In</h6>
-        </div>
-      </div>
+            {attendanceData && attendanceData.length === 0 ? (
+          
+                  <div className="punch_button outer"    onClick={showPunchInPopup}>
+                  <div className="inner_one">
+                    <div className="inner_two">
+                      <img src="/assets/img/hand-pointer.png" alt="" />
+                      <h6>Punch In</h6>
+                    </div>
+                  </div>
+                </div>
+            ) : attendanceData &&
+              attendanceData.length > 0 &&
+              (!attendanceData[0].punchIn ||
+                attendanceData[0].date !== formattedTodaysDate) ? (
+                  <div className="punch_button outer"    onClick={showPunchInPopup}>
+                  <div className="inner_one">
+                    <div className="inner_two">
+                      <img src="/assets/img/hand-pointer.png" alt="" />
+                      <h6>Punch In</h6>
+                    </div>
+                  </div>
+                </div>
+            ) : attendanceData &&
+              attendanceData.length > 0 &&
+              attendanceData[0].date === formattedTodaysDate &&
+              !attendanceData[0].punchOut ? (
+            
+              <div className="punch_button punchout outer"   onClick={showPunchOutPopup}>
+              <div className="inner_one">
+                <div className="inner_two">
+                  <img src="/assets/img/punchouthand.png" alt="" />
+                  <h6>Punch Out</h6>
+                </div>
+              </div>
             </div>
+            ) : (
+              <div className="punch_button pio_done outer">
+              <div className="inner_one">
+                <div className="inner_two">
+                  {/* <img src="/assets/img/hand-pointer.png" alt="" /> */}
+                  {/* <h6>Next Punch In</h6> */}
+                  <h6 className="text-center">Next Punch In Tomorrow</h6>
+                  {/* <h6>Tomorrow</h6> */}
+                </div>
+              </div>
+            </div>
+            )}
+
             <div className="punch_detail">
               <div className="pd_single">
                 <img src="/assets/img/punchin.png" alt="" />
+                {attendanceData && attendanceData.length === 0 ? (
+                  <div className="data">--:--</div>
+                )
+              : 
+<div className="data">{attendanceData && attendanceData.length > 0 && attendanceData[0].date === formattedTodaysDate && attendanceData[0].punchIn ? attendanceData[0].punchIn : "--:--" }</div>
+              }
+                
+                <h6>Punch In</h6>
+              </div>
+              <div className="pd_single">
+                <img src="/assets/img/punchout.png" alt="" />
+                {attendanceData && attendanceData.length === 0 ? (
+                  <div className="data">--:--</div>
+                )
+              : 
+<div className="data">{attendanceData && attendanceData.length > 0 && attendanceData[0].date === formattedTodaysDate && attendanceData[0].punchOut ? attendanceData[0].punchOut : "--:--" }</div>
+              }
+                <h6>Punch Out</h6>
+              </div>
+              <div className="pd_single">
+                <img src="/assets/img/punchin.png" alt="" />
                 <div className="data">--:--</div>
-<h6>Punch In</h6>
+                <h6>Reading</h6>
               </div>
             </div>
           </div>
